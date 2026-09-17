@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { tylIconCheck, tylIconExclamation } from '@tylertech/tyler-icons';
 import { TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { when } from 'lit/directives/when.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
@@ -19,18 +19,20 @@ import styles from './process-step.scss';
 /**
  * @tag forge-process-step
  *
- * @summary Process steps represent a single stage of a process, and may contain interactive content.
+ * @summary Process steps represent a single stage of a process. A step containing a link or a
+ * button is actionable; a step containing only text is a read-only indicator of progress.
  *
  * @dependency forge-icon
  * @dependency forge-focus-indicator
  *
- * @slot - The default slot for supporting content, such as inline form fields or actions.
+ * @slot - The step label. A slotted link or button in this slot becomes the step's interactive area.
  * @slot marker - Replaces the generated state marker.
+ * @slot additional-content - Content displayed under the label, such as inline form fields.
  * @slot meta - Supporting information displayed under the label, such as dates or assigned users.
  * @slot message - Validation or warning messaging displayed under the meta content.
  * @slot actions - Actions displayed at the end of the step content.
  *
- * @fires {CustomEvent<void>} forge-process-step-select - Dispatches when a clickable step is activated.
+ * @fires {CustomEvent<void>} forge-process-step-select - Dispatches when an interactive step is activated.
  *
  * @cssproperty --forge-process-step-marker-size - The size of the state marker.
  * @cssproperty --forge-process-step-marker-background - The background color of the marker, which masks the progress line behind it.
@@ -63,9 +65,8 @@ import styles from './process-step.scss';
  * @csspart line - The progress line element.
  * @csspart marker - The state marker element.
  * @csspart content - The element containing the description, meta, message, and slotted content.
- * @csspart label - The label element.
- * @csspart label-button - The button rendered for a clickable step.
- * @csspart focus-indicator - The focus indicator shown when a clickable step has keyboard focus.
+ * @csspart label - The element containing the slotted label.
+ * @csspart focus-indicator - The focus indicator shown when an interactive step has keyboard focus.
  * @csspart description - The description element.
  * @csspart meta - The element containing the slotted meta content.
  * @csspart message - The element containing the slotted message content.
@@ -94,13 +95,6 @@ export class ProcessStepComponent extends BaseLitElement {
   public state: ProcessStepState = 'not-started';
 
   /**
-   * The label of the step.
-   * @attribute
-   */
-  @property()
-  public label = '';
-
-  /**
    * The description displayed under the label.
    * @attribute
    */
@@ -108,13 +102,13 @@ export class ProcessStepComponent extends BaseLitElement {
   public description = '';
 
   /**
-   * Whether the step label is interactive. Clickable steps render a button and dispatch a
-   * `forge-process-step-select` event when activated.
+   * Whether to ignore an interactive element in the default slot. A step containing a link or a
+   * button is interactive by default.
    * @default false
    * @attribute
    */
   @property({ type: Boolean, reflect: true })
-  public clickable = false;
+  public noninteractive = false;
 
   /**
    * The one-based position of the step within the process. Set by the parent
@@ -156,6 +150,12 @@ export class ProcessStepComponent extends BaseLitElement {
   @queryAssignedElements({ slot: 'marker' })
   private readonly _markerElements!: Element[];
 
+  @queryAssignedElements()
+  private readonly _labelElements!: Element[];
+
+  @queryAssignedNodes()
+  private readonly _labelNodes!: Node[];
+
   readonly #internals: ElementInternals;
 
   constructor() {
@@ -166,6 +166,12 @@ export class ProcessStepComponent extends BaseLitElement {
   public connectedCallback(): void {
     super.connectedCallback();
     setDefaultAria(this, this.#internals, { role: 'listitem' });
+    this.addEventListener('click', this.#onClick);
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this.#onClick);
   }
 
   public willUpdate(): void {
@@ -183,6 +189,27 @@ export class ProcessStepComponent extends BaseLitElement {
    */
   public get lineActive(): boolean {
     return PROGRESS_LINE_STATES.includes(this.state);
+  }
+
+  /**
+   * Whether the step has an interactive element, which makes it actionable rather than a read-only
+   * indicator of progress.
+   * @readonly
+   */
+  public get interactive(): boolean {
+    return !!this.#interactiveElement;
+  }
+
+  /**
+   * The step's label as plain text, taken from the default slot.
+   * @readonly
+   */
+  public get labelText(): string {
+    return (this._labelNodes ?? [])
+      .map(node => node.textContent ?? '')
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   get #markerIcon(): string | null {
@@ -213,42 +240,66 @@ export class ProcessStepComponent extends BaseLitElement {
     `;
   }
 
-  get #label(): TemplateResult {
-    return when(
-      this.clickable,
-      () => html`
-        <button id="label-button" part="label-button" class="label-button" ?disabled=${this.state === 'disabled'} @click=${this.#handleClick}>
-          <span part="label" class="label">${this.label}</span>
-          <forge-focus-indicator part="focus-indicator" target="label-button"></forge-focus-indicator>
-        </button>
-      `,
-      () => html`<span part="label" class="label">${this.label}</span>`
-    );
-  }
-
   /* @internal */
   public render(): TemplateResult {
+    const interactive = this.interactive;
+
     return html`
-      <div part="root" class=${classMap({ 'forge-process-step': true, [this.orientation]: true, [this.state]: true })}>
+      <div part="root" class=${classMap({ 'forge-process-step': true, [this.orientation]: true, [this.state]: true, interactive })}>
         <div part="line" class=${classMap({ line: true, active: this.lineActive, last: this.last })} aria-hidden="true"></div>
         <div class="sidebar">${this.#marker}</div>
-        <div class="label-row">${this.#label}</div>
+        <div part="label" class="label-row">
+          <slot @slotchange=${this.#handleLabelSlotChange}></slot>
+          ${when(interactive, () => html`<forge-focus-indicator part="focus-indicator"></forge-focus-indicator>`)}
+        </div>
         <div part="content" class="content">
           ${when(this.description, () => html`<span part="description" class="description">${this.description}</span>`)}
           <div part="meta" class="meta" ${hideWhenEmpty()}><slot name="meta"></slot></div>
           <div part="message" class="message" ${hideWhenEmpty()}><slot name="message"></slot></div>
-          <slot></slot>
+          <slot name="additional-content"></slot>
           <div part="actions" class="actions" ${hideWhenEmpty()}><slot name="actions"></slot></div>
         </div>
       </div>
     `;
   }
 
+  public updated(): void {
+    const indicator = this.shadowRoot?.querySelector<FocusIndicatorComponent>('forge-focus-indicator');
+    if (indicator) {
+      indicator.targetElement = this.#interactiveElement ?? undefined;
+    }
+  }
+
+  /**
+   * The step's interactive element, which is a slotted link or button in the default slot. Content
+   * in the other slots is ignored, so an action button does not make the label interactive.
+   */
+  get #interactiveElement(): HTMLElement | null {
+    if (this.noninteractive) {
+      return null;
+    }
+
+    const elements = this._labelElements ?? [];
+    const anchor = elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.ANCHOR));
+    return (anchor ?? elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.BUTTON_LIKE)) ?? null) as HTMLElement | null;
+  }
+
+  #onClick: EventListener = (evt: Event) => this.#handleClick(evt);
+
+  #handleLabelSlotChange(): void {
+    this.requestUpdate();
+  }
+
   #handleMarkerSlotChange(): void {
     this.requestUpdate();
   }
 
-  #handleClick(): void {
+  #handleClick(evt: Event): void {
+    const interactiveElement = this.#interactiveElement;
+    if (!interactiveElement || !evt.composedPath().includes(interactiveElement)) {
+      return;
+    }
+
     this.dispatchEvent(new CustomEvent('forge-process-step-select', { bubbles: true, composed: true }));
   }
 }

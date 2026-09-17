@@ -16,9 +16,9 @@ interface IHarness {
 async function createFixture(
   template = html`
     <forge-process-stepper>
-      <forge-process-step state="completed" label="One"></forge-process-step>
-      <forge-process-step state="current" label="Two"></forge-process-step>
-      <forge-process-step label="Three"></forge-process-step>
+      <forge-process-step state="completed">One</forge-process-step>
+      <forge-process-step state="current">Two</forge-process-step>
+      <forge-process-step>Three</forge-process-step>
     </forge-process-stepper>
   `
 ): Promise<IHarness> {
@@ -56,7 +56,7 @@ describe('ProcessStepper', () => {
     it('should render the horizontal orientation when set', async () => {
       const { stepper } = await createFixture(html`
         <forge-process-stepper orientation="horizontal">
-          <forge-process-step label="One"></forge-process-step>
+          <forge-process-step>One</forge-process-step>
         </forge-process-stepper>
       `);
 
@@ -104,8 +104,8 @@ describe('ProcessStepper', () => {
     it('should propagate numbered to each step', async () => {
       const { steps } = await createFixture(html`
         <forge-process-stepper numbered>
-          <forge-process-step label="One"></forge-process-step>
-          <forge-process-step label="Two"></forge-process-step>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step>Two</forge-process-step>
         </forge-process-stepper>
       `);
 
@@ -121,8 +121,8 @@ describe('ProcessStepper', () => {
     it('should propagate the orientation to each step', async () => {
       const { steps } = await createFixture(html`
         <forge-process-stepper orientation="horizontal">
-          <forge-process-step label="One"></forge-process-step>
-          <forge-process-step label="Two"></forge-process-step>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step>Two</forge-process-step>
         </forge-process-stepper>
       `);
 
@@ -203,10 +203,10 @@ describe('ProcessStepper', () => {
       const screen = render(html`
         <div style="width: ${width}">
           <forge-process-stepper orientation=${orientation}>
-            <forge-process-step state="completed" label="One"></forge-process-step>
-            <forge-process-step state="current" label="Two"></forge-process-step>
-            <forge-process-step label="Three"></forge-process-step>
-            <forge-process-step label="Four"></forge-process-step>
+            <forge-process-step state="completed">One</forge-process-step>
+            <forge-process-step state="current">Two</forge-process-step>
+            <forge-process-step>Three</forge-process-step>
+            <forge-process-step>Four</forge-process-step>
           </forge-process-stepper>
         </div>
       `);
@@ -261,42 +261,60 @@ describe('ProcessStepper', () => {
   });
 
   describe('selection', () => {
-    it('should dispatch a change event when a clickable step is activated', async () => {
+    it('should dispatch a change event when an interactive step is activated', async () => {
       const { stepper, steps } = await createFixture(html`
         <forge-process-stepper>
-          <forge-process-step label="One"></forge-process-step>
-          <forge-process-step label="Two" clickable></forge-process-step>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step><button>Two</button></forge-process-step>
         </forge-process-stepper>
       `);
       const spy = vi.fn();
       stepper.addEventListener('forge-process-stepper-change', spy);
 
-      steps[1].shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.click();
+      steps[1].querySelector('button')?.click();
 
       expect(spy).toHaveBeenCalledOnce();
       expect(spy.mock.calls[0][0].detail).toEqual({ index: 1, step: steps[1] });
     });
 
-    it('should not dispatch a change event when a step is not clickable', async () => {
-      const { stepper, steps } = await createFixture();
-      const spy = vi.fn();
-      stepper.addEventListener('forge-process-stepper-change', spy);
-
-      steps[0].shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.click();
-
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should not dispatch a change event for a disabled clickable step', async () => {
+    it('should dispatch a change event for a slotted link', async () => {
       const { stepper, steps } = await createFixture(html`
         <forge-process-stepper>
-          <forge-process-step label="One" state="disabled" clickable></forge-process-step>
+          <forge-process-step><a href="#cart">One</a></forge-process-step>
         </forge-process-stepper>
       `);
       const spy = vi.fn();
       stepper.addEventListener('forge-process-stepper-change', spy);
 
-      steps[0].shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.click();
+      steps[0].querySelector('a')?.addEventListener('click', evt => evt.preventDefault());
+      steps[0].querySelector('a')?.click();
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
+    it('should not dispatch a change event when a step has no interactive element', async () => {
+      const { stepper, steps } = await createFixture();
+      const spy = vi.fn();
+      stepper.addEventListener('forge-process-stepper-change', spy);
+
+      steps[0].click();
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not dispatch a change event for content outside the label', async () => {
+      const { stepper, steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step>
+            One
+            <button slot="actions">Advance</button>
+          </forge-process-step>
+        </forge-process-stepper>
+      `);
+      const spy = vi.fn();
+      stepper.addEventListener('forge-process-stepper-change', spy);
+
+      steps[0].querySelector('button')?.click();
 
       expect(spy).not.toHaveBeenCalled();
     });
@@ -331,14 +349,28 @@ describe('ProcessStep', () => {
   });
 
   it('should render the label and description', async () => {
-    const step = await createStep(html`<forge-process-step label="Fees paid" description="Optional"></forge-process-step>`);
+    const step = await createStep(html`<forge-process-step description="Optional">Fees paid</forge-process-step>`);
 
-    expect(step.shadowRoot?.querySelector('.label')?.textContent).toBe('Fees paid');
+    expect(step.labelText).toBe('Fees paid');
     expect(step.shadowRoot?.querySelector('.description')?.textContent).toBe('Optional');
   });
 
+  it('should scope the label text to the label slot', async () => {
+    const step = await createStep(html`
+      <forge-process-step>
+        Suspension
+        <span slot="meta">Started:</span>
+        <span slot="meta">02/03/2026</span>
+        <input slot="additional-content" />
+        <button slot="actions">Advance</button>
+      </forge-process-step>
+    `);
+
+    expect(step.labelText).toBe('Suspension');
+  });
+
   it('should not render a description element when no description is set', async () => {
-    const step = await createStep(html`<forge-process-step label="Fees paid"></forge-process-step>`);
+    const step = await createStep(html`<forge-process-step>Fees paid</forge-process-step>`);
 
     expect(step.shadowRoot?.querySelector('.description')).toBeNull();
   });
@@ -439,77 +471,104 @@ describe('ProcessStep', () => {
     });
   });
 
-  describe('clickable', () => {
-    it('should render a button when clickable', async () => {
-      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+  describe('interactive', () => {
+    it('should not be interactive when the label is plain text', async () => {
+      const step = await createStep(html`<forge-process-step>One</forge-process-step>`);
 
-      expect(step.shadowRoot?.querySelector('.label-button')).toBeTruthy();
+      expect(step.interactive).toBe(false);
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
     });
 
-    it('should not render a button by default', async () => {
-      const step = await createStep(html`<forge-process-step label="One"></forge-process-step>`);
+    it('should be interactive when the label contains a button', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
 
-      expect(step.shadowRoot?.querySelector('.label-button')).toBeNull();
+      expect(step.interactive).toBe(true);
     });
 
-    it('should dispatch a select event when activated', async () => {
-      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+    it('should be interactive when the label contains a link', async () => {
+      const step = await createStep(html`<forge-process-step><a href="#one">One</a></forge-process-step>`);
+
+      expect(step.interactive).toBe(true);
+    });
+
+    it('should prefer a slotted link over a slotted button', async () => {
+      const step = await createStep(html`
+        <forge-process-step>
+          <button>Button</button>
+          <a href="#one">Link</a>
+        </forge-process-step>
+      `);
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator');
+
+      expect((indicator as unknown as { targetElement: HTMLElement }).targetElement).toBe(step.querySelector('a'));
+    });
+
+    it('should ignore interactive content in the other slots', async () => {
+      const step = await createStep(html`
+        <forge-process-step>
+          One
+          <button slot="actions">Advance</button>
+          <button slot="additional-content">Nested</button>
+        </forge-process-step>
+      `);
+
+      expect(step.interactive).toBe(false);
+    });
+
+    it('should not be interactive when noninteractive is set', async () => {
+      const step = await createStep(html`<forge-process-step noninteractive><button>One</button></forge-process-step>`);
+
+      expect(step.interactive).toBe(false);
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
+    });
+
+    it('should dispatch a select event when the interactive element is activated', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
       const spy = vi.fn();
       step.addEventListener('forge-process-step-select', spy);
 
-      step.shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.click();
+      step.querySelector('button')?.click();
 
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should render a focus indicator targeting the label button', async () => {
-      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+    it('should render a focus indicator targeting the interactive element', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
       const indicator = step.shadowRoot?.querySelector('forge-focus-indicator');
 
       expect(indicator).toBeTruthy();
-      expect(indicator?.getAttribute('target')).toBe('label-button');
+      expect((indicator as unknown as { targetElement: HTMLElement }).targetElement).toBe(step.querySelector('button'));
     });
 
-    it('should not render a focus indicator when not clickable', async () => {
-      const step = await createStep(html`<forge-process-step label="One"></forge-process-step>`);
-
-      expect(step.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
-    });
-
-    it('should nest the focus indicator inside the label button so the ring excludes the progress line', async () => {
-      const step = await createStep(html`<forge-process-step label="One" clickable></forge-process-step>`);
+    it('should keep the focus indicator out of the progress line and content', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
       const indicator = step.shadowRoot?.querySelector('forge-focus-indicator');
 
-      expect(indicator?.parentElement?.id).toBe('label-button');
-    });
-
-    it('should disable the button when the step is disabled', async () => {
-      const step = await createStep(html`<forge-process-step label="One" state="disabled" clickable></forge-process-step>`);
-
-      expect(step.shadowRoot?.querySelector<HTMLButtonElement>('.label-button')?.disabled).toBe(true);
+      expect(indicator?.closest('[part="label"]')).toBeTruthy();
     });
   });
 
   describe('slots', () => {
     it('should render slotted meta, message, and action content', async () => {
       const step = await createStep(html`
-        <forge-process-step label="One">
+        <forge-process-step>
+          One
           <span slot="meta" id="meta">Jul 17, 2026</span>
           <span slot="message" id="message">Invalid</span>
           <button slot="actions" id="action">Advance</button>
-          <input id="default" />
+          <input slot="additional-content" id="extra" />
         </forge-process-step>
       `);
 
       expect(step.querySelector('#meta')).toBeTruthy();
       expect(step.querySelector('#message')).toBeTruthy();
       expect(step.querySelector('#action')).toBeTruthy();
-      expect(step.querySelector('#default')).toBeTruthy();
+      expect(step.querySelector('#extra')).toBeTruthy();
     });
 
     it('should allow the marker to be replaced', async () => {
       const step = await createStep(html`
-        <forge-process-step label="One">
+        <forge-process-step>
           <forge-icon slot="marker" name="check" id="custom-marker"></forge-icon>
         </forge-process-step>
       `);
@@ -520,7 +579,7 @@ describe('ProcessStep', () => {
 
     it('should drop the generated marker treatment when a marker is slotted', async () => {
       const step = await createStep(html`
-        <forge-process-step label="One" state="current">
+        <forge-process-step state="current">
           <forge-icon slot="marker" name="check"></forge-icon>
         </forge-process-step>
       `);

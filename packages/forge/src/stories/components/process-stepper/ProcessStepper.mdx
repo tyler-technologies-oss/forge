@@ -111,7 +111,8 @@ lays its content out in two columns, so pass a label and a value as separate chi
 aligned down the step:
 
 ```html
-<forge-process-step label="Verbal warning" state="completed">
+<forge-process-step state="completed">
+  Verbal warning
   <span slot="meta">Started:</span>
   <span slot="meta">01/15/2026</span>
   <span slot="meta">Completed:</span>
@@ -125,8 +126,8 @@ A single child per row, such as a lone date, occupies the first column.
 
 ## Step Content and Actions
 
-Content placed in a step's default slot renders under its meta content, and content in the `actions`
-slot renders at the end of the step. Use these slots to let users complete a step in place with
+Content placed in a step's `additional-content` slot renders under its meta content, and content in
+the `actions` slot renders at the end of the step. Use these slots to let users complete a step in place with
 checkboxes, inline form fields, or buttons. Not every step needs content or actions.
 
 Slotted `<forge-checkbox>`, `<forge-radio>`, and `<forge-switch>` controls are pulled back by
@@ -141,20 +142,41 @@ Use a step's `message` slot for validation or warning messaging.
 
 <Canvas of={ProcessStepperStories.WithMessage} />
 
-## Clickable Steps
+## Interactive Steps
 
-Set `clickable` on a step to render its label as a button. Activating a clickable step dispatches a
-`forge-process-step-select` event from the step, and a `forge-process-stepper-change` event from the
-stepper with the index of the step and the step element. Use this to let users revisit a previous
-step or view its details.
+A stepper is read-only by default: a step whose label is plain text simply reports progress. Put a
+link or a button in the label to make that step actionable, and the stepper becomes interactive
+without a separate variant or attribute.
 
-Steps in the `disabled` state do not dispatch either event.
+```html
+<!-- read-only: reports progress -->
+<forge-process-step state="current">Internal review</forge-process-step>
 
-Each clickable step is a native button, so steps are reachable with `Tab` and activate with both
-`Enter` and `Space`. A `<forge-focus-indicator>` draws the focus ring around the step's label only,
-so keyboard focus never outlines the progress line or the step's content.
+<!-- interactive: navigates -->
+<forge-process-step state="completed"><a href="/cart">Cart</a></forge-process-step>
 
-<Canvas of={ProcessStepperStories.Clickable} />
+<!-- interactive: performs an action -->
+<forge-process-step state="current"><button>Suspension</button></forge-process-step>
+```
+
+Use a link when activating the step navigates, so it keeps the browser behaviour users expect from
+a link, and a button when it performs an action in place. A slotted link takes precedence if both
+are present. The step reports its state through the read-only `interactive` property, and slotted
+controls are reset so the label still reads as text.
+
+Only the label slot is considered, so a button in the `actions` or `additional-content` slots does
+not make the step itself interactive. Set `noninteractive` on a step to opt out of the behaviour
+entirely.
+
+Activating an interactive step dispatches a `forge-process-step-select` event from the step and a
+`forge-process-stepper-change` event from the stepper, carrying the index of the step and the step
+element.
+
+Because the interactive area is the consumer's own link or button, steps are reachable with `Tab`
+and activate with the keys native to that element. A `<forge-focus-indicator>` draws the focus ring
+around the label only, so keyboard focus never outlines the progress line or the step's content.
+
+<Canvas of={ProcessStepperStories.Interactive} />
 
 ## API
 
@@ -183,8 +205,8 @@ initial render so a screen reader is not interrupted when the page loads.
 
 - Because the marker is decorative, never rely on it alone to communicate state. Give steps whose
   state is not obvious from the label a `description`, or a message in the `message` slot
-- Clickable steps render a native button, so they are reachable in the tab order and activate with
-  both `Enter` and `Space`
+- Make a step interactive with a link when it navigates and a button when it acts, so it carries the
+  right semantics and keyboard behaviour for what it does
 - Provide a heading in the `title` slot at the correct level for the surrounding page
-- Interactive content placed in the `actions` or default slots keeps its own semantics and focus
-  behavior, so label it as you would anywhere else
+- Interactive content placed in the `actions` or `additional-content` slots keeps its own semantics
+  and focus behavior, so label it as you would anywhere else

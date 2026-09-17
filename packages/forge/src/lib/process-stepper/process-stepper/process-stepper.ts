@@ -163,7 +163,8 @@ export class ProcessStepperComponent extends BaseLitElement {
 
     const step = steps[index];
     const position = `Step ${index + 1} of ${steps.length}`;
-    this._announcement = step.label ? `${position}: ${step.label}` : position;
+    const label = step.labelText;
+    this._announcement = label ? `${position}: ${label}` : position;
   }
 
   /** The orientation the steps are actually laid out in, which is vertical while compact. */

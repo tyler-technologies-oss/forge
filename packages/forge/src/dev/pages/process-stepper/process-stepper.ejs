@@ -3,15 +3,16 @@
     <h3 class="forge-typography--heading2">Compact (narrow container)</h3>
     <div style="max-inline-size: 360px">
       <forge-process-stepper orientation="horizontal" numbered>
-        <forge-process-step label="Cart" state="completed"></forge-process-step>
-        <forge-process-step label="Shipping" state="completed"></forge-process-step>
-        <forge-process-step label="Payment" state="current">
+        <forge-process-step state="completed">Cart</forge-process-step>
+        <forge-process-step state="completed">Shipping</forge-process-step>
+        <forge-process-step state="current">
+          Payment
           <span slot="meta" class="forge-color--text-medium">Started:</span>
           <span slot="meta">02/03/2026</span>
-          <forge-checkbox><label>Save this card</label></forge-checkbox>
+          <forge-checkbox slot="additional-content"><label>Save this card</label></forge-checkbox>
           <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
         </forge-process-step>
-        <forge-process-step label="Review"></forge-process-step>
+        <forge-process-step>Review</forge-process-step>
       </forge-process-stepper>
     </div>
   </div>
@@ -19,21 +20,21 @@
   <div>
     <h3 class="forge-typography--heading2">Horizontal</h3>
     <forge-process-stepper orientation="horizontal">
-      <forge-process-step label="1. Cart" state="completed"></forge-process-step>
-      <forge-process-step label="2. Shipping" state="current"></forge-process-step>
-      <forge-process-step label="3. Payment"></forge-process-step>
-      <forge-process-step label="4. Review"></forge-process-step>
+      <forge-process-step state="completed">1. Cart</forge-process-step>
+      <forge-process-step state="current">2. Shipping</forge-process-step>
+      <forge-process-step>3. Payment</forge-process-step>
+      <forge-process-step>4. Review</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Horizontal With Descriptions</h3>
     <forge-process-stepper orientation="horizontal">
-      <forge-process-step label="First step" state="completed" description="Optional"></forge-process-step>
-      <forge-process-step label="Second step" state="current"></forge-process-step>
-      <forge-process-step label="Third step"></forge-process-step>
-      <forge-process-step label="Fourth step" state="error" description="Example invalid step"></forge-process-step>
-      <forge-process-step label="Fifth step"></forge-process-step>
+      <forge-process-step state="completed" description="Optional">First step</forge-process-step>
+      <forge-process-step state="current">Second step</forge-process-step>
+      <forge-process-step>Third step</forge-process-step>
+      <forge-process-step state="error" description="Example invalid step">Fourth step</forge-process-step>
+      <forge-process-step>Fifth step</forge-process-step>
     </forge-process-stepper>
   </div>
 
@@ -41,26 +42,28 @@
     <h3 class="forge-typography--heading2">Horizontal With Title</h3>
     <forge-process-stepper orientation="horizontal" numbered>
       <h4 slot="title" class="forge-typography--heading3">Record progress</h4>
-      <forge-process-step label="Application received" state="completed">
+      <forge-process-step state="completed">
+          Application received
         <span slot="meta" class="forge-color--text-medium">Jul 17, 2026</span>
       </forge-process-step>
-      <forge-process-step label="Fees paid" state="completed"></forge-process-step>
-      <forge-process-step label="Internal review" state="completed"></forge-process-step>
-      <forge-process-step label="Documents approved"></forge-process-step>
-      <forge-process-step label="Record issued"></forge-process-step>
+      <forge-process-step state="completed">Fees paid</forge-process-step>
+      <forge-process-step state="completed">Internal review</forge-process-step>
+      <forge-process-step>Documents approved</forge-process-step>
+      <forge-process-step>Record issued</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Vertical</h3>
     <forge-process-stepper numbered>
-      <forge-process-step label="Application received" state="completed">
+      <forge-process-step state="completed">
+          Application received
         <span slot="meta" class="forge-color--text-medium">Jul 17, 2026</span>
       </forge-process-step>
-      <forge-process-step label="Fees paid" state="completed"></forge-process-step>
-      <forge-process-step label="Internal review" state="completed"></forge-process-step>
-      <forge-process-step label="Documents approved"></forge-process-step>
-      <forge-process-step label="Record issued"></forge-process-step>
+      <forge-process-step state="completed">Fees paid</forge-process-step>
+      <forge-process-step state="completed">Internal review</forge-process-step>
+      <forge-process-step>Documents approved</forge-process-step>
+      <forge-process-step>Record issued</forge-process-step>
     </forge-process-stepper>
   </div>
 
@@ -68,70 +71,97 @@
     <h3 class="forge-typography--heading2">Vertical With Step Content</h3>
     <forge-process-stepper>
       <h4 slot="title" class="forge-typography--heading3">Stage progress</h4>
-      <forge-process-step label="Verbal warning" state="completed">
+      <forge-process-step state="completed">
+          Verbal warning
         <span slot="meta" class="forge-color--text-medium">Started:</span>
         <span slot="meta">01/15/2026</span>
         <span slot="meta" class="forge-color--text-medium">Completed:</span>
         <span slot="meta">01/15/2026</span>
       </forge-process-step>
-      <forge-process-step label="Written warning" state="completed">
+      <forge-process-step state="completed">
+          Written warning
         <span slot="meta" class="forge-color--text-medium">Started:</span>
         <span slot="meta">02/03/2026</span>
         <span slot="meta" class="forge-color--text-medium">Completed:</span>
         <span slot="meta">02/03/2026</span>
       </forge-process-step>
-      <forge-process-step label="Suspension" state="current">
+      <forge-process-step state="current">
+          Suspension
         <span slot="meta" class="forge-color--text-medium">Started:</span>
         <span slot="meta">02/03/2026</span>
         <span slot="meta" class="forge-color--text-medium">Completed:</span>
         <span slot="meta">02/03/2026</span>
-        <forge-checkbox><label>Issue suspension notice</label></forge-checkbox>
-        <forge-checkbox><label>Schedule meeting with union rep</label></forge-checkbox>
-        <forge-checkbox><label>Document meeting notes</label></forge-checkbox>
-        <forge-checkbox><label>Submit to HR director for approval</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Issue suspension notice</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Schedule meeting with union rep</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Document meeting notes</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Submit to HR director for approval</label></forge-checkbox>
         <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
       </forge-process-step>
-      <forge-process-step label="Termination review"></forge-process-step>
+      <forge-process-step>Termination review</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">All States</h3>
     <forge-process-stepper>
-      <forge-process-step label="Completed" state="completed"></forge-process-step>
-      <forge-process-step label="Current" state="current"></forge-process-step>
-      <forge-process-step label="In progress" state="in-progress"></forge-process-step>
-      <forge-process-step label="Not started" state="not-started"></forge-process-step>
-      <forge-process-step label="Optional" state="optional" description="Optional"></forge-process-step>
-      <forge-process-step label="Skipped" state="skipped"></forge-process-step>
-      <forge-process-step label="Waiting" state="waiting"></forge-process-step>
-      <forge-process-step label="Disabled" state="disabled"></forge-process-step>
-      <forge-process-step label="Blocked" state="blocked"></forge-process-step>
-      <forge-process-step label="Error" state="error">
+      <forge-process-step state="completed">Completed</forge-process-step>
+      <forge-process-step state="current">Current</forge-process-step>
+      <forge-process-step state="in-progress">In progress</forge-process-step>
+      <forge-process-step state="not-started">Not started</forge-process-step>
+      <forge-process-step state="optional" description="Optional">Optional</forge-process-step>
+      <forge-process-step state="skipped">Skipped</forge-process-step>
+      <forge-process-step state="waiting">Waiting</forge-process-step>
+      <forge-process-step state="disabled">Disabled</forge-process-step>
+      <forge-process-step state="blocked">Blocked</forge-process-step>
+      <forge-process-step state="error">
+          Error
         <forge-inline-message slot="message" theme="error">Two required documents are missing.</forge-inline-message>
       </forge-process-step>
-      <forge-process-step label="Requires attention" state="requires-attention"></forge-process-step>
+      <forge-process-step state="requires-attention">Requires attention</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Clickable Steps</h3>
     <forge-process-stepper id="clickable-stepper" orientation="horizontal">
-      <forge-process-step label="Cart" state="completed" clickable></forge-process-step>
-      <forge-process-step label="Shipping" state="current" clickable></forge-process-step>
-      <forge-process-step label="Payment" clickable></forge-process-step>
-      <forge-process-step label="Review" clickable></forge-process-step>
+      <forge-process-step state="completed"><button>Cart</button></forge-process-step>
+      <forge-process-step state="current"><button>Shipping</button></forge-process-step>
+      <forge-process-step><button>Payment</button></forge-process-step>
+      <forge-process-step><button>Review</button></forge-process-step>
     </forge-process-stepper>
     <p id="clickable-output" class="forge-color--text-medium">No step selected.</p>
+  </div>
+
+
+  <div>
+    <h3 class="forge-typography--heading2">Interactive With Links</h3>
+    <forge-process-stepper orientation="horizontal" numbered>
+      <forge-process-step state="completed"><a href="#cart">Cart</a></forge-process-step>
+      <forge-process-step state="current"><a href="#shipping">Shipping</a></forge-process-step>
+      <forge-process-step><a href="#payment">Payment</a></forge-process-step>
+      <forge-process-step><a href="#review">Review</a></forge-process-step>
+    </forge-process-stepper>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Read-only (no interactive element)</h3>
+    <forge-process-stepper orientation="horizontal" numbered>
+      <forge-process-step state="completed">Cart</forge-process-step>
+      <forge-process-step state="current">Shipping</forge-process-step>
+      <forge-process-step>Payment</forge-process-step>
+      <forge-process-step>Review</forge-process-step>
+    </forge-process-stepper>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Custom Markers</h3>
     <forge-process-stepper>
-      <forge-process-step label="Reviewed by Debbie Johnson" state="completed">
+      <forge-process-step state="completed">
+          Reviewed by Debbie Johnson
         <forge-avatar slot="marker" text="Debbie Johnson"></forge-avatar>
       </forge-process-step>
-      <forge-process-step label="Awaiting approval" state="current">
+      <forge-process-step state="current">
+          Awaiting approval
         <forge-avatar slot="marker" text="Alex Kim"></forge-avatar>
       </forge-process-step>
     </forge-process-stepper>

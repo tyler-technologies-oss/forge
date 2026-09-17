@@ -72,10 +72,10 @@ export const Horizontal: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper orientation="horizontal">
-      <forge-process-step label="1. Cart" state="completed"></forge-process-step>
-      <forge-process-step label="2. Shipping" state="current"></forge-process-step>
-      <forge-process-step label="3. Payment"></forge-process-step>
-      <forge-process-step label="4. Review"></forge-process-step>
+      <forge-process-step state="completed">1. Cart</forge-process-step>
+      <forge-process-step state="current">2. Shipping</forge-process-step>
+      <forge-process-step>3. Payment</forge-process-step>
+      <forge-process-step>4. Review</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -84,11 +84,11 @@ export const States: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper orientation="horizontal">
-      <forge-process-step label="First step" state="completed" description="Optional"></forge-process-step>
-      <forge-process-step label="Second step" state="current"></forge-process-step>
-      <forge-process-step label="Third step"></forge-process-step>
-      <forge-process-step label="Fourth step" state="error" description="Example invalid step"></forge-process-step>
-      <forge-process-step label="Fifth step"></forge-process-step>
+      <forge-process-step state="completed" description="Optional">First step</forge-process-step>
+      <forge-process-step state="current">Second step</forge-process-step>
+      <forge-process-step>Third step</forge-process-step>
+      <forge-process-step state="error" description="Example invalid step">Fourth step</forge-process-step>
+      <forge-process-step>Fifth step</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -98,13 +98,14 @@ export const WithTitle: Story = {
   render: () => html`
     <forge-process-stepper orientation="horizontal" numbered>
       <span slot="title">Record progress</span>
-      <forge-process-step label="Application received" state="completed">
+      <forge-process-step state="completed">
+        Application received
         <span slot="meta">Jul 17, 2026</span>
       </forge-process-step>
-      <forge-process-step label="Fees paid" state="completed"></forge-process-step>
-      <forge-process-step label="Internal review" state="completed"></forge-process-step>
-      <forge-process-step label="Documents approved"></forge-process-step>
-      <forge-process-step label="Record issued"></forge-process-step>
+      <forge-process-step state="completed">Fees paid</forge-process-step>
+      <forge-process-step state="completed">Internal review</forge-process-step>
+      <forge-process-step>Documents approved</forge-process-step>
+      <forge-process-step>Record issued</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -113,13 +114,14 @@ export const WithMeta: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper numbered>
-      <forge-process-step label="Application received" state="completed">
+      <forge-process-step state="completed">
+        Application received
         <span slot="meta">Jul 17, 2026</span>
       </forge-process-step>
-      <forge-process-step label="Fees paid" state="completed"></forge-process-step>
-      <forge-process-step label="Internal review" state="completed"></forge-process-step>
-      <forge-process-step label="Documents approved"></forge-process-step>
-      <forge-process-step label="Record issued"></forge-process-step>
+      <forge-process-step state="completed">Fees paid</forge-process-step>
+      <forge-process-step state="completed">Internal review</forge-process-step>
+      <forge-process-step>Documents approved</forge-process-step>
+      <forge-process-step>Record issued</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -129,21 +131,23 @@ export const WithStepContent: Story = {
   render: () => html`
     <forge-process-stepper>
       <span slot="title">Stage progress</span>
-      <forge-process-step label="Verbal warning" state="completed">
+      <forge-process-step state="completed">
+        Verbal warning
         <span slot="meta">Started:</span>
         <span slot="meta">01/15/2026</span>
         <span slot="meta">Completed:</span>
         <span slot="meta">01/15/2026</span>
       </forge-process-step>
-      <forge-process-step label="Suspension" state="current">
+      <forge-process-step state="current">
+        Suspension
         <span slot="meta">Started:</span>
         <span slot="meta">02/03/2026</span>
-        <forge-checkbox><label>Issue suspension notice</label></forge-checkbox>
-        <forge-checkbox><label>Schedule meeting with union rep</label></forge-checkbox>
-        <forge-checkbox><label>Document meeting notes</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Issue suspension notice</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Schedule meeting with union rep</label></forge-checkbox>
+        <forge-checkbox slot="additional-content"><label>Document meeting notes</label></forge-checkbox>
         <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
       </forge-process-step>
-      <forge-process-step label="Termination review"></forge-process-step>
+      <forge-process-step>Termination review</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -152,23 +156,24 @@ export const WithMessage: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper>
-      <forge-process-step label="Submit documents" state="completed"></forge-process-step>
-      <forge-process-step label="Plan review" state="error">
+      <forge-process-step state="completed">Submit documents</forge-process-step>
+      <forge-process-step state="error">
+        Plan review
         <forge-inline-message slot="message" theme="error">Two required documents are missing.</forge-inline-message>
       </forge-process-step>
-      <forge-process-step label="Permit issued"></forge-process-step>
+      <forge-process-step>Permit issued</forge-process-step>
     </forge-process-stepper>
   `
 };
 
-export const Clickable: Story = {
+export const Interactive: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper orientation="horizontal" @forge-process-stepper-change=${changeAction} @forge-process-step-select=${selectAction}>
-      <forge-process-step label="Cart" state="completed" clickable></forge-process-step>
-      <forge-process-step label="Shipping" state="current" clickable></forge-process-step>
-      <forge-process-step label="Payment" clickable></forge-process-step>
-      <forge-process-step label="Review" clickable></forge-process-step>
+      <forge-process-step state="completed"><button>Cart</button></forge-process-step>
+      <forge-process-step state="current"><button>Shipping</button></forge-process-step>
+      <forge-process-step><button>Payment</button></forge-process-step>
+      <forge-process-step><button>Review</button></forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -177,10 +182,10 @@ export const Numbered: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper orientation="horizontal" numbered>
-      <forge-process-step label="Application received" state="completed"></forge-process-step>
-      <forge-process-step label="Internal review" state="current"></forge-process-step>
-      <forge-process-step label="Documents approved"></forge-process-step>
-      <forge-process-step label="Record issued"></forge-process-step>
+      <forge-process-step state="completed">Application received</forge-process-step>
+      <forge-process-step state="current">Internal review</forge-process-step>
+      <forge-process-step>Documents approved</forge-process-step>
+      <forge-process-step>Record issued</forge-process-step>
     </forge-process-stepper>
   `
 };
@@ -190,15 +195,16 @@ export const Compact: Story = {
   render: () => html`
     <div style="max-inline-size: 360px">
       <forge-process-stepper orientation="horizontal" numbered>
-        <forge-process-step label="Cart" state="completed"></forge-process-step>
-        <forge-process-step label="Shipping" state="completed"></forge-process-step>
-        <forge-process-step label="Payment" state="current">
+        <forge-process-step state="completed">Cart</forge-process-step>
+        <forge-process-step state="completed">Shipping</forge-process-step>
+        <forge-process-step state="current">
+          Payment
           <span slot="meta">Started:</span>
           <span slot="meta">02/03/2026</span>
-          <forge-checkbox><label>Save this card</label></forge-checkbox>
+          <forge-checkbox slot="additional-content"><label>Save this card</label></forge-checkbox>
           <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
         </forge-process-step>
-        <forge-process-step label="Review"></forge-process-step>
+        <forge-process-step>Review</forge-process-step>
       </forge-process-stepper>
     </div>
   `

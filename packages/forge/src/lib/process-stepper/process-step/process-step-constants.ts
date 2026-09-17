@@ -4,9 +4,13 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}proces
 
 const attributes = {
   STATE: 'state',
-  LABEL: 'label',
   DESCRIPTION: 'description',
-  CLICKABLE: 'clickable'
+  NONINTERACTIVE: 'noninteractive'
+};
+
+const selectors = {
+  ANCHOR: 'a[href]',
+  BUTTON_LIKE: ':is(button,[role=button][tabindex]:not([tabindex="-1"]))'
 };
 
 const events = {
@@ -17,6 +21,7 @@ const events = {
 export const PROCESS_STEP_CONSTANTS = {
   elementName,
   attributes,
+  selectors,
   events
 };
 

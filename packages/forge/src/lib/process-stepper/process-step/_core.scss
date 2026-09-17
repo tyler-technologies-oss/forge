@@ -167,22 +167,26 @@
   @include typography.style(body2);
 }
 
-// Positioned so the focus indicator sizes to the label itself, keeping the ring clear of the
-// progress line and the step content.
-@mixin label-button {
+// A slotted link or button is reset so the label still reads as text. The interactive affordance
+// comes from the cursor and the focus ring rather than native control chrome. It is positioned so
+// the focus ring sizes to the label, keeping it clear of the progress line and the step content.
+@mixin slotted-label-control {
   appearance: none;
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
   font: inherit;
+  margin: 0;
   padding: 0;
   position: relative;
   text-align: start;
+  text-decoration: none;
 }
 
-@mixin label-button-disabled {
+@mixin slotted-label-control-disabled {
   cursor: default;
+  pointer-events: none;
 }
 
 @mixin description {

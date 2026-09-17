@@ -130,16 +130,18 @@
   @include core.content-vertical;
 }
 
-.label {
+.label-row {
   @include core.label;
 }
 
-.label-button {
-  @include core.label-button;
+.label-row ::slotted(a),
+.label-row ::slotted(button) {
+  @include core.slotted-label-control;
 }
 
-.label-button:disabled {
-  @include core.label-button-disabled;
+.disabled .label-row ::slotted(a),
+.disabled .label-row ::slotted(button) {
+  @include core.slotted-label-control-disabled;
 }
 
 .description {
