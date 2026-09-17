@@ -25,8 +25,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Get release info
         id: release
@@ -38,7 +36,6 @@ jobs:
             echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
             echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
             echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
-            echo "author=$(echo "$RELEASE_JSON" | jq -r '.author.login')" >> $GITHUB_OUTPUT
             echo "body<<EOF" >> $GITHUB_OUTPUT
             echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
@@ -46,43 +43,21 @@ jobs:
             echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
             echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
             echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
-            echo "author=${{ github.event.release.author.login }}" >> $GITHUB_OUTPUT
             echo "body<<EOF" >> $GITHUB_OUTPUT
             echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
-      - name: Get contributors for this release
-        id: contributors
-        run: |
-          # Get the previous release tag
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 ${{ steps.release.outputs.tag }}^ 2>/dev/null || git rev-list --max-parents=0 HEAD)
-
-          # Get unique contributors between previous tag and current release
-          CONTRIBUTORS=$(git log $PREVIOUS_TAG..${{ steps.release.outputs.tag }} --format='%an' | sort -u | sed 's/^/- /')
-
-          # Save to output
-          echo "list<<EOF" >> $GITHUB_OUTPUT
-          echo "$CONTRIBUTORS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Build Teams message JSON
         id: message
         env:
           RELEASE_BODY: ${{ steps.release.outputs.body }}
-          CONTRIBUTORS_LIST: ${{ steps.contributors.outputs.list }}
         run: |
           SECTIONS=$(jq -n \
             --arg body "$RELEASE_BODY" \
-            --arg contributors "$CONTRIBUTORS_LIST" \
             '[
               {
-                title: "📝 Release Notes",
                 text: $body
-              },
-              {
-                title: "👥 Contributors",
-                text: $contributors
               }
             ]')
 
