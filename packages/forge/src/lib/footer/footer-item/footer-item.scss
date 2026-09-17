@@ -1,0 +1,41 @@
+@use '../../core/styles/theme';
+@use '../../core/styles/typography';
+
+/* stylelint-disable custom-property-pattern */
+
+:host {
+  display: inline;
+  box-sizing: border-box;
+
+  --_footer-item-color: var(--forge-footer-item-color, #{theme.variable(on-surface-inverse)});
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.footer-item {
+  @include typography.style(body1);
+  color: var(--_footer-item-color);
+  line-height: 1.375rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  word-break: normal;
+}
+
+::slotted(*) {
+  @include typography.style(body1);
+  color: var(--_footer-item-color);
+  line-height: 1.375rem;
+  margin: 0;
+}
+
+::slotted(a) {
+  text-decoration: underline;
+}
+
+::slotted(a:hover) {
+  text-decoration: none;
+}
+
+/* stylelint-enable custom-property-pattern */
