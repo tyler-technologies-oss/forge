@@ -86,7 +86,7 @@ export const WithTitle: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper orientation="horizontal" numbered>
-      <h2 slot="title">Record progress</h2>
+      <span slot="title">Record progress</span>
       <forge-process-step label="Application received" state="completed">
         <span slot="meta">Jul 17, 2026</span>
       </forge-process-step>
@@ -117,7 +117,7 @@ export const WithStepContent: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <forge-process-stepper>
-      <h2 slot="title">Stage progress</h2>
+      <span slot="title">Stage progress</span>
       <forge-process-step label="Verbal warning" state="completed">
         <span slot="meta">Started:</span>
         <span slot="meta">01/15/2026</span>
