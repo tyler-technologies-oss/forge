@@ -47,6 +47,15 @@ const meta = {
       exclude: ['steps', 'compact', 'progress']
     })
   },
+  // The API section adds an h4 for every table, which makes the contents list long enough to
+  // scroll. Limiting it to h2 and h3 keeps one entry per documentation section and per component.
+  parameters: {
+    docs: {
+      toc: {
+        headingSelector: 'h2,h3'
+      }
+    }
+  },
   args: {
     orientation: 'vertical',
     numbered: false

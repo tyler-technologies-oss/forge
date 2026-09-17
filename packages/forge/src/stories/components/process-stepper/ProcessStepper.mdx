@@ -9,12 +9,6 @@ import * as ProcessStepperStories from './ProcessStepper.stories';
     CustomEvent<IProcessStepperChangeEventData>, which otherwise force the page wider than a narrow
     docs pane and introduce a horizontal scrollbar. */}
 <style>{`
-  /* The API section nests three levels deep, which leaves the contents list too narrow for
-     "Dependencies" to fit once its own vertical scrollbar appears. */
-  .toc-list-item a {
-    overflow-wrap: anywhere;
-  }
-
   @media (max-width: 820px) {
     .sbdocs-content table {
       table-layout: fixed;
