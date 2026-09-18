@@ -1,0 +1,276 @@
+@use '../avatar';
+@use '../button';
+@use '../card';
+@use '../core/styles/scrollbar';
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+@use '../dialog';
+@use '../icon';
+@use '../list/list-item';
+@use '../popover';
+@use '../skeleton';
+@use '../toolbar';
+@use '../utils/mixins';
+
+//
+// Host
+//
+
+:host {
+  display: contents;
+  padding: 0;
+
+  & * {
+    box-sizing: border-box;
+    @include scrollbar.base;
+  }
+}
+
+//
+// Base
+//
+
+/* stylelint-disable custom-property-pattern */
+
+.outer-container {
+  --_app-launcher-avatar-size: 48px;
+}
+
+h1 {
+  @include typography.style(heading3);
+
+  margin: 0;
+}
+
+h2 {
+  @include typography.style(heading1);
+
+  margin: 0;
+}
+
+forge-popover {
+  @include popover.provide-theme(
+    (
+      background: #{theme.variable(surface-dim)}
+    )
+  );
+}
+
+.v-stack {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.header {
+  @include toolbar.provide-theme(
+    (
+      background: none
+    )
+  );
+}
+
+.outer-container {
+  max-height: var(--_app-launcher-max-height);
+  width: var(--_app-launcher-width);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.search-container {
+  padding-inline: #{spacing.variable(medium)};
+  padding-block-start: #{spacing.variable(medium)};
+}
+
+.app-list-container {
+  height: 100%;
+  min-height: 0;
+  padding: #{spacing.variable(medium)};
+}
+
+.app-list-item {
+  @include list-item.provide-theme(
+    (
+      padding: #{spacing.variable(medium)},
+      height: calc(var(--_app-launcher-avatar-size) + #{spacing.variable(medium)}),
+      gap: #{spacing.variable(medium)},
+      shape: #{spacing.variable(xsmall)}
+    )
+  );
+}
+
+.app-avatar {
+  @include avatar.provide-theme(
+    (
+      size: var(--_app-launcher-avatar-size),
+      background: #{theme.variable(tertiary-container-low)},
+      color: #{theme.variable(on-tertiary-container-low)}
+    )
+  );
+
+  forge-icon {
+    @include icon.provide-theme(
+      (
+        font-size: calc(var(--_app-launcher-avatar-size) * 0.75),
+        color: #{theme.variable(on-tertiary-container-low)}
+      )
+    );
+  }
+}
+
+.inner-container {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+  padding: #{spacing.variable(medium)};
+  padding-block-start: 0;
+
+  &.related-view {
+    grid-template-rows: auto 1fr;
+  }
+
+  forge-card {
+    @include card.provide-theme(
+      (
+        overflow: hidden
+      )
+    );
+
+    min-height: 0;
+
+    &::part(root) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.scroll-container {
+  height: 100%;
+  overflow-y: auto;
+  min-height: 0;
+  scroll-padding-bottom: #{spacing.variable(xxxlarge)};
+}
+
+.view-all-apps-button {
+  display: flex;
+  margin-inline: #{spacing.variable(medium)};
+  margin-block-end: #{spacing.variable(medium)};
+
+  forge-button {
+    @include button.provide-theme(
+      (
+        height: var(--_app-launcher-view-all-apps-button-height)
+      )
+    );
+    flex: 1;
+  }
+}
+
+.app-launcher-links-card {
+  margin-block-start: #{spacing.variable(medium)};
+  max-height: 204px;
+}
+
+.app-launcher-links {
+  display: flex;
+  flex-direction: column;
+  gap: #{spacing.variable(xsmall)};
+  overflow-y: auto;
+  height: 100%;
+
+  @include list-item.provide-theme(
+    (
+      padding: #{spacing.variable(large)},
+      shape: #{spacing.variable(xsmall)}
+    )
+  );
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  height: 100%;
+
+  forge-icon {
+    font-size: 72px;
+    color: #{theme.variable(text-medium)};
+  }
+
+  p {
+    @include typography.style(subheading2);
+    text-align: center;
+  }
+}
+
+.loading-state {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  height: 100%;
+  gap: #{spacing.variable(small)};
+
+  forge-skeleton {
+    height: calc(var(--_app-launcher-avatar-size) + #{spacing.variable(xsmall)});
+    width: 100%;
+    cursor: progress;
+
+    @include skeleton.provide-theme(
+      (
+        margin: 0
+      )
+    );
+  }
+
+  .title-skeleton {
+    height: 16px;
+    width: 96px;
+    justify-self: start;
+  }
+
+  .button-skeleton {
+    width: 100%;
+    height: 36px;
+  }
+
+  .loading-text {
+    @include mixins.visually-hidden;
+  }
+}
+
+//
+// State
+//
+
+// Large screen (popover mode)
+:host(:state(large)) {
+  .outer-container {
+    --_app-launcher-avatar-size: 48px;
+    --_app-launcher-width: 500px;
+    --_app-launcher-max-height: 90dvh;
+    --_app-launcher-view-all-apps-button-height: 36px;
+  }
+}
+
+// Small screen (dialog mode)
+:host(:state(small)) {
+  @include dialog.provide-theme(
+    (
+      width: 100%,
+      height: 100%
+    )
+  );
+
+  .outer-container {
+    --_app-launcher-avatar-size: 56px;
+    --_app-launcher-width: 100%;
+    --_app-launcher-max-height: 100dvh;
+    --_app-launcher-view-all-apps-button-height: 56px;
+  }
+}
+
+/* stylelint-enable custom-property-pattern */
