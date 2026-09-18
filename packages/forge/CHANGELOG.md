@@ -1,5 +1,16 @@
 # @tylertech/forge
 
+## 3.18.0
+
+### Minor Changes
+
+- 95d74ca: feat(app-bar-menu-button): add `expanded`, `controls`, and `hasPopup` properties for ARIA state on the internal button
+- 49aa4bc: feat(menu): add an `onSelect` callback to menu options so each option can carry its own handler instead of branching on the `forge-menu-select` event value
+
+### Patch Changes
+
+- f658799: fix: guard against attempts to redefine Forge components (this is a temporary workaround that will be reverted in v4)
+
 ## 3.17.0
 
 ### Minor Changes
