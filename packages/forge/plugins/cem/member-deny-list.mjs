@@ -4,17 +4,23 @@
 export default function forgeMemberDenyListPlugin() {
   const GENERAL_MEMBER_DENY_LIST = [
     /^\[.*\]$/, // All Symbol members
-    'initializedCallback',
-    'formStateRestoreCallback',
-    'formResetCallback',
+    'checkValidity',
+    'form',
+    'formAssociated',
     'formAssociatedCallback',
     'formDisabledCallback',
-    'labelClickedCallback',
+    'formResetCallback',
+    'formStateRestoreCallback',
+    'initializedCallback',
     'labelChangedCallback',
-    'formAssociated',
-    'form',
+    'labelClickedCallback',
     'labels',
+    'reportValidity',
+    'setCustomValidity',
     'setFormValue',
+    'validationMessage',
+    'validity',
+    'willValidate',
     '_core',
     '_internals'
   ];
@@ -34,6 +40,8 @@ export default function forgeMemberDenyListPlugin() {
     'willUpdate'
   ];
 
+  const LIT_ELEMENT_CLASSES = ['LitElement', 'BaseLitElement', 'OptionConfigComponent', 'OptionGroupConfigComponent'];
+
   return {
     name: 'FORGE - MEMBER-DENYLIST',
     moduleLinkPhase({ moduleDoc }) {
@@ -42,7 +50,7 @@ export default function forgeMemberDenyListPlugin() {
       classes?.forEach(klass => (klass.members = klass?.members?.filter(deny(GENERAL_MEMBER_DENY_LIST))));
 
       // LitElement classes
-      const litElementClasses = classes?.filter(klass => klass.superclass?.name === 'LitElement' || klass.superclass?.name === 'BaseLitElement');
+      const litElementClasses = classes?.filter(klass => LIT_ELEMENT_CLASSES.includes(klass.superclass?.name));
       litElementClasses?.forEach(klass => (klass.members = klass?.members?.filter(deny(LIT_ELEMENT_MEMBER_DENY_LIST))));
     }
   };
