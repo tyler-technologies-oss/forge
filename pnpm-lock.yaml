@@ -426,6 +426,31 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(lit@3.3.2)(vitest@4.1.11)
 
+  packages/forge-adapter-codegen:
+    dependencies:
+      '@angular/cli':
+        specifier: ^20.3.13
+        version: 20.3.35(@types/node@25.5.0)(chokidar@4.0.3)
+      '@tylertech/forge-schematics':
+        specifier: workspace:*
+        version: link:../forge-schematics
+      change-case:
+        specifier: ^5.4.4
+        version: 5.4.4
+      custom-element-react-wrappers:
+        specifier: ^1.7.3
+        version: 1.7.3(prettier@3.8.1)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.1
+    devDependencies:
+      '@tylertech-eslint/eslint-plugin':
+        specifier: 'catalog:'
+        version: 4.0.0(eslint@9.39.4(jiti@2.6.1))(typescript-eslint@8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(typescript@5.9.3)
+      eslint:
+        specifier: 'catalog:'
+        version: 9.39.4(jiti@2.6.1)
+
   packages/forge-angular:
     dependencies:
       tslib:
@@ -4171,7 +4196,7 @@ packages:
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   change-case@5.4.4:
-    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
+    resolution: {integrity: sha1-DVK1B9j7jyBDQ0MjgdGm17/5egI=}
 
   character-entities@2.0.2:
     resolution: {integrity: sha512-shx7oQ0Awen/BRIdkjkvz54PnEEI/EjwXDSIZp86/KKdbafHh1Df/RYGBhn4hbe2+uKC9FnT5UCEdyPz3ai9hQ==}
@@ -4390,6 +4415,9 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  custom-element-react-wrappers@1.7.3:
+    resolution: {integrity: sha1-mkd1iMBrG8cAdYzTUYkkX/sN2sc=}
 
   custom-element-vs-code-integration@1.5.0:
     resolution: {integrity: sha512-dMKlHq7qz1HbNZUXqw/4fVTh8FBLYX/dIQRt9M0M3KX+Z4iXKUzXxCBdNIdLjE18kMiOCZuRLDZly5mBznoCYw==}
@@ -10880,6 +10908,12 @@ snapshots:
   cssesc@3.0.0: {}
 
   csstype@3.2.3: {}
+
+  custom-element-react-wrappers@1.7.3(prettier@3.8.1):
+    dependencies:
+      '@prettier/sync': 0.5.5(prettier@3.8.1)
+    transitivePeerDependencies:
+      - prettier
 
   custom-element-vs-code-integration@1.5.0(patch_hash=bb1736b8f4ba90b573afc0bea1345821b24244e6acabe81ec171e2abb9841297)(prettier@3.8.1):
     dependencies:
