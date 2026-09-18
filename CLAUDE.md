@@ -67,6 +67,10 @@ DO NOT add comments unless code is complex. Defer to configs.
 - `packages/forge-react` - React adapter library (see its CLAUDE.md)
 - `packages/forge-angular` - Angular adapter library (see its CLAUDE.md)
 - `packages/forge-schematics` - Angular Schematics for generating custom element proxies (see its CLAUDE.md)
+- `packages/forge-rich-text-editor` - Rich text editor Web Components, built on Tiptap (see its CLAUDE.md)
+- `packages/forge-react-rich-text-editor` - React adapter for the rich text editor (see its CLAUDE.md)
+- `packages/forge-angular-rich-text-editor` - Angular adapter for the rich text editor (see its CLAUDE.md)
+- `packages/forge-adapter-codegen` - Shared adapter code generation, private to this repo (see its CLAUDE.md)
 
 ## Blocks
 

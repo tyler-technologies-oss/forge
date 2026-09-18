@@ -26,6 +26,8 @@ export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ri
  * It provides the editor element reference to the editor context and must be used within
  * a forge-rich-text-context component. Use this when you need to separate the toolbar from
  * the content area in your layout.
+ *
+ * @dependency forge-focus-indicator
  */
 @customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {

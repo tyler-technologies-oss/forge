@@ -31,6 +31,8 @@ export const RTE_STRIKE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-strik
  * cursor is positioned within strikethrough text. The feature announces state changes to screen
  * readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Strikethrough'] - The accessible label for the strikethrough button.
  *
  * @attribute {string} label - The accessible label for the strikethrough button.
