@@ -178,6 +178,18 @@ export const Interactive: Story = {
   `
 };
 
+export const InteractiveVertical: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <forge-process-stepper @forge-process-stepper-change=${changeAction} @forge-process-step-select=${selectAction}>
+      <forge-process-step state="completed"><a href="#application">Application received</a></forge-process-step>
+      <forge-process-step state="current" description="Assigned to J. Rivera"><a href="#review">Internal review</a></forge-process-step>
+      <forge-process-step><a href="#inspection">Site inspection</a></forge-process-step>
+      <forge-process-step><a href="#decision">Decision</a></forge-process-step>
+    </forge-process-stepper>
+  `
+};
+
 export const Numbered: Story = {
   ...standaloneStoryParams,
   render: () => html`

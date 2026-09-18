@@ -22,6 +22,7 @@
   grid-template-columns: max-content 1fr;
   min-block-size: #{token(row-min-block-size)};
   padding-inline-start: calc(#{token(line-active-width)} + #{token(line-gap)});
+  row-gap: #{token(label-content-gap)};
 }
 
 @mixin horizontal {

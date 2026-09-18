@@ -182,17 +182,28 @@ The ring is offset from the label text and has rounded corners. Both measurement
 | Custom property                                     | Default |
 | --------------------------------------------------- | ------- |
 | `--forge-process-step-focus-indicator-offset`       | `4px`   |
-| `--forge-process-step-focus-indicator-offset-block` | `4px`   |
+| `--forge-process-step-focus-indicator-offset-block` | `2px`   |
 | `--forge-process-step-focus-indicator-shape`        | `4px`   |
 
-The ring's outline is painted outside its offset, so the space between the marker and the label has
-to accommodate the offset plus the outline width for the two never to touch. In the vertical
-orientation the marker and label share a row and `--forge-process-step-sidebar-gap` provides that
-space; in the horizontal orientation the marker sits above the label and
-`--forge-process-step-marker-label-gap` does. Raising either focus offset past the gap that
-separates them will make a focused label overlap the marker, so raise the gap to match.
+The ring's outline is painted outside its offset, so every gap around the label has to accommodate
+the offset plus the outline width for the ring never to touch its neighbours. Three gaps do that
+work, and each leaves at least 4px of visible clearance at the default offsets:
+
+| Gap                                        | Separates the label from       | Default |
+| ------------------------------------------ | ------------------------------ | ------- |
+| `--forge-process-step-sidebar-gap`         | the marker, when vertical      | `12px`  |
+| `--forge-process-step-marker-label-gap`    | the marker, when horizontal    | `8px`   |
+| `--forge-process-step-label-content-gap`   | the description and content    | `8px`   |
+
+Raising either focus offset past the gap that separates the label from a neighbour will make a
+focused label overlap it, so raise the corresponding gap to match.
 
 <Canvas of={ProcessStepperStories.Interactive} />
+
+Interactive steps work the same way in the vertical orientation, where a link or button label sits
+beside its marker rather than beneath it.
+
+<Canvas of={ProcessStepperStories.InteractiveVertical} />
 
 ## API
 

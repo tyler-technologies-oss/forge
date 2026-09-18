@@ -602,10 +602,37 @@ describe('ProcessStep', () => {
       const ring = indicator.getBoundingClientRect();
       const markerBox = marker.getBoundingClientRect();
 
-      // The outline is painted outside the indicator's box, so it has to be counted in.
+      // The outline is painted outside the indicator's box, so it has to be counted in. The gap has
+      // to be visible rather than merely non-overlapping, so it is checked against the smallest
+      // spacing step rather than zero.
       const clearance = orientation === 'vertical' ? ring.left - outlineWidth - markerBox.right : ring.top - outlineWidth - markerBox.bottom;
 
-      expect(clearance).toBeGreaterThan(0);
+      expect(clearance).toBeGreaterThanOrEqual(4);
+    });
+
+    it('should keep the focus ring clear of the step content', async () => {
+      const screen = render(html`
+        <div>
+          <button id="sentinel">Sentinel</button>
+          <forge-process-stepper>
+            <forge-process-step state="current" description="Assigned to J. Rivera"><button>One</button></forge-process-step>
+          </forge-process-stepper>
+        </div>
+      `);
+      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
+      await stepper.updateComplete;
+      const step = stepper.querySelector('forge-process-step') as ProcessStepComponent;
+      await step.updateComplete;
+
+      (screen.container.querySelector('#sentinel') as HTMLButtonElement).focus();
+      await userEvent.tab();
+
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
+      const description = step.shadowRoot?.querySelector('.description') as HTMLElement;
+      const outlineWidth = parseFloat(getComputedStyle(indicator).outlineWidth);
+      const clearance = description.getBoundingClientRect().top - (indicator.getBoundingClientRect().bottom + outlineWidth);
+
+      expect(clearance).toBeGreaterThanOrEqual(4);
     });
 
     it('should keep the native focus outline when the step is not interactive', async () => {

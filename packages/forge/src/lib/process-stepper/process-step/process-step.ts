@@ -61,6 +61,7 @@ import styles from './process-step.scss';
  * @cssproperty --forge-process-step-description-color - The color of the description.
  * @cssproperty --forge-process-step-disabled-opacity - The opacity applied to a disabled step.
  * @cssproperty --forge-process-step-marker-label-gap - The spacing between the marker and the label in the horizontal orientation, which leaves room for the focus ring.
+ * @cssproperty --forge-process-step-label-content-gap - The spacing between the label and the step content, which leaves room for the focus ring.
  * @cssproperty --forge-process-step-focus-indicator-offset - The distance between the label text and the focus ring along the inline axis.
  * @cssproperty --forge-process-step-focus-indicator-offset-block - The distance between the label text and the focus ring along the block axis.
  * @cssproperty --forge-process-step-focus-indicator-shape - The corner radius of the focus ring.

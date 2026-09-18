@@ -134,6 +134,27 @@
 
 
   <div>
+    <h3 class="forge-typography--heading2">Clickable Steps (Vertical)</h3>
+    <forge-process-stepper id="clickable-vertical-stepper">
+      <forge-process-step state="completed"><button>Application received</button></forge-process-step>
+      <forge-process-step state="current" description="Assigned to J. Rivera"><button>Internal review</button></forge-process-step>
+      <forge-process-step><button>Site inspection</button></forge-process-step>
+      <forge-process-step><button>Decision</button></forge-process-step>
+    </forge-process-stepper>
+    <p id="clickable-vertical-output" class="forge-color--text-medium">No step selected.</p>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Interactive With Links (Vertical)</h3>
+    <forge-process-stepper numbered>
+      <forge-process-step state="completed"><a href="#cart">Cart</a></forge-process-step>
+      <forge-process-step state="current"><a href="#shipping">Shipping</a></forge-process-step>
+      <forge-process-step><a href="#payment">Payment</a></forge-process-step>
+      <forge-process-step><a href="#review">Review</a></forge-process-step>
+    </forge-process-stepper>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">Interactive With Links</h3>
     <forge-process-stepper orientation="horizontal" numbered>
       <forge-process-step state="completed"><a href="#cart">Cart</a></forge-process-step>
