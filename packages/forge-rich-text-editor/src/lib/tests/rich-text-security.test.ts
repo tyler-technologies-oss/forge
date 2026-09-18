@@ -2,7 +2,7 @@ import { expect, fixture, html } from '@open-wc/testing';
 import sinon from 'sinon';
 import { RichTextContextComponent } from '../rich-text-context.js';
 import { RichTextRendererComponent } from '../rich-text-renderer.js';
-import type { RichTextFeatureLinkComponent } from '../features/rte-link.js';
+import type { RteLinkComponent } from '../features/rte-link.js';
 
 import '../rich-text-context.js';
 import '../rich-text-content.js';
@@ -20,7 +20,7 @@ describe('Security: XSS Prevention', () => {
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
       // Property should not exist in the public API
       expect(link).to.not.have.property('validateUrls');
@@ -45,7 +45,7 @@ describe('Security: XSS Prevention', () => {
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       // Trigger validation via DOM input event (native private #validateUrl not accessible via as any)
       (link as any)._linkUrl = 'javascript:alert(1)';
       await link.updateComplete;
@@ -196,7 +196,7 @@ describe('Security: XSS Prevention', () => {
   describe('Link Protocol Validation', () => {
     // #validateUrl is a native private method — not accessible via (as any).
     // Trigger it by dispatching an input event on the shadow DOM input element.
-    async function triggerLinkValidation(link: RichTextFeatureLinkComponent, url: string): Promise<void> {
+    async function triggerLinkValidation(link: RteLinkComponent, url: string): Promise<void> {
       (link as any)._linkUrl = url;
       await link.updateComplete;
       const input = link.shadowRoot?.querySelector('input') as HTMLInputElement;
@@ -215,7 +215,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'javascript:alert(1)');
 
       expect((link as any)._validationError).to.include('Invalid protocol');
@@ -229,7 +229,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'data:text/html,<script>alert(1)</script>');
 
       expect((link as any)._validationError).to.include('Invalid protocol');
@@ -243,7 +243,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'vbscript:alert(1)');
 
       expect((link as any)._validationError).to.include('Invalid protocol');
@@ -257,7 +257,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'file:///etc/passwd');
 
       expect((link as any)._validationError).to.include('Invalid protocol');
@@ -271,7 +271,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       // java%09script:alert(1) decodes to java\tscript:alert(1) — matches startsWith check after decode
       await triggerLinkValidation(link, 'java%09script:alert(1)');
 
@@ -288,7 +288,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'https://example.com?redirect=javascript:alert(1)');
 
       // Should NOT be blocked — the protocol is https:, not javascript:
@@ -303,7 +303,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'https://example.com');
 
       expect((link as any)._validationError).to.equal('');
@@ -317,7 +317,7 @@ describe('Security: XSS Prevention', () => {
       `);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+      const link = el.querySelector('forge-rte-link') as RteLinkComponent;
       await triggerLinkValidation(link, 'http://example.com/path?query=value');
 
       expect((link as any)._validationError).to.equal('');
@@ -1277,7 +1277,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Verify properties that could disable security don't exist
         expect(link).to.not.have.property('validateUrls');
@@ -1359,7 +1359,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     describe('Unicode Homograph Attack Detection', () => {
-      async function triggerValidation(link: RichTextFeatureLinkComponent, url: string): Promise<void> {
+      async function triggerValidation(link: RteLinkComponent, url: string): Promise<void> {
         const input = link.shadowRoot?.querySelector('input') as HTMLInputElement;
         if (input) {
           Object.defineProperty(input, 'value', { value: url, writable: true, configurable: true });
@@ -1380,7 +1380,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Use Cyrillic 'е' (U+0435) instead of Latin 'e' (U+0065) — now a non-blocking warning
         (link as any)._linkUrl = 'https://еxample.com';
@@ -1400,7 +1400,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         await triggerValidation(link, 'https://xn--xample-9ua.com');
 
@@ -1417,7 +1417,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         await triggerValidation(link, 'https://example.com');
 
@@ -1433,7 +1433,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Greek letters that look like Latin — IDN is a warning, not a blocking error
         await triggerValidation(link, 'https://gοοgle.com'); // Greek omicron (ο)
@@ -1444,7 +1444,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     describe('URL Length Validation', () => {
-      async function triggerValidation(link: RichTextFeatureLinkComponent, url: string): Promise<void> {
+      async function triggerValidation(link: RteLinkComponent, url: string): Promise<void> {
         (link as any)._linkUrl = url;
         await link.updateComplete;
         const input = link.shadowRoot?.querySelector('input') as HTMLInputElement;
@@ -1463,7 +1463,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Create URL over 2048 characters
         await triggerValidation(link, 'https://example.com/' + 'a'.repeat(2100));
@@ -1480,7 +1480,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Create URL under 2048 characters
         await triggerValidation(link, 'https://example.com/' + 'a'.repeat(2000));
@@ -1496,7 +1496,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
 
         // Create URL exactly at 2049 (1 over limit)
         const url = 'https://example.com/' + 'a'.repeat(2029);
@@ -1618,7 +1618,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     describe('Protocol blocklist uses startsWith (no over-blocking)', () => {
-      async function triggerLinkValidation(link: RichTextFeatureLinkComponent, url: string): Promise<void> {
+      async function triggerLinkValidation(link: RteLinkComponent, url: string): Promise<void> {
         (link as any)._linkUrl = url;
         await link.updateComplete;
         const input = link.shadowRoot?.querySelector('input') as HTMLInputElement;
@@ -1637,7 +1637,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
         await triggerLinkValidation(link, 'https://x.com/?next=about:blank');
 
         // Should not be blocked — about:blank is in query params, not the protocol position
@@ -1652,7 +1652,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
         await triggerLinkValidation(link, 'javascript:alert(1)');
 
         expect((link as any)._validationError).to.include('Invalid protocol');
@@ -1660,7 +1660,7 @@ describe('Security: XSS Prevention', () => {
     });
 
     describe('IDN URLs show non-blocking warning', () => {
-      async function triggerLinkValidation(link: RichTextFeatureLinkComponent, url: string): Promise<void> {
+      async function triggerLinkValidation(link: RteLinkComponent, url: string): Promise<void> {
         (link as any)._linkUrl = url;
         await link.updateComplete;
         const input = link.shadowRoot?.querySelector('input') as HTMLInputElement;
@@ -1679,7 +1679,7 @@ describe('Security: XSS Prevention', () => {
         `);
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const link = el.querySelector('forge-rte-link') as RichTextFeatureLinkComponent;
+        const link = el.querySelector('forge-rte-link') as RteLinkComponent;
         await triggerLinkValidation(link, 'https://xn--e1afmkfd.xn--80akhbyknj4f/path');
 
         // Error should be empty so Apply is enabled

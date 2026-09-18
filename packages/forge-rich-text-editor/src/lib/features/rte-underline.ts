@@ -4,11 +4,12 @@ import { IconRegistry } from '@tylertech/forge';
 import { tylIconFormatUnderlined } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
-import './core/rich-text-feature-button.js';
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -16,7 +17,7 @@ declare global {
   }
 }
 
-export const RteUnderlineComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-underline';
+export const RTE_UNDERLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-underline';
 
 /**
  * @tag forge-rte-underline
@@ -34,8 +35,11 @@ export const RteUnderlineComponentTagName: keyof HTMLElementTagNameMap = 'forge-
  *
  * @attribute {string} label - The accessible label for the underline button.
  */
-@customElement(RteUnderlineComponentTagName)
-export class RteUnderlineComponent extends LitElement implements RichTextEditorFeature {
+@customElement(RTE_UNDERLINE_TAG_NAME)
+export class RteUnderlineComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_UNDERLINE_TAG_NAME;
+
   static {
     IconRegistry.define(tylIconFormatUnderlined);
   }

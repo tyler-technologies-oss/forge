@@ -2,6 +2,7 @@ import { defineIconButtonComponent } from '@tylertech/forge';
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { featureHostStyles } from './feature-styles.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -9,11 +10,11 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-rich-text-feature-button': CustomEvent<boolean>;
+    'forge-rte-tool-toggle': CustomEvent<boolean>;
   }
 }
 
-export const RteToolButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-tool-button';
+export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-tool-button';
 
 /**
  * @tag forge-rte-tool-button
@@ -42,8 +43,11 @@ export const RteToolButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge
  *
  * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the toggle state.
  */
-@customElement(RteToolButtonComponentTagName)
+@customElement(RTE_TOOL_BUTTON_TAG_NAME)
 export class RteToolButtonComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_TOOL_BUTTON_TAG_NAME;
+
   static {
     defineIconButtonComponent();
   }

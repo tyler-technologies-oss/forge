@@ -4,19 +4,20 @@ import { IconRegistry } from '@tylertech/forge';
 import { tylIconFormatStrikethrough } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
-import './core/rich-text-feature-button.js';
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-strike': RichTextFeatureStrikeComponent;
+    'forge-rte-strike': RteStrikeComponent;
   }
 }
 
-export const RichTextFeatureStrikeComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-strike';
+export const RTE_STRIKE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-strike';
 
 /**
  * @tag forge-rte-strike
@@ -34,8 +35,11 @@ export const RichTextFeatureStrikeComponentTagName: keyof HTMLElementTagNameMap 
  *
  * @attribute {string} label - The accessible label for the strikethrough button.
  */
-@customElement(RichTextFeatureStrikeComponentTagName)
-export class RichTextFeatureStrikeComponent extends LitElement implements RichTextEditorFeature {
+@customElement(RTE_STRIKE_TAG_NAME)
+export class RteStrikeComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_STRIKE_TAG_NAME;
+
   static {
     IconRegistry.define(tylIconFormatStrikethrough);
   }

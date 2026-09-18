@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureHeadingComponent } from '../rte-heading.js';
+import { RteHeadingComponent } from '../rte-heading.js';
 
 import '../../rich-text-editor.js';
 import '../rte-heading.js';
@@ -266,7 +266,7 @@ interface HeadingFixtureOptions {
 
 interface HeadingFixture {
   el: RichTextEditorComponent;
-  headingFeature: RichTextFeatureHeadingComponent;
+  headingFeature: RteHeadingComponent;
   h1Button: () => HTMLElement;
   h2Button: () => HTMLElement;
   h3Button: () => HTMLElement;
@@ -287,7 +287,7 @@ async function createFixture(options: HeadingFixtureOptions = {}): Promise<Headi
     </forge-rich-text-editor>
   `);
 
-  const headingFeature = el.querySelector('forge-rte-heading') as RichTextFeatureHeadingComponent;
+  const headingFeature = el.querySelector('forge-rte-heading') as RteHeadingComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize

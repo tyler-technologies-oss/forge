@@ -7,20 +7,21 @@ import { css, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { editorContext, EditorContext } from '../editor-context.js';
-import { RichTextEditorFeature } from './rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
 import { VirtualElement } from '@tylertech/forge';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
-import './core/rich-text-feature-button.js';
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-rte-link': RichTextFeatureLinkComponent;
+    'forge-rte-link': RteLinkComponent;
   }
 }
 
-export const RichTextFeatureLinkComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-link';
+export const RTE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-link';
 
 /**
  * @tag forge-rte-link
@@ -43,8 +44,11 @@ export const RichTextFeatureLinkComponentTagName: keyof HTMLElementTagNameMap = 
  *
  * @note URL validation is always enabled for security and cannot be disabled.
  */
-@customElement(RichTextFeatureLinkComponentTagName)
-export class RichTextFeatureLinkComponent extends LitElement implements RichTextEditorFeature {
+@customElement(RTE_LINK_TAG_NAME)
+export class RteLinkComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_LINK_TAG_NAME;
+
   static {
     IconRegistry.define(tylIconLink);
     defineButtonComponent();

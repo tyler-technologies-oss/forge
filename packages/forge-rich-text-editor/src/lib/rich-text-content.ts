@@ -5,6 +5,7 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { editorContext, EditorContext } from './editor-context.js';
 
 import styles from './rich-text-content.scss';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -12,7 +13,7 @@ declare global {
   }
 }
 
-export const RichTextContentComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-content';
+export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-content';
 
 /**
  * @tag forge-rich-text-content
@@ -26,8 +27,11 @@ export const RichTextContentComponentTagName: keyof HTMLElementTagNameMap = 'for
  * a forge-rich-text-context component. Use this when you need to separate the toolbar from
  * the content area in your layout.
  */
-@customElement(RichTextContentComponentTagName)
+@customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_CONTENT_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   @state()
