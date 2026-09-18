@@ -14,6 +14,9 @@ import { backfillAttributeFieldNames, unwrapEventDetailTypes } from '../core/nor
  * @property {(tagName: string) => string} [componentName] Names the React component for a tag.
  *   Defaults to the pascal-cased tag, so `forge-rte-bold` becomes `ForgeRteBold`, matching
  *   `@tylertech/forge-react`.
+ * @property {Record<string, string[]>} [propertyProps] Props, keyed by tag name, that React must
+ *   assign as PROPERTIES rather than attributes - for attribute-backed props whose value may be an
+ *   object. See `forwardAsProperties`.
  */
 
 /**
@@ -22,7 +25,7 @@ import { backfillAttributeFieldNames, unwrapEventDetailTypes } from '../core/nor
  * @param {ReactAdapterOptions} options
  * @returns {{ generated: number, backfilled: number, unwrapped: number }} What the run changed.
  */
-export function generateReactAdapter({ packageName, entryPoints, outDir = 'dist', componentName = pascalCase }) {
+export function generateReactAdapter({ packageName, entryPoints, outDir = 'dist', componentName = pascalCase, propertyProps = {} }) {
   const { manifest } = loadManifest(packageName);
   const elements = getCustomElements(manifest);
 
@@ -33,6 +36,10 @@ export function generateReactAdapter({ packageName, entryPoints, outDir = 'dist'
   const declarations = elements.map(element => element.declaration);
   const backfilled = backfillAttributeFieldNames(declarations);
   const unwrapped = unwrapEventDetailTypes(declarations);
+
+  for (const { declaration } of elements) {
+    forwardAsProperties(declaration, propertyProps[declaration.tagName] ?? []);
+  }
 
   /**
    * The generator derives BOTH the React component name and the element type import from the
@@ -64,6 +71,50 @@ export function generateReactAdapter({ packageName, entryPoints, outDir = 'dist'
     backfilled,
     unwrapped
   };
+}
+
+/**
+ * Drops the named props from a declaration's attribute list so the generator forwards them as
+ * properties instead of attributes.
+ *
+ * The generator decides this by whether the manifest lists a prop as an attribute: attribute-backed
+ * props are spread into `createElement`, and React sets unknown props on a custom element as
+ * ATTRIBUTES - which stringifies an object to `"[object Object]"`. Props with no attribute get a
+ * `useProperties` hook that assigns `element[prop] = value` through a ref, which works for objects
+ * and strings alike.
+ *
+ * Only the in-memory manifest is changed; the package's published `custom-elements.json` still
+ * documents the attribute, which remains real and usable in HTML.
+ *
+ * @param {object} declaration A custom element declaration to adjust in place.
+ * @param {string[]} propNames Field names to forward as properties.
+ */
+function forwardAsProperties(declaration, propNames) {
+  if (!propNames.length) {
+    return;
+  }
+
+  const attributes = declaration.attributes ?? [];
+  const publicFields = new Set(
+    (declaration.members ?? [])
+      .filter(member => member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected')
+      .map(member => member.name)
+  );
+
+  for (const propName of propNames) {
+    if (!publicFields.has(propName)) {
+      throw new Error(`${declaration.tagName}: cannot forward "${propName}" as a property because it is not a public field.`);
+    }
+
+    const index = attributes.findIndex(attribute => attribute.fieldName === propName);
+    if (index === -1) {
+      throw new Error(
+        `${declaration.tagName}: "${propName}" is configured to forward as a property but is not attribute-backed, so it already does. Remove it from propertyProps.`
+      );
+    }
+
+    attributes.splice(index, 1);
+  }
 }
 
 /**

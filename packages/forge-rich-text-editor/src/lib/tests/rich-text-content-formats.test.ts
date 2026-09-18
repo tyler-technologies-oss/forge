@@ -101,6 +101,44 @@ describe('RichTextEditor content formats', () => {
     expect(el.toHTML()).toBe('<p>json <strong>works</strong></p>');
   });
 
+  it('should keep a document whose marks are all in the schema', async () => {
+    const el = await createEditor();
+
+    await setContent(el, PARAGRAPH);
+
+    expect(el.toHTML()).toContain('<strong>');
+  });
+
+  it('should discard a document carrying a mark the schema does not define', async () => {
+    // Document input is strict where HTML input is lenient: ProseMirror rejects an unknown mark
+    // type outright, losing the whole document, whereas HTML parsing drops the unknown formatting
+    // and keeps the text. Consumers must slot the features providing the marks their content uses.
+    const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await setContent(bare, PARAGRAPH);
+
+    expect(bare.toHTML()).toBe('<p></p>');
+  });
+
+  it('should keep the text of a mark-free document in a bare editor', async () => {
+    const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await setContent(bare, asDocument({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'plain' }] }] }));
+
+    expect(bare.toHTML()).toBe('<p>plain</p>');
+  });
+
+  it('should keep the text of an HTML string with unsupported formatting', async () => {
+    const bare = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await setContent(bare, '<p>plain <strong>and bold</strong></p>');
+
+    expect(bare.toHTML()).toContain('plain');
+  });
+
   it('should switch between the two formats without reinitializing', async () => {
     const el = await createEditor();
 
