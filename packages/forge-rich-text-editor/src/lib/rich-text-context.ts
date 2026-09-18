@@ -6,6 +6,7 @@ import { Document } from '@tiptap/extension-document';
 import { Text } from '@tiptap/extension-text';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import CharacterCount from '@tiptap/extension-character-count';
+import { CharacterLimit, countCharacters } from './extensions/character-limit.js';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
@@ -416,10 +417,11 @@ export class RichTextContextComponent extends LitElement {
       // Features can contain duplicate extensions. Make sure to filter out any duplicates
       const featureExtensions = Array.from(this.#featureInstances).flatMap(feature => feature.extensions);
 
-      // CharacterCount enforces maxLength as a hard input limit via TipTap's filterTransaction
-      const characterCountExtension = CharacterCount.configure({
-        limit: this.maxLength > 0 ? this.maxLength : undefined
-      });
+      // CharacterCount supplies the word count. The character limit is enforced by CharacterLimit
+      // instead, because CharacterCount's own counter joins blocks with nothing and so never sees
+      // a paragraph break - a document at the limit could still grow through Enter.
+      const characterCountExtension = CharacterCount.configure({});
+      const characterLimitExtension = CharacterLimit.configure({ limit: this.maxLength });
 
       // Add PasteHandler extension
       const pasteHandlerExtension = PasteHandler.configure({
@@ -427,7 +429,7 @@ export class RichTextContextComponent extends LitElement {
         allowPasteImages: this.allowPasteImages
       });
 
-      const extensions = [...DEFAULT_EXTENSIONS, characterCountExtension, pasteHandlerExtension, ...featureExtensions].filter(
+      const extensions = [...DEFAULT_EXTENSIONS, characterCountExtension, characterLimitExtension, pasteHandlerExtension, ...featureExtensions].filter(
         (ext, index, self) => self.findIndex(e => e.name === ext.name) === index
       );
 
@@ -462,7 +464,7 @@ export class RichTextContextComponent extends LitElement {
 
             // Update character and word counts
             const charCountStorage = editor.storage.characterCount;
-            this._characterCount = charCountStorage?.characters?.() ?? 0;
+            this._characterCount = countCharacters(editor.state.doc);
             this._wordCount = charCountStorage?.words?.() ?? 0;
 
             // Perform validation
@@ -490,7 +492,7 @@ export class RichTextContextComponent extends LitElement {
 
       // Initialize counts
       const storage = this._editor.storage.characterCount;
-      this._characterCount = storage?.characters?.() ?? 0;
+      this._characterCount = countCharacters(this._editor.state.doc);
       this._wordCount = storage?.words?.() ?? 0;
 
       // Initial validation
