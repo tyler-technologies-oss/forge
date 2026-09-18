@@ -1,5 +1,5 @@
 <!--
-  @block New Team Dialog
+  @block Dialog — New object with template selection list
   @type pattern
   @description Modal dialog for creating a new team, capturing a name and description and letting the user choose an orchestration pattern from a scrollable list, with a detail card showing a diagram, use case, and example for the selected pattern
   @tags dialog, modal, scaffold, form, list, detail-panel, orchestration, selection, team
@@ -251,7 +251,7 @@
           ${tagBadge(pattern)}
         </div>
 
-        <div class="flex flex-col gap-medium px-medium pb-medium pt-medium">
+        <div class="flex flex-col gap-medium px-medium pb-medium pt-small">
           <p class="text-body1 m-0">${pattern.description}</p>
 
           <div class="flex items-center justify-center p-medium bg-surface-dim rounded-md">
