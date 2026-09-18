@@ -546,6 +546,15 @@ describe('ProcessStep', () => {
 
       expect(indicator?.closest('[part="label"]')).toBeTruthy();
     });
+
+    it('should size the focus indicator to the label rather than the label cell', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
+      const label = step.shadowRoot?.querySelector('.label') as HTMLElement;
+      const cell = step.shadowRoot?.querySelector('[part="label"]') as HTMLElement;
+
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')?.parentElement).toBe(label);
+      expect(label.getBoundingClientRect().width).toBeLessThan(cell.getBoundingClientRect().width);
+    });
   });
 
   describe('slots', () => {

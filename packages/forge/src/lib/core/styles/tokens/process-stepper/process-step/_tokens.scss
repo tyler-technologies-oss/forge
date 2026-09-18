@@ -32,7 +32,10 @@ $tokens: (
   content-padding-block-end: utils.module-val(process-step, content-padding-block-end, spacing.variable(medium)),
   row-min-block-size: utils.module-val(process-step, row-min-block-size, 72px),
   marker-background: utils.module-val(process-step, marker-background, theme.variable(surface)),
-  disabled-opacity: utils.module-val(process-step, disabled-opacity, 0.38)
+  disabled-opacity: utils.module-val(process-step, disabled-opacity, 0.38),
+  focus-indicator-offset: utils.module-val(process-step, focus-indicator-offset, spacing.variable(xsmall)),
+  focus-indicator-offset-block: utils.module-val(process-step, focus-indicator-offset-block, spacing.variable(xxsmall)),
+  focus-indicator-shape: utils.module-val(process-step, focus-indicator-shape, shape.variable(medium))
 ) !default;
 
 @function get($key) {

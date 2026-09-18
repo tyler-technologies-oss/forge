@@ -60,6 +60,9 @@ import styles from './process-step.scss';
  * @cssproperty --forge-process-step-label-color - The color of the label.
  * @cssproperty --forge-process-step-description-color - The color of the description.
  * @cssproperty --forge-process-step-disabled-opacity - The opacity applied to a disabled step.
+ * @cssproperty --forge-process-step-focus-indicator-offset - The distance between the label text and the focus ring along the inline axis.
+ * @cssproperty --forge-process-step-focus-indicator-offset-block - The distance between the label text and the focus ring along the block axis.
+ * @cssproperty --forge-process-step-focus-indicator-shape - The corner radius of the focus ring.
  *
  * @csspart root - The root element.
  * @csspart line - The progress line element.
@@ -249,8 +252,10 @@ export class ProcessStepComponent extends BaseLitElement {
         <div part="line" class=${classMap({ line: true, active: this.lineActive, last: this.last })} aria-hidden="true"></div>
         <div class="sidebar">${this.#marker}</div>
         <div part="label" class="label-row">
-          <slot @slotchange=${this.#handleLabelSlotChange}></slot>
-          ${when(interactive, () => html`<forge-focus-indicator part="focus-indicator"></forge-focus-indicator>`)}
+          <span class="label">
+            <slot @slotchange=${this.#handleLabelSlotChange}></slot>
+            ${when(interactive, () => html`<forge-focus-indicator part="focus-indicator"></forge-focus-indicator>`)}
+          </span>
         </div>
         <div part="content" class="content">
           ${when(this.description, () => html`<span part="description" class="description">${this.description}</span>`)}

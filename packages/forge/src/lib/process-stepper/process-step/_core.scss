@@ -1,4 +1,5 @@
 @use '../../core/styles/typography';
+@use '../../focus-indicator';
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -167,9 +168,30 @@
   @include typography.style(body2);
 }
 
+// The label shrink-wraps its text and hosts the focus indicator, so the focus ring sizes to the
+// label itself rather than the full width of the label cell, and stays clear of the progress line
+// and the step content.
+@mixin label-text {
+  display: inline-block;
+  max-inline-size: 100%;
+  position: relative;
+}
+
+// The ring sits further from the text along the inline axis than the block axis, so short labels
+// are not crowded. `outward-offset` insets the ring evenly on every side, and the block margin
+// pulls it back to the smaller block offset.
+@mixin label-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      outward-offset: #{token(focus-indicator-offset)},
+      offset-block: calc(#{token(focus-indicator-offset)} - #{token(focus-indicator-offset-block)}),
+      shape: #{token(focus-indicator-shape)}
+    )
+  );
+}
+
 // A slotted link or button is reset so the label still reads as text. The interactive affordance
-// comes from the cursor and the focus ring rather than native control chrome. It is positioned so
-// the focus ring sizes to the label, keeping it clear of the progress line and the step content.
+// comes from the cursor and the focus ring rather than native control chrome.
 @mixin slotted-label-control {
   appearance: none;
   background: none;
@@ -179,7 +201,6 @@
   font: inherit;
   margin: 0;
   padding: 0;
-  position: relative;
   text-align: start;
   text-decoration: none;
 }

@@ -134,6 +134,14 @@
   @include core.label;
 }
 
+.label {
+  @include core.label-text;
+}
+
+forge-focus-indicator {
+  @include core.label-focus-indicator;
+}
+
 .label-row ::slotted(a),
 .label-row ::slotted(button) {
   @include core.slotted-label-control;

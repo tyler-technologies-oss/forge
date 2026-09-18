@@ -174,7 +174,21 @@ element.
 
 Because the interactive area is the consumer's own link or button, steps are reachable with `Tab`
 and activate with the keys native to that element. A `<forge-focus-indicator>` draws the focus ring
-around the label only, so keyboard focus never outlines the progress line or the step's content.
+around the label text only, so keyboard focus never outlines the progress line, the label's full
+cell, or the step's content.
+
+The ring sits further from the text along the inline axis than the block axis so short labels are
+not crowded. All three measurements are configurable:
+
+| Custom property                                       | Default       |
+| ----------------------------------------------------- | ------------- |
+| `--forge-process-step-focus-indicator-offset`         | `8px`         |
+| `--forge-process-step-focus-indicator-offset-block`   | `4px`         |
+| `--forge-process-step-focus-indicator-shape`          | `4px`         |
+
+The ring is drawn outside the label, so at the default inline offset it meets the marker in the
+vertical orientation and extends slightly past the leading edge of a horizontal stepper. Reduce
+`--forge-process-step-focus-indicator-offset` if the stepper sits flush against a container edge.
 
 <Canvas of={ProcessStepperStories.Interactive} />
 
