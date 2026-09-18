@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars, tryDefine } from '@tylertech/forge-core';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
+import { property, queryAssignedElements, state } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/index.js';
@@ -50,7 +50,6 @@ export interface IExpansionPanelComponent extends IBaseComponent {
  * @slot - The content of the panel.
  * @slot header - The header of the panel. This is deprecated, prefer using the trigger property instead, or manually associating a button with the panel.
  */
-@customElement(EXPANSION_PANEL_CONSTANTS.elementName)
 export class ExpansionPanelComponent extends BaseLitElement implements IExpansionPanelComponent {
   public static styles = unsafeCSS(styles);
 
@@ -394,6 +393,8 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
     });
   }
 }
+
+tryDefine(EXPANSION_PANEL_CONSTANTS.elementName, ExpansionPanelComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

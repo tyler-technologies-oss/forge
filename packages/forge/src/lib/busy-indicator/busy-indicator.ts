@@ -1,8 +1,8 @@
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
+import { property, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { composeSlottedTextContent } from '../core/utils/lit-utils.js';
 import { HeadingLevel } from '../core/utils/utils.js';
@@ -60,7 +60,6 @@ export const BUSY_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-busy-
  *
  * @event {CustomEvent<void>} forge-busy-indicator-cancel - Fired when the cancel button is clicked.
  */
-@customElement(BUSY_INDICATOR_TAG_NAME)
 export class BusyIndicatorComponent extends BaseLitElement implements IBusyIndicatorComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BUSY_INDICATOR_TAG_NAME;
@@ -262,3 +261,5 @@ export class BusyIndicatorComponent extends BaseLitElement implements IBusyIndic
     }
   }
 }
+
+tryDefine(BUSY_INDICATOR_TAG_NAME, BusyIndicatorComponent);

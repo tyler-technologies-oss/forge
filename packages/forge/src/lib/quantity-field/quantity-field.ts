@@ -1,6 +1,6 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { property, queryAssignedElements } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconMinus, tylIconPlus } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -51,7 +51,6 @@ export const QUANTITY_FIELD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-quant
  * @state required - Indicates whether the field is in its required state.
  * @state invalid - Indicates whether the field is in its invalid state.
  */
-@customElement(QUANTITY_FIELD_TAG_NAME)
 export class QuantityFieldComponent extends BaseLitElement implements IQuantityFieldComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = QUANTITY_FIELD_TAG_NAME;
@@ -147,3 +146,5 @@ export class QuantityFieldComponent extends BaseLitElement implements IQuantityF
     input?.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
 }
+
+tryDefine(QUANTITY_FIELD_TAG_NAME, QuantityFieldComponent);

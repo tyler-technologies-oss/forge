@@ -1,8 +1,8 @@
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconAccountOutline, tylIconLogout } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -83,7 +83,6 @@ export const USER_PROFILE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-user-pr
  * @event {Event} forge-user-profile-sign-in - Fired when the sign in button is clicked.
  * @event {Event} forge-user-profile-sign-out - Fired when the sign out button is clicked.
  */
-@customElement(USER_PROFILE_TAG_NAME)
 export class UserProfileComponent extends BaseLitElement implements IUserProfileComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = USER_PROFILE_TAG_NAME;
@@ -285,3 +284,5 @@ export class UserProfileComponent extends BaseLitElement implements IUserProfile
     }
   }
 }
+
+tryDefine(USER_PROFILE_TAG_NAME, UserProfileComponent);

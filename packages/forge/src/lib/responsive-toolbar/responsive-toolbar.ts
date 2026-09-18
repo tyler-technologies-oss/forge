@@ -1,7 +1,7 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, throttle } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, throttle, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
 import { ToolbarComponent } from '../toolbar/index.js';
@@ -55,7 +55,6 @@ export const RESPONSIVE_TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-r
  *
  * @event {CustomEvent<ResponsiveToolbarUpdateEventData>} forge-responsive-toolbar-update - Dispatched when the overflow state changes.
  */
-@customElement(RESPONSIVE_TOOLBAR_TAG_NAME)
 export class ResponsiveToolbarComponent extends BaseLitElement implements IResponsiveToolbarComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RESPONSIVE_TOOLBAR_TAG_NAME;
@@ -158,3 +157,5 @@ export class ResponsiveToolbarComponent extends BaseLitElement implements IRespo
     this.dispatchEvent(event);
   }
 }
+
+tryDefine(RESPONSIVE_TOOLBAR_TAG_NAME, ResponsiveToolbarComponent);
