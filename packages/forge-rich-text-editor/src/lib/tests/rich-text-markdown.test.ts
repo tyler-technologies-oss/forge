@@ -1,4 +1,6 @@
-import { expect, fixture, html as testHtml } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html as testHtml } from 'lit';
 import { RichTextEditorComponent } from '../rich-text-editor.js';
 import type { RichTextContextComponent } from '../rich-text-context.js';
 import { MarkdownSerializer } from '../extensions/markdown-serializer.js';
@@ -72,7 +74,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('');
+        expect(markdown).toBe('');
       });
 
       it('should serialize plain text paragraph', () => {
@@ -87,7 +89,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('Hello world\n\n');
+        expect(markdown).toBe('Hello world\n\n');
       });
 
       it('should serialize multiple paragraphs', () => {
@@ -100,7 +102,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('First paragraph\n\nSecond paragraph\n\n');
+        expect(markdown).toBe('First paragraph\n\nSecond paragraph\n\n');
       });
 
       it('should serialize empty paragraphs', () => {
@@ -114,7 +116,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('First\n\n\nSecond\n\n');
+        expect(markdown).toBe('First\n\n\nSecond\n\n');
       });
     });
 
@@ -131,7 +133,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('**bold text**\n\n');
+        expect(markdown).toBe('**bold text**\n\n');
       });
 
       it('should serialize italic text', () => {
@@ -146,7 +148,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('*italic text*\n\n');
+        expect(markdown).toBe('*italic text*\n\n');
       });
 
       it('should serialize underline text as HTML', () => {
@@ -161,7 +163,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('<u>underline text</u>\n\n');
+        expect(markdown).toBe('<u>underline text</u>\n\n');
       });
 
       it('should serialize strikethrough text', () => {
@@ -176,7 +178,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('~~strike text~~\n\n');
+        expect(markdown).toBe('~~strike text~~\n\n');
       });
 
       it('should serialize inline code', () => {
@@ -191,7 +193,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('`const x = 5;`\n\n');
+        expect(markdown).toBe('`const x = 5;`\n\n');
       });
 
       it('should serialize combined marks (bold + italic)', () => {
@@ -212,7 +214,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('***bold italic***\n\n');
+        expect(markdown).toBe('***bold italic***\n\n');
       });
 
       it('should serialize mixed formatting in same paragraph', () => {
@@ -233,7 +235,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('Normal **bold** and *italic* text.\n\n');
+        expect(markdown).toBe('Normal **bold** and *italic* text.\n\n');
       });
     });
 
@@ -256,7 +258,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('[Click here](https://example.com)\n\n');
+        expect(markdown).toBe('[Click here](https://example.com)\n\n');
       });
 
       it('should serialize link with formatting', () => {
@@ -277,7 +279,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('[**bold link**](https://example.com)\n\n');
+        expect(markdown).toBe('[**bold link**](https://example.com)\n\n');
       });
 
       it('should serialize multiple links in paragraph', () => {
@@ -297,7 +299,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('Visit [example](https://example.com) or [google](https://google.com)\n\n');
+        expect(markdown).toBe('Visit [example](https://example.com) or [google](https://google.com)\n\n');
       });
     });
 
@@ -315,7 +317,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('# Heading 1\n\n');
+        expect(markdown).toBe('# Heading 1\n\n');
       });
 
       it('should serialize H2 heading', () => {
@@ -331,7 +333,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('## Heading 2\n\n');
+        expect(markdown).toBe('## Heading 2\n\n');
       });
 
       it('should serialize H3 heading', () => {
@@ -347,7 +349,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('### Heading 3\n\n');
+        expect(markdown).toBe('### Heading 3\n\n');
       });
 
       it('should serialize heading with formatting', () => {
@@ -366,7 +368,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('# **Bold** Heading\n\n');
+        expect(markdown).toBe('# **Bold** Heading\n\n');
       });
 
       it('should serialize document with mixed headings and paragraphs', () => {
@@ -381,7 +383,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('# Title\n\nIntro paragraph\n\n## Section\n\nSection content\n\n');
+        expect(markdown).toBe('# Title\n\nIntro paragraph\n\n## Section\n\nSection content\n\n');
       });
     });
 
@@ -401,7 +403,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('- First item\n- Second item\n\n');
+        expect(markdown).toBe('- First item\n- Second item\n\n');
       });
 
       it('should serialize ordered list', () => {
@@ -419,7 +421,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('1. First item\n2. Second item\n\n');
+        expect(markdown).toBe('1. First item\n2. Second item\n\n');
       });
 
       it('should serialize list items with formatting', () => {
@@ -453,7 +455,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('- **bold item**\n- *italic item*\n\n');
+        expect(markdown).toBe('- **bold item**\n- *italic item*\n\n');
       });
 
       it('should serialize list with links', () => {
@@ -485,7 +487,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('- Visit [example](https://example.com)\n\n');
+        expect(markdown).toBe('- Visit [example](https://example.com)\n\n');
       });
     });
 
@@ -503,7 +505,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('<!-- align:center -->\nCentered text\n\n');
+        expect(markdown).toBe('<!-- align:center -->\nCentered text\n\n');
       });
 
       it('should serialize right-aligned paragraph with HTML comment', () => {
@@ -519,7 +521,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('<!-- align:right -->\nRight-aligned text\n\n');
+        expect(markdown).toBe('<!-- align:right -->\nRight-aligned text\n\n');
       });
 
       it('should serialize justify-aligned paragraph with HTML comment', () => {
@@ -535,7 +537,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('<!-- align:justify -->\nJustified text\n\n');
+        expect(markdown).toBe('<!-- align:justify -->\nJustified text\n\n');
       });
 
       it('should not add alignment comment for left-aligned paragraph', () => {
@@ -551,7 +553,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('Left-aligned text\n\n');
+        expect(markdown).toBe('Left-aligned text\n\n');
       });
     });
 
@@ -590,7 +592,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal(
+        expect(markdown).toBe(
           '# Document Title\n\n' +
             'This is **bold** and *italic* text.\n\n' +
             '## Features\n\n' +
@@ -608,7 +610,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('');
+        expect(markdown).toBe('');
       });
 
       it('should handle unknown node types gracefully', () => {
@@ -618,7 +620,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('Should be skipped');
+        expect(markdown).toBe('Should be skipped');
       });
 
       it('should handle empty lists', () => {
@@ -628,7 +630,7 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.equal('\n');
+        expect(markdown).toBe('\n');
       });
     });
   });
@@ -636,78 +638,96 @@ describe('Rich Text Editor - Markdown Output', () => {
   describe('toMarkdown() Method', () => {
     describe('RichTextEditorComponent', () => {
       it('should return empty string when editor is not initialized', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor></forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('');
+        expect(markdown).toBe('');
       });
 
       it('should return markdown for plain text content', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor content="<p>Hello world</p>">
             <forge-rte-standard-tools></forge-rte-standard-tools>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('Hello world\n\n');
+        expect(markdown).toBe('Hello world\n\n');
       });
 
       it('should return markdown for formatted content', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor content="<p><strong>Bold</strong> and <em>italic</em></p>">
             <forge-rte-standard-tools></forge-rte-standard-tools>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('**Bold** and *italic*\n\n');
+        expect(markdown).toBe('**Bold** and *italic*\n\n');
       });
 
       it('should return markdown for headings', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor content="<h1>Heading 1</h1><h2>Heading 2</h2>">
             <forge-rte-standard-tools></forge-rte-standard-tools>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('# Heading 1\n\n## Heading 2\n\n');
+        expect(markdown).toBe('# Heading 1\n\n## Heading 2\n\n');
       });
 
       it('should return markdown for lists', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor content="<ul><li>Item 1</li><li>Item 2</li></ul>">
             <forge-rte-standard-tools></forge-rte-standard-tools>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('- Item 1\n- Item 2\n\n');
+        expect(markdown).toBe('- Item 1\n- Item 2\n\n');
       });
 
       it('should return markdown for links', async () => {
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor content='<p><a href="https://example.com">Click here</a></p>'>
             <forge-rte-standard-tools></forge-rte-standard-tools>
             <forge-rte-link></forge-rte-link>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('[Click here](https://example.com)\n\n');
+        expect(markdown).toBe('[Click here](https://example.com)\n\n');
       });
 
       it('should return markdown for complex content', async () => {
@@ -721,21 +741,24 @@ describe('Rich Text Editor - Markdown Output', () => {
           <p>Visit <a href="https://example.com">example</a></p>
         `;
 
-        const element = await fixture<RichTextEditorComponent>(testHtml`
+        const element = await renderFixture<RichTextEditorComponent>(
+          testHtml`
           <forge-rich-text-editor .content=${content}>
             <forge-rte-standard-tools></forge-rte-standard-tools>
             <forge-rte-link></forge-rte-link>
           </forge-rich-text-editor>
-        `);
+        `,
+          'forge-rich-text-editor'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.include('# Title');
-        expect(markdown).to.include('**bold**');
-        expect(markdown).to.include('*italic*');
-        expect(markdown).to.include('- First item');
-        expect(markdown).to.include('[example](https://example.com)');
+        expect(markdown).toContain('# Title');
+        expect(markdown).toContain('**bold**');
+        expect(markdown).toContain('*italic*');
+        expect(markdown).toContain('- First item');
+        expect(markdown).toContain('[example](https://example.com)');
       });
     });
 
@@ -752,8 +775,8 @@ describe('Rich Text Editor - Markdown Output', () => {
         };
 
         const markdown = MarkdownSerializer.serialize(json);
-        expect(markdown).to.include('\\*asterisks\\*');
-        expect(markdown).to.include('\\_underscores\\_');
+        expect(markdown).toContain('\\*asterisks\\*');
+        expect(markdown).toContain('\\_underscores\\_');
       });
 
       it('should escape ] and ) in link text to prevent injection', () => {
@@ -775,8 +798,8 @@ describe('Rich Text Editor - Markdown Output', () => {
 
         const markdown = MarkdownSerializer.serialize(json);
         // Must not produce [click]here)](https://example.com) — that breaks out of the link
-        expect(markdown).to.include('\\]');
-        expect(markdown).to.include('\\)');
+        expect(markdown).toContain('\\]');
+        expect(markdown).toContain('\\)');
       });
 
       it('should percent-encode parens in link href to prevent injection', () => {
@@ -798,8 +821,8 @@ describe('Rich Text Editor - Markdown Output', () => {
 
         const markdown = MarkdownSerializer.serialize(json);
         // Parens in href must be encoded so the link doesn't break
-        expect(markdown).to.include('https://example.com/path%281%29');
-        expect(markdown).to.not.include('(1)');
+        expect(markdown).toContain('https://example.com/path%281%29');
+        expect(markdown).not.toContain('(1)');
       });
 
       it('should not double-escape code spans', () => {
@@ -821,23 +844,26 @@ describe('Rich Text Editor - Markdown Output', () => {
 
         const markdown = MarkdownSerializer.serialize(json);
         // Inside a code span, asterisks should be literal
-        expect(markdown).to.include('`some *code*`');
+        expect(markdown).toContain('`some *code*`');
       });
     });
 
     describe('RichTextContextComponent', () => {
       it('should return markdown from context component', async () => {
-        const element = await fixture<RichTextContextComponent>(testHtml`
+        const element = await renderFixture<RichTextContextComponent>(
+          testHtml`
           <forge-rich-text-context content="<p><strong>Bold text</strong></p>">
             <forge-rte-standard-tools></forge-rte-standard-tools>
             <forge-rich-text-content></forge-rich-text-content>
           </forge-rich-text-context>
-        `);
+        `,
+          'forge-rich-text-context'
+        );
 
         await waitForEditor(element);
 
         const markdown = element.toMarkdown();
-        expect(markdown).to.equal('**Bold text**\n\n');
+        expect(markdown).toBe('**Bold text**\n\n');
       });
     });
   });

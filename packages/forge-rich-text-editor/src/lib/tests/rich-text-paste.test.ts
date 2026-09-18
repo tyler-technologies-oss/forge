@@ -1,4 +1,6 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
 
@@ -9,23 +11,23 @@ import '../features/rte-link.js';
 describe('RTE Paste Handling', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
-    expect(harness.el.shadowRoot).to.exist;
+    expect(harness.el.shadowRoot).toBeTruthy();
   });
 
   it('should have default paste properties', async () => {
     const harness = await createFixture();
-    expect(harness.el.allowPasteFormatting).to.be.true;
-    expect(harness.el.allowPasteImages).to.be.false;
+    expect(harness.el.allowPasteFormatting).toBe(true);
+    expect(harness.el.allowPasteImages).toBe(false);
   });
 
   it('should set allowPasteFormatting property', async () => {
     const harness = await createFixture({ allowPasteFormatting: false });
-    expect(harness.el.allowPasteFormatting).to.be.false;
+    expect(harness.el.allowPasteFormatting).toBe(false);
   });
 
   it('should set allowPasteImages property', async () => {
     const harness = await createFixture({ allowPasteImages: true });
-    expect(harness.el.allowPasteImages).to.be.true;
+    expect(harness.el.allowPasteImages).toBe(true);
   });
 
   describe('Formatted paste (default)', () => {
@@ -37,8 +39,8 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.include('<strong>');
-      expect(output).to.include('Bold text');
+      expect(output).toContain('<strong>');
+      expect(output).toContain('Bold text');
     });
 
     it('should preserve italic formatting when pasting HTML', async () => {
@@ -49,8 +51,8 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.include('<em>');
-      expect(output).to.include('Italic text');
+      expect(output).toContain('<em>');
+      expect(output).toContain('Italic text');
     });
 
     it('should preserve heading formatting when pasting HTML', async () => {
@@ -61,8 +63,8 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.include('<h2>');
-      expect(output).to.include('Heading text');
+      expect(output).toContain('<h2>');
+      expect(output).toContain('Heading text');
     });
 
     it('should preserve list formatting when pasting HTML', async () => {
@@ -73,10 +75,10 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.include('<ul>');
-      expect(output).to.include('<li>');
-      expect(output).to.include('Item 1');
-      expect(output).to.include('Item 2');
+      expect(output).toContain('<ul>');
+      expect(output).toContain('<li>');
+      expect(output).toContain('Item 1');
+      expect(output).toContain('Item 2');
     });
 
     it('should preserve link formatting when pasting HTML', async () => {
@@ -89,8 +91,8 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.include('href="https://example.com"');
-      expect(output).to.include('Link text');
+      expect(output).toContain('href="https://example.com"');
+      expect(output).toContain('Link text');
     });
   });
 
@@ -102,8 +104,8 @@ describe('RTE Paste Handling', () => {
       // setContent bypasses paste handler - just verify the configuration is set
       const extensions = editor.extensionManager.extensions;
       const pasteHandler = extensions.find(ext => ext.name === 'pasteHandler');
-      expect(pasteHandler).to.exist;
-      expect((pasteHandler as any).options?.allowPasteFormatting).to.be.false;
+      expect(pasteHandler).toBeTruthy();
+      expect((pasteHandler as any).options?.allowPasteFormatting).toBe(false);
     });
 
     it('should handle plain text paste via keyboard shortcut', async () => {
@@ -119,7 +121,7 @@ describe('RTE Paste Handling', () => {
       // Here we verify the shortcut is registered
       const extensions = editor.extensionManager.extensions;
       const pasteHandler = extensions.find(ext => ext.name === 'pasteHandler');
-      expect(pasteHandler).to.exist;
+      expect(pasteHandler).toBeTruthy();
     });
   });
 
@@ -134,7 +136,7 @@ describe('RTE Paste Handling', () => {
 
       const output = editor.getHTML();
       // TipTap naturally strips style attributes from <p> tags
-      expect(output).to.not.include('style=');
+      expect(output).not.toContain('style=');
     });
 
     it('should not allow script tags in content', async () => {
@@ -146,7 +148,7 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.not.include('<script>');
+      expect(output).not.toContain('<script>');
     });
 
     it('should not allow iframe tags in content', async () => {
@@ -157,7 +159,7 @@ describe('RTE Paste Handling', () => {
       await harness.waitForUpdate();
 
       const output = editor.getHTML();
-      expect(output).to.not.include('<iframe>');
+      expect(output).not.toContain('<iframe>');
     });
   });
 
@@ -169,7 +171,7 @@ describe('RTE Paste Handling', () => {
       const extensions = editor.extensionManager.extensions;
       const pasteHandler = extensions.find(ext => ext.name === 'pasteHandler');
 
-      expect(pasteHandler).to.exist;
+      expect(pasteHandler).toBeTruthy();
     });
 
     it('should configure pasteHandler with allowPasteFormatting option', async () => {
@@ -179,8 +181,8 @@ describe('RTE Paste Handling', () => {
       const extensions = editor.extensionManager.extensions;
       const pasteHandler = extensions.find(ext => ext.name === 'pasteHandler');
 
-      expect(pasteHandler).to.exist;
-      expect((pasteHandler as any).options.allowPasteFormatting).to.be.false;
+      expect(pasteHandler).toBeTruthy();
+      expect((pasteHandler as any).options.allowPasteFormatting).toBe(false);
     });
 
     it('should configure pasteHandler with allowPasteImages option', async () => {
@@ -190,8 +192,8 @@ describe('RTE Paste Handling', () => {
       const extensions = editor.extensionManager.extensions;
       const pasteHandler = extensions.find(ext => ext.name === 'pasteHandler');
 
-      expect(pasteHandler).to.exist;
-      expect((pasteHandler as any).options.allowPasteImages).to.be.true;
+      expect(pasteHandler).toBeTruthy();
+      expect((pasteHandler as any).options.allowPasteImages).toBe(true);
     });
   });
 
@@ -200,14 +202,14 @@ describe('RTE Paste Handling', () => {
       const harness = await createFixture({ disabled: true });
       const editor = await harness.getEditor();
 
-      expect(editor.isEditable).to.be.false;
+      expect(editor.isEditable).toBe(false);
     });
 
     it('should not allow editing when editor is readonly', async () => {
       const harness = await createFixture({ readOnly: true });
       const editor = await harness.getEditor();
 
-      expect(editor.isEditable).to.be.false;
+      expect(editor.isEditable).toBe(false);
     });
   });
 });
@@ -228,17 +230,20 @@ interface PasteFixtureOptions {
 }
 
 async function createFixture(options: PasteFixtureOptions = {}): Promise<PasteFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor
-      .content=${options.content ?? ''}
-      ?disabled=${options.disabled ?? false}
-      ?readonly=${options.readOnly ?? false}
-      .allowPasteFormatting=${options.allowPasteFormatting ?? true}
-      .allowPasteImages=${options.allowPasteImages ?? false}>
-      <forge-rte-standard-tools></forge-rte-standard-tools>
-      <forge-rte-link></forge-rte-link>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor
+        .content=${options.content ?? ''}
+        ?disabled=${options.disabled ?? false}
+        ?readonly=${options.readOnly ?? false}
+        .allowPasteFormatting=${options.allowPasteFormatting ?? true}
+        .allowPasteImages=${options.allowPasteImages ?? false}>
+        <forge-rte-standard-tools></forge-rte-standard-tools>
+        <forge-rte-link></forge-rte-link>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 

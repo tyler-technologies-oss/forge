@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteHeadingComponent } from '../rte-heading.js';
@@ -11,51 +12,51 @@ describe('RTE Heading Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.headingFeature.shadowRoot).to.be.ok;
+    expect(harness.headingFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default labels', async () => {
     const harness = await createFixture();
 
-    expect(harness.headingFeature.h1Label).to.equal('Heading 1');
-    expect(harness.headingFeature.h2Label).to.equal('Heading 2');
-    expect(harness.headingFeature.h3Label).to.equal('Heading 3');
+    expect(harness.headingFeature.h1Label).toBe('Heading 1');
+    expect(harness.headingFeature.h2Label).toBe('Heading 2');
+    expect(harness.headingFeature.h3Label).toBe('Heading 3');
   });
 
   it('should set custom h1 label', async () => {
     const harness = await createFixture({ h1Label: 'Custom H1' });
 
-    expect(harness.headingFeature.h1Label).to.equal('Custom H1');
-    expect(harness.h1Button().getAttribute('aria-label')).to.equal('Custom H1');
+    expect(harness.headingFeature.h1Label).toBe('Custom H1');
+    expect(harness.h1Button().getAttribute('aria-label')).toBe('Custom H1');
   });
 
   it('should set custom h2 label', async () => {
     const harness = await createFixture({ h2Label: 'Custom H2' });
 
-    expect(harness.headingFeature.h2Label).to.equal('Custom H2');
-    expect(harness.h2Button().getAttribute('aria-label')).to.equal('Custom H2');
+    expect(harness.headingFeature.h2Label).toBe('Custom H2');
+    expect(harness.h2Button().getAttribute('aria-label')).toBe('Custom H2');
   });
 
   it('should set custom h3 label', async () => {
     const harness = await createFixture({ h3Label: 'Custom H3' });
 
-    expect(harness.headingFeature.h3Label).to.equal('Custom H3');
-    expect(harness.h3Button().getAttribute('aria-label')).to.equal('Custom H3');
+    expect(harness.headingFeature.h3Label).toBe('Custom H3');
+    expect(harness.h3Button().getAttribute('aria-label')).toBe('Custom H3');
   });
 
   it('should render three heading buttons', async () => {
     const harness = await createFixture();
 
-    expect(harness.h1Button()).to.exist;
-    expect(harness.h2Button()).to.exist;
-    expect(harness.h3Button()).to.exist;
+    expect(harness.h1Button()).toBeTruthy();
+    expect(harness.h2Button()).toBeTruthy();
+    expect(harness.h3Button()).toBeTruthy();
   });
 
   it('should configure heading extension with levels 1, 2, 3', async () => {
     const harness = await createFixture();
 
-    expect(harness.headingFeature.extensions).to.have.lengthOf(1);
-    expect(harness.headingFeature.extensions[0].name).to.equal('heading');
+    expect(harness.headingFeature.extensions).toHaveLength(1);
+    expect(harness.headingFeature.extensions[0].name).toBe('heading');
   });
 
   it('should toggle H1 when H1 button is clicked', async () => {
@@ -72,7 +73,7 @@ describe('RTE Heading Feature', () => {
 
     // Verify H1 was applied
     const output = editor.getHTML();
-    expect(output).to.include('<h1>test text</h1>');
+    expect(output).toContain('<h1>test text</h1>');
   });
 
   it('should toggle H2 when H2 button is clicked', async () => {
@@ -89,7 +90,7 @@ describe('RTE Heading Feature', () => {
 
     // Verify H2 was applied
     const output = editor.getHTML();
-    expect(output).to.include('<h2>test text</h2>');
+    expect(output).toContain('<h2>test text</h2>');
   });
 
   it('should toggle H3 when H3 button is clicked', async () => {
@@ -106,31 +107,31 @@ describe('RTE Heading Feature', () => {
 
     // Verify H3 was applied
     const output = editor.getHTML();
-    expect(output).to.include('<h3>test text</h3>');
+    expect(output).toContain('<h3>test text</h3>');
   });
 
   it('should disable all buttons when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.h1Button().hasAttribute('disabled')).to.be.true;
-    expect(harness.h2Button().hasAttribute('disabled')).to.be.true;
-    expect(harness.h3Button().hasAttribute('disabled')).to.be.true;
+    expect(harness.h1Button().hasAttribute('disabled')).toBe(true);
+    expect(harness.h2Button().hasAttribute('disabled')).toBe(true);
+    expect(harness.h3Button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable all buttons when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.h1Button().hasAttribute('disabled')).to.be.true;
-    expect(harness.h2Button().hasAttribute('disabled')).to.be.true;
-    expect(harness.h3Button().hasAttribute('disabled')).to.be.true;
+    expect(harness.h1Button().hasAttribute('disabled')).toBe(true);
+    expect(harness.h2Button().hasAttribute('disabled')).toBe(true);
+    expect(harness.h3Button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should enable buttons when editor is editable', async () => {
     const harness = await createFixture();
 
-    expect(harness.h1Button().hasAttribute('disabled')).to.be.false;
-    expect(harness.h2Button().hasAttribute('disabled')).to.be.false;
-    expect(harness.h3Button().hasAttribute('disabled')).to.be.false;
+    expect(harness.h1Button().hasAttribute('disabled')).toBe(false);
+    expect(harness.h2Button().hasAttribute('disabled')).toBe(false);
+    expect(harness.h3Button().hasAttribute('disabled')).toBe(false);
   });
 
   it('should show H1 as active when cursor is in H1', async () => {
@@ -142,9 +143,9 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.waitForUpdate();
 
-    expect(harness.h1Button().hasAttribute('pressed')).to.be.true;
-    expect(harness.h2Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h3Button().hasAttribute('pressed')).to.be.false;
+    expect(harness.h1Button().hasAttribute('pressed')).toBe(true);
+    expect(harness.h2Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h3Button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should show H2 as active when cursor is in H2', async () => {
@@ -156,9 +157,9 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.waitForUpdate();
 
-    expect(harness.h1Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h2Button().hasAttribute('pressed')).to.be.true;
-    expect(harness.h3Button().hasAttribute('pressed')).to.be.false;
+    expect(harness.h1Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h2Button().hasAttribute('pressed')).toBe(true);
+    expect(harness.h3Button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should show H3 as active when cursor is in H3', async () => {
@@ -170,9 +171,9 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.waitForUpdate();
 
-    expect(harness.h1Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h2Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h3Button().hasAttribute('pressed')).to.be.true;
+    expect(harness.h1Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h2Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h3Button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should show no buttons as active when cursor is in paragraph', async () => {
@@ -184,9 +185,9 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.waitForUpdate();
 
-    expect(harness.h1Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h2Button().hasAttribute('pressed')).to.be.false;
-    expect(harness.h3Button().hasAttribute('pressed')).to.be.false;
+    expect(harness.h1Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h2Button().hasAttribute('pressed')).toBe(false);
+    expect(harness.h3Button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should convert paragraph to H1 when H1 button is clicked', async () => {
@@ -197,7 +198,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH1Button();
 
-    expect(editor.getHTML()).to.include('<h1>Test paragraph</h1>');
+    expect(editor.getHTML()).toContain('<h1>Test paragraph</h1>');
   });
 
   it('should convert paragraph to H2 when H2 button is clicked', async () => {
@@ -208,7 +209,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH2Button();
 
-    expect(editor.getHTML()).to.include('<h2>Test paragraph</h2>');
+    expect(editor.getHTML()).toContain('<h2>Test paragraph</h2>');
   });
 
   it('should convert paragraph to H3 when H3 button is clicked', async () => {
@@ -219,7 +220,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH3Button();
 
-    expect(editor.getHTML()).to.include('<h3>Test paragraph</h3>');
+    expect(editor.getHTML()).toContain('<h3>Test paragraph</h3>');
   });
 
   it('should convert H1 back to paragraph when H1 button is clicked again', async () => {
@@ -230,7 +231,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH1Button();
 
-    expect(editor.getHTML()).to.include('<p>Test heading</p>');
+    expect(editor.getHTML()).toContain('<p>Test heading</p>');
   });
 
   it('should convert H1 to H2 when H2 button is clicked', async () => {
@@ -241,7 +242,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH2Button();
 
-    expect(editor.getHTML()).to.include('<h2>Test heading</h2>');
+    expect(editor.getHTML()).toContain('<h2>Test heading</h2>');
   });
 
   it('should convert H2 to H3 when H3 button is clicked', async () => {
@@ -252,7 +253,7 @@ describe('RTE Heading Feature', () => {
     editor.commands.focus();
     await harness.clickH3Button();
 
-    expect(editor.getHTML()).to.include('<h3>Test heading</h3>');
+    expect(editor.getHTML()).toContain('<h3>Test heading</h3>');
   });
 });
 
@@ -278,14 +279,17 @@ interface HeadingFixture {
 }
 
 async function createFixture(options: HeadingFixtureOptions = {}): Promise<HeadingFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-heading
-        h1-label=${options.h1Label || 'Heading 1'}
-        h2-label=${options.h2Label || 'Heading 2'}
-        h3-label=${options.h3Label || 'Heading 3'}></forge-rte-heading>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-heading
+          h1-label=${options.h1Label || 'Heading 1'}
+          h2-label=${options.h2Label || 'Heading 2'}
+          h3-label=${options.h3Label || 'Heading 3'}></forge-rte-heading>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const headingFeature = el.querySelector('forge-rte-heading') as RteHeadingComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -293,7 +297,7 @@ async function createFixture(options: HeadingFixtureOptions = {}): Promise<Headi
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: HeadingFixture = {
     el,
     headingFeature,
     h1Button: () => {
@@ -322,7 +326,7 @@ async function createFixture(options: HeadingFixtureOptions = {}): Promise<Headi
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -333,4 +337,6 @@ async function createFixture(options: HeadingFixtureOptions = {}): Promise<Headi
       await new Promise(resolve => setTimeout(resolve, 50));
     }
   };
+
+  return harness;
 }

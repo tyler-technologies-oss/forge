@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteAlignComponent } from '../rte-align.js';
@@ -11,16 +12,16 @@ describe('RTE Align Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.alignFeature.shadowRoot).to.be.ok;
+    expect(harness.alignFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default labels', async () => {
     const harness = await createFixture();
 
-    expect(harness.alignFeature.leftLabel).to.equal('Align Left');
-    expect(harness.alignFeature.centerLabel).to.equal('Align Center');
-    expect(harness.alignFeature.rightLabel).to.equal('Align Right');
-    expect(harness.alignFeature.justifyLabel).to.equal('Justify');
+    expect(harness.alignFeature.leftLabel).toBe('Align Left');
+    expect(harness.alignFeature.centerLabel).toBe('Align Center');
+    expect(harness.alignFeature.rightLabel).toBe('Align Right');
+    expect(harness.alignFeature.justifyLabel).toBe('Justify');
   });
 
   it('should set custom labels via properties', async () => {
@@ -33,31 +34,31 @@ describe('RTE Align Feature', () => {
     harness.alignFeature.justifyLabel = 'Full';
     await harness.waitForUpdate();
 
-    expect(harness.alignFeature.leftLabel).to.equal('Left');
-    expect(harness.alignFeature.centerLabel).to.equal('Center');
-    expect(harness.alignFeature.rightLabel).to.equal('Right');
-    expect(harness.alignFeature.justifyLabel).to.equal('Full');
+    expect(harness.alignFeature.leftLabel).toBe('Left');
+    expect(harness.alignFeature.centerLabel).toBe('Center');
+    expect(harness.alignFeature.rightLabel).toBe('Right');
+    expect(harness.alignFeature.justifyLabel).toBe('Full');
 
-    expect(harness.leftButton().getAttribute('aria-label')).to.equal('Left');
-    expect(harness.centerButton().getAttribute('aria-label')).to.equal('Center');
-    expect(harness.rightButton().getAttribute('aria-label')).to.equal('Right');
-    expect(harness.justifyButton().getAttribute('aria-label')).to.equal('Full');
+    expect(harness.leftButton().getAttribute('aria-label')).toBe('Left');
+    expect(harness.centerButton().getAttribute('aria-label')).toBe('Center');
+    expect(harness.rightButton().getAttribute('aria-label')).toBe('Right');
+    expect(harness.justifyButton().getAttribute('aria-label')).toBe('Full');
   });
 
   it('should render all four alignment buttons', async () => {
     const harness = await createFixture();
 
-    expect(harness.leftButton()).to.exist;
-    expect(harness.centerButton()).to.exist;
-    expect(harness.rightButton()).to.exist;
-    expect(harness.justifyButton()).to.exist;
+    expect(harness.leftButton()).toBeTruthy();
+    expect(harness.centerButton()).toBeTruthy();
+    expect(harness.rightButton()).toBeTruthy();
+    expect(harness.justifyButton()).toBeTruthy();
   });
 
   it('should configure text align extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.alignFeature.extensions).to.have.lengthOf(1);
-    expect(harness.alignFeature.extensions[0].name).to.equal('textAlign');
+    expect(harness.alignFeature.extensions).toHaveLength(1);
+    expect(harness.alignFeature.extensions[0].name).toBe('textAlign');
   });
 
   it('should apply left alignment when left button clicked', async () => {
@@ -73,7 +74,7 @@ describe('RTE Align Feature', () => {
     await harness.clickLeftButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: left');
+    expect(output).toContain('text-align: left');
   });
 
   it('should apply center alignment when center button clicked', async () => {
@@ -89,7 +90,7 @@ describe('RTE Align Feature', () => {
     await harness.clickCenterButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: center');
+    expect(output).toContain('text-align: center');
   });
 
   it('should apply right alignment when right button clicked', async () => {
@@ -105,7 +106,7 @@ describe('RTE Align Feature', () => {
     await harness.clickRightButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: right');
+    expect(output).toContain('text-align: right');
   });
 
   it('should apply justify alignment when justify button clicked', async () => {
@@ -121,25 +122,25 @@ describe('RTE Align Feature', () => {
     await harness.clickJustifyButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: justify');
+    expect(output).toContain('text-align: justify');
   });
 
   it('should disable all buttons when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.leftButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.centerButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.rightButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.justifyButton().hasAttribute('disabled')).to.be.true;
+    expect(harness.leftButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.centerButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.rightButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.justifyButton().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable all buttons when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.leftButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.centerButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.rightButton().hasAttribute('disabled')).to.be.true;
-    expect(harness.justifyButton().hasAttribute('disabled')).to.be.true;
+    expect(harness.leftButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.centerButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.rightButton().hasAttribute('disabled')).toBe(true);
+    expect(harness.justifyButton().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state on left button when text is left aligned', async () => {
@@ -151,10 +152,10 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.leftButton().hasAttribute('pressed')).to.be.true;
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.rightButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.justifyButton().hasAttribute('pressed')).to.be.false;
+    expect(harness.leftButton().hasAttribute('pressed')).toBe(true);
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.rightButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.justifyButton().hasAttribute('pressed')).toBe(false);
   });
 
   it('should show active state on center button when text is center aligned', async () => {
@@ -166,10 +167,10 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.leftButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.true;
-    expect(harness.rightButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.justifyButton().hasAttribute('pressed')).to.be.false;
+    expect(harness.leftButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(true);
+    expect(harness.rightButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.justifyButton().hasAttribute('pressed')).toBe(false);
   });
 
   it('should show active state on right button when text is right aligned', async () => {
@@ -181,10 +182,10 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.leftButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.rightButton().hasAttribute('pressed')).to.be.true;
-    expect(harness.justifyButton().hasAttribute('pressed')).to.be.false;
+    expect(harness.leftButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.rightButton().hasAttribute('pressed')).toBe(true);
+    expect(harness.justifyButton().hasAttribute('pressed')).toBe(false);
   });
 
   it('should show active state on justify button when text is justified', async () => {
@@ -196,10 +197,10 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.leftButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.rightButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.justifyButton().hasAttribute('pressed')).to.be.true;
+    expect(harness.leftButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.rightButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.justifyButton().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state on any button for default text', async () => {
@@ -211,10 +212,10 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.leftButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.rightButton().hasAttribute('pressed')).to.be.false;
-    expect(harness.justifyButton().hasAttribute('pressed')).to.be.false;
+    expect(harness.leftButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.rightButton().hasAttribute('pressed')).toBe(false);
+    expect(harness.justifyButton().hasAttribute('pressed')).toBe(false);
   });
 
   it('should switch alignment from center to right', async () => {
@@ -226,14 +227,14 @@ describe('RTE Align Feature', () => {
     editor.commands.setTextSelection(5);
     await harness.waitForUpdate();
 
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.true;
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(true);
 
     // Switch to right alignment
     await harness.clickRightButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: right');
-    expect(output).not.to.include('text-align: center');
+    expect(output).toContain('text-align: right');
+    expect(output).not.toContain('text-align: center');
   });
 
   it('should toggle alignment off when clicking active button', async () => {
@@ -246,13 +247,13 @@ describe('RTE Align Feature', () => {
     editor.chain().focus().setTextAlign('center').run();
     await harness.waitForUpdate();
 
-    expect(harness.centerButton().hasAttribute('pressed')).to.be.true;
+    expect(harness.centerButton().hasAttribute('pressed')).toBe(true);
 
     // Click center button again to toggle off
     await harness.clickCenterButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('text-align: center');
+    expect(output).not.toContain('text-align: center');
   });
 
   it('should apply alignment to heading elements', async () => {
@@ -269,8 +270,8 @@ describe('RTE Align Feature', () => {
     await harness.clickCenterButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: center');
-    expect(output).to.include('test content');
+    expect(output).toContain('text-align: center');
+    expect(output).toContain('test content');
   });
 
   it('should apply alignment to multiple paragraphs', async () => {
@@ -288,7 +289,7 @@ describe('RTE Align Feature', () => {
     const output = editor.getHTML();
     // Count occurrences of text-align: right
     const matches = output.match(/text-align: right/g);
-    expect(matches).to.have.lengthOf(3);
+    expect(matches).toHaveLength(3);
   });
 
   it('should preserve text content when changing alignment', async () => {
@@ -304,8 +305,8 @@ describe('RTE Align Feature', () => {
     await harness.clickCenterButton();
 
     const output = editor.getHTML();
-    expect(output).to.include(testText);
-    expect(output).to.include('text-align: center');
+    expect(output).toContain(testText);
+    expect(output).toContain('text-align: center');
   });
 
   it('should handle alignment changes on list items', async () => {
@@ -321,8 +322,8 @@ describe('RTE Align Feature', () => {
     await harness.clickCenterButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('text-align: center');
-    expect(output).to.include('list item');
+    expect(output).toContain('text-align: center');
+    expect(output).toContain('list item');
   });
 });
 
@@ -351,15 +352,18 @@ interface AlignFixture {
 }
 
 async function createFixture(options: AlignFixtureOptions = {}): Promise<AlignFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-align
-        left-label=${options.leftLabel || 'Align Left'}
-        center-label=${options.centerLabel || 'Align Center'}
-        right-label=${options.rightLabel || 'Align Right'}
-        justify-label=${options.justifyLabel || 'Justify'}></forge-rte-align>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-align
+          left-label=${options.leftLabel || 'Align Left'}
+          center-label=${options.centerLabel || 'Align Center'}
+          right-label=${options.rightLabel || 'Align Right'}
+          justify-label=${options.justifyLabel || 'Justify'}></forge-rte-align>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const alignFeature = el.querySelector('forge-rte-align') as RteAlignComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -369,7 +373,7 @@ async function createFixture(options: AlignFixtureOptions = {}): Promise<AlignFi
 
   const toolButtons = alignFeature.shadowRoot!.querySelectorAll('forge-rte-tool-button');
 
-  return {
+  const harness: AlignFixture = {
     el,
     alignFeature,
     leftButton: () => toolButtons[0].shadowRoot!.querySelector('forge-icon-button')!,
@@ -394,7 +398,7 @@ async function createFixture(options: AlignFixtureOptions = {}): Promise<AlignFi
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -407,4 +411,6 @@ async function createFixture(options: AlignFixtureOptions = {}): Promise<AlignFi
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }

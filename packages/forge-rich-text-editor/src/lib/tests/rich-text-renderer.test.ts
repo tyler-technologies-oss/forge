@@ -1,51 +1,59 @@
-import { expect, fixture, html } from '@open-wc/testing';
-import type { RichTextRendererComponent } from '../rich-text-renderer.js';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
+import type { RichTextRendererComponent, RichTextRendererContent } from '../rich-text-renderer.js';
 import '../rich-text-renderer.js';
 
 describe('RichTextRendererComponent', () => {
   describe('Component Structure', () => {
     it('should contain shadow root', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`);
-      expect(el.shadowRoot).not.to.be.null;
+      const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
+      expect(el.shadowRoot).not.toBeNull();
     });
 
     it('should render content container', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container).to.exist;
+      expect(container).toBeTruthy();
     });
 
     it('should set the ARIA role on the host element', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`);
-      expect(el.getAttribute('role')).to.equal('article');
+      const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
+      expect(el.getAttribute('role')).toBe('article');
     });
 
     it('should not override a consumer-provided role', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer role="region"></forge-rich-text-renderer>`);
-      expect(el.getAttribute('role')).to.equal('region');
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer role="region"></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
+      expect(el.getAttribute('role')).toBe('region');
     });
 
     it('should not apply a hardcoded ARIA label', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`);
-      expect(el.hasAttribute('aria-label')).to.be.false;
+      const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
+      expect(el.hasAttribute('aria-label')).toBe(false);
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.hasAttribute('aria-label')).to.be.false;
+      expect(container?.hasAttribute('aria-label')).toBe(false);
     });
 
     it('should allow the host to be labelled by the consumer', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer aria-label="Release notes"></forge-rich-text-renderer>`);
-      expect(el.getAttribute('aria-label')).to.equal('Release notes');
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer aria-label="Release notes"></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
+      expect(el.getAttribute('aria-label')).toBe('Release notes');
     });
   });
 
   describe('Content Rendering', () => {
     it('should render empty content', async () => {
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.textContent?.trim()).to.equal('');
+      expect(container?.textContent?.trim()).toBe('');
     });
 
     it('should render plain text paragraph', async () => {
@@ -64,11 +72,14 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.textContent).to.include('Hello world');
+      expect(container?.textContent).toContain('Hello world');
     });
 
     it('should render multiple paragraphs', async () => {
@@ -86,14 +97,17 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const paragraphs = container?.querySelectorAll('p');
-      expect(paragraphs?.length).to.equal(2);
-      expect(paragraphs?.[0].textContent).to.equal('First paragraph');
-      expect(paragraphs?.[1].textContent).to.equal('Second paragraph');
+      expect(paragraphs?.length).toBe(2);
+      expect(paragraphs?.[0].textContent).toBe('First paragraph');
+      expect(paragraphs?.[1].textContent).toBe('Second paragraph');
     });
 
     it('should update content when property changes', async () => {
@@ -107,7 +121,10 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content1}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content1}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const content2 = {
@@ -120,13 +137,13 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      el.content = content2;
+      el.content = content2 as RichTextRendererContent;
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.textContent).to.include('Updated content');
-      expect(container?.textContent).not.to.include('Original content');
+      expect(container?.textContent).toContain('Updated content');
+      expect(container?.textContent).not.toContain('Original content');
     });
   });
 
@@ -148,13 +165,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const strong = container?.querySelector('strong');
-      expect(strong).to.exist;
-      expect(strong?.textContent).to.equal('Bold text');
+      expect(strong).toBeTruthy();
+      expect(strong?.textContent).toBe('Bold text');
     });
 
     it('should render italic text', async () => {
@@ -174,13 +194,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const em = container?.querySelector('em');
-      expect(em).to.exist;
-      expect(em?.textContent).to.equal('Italic text');
+      expect(em).toBeTruthy();
+      expect(em?.textContent).toBe('Italic text');
     });
 
     it('should render underlined text', async () => {
@@ -200,13 +223,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const u = container?.querySelector('u');
-      expect(u).to.exist;
-      expect(u?.textContent).to.equal('Underlined text');
+      expect(u).toBeTruthy();
+      expect(u?.textContent).toBe('Underlined text');
     });
 
     it('should render strikethrough text', async () => {
@@ -226,13 +252,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const s = container?.querySelector('s');
-      expect(s).to.exist;
-      expect(s?.textContent).to.equal('Strikethrough text');
+      expect(s).toBeTruthy();
+      expect(s?.textContent).toBe('Strikethrough text');
     });
 
     it('should render code text', async () => {
@@ -252,13 +281,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const code = container?.querySelector('code');
-      expect(code).to.exist;
-      expect(code?.textContent).to.equal('const x = 42;');
+      expect(code).toBeTruthy();
+      expect(code?.textContent).toBe('const x = 42;');
     });
 
     it('should render combined formatting marks', async () => {
@@ -278,15 +310,18 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const strong = container?.querySelector('strong');
       const em = container?.querySelector('em');
-      expect(strong).to.exist;
-      expect(em).to.exist;
-      expect(container?.textContent).to.include('Bold and italic');
+      expect(strong).toBeTruthy();
+      expect(em).toBeTruthy();
+      expect(container?.textContent).toContain('Bold and italic');
     });
   });
 
@@ -303,13 +338,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const h1 = container?.querySelector('h1');
-      expect(h1).to.exist;
-      expect(h1?.textContent).to.equal('Heading 1');
+      expect(h1).toBeTruthy();
+      expect(h1?.textContent).toBe('Heading 1');
     });
 
     it('should render H2 heading', async () => {
@@ -324,13 +362,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const h2 = container?.querySelector('h2');
-      expect(h2).to.exist;
-      expect(h2?.textContent).to.equal('Heading 2');
+      expect(h2).toBeTruthy();
+      expect(h2?.textContent).toBe('Heading 2');
     });
 
     it('should render H3 heading', async () => {
@@ -345,13 +386,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const h3 = container?.querySelector('h3');
-      expect(h3).to.exist;
-      expect(h3?.textContent).to.equal('Heading 3');
+      expect(h3).toBeTruthy();
+      expect(h3?.textContent).toBe('Heading 3');
     });
 
     it('should render headings with formatting', async () => {
@@ -372,15 +416,18 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const h2 = container?.querySelector('h2');
       const strong = h2?.querySelector('strong');
-      expect(h2).to.exist;
-      expect(strong).to.exist;
-      expect(strong?.textContent).to.equal('Bold Heading');
+      expect(h2).toBeTruthy();
+      expect(strong).toBeTruthy();
+      expect(strong?.textContent).toBe('Bold Heading');
     });
   });
 
@@ -415,16 +462,19 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const ul = container?.querySelector('ul');
       const items = ul?.querySelectorAll('li');
-      expect(ul).to.exist;
-      expect(items?.length).to.equal(2);
-      expect(items?.[0].textContent).to.equal('Item 1');
-      expect(items?.[1].textContent).to.equal('Item 2');
+      expect(ul).toBeTruthy();
+      expect(items?.length).toBe(2);
+      expect(items?.[0].textContent).toBe('Item 1');
+      expect(items?.[1].textContent).toBe('Item 2');
     });
 
     it('should render ordered list', async () => {
@@ -457,16 +507,19 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const ol = container?.querySelector('ol');
       const items = ol?.querySelectorAll('li');
-      expect(ol).to.exist;
-      expect(items?.length).to.equal(2);
-      expect(items?.[0].textContent).to.equal('First');
-      expect(items?.[1].textContent).to.equal('Second');
+      expect(ol).toBeTruthy();
+      expect(items?.length).toBe(2);
+      expect(items?.[0].textContent).toBe('First');
+      expect(items?.[1].textContent).toBe('Second');
     });
 
     it('should render list items with formatting', async () => {
@@ -496,13 +549,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const strong = container?.querySelector('strong');
-      expect(strong).to.exist;
-      expect(strong?.textContent).to.equal('Bold item');
+      expect(strong).toBeTruthy();
+      expect(strong?.textContent).toBe('Bold item');
     });
   });
 
@@ -529,14 +585,17 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const link = container?.querySelector('a');
-      expect(link).to.exist;
-      expect(link?.textContent).to.equal('Click here');
-      expect(link?.getAttribute('href')).to.equal('https://example.com');
+      expect(link).toBeTruthy();
+      expect(link?.textContent).toBe('Click here');
+      expect(link?.getAttribute('href')).toBe('https://example.com');
     });
 
     it('should render link with security attributes', async () => {
@@ -561,16 +620,19 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const link = container?.querySelector('a');
-      expect(link).to.exist;
-      expect(link?.getAttribute('target')).to.equal('_blank');
-      expect(link?.getAttribute('rel')).to.include('noopener');
-      expect(link?.getAttribute('rel')).to.include('noreferrer');
-      expect(link?.getAttribute('rel')).to.include('nofollow');
+      expect(link).toBeTruthy();
+      expect(link?.getAttribute('target')).toBe('_blank');
+      expect(link?.getAttribute('rel')).toContain('noopener');
+      expect(link?.getAttribute('rel')).toContain('noreferrer');
+      expect(link?.getAttribute('rel')).toContain('nofollow');
     });
 
     it('should render link with formatting', async () => {
@@ -590,15 +652,18 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const link = container?.querySelector('a');
       const strong = link?.querySelector('strong');
-      expect(link).to.exist;
-      expect(strong).to.exist;
-      expect(strong?.textContent).to.equal('Bold link');
+      expect(link).toBeTruthy();
+      expect(strong).toBeTruthy();
+      expect(strong?.textContent).toBe('Bold link');
     });
   });
 
@@ -615,13 +680,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const paragraph = container?.querySelector('p');
-      expect(paragraph).to.exist;
-      expect(paragraph?.style.textAlign).to.equal('left');
+      expect(paragraph).toBeTruthy();
+      expect(paragraph?.style.textAlign).toBe('left');
     });
 
     it('should render center-aligned paragraph', async () => {
@@ -636,13 +704,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const paragraph = container?.querySelector('p');
-      expect(paragraph).to.exist;
-      expect(paragraph?.style.textAlign).to.equal('center');
+      expect(paragraph).toBeTruthy();
+      expect(paragraph?.style.textAlign).toBe('center');
     });
 
     it('should render right-aligned paragraph', async () => {
@@ -657,13 +728,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const paragraph = container?.querySelector('p');
-      expect(paragraph).to.exist;
-      expect(paragraph?.style.textAlign).to.equal('right');
+      expect(paragraph).toBeTruthy();
+      expect(paragraph?.style.textAlign).toBe('right');
     });
 
     it('should render justified paragraph', async () => {
@@ -678,13 +752,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
       const paragraph = container?.querySelector('p');
-      expect(paragraph).to.exist;
-      expect(paragraph?.style.textAlign).to.equal('justify');
+      expect(paragraph).toBeTruthy();
+      expect(paragraph?.style.textAlign).toBe('justify');
     });
   });
 
@@ -745,15 +822,18 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.querySelector('h1')).to.exist;
-      expect(container?.querySelector('strong')).to.exist;
-      expect(container?.querySelector('em')).to.exist;
-      expect(container?.querySelector('ul')).to.exist;
-      expect(container?.querySelector('a')).to.exist;
+      expect(container?.querySelector('h1')).toBeTruthy();
+      expect(container?.querySelector('strong')).toBeTruthy();
+      expect(container?.querySelector('em')).toBeTruthy();
+      expect(container?.querySelector('ul')).toBeTruthy();
+      expect(container?.querySelector('a')).toBeTruthy();
     });
 
     it('should handle nested formatting', async () => {
@@ -773,13 +853,16 @@ describe('RichTextRendererComponent', () => {
         ]
       };
 
-      const el = await fixture<RichTextRendererComponent>(html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`);
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer .content=${content}></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const container = el.shadowRoot?.querySelector('.renderer-content');
-      expect(container?.querySelector('strong')).to.exist;
-      expect(container?.querySelector('em')).to.exist;
-      expect(container?.querySelector('u')).to.exist;
+      expect(container?.querySelector('strong')).toBeTruthy();
+      expect(container?.querySelector('em')).toBeTruthy();
+      expect(container?.querySelector('u')).toBeTruthy();
     });
   });
 });

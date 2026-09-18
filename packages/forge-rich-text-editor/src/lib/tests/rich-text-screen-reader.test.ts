@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
 import { html } from 'lit';
-import { fixture, expect } from '@open-wc/testing';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
 import type { RichTextContextComponent } from '../rich-text-context.js';
 import type { RichTextContentComponent } from '../rich-text-content.js';
@@ -70,9 +71,8 @@ async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextConte
   return getContext();
 }
 
-function getLiveRegion(el: RichTextEditorComponent): HTMLElement | null {
-  const contentComponent = el.shadowRoot?.querySelector('forge-rich-text-content');
-  return contentComponent?.shadowRoot?.querySelector('[role="status"]') as HTMLElement | null;
+function getLiveRegion(): HTMLElement | null {
+  return document.body.querySelector<HTMLElement>('[data-forge-live-announcer-polite]');
 }
 
 async function waitForAnnouncement(el: RichTextEditorComponent, expectedText?: string): Promise<void> {
@@ -87,58 +87,39 @@ async function waitForAnnouncement(el: RichTextEditorComponent, expectedText?: s
 
 describe('RTE Screen Reader Support', () => {
   describe('Live Region', () => {
-    it('should contain ARIA live region with proper attributes', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+    it('should announce through a polite live region', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
+      expect(getLiveRegion()).toBeNull();
 
-      const contentComponent = el.shadowRoot?.querySelector('forge-rich-text-content');
-      expect(contentComponent).to.exist;
+      el.disabled = true;
+      await waitForAnnouncement(el);
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion).to.exist;
-      expect(liveRegion?.getAttribute('aria-live')).to.equal('polite');
-      expect(liveRegion?.getAttribute('aria-atomic')).to.equal('true');
-    });
-
-    it('should have screen reader only class', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
-
-      await waitForEditor(el);
-
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.classList.contains('sr-only')).to.be.true;
-    });
-
-    it('should be initially empty', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
-
-      await waitForEditor(el);
-
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent?.trim()).to.equal('');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion).toBeTruthy();
+      expect(liveRegion?.getAttribute('aria-live')).toBe('polite');
+      expect(liveRegion?.getAttribute('aria-atomic')).toBe('true');
     });
   });
 
   describe('Text Formatting Announcements', () => {
     it('should announce when bold is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -150,16 +131,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Bold applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Bold applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Bold applied');
     });
 
     it('should announce when bold is removed', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -171,16 +155,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Bold removed');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Bold removed');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Bold removed');
     });
 
     it('should announce when italic is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -192,16 +179,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Italic applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Italic applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Italic applied');
     });
 
     it('should announce when underline is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -213,16 +203,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Underline applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Underline applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Underline applied');
     });
 
     it('should announce when strikethrough is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -234,17 +227,20 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Strikethrough applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Strikethrough applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Strikethrough applied');
     });
 
     it('should announce when code is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-          <forge-rte-code></forge-rte-code>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+            <forge-rte-code></forge-rte-code>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -256,18 +252,21 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Code applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Code applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Code applied');
     });
   });
 
   describe('Heading Announcements', () => {
     it('should announce when heading 1 is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -280,16 +279,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Heading 1');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Heading 1');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Heading 1');
     });
 
     it('should announce when heading is removed', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -302,18 +304,21 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Paragraph style');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Paragraph style');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Paragraph style');
     });
   });
 
   describe('List Announcements', () => {
     it('should announce when bullet list is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -325,16 +330,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Bullet list');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Bullet list');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Bullet list');
     });
 
     it('should announce when numbered list is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -346,16 +354,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Numbered list');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Numbered list');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Numbered list');
     });
 
     it('should announce when list is removed', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -367,18 +378,21 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'List removed');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('List removed');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('List removed');
     });
   });
 
   describe('Alignment Announcements', () => {
     it('should announce when center alignment is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -391,16 +405,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Center aligned');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Center aligned');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Center aligned');
     });
 
     it('should announce when right alignment is applied', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -413,18 +430,21 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Right aligned');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Right aligned');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Right aligned');
     });
   });
 
   describe('Undo/Redo Announcements', () => {
     it('should announce when undo is performed', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -440,16 +460,19 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Undo');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Undo');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Undo');
     });
 
     it('should announce when redo is performed', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -466,84 +489,99 @@ describe('RTE Screen Reader Support', () => {
 
       await waitForAnnouncement(el, 'Redo');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Redo');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Redo');
     });
   });
 
   describe('Editor State Announcements', () => {
     it('should announce when editor becomes disabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       el.disabled = true;
       await waitForAnnouncement(el, 'Editor disabled');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Editor disabled');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Editor disabled');
     });
 
     it('should announce when editor becomes enabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor disabled>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor disabled>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       el.disabled = false;
       await waitForAnnouncement(el, 'Editor enabled');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Editor enabled');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Editor enabled');
     });
 
     it('should announce when editor becomes read-only', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       el.readOnly = true;
       await waitForAnnouncement(el, 'Editor read-only');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Editor read-only');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Editor read-only');
     });
 
     it('should announce when editor becomes editable from read-only', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor readonly>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor readonly>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       el.readOnly = false;
       await waitForAnnouncement(el, 'Editor editable');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Editor editable');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Editor editable');
     });
   });
 
   describe('Announcement Cleanup', () => {
-    it('should clear announcement after timeout', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+    it('should replace the previous announcement rather than appending to it', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -552,18 +590,15 @@ describe('RTE Screen Reader Support', () => {
 
       const boldFeature = getFeature(el, 'forge-rte-bold');
       triggerToolButton(boldFeature);
-
       await waitForAnnouncement(el, 'Bold applied');
 
-      const liveRegion = getLiveRegion(el);
-      expect(liveRegion?.textContent).to.equal('Bold applied');
+      const liveRegion = getLiveRegion();
+      expect(liveRegion?.textContent).toBe('Bold applied');
 
-      // Wait for cleanup timeout (1000ms)
-      await new Promise(resolve => setTimeout(resolve, 1100));
-      const contentComponent = el.shadowRoot?.querySelector('forge-rich-text-content') as RichTextContentComponent;
-      await contentComponent?.updateComplete;
+      triggerToolButton(boldFeature);
+      await waitForAnnouncement(el, 'Bold removed');
 
-      expect(liveRegion?.textContent?.trim()).to.equal('');
+      expect(liveRegion?.textContent).toBe('Bold removed');
     });
   });
 });

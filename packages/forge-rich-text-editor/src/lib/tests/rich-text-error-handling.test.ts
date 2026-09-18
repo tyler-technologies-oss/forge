@@ -1,8 +1,8 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it, vi } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
 import type { RichTextContextComponent } from '../rich-text-context.js';
-import sinon from 'sinon';
 
 import '../rich-text-editor.js';
 import '../rich-text-context.js';
@@ -12,116 +12,137 @@ import '../features/rte-standard-tools.js';
 describe('RichTextEditor - Error Handling', () => {
   describe('Initialization', () => {
     it('should dispatch initialized event on successful initialization', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const initSpy = sinon.spy();
+      const initSpy = vi.fn();
       contextComponent.addEventListener('initialized', initSpy);
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
-      expect(initSpy.calledOnce).to.be.true;
+      expect(initSpy).toHaveBeenCalledOnce();
     });
 
     it('should expose isInitialized getter on context component', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
 
     it('should expose initializationError getter on context component', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
-      expect(contextComponent.initializationError).to.be.null;
+      expect(contextComponent.initializationError).toBeNull();
     });
 
     it('should handle initialization errors gracefully', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context>
-          <!-- No content element, will cause initialization error -->
-        </forge-rich-text-context>
-      `);
+      const el = await renderFixture<RichTextContextComponent>(
+        html`
+          <forge-rich-text-context>
+            <!-- No content element, will cause initialization error -->
+          </forge-rich-text-context>
+        `,
+        'forge-rich-text-context'
+      );
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       el.addEventListener('initialization-error', errorSpy);
 
       // Wait for initialization attempt
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Context should have detected missing editor element
-      expect(el.isInitialized).to.be.false;
+      expect(el.isInitialized).toBe(false);
     });
 
     it('should display initialization error message when initialization fails', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context>
-          <!-- No content element, will cause initialization error -->
-        </forge-rich-text-context>
-      `);
+      const el = await renderFixture<RichTextContextComponent>(
+        html`
+          <forge-rich-text-context>
+            <!-- No content element, will cause initialization error -->
+          </forge-rich-text-context>
+        `,
+        'forge-rich-text-context'
+      );
 
       // Wait for initialization attempt
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Error display only shows if internal error state is set, which requires actual error
       // Since we can't easily trigger that without proper setup, just verify the component exists
-      expect(el).to.be.ok;
+      expect(el).toBeTruthy();
     });
 
     it('should log initialization errors to console by default', async () => {
-      const consoleStub = sinon.stub(console, 'error');
+      const consoleStub = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context>
-          <!-- No content element -->
-        </forge-rich-text-context>
-      `);
+      const el = await renderFixture<RichTextContextComponent>(
+        html`
+          <forge-rich-text-context>
+            <!-- No content element -->
+          </forge-rich-text-context>
+        `,
+        'forge-rich-text-context'
+      );
 
       // Trigger initialization by adding a feature
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Errors should be logged (if any occurred)
       // Don't assert on call count as initialization might succeed with empty feature set
-      expect(el).to.be.ok;
+      expect(el).toBeTruthy();
 
-      consoleStub.restore();
+      consoleStub.mockRestore();
     });
   });
 
   describe('Content Operations', () => {
     it('should handle setContent errors gracefully', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor content="<p>Initial content</p>">
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor content="<p>Initial content</p>">
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       contextComponent.addEventListener('error', errorSpy);
 
       // Wait for initialization
@@ -132,15 +153,18 @@ describe('RichTextEditor - Error Handling', () => {
       await el.updateComplete;
 
       // Editor should still be functional
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
 
     it('should handle toJSON errors and return undefined', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
@@ -148,15 +172,18 @@ describe('RichTextEditor - Error Handling', () => {
       await new Promise(resolve => setTimeout(resolve, 150));
 
       const json = contextComponent.toJSON();
-      expect(json).to.not.be.undefined;
+      expect(json).not.toBeUndefined();
     });
 
     it('should handle toHTML errors and return empty string', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
@@ -164,37 +191,40 @@ describe('RichTextEditor - Error Handling', () => {
       await new Promise(resolve => setTimeout(resolve, 150));
 
       const htmlContent = contextComponent.toHTML();
-      expect(htmlContent).to.be.a('string');
+      expect(typeof htmlContent).toBe('string');
     });
 
     it('should return undefined from toJSON when not initialized', async () => {
-      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
+      const el = await renderFixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `, 'forge-rich-text-context');
 
       // Don't wait for initialization
       const json = el.toJSON();
-      expect(json).to.be.undefined;
+      expect(json).toBeUndefined();
     });
 
     it('should return empty string from toHTML when not initialized', async () => {
-      const el = await fixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `);
+      const el = await renderFixture<RichTextContextComponent>(html` <forge-rich-text-context></forge-rich-text-context> `, 'forge-rich-text-context');
 
       // Don't wait for initialization
       const htmlContent = el.toHTML();
-      expect(htmlContent).to.equal('');
+      expect(htmlContent).toBe('');
     });
   });
 
   describe('State Update Errors', () => {
     it('should handle disabled state update errors gracefully', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       contextComponent.addEventListener('error', errorSpy);
 
       // Wait for initialization
@@ -209,19 +239,22 @@ describe('RichTextEditor - Error Handling', () => {
       await el.updateComplete;
 
       // Should handle state changes without errors
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
 
     it('should handle readonly state update errors gracefully', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       contextComponent.addEventListener('error', errorSpy);
 
       // Wait for initialization
@@ -236,55 +269,64 @@ describe('RichTextEditor - Error Handling', () => {
       await el.updateComplete;
 
       // Should handle state changes without errors
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
   });
 
   describe('Runtime Errors', () => {
     it('should dispatch error event for non-fatal runtime errors', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       contextComponent.addEventListener('error', errorSpy);
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Editor should be functional
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
 
     it('should log runtime errors to console by default', async () => {
-      const consoleStub = sinon.stub(console, 'error');
+      const consoleStub = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
-      expect(el).to.be.ok;
+      expect(el).toBeTruthy();
 
-      consoleStub.restore();
+      consoleStub.mockRestore();
     });
   });
 
   describe('Error Recovery', () => {
     it('should clear previous initialization errors on successful retry', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context>
-          <!-- Start without content element -->
-        </forge-rich-text-context>
-      `);
+      const el = await renderFixture<RichTextContextComponent>(
+        html`
+          <forge-rich-text-context>
+            <!-- Start without content element -->
+          </forge-rich-text-context>
+        `,
+        'forge-rich-text-context'
+      );
 
       // Wait for potential initialization
       await new Promise(resolve => setTimeout(resolve, 150));
@@ -296,15 +338,18 @@ describe('RichTextEditor - Error Handling', () => {
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Check that component exists (may or may not have initialized depending on timing)
-      expect(el).to.be.ok;
+      expect(el).toBeTruthy();
     });
 
     it('should maintain editor functionality after non-fatal errors', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor content="<p>Test content</p>">
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor content="<p>Test content</p>">
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
@@ -325,21 +370,24 @@ describe('RichTextEditor - Error Handling', () => {
       await el.updateComplete;
 
       // Editor should still be functional
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
       const json = contextComponent.toJSON();
-      expect(json).to.not.be.undefined;
+      expect(json).not.toBeUndefined();
     });
 
     it('should handle rapid content changes without errors', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
-      const errorSpy = sinon.spy();
+      const errorSpy = vi.fn();
       contextComponent.addEventListener('error', errorSpy);
 
       // Wait for initialization
@@ -354,50 +402,56 @@ describe('RichTextEditor - Error Handling', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Should handle all changes
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
   });
 
   describe('Error Event Details', () => {
     it('should include error message in initialization-error event detail', async () => {
-      const el = await fixture<RichTextContextComponent>(html`
-        <forge-rich-text-context>
-          <!-- No content element -->
-        </forge-rich-text-context>
-      `);
+      const el = await renderFixture<RichTextContextComponent>(
+        html`
+          <forge-rich-text-context>
+            <!-- No content element -->
+          </forge-rich-text-context>
+        `,
+        'forge-rich-text-context'
+      );
 
       el.addEventListener('initialization-error', (e: Event) => {
         const detail = (e as CustomEvent).detail;
         // Error detail should contain error message if event fires
-        expect(detail).to.be.ok;
+        expect(detail).toBeTruthy();
       });
 
       // Trigger initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
       // Check if error was caught (may not error with empty feature set)
-      expect(el).to.be.ok;
+      expect(el).toBeTruthy();
     });
 
     it('should include context and error in error event detail', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const contextComponent = el.shadowRoot?.querySelector('forge-rich-text-context') as RichTextContextComponent;
 
       contextComponent.addEventListener('error', (e: Event) => {
         const detail = (e as CustomEvent).detail;
         // Error detail should contain context and error if event fires
-        expect(detail).to.be.ok;
+        expect(detail).toBeTruthy();
       });
 
       // Wait for initialization
       await new Promise(resolve => setTimeout(resolve, 150));
 
-      expect(contextComponent.isInitialized).to.be.true;
+      expect(contextComponent.isInitialized).toBe(true);
     });
   });
 });

@@ -1,5 +1,7 @@
-import { expect, fixture, html } from '@open-wc/testing';
-import type { IForgeIconButtonComponent } from '@tylertech/forge';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
+import type { IIconButtonComponent } from '@tylertech/forge';
 
 import '../rich-text-editor.js';
 import '../features/rte-standard-tools.js';
@@ -10,7 +12,7 @@ import type { RichTextContextComponent } from '../rich-text-context.js';
  * Returns all forge-icon-button elements inside forge-rte-standard-tools by traversing
  * the shadow DOM chain: standard-tools → feature shadow → tool-button shadow → icon-button.
  */
-function getToolbarIconButtons(el: RichTextEditorComponent): IForgeIconButtonComponent[] {
+function getToolbarIconButtons(el: RichTextEditorComponent): IIconButtonComponent[] {
   const standardTools = el.querySelector('forge-rte-standard-tools');
   if (!standardTools?.shadowRoot) {
     return [];
@@ -21,7 +23,7 @@ function getToolbarIconButtons(el: RichTextEditorComponent): IForgeIconButtonCom
   return Array.from(standardTools.shadowRoot.querySelectorAll('*'))
     .filter(node => node.shadowRoot)
     .flatMap(featureEl => Array.from(featureEl.shadowRoot!.querySelectorAll('forge-rte-tool-button')))
-    .map(tb => tb.shadowRoot?.querySelector('forge-icon-button') as IForgeIconButtonComponent)
+    .map(tb => tb.shadowRoot?.querySelector('forge-icon-button') as IIconButtonComponent)
     .filter(Boolean);
 }
 
@@ -68,103 +70,124 @@ async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextConte
 describe('Rich Text Editor - State Visual Indicators', () => {
   describe('Disabled state', () => {
     it('should apply disabled styling to editor wrapper', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor disabled>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor disabled>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await el.updateComplete;
       const root = el.shadowRoot as ShadowRoot;
       const editorWrapper = root.querySelector('.forge-rich-text-editor') as HTMLElement;
 
-      expect(el.hasAttribute('disabled')).to.be.true;
-      expect(editorWrapper).to.exist;
+      expect(el.hasAttribute('disabled')).toBe(true);
+      expect(editorWrapper).toBeTruthy();
 
       // Verify the component has disabled attribute which triggers :host([disabled]) styles
-      expect(el.disabled).to.be.true;
+      expect(el.disabled).toBe(true);
     });
 
     it('should disable all toolbar buttons when editor is disabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor disabled>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor disabled>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       const buttons = getToolbarIconButtons(el);
 
-      expect(buttons.length).to.be.greaterThan(0);
+      expect(buttons.length).toBeGreaterThan(0);
       buttons.forEach(button => {
-        expect(button.hasAttribute('disabled')).to.be.true;
+        expect(button.hasAttribute('disabled')).toBe(true);
       });
     });
 
     it('should prevent editing in content area when disabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor disabled>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor disabled>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
-      expect(context.editorContext.editor?.isEditable).to.be.false;
+      expect(context.editorContext.editor?.isEditable).toBe(false);
     });
   });
 
   describe('Readonly state', () => {
     it('should apply readonly styling to editor', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor readonly>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor readonly>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(el.hasAttribute('readonly')).to.be.true;
-      expect(el.readOnly).to.be.true;
+      expect(el.hasAttribute('readonly')).toBe(true);
+      expect(el.readOnly).toBe(true);
     });
 
     it('should disable all toolbar buttons when editor is readonly', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor readonly>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor readonly>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       const buttons = getToolbarIconButtons(el);
 
-      expect(buttons.length).to.be.greaterThan(0);
+      expect(buttons.length).toBeGreaterThan(0);
       buttons.forEach(button => {
-        expect(button.hasAttribute('disabled')).to.be.true;
+        expect(button.hasAttribute('disabled')).toBe(true);
       });
     });
 
     it('should prevent editing in content area when readonly', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor readonly>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor readonly>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
-      expect(context.editorContext.editor?.isEditable).to.be.false;
+      expect(context.editorContext.editor?.isEditable).toBe(false);
     });
   });
 
   describe('Active state indicators', () => {
     it('should show active state on bold button when bold text is selected', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -181,17 +204,20 @@ describe('Rich Text Editor - State Visual Indicators', () => {
 
       const boldButtons = getToolbarIconButtons(el).filter(btn => btn.getAttribute('aria-label')?.includes('Bold'));
 
-      expect(boldButtons.length).to.be.greaterThan(0);
-      const boldButton = boldButtons[0] as IForgeIconButtonComponent;
-      expect(boldButton.hasAttribute('pressed')).to.be.true;
+      expect(boldButtons.length).toBeGreaterThan(0);
+      const boldButton = boldButtons[0] as IIconButtonComponent;
+      expect(boldButton.hasAttribute('pressed')).toBe(true);
     });
 
     it('should show active state on heading button when heading is active', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
       const editor = context.editorContext.editor;
@@ -210,109 +236,121 @@ describe('Rich Text Editor - State Visual Indicators', () => {
         btn => btn.getAttribute('aria-label')?.includes('H1') || btn.getAttribute('aria-label')?.includes('Heading 1')
       );
 
-      expect(h1Buttons.length).to.be.greaterThan(0);
-      const h1Button = h1Buttons[0] as IForgeIconButtonComponent;
-      expect(h1Button.hasAttribute('pressed')).to.be.true;
+      expect(h1Buttons.length).toBeGreaterThan(0);
+      const h1Button = h1Buttons[0] as IIconButtonComponent;
+      expect(h1Button.hasAttribute('pressed')).toBe(true);
     });
   });
 
   describe('Focus indicators', () => {
     it('should have focus indicator on content area', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await el.updateComplete;
       const contentComponent = el.shadowRoot?.querySelector('forge-rich-text-content');
       const contentWrapper = contentComponent?.shadowRoot?.querySelector('.editor-content-wrapper');
       const focusIndicator = contentWrapper?.querySelector('forge-focus-indicator');
 
-      expect(focusIndicator).to.exist;
+      expect(focusIndicator).toBeTruthy();
     });
 
     it('should have accessible focus indicators on toolbar buttons', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       await waitForEditor(el);
 
       const buttons = getToolbarIconButtons(el);
 
-      expect(buttons.length).to.be.greaterThan(0);
+      expect(buttons.length).toBeGreaterThan(0);
 
       // Forge icon buttons have built-in focus indicators
       // Verify buttons are focusable
       buttons.forEach(button => {
         const tabindex = button.getAttribute('tabindex');
-        expect(tabindex === null || tabindex === '0').to.be.true;
+        expect(tabindex === null || tabindex === '0').toBe(true);
       });
     });
   });
 
   describe('State transitions', () => {
     it('should update visual state when toggling disabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       // Initially enabled
-      expect(el.disabled).to.be.false;
-      expect(context.editorContext.editor?.isEditable).to.be.true;
+      expect(el.disabled).toBe(false);
+      expect(context.editorContext.editor?.isEditable).toBe(true);
 
       // Disable
       el.disabled = true;
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(el.hasAttribute('disabled')).to.be.true;
-      expect(context.editorContext.editor?.isEditable).to.be.false;
+      expect(el.hasAttribute('disabled')).toBe(true);
+      expect(context.editorContext.editor?.isEditable).toBe(false);
 
       // Re-enable
       el.disabled = false;
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(el.hasAttribute('disabled')).to.be.false;
-      expect(context.editorContext.editor?.isEditable).to.be.true;
+      expect(el.hasAttribute('disabled')).toBe(false);
+      expect(context.editorContext.editor?.isEditable).toBe(true);
     });
 
     it('should update visual state when toggling readonly', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-standard-tools></forge-rte-standard-tools>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-standard-tools></forge-rte-standard-tools>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       // Initially not readonly
-      expect(el.readOnly).to.be.false;
-      expect(context.editorContext.editor?.isEditable).to.be.true;
+      expect(el.readOnly).toBe(false);
+      expect(context.editorContext.editor?.isEditable).toBe(true);
 
       // Set readonly
       el.readOnly = true;
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(el.hasAttribute('readonly')).to.be.true;
-      expect(context.editorContext.editor?.isEditable).to.be.false;
+      expect(el.hasAttribute('readonly')).toBe(true);
+      expect(context.editorContext.editor?.isEditable).toBe(false);
 
       // Unset readonly
       el.readOnly = false;
       await el.updateComplete;
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(el.hasAttribute('readonly')).to.be.false;
-      expect(context.editorContext.editor?.isEditable).to.be.true;
+      expect(el.hasAttribute('readonly')).toBe(false);
+      expect(context.editorContext.editor?.isEditable).toBe(true);
     });
   });
 });
