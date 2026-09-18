@@ -1,0 +1,22 @@
+@use 'sass:map';
+@use '../../theme';
+@use '../../shape';
+@use '../../spacing';
+@use '../../border';
+@use '../../utils';
+
+$tokens: (
+  background: utils.module-val(kbd, background, theme.variable(surface-dim)),
+  color: utils.module-val(kbd, color, theme.variable(text-medium)),
+  shape: utils.module-val(kbd, shape, shape.variable(medium)),
+  block-size: utils.module-val(kbd, block-size, 2em),
+  padding-inline: utils.module-val(kbd, padding-inline, spacing.variable(xxsmall)),
+  border-width: utils.module-val(kbd, border-width, border.variable(thin)),
+  border-style: utils.module-val(kbd, border-style, solid),
+  border-color: utils.module-val(kbd, border-color, theme.variable(outline)),
+  gap: utils.module-val(kbd, gap, spacing.variable(xxxsmall))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

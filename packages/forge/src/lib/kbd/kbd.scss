@@ -1,0 +1,33 @@
+@use './core' as *;
+@use '../core/styles/typography';
+
+:host {
+  display: inline;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-kbd {
+  @include tokens;
+}
+
+.forge-kbd {
+  @include base;
+}
+
+.key {
+  @include key;
+}
+
+.dense {
+  @include dense;
+}
+
+$themes: (primary, secondary, tertiary, success, warning, error, info);
+@each $theme in $themes {
+  .theme-#{$theme} {
+    @include theme($theme);
+  }
+}
