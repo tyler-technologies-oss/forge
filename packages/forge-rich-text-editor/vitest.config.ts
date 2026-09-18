@@ -43,6 +43,10 @@ export default defineConfig({
       screenshotFailures: false
     },
     include: ['src/lib/**/*.test.ts'],
+    // TODO(rte-vitest-migration): the lifted specs still target Web Test Runner and are excluded
+    // until they are migrated to Vitest browser mode. Drop both options once that lands.
+    exclude: ['src/lib/**/tests/**/*.test.ts'],
+    passWithNoTests: true,
     onConsoleLog(log) {
       if (log.includes('Lit is in dev mode')) {
         return false;

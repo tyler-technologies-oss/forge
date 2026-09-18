@@ -22,18 +22,16 @@
   "typings": "esm/index.d.ts",
   "exports": {
     ".": {
-      "development": "./src/lib/index.ts",
       "types": "./esm/index.d.ts",
       "default": "./esm/index.js"
     },
     "./*": {
-      "development": "./src/lib/*/index.ts",
       "types": "./esm/*/index.d.ts",
       "default": "./esm/*/index.js"
     },
     "./esm/*": {
-      "types": "./esm/*/index.d.ts",
-      "default": "./esm/*/index.js"
+      "types": "./esm/*.d.ts",
+      "default": "./esm/*.js"
     },
     "./custom-elements.json": {
       "default": "./custom-elements.json"
@@ -98,6 +96,7 @@
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-prettier": "catalog:",
+    "glob": "catalog:",
     "minimatch": "^10.2.5",
     "ora": "^9.3.0",
     "playwright": "catalog:",

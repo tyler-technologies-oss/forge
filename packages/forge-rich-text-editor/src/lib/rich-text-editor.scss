@@ -1,0 +1,62 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+
+:host {
+  display: block;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-rich-text-editor {
+  border: var(--forge-border-thin) solid var(--forge-theme-outline);
+  border-radius: var(--forge-shape-medium);
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background-color: var(--forge-theme-surface);
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--forge-spacing-xxsmall);
+  padding: var(--forge-spacing-small) var(--forge-spacing-small);
+  background-color: var(--forge-theme-surface-container-lowest);
+  border-bottom: var(--forge-border-thin) solid var(--forge-theme-outline);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  min-height: 48px;
+
+  // Active button styling
+  --forge-icon-button-toggle-on-background-color: var(--forge-theme-primary-container);
+  --forge-icon-button-toggle-on-icon-color: var(--forge-theme-on-primary-container);
+
+  // Hover state
+  --forge-icon-button-hover-background-color: var(--forge-theme-surface-container);
+
+  // Focus indicator
+  --forge-focus-indicator-color: var(--forge-theme-primary);
+  --forge-focus-indicator-width: var(--forge-border-medium);
+}
+
+:host([disabled]) {
+  .forge-rich-text-editor {
+    opacity: var(--forge-theme-disabled-opacity);
+    pointer-events: none;
+  }
+}
+
+:host([readonly]) {
+  .editor-toolbar {
+    opacity: var(--forge-theme-disabled-opacity);
+    pointer-events: none;
+  }
+}
