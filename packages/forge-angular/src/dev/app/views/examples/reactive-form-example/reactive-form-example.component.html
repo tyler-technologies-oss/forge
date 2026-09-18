@@ -1,0 +1,108 @@
+<app-demo-card headerText="Form Example">
+  <pre style="margin-bottom: 24px">{{ exampleForm.value | json }}</pre>
+
+  <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+    <!-- Text field -->
+    <div class="forge-demo-form-field" style="display: flex">
+      <forge-text-field style="margin-right: 16px" required [invalid]="isInvalid('firstName')">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" formControlName="firstName" />
+        <span slot="support-text">{{ isInvalid('firstName') ? 'A first name is required' : 'Enter your first name' }}</span>
+      </forge-text-field>
+      <forge-text-field required [invalid]="isInvalid('lastName')">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" formControlName="lastName" />
+      </forge-text-field>
+    </div>
+    <div class="forge-demo-form-field">
+      <forge-text-field required [invalid]="isInvalid('email')">
+        <label for="email">Email</label>
+        <input type="text" id="email" formControlName="email" />
+      </forge-text-field>
+    </div>
+
+    <!-- Switch -->
+    <div class="forge-demo-form-field">
+      <forge-switch formControlName="send">
+        <span>&nbsp;Send me promotional emails</span>
+      </forge-switch>
+    </div>
+
+    <!-- Date picker -->
+    <div class="forge-demo-form-field">
+      <forge-date-picker formControlName="dob" masked>
+        <forge-text-field required [invalid]="isInvalid('dob')">
+          <label for="dob">Date of birth</label>
+          <input type="text" id="dob" />
+        </forge-text-field>
+      </forge-date-picker>
+    </div>
+
+    <!-- Time picker -->
+    <div class="forge-demo-form-field">
+      <forge-time-picker formControlName="tob">
+        <forge-text-field required [invalid]="isInvalid('tob')">
+          <label for="tob">Time of birth</label>
+          <input type="text" id="tob" />
+        </forge-text-field>
+      </forge-time-picker>
+    </div>
+
+    <!-- Radio -->
+    <div class="forge-demo-form-field">
+      <forge-radio-group>
+        <forge-radio name="gender" value="male" formControlName="gender">Male</forge-radio>
+        <forge-radio name="gender" value="female" formControlName="gender">Female</forge-radio>
+      </forge-radio-group>
+    </div>
+
+    <!-- Autocomplete -->
+    <div class="forge-demo-form-field">
+      <forge-autocomplete debounce="0" #stateAutocomplete formControlName="state">
+        <forge-text-field required [invalid]="isInvalid('state')">
+          <label for="state">State</label>
+          <input type="text" id="state" />
+        </forge-text-field>
+      </forge-autocomplete>
+    </div>
+
+    <!-- Select -->
+    <div class="forge-demo-form-field">
+      <forge-select label="Country" formControlName="country" required [invalid]="isInvalid('country')">
+        <forge-option value=""></forge-option>
+        <forge-option value="US">United States</forge-option>
+        <forge-option value="CA">Canada</forge-option>
+        <forge-option value="MX">Mexico</forge-option>
+      </forge-select>
+    </div>
+
+    <!-- Slider -->
+    <div class="forge-demo-form-field">
+      <forge-slider type="discrete" min="0" max="100" formControlName="favoriteNumber" aria-label="Set favorite number"></forge-slider>
+      <div class="forge-typography--label1" style="text-align: center">Favorite Number: {{ exampleForm.value.favoriteNumber }}</div>
+    </div>
+
+    <!-- Chips -->
+    <div class="forge-demo-form-field">
+      <h3>Shirt Size</h3>
+      <forge-chip-set type="choice">
+        <forge-chip [selected]="shirtSize.value === 'xs'" value="xs" formControlName="shirtSize">Extra small</forge-chip>
+        <forge-chip [selected]="shirtSize.value === 's'" value="s" formControlName="shirtSize">Small</forge-chip>
+        <forge-chip [selected]="shirtSize.value === 'm'" value="m" formControlName="shirtSize">Medium</forge-chip>
+        <forge-chip [selected]="shirtSize.value === 'l'" value="l" formControlName="shirtSize">Large</forge-chip>
+        <forge-chip [selected]="shirtSize.value === 'xl'" value="xl" formControlName="shirtSize">Extra large</forge-chip>
+      </forge-chip-set>
+    </div>
+
+    <!-- Checkbox -->
+    <div class="forge-demo-form-field">
+      <forge-checkbox formControlName="agree">Do you agree to the terms of service?</forge-checkbox>
+    </div>
+
+    <!-- Reset and submit buttons-->
+    <div class="forge-form-field">
+      <forge-button style="margin-right: 8px" (click)="onReset()" [disabled]="!exampleForm.dirty">Reset</forge-button>
+      <forge-button variant="raised" [disabled]="!exampleForm.get('agree')?.value || !exampleForm.valid">Submit</forge-button>
+    </div>
+  </form>
+</app-demo-card>

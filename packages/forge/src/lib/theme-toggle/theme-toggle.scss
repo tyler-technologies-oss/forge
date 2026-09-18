@@ -1,0 +1,59 @@
+@use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+:host {
+  display: contents;
+  --toggle-background: #{theme.variable(surface-dim)};
+}
+
+//
+// Base
+//
+
+.title {
+  @include typography.style(heading1);
+  margin-block-end: #{spacing.variable(xsmall)};
+}
+
+forge-button-toggle-group {
+  --forge-button-toggle-group-height: 32px;
+  --forge-button-toggle-group-outline-width: 0;
+  --forge-button-toggle-group-shape: #{shape.variable(large)};
+
+  &::part(root) {
+    background-color: var(--toggle-background);
+  }
+}
+
+forge-button-toggle {
+  --forge-button-toggle-color: #{theme.variable(text-high)};
+  --forge-button-toggle-selected-color: #{theme.variable(text-high)};
+  --forge-button-toggle-selected-background: #{theme.variable(surface-bright)};
+  --forge-button-toggle-shape: #{shape.variable(large)};
+
+  &[selected]::part(root) {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid #{theme.variable(outline-low)};
+      border-radius: inherit;
+    }
+  }
+}
+
+//
+// State
+//
+
+:host(:state(light)) {
+  --toggle-background: #{theme.variable(surface-container-minimum)};
+}
+
+:host(:state(dark)) {
+  --toggle-background: #{theme.variable(surface-container-low)};
+}

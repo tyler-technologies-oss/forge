@@ -1,0 +1,93 @@
+:host {
+  --forge-card-padding: 0;
+}
+
+.forge-expansion-demo {
+  &__container {
+    max-width: 960px;
+    margin: 24px auto;
+
+    forge-card {
+      margin: -1px 0 0 0;
+    }
+  }
+}
+
+.card-detail {
+  margin-bottom: 24px;
+
+  &__container {
+    height: 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__left {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      forge-open-icon {
+        margin-right: 16px;
+      }
+    }
+
+    &__right {
+      display: flex;
+      justify-content: space-between;
+
+      forge-icon-button {
+        color: var(--forge-theme-text-medium);
+      }
+    }
+  }
+}
+
+.card-grid {
+  &__container {
+    height: 56px;
+    display: grid;
+    grid-template-columns: min-content repeat(11, 1fr);
+    align-items: center;
+    gap: 16px;
+
+    forge-open-icon {
+      grid-column: 1;
+    }
+
+    .details {
+      grid-column: 2/12;
+    }
+
+    .actions {
+      grid-column: 13;
+    }
+  }
+}
+
+forge-open-icon {
+  cursor: pointer;
+}
+
+.toolbar-start {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  h2 {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.container-outline-demo {
+  outline: 3px solid var(--forge-theme-primary);
+  outline-offset: -3px;
+  transition: all 0.1s linear;
+}
+
+.flex-item-demo {
+  outline: 3px dashed var(--forge-theme-info-primary-container);
+  outline-offset: -3px;
+  transition: all 0.1s linear;
+}

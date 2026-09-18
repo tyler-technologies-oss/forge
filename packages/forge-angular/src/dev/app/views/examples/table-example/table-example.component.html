@@ -1,0 +1,81 @@
+<app-demo-card headerText="Table example" [fullWidth]="true">
+  <p class="forge-typography--subheading2">
+    The following example demonstrates a complex usage of the Forge table component to showcase many of its features, while also demonstrating a realistic
+    design for an actual Tyler application.
+  </p>
+
+  <p class="forge-typography--subheading2">
+    The design for the following example can be found
+    <a href="https://tylertech.invisionapp.com/share/7TWPBF5B2E5#/screens" target="_blank" rel="noopener noreferrer">here</a>.
+  </p>
+
+  <forge-divider />
+
+  @if (journalSelectionCount === 0) {
+    <div class="table-header">
+      <h2>Journals</h2>
+      <div class="align-vert">
+        <forge-menu [options]="availableColumns" (forge-menu-select)="onToggleColumnVisibility($event)">
+          <forge-icon-button style="color: var(--forge-theme-text-medium); margin-right: 8px">
+            <forge-icon name="view_column"></forge-icon>
+          </forge-icon-button>
+          <forge-tooltip placement="bottom">Customize columns</forge-tooltip>
+        </forge-menu>
+        <forge-button variant="outlined" (click)="onToggleFilters()">
+          <forge-icon name="filter_list"></forge-icon>
+          {{ showFilter ? 'Cancel filter' : 'Filter' }}
+        </forge-button>
+      </div>
+    </div>
+  }
+
+  @if (journalSelectionCount > 0) {
+    <div class="selection-header">
+      <div>{{ journalSelectionCount }} journals selected</div>
+      <div class="journal-action-buttons">
+        <forge-button>
+          <forge-icon name="import_export"></forge-icon>
+          <span>Export</span>
+        </forge-button>
+        <forge-button>
+          <forge-icon name="note_add"></forge-icon>
+          <span>Post</span>
+        </forge-button>
+        <forge-button>
+          <forge-icon name="print"></forge-icon>
+          <span>Print</span>
+        </forge-button>
+        <forge-button>
+          <forge-icon name="compare_arrows"></forge-icon>
+          <span>Release</span>
+        </forge-button>
+        <forge-button>
+          <forge-icon name="not_interested"></forge-icon>
+          <span>Void</span>
+        </forge-button>
+        <forge-button (click)="clearSelections()">
+          <forge-icon name="close"></forge-icon>
+          <span>Cancel</span>
+        </forge-button>
+      </div>
+    </div>
+  }
+
+  <div class="table-container">
+    <forge-table
+      #journalTable
+      [columnConfigurations]="(columnConfigs$ | async) ?? []"
+      [data]="(pagedData$ | async) ?? []"
+      [filter]="showFilter"
+      (forge-table-select)="onTableRowSelected($event)"
+      (forge-table-select-all)="onTableSelectAll($event)"
+      select
+      select-key="number"
+      multiple
+      resizeable>
+    </forge-table>
+  </div>
+  <div class="table-footer">
+    <forge-paginator [total]="totalCount"></forge-paginator>
+  </div>
+</app-demo-card>

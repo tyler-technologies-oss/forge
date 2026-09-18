@@ -1,8 +1,8 @@
 import { consume, ContextRoot } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { ExperimentalFocusOptions, playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { toggleState } from '../../core/index.js';
@@ -34,6 +34,7 @@ export interface ITabComponent extends BaseLitElement {
   secondary: boolean;
   inverted: boolean;
   closable: boolean;
+  name: string;
   focus(options?: ExperimentalFocusOptions): void;
 }
 
@@ -103,7 +104,6 @@ export interface ITabComponent extends BaseLitElement {
  * @slot start - Content before the label.
  * @slot end - Content after the label.
  */
-@customElement(TAB_CONSTANTS.elementName)
 export class TabComponent extends BaseLitElement implements ITabComponent {
   public static styles = unsafeCSS(styles);
 
@@ -118,7 +118,15 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
 
   #internals: ElementInternals;
 
-  // TODO: Remove attribute reflection
+  // TODO: Remove attribute reflection except for `name`
+
+  /**
+   * The name of the tab used for indexing and identication.
+   * @default ''
+   * @attribute
+   */
+  @property({ reflect: true })
+  public name = '';
 
   /**
    * The disabled state of the tab. Disabled tabs remain focusable but are not interactive. Should
@@ -129,6 +137,9 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  /**
+   * Whether the tab is the current active tab within its parent tab bar.
+   */
   @property({ type: Boolean })
   public active = false;
 
@@ -208,6 +219,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   private set _stacked(value: boolean) {
     this.stacked = value;
   }
+
   @consume({ context: TAB_BAR_SECONDARY, subscribe: true })
   private set _secondary(value: boolean) {
     this.secondary = value;
@@ -230,7 +242,6 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   constructor() {
     super();
     this.#internals = this.attachInternals();
-    this.style.scrollMargin = `${TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN}px`;
   }
 
   public override connectedCallback(): void {
@@ -246,6 +257,16 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       role: 'tab'
     });
     this.tabIndex = -1;
+    this.style.scrollMargin = `${TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN}px`;
+
+    // Dispatch registration event for tab panels waiting to connect
+    window.dispatchEvent(
+      new CustomEvent('forge-tab-connected', {
+        detail: this,
+        bubbles: false,
+        composed: false
+      })
+    );
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -270,6 +291,12 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
 
     if (changedProperties.has('vertical')) {
       toggleState(this.#internals, 'vertical', this.vertical);
+    }
+  }
+
+  public updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('name')) {
+      this.#verifyName();
     }
   }
 
@@ -320,6 +347,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   #requestSync(): void {
+    /** @ignore */
     this.dispatchEvent(
       new CustomEvent(TAB_CONSTANTS.events.REQUEST_SYNC, {
         bubbles: true,
@@ -327,7 +355,20 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
       })
     );
   }
+
+  #verifyName(): void {
+    if (!this.name) {
+      return;
+    }
+    const tabBar = this.closest(TAB_BAR_CONSTANTS.elementName);
+    const tabs = tabBar?.querySelectorAll(`${TAB_CONSTANTS.elementName}[name="${this.name}"]`);
+    if (tabs && tabs.length > 1) {
+      console.warn(`Multiple tabs with the name "${this.name}" found. Each tab should have a unique name.`);
+    }
+  }
 }
+
+tryDefine(TAB_CONSTANTS.elementName, TabComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -336,8 +377,13 @@ declare global {
 
   interface HTMLElementEventMap {
     'forge-tab-close': Event;
+    'forge-tab-did-sync': Event;
     'forge-tab-menu': Event;
     'forge-tab-request-sync': Event;
     'forge-tab-select': CustomEvent<void>;
+  }
+
+  interface WindowEventMap {
+    'forge-tab-connected': CustomEvent<TabComponent>;
   }
 }

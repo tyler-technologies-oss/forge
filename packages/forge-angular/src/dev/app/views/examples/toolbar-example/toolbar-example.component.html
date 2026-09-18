@@ -1,0 +1,101 @@
+<div class="container">
+  <forge-card>
+    <!-- scaffold is not specifically required here since the card has its own similar set of slots.
+    We just want to demo that the scaffold can be used for smaller layouts as well. -->
+    <forge-scaffold>
+      <forge-toolbar slot="header" class="toolbar--no-footer">
+        <h3 slot="start" class="forge-typography--heading4">Latest evaluation</h3>
+        <forge-badge muted theme="info-primary" slot="end">Pending</forge-badge>
+      </forge-toolbar>
+
+      <div slot="body" class="padding-16 card-body">
+        <forge-label-value>
+          <span slot="label">Evaluation period</span>
+          <span slot="value">00/00/2020</span>
+        </forge-label-value>
+        <forge-label-value>
+          <span slot="label">Evaluation type</span>
+          <span slot="value">Annual review</span>
+        </forge-label-value>
+        <forge-label-value>
+          <span slot="label">Overall rating</span>
+          <span slot="value">High solid</span>
+        </forge-label-value>
+        <forge-label-value>
+          <span slot="label">Evaluator</span>
+          <span slot="value">Claire Nicholson</span>
+        </forge-label-value>
+        <forge-label-value>
+          <span slot="label">Overall rating</span>
+          <span slot="value">High solid</span>
+        </forge-label-value>
+        <forge-label-value>
+          <span slot="label">Evaluator</span>
+          <span slot="value">Claire Nicholson</span>
+        </forge-label-value>
+      </div>
+
+      <forge-toolbar slot="footer">
+        <forge-button variant="outlined" slot="start">Details</forge-button>
+      </forge-toolbar>
+    </forge-scaffold>
+  </forge-card>
+
+  <forge-card>
+    <forge-toolbar class="toolbar--no-footer">
+      <h3 slot="start" class="forge-typography--heading4">Goal progress</h3>
+    </forge-toolbar>
+
+    <div class="padding-16 card-body">
+      <div>
+        <forge-label-value>
+          <span slot="label">Next goal due</span>
+          <span slot="value">00/00/2020</span>
+        </forge-label-value>
+
+        <p class="forge-typography--subheading2-secondary">Human Resource Performance Certification</p>
+      </div>
+
+      <img src="../../../../assets/images/chart-placeholder.png" alt="Chart example" width="150px" class="chart-placeholder" />
+    </div>
+
+    <forge-toolbar slot="footer">
+      <forge-button variant="outlined" slot="start">View goals</forge-button>
+    </forge-toolbar>
+  </forge-card>
+
+  <forge-card class="span-full">
+    <forge-toolbar slot="header">
+      <h3 slot="start" class="forge-typography--heading4">Recent feedback</h3>
+    </forge-toolbar>
+
+    @for (data of feedbackData; track data) {
+      <div>
+        <div class="padding-16 feedback-container">
+          <h3 class="forge-typography--subheading2-secondary span-full">{{ data.title }}</h3>
+          <forge-label-value>
+            <span slot="label">From</span>
+            <span slot="value">{{ data.from }}</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Date</span>
+            <span slot="value">{{ data.date }}</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Type</span>
+            <span slot="value">{{ data.type }}</span>
+          </forge-label-value>
+          <forge-label-value class="span-full">
+            <span slot="label">Details</span>
+            <span slot="value">{{ data.details }}</span>
+          </forge-label-value>
+        </div>
+        <forge-divider class="span-full"></forge-divider>
+      </div>
+    }
+
+    <forge-toolbar slot="footer">
+      <forge-paginator slot="start" total="100"></forge-paginator>
+    </forge-toolbar>
+  </forge-card>
+</div>

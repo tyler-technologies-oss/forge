@@ -1,5 +1,120 @@
 # @tylertech/forge
 
+## 3.18.0
+
+### Minor Changes
+
+- 95d74ca: feat(app-bar-menu-button): add `expanded`, `controls`, and `hasPopup` properties for ARIA state on the internal button
+- 49aa4bc: feat(menu): add an `onSelect` callback to menu options so each option can carry its own handler instead of branching on the `forge-menu-select` event value
+
+### Patch Changes
+
+- f658799: fix: guard against attempts to redefine Forge components (this is a temporary workaround that will be reverted in v4)
+
+## 3.17.0
+
+### Minor Changes
+
+- 2f37973: feat(app-launcher): migrate app launcher and app launcher link components from forge-extended
+- 2f37973: feat(app-layout): migrate app layout component from forge-extended
+- 2f37973: feat(busy-indicator): migrate busy indicator component from forge-extended
+- 2f37973: feat(confirmation-dialog): migrate confirmation dialog component from forge-extended
+- 2f37973: feat(content-scaffold): migrate content scaffold component from forge-extended
+- 2f37973: feat(count-card): migrate count card component from forge-extended
+- 2f37973: feat(footer): migrate footer and footer-item components from forge-extended
+- 2f37973: feat(multi-select-header): migrate multi select header component from forge-extended
+- 2f37973: feat(quantity-field): migrate quantity field component from forge-extended
+- 2f37973: feat(responsive-toolbar): migrate responsive toolbar component from forge-extended
+- 2f37973: feat(structured-card): migrate structured card component from forge-extended
+- 0ec03e3: Added i18n slots/labels to `forge-theme-toggle` and synced its state with OS `prefers-color-scheme` changes. Added a `groupAriaLabel` property on `forge-theme-toggle` and a `themeToggleAriaLabel` pass-through on `forge-user-profile`, along with `theme-toggle-title`/`theme-toggle-light-label`/`theme-toggle-dark-label`/`theme-toggle-system-label` slots for translating the embedded theme toggle. Regenerated the Angular wrappers to expose the new inputs.
+- 2f37973: feat(theme-toggle): migrate theme toggle component from forge-extended
+- 2f37973: feat(user-profile): migrate user profile and profile link components from forge-extended
+
+### Patch Changes
+
+- bbcc817: fix: add `./sass/*` subpath to package `exports` so Sass imports resolve
+- 6f06747: chore(deps): upgrade sass to 1.101.6
+- 5492215: fix: migrate usages of deprecated sass functions
+
+## 3.16.2
+
+### Patch Changes
+
+- 2388ce8: fix(autocomplete): document the second `value` parameter of the `filter`/`forceFilter` callback used for value-to-label resolution
+- 2388ce8: fix(page-state): correct `@slot` documentation from `actions` to `action` to match the actual template slot name
+- 2388ce8: fix(select): implement the `readonly` property so setting it no longer throws at runtime; the dropdown can still be opened to browse options, but the value can no longer be changed
+
+## 3.16.1
+
+### Patch Changes
+
+- dba81e7: fix(paginator): allow default page size that is not in page size options
+- dba81e7: fix(paginator): hide page size options select when page size options is a null value or empty array
+- 236a995: docs(paginator): fix storybook build error
+- Updated dependencies [dba81e7]
+  - @tylertech/forge-core@3.5.1
+
+## 3.16.0
+
+### Minor Changes
+
+- b555bdd: fix(secret): reduce default icon button size
+- 4362fba: feat(dialog): migrate to Lit
+- 79c3d06: feat(paginator): migrate to Lit
+- b555bdd: feat(secret): add button size token
+
+### Patch Changes
+
+- 79c3d06: fix(paginator): ensure button labels are announced by accessibility tools
+- 691a79d: fix(dialog): set focus on first focusable descendent element when opened as modal
+- Updated dependencies [691a79d]
+  - @tylertech/forge-core@3.5.0
+
+## 3.15.2
+
+### Patch Changes
+
+- 7260080: fix(tabs): detect all descendent tabs of tab bar
+
+## 3.15.1
+
+### Patch Changes
+
+- 3be1f74: fix(tabs): fix error when upgrading tab element
+
+## 3.15.0
+
+### Minor Changes
+
+- d28a72e: feat(skip-link): migrate to lit
+- ea1082a: feat(timeline): add timeline component
+- a600f23: feat(tabs): support named tabs
+- 35922fc: feat(tabs): enable tab removal via keyboard
+- 27787b4: feat(avatar): show default image when an image url or text is absent
+- a600f23: feat(tabs): add tab panel component
+- 35922fc: feat(tabs): migrate to lit
+- ea1082a: feat(timestamp): add timestamp component
+
+### Patch Changes
+
+- c25ede1: fix(icon): synchronously render icons which don't require loading
+- 60ac10b: fix(button-toggle): select with enter key
+- 19d2237: feature(toolbar): convert to Lit
+- a600f23: fix(tabs): stabilize active tab state in fewer update cycles
+- f6806ee: fix(calendar-dropdown): remove disallowed aria-selected attribute
+- efc46d0: fix(autocomplete): prevent stale dropdown popovers by destroying previous instances
+- 8e6efa6: fix(time-picker): preserve typed leading zeros in hours, minutes, and seconds
+- 6788bf9: fix(chip-field): initialize has-members class for pre-slotted chips
+- df76d15: fix(button-area): prevent slotted content disappearing when button receives focus
+- a600f23: fix(tabs): stabilize active tab state synchronously
+- 323ca11: feat(skeleton): migrated to lit
+- 6788bf9: fix(stepper, button-toggle): properly remove slot-change event listeners
+- 53d8510: fix(select): keyboard navigation from selected option after mouse click open
+- 83a9932: fix(time-picker): display midnight (00:00) value when set before connected to the DOM
+- Updated dependencies [ea1082a]
+- Updated dependencies [35922fc]
+  - @tylertech/forge-core@3.4.0
+
 ## 3.14.4
 
 ### Patch Changes
