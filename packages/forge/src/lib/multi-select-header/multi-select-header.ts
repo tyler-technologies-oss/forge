@@ -1,7 +1,7 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
+import { property, queryAssignedNodes } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { ButtonComponent } from '../button/index.js';
 import { ToolbarComponent } from '../toolbar/index.js';
@@ -43,7 +43,6 @@ export const MULTI_SELECT_HEADER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-
  *
  * @event {CustomEvent<void>} forge-multi-select-header-select-all - Fired when the select-all button is clicked
  */
-@customElement(MULTI_SELECT_HEADER_TAG_NAME)
 export class MultiSelectHeaderComponent extends BaseLitElement implements IMultiSelectHeaderComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = MULTI_SELECT_HEADER_TAG_NAME;
@@ -102,3 +101,5 @@ export class MultiSelectHeaderComponent extends BaseLitElement implements IMulti
     this.dispatchEvent(event);
   }
 }
+
+tryDefine(MULTI_SELECT_HEADER_TAG_NAME, MultiSelectHeaderComponent);

@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, formatDate } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, formatDate, tryDefine } from '@tylertech/forge-core';
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -25,7 +25,6 @@ export const TIMESTAMP_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timestamp'
  *
  * @csspart root - The root element.
  */
-@customElement(TIMESTAMP_TAG_NAME)
 export class TimestampComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -193,6 +192,8 @@ export class TimestampComponent extends BaseLitElement {
     }
   }
 }
+
+tryDefine(TIMESTAMP_TAG_NAME, TimestampComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

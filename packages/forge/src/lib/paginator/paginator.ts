@@ -4,11 +4,12 @@ import {
   CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
   CUSTOM_ELEMENT_NAME_PROPERTY,
   isArray,
-  LiveAnnouncer
+  LiveAnnouncer,
+  tryDefine
 } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLastPage } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { removeEmptyAttribute } from '../core/utils/lit-utils.js';
 import { IconButtonComponent } from '../icon-button/icon-button.js';
@@ -79,7 +80,6 @@ export interface IPaginatorComponent extends BaseLitElement {
  * @slot previous-page-tooltip - Overrides the default tooltip for the previous page button.
  * @slot next-page-tooltip - Overrides the default tooltip for the next page button.
  */
-@customElement(PAGINATOR_CONSTANTS.elementName)
 export class PaginatorComponent extends BaseLitElement implements IPaginatorComponent {
   public static styles = unsafeCSS(styles);
 
@@ -560,6 +560,8 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
     }
   }
 }
+
+tryDefine(PAGINATOR_CONSTANTS.elementName, PaginatorComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

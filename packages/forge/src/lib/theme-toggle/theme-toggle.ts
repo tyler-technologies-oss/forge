@@ -1,6 +1,6 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconMoonWaningCrescent, tylIconTonality, tylIconWbSunny } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -57,7 +57,6 @@ export const THEME_TOGGLE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-theme-t
  * the selected mode and is unchanged for OS-driven updates while `system` remains selected; `detail.resolvedTheme`
  * is the actual light/dark theme applied and is always the actionable value.
  */
-@customElement(THEME_TOGGLE_TAG_NAME)
 export class ThemeToggleComponent extends BaseLitElement implements IThemeToggleComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = THEME_TOGGLE_TAG_NAME;
@@ -178,3 +177,5 @@ export class ThemeToggleComponent extends BaseLitElement implements IThemeToggle
     }
   };
 }
+
+tryDefine(THEME_TOGGLE_TAG_NAME, ThemeToggleComponent);

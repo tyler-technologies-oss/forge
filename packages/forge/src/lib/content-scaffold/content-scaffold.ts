@@ -1,7 +1,7 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, queryAssignedNodes } from 'lit/decorators.js';
+import { queryAssignedNodes } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { hideWhenEmpty } from '../core/utils/lit-utils.js';
 
@@ -41,7 +41,6 @@ export const CONTENT_SCAFFOLD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-con
  * @cssproperty --forge-content-scaffold-footer-min-height - Controls the minimum height of the footer section. Defaults to `48px`.
  * @cssproperty --forge-content-scaffold-footer-full-padding - Controls the padding applied to full-width footer content. Defaults to Forge's small spacing token.
  */
-@customElement(CONTENT_SCAFFOLD_TAG_NAME)
 export class ContentScaffoldComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CONTENT_SCAFFOLD_TAG_NAME;
@@ -124,3 +123,5 @@ export class ContentScaffoldComponent extends BaseLitElement {
     }
   }
 }
+
+tryDefine(CONTENT_SCAFFOLD_TAG_NAME, ContentScaffoldComponent);

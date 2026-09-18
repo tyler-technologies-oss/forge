@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, matchesSelectors } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, matchesSelectors, tryDefine } from '@tylertech/forge-core';
 import { PropertyValues } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { IKeyCombination, KEYBOARD_SHORTCUT_CONSTANTS, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants.js';
 import { elementAcceptsTextInput, matchKeyCombination, parseKeyCombinations } from './keyboard-shortcut-utils.js';
@@ -26,7 +26,6 @@ export interface IKeyboardShortcutComponent extends BaseLitElement {
  *
  * @event {CustomEvent<KeyboardEvent>} forge-keyboard-shortcut-activate - Event fired when the keyboard shortcut is activated.
  */
-@customElement(KEYBOARD_SHORTCUT_CONSTANTS.elementName)
 export class KeyboardShortcutComponent extends BaseLitElement implements IKeyboardShortcutComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = KEYBOARD_SHORTCUT_CONSTANTS.elementName;
@@ -219,6 +218,8 @@ export class KeyboardShortcutComponent extends BaseLitElement implements IKeyboa
     }
   }
 }
+
+tryDefine(KEYBOARD_SHORTCUT_CONSTANTS.elementName, KeyboardShortcutComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

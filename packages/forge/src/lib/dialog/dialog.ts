@@ -1,6 +1,12 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, getFirstFocusableElement, playKeyframeAnimation } from '@tylertech/forge-core';
+import {
+  CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
+  CUSTOM_ELEMENT_NAME_PROPERTY,
+  getFirstFocusableElement,
+  playKeyframeAnimation,
+  tryDefine
+} from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { BACKDROP_CONSTANTS, BackdropComponent, IBackdropComponent } from '../backdrop/index.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { GlobalConfiguration } from '../core/configuration/global-configuration.js';
@@ -153,7 +159,6 @@ export interface IDialogComponent extends IDialogProperties, BaseLitElement, IDi
  * @cssclass forge-dialog__move-handle - Apply to the move handle element.
  * @cssclass forge-dialog__move-handle-container - Apply to the parent of the move handle element.
  */
-@customElement(DIALOG_CONSTANTS.elementName)
 export class DialogComponent extends BaseLitElement implements IDialogComponent {
   public static styles = unsafeCSS(styles);
 
@@ -837,6 +842,8 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     });
   }
 }
+
+tryDefine(DIALOG_CONSTANTS.elementName, DialogComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

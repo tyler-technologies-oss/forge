@@ -1,8 +1,8 @@
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes, state } from 'lit/decorators.js';
 import { cache } from 'lit/directives/cache.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconApplication, tylIconApps, tylIconArrowBack, tylIconChevronRight, tylIconClose, tylIconSearch } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -86,7 +86,6 @@ export const APP_LAUNCHER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-app-lau
  * @state small - The component is displayed in mobile/small screen mode (dialog)
  * @state large - The component is displayed in desktop/large screen mode (popover)
  */
-@customElement(APP_LAUNCHER_TAG_NAME)
 export class AppLauncherComponent extends BaseLitElement implements IAppLauncherComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = APP_LAUNCHER_TAG_NAME;
@@ -529,3 +528,5 @@ export class AppLauncherComponent extends BaseLitElement implements IAppLauncher
     }
   };
 }
+
+tryDefine(APP_LAUNCHER_TAG_NAME, AppLauncherComponent);

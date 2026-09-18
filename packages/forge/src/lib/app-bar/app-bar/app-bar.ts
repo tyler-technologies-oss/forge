@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../../core/base/base-component.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -62,7 +62,6 @@ export interface IAppBarComponent extends IBaseComponent {
  * @cssclass forge-app-bar__section-center - The center section of the app bar.
  * @cssclass forge-app-bar__section-end - The end section of the app bar.
  */
-@customElement(APP_BAR_CONSTANTS.elementName)
 export class AppBarComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -196,6 +195,8 @@ export class AppBarComponent extends BaseLitElement {
     }
   }
 }
+
+tryDefine(APP_BAR_CONSTANTS.elementName, AppBarComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, randomChars, tryDefine } from '@tylertech/forge-core';
 import { html, type PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -35,7 +35,6 @@ export type TabPanelFocusStrategy = 'auto' | 'off';
  *
  * @fires {ToggleEvent} toggle - Dispatched when the tab panel opens or closes.
  */
-@customElement(TAB_PANEL_TAG_NAME)
 export class TabPanelComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -327,6 +326,8 @@ export class TabPanelComponent extends BaseLitElement {
     );
   }
 }
+
+tryDefine(TAB_PANEL_TAG_NAME, TabPanelComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
