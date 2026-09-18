@@ -16,7 +16,7 @@ export class RichTextEditorComponent {
   /** The forge-rich-text-editor element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
-  /** The HTML content of the editor. */
+  /** The content of the editor, as an HTML string or a ProseMirror document. Both are sanitized. */
   @Input()
   public set content(value: RichTextEditorComponentCustomElement['content']) {
     this.zone.runOutsideAngular(() => {

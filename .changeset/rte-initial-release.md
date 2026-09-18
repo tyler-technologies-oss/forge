@@ -24,3 +24,8 @@ monorepo:
   `defineRichTextEditorComponents()` and `defineRteFeatureComponents()` aggregates.
 - The `forge-rte-tool-toggle` event is now correctly declared on `HTMLElementEventMap`; the
   previous declaration named an event that was never dispatched.
+- `content` on `forge-rich-text-editor` and `forge-rich-text-context` accepts either an HTML string
+  or a ProseMirror document. The runtime already sanitized both; only the declared type was
+  narrower. The matching `content` attribute remains HTML-only, since an attribute cannot carry an
+  object — pass a document through the property. Note that the React adapter forwards props as
+  attributes, so documents must be assigned through a ref there; see that package's README.
