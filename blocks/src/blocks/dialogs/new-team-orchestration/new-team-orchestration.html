@@ -19,7 +19,7 @@
     </forge-toolbar>
 
     <div slot="body" class="p-medium flex flex-col gap-medium">
-      <forge-text-field label-position="block-start">
+      <forge-text-field label-position="block-start" class="w-full max-w-[450px]">
         <label for="team-name">Name</label>
         <input type="text" id="team-name" value="Support Triage Team" />
       </forge-text-field>
@@ -245,13 +245,13 @@
       }
 
       detailEl.innerHTML = `
-        <div class="flex items-center gap-small p-medium border-b border-outline">
+        <div class="flex items-center gap-small px-medium pt-medium pb-0">
           <forge-icon name="${pattern.icon}" style="font-size: 24px;" class="text-primary"></forge-icon>
           <h3 class="text-heading3 m-0">${pattern.name}</h3>
           ${tagBadge(pattern)}
         </div>
 
-        <div class="flex flex-col gap-medium p-medium">
+        <div class="flex flex-col gap-medium px-medium pb-medium pt-small">
           <p class="text-body1 m-0">${pattern.description}</p>
 
           <div class="flex items-center justify-center p-medium bg-surface-dim rounded-md">
