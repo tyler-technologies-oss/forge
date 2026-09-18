@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tyler Forge™ Rich Text Editor Dev</title>
+  </head>
+  <body>
+    <main>
+      <h1>Rich Text Editor</h1>
+
+      <section>
+        <h2>Standard tools</h2>
+        <forge-rich-text-editor id="editor" max-length="500" show-character-count show-word-count>
+          <forge-rte-standard-tools></forge-rte-standard-tools>
+          <forge-rte-code></forge-rte-code>
+          <forge-rte-link></forge-rte-link>
+        </forge-rich-text-editor>
+        <output id="events"></output>
+      </section>
+
+      <section>
+        <h2>Read only</h2>
+        <forge-rich-text-editor id="readonly" readonly></forge-rich-text-editor>
+      </section>
+
+      <section>
+        <h2>Disabled</h2>
+        <forge-rich-text-editor disabled></forge-rich-text-editor>
+      </section>
+
+      <section>
+        <h2>Renderer</h2>
+        <forge-rich-text-renderer id="renderer"></forge-rich-text-renderer>
+      </section>
+
+      <section>
+        <h2>Output</h2>
+        <button id="dump" type="button">Log toJSON / toHTML / toMarkdown</button>
+        <pre id="output"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

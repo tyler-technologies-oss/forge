@@ -20,14 +20,17 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/test-out"
   ],
   "scripts": {
     "build": "rimraf ./dist && pnpm run generate-proxies && ng build forge-angular-rich-text-editor --configuration production",
     "generate-proxies": "node scripts/generate-proxies.mjs",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,js,mjs,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,js,mjs,json,md}\""
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,json,md}\"",
+    "dev": "ng serve forge-angular-rich-text-editor-demo",
+    "test": "ng test forge-angular-rich-text-editor"
   },
   "dependencies": {
     "tslib": "catalog:"
@@ -50,15 +53,18 @@
     "@tylertech/forge-adapter-codegen": "workspace:*",
     "@tylertech/forge-rich-text-editor": "workspace:*",
     "@types/node": "catalog:",
+    "@vitest/browser": "^3.2.4",
     "angular-eslint": "^20.4.0",
     "eslint": "catalog:",
     "ng-packagr": "^20.3.2",
+    "playwright": "catalog:",
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "rxjs": "^7.8.2",
     "sass": "catalog:",
     "typescript": "~5.9.3",
     "vite": "catalog:",
+    "vitest": "^3.2.4",
     "zone.js": "~0.15.1"
   },
   "lint-staged": {

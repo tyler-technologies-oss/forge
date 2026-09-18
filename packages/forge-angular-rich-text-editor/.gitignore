@@ -1,3 +1,5 @@
 dist
 out-tsc
 .angular
+dist-demo
+dist/test-out
