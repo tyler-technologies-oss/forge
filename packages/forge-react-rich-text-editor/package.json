@@ -1,0 +1,73 @@
+{
+  "name": "@tylertech/forge-react-rich-text-editor",
+  "version": "0.0.0",
+  "description": "The official Tyler Forge™ rich text editor adapter library for React.",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-react-rich-text-editor"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && pnpm run generate-proxies && pnpm run typecheck",
+    "generate-proxies": "node scripts/generate-proxies.mjs",
+    "typecheck": "tsc -p tsconfig.build.json",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,md}\"",
+    "pretest": "pnpm run build",
+    "test": "vitest run --browser.headless",
+    "vitest": "vitest"
+  },
+  "dependencies": {
+    "tslib": "catalog:"
+  },
+  "peerDependencies": {
+    "@tylertech/forge-rich-text-editor": "^0.1.0",
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-adapter-codegen": "workspace:*",
+    "@tylertech/forge-rich-text-editor": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "^17.0.91",
+    "@types/react-dom": "^17.0.26",
+    "@vitest/browser": "^4.1.2",
+    "@vitest/browser-playwright": "^4.1.2",
+    "eslint": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rimraf": "catalog:",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
