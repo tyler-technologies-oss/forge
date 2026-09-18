@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { ProcessStepComponent } from './process-step/process-step.js';
 import { ProcessStepperComponent } from './process-stepper/process-stepper.js';
@@ -554,6 +555,64 @@ describe('ProcessStep', () => {
 
       expect(step.shadowRoot?.querySelector('forge-focus-indicator')?.parentElement).toBe(label);
       expect(label.getBoundingClientRect().width).toBeLessThan(cell.getBoundingClientRect().width);
+    });
+
+    /** Tabs onto the step's slotted control so that it matches `:focus-visible`. */
+    async function focusStepControl(template: ReturnType<typeof html>): Promise<{ step: ProcessStepComponent; control: HTMLElement }> {
+      const screen = render(html`<div><button id="sentinel">Sentinel</button>${template}</div>`);
+      const step = screen.container.querySelector('forge-process-step') as ProcessStepComponent;
+      await step.updateComplete;
+
+      (screen.container.querySelector('#sentinel') as HTMLButtonElement).focus();
+      await userEvent.tab();
+
+      const control = step.querySelector('button') as HTMLElement;
+      expect(control.matches(':focus-visible')).toBe(true);
+
+      return { step, control };
+    }
+
+    it('should replace the native focus outline with the focus ring', async () => {
+      const { control } = await focusStepControl(html`<forge-process-step><button>One</button></forge-process-step>`);
+
+      expect(getComputedStyle(control).outlineStyle).toBe('none');
+    });
+
+    it.each(['vertical', 'horizontal'])('should keep the focus ring clear of the marker when %s', async orientation => {
+      const screen = render(html`
+        <div>
+          <button id="sentinel">Sentinel</button>
+          <forge-process-stepper orientation=${orientation}>
+            <forge-process-step state="completed"><button>One</button></forge-process-step>
+            <forge-process-step state="current"><button>Two</button></forge-process-step>
+          </forge-process-stepper>
+        </div>
+      `);
+      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
+      await stepper.updateComplete;
+      const step = stepper.querySelector('forge-process-step') as ProcessStepComponent;
+      await step.updateComplete;
+
+      (screen.container.querySelector('#sentinel') as HTMLButtonElement).focus();
+      await userEvent.tab();
+
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
+      const marker = step.shadowRoot?.querySelector('.marker') as HTMLElement;
+      const outlineWidth = parseFloat(getComputedStyle(indicator).outlineWidth);
+      const ring = indicator.getBoundingClientRect();
+      const markerBox = marker.getBoundingClientRect();
+
+      // The outline is painted outside the indicator's box, so it has to be counted in.
+      const clearance = orientation === 'vertical' ? ring.left - outlineWidth - markerBox.right : ring.top - outlineWidth - markerBox.bottom;
+
+      expect(clearance).toBeGreaterThan(0);
+    });
+
+    it('should keep the native focus outline when the step is not interactive', async () => {
+      const { step, control } = await focusStepControl(html`<forge-process-step noninteractive><button>One</button></forge-process-step>`);
+
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
+      expect(getComputedStyle(control).outlineStyle).not.toBe('none');
     });
   });
 

@@ -33,7 +33,8 @@ $tokens: (
   row-min-block-size: utils.module-val(process-step, row-min-block-size, 72px),
   marker-background: utils.module-val(process-step, marker-background, theme.variable(surface)),
   disabled-opacity: utils.module-val(process-step, disabled-opacity, 0.38),
-  focus-indicator-offset: utils.module-val(process-step, focus-indicator-offset, spacing.variable(xsmall)),
+  marker-label-gap: utils.module-val(process-step, marker-label-gap, spacing.variable(xsmall)),
+  focus-indicator-offset: utils.module-val(process-step, focus-indicator-offset, spacing.variable(xxsmall)),
   focus-indicator-offset-block: utils.module-val(process-step, focus-indicator-offset-block, spacing.variable(xxsmall)),
   focus-indicator-shape: utils.module-val(process-step, focus-indicator-shape, shape.variable(medium))
 ) !default;

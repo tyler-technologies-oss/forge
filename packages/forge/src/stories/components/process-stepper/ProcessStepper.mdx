@@ -177,18 +177,20 @@ and activate with the keys native to that element. A `<forge-focus-indicator>` d
 around the label text only, so keyboard focus never outlines the progress line, the label's full
 cell, or the step's content.
 
-The ring sits further from the text along the inline axis than the block axis so short labels are
-not crowded. All three measurements are configurable:
+The ring is offset from the label text and has rounded corners. Both measurements are configurable:
 
-| Custom property                                       | Default       |
-| ----------------------------------------------------- | ------------- |
-| `--forge-process-step-focus-indicator-offset`         | `8px`         |
-| `--forge-process-step-focus-indicator-offset-block`   | `4px`         |
-| `--forge-process-step-focus-indicator-shape`          | `4px`         |
+| Custom property                                     | Default |
+| --------------------------------------------------- | ------- |
+| `--forge-process-step-focus-indicator-offset`       | `4px`   |
+| `--forge-process-step-focus-indicator-offset-block` | `4px`   |
+| `--forge-process-step-focus-indicator-shape`        | `4px`   |
 
-The ring is drawn outside the label, so at the default inline offset it meets the marker in the
-vertical orientation and extends slightly past the leading edge of a horizontal stepper. Reduce
-`--forge-process-step-focus-indicator-offset` if the stepper sits flush against a container edge.
+The ring's outline is painted outside its offset, so the space between the marker and the label has
+to accommodate the offset plus the outline width for the two never to touch. In the vertical
+orientation the marker and label share a row and `--forge-process-step-sidebar-gap` provides that
+space; in the horizontal orientation the marker sits above the label and
+`--forge-process-step-marker-label-gap` does. Raising either focus offset past the gap that
+separates them will make a focused label overlap the marker, so raise the gap to match.
 
 <Canvas of={ProcessStepperStories.Interactive} />
 

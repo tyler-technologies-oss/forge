@@ -177,6 +177,13 @@
   position: relative;
 }
 
+// In the horizontal orientation the marker sits above the label, so the marker row needs more
+// space beneath it than the other rows: enough for the focus ring's block offset and its outline,
+// with clearance left over, so a focused label never touches the marker.
+@mixin label-row-horizontal {
+  margin-block-start: calc(#{token(marker-label-gap)} - #{token(content-gap)});
+}
+
 // The ring sits further from the text along the inline axis than the block axis, so short labels
 // are not crowded. `outward-offset` insets the ring evenly on every side, and the block margin
 // pulls it back to the smaller block offset.
@@ -188,6 +195,12 @@
       shape: #{token(focus-indicator-shape)}
     )
   );
+}
+
+// The focus ring replaces the native focus outline, so the label is not ringed twice. This is only
+// applied to an interactive step, which is the only case that renders a focus indicator.
+@mixin slotted-label-control-interactive {
+  outline: none;
 }
 
 // A slotted link or button is reset so the label still reads as text. The interactive affordance
