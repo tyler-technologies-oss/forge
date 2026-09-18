@@ -1,0 +1,119 @@
+{
+  "name": "@tylertech/forge-rich-text-editor",
+  "version": "0.1.0",
+  "description": "Tyler Forge™ rich text editor Web Components",
+  "license": "Apache-2.0",
+  "author": "Tyler Technologies, Inc.",
+  "keywords": [
+    "tyler forge",
+    "web components",
+    "custom elements",
+    "rich text editor",
+    "tiptap"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-rich-text-editor"
+  },
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "typings": "esm/index.d.ts",
+  "exports": {
+    ".": {
+      "development": "./src/lib/index.ts",
+      "types": "./esm/index.d.ts",
+      "default": "./esm/index.js"
+    },
+    "./*": {
+      "development": "./src/lib/*/index.ts",
+      "types": "./esm/*/index.d.ts",
+      "default": "./esm/*/index.js"
+    },
+    "./esm/*": {
+      "types": "./esm/*/index.d.ts",
+      "default": "./esm/*/index.js"
+    },
+    "./custom-elements.json": {
+      "default": "./custom-elements.json"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "customElements": "custom-elements.json",
+  "files": [
+    "esm/",
+    "custom-elements.json",
+    "vscode.*.json"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\"",
+    "test": "vitest run --browser.headless",
+    "vitest": "vitest",
+    "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js",
+    "format": "prettier --write \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\""
+  },
+  "dependencies": {
+    "@lit/context": "catalog:",
+    "@tiptap/core": "catalog:",
+    "@tiptap/extension-bold": "catalog:",
+    "@tiptap/extension-character-count": "catalog:",
+    "@tiptap/extension-code": "catalog:",
+    "@tiptap/extension-document": "catalog:",
+    "@tiptap/extension-heading": "catalog:",
+    "@tiptap/extension-italic": "catalog:",
+    "@tiptap/extension-link": "catalog:",
+    "@tiptap/extension-list": "catalog:",
+    "@tiptap/extension-paragraph": "catalog:",
+    "@tiptap/extension-strike": "catalog:",
+    "@tiptap/extension-text": "catalog:",
+    "@tiptap/extension-text-align": "catalog:",
+    "@tiptap/extension-underline": "catalog:",
+    "@tiptap/extensions": "catalog:",
+    "@tiptap/pm": "catalog:",
+    "@tylertech/forge-core": "workspace:",
+    "@tylertech/tyler-icons": "catalog:",
+    "lit": "catalog:",
+    "tslib": "catalog:"
+  },
+  "peerDependencies": {
+    "@tylertech/forge": "^3.16.0"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "catalog:",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/stylelint-rules": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/browser": "^4.1.2",
+    "@vitest/browser-playwright": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "@wc-toolkit/jsdoc-tags": "^1.1.0",
+    "custom-element-vs-code-integration": "^1.5.0",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "minimatch": "^10.2.5",
+    "ora": "^9.3.0",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "rollup": "^4.60.1",
+    "sass": "catalog:",
+    "stylelint": "catalog:",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.58.0",
+    "vitest": "^4.1.2",
+    "vitest-browser-lit": "^1.0.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
