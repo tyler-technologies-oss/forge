@@ -1,0 +1,18 @@
+import { defineCustomElement } from '@tylertech/forge-core';
+import { defineDateTimePickerComponent } from '../date-time-picker/index.js';
+import { defineIconComponent } from '../icon/index.js';
+import { defineIconButtonComponent } from '../icon-button/index.js';
+import { defineFieldComponent } from '../field/index.js';
+import { DateTimeFieldComponent } from './date-time-field.js';
+
+export * from './date-time-field.js';
+export * from './date-time-field-constants.js';
+export * from './date-time-field-component-delegate.js';
+
+export function defineDateTimeFieldComponent(): void {
+  defineFieldComponent();
+  defineIconComponent();
+  defineIconButtonComponent();
+  defineDateTimePickerComponent();
+  defineCustomElement(DateTimeFieldComponent);
+}

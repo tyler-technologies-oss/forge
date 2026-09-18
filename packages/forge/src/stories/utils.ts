@@ -171,7 +171,7 @@ export function generateCustomElementArgTypes({
 function generateArgTypesFrom(items: TagItem[], category: string, controlType?: ControlType): Record<string, unknown> {
   return items.reduce((acc: Record<string, unknown>, property: any) => {
     acc[property.name] = {
-      control: controlType ?? getControlFromType(property.type.text),
+      control: controlType ?? getControlFromType(property.type?.text),
       defaultValue: property.default,
       table: { category }
     };
@@ -203,8 +203,8 @@ export function htmlEncode(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function getControlFromType(type: string): ControlType {
-  return CONTROL_TYPE_MAP[type] ?? 'text';
+function getControlFromType(type: string | undefined): ControlType {
+  return (type && CONTROL_TYPE_MAP[type]) ?? 'text';
 }
 
 /** Removes inline style tags from a string of HTML. */
