@@ -38,6 +38,28 @@ export class KeyboardShortcutComponent {
     return this.nativeElement.keyBinding;
   }
 
+  /** Gets/sets the id of the anchor element in the shortcut's root node. */
+  @Input()
+  public set anchor(value: KeyboardShortcutComponentCustomElement['anchor']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.anchor = value;
+    });
+  }
+  public get anchor(): KeyboardShortcutComponentCustomElement['anchor'] {
+    return this.nativeElement.anchor;
+  }
+
+  /** Gets/sets the name of an ancestor scope marker. */
+  @Input()
+  public set scope(value: KeyboardShortcutComponentCustomElement['scope']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.scope = value;
+    });
+  }
+  public get scope(): KeyboardShortcutComponentCustomElement['scope'] {
+    return this.nativeElement.scope;
+  }
+
   /** Gets/sets the target element selector. */
   @Input()
   public set target(value: KeyboardShortcutComponentCustomElement['target']) {
@@ -69,6 +91,28 @@ export class KeyboardShortcutComponent {
   }
   public get allowWhileTyping(): KeyboardShortcutComponentCustomElement['allowWhileTyping'] {
     return this.nativeElement.allowWhileTyping;
+  }
+
+  /** Gets/sets whether held-key repeat events activate the shortcut. */
+  @Input({ transform: booleanAttribute })
+  public set allowRepeat(value: KeyboardShortcutComponentCustomElement['allowRepeat']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.allowRepeat = value;
+    });
+  }
+  public get allowRepeat(): KeyboardShortcutComponentCustomElement['allowRepeat'] {
+    return this.nativeElement.allowRepeat;
+  }
+
+  /** Gets/sets whether the shortcut allows outer scopes to also handle the key. */
+  @Input({ transform: booleanAttribute })
+  public set fallthrough(value: KeyboardShortcutComponentCustomElement['fallthrough']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.fallthrough = value;
+    });
+  }
+  public get fallthrough(): KeyboardShortcutComponentCustomElement['fallthrough'] {
+    return this.nativeElement.fallthrough;
   }
 
   /** Gets/sets whether to prevent default on keyboard events. */
@@ -115,6 +159,17 @@ export class KeyboardShortcutComponent {
     return this.nativeElement.disabled;
   }
 
+  /** Gets/sets whether aria-keyshortcuts is automatically set on the anchor. */
+  @Input()
+  public set anchorAccessibility(value: KeyboardShortcutComponentCustomElement['anchorAccessibility']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.anchorAccessibility = value;
+    });
+  }
+  public get anchorAccessibility(): KeyboardShortcutComponentCustomElement['anchorAccessibility'] {
+    return this.nativeElement.anchorAccessibility;
+  }
+
   /** Gets/sets the activation callback. */
   @Input()
   public set activateCallback(value: KeyboardShortcutComponentCustomElement['activateCallback']) {
@@ -124,6 +179,28 @@ export class KeyboardShortcutComponent {
   }
   public get activateCallback(): KeyboardShortcutComponentCustomElement['activateCallback'] {
     return this.nativeElement.activateCallback;
+  }
+
+  /** Gets/sets the anchor element directly. */
+  @Input()
+  public set anchorElement(value: KeyboardShortcutComponentCustomElement['anchorElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.anchorElement = value;
+    });
+  }
+  public get anchorElement(): KeyboardShortcutComponentCustomElement['anchorElement'] {
+    return this.nativeElement.anchorElement;
+  }
+
+  /** Gets/sets the scope element directly. */
+  @Input()
+  public set scopeElement(value: KeyboardShortcutComponentCustomElement['scopeElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.scopeElement = value;
+    });
+  }
+  public get scopeElement(): KeyboardShortcutComponentCustomElement['scopeElement'] {
+    return this.nativeElement.scopeElement;
   }
 
   constructor() {
