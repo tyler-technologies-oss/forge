@@ -1,0 +1,184 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([state='disabled']) {
+  @include core.disabled;
+}
+
+//
+// Base
+//
+
+.forge-process-step {
+  @include core.tokens;
+  @include core.base;
+}
+
+.forge-process-step.vertical {
+  @include core.vertical;
+}
+
+.forge-process-step.horizontal {
+  @include core.horizontal;
+}
+
+//
+// Progress line
+//
+
+.line {
+  @include core.line;
+}
+
+.line.active {
+  @include core.line-active;
+}
+
+.vertical .line {
+  @include core.line-vertical;
+}
+
+.vertical .line.active {
+  @include core.line-vertical-active;
+}
+
+.horizontal .line {
+  @include core.line-horizontal;
+}
+
+.horizontal .line.active {
+  @include core.line-horizontal-active;
+}
+
+//
+// Sidebar
+//
+
+.sidebar {
+  @include core.sidebar;
+}
+
+.vertical .sidebar {
+  @include core.sidebar-vertical;
+}
+
+.horizontal .sidebar {
+  @include core.sidebar-horizontal;
+}
+
+.horizontal .label-row,
+.horizontal .content {
+  @include core.text-cell-horizontal;
+}
+
+.label-row {
+  @include core.label-row;
+}
+
+.vertical .label-row {
+  @include core.label-row-vertical;
+}
+
+.horizontal .label-row {
+  @include core.label-row-horizontal;
+}
+
+//
+// Marker
+//
+
+.marker {
+  @include core.marker;
+}
+
+.marker.dashed {
+  @include core.marker-dashed;
+}
+
+.marker.filled {
+  @include core.marker-filled;
+}
+
+.marker.partial {
+  @include core.marker-partial;
+}
+
+.marker.error {
+  @include core.marker-error;
+}
+
+.marker.custom {
+  @include core.marker-custom;
+}
+
+.marker forge-icon {
+  @include core.marker-icon;
+}
+
+//
+// Content
+//
+
+.content {
+  @include core.content;
+}
+
+.vertical .content {
+  @include core.content-vertical;
+}
+
+.label-row {
+  @include core.label;
+}
+
+.label {
+  @include core.label-text;
+}
+
+forge-focus-indicator {
+  @include core.label-focus-indicator;
+}
+
+.label-row ::slotted(a),
+.label-row ::slotted(button) {
+  @include core.slotted-label-control;
+}
+
+.interactive .label-row ::slotted(a),
+.interactive .label-row ::slotted(button) {
+  @include core.slotted-label-control-interactive;
+}
+
+.disabled .label-row ::slotted(a),
+.disabled .label-row ::slotted(button) {
+  @include core.slotted-label-control-disabled;
+}
+
+.description {
+  @include core.description;
+}
+
+.meta {
+  @include core.meta;
+}
+
+.actions {
+  @include core.actions;
+}
+
+//
+// Slotted
+//
+
+::slotted(forge-checkbox),
+::slotted(forge-radio),
+::slotted(forge-switch) {
+  @include core.slotted-control;
+}
