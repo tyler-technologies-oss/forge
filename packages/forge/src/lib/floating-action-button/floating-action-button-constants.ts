@@ -17,7 +17,7 @@ const selectors = {
 };
 
 const classes = {
-  EXTENDED: `${elementName}--extended`
+  EXTENDED: `extended`
 };
 
 const defaults = {
@@ -26,6 +26,7 @@ const defaults = {
   DEFAULT_ELEVATION: 'raised' as FloatingActionButtonElevation
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const FLOATING_ACTION_BUTTON_CONSTANTS = {
   elementName,
   observedAttributes,
