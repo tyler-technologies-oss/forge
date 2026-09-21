@@ -1108,6 +1108,34 @@ describe('Keyboard Shortcut', () => {
       const harness = await createFixture({ key: 'Control+k>Control+c' });
       expect(harness.targetEl?.hasAttribute('aria-keyshortcuts')).toBe(false);
     });
+
+    it('should complete a sequence when the modifier is released and pressed again between chords', async () => {
+      const harness = await createFixture({ key: 'Control+k>Control+c' });
+
+      const activateSpy = vi.fn();
+      harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
+
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Control', ctrlKey: true, bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keyup', { key: 'Control', bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Control', ctrlKey: true, bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, bubbles: true, cancelable: true }));
+
+      expect(activateSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should cancel a pending sequence when a non-modifier key does not match the next chord', async () => {
+      const harness = await createFixture({ key: 'Control+k>Control+c' });
+
+      const activateSpy = vi.fn();
+      harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
+
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'x', ctrlKey: true, bubbles: true, cancelable: true }));
+      harness.targetEl?.dispatchEvent(new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, bubbles: true, cancelable: true }));
+
+      expect(activateSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe('deprecated target', () => {

@@ -1,7 +1,7 @@
 import type { IKeyCombination, IKeyboardShortcutSequence } from './keyboard-shortcut-constants.js';
 import { SEQUENCE_TIMEOUT } from './keyboard-shortcut-constants.js';
 import type { IKeyboardShortcutEntry } from './keyboard-shortcut-constants.js';
-import { getComposedEventTarget, isTextEntryElement, matchChord } from './keyboard-shortcut-utils.js';
+import { getComposedEventTarget, isModifierKeyEvent, isTextEntryElement, matchChord } from './keyboard-shortcut-utils.js';
 
 interface IDeferredEntry {
   entry: IKeyboardShortcutEntry;
@@ -105,6 +105,11 @@ export class KeyboardShortcutScope {
   }
 
   #handlePendingResolution(evt: KeyboardEvent, phase: 'capture' | 'bubble'): void {
+    // Re-pressing a modifier between chords must not count as a non-matching key
+    if (isModifierKeyEvent(evt)) {
+      return;
+    }
+
     if (evt.key === 'Escape') {
       this.#resetPending();
       this.#handled.add(evt);

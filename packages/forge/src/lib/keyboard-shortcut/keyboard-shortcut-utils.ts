@@ -36,6 +36,13 @@ export function isTextEntryElement(el: EventTarget | null): boolean {
   return role === 'textbox' || role === 'searchbox' || role === 'combobox';
 }
 
+const MODIFIER_KEY_NAMES = ['Alt', 'AltGraph', 'CapsLock', 'Control', 'Meta', 'NumLock', 'ScrollLock', 'Shift'];
+
+/** Checks if a keyboard event was produced by a modifier key being pressed on its own */
+export function isModifierKeyEvent(evt: KeyboardEvent): boolean {
+  return MODIFIER_KEY_NAMES.includes(evt.key);
+}
+
 export function isElementDisabled(el: Element): boolean {
   try {
     if (el.matches(':disabled')) {

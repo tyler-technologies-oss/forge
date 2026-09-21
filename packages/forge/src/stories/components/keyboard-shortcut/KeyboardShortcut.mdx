@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta, Title } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as KeyboardShortcutStories from './KeyboardShortcut.stories';
 
@@ -25,7 +25,10 @@ the `anchor` attribute with an element id:
 <forge-keyboard-shortcut key="Control+s" anchor="save-btn"></forge-keyboard-shortcut>
 ```
 
-Or set `anchorElement` programmatically for elements outside the local DOM.
+You can also set `anchorElement` programmatically to bypass the anchor resolution logic.
+
+You are still responsible for ensuring that any action to perform (e.g. clicking the button) is executed 
+when the shortcut is triggered.
 
 ## Scopes
 
@@ -45,6 +48,8 @@ nested scopes, only the innermost scope that contains the event target activates
 </div>
 ```
 
+<Canvas of={KeyboardShortcutStories.ScopedEditors} />
+
 In this example, pressing Ctrl+B (or Cmd+B on Mac) only activates the shortcut in the focused
 editor. Each shortcut automatically binds to its nearest ancestor scope marker.
 
@@ -60,9 +65,9 @@ marker walk:
 </div>
 ```
 
-Use the `global` attribute to listen on the entire document regardless of scope markers.
+You can also set `scopeElement` programmatically to bypass the scope resolution logic.
 
-<Canvas of={KeyboardShortcutStories.ScopedEditors} />
+Use the `global` attribute to listen on the entire document regardless of scope markers.
 
 ## Key syntax
 
