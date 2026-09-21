@@ -26,26 +26,28 @@
 
       <forge-text-field label-position="block-start">
         <label for="team-description">Description</label>
-        <input
-          type="text"
-          id="team-description"
-          value="Routes incoming customer requests to the right specialist agent" />
+        <input type="text" id="team-description" value="Routes incoming customer requests to the right specialist agent" />
       </forge-text-field>
 
       <div class="flex flex-col gap-small">
-        <span class="text-label1">Orchestration pattern</span>
+        <span id="pattern-list-label" class="text-label1">Orchestration pattern</span>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
           <forge-list
             id="pattern-list"
+            role="listbox"
+            tabindex="0"
+            aria-labelledby="pattern-list-label"
             two-line
             wrap
             class="border border-outline rounded-md overflow-x-hidden overflow-y-auto max-md:max-h-[200px]"
-            style="--forge-list-spacing: 0;">
+            style="--forge-list-spacing: 0">
           </forge-list>
 
           <forge-card id="pattern-detail" no-padding></forge-card>
         </div>
+
+        <div id="pattern-detail-summary" class="sr-only"></div>
       </div>
     </div>
 
@@ -216,18 +218,30 @@
 
     const listEl = document.getElementById('pattern-list');
     const detailEl = document.getElementById('pattern-detail');
+    const summaryEl = document.getElementById('pattern-detail-summary');
+    const PATTERN_IDS = PATTERNS.map(pattern => pattern.id);
     let selectedId = null;
+
+    const optionId = patternId => `pattern-option-${patternId}`;
 
     const tagBadge = pattern => (pattern.tag ? `<forge-badge theme="tertiary">${pattern.tag}</forge-badge>` : '');
 
     const renderList = () => {
       listEl.innerHTML = PATTERNS.map(
         pattern => `
-          <forge-list-item value="${pattern.id}" data-pattern-id="${pattern.id}" class="border-b border-outline">
+          <forge-list-item
+            id="${optionId(pattern.id)}"
+            value="${pattern.id}"
+            data-pattern-id="${pattern.id}"
+            role="option"
+            aria-selected="false"
+            aria-describedby="pattern-detail-summary"
+            tabindex="-1"
+            class="border-b border-outline cursor-pointer">
             <forge-icon slot="start" name="${pattern.icon}"></forge-icon>
-            <button type="button" class="flex items-center gap-xsmall">${pattern.name}${tagBadge(pattern)}</button>
+            <span class="flex items-center gap-xsmall">${pattern.name}${tagBadge(pattern)}</span>
             <span slot="secondary-text">${pattern.useWhen}</span>
-            <forge-icon slot="end" name="check_circle" class="invisible" data-selected-icon></forge-icon>
+            <forge-icon slot="end" name="check_circle" class="invisible" aria-hidden="true" data-selected-icon></forge-icon>
           </forge-list-item>`
       ).join('');
     };
@@ -241,6 +255,7 @@
             <forge-icon name="sitemap" style="font-size: 40px;"></forge-icon>
             <p class="text-body1 mb-0">Select a pattern to see its details</p>
           </div>`;
+        summaryEl.textContent = 'No orchestration pattern selected.';
         return;
       }
 
@@ -268,24 +283,65 @@
             <span slot="value">${pattern.example}</span>
           </forge-label-value>
         </div>`;
+      summaryEl.textContent = `${pattern.name}: ${pattern.description}`;
     };
 
     const updateSelectionState = () => {
       listEl.querySelectorAll('forge-list-item').forEach(item => {
         const isSelected = item.dataset.patternId === selectedId;
         item.selected = isSelected;
+        item.active = isSelected;
+        item.setAttribute('aria-selected', String(isSelected));
         item.querySelector('[data-selected-icon]').classList.toggle('invisible', !isSelected);
       });
+      if (selectedId) {
+        listEl.setAttribute('aria-activedescendant', optionId(selectedId));
+      } else {
+        listEl.removeAttribute('aria-activedescendant');
+      }
     };
 
-    listEl.addEventListener('forge-list-item-select', evt => {
-      const item = evt.target.closest('forge-list-item');
+    const selectPattern = patternId => {
+      selectedId = patternId;
+      updateSelectionState();
+      renderDetail();
+    };
+
+    const moveSelection = delta => {
+      const currentIndex = selectedId ? PATTERN_IDS.indexOf(selectedId) : -1;
+      const nextIndex = currentIndex === -1 ? (delta > 0 ? 0 : PATTERN_IDS.length - 1) : Math.min(Math.max(currentIndex + delta, 0), PATTERN_IDS.length - 1);
+      selectPattern(PATTERN_IDS[nextIndex]);
+    };
+
+    listEl.addEventListener('click', evt => {
+      const item = evt.target.closest('forge-list-item[data-pattern-id]');
       if (!item) {
         return;
       }
-      selectedId = item.dataset.patternId;
-      updateSelectionState();
-      renderDetail();
+      selectPattern(item.dataset.patternId);
+    });
+
+    listEl.addEventListener('keydown', evt => {
+      switch (evt.key) {
+        case 'ArrowDown':
+          evt.preventDefault();
+          moveSelection(1);
+          break;
+        case 'ArrowUp':
+          evt.preventDefault();
+          moveSelection(-1);
+          break;
+        case 'Home':
+          evt.preventDefault();
+          selectPattern(PATTERN_IDS[0]);
+          break;
+        case 'End':
+          evt.preventDefault();
+          selectPattern(PATTERN_IDS[PATTERN_IDS.length - 1]);
+          break;
+        default:
+          break;
+      }
     });
 
     renderList();
