@@ -1,2 +1,0 @@
-import{u as s,j as t,M as e,C as a}from"./blocks-CRtB2q9J.js";import{S as m,D as i}from"./ResponsiveBreakpoints.stories-DBm-gpJZ.js";import"./preload-helper-PPVm8Dsz.js";import"./index-B5Tn_34B.js";import"./iframe-DQLkTsj5.js";import"./_commonjsHelpers-CqkleIqs.js";/* empty css                 */function r(o){return t.jsxs(t.Fragment,{children:[t.jsx(e,{of:m}),`
-`,t.jsx(a,{of:i})]})}function C(o={}){const{wrapper:n}={...s(),...o.components};return n?t.jsx(n,{...o,children:t.jsx(r,{...o})}):r()}export{C as default};

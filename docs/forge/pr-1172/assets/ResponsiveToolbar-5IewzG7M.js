@@ -1,0 +1,23 @@
+import{u as r,j as e,M as i,T as s,C as a}from"./blocks-qYGqEfe4.js";import{C as l}from"./CustomArgTypes-DPtrc7ix.js";import{R as p,D as m}from"./ResponsiveToolbar.stories-CTEfTaC6.js";import"./preload-helper-PPVm8Dsz.js";import"./index-DBk9oFP9.js";import"./iframe-BQuUdi9A.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-CElmhe9Y.js";import"./if-defined-BikPIWsk.js";import"./service-adapter-DlT-lJx7.js";import"./property-DJvCC0I6.js";import"./ref-Bchl8AcG.js";import"./base-lit-element-CB0pz4XF.js";import"./directive-CwRn8Fwj.js";import"./utils-DU-9AqTO.js";import"./toolbar-u0CVrqbx.js";import"./class-map-DAzR423m.js";import"./button-0aFc-rvC.js";import"./focus-indicator--VpOaZ6F.js";import"./tyler-icons--haAADqW.js";import"./constants-DVKvft47.js";import"./feature-detection-Cdqsoz5C.js";import"./state-layer-Y1FZSPuC.js";import"./base-component-DokdPcmx.js";import"./base-adapter-C2s8cO2K.js";import"./dom-utils-D38acdAW.js";import"./base-button-D04UaXVg.js";import"./state-CFsUyUp-.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./a11y-utils-CUlOUJ7O.js";import"./button-constants-Dh8wxsDb.js";import"./stack-E4V9OTtJ.js";import"./icon-button-CqF7oM9r.js";import"./icon-button-constants-wbi3a2tN.js";import"./menu-D-lcVz-r.js";import"./list-DJY0Qsvo.js";import"./list-item-ByLOjRzX.js";import"./event-utils-zQ4FLDwK.js";import"./with-element-internals-BVdcaC_W.js";import"./list-dropdown-aware-core-Sa8fC1Pu.js";import"./list-dropdown-ByAkRjvi.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-VpC6qUWa.js";import"./popover-C49q6_k0.js";import"./overlay-DlXgJPae.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener--49psJKK.js";import"./dismissible-stack-xq-0Rg1q.js";import"./skeleton-BnhVRD4Y.js";import"./a11y-BxM9_46k.js";import"./tooltip-Dq2Q0xN1.js";import"./split-view-CR0DiTXv.js";import"./card-D4nNosYG.js";function n(t){const o={blockquote:"blockquote",code:"code",h2:"h2",h3:"h3",p:"p",strong:"strong",...r(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(i,{of:p}),`
+`,e.jsx(s,{}),`
+`,e.jsxs(o.p,{children:["The Responsive Toolbar dynamically adjusts your toolbar content to prevent overlap on smaller screens. It leverages a ",e.jsx(o.code,{children:"ResizeObserver"}),` to detect
+when the title content collides with the end slot content. When an overlap is detected, the toolbar automatically hides the `,e.jsx(o.code,{children:"end-large"}),` slot
+and displays the `,e.jsx(o.code,{children:"end-small"})," slot instead."]}),`
+`,e.jsxs(o.p,{children:[`This approach eliminates the need for manually configuring breakpoints or container queries, ensuring a seamless adaptive experience without extra
+calculations. Simply provide your `,e.jsx(o.code,{children:"end-large"})," slot content and your ",e.jsx(o.code,{children:"end-small"})," slot content, and the component handles the rest."]}),`
+`,e.jsx(a,{of:m}),`
+`,e.jsxs(o.blockquote,{children:[`
+`,e.jsxs(o.p,{children:[e.jsx(o.strong,{children:"Note:"}),` The responsive toolbar will not automatically create a mobile friendly version of your end slot content. You
+should be providing markup for both the `,e.jsx(o.code,{children:"end-large"})," slot and the ",e.jsx(o.code,{children:"end-small"}),` slot, this lets you fine tune
+the user experience based on available space.`]}),`
+`]}),`
+`,e.jsx(o.h3,{id:"why-a-responsive-toolbar",children:"Why a responsive toolbar?"}),`
+`,e.jsxs(o.p,{children:[`The toolbar is a common source of layout issues in applications, often overlooked when adapting to different screen sizes. Managing multiple instances
+of the primitive `,e.jsx(o.code,{children:"<forge-toolbar>"})," across a page can make breakpoint handling complex and inconsistent."]}),`
+`,e.jsxs(o.p,{children:["The ",e.jsx(o.code,{children:"<forge-responsive-toolbar>"}),` solves this by automatically adjusting to various container sizes, preventing hidden content, overlapping text, and
+broken layouts. It ensures a clean, readable UI without the need for manual breakpoint management.`]}),`
+`,e.jsx(o.h3,{id:"when-to-use-a-responsive-toolbar",children:"When to use a responsive toolbar"}),`
+`,e.jsx(o.p,{children:`If you know that your application could potentially be used on lower resolutions or mobile devices, and you're currently using toolbars with actions
+in the end slot, then you should use a responsive toolbar instead.`}),`
+`,e.jsx(o.h2,{id:"api",children:"API"}),`
+`,e.jsx(l,{})]})}function de(t={}){const{wrapper:o}={...r(),...t.components};return o?e.jsx(o,{...t,children:e.jsx(n,{...t})}):n(t)}export{de as default};
