@@ -1,7 +1,7 @@
 import type { IKeyboardShortcutOptions, IKeyboardShortcutRegistration, IKeyboardShortcutEntry } from './keyboard-shortcut-constants.js';
 import { WARNING_PREFIX } from './keyboard-shortcut-constants.js';
 import { KeyboardShortcutScope } from './keyboard-shortcut-scope.js';
-import { parseKeySequences } from './keyboard-shortcut-utils.js';
+import { findScopeMarker, parseKeySequences } from './keyboard-shortcut-utils.js';
 
 class KeyboardShortcutRegistry {
   static #instance: KeyboardShortcutRegistry;
@@ -20,7 +20,7 @@ class KeyboardShortcutRegistry {
   }
 
   public register(options: IKeyboardShortcutOptions): IKeyboardShortcutRegistration {
-    const scopeElement = options.global ? document.documentElement : options.scopeElement;
+    const scopeElement = this.#resolveScopeElement(options);
     if (!scopeElement) {
       throw new Error(`${WARNING_PREFIX} A scopeElement or global option is required.`);
     }
@@ -63,6 +63,13 @@ class KeyboardShortcutRegistry {
     return registration;
   }
 
+  #resolveScopeElement({ global, scopeElement, ownerElement }: IKeyboardShortcutOptions): Element | null {
+    if (global) {
+      return document.documentElement;
+    }
+    return scopeElement ?? (ownerElement ? findScopeMarker(ownerElement) : null);
+  }
+
   #checkDuplicates(scope: KeyboardShortcutScope, entry: IKeyboardShortcutEntry): void {
     if (scope.size === 0) {
       return;
@@ -78,6 +85,12 @@ class KeyboardShortcutRegistry {
   }
 }
 
+/**
+ * Registers a keyboard shortcut programmatically.
+ * @param options The shortcut configuration.
+ * @returns A registration whose `dispose()` removes the shortcut.
+ * @throws If no scope element can be determined.
+ */
 export function registerKeyboardShortcut(options: IKeyboardShortcutOptions): IKeyboardShortcutRegistration {
   return KeyboardShortcutRegistry.instance.register(options);
 }

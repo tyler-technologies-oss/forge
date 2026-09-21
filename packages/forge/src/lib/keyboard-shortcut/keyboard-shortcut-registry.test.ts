@@ -325,6 +325,52 @@ describe('Keyboard Shortcut Registry', () => {
     expect(() => registerKeyboardShortcut({ key: 'a', onActivate: vi.fn() })).toThrow();
   });
 
+  it('should resolve the scope from the nearest marker above ownerElement when no scopeElement is provided', () => {
+    const marker = addElement('div');
+    marker.setAttribute('forge-keyboard-shortcut-scope', '');
+    const owner = addElement('span', marker);
+    const spy = vi.fn();
+    reg({ key: 'a', ownerElement: owner, onActivate: spy });
+
+    keydown(owner, { key: 'a' });
+
+    expect(spy).toHaveBeenCalledOnce();
+  });
+
+  it('should not activate for keydowns outside the marker resolved from ownerElement', () => {
+    const marker = addElement('div');
+    marker.setAttribute('forge-keyboard-shortcut-scope', '');
+    const owner = addElement('span', marker);
+    const outside = addElement('button');
+    const spy = vi.fn();
+    reg({ key: 'a', ownerElement: owner, onActivate: spy });
+
+    keydown(outside, { key: 'a' });
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should prefer an explicit scopeElement over the marker above ownerElement', () => {
+    const marker = addElement('div');
+    marker.setAttribute('forge-keyboard-shortcut-scope', '');
+    const owner = addElement('span', marker);
+    const scope = addElement('div');
+    const spy = vi.fn();
+    reg({ key: 'a', scopeElement: scope, ownerElement: owner, onActivate: spy });
+
+    keydown(owner, { key: 'a' });
+    expect(spy).not.toHaveBeenCalled();
+
+    keydown(scope, { key: 'a' });
+    expect(spy).toHaveBeenCalledOnce();
+  });
+
+  it('should throw when ownerElement has no ancestor scope marker', () => {
+    const owner = addElement('span');
+
+    expect(() => registerKeyboardShortcut({ key: 'a', ownerElement: owner, onActivate: vi.fn() })).toThrow();
+  });
+
   describe('key sequences', () => {
     it('should activate a two-chord sequence when pressed in order within timeout', async () => {
       const scope = addElement('div');

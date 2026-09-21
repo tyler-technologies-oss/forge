@@ -6,7 +6,7 @@ import { locateElementById } from '../core/utils/utils.js';
 import { KEYBOARD_SHORTCUT_CONSTANTS, WARNING_PREFIX, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants.js';
 import type { KeyboardShortcutAnchorAccessibility, IKeyboardShortcutRegistration } from './keyboard-shortcut-constants.js';
 import { registerKeyboardShortcut } from './keyboard-shortcut-registry.js';
-import { closestComposedAncestor, formatAriaKeyShortcuts } from './keyboard-shortcut-utils.js';
+import { findScopeMarker, formatAriaKeyShortcuts } from './keyboard-shortcut-utils.js';
 
 /** @deprecated This will be removed in the future. Please switch to using KeyboardShortcutComponent. */
 export interface IKeyboardShortcutComponent extends BaseLitElement {
@@ -359,7 +359,7 @@ export class KeyboardShortcutComponent extends BaseLitElement implements IKeyboa
       }
     }
 
-    const marker = closestComposedAncestor(this, el => el.hasAttribute(KEYBOARD_SHORTCUT_CONSTANTS.attributes.SCOPE_MARKER));
+    const marker = findScopeMarker(this);
     if (marker) {
       this.#resolvedScopeElement = marker;
       return;

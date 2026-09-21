@@ -1,12 +1,11 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
-  parseKeyCombinations,
-  parseKeySequences,
-  formatKeyBinding,
+  closestComposedAncestor,
   formatAriaKeyShortcuts,
+  formatKeyboardShortcutBinding,
   isTextEntryElement,
-  isElementDisabled,
-  closestComposedAncestor
+  parseKeyCombinations,
+  parseKeySequences
 } from './keyboard-shortcut-utils.js';
 
 describe('Keyboard Shortcut Utils', () => {
@@ -135,31 +134,31 @@ describe('Keyboard Shortcut Utils', () => {
     });
   });
 
-  describe('formatKeyBinding', () => {
+  describe('formatKeyboardShortcutBinding', () => {
     it('should format control combinations as Ctrl on pc', () => {
-      expect(formatKeyBinding('Control+a', 'pc')).toBe('Ctrl+A');
+      expect(formatKeyboardShortcutBinding('Control+a', 'pc')).toBe('Ctrl+A');
     });
 
     it('should format meta combinations as Cmd on apple', () => {
-      expect(formatKeyBinding('Meta+a', 'apple')).toBe('Cmd+A');
+      expect(formatKeyboardShortcutBinding('Meta+a', 'apple')).toBe('Cmd+A');
     });
 
     it('should uppercase single-character keys', () => {
-      expect(formatKeyBinding('b', 'pc')).toBe('B');
+      expect(formatKeyboardShortcutBinding('b', 'pc')).toBe('B');
     });
 
     it('should join alternatives with a comma', () => {
-      expect(formatKeyBinding('Control+a Control+b', 'pc')).toBe('Ctrl+A, Ctrl+B');
+      expect(formatKeyboardShortcutBinding('Control+a Control+b', 'pc')).toBe('Ctrl+A, Ctrl+B');
     });
 
     it('should join chords within a sequence with space and alternatives with comma', () => {
-      expect(formatKeyBinding('Control+k>Control+c Control+shift+/', 'pc')).toBe('Ctrl+K Ctrl+C, Ctrl+Shift+/');
+      expect(formatKeyboardShortcutBinding('Control+k>Control+c Control+shift+/', 'pc')).toBe('Ctrl+K Ctrl+C, Ctrl+Shift+/');
     });
 
     it('should return an empty string when keys is empty', () => {
-      expect(formatKeyBinding('', 'pc')).toBe('');
-      expect(formatKeyBinding(null, 'pc')).toBe('');
-      expect(formatKeyBinding(undefined, 'pc')).toBe('');
+      expect(formatKeyboardShortcutBinding('', 'pc')).toBe('');
+      expect(formatKeyboardShortcutBinding(null, 'pc')).toBe('');
+      expect(formatKeyboardShortcutBinding(undefined, 'pc')).toBe('');
     });
   });
 
@@ -227,39 +226,6 @@ describe('Keyboard Shortcut Utils', () => {
       expect(isTextEntryElement(createElement('button'))).toBe(false);
       expect(isTextEntryElement(createElement('input', { type: 'checkbox' }))).toBe(false);
       expect(isTextEntryElement(null)).toBe(false);
-    });
-  });
-
-  describe('isElementDisabled', () => {
-    const elements: HTMLElement[] = [];
-
-    afterEach(() => {
-      elements.forEach(el => el.remove());
-      elements.length = 0;
-    });
-
-    it('should detect a native disabled button', () => {
-      const btn = document.createElement('button');
-      btn.disabled = true;
-      document.body.appendChild(btn);
-      elements.push(btn);
-      expect(isElementDisabled(btn)).toBe(true);
-    });
-
-    it('should detect a custom element with a truthy disabled property', () => {
-      const el = document.createElement('div') as HTMLElement & { disabled: boolean };
-      (el as any).disabled = true;
-      document.body.appendChild(el);
-      elements.push(el);
-      expect(isElementDisabled(el)).toBe(true);
-    });
-
-    it('should detect aria-disabled true', () => {
-      const el = document.createElement('div');
-      el.setAttribute('aria-disabled', 'true');
-      document.body.appendChild(el);
-      elements.push(el);
-      expect(isElementDisabled(el)).toBe(true);
     });
   });
 

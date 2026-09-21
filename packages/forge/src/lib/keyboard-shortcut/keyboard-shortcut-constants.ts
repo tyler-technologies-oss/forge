@@ -44,6 +44,7 @@ export const KEYBOARD_SHORTCUT_CONSTANTS = {
 
 export const WARNING_PREFIX = '[forge-keyboard-shortcut]:';
 
+/** @deprecated */
 export const textInputTypes = ['date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'];
 
 export type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
@@ -59,7 +60,7 @@ export interface IKeyboardShortcutSequence {
   readonly chords: IKeyCombination[];
 }
 
-export const SEQUENCE_TIMEOUT = 1000;
+export const SEQUENCE_TIMEOUT = 5000;
 
 export interface IKeyboardShortcutOptions {
   key: string;
@@ -72,18 +73,18 @@ export interface IKeyboardShortcutOptions {
   allowWhileTyping?: boolean;
   allowRepeat?: boolean;
   fallthrough?: boolean;
-  onActivate?: (event: KeyboardEvent) => void;
+  onActivate?: KeyboardShortcutActivateCallback;
   ownerElement?: Element;
 }
 
 export interface IKeyboardShortcutRegistration {
-  readonly options: Readonly<Required<Pick<IKeyboardShortcutOptions, 'key'>> & IKeyboardShortcutOptions>;
+  readonly options: Readonly<IKeyboardShortcutOptions>;
   readonly scopeElement: Element;
   dispose(): void;
 }
 
 export interface IKeyboardShortcutEntry {
-  readonly options: Readonly<Required<Pick<IKeyboardShortcutOptions, 'key'>> & IKeyboardShortcutOptions>;
+  readonly options: Readonly<IKeyboardShortcutOptions>;
   readonly sequences: IKeyboardShortcutSequence[];
   readonly capture: boolean;
   readonly useCode: boolean;
@@ -92,7 +93,7 @@ export interface IKeyboardShortcutEntry {
   readonly fallthrough: boolean;
   readonly preventDefault: boolean;
   readonly anchorElement: HTMLElement | null;
-  readonly onActivate: ((event: KeyboardEvent) => void) | undefined;
+  readonly onActivate: KeyboardShortcutActivateCallback | undefined;
   readonly ownerElement: Element | undefined;
 }
 

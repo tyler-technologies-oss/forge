@@ -1,10 +1,11 @@
 import {
-  textInputTypes,
   IKeyCombination,
-  MODIFIER_ALIASES,
   KEY_ALIASES,
-  type KeyboardShortcutPlatform,
-  type IKeyboardShortcutSequence
+  KEYBOARD_SHORTCUT_CONSTANTS,
+  MODIFIER_ALIASES,
+  textInputTypes,
+  type IKeyboardShortcutSequence,
+  type KeyboardShortcutPlatform
 } from './keyboard-shortcut-constants.js';
 
 export function isApplePlatform(): boolean {
@@ -43,20 +44,6 @@ export function isModifierKeyEvent(evt: KeyboardEvent): boolean {
   return MODIFIER_KEY_NAMES.includes(evt.key);
 }
 
-export function isElementDisabled(el: Element): boolean {
-  try {
-    if (el.matches(':disabled')) {
-      return true;
-    }
-  } catch {
-    // :disabled not supported for this element type
-  }
-  if ('disabled' in el && (el as any).disabled === true) {
-    return true;
-  }
-  return el.getAttribute('aria-disabled') === 'true';
-}
-
 export function closestComposedAncestor(el: Element, predicate: (candidate: Element) => boolean): Element | null {
   let current: Node | null = el.parentNode;
   while (current) {
@@ -75,6 +62,11 @@ export function closestComposedAncestor(el: Element, predicate: (candidate: Elem
   return null;
 }
 
+/** Finds the nearest ancestor scope marker, crossing shadow boundaries */
+export function findScopeMarker(el: Element): Element | null {
+  return closestComposedAncestor(el, candidate => candidate.hasAttribute(KEYBOARD_SHORTCUT_CONSTANTS.attributes.SCOPE_MARKER));
+}
+
 export function getComposedEventTarget(evt: Event): Element | null {
   const path = evt.composedPath();
   if (path.length > 0 && path[0] instanceof Element) {
@@ -86,7 +78,10 @@ export function getComposedEventTarget(evt: Event): Element | null {
   return null;
 }
 
-/** Checks if an HTML element allows text input */
+/**
+ * Checks if an HTML element allows text input
+ * @deprecated
+ */
 export function elementAcceptsTextInput(el: any): boolean {
   if (el instanceof HTMLInputElement) {
     return textInputTypes.includes(el.type);
@@ -113,7 +108,10 @@ function parseChord(combo: string, useCode: boolean, platform: KeyboardShortcutP
   return { key, modifier };
 }
 
-/** Parses a string of key combinations into an array of keys and modifiers */
+/**
+ * Parses a string of key combinations into an array of keys and modifiers
+ * @deprecated
+ */
 export function parseKeyCombinations(
   keys: string | null | undefined,
   useCode = false,
@@ -161,12 +159,18 @@ export function matchChord(evt: KeyboardEvent, chord: IKeyCombination, useCode =
   return eventKey === chord.key && modifierKeys === (chord.modifier ?? '');
 }
 
-/** Checks a keyboard event for a matching key combination */
+/**
+ * Checks a keyboard event for a matching key combination
+ * @deprecated
+ */
 export function matchKeyCombination(evt: KeyboardEvent, keyCombinations: IKeyCombination[], useCode = false): boolean {
   return keyCombinations.some(combination => matchChord(evt, combination, useCode));
 }
 
-/** Returns an array of active modifier keys from a keyboard event */
+/**
+ * Returns an array of active modifier keys from a keyboard event
+ * @deprecated
+ */
 export function getModiferKeysString(evt: KeyboardEvent): string {
   let modifierString = '';
   if (evt.altKey) {
@@ -184,7 +188,10 @@ export function getModiferKeysString(evt: KeyboardEvent): string {
   return modifierString;
 }
 
-/** Returns a reserved key character from its alias */
+/**
+ * Returns a reserved key character from its alias
+ * @deprecated
+ */
 export function fixKey(key: string): string {
   switch (key) {
     case 'plus':
@@ -272,7 +279,7 @@ function formatKeyForLabel(key: string): string {
   return key.charAt(0).toUpperCase() + key.slice(1);
 }
 
-export function formatKeyBinding(keys: string | null | undefined, platform: KeyboardShortcutPlatform = detectPlatform()): string {
+export function formatKeyboardShortcutBinding(keys: string | null | undefined, platform: KeyboardShortcutPlatform = detectPlatform()): string {
   const sequences = parseSequenceBindings(keys, platform);
   if (!sequences.length) {
     return '';
