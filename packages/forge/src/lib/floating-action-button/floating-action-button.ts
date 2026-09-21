@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { BaseButton } from '../button/base/base-button.js';
 import { ButtonTheme } from '../button/index.js';
@@ -80,7 +80,6 @@ export interface IFloatingActionButtonComponent extends BaseLitElement {
  * @slot label - Reserved specifically for label text. This forces the button into extended mode.
  * @slot end - An element to logically render at the end of the button content.
  */
-@customElement(FLOATING_ACTION_BUTTON_CONSTANTS.elementName)
 export class FloatingActionButtonComponent extends BaseButton {
   public static styles = unsafeCSS(styles);
 
@@ -145,6 +144,8 @@ export class FloatingActionButtonComponent extends BaseButton {
     this._extended = this.popoverIcon || !!this._labelSlotAssignedNodes.length;
   }
 }
+
+tryDefine(FLOATING_ACTION_BUTTON_CONSTANTS.elementName, FloatingActionButtonComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

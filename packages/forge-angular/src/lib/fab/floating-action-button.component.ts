@@ -16,7 +16,7 @@ export class FloatingActionButtonComponent {
   /** The forge-fab element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
-  /** Sets the theme of the button. */
+  /** Gets/sets the theme of the button. */
   @Input()
   public set theme(value: FloatingActionButtonComponentCustomElement['theme']) {
     this.zone.runOutsideAngular(() => {
@@ -27,7 +27,7 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.theme;
   }
 
-  /** Sets the density of the button. */
+  /** Gets/sets the density of the button. */
   @Input()
   public set density(value: FloatingActionButtonComponentCustomElement['density']) {
     this.zone.runOutsideAngular(() => {
@@ -38,7 +38,7 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.density;
   }
 
-  /** Sets the elevation of the button. */
+  /** Gets/sets the elevation of the button. */
   @Input()
   public set elevation(value: FloatingActionButtonComponentCustomElement['elevation']) {
     this.zone.runOutsideAngular(() => {
@@ -49,29 +49,7 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.elevation;
   }
 
-  /** The name of the button. */
-  @Input()
-  public set name(value: FloatingActionButtonComponentCustomElement['name']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.name = value;
-    });
-  }
-  public get name(): FloatingActionButtonComponentCustomElement['name'] {
-    return this.nativeElement.name;
-  }
-
-  /** The value of the button. */
-  @Input()
-  public set value(value: FloatingActionButtonComponentCustomElement['value']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.value = value;
-    });
-  }
-  public get value(): FloatingActionButtonComponentCustomElement['value'] {
-    return this.nativeElement.value;
-  }
-
-  /** Sets the type of the button. Possible values are `button`, `submit`, and `reset`. */
+  /** Gets/sets the type of button. */
   @Input()
   public set type(value: FloatingActionButtonComponentCustomElement['type']) {
     this.zone.runOutsideAngular(() => {
@@ -82,7 +60,7 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.type;
   }
 
-  /** Disables the button. */
+  /** Gets/sets whether the button is disabled. */
   @Input({ transform: booleanAttribute })
   public set disabled(value: FloatingActionButtonComponentCustomElement['disabled']) {
     this.zone.runOutsideAngular(() => {
@@ -93,18 +71,7 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.disabled;
   }
 
-  /** Shows a popover icon on the button. */
-  @Input({ transform: booleanAttribute })
-  public set popoverIcon(value: FloatingActionButtonComponentCustomElement['popoverIcon']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.popoverIcon = value;
-    });
-  }
-  public get popoverIcon(): FloatingActionButtonComponentCustomElement['popoverIcon'] {
-    return this.nativeElement.popoverIcon;
-  }
-
-  /** Sets the density of the button. */
+  /** Gets/sets whether the button is dense. */
   @Input({ transform: booleanAttribute })
   public set dense(value: FloatingActionButtonComponentCustomElement['dense']) {
     this.zone.runOutsideAngular(() => {
@@ -115,12 +82,76 @@ export class FloatingActionButtonComponent {
     return this.nativeElement.dense;
   }
 
-  /** Clicks the button. */
+  /** Gets/sets whether to show a popover icon. */
+  @Input({ transform: booleanAttribute })
+  public set popoverIcon(value: FloatingActionButtonComponentCustomElement['popoverIcon']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.popoverIcon = value;
+    });
+  }
+  public get popoverIcon(): FloatingActionButtonComponentCustomElement['popoverIcon'] {
+    return this.nativeElement.popoverIcon;
+  }
+
+  /** Gets/sets the button name for form association. */
+  @Input()
+  public set name(value: FloatingActionButtonComponentCustomElement['name']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.name = value;
+    });
+  }
+  public get name(): FloatingActionButtonComponentCustomElement['name'] {
+    return this.nativeElement.name;
+  }
+
+  /** Gets/sets the button value for form submission. */
+  @Input()
+  public set value(value: FloatingActionButtonComponentCustomElement['value']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.value = value;
+    });
+  }
+  public get value(): FloatingActionButtonComponentCustomElement['value'] {
+    return this.nativeElement.value;
+  }
+
+  /** Indicates to the targeted element which action to take. */
+  @Input()
+  public set command(value: FloatingActionButtonComponentCustomElement['command']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.command = value;
+    });
+  }
+  public get command(): FloatingActionButtonComponentCustomElement['command'] {
+    return this.nativeElement.command;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandFor(value: FloatingActionButtonComponentCustomElement['commandFor']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandFor = value;
+    });
+  }
+  public get commandFor(): FloatingActionButtonComponentCustomElement['commandFor'] {
+    return this.nativeElement.commandFor;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandForElement(value: FloatingActionButtonComponentCustomElement['commandForElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandForElement = value;
+    });
+  }
+  public get commandForElement(): FloatingActionButtonComponentCustomElement['commandForElement'] {
+    return this.nativeElement.commandForElement;
+  }
+
   public click(...args: Parameters<FloatingActionButtonComponentCustomElement['click']>): ReturnType<FloatingActionButtonComponentCustomElement['click']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.click(...args));
   }
 
-  /** Focuses the button. */
   public focus(...args: Parameters<FloatingActionButtonComponentCustomElement['focus']>): ReturnType<FloatingActionButtonComponentCustomElement['focus']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.focus(...args));
   }

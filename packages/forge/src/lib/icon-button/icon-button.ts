@@ -1,16 +1,16 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { BaseButton, IBaseButton } from '../button/base/base-button.js';
 import { toggleState } from '../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 import { IconComponent } from '../icon/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
-import { BaseButton, IBaseButton } from '../button/base/base-button.js';
-import { IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant, ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { ICON_BUTTON_CONSTANTS, IconButtonDensity, IconButtonShape, IconButtonTheme, IconButtonVariant } from './icon-button-constants.js';
 
-import styles from './icon-button.scss';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import styles from './icon-button.scss';
 
 /** @deprecated - This will be removed in the future. Please switch to using IconButtonComponent. */
 export interface IIconButtonComponent extends IBaseButton {
@@ -113,7 +113,6 @@ export interface IIconButtonComponent extends IBaseButton {
  * @state toggle - Applied when the button is in toggle mode.
  * @state pressed - Applied when the button is toggled on in toggle mode.
  */
-@customElement(ICON_BUTTON_CONSTANTS.elementName)
 export class IconButtonComponent extends BaseButton {
   public static styles = unsafeCSS(styles);
 
@@ -245,6 +244,8 @@ export class IconButtonComponent extends BaseButton {
     this.pressed = newPressed;
   }
 }
+
+tryDefine(ICON_BUTTON_CONSTANTS.elementName, IconButtonComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

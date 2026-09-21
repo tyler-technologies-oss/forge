@@ -1,13 +1,13 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { toggleState } from '../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 import { IconComponent } from '../icon/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
 import { BaseButton, IBaseButton } from './base/base-button.js';
 import { BUTTON_CONSTANTS, ButtonTheme, ButtonVariant } from './button-constants.js';
-import { classMap } from 'lit/directives/class-map.js';
-import { toggleState } from '../core/utils/utils.js';
 
 import styles from './button.scss';
 
@@ -120,7 +120,6 @@ export interface IButtonComponent extends IBaseButton {
  * @cssclass forge-button--dense - Dense height.
  * @cssclass forge-button--pill - Pill shape.
  */
-@customElement(BUTTON_CONSTANTS.elementName)
 export class ButtonComponent extends BaseButton {
   public static styles = unsafeCSS(styles);
 
@@ -192,6 +191,7 @@ export class ButtonComponent extends BaseButton {
   }
 }
 
+tryDefine(BUTTON_CONSTANTS.elementName, ButtonComponent);
 declare global {
   interface HTMLElementTagNameMap {
     'forge-button': ButtonComponent;

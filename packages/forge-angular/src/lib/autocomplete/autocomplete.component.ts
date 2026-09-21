@@ -141,7 +141,11 @@ export class AutocompleteComponent {
     return this.nativeElement.optionBuilder;
   }
 
-  /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
+  /**
+   * Sets the filter callback that will be executed when fetching options for the autocomplete dropdown.
+   *
+   * The callback is also invoked to resolve the display label for an already-selected value (e.g. on initialization, or via `forceFilter()`) by calling it with an empty `filterText` and the current `value` as its second argument. Implementations must handle this case by returning the matching option(s) for `value`, or the selected text will fail to resolve and appear blank.
+   */
   @Input()
   public set filter(value: AutocompleteComponentCustomElement['filter']) {
     this.zone.runOutsideAngular(() => {
@@ -404,7 +408,11 @@ export class AutocompleteComponent {
     return this.zone.runOutsideAngular(() => this.nativeElement.closeDropdown(...args));
   }
 
-  /** Forces the filter callback to be executed to update the current selection state with new options. */
+  /**
+   * Forces the filter callback to be executed to update the current selection state with new options.
+   *
+   * This invokes the `filter` callback with the current `value` (and an empty filter text) so it can resolve and return the matching option(s), allowing the selected text to be updated to their label.
+   */
   public forceFilter(...args: Parameters<AutocompleteComponentCustomElement['forceFilter']>): ReturnType<AutocompleteComponentCustomElement['forceFilter']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.forceFilter(...args));
   }

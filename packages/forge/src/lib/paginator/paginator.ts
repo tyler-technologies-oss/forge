@@ -240,10 +240,10 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
     return this.#rangeLabelCallback;
   }
 
-  @query('.first-page') private _firstPageButton?: IIconButtonComponent;
-  @query('.previous-page', true) private _previousPageButton!: IIconButtonComponent;
-  @query('.next-page', true) private _nextPageButton!: IIconButtonComponent;
-  @query('.last-page') private _lastPageButton?: IIconButtonComponent;
+  @query('.first-page') private _firstPageButton?: IconButtonComponent;
+  @query('.previous-page', true) private _previousPageButton!: IconButtonComponent;
+  @query('.next-page', true) private _nextPageButton!: IconButtonComponent;
+  @query('.last-page') private _lastPageButton?: IconButtonComponent;
   @query('.page-size-options', true) private _pageSizeSelect!: ISelectComponent;
 
   public override connectedCallback(): void {
@@ -550,7 +550,7 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
     this._pageSizeSelect.options = options;
   }
 
-  #tryFocus(elements: Array<IIconButtonComponent | ISelectComponent | undefined>, options?: FocusOptions): void {
+  #tryFocus(elements: Array<IconButtonComponent | ISelectComponent | undefined>, options?: FocusOptions): void {
     const preventScroll = typeof options?.preventScroll === 'boolean' ? options.preventScroll : true;
     for (const el of elements) {
       if (el && el.isConnected && !el.disabled && el.style.display !== 'none') {
