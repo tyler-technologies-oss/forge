@@ -13,7 +13,6 @@ import { property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { removeEmptyAttribute } from '../core/utils/lit-utils.js';
 import { IconButtonComponent } from '../icon-button/icon-button.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
 import { IconRegistry } from '../icon/icon-registry.js';
 import type { ISelectComponent, ISelectOption } from '../select/index.js';
 import { SelectComponent } from '../select/select/index.js';
