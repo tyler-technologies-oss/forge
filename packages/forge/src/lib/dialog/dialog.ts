@@ -687,7 +687,7 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
   #tryAutofocus(): void {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        const alreadyHasFocus = this.matches(':focus-within');
+        const alreadyHasFocus = this._dialogElement.matches(':focus-within');
         if (!alreadyHasFocus) {
           if (this.mode === 'modal') {
             this._dialogElement.focus();
