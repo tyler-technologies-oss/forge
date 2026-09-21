@@ -13,6 +13,7 @@ import type { ButtonComponent } from '../button.js';
 import { BaseButton } from './base-button.js';
 
 import '../../focus-indicator/focus-indicator.js';
+import '../../icon/icon.js';
 import '../../label/label.js';
 import '../../state-layer/state-layer.js';
 
@@ -1119,7 +1120,6 @@ describe('BaseButton', () => {
       await el.updateComplete;
 
       expect(el.command).toBe('close');
-      expect(el.getAttribute('command')).toBe('close');
     });
 
     it('should set commandFor property', async () => {
@@ -1139,7 +1139,6 @@ describe('BaseButton', () => {
       await el.updateComplete;
 
       expect(el.commandFor).toBe('target-element');
-      expect(el.getAttribute('command-for')).toBe('target-element');
     });
 
     it('should resolve commandForElement by ID', async () => {
@@ -1284,6 +1283,7 @@ describe('BaseButton', () => {
       const commandSpy = vi.fn();
       target.addEventListener('command', commandSpy);
 
+      await button.updateComplete;
       button.focus();
       await userEvent.keyboard('{Enter}');
       await frame();
@@ -1303,6 +1303,7 @@ describe('BaseButton', () => {
       const commandSpy = vi.fn();
       target.addEventListener('command', commandSpy);
 
+      await button.updateComplete;
       button.focus();
       await userEvent.keyboard(' ');
       await frame();

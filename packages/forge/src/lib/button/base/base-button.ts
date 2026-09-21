@@ -135,7 +135,7 @@ export abstract class BaseButton extends BaseLitElement {
    * @default ''
    * @attribute command-for
    */
-  @property()
+  @property({ attribute: 'command-for' })
   public commandFor = '';
 
   /**
