@@ -130,11 +130,43 @@ listener on a container and read `event.target.anchorElement` to determine which
 
 <Canvas of={KeyboardShortcutStories.GlobalShortcut} />
 
+## Imperative registration
+
+`registerKeyboardShortcut()` registers a shortcut without rendering an element, which is useful when
+the shortcut belongs to code rather than a template. The options mirror the element's properties.
+
+```ts
+import { registerKeyboardShortcut } from '@tylertech/forge/keyboard-shortcut';
+
+const registration = registerKeyboardShortcut({
+  key: 'mod+s',
+  scopeElement: editor,
+  onActivate: () => save()
+});
+
+// Later, when the shortcut should stop listening
+registration.dispose();
+```
+
+Pass one of three options to say where the shortcut listens:
+
+- `global` — the whole document.
+- `scopeElement` — that element.
+- `ownerElement` — the closest ancestor with the `forge-keyboard-shortcut-scope` attribute, the same
+  lookup the element does.
+
+If more than one is passed, the first in this list wins. The call throws if none is passed, or if
+`ownerElement` has no scope marker above it.
+
+Registrations otherwise behave like element-based ones, including the nesting rule above: when the
+same key is bound in nested scopes, only the innermost scope containing the event target activates.
+
 ## Accessibility
 
 - The component automatically sets `aria-keyshortcuts` on the anchor element when
   `anchorAccessibility` is `'auto'` (the default). Set it to `'none'` to opt out.
-- The `label` property returns a human-readable string for the current binding (e.g. `Ctrl+A`).
+- `formatKeyboardShortcutBinding()` returns a human-readable string for a binding (e.g. `Ctrl+A`) for use in
+  visible hints such as menu items and tooltips.
 - Don't override browser, operating system, or assistive technology shortcuts.
 - Avoid using the `accesskey` attribute.
 - Don't duplicate behavior provided by the browser.

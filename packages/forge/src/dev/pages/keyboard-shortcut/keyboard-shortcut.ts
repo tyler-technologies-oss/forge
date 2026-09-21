@@ -1,14 +1,14 @@
 import '$src/shared';
-import '@tylertech/forge/keyboard-shortcut';
 import '@tylertech/forge/button';
-import '@tylertech/forge/text-field';
 import '@tylertech/forge/focus-indicator';
-import '@tylertech/forge/toast';
+import '@tylertech/forge/keyboard-shortcut';
 import { IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
-import { ToastComponent } from '@tylertech/forge/toast';
 import { ISwitchComponent } from '@tylertech/forge/switch';
+import '@tylertech/forge/text-field';
+import '@tylertech/forge/toast';
+import { ToastComponent, ToastTheme } from '@tylertech/forge/toast';
 
-function showToast(message: string, theme?: string): void {
+function showToast(message: string, theme?: ToastTheme): void {
   ToastComponent.present({ message, duration: 2000, theme });
 }
 

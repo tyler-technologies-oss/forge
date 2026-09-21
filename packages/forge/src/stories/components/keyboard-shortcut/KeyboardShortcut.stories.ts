@@ -5,10 +5,15 @@ import { generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/keyboard-shortcut';
-import { formatKeyBinding, IKeyboardShortcutComponent, isModifierKeyEvent, SEQUENCE_TIMEOUT } from '@tylertech/forge/keyboard-shortcut';
+import { formatKeyboardShortcutBinding, IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 import '@tylertech/forge/text-field';
 
 const component = 'forge-keyboard-shortcut';
+
+const SEQUENCE_TIMEOUT = 5000;
+const MODIFIER_KEYS = ['Alt', 'AltGraph', 'CapsLock', 'Control', 'Meta', 'NumLock', 'ScrollLock', 'Shift'];
+
+const isModifierKeyEvent = (evt: KeyboardEvent): boolean => MODIFIER_KEYS.includes(evt.key);
 
 const activateAction = action('forge-keyboard-shortcut-activate');
 const activateCallbackAction = action('activateCallback');
@@ -62,8 +67,8 @@ const meta = {
         @forge-keyboard-shortcut-activate=${handleActivate}
         @focusin=${handleFocusIn}>
         <p style="margin: 0;">
-          Click inside this panel to focus the scope, then press <kbd>${formatKeyBinding(args.key) || 'no binding'}</kbd>. Turn on <code>global</code> to listen
-          on the whole document instead, so the shortcut fires without focusing the panel first.
+          Click inside this panel to focus the scope, then press <kbd>${formatKeyboardShortcutBinding(args.key) || 'no binding'}</kbd>. Turn on
+          <code>global</code> to listen on the whole document instead, so the shortcut fires without focusing the panel first.
         </p>
         <p style="margin: 0;">
           The text field is exempt until <code>allowWhileTyping</code> is on — with <code>preventDefault</code> also on, the character is then swallowed instead
