@@ -995,5 +995,6 @@ async function createFixture({
   `);
 
   const el = screen.container.querySelector('forge-paginator') as IPaginatorComponent;
+  await el.updateComplete;
   return new PaginatorHarness(el);
 }
