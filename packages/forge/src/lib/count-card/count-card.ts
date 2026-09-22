@@ -1,6 +1,6 @@
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { property, queryAssignedNodes } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { SlotTextController, hideWhenEmpty } from '../core/utils/lit-utils.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -63,7 +63,6 @@ export const COUNT_CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-count-car
  * @state no-border - Applied when the `noBorder` property is `true`.
  * @state has-action - Applied when content is slotted into the `action` slot.
  */
-@customElement(COUNT_CARD_TAG_NAME)
 export class CountCardComponent extends BaseLitElement implements ICountCardComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = COUNT_CARD_TAG_NAME;
@@ -149,3 +148,5 @@ export class CountCardComponent extends BaseLitElement implements ICountCardComp
     toggleState(this.#internals, 'has-action', this._actionSlotNodes.length > 0);
   }
 }
+
+tryDefine(COUNT_CARD_TAG_NAME, CountCardComponent);

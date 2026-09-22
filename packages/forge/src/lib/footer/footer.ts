@@ -1,6 +1,6 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { property } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -52,7 +52,6 @@ export const FOOTER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-footer';
  *
  * @dependency forge-footer-item
  */
-@customElement(FOOTER_TAG_NAME)
 export class FooterComponent extends BaseLitElement implements IFooterComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = FOOTER_TAG_NAME;
@@ -143,3 +142,5 @@ export class FooterComponent extends BaseLitElement implements IFooterComponent 
     toggleState(this.#internals, 'standard', !evt.matches);
   };
 }
+
+tryDefine(FOOTER_TAG_NAME, FooterComponent);

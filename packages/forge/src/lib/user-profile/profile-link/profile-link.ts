@@ -1,6 +1,5 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { ListItemComponent } from '../../list/list-item/index.js';
 
@@ -28,7 +27,6 @@ export const PROFILE_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-profile
  * @slot icon - The icon to display in the profile link.
  * @slot - The `<a>` element for the link.
  */
-@customElement(PROFILE_LINK_TAG_NAME)
 export class ProfileLinkComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = PROFILE_LINK_TAG_NAME;
@@ -47,3 +45,5 @@ export class ProfileLinkComponent extends BaseLitElement {
     `;
   }
 }
+
+tryDefine(PROFILE_LINK_TAG_NAME, ProfileLinkComponent);

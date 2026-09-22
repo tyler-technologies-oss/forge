@@ -1,6 +1,5 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconOpenInNew } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
@@ -31,7 +30,6 @@ export const APP_LAUNCHER_LINK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ap
  *
  * @slot - The `<a>` element for the link.
  */
-@customElement(APP_LAUNCHER_LINK_TAG_NAME)
 export class AppLauncherLinkComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = APP_LAUNCHER_LINK_TAG_NAME;
@@ -54,3 +52,5 @@ export class AppLauncherLinkComponent extends BaseLitElement {
     `;
   }
 }
+
+tryDefine(APP_LAUNCHER_LINK_TAG_NAME, AppLauncherLinkComponent);

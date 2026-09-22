@@ -8,7 +8,7 @@ import { createToggleElement } from '../date-picker/base/base-date-picker-utils.
 import { FIELD_CONSTANTS } from '../field/index.js';
 import { DateRangePickerComponent, IDateRangePickerComponent } from './date-range-picker.js';
 import { DATE_RANGE_PICKER_CONSTANTS } from './date-range-picker-constants.js';
-import { IIconButtonComponent } from '../icon-button/icon-button.js';
+import { type IconButtonComponent } from '../icon-button/icon-button.js';
 
 export interface IDateRangePickerAdapter extends IBaseDatePickerAdapter {
   initializeToMask(toOptions: IDateInputMaskOptions): void;
@@ -235,7 +235,7 @@ export class DateRangePickerAdapter extends BaseDatePickerAdapter<IDateRangePick
     emitEvent(this._toInputElement, type, data);
   }
 
-  protected override _createToggleElement(): IIconButtonComponent {
+  protected override _createToggleElement(): IconButtonComponent {
     return createToggleElement('date_range');
   }
 

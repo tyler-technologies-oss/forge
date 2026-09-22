@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { nothing, PropertyValues, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
@@ -54,7 +54,6 @@ export const FOCUS_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-focu
  * @cssclass forge-focus-indicator--active - Forces the focus indicator to be visible.
  * @cssclass forge-focus-indicator--inward - Renders the focus inside the target element.
  */
-@customElement(FOCUS_INDICATOR_TAG_NAME)
 export class FocusIndicatorComponent extends BaseLitElement implements IFocusIndicatorComponent {
   public static styles = unsafeCSS(styles);
 
@@ -208,3 +207,5 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     toggleState(this.#internals, 'active', this.active);
   }
 }
+
+tryDefine(FOCUS_INDICATOR_TAG_NAME, FocusIndicatorComponent);

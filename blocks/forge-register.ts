@@ -78,7 +78,23 @@ import {
   tylIconChevronDown,
   tylIconChevronRight,
   tylIconLibrary,
-  tylIconGithub
+  tylIconGithub,
+  tylIconAltRoute,
+  tylIconSitemap,
+  tylIconHub,
+  tylIconList,
+  tylIconSync,
+  tylIconSyncAlt,
+  tylIconCallMerge,
+  tylIconDeviceHub,
+  tylIconCheckCircle,
+  tylIconArrowDown,
+  tylIconArrowBottomLeft,
+  tylIconArrowBottomRight,
+  tylIconRobotOutline,
+  tylIconArrowUp,
+  tylIconArrowTopLeft,
+  tylIconArrowTopRight
 } from '@tylertech/tyler-icons';
 
 // Register all Forge components
@@ -150,5 +166,21 @@ IconRegistry.define([
   tylIconChevronDown,
   tylIconChevronRight,
   tylIconLibrary,
-  tylIconGithub
+  tylIconGithub,
+  tylIconAltRoute,
+  tylIconSitemap,
+  tylIconHub,
+  tylIconList,
+  tylIconSync,
+  tylIconSyncAlt,
+  tylIconCallMerge,
+  tylIconDeviceHub,
+  tylIconCheckCircle,
+  tylIconArrowDown,
+  tylIconArrowBottomLeft,
+  tylIconArrowBottomRight,
+  tylIconRobotOutline,
+  tylIconArrowUp,
+  tylIconArrowTopLeft,
+  tylIconArrowTopRight
 ]);

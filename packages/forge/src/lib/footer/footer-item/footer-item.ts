@@ -1,6 +1,5 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 
@@ -27,7 +26,6 @@ export const FOOTER_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-footer-i
  *
  * @csspart root - The root container element.
  */
-@customElement(FOOTER_ITEM_TAG_NAME)
 export class FooterItemComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = FOOTER_ITEM_TAG_NAME;
@@ -50,3 +48,5 @@ export class FooterItemComponent extends BaseLitElement {
     return html`<div class="footer-item" part="root"><slot></slot></div>`;
   }
 }
+
+tryDefine(FOOTER_ITEM_TAG_NAME, FooterItemComponent);
