@@ -1,5 +1,6 @@
+import { autoUpdate } from '@floating-ui/dom';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
-import { PropertyValues, unsafeCSS } from 'lit';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
