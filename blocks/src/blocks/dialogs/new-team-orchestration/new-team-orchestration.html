@@ -1,0 +1,372 @@
+<!--
+  @block Dialog — New object with template selection list
+  @type pattern
+  @description Modal dialog that pairs a short form (name and description fields) with a two-pane master-detail option picker: a scrollable list of selectable choices alongside a detail card whose content updates dynamically for the highlighted choice (e.g. a diagram, preview image, chart, or other contextual content), plus "use when" guidance and an example. Fits any "create an item and choose a type/pattern/template" flow — e.g. picking a team orchestration pattern, project template, automation trigger, or report layout — not just team creation.
+  @tags dialog, modal, scaffold, form, list, detail-panel, master-detail, option-picker, template-picker, preview, create-dialog, selection, orchestration, team
+-->
+
+<div class="flex justify-center items-center min-h-screen">
+  <forge-button id="open-dialog-btn">Create new team</forge-button>
+</div>
+
+<forge-dialog id="new-team-dialog" aria-labelledby="new-team-dialog-title">
+  <forge-scaffold class="h-auto w-[95vw] max-w-[1040px]">
+    <forge-toolbar slot="header">
+      <h2 id="new-team-dialog-title" slot="start" class="text-heading3">Create new team</h2>
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+
+    <div slot="body" class="p-medium flex flex-col gap-medium">
+      <forge-text-field label-position="block-start" class="w-full max-w-[450px]">
+        <label for="team-name">Name</label>
+        <input type="text" id="team-name" value="Support Triage Team" />
+      </forge-text-field>
+
+      <forge-text-field label-position="block-start">
+        <label for="team-description">Description</label>
+        <input type="text" id="team-description" value="Routes incoming customer requests to the right specialist agent" />
+      </forge-text-field>
+
+      <div class="flex flex-col gap-small">
+        <span id="pattern-list-label" class="text-label1">Orchestration pattern</span>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+          <forge-list
+            id="pattern-list"
+            role="listbox"
+            tabindex="0"
+            aria-labelledby="pattern-list-label"
+            two-line
+            wrap
+            class="border border-outline rounded-md overflow-x-hidden overflow-y-auto max-md:max-h-[200px]"
+            style="--forge-list-spacing: 0">
+          </forge-list>
+
+          <forge-card id="pattern-detail" no-padding></forge-card>
+        </div>
+
+        <div id="pattern-detail-summary" class="sr-only"></div>
+      </div>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div class="flex items-center gap-medium" slot="end">
+        <forge-button id="cancel-btn">Cancel</forge-button>
+        <forge-button id="create-btn" variant="filled">Create team</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-dialog>
+
+<script>
+  (() => {
+    const agentNode = (label, { lead = false, dashed = false, muted = false } = {}) => {
+      const borderStyle = dashed ? 'border-dashed' : '';
+      const background = lead ? 'bg-tertiary-container-low' : 'bg-surface';
+      const dimmed = muted ? 'opacity-40' : '';
+      return `
+        <span
+          class="inline-flex items-center gap-xxsmall rounded-md border ${borderStyle} border-outline ${background} px-xsmall py-xxsmall ${dimmed}">
+          <forge-icon name="robot_outline" style="font-size: 20px;" class="text-tertiary"></forge-icon>
+          <span class="text-label2">${label}</span>
+        </span>`;
+    };
+
+    const glyph = name => `<forge-icon name="${name}"></forge-icon>`;
+
+    const note = text => `<span class="text-label2 text-medium">${text}</span>`;
+
+    const PATTERNS = [
+      {
+        id: 'router',
+        name: 'Router',
+        icon: 'alt_route',
+        useWhen: 'One best-fit agent handles each request.',
+        description: 'Incoming requests are classified and handed off to the single agent best suited to answer.',
+        example: 'A support inbox sends billing questions to the billing agent and technical questions to the technical agent.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            ${note('Incoming request')}
+            ${glyph('arrow_down')}
+            ${agentNode('Router', { lead: true })}
+            <div class="flex items-center gap-large">
+              ${glyph('arrow_bottom_left')}${glyph('arrow_down')}${glyph('arrow_bottom_right')}
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('Billing', { muted: true })}${agentNode('Technical')}${agentNode('General', { muted: true })}
+            </div>
+            ${note('Only the best-fit agent runs')}
+          </div>`
+      },
+      {
+        id: 'hierarchical',
+        name: 'Hierarchical',
+        icon: 'sitemap',
+        useWhen: 'A supervisor delegates pieces of work and composes the result.',
+        description: 'A supervising agent breaks a request into subtasks, assigns them to member agents, and merges their outputs.',
+        example: 'A research supervisor assigns fact-finding and drafting subtasks, then compiles the final report.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            ${agentNode('Supervisor', { lead: true })}
+            <div class="flex items-center gap-xsmall">
+              ${glyph('arrow_bottom_left')}${note('delegates subtasks')}${glyph('arrow_bottom_right')}
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('Research')}${agentNode('Drafting')}
+            </div>
+            <div class="flex items-center gap-xxsmall">
+              ${glyph('arrow_up')}${note('supervisor composes the final result')}
+            </div>
+          </div>`
+      },
+      {
+        id: 'network',
+        name: 'Network',
+        icon: 'hub',
+        tag: 'Experimental',
+        useWhen: 'Members contribute to a shared discussion in turn, then a synthesis pass merges it.',
+        description: 'Every member sees the running discussion and adds its perspective before a final synthesis pass merges the thread.',
+        example: 'Three domain experts debate a proposal in turn, then a synthesis pass writes the final recommendation.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            <div class="flex flex-col items-center gap-xsmall rounded-md border border-dashed border-outline p-small">
+              ${note('Shared discussion, one turn each')}
+              <div class="flex flex-wrap items-center justify-center gap-xsmall">
+                ${agentNode('Member 1')}${glyph('sync_alt')}${agentNode('Member 2')}${glyph('sync_alt')}${agentNode('Member 3')}
+              </div>
+            </div>
+            ${glyph('arrow_down')}
+            ${agentNode('Synthesis pass', { lead: true })}
+          </div>`
+      },
+      {
+        id: 'sequential',
+        name: 'Sequential',
+        icon: 'list',
+        useWhen: 'Members run in a fixed order, each building on the last.',
+        description: 'Agents run one after another in a fixed pipeline, with each step building on the output of the previous one.',
+        example: 'A drafting agent writes a first pass, an editing agent revises it, and a formatting agent prepares it for delivery.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('1. Draft')}${glyph('forward')}${agentNode('2. Edit')}${glyph('forward')}${agentNode('3. Format')}
+            </div>
+            ${note('Each step builds on the previous output')}
+          </div>`
+      },
+      {
+        id: 'loop',
+        name: 'Loop',
+        icon: 'sync',
+        useWhen: 'Repeats a refinement step up to a set number of iterations.',
+        description: 'A single refinement step repeats against its own output, stopping once a condition is met or the iteration limit is reached.',
+        example: 'A code-review agent repeatedly critiques and rewrites a function until it passes all checks or hits the iteration limit.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('Refine', { lead: true })}${glyph('forward')}${agentNode('Check')}
+            </div>
+            <div class="flex items-center gap-xxsmall rounded-md border border-dashed border-outline px-xsmall py-xxsmall">
+              ${glyph('sync')}${note('repeats until it passes, up to the iteration limit')}
+            </div>
+          </div>`
+      },
+      {
+        id: 'aggregator',
+        name: 'Aggregator',
+        icon: 'call_merge',
+        useWhen: 'One agent synthesizes outputs from other selected agents.',
+        description: 'Several member agents work independently in parallel, and one aggregator agent combines their outputs into a single result.',
+        example: 'Three analyst agents each produce an estimate, and an aggregator agent combines them into one final figure.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('Analyst A')}${agentNode('Analyst B')}${agentNode('Analyst C')}
+            </div>
+            <div class="flex items-center gap-large">
+              ${glyph('arrow_bottom_right')}${glyph('arrow_down')}${glyph('arrow_bottom_left')}
+            </div>
+            ${agentNode('Aggregator', { lead: true })}
+            ${note('One agent merges every output')}
+          </div>`
+      },
+      {
+        id: 'orchestrator-subagent',
+        name: 'Orchestrator-subagent',
+        icon: 'device_hub',
+        tag: 'Experimental',
+        useWhen: 'An orchestrator spins up isolated, tool-scoped workers at request time and synthesizes their reports.',
+        description: 'An orchestrator creates disposable, tool-scoped worker agents on demand for a request, then synthesizes their reports into one response.',
+        example: 'An orchestrator spins up a search worker and a summarization worker for a single query, then merges their findings.',
+        diagram: `
+          <div class="flex flex-col items-center gap-xsmall">
+            ${agentNode('Orchestrator', { lead: true })}
+            <div class="flex items-center gap-xsmall">
+              ${glyph('arrow_bottom_left')}${note('spawns tool-scoped workers per request')}${glyph('arrow_bottom_right')}
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-xsmall">
+              ${agentNode('Search', { dashed: true })}${agentNode('Fetch', { dashed: true })}${agentNode('Summarize', { dashed: true })}
+            </div>
+            <div class="flex items-center gap-xxsmall">
+              ${glyph('arrow_up')}${note('reports synthesized, workers discarded')}
+            </div>
+          </div>`
+      }
+    ];
+
+    const listEl = document.getElementById('pattern-list');
+    const detailEl = document.getElementById('pattern-detail');
+    const summaryEl = document.getElementById('pattern-detail-summary');
+    const PATTERN_IDS = PATTERNS.map(pattern => pattern.id);
+    let selectedId = null;
+
+    const optionId = patternId => `pattern-option-${patternId}`;
+
+    const tagBadge = pattern => (pattern.tag ? `<forge-badge theme="tertiary">${pattern.tag}</forge-badge>` : '');
+
+    const renderList = () => {
+      listEl.innerHTML = PATTERNS.map(
+        pattern => `
+          <forge-list-item
+            id="${optionId(pattern.id)}"
+            value="${pattern.id}"
+            data-pattern-id="${pattern.id}"
+            role="option"
+            aria-selected="false"
+            aria-describedby="pattern-detail-summary"
+            tabindex="-1"
+            class="border-b border-outline cursor-pointer">
+            <forge-icon slot="start" name="${pattern.icon}"></forge-icon>
+            <span class="flex items-center gap-xsmall">${pattern.name}${tagBadge(pattern)}</span>
+            <span slot="secondary-text">${pattern.useWhen}</span>
+            <forge-icon slot="end" name="check_circle" class="invisible" aria-hidden="true" data-selected-icon></forge-icon>
+          </forge-list-item>`
+      ).join('');
+    };
+
+    const renderDetail = () => {
+      const pattern = PATTERNS.find(p => p.id === selectedId);
+
+      if (!pattern) {
+        detailEl.innerHTML = `
+          <div class="flex flex-col items-center justify-center gap-small h-full p-medium text-medium text-center">
+            <forge-icon name="sitemap" style="font-size: 40px;"></forge-icon>
+            <p class="text-body1 mb-0">Select a pattern to see its details</p>
+          </div>`;
+        summaryEl.textContent = 'No orchestration pattern selected.';
+        return;
+      }
+
+      detailEl.innerHTML = `
+        <div class="flex items-center gap-small px-medium pt-medium pb-0">
+          <forge-icon name="${pattern.icon}" style="font-size: 24px;" class="text-primary"></forge-icon>
+          <h3 class="text-heading3 m-0">${pattern.name}</h3>
+          ${tagBadge(pattern)}
+        </div>
+
+        <div class="flex flex-col gap-medium px-medium pb-medium pt-small">
+          <p class="text-body1 m-0">${pattern.description}</p>
+
+          <div class="flex items-center justify-center p-medium bg-surface-dim rounded-md">
+            ${pattern.diagram}
+          </div>
+
+          <forge-label-value>
+            <span slot="label">Use when</span>
+            <span slot="value">${pattern.useWhen}</span>
+          </forge-label-value>
+
+          <forge-label-value>
+            <span slot="label">Example</span>
+            <span slot="value">${pattern.example}</span>
+          </forge-label-value>
+        </div>`;
+      summaryEl.textContent = `${pattern.name}: ${pattern.description}`;
+    };
+
+    const updateSelectionState = () => {
+      listEl.querySelectorAll('forge-list-item').forEach(item => {
+        const isSelected = item.dataset.patternId === selectedId;
+        item.selected = isSelected;
+        item.active = isSelected;
+        item.setAttribute('aria-selected', String(isSelected));
+        item.querySelector('[data-selected-icon]').classList.toggle('invisible', !isSelected);
+      });
+      if (selectedId) {
+        listEl.setAttribute('aria-activedescendant', optionId(selectedId));
+      } else {
+        listEl.removeAttribute('aria-activedescendant');
+      }
+    };
+
+    const selectPattern = patternId => {
+      selectedId = patternId;
+      updateSelectionState();
+      renderDetail();
+    };
+
+    const moveSelection = delta => {
+      const currentIndex = selectedId ? PATTERN_IDS.indexOf(selectedId) : -1;
+      const nextIndex = currentIndex === -1 ? (delta > 0 ? 0 : PATTERN_IDS.length - 1) : Math.min(Math.max(currentIndex + delta, 0), PATTERN_IDS.length - 1);
+      selectPattern(PATTERN_IDS[nextIndex]);
+    };
+
+    listEl.addEventListener('click', evt => {
+      const item = evt.target.closest('forge-list-item[data-pattern-id]');
+      if (!item) {
+        return;
+      }
+      selectPattern(item.dataset.patternId);
+    });
+
+    listEl.addEventListener('keydown', evt => {
+      switch (evt.key) {
+        case 'ArrowDown':
+          evt.preventDefault();
+          moveSelection(1);
+          break;
+        case 'ArrowUp':
+          evt.preventDefault();
+          moveSelection(-1);
+          break;
+        case 'Home':
+          evt.preventDefault();
+          selectPattern(PATTERN_IDS[0]);
+          break;
+        case 'End':
+          evt.preventDefault();
+          selectPattern(PATTERN_IDS[PATTERN_IDS.length - 1]);
+          break;
+        default:
+          break;
+      }
+    });
+
+    renderList();
+    renderDetail();
+
+    const dialog = document.getElementById('new-team-dialog');
+    const openBtn = document.getElementById('open-dialog-btn');
+    const closeBtn = document.getElementById('close-dialog-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const createBtn = document.getElementById('create-btn');
+
+    openBtn.addEventListener('click', () => {
+      dialog.open = true;
+    });
+
+    closeBtn.addEventListener('click', () => {
+      dialog.open = false;
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      dialog.open = false;
+    });
+
+    createBtn.addEventListener('click', () => {
+      dialog.open = false;
+    });
+  })();
+</script>
