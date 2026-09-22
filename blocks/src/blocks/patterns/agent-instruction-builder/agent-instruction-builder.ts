@@ -1,4 +1,12 @@
-import type { CheckboxComponent, ChipComponent, ExpansionPanelComponent, IconButtonComponent, OpenIconComponent, SwitchComponent } from '@tylertech/forge';
+import type {
+  CheckboxComponent,
+  ChipComponent,
+  ChipSetComponent,
+  ExpansionPanelComponent,
+  IconButtonComponent,
+  OpenIconComponent,
+  SwitchComponent
+} from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconArrowDownward, tylIconArrowUpward, tylIconCaseSensitiveAlt, tylIconDragIndicator, tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
 
@@ -89,7 +97,7 @@ function initCard(card: HTMLElement): void {
   const instructionLabel = card.querySelector('[data-instruction-label]') as HTMLLabelElement;
   const instructionInput = card.querySelector('[data-instruction-input]') as HTMLTextAreaElement;
   const keywordGroup = card.querySelector('[data-keyword-group]') as HTMLElement;
-  const keywordSet = card.querySelector('[data-keyword-set]') as HTMLElement;
+  const keywordSet = card.querySelector('[data-keyword-set]') as ChipSetComponent;
   const keywordForm = card.querySelector('[data-keyword-form]') as HTMLFormElement;
   const keywordLabel = card.querySelector('[data-keyword-label]') as HTMLLabelElement;
   const keywordInput = card.querySelector('[data-keyword-input]') as HTMLInputElement;
@@ -116,14 +124,13 @@ function initCard(card: HTMLElement): void {
     titleTrigger.setAttribute('aria-expanded', String(open));
   };
 
+  // The chip set orchestrates its chips, so disabling the set covers existing and future chips.
   const setEnabled = (enabled: boolean): void => {
     card.toggleAttribute('data-disabled', !enabled);
     instructionInput.disabled = !enabled;
     keywordInput.disabled = !enabled;
     caseSensitive.disabled = !enabled;
-    chips().forEach(chip => {
-      chip.disabled = !enabled;
-    });
+    keywordSet.disabled = !enabled;
     syncKeywordControls();
   };
 
@@ -164,7 +171,6 @@ function initCard(card: HTMLElement): void {
     }
 
     const chip = document.createElement('forge-chip');
-    chip.setAttribute('type', 'field');
     chip.setAttribute('value', keyword);
 
     if (caseSensitive.checked) {
