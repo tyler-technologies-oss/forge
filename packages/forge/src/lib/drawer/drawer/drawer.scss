@@ -20,7 +20,7 @@
 
 @include base-core.core-styles;
 
-:host([open]) {
+:host(:state(open)) {
   // Safari fix for triggering reflow after transition completes (as of Safari 17.6)
   transform: translateZ(0);
 }

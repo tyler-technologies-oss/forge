@@ -1,24 +1,15 @@
-import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { BackdropComponent } from '../../backdrop/index.js';
-import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/index.js';
-import { ModalDrawerAdapter } from './modal-drawer-adapter.js';
+import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
 import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants.js';
-import { ModalDrawerCore } from './modal-drawer-core.js';
 
-import template from './modal-drawer.html';
 import styles from './modal-drawer.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using ModalDrawerComponent. */
 export interface IModalDrawerComponent extends IBaseDrawerComponent {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-modal-drawer': IModalDrawerComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-modal-drawer-close': CustomEvent<void>;
-  }
-}
 
 /**
  * @tag forge-modal-drawer
@@ -45,16 +36,72 @@ declare global {
  * @csspart content - The content container element.
  * @csspart backdrop - The backdrop root element.
  */
-@customElement({
-  name: MODAL_DRAWER_CONSTANTS.elementName,
-  dependencies: [BackdropComponent]
-})
-export class ModalDrawerComponent extends BaseDrawerComponent<ModalDrawerCore> implements IModalDrawerComponent {
-  protected _core: ModalDrawerCore;
+@customElement(MODAL_DRAWER_CONSTANTS.elementName)
+export class ModalDrawerComponent extends BaseDrawerComponent implements IModalDrawerComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = MODAL_DRAWER_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [BackdropComponent];
+
+  #backdropElement: Ref<BackdropComponent> = createRef();
+
+  #backdropClickListener: EventListener = () => this.#handleBackdropClick();
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new ModalDrawerCore(new ModalDrawerAdapter(this));
+    // Modal drawer defaults to closed
+    this.open = false;
+  }
+
+  public render(): TemplateResult {
+    return html`
+      <forge-backdrop
+        class="scrim"
+        .hidden=${!this.open}
+        exportparts="root:backdrop"
+        @click=${this.#backdropClickListener}
+        ${ref(this.#backdropElement)}></forge-backdrop>
+      <div class="forge-drawer modal" part="root" ${ref(this._drawerElement)}>
+        <slot name="header"></slot>
+        <div class="content" part="content">
+          <slot></slot>
+        </div>
+        <slot name="footer"></slot>
+      </div>
+    `;
+  }
+
+  protected override _onBeforeOpen(): Promise<void> {
+    if (this.#backdropElement.value) {
+      void this.#backdropElement.value.fadeIn();
+    }
+    return Promise.resolve();
+  }
+
+  protected override _onBeforeClose(): Promise<void> {
+    if (this.#backdropElement.value) {
+      void this.#backdropElement.value.fadeOut();
+    }
+    return Promise.resolve();
+  }
+
+  #handleBackdropClick(): void {
+    const canClose = this.dispatchEvent(new CustomEvent(MODAL_DRAWER_CONSTANTS.events.CLOSE, { bubbles: true, composed: true, cancelable: true }));
+    if (canClose) {
+      this.open = false;
+    }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-modal-drawer': IModalDrawerComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-modal-drawer-close': CustomEvent<void>;
   }
 }

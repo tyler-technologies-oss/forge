@@ -414,7 +414,6 @@ public get step(): number {
 
 ### Property with Side Effects
 
-<<<<<<< feat/divider-lit
 When setter needs to trigger other updates immediately:
 
 =======
@@ -441,8 +440,6 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 
 **Custom setter approach** (only when you need synchronous value transformation):
 
-> > > > > > > main
-
 ```typescript
 /**
  * The trigger element id.
@@ -451,11 +448,7 @@ public willUpdate(changedProperties: PropertyValues<this>): void {
 @property({ reflect: true })
 public set trigger(value: string) {
   this.#trigger = value;
-<<<<<<< feat/divider-lit
-  // Immediately resolve trigger element
-=======
   // Immediately resolve trigger element (synchronous lookup needed)
->>>>>>> main
   this.triggerElement = value ? document.getElementById(value) : null;
 }
 public get trigger(): string {

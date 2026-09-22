@@ -1,28 +1,22 @@
-import { attachShadowTemplate, customElement } from '@tylertech/forge-core';
-import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base/index.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
+import { toggleState } from '../../core/utils/utils.js';
+import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
 import { MINI_DRAWER_CONSTANTS } from './mini-drawer-constants.js';
 
-import template from './mini-drawer.html';
 import styles from './mini-drawer.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using MiniDrawerComponent. */
 export interface IMiniDrawerComponent extends IBaseDrawerComponent {
   hover: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-mini-drawer': IMiniDrawerComponent;
-  }
 }
 
 /**
  * @tag forge-mini-drawer
  *
  * @summary A compact navigation drawer component that displays as a narrow rail and optionally expands on hover to show full content.
- *
- * @property {boolean} [hover=false] - The drawer will expand open when hovered.
- *
- * @attribute {boolean} [hover=false] - The drawer will expand open when hovered.
  *
  * @cssproperty --forge-mini-drawer-width - The width of the drawer.
  * @cssproperty --forge-mini-drawer-min-width - The minimum width of the drawer. Defaults to match the width.
@@ -49,22 +43,49 @@ declare global {
  * @csspart container - The container element around the content.
  * @csspart content - The content container element.
  */
-@customElement({
-  name: MINI_DRAWER_CONSTANTS.elementName
-})
-export class MiniDrawerComponent extends BaseDrawerComponent<BaseDrawerCore> implements IMiniDrawerComponent {
-  protected _core: BaseDrawerCore;
+@customElement(MINI_DRAWER_CONSTANTS.elementName)
+export class MiniDrawerComponent extends BaseDrawerComponent implements IMiniDrawerComponent {
+  public static styles = unsafeCSS(styles);
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new BaseDrawerCore(new BaseDrawerAdapter(this));
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = MINI_DRAWER_CONSTANTS.elementName;
+
+  // TODO: Remove attribute reflection
+
+  /**
+   * Whether the drawer expands on hover.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public hover = false;
+
+  protected override _fixContentWidthWhileAnimating = false;
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    super.willUpdate(changedProperties);
+    if (changedProperties.has('hover')) {
+      toggleState(this._internals, 'hover', this.hover);
+    }
   }
 
-  public get hover(): boolean {
-    return this.hasAttribute('hover');
+  public render(): TemplateResult {
+    return html`
+      <div class="root" part="root">
+        <div class="forge-drawer mini" part="container" ${ref(this._drawerElement)}>
+          <slot name="header"></slot>
+          <div class="content" part="content">
+            <slot></slot>
+          </div>
+          <slot name="footer"></slot>
+        </div>
+      </div>
+    `;
   }
-  public set hover(value: boolean) {
-    this.toggleAttribute('hover', value);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-mini-drawer': IMiniDrawerComponent;
   }
 }

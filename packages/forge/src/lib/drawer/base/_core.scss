@@ -4,7 +4,7 @@
 
 @forward './token-utils';
 
-@mixin core-styles() {
+@mixin core-styles {
   .forge-drawer {
     @include tokens;
   }
@@ -24,44 +24,50 @@
       @include content;
     }
 
-    &.left {
+    &.no-transition {
+      transition: none !important;
+    }
+
+    &.animating {
+      .content {
+        @include animating-content;
+      }
+    }
+  }
+
+  :host(:not(:state(right))) {
+    .forge-drawer {
       @include left;
     }
+  }
 
-    &.right {
+  :host(:state(right)) {
+    .forge-drawer {
       @include right;
-
-      &.closing {
-        @include closing(right);
-      }
-
-      &.closed {
-        @include closed(right);
-      }
     }
+  }
 
-    &.closing {
-      @include closing(left);
+  :host(:not(:state(open))) {
+    .forge-drawer {
+      @include closed;
     }
+  }
 
-    &.closed {
-      @include closed(left);
-    }
-
-    &.no-transition {
+  @media (prefers-reduced-motion: reduce) {
+    .forge-drawer {
       transition: none !important;
     }
   }
 }
 
-@mixin host() {
+@mixin host {
   display: grid;
   box-sizing: border-box;
   height: 100%;
   overflow: hidden !important; // Using important to ensure that it overrides the scaffold overflow style
 }
 
-@mixin base() {
+@mixin base {
   width: #{token(width)};
   height: 100%;
   box-sizing: border-box;
@@ -74,65 +80,55 @@
   background-color: #{token(background)};
   border-color: #{token(border-color)};
 
-  transition-property: transform;
+  transition-property: width, display;
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-easing)};
+  transition-behavior: allow-discrete;
+
+  @starting-style {
+    width: 0;
+  }
 }
 
-@mixin header() {
+@mixin header {
   grid-row: 1;
+  min-height: 0;
 }
 
-@mixin content() {
+@mixin content {
   @include scrollbar.base;
 
-  overflow-x: auto;
   -webkit-overflow-scrolling: 'touch';
 
+  width: auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   grid-row: 2;
+  overflow-y: auto;
 }
 
-@mixin footer() {
+@mixin footer {
   grid-row: 3;
+  min-height: 0;
 }
 
-@mixin left() {
+@mixin left {
   border-right-width: #{token(border-width)};
   border-right-style: solid;
 }
 
-@mixin right() {
+@mixin right {
   border-left-width: #{token(border-width)};
   border-left-style: solid;
 }
 
-@mixin closed($direction: left) {
-  @include closed-direction($direction);
-
+@mixin closed {
+  display: none;
   width: 0;
-  border: none;
-}
-
-@mixin closing($direction: left) {
-  @include closed-direction($direction);
-
-  z-index: #{elevation.z-index-variable(surface)};
-  position: absolute;
-  top: 0;
-  right: 0;
-
   transition-duration: #{token(transition-duration-close)};
 }
 
-@mixin closed-direction($direction: left) {
-  @if $direction == right {
-    transform: translateX(100%);
-    right: 0;
-    left: auto;
-  } @else {
-    transform: translateX(-100%);
-    left: 0;
-  }
+@mixin animating-content {
+  width: #{token(width)};
 }
