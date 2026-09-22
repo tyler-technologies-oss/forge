@@ -1,7 +1,7 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconClose, tylIconTylerTalkingTLogo } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
@@ -102,7 +102,6 @@ export const APP_LAYOUT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-app-layou
  * @event {CustomEvent<AppLayoutBreakpointChangeEventData>} forge-app-layout-breakpoint-change - Fired when the screen size crosses the breakpoint threshold.
  * @event {CustomEvent<AppLayoutDrawerChangeEventData>} forge-app-layout-drawer-change - Fired when the navigation drawer opens or closes.
  */
-@customElement(APP_LAYOUT_TAG_NAME)
 export class AppLayoutComponent extends BaseLitElement implements IAppLayoutComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = APP_LAYOUT_TAG_NAME;
@@ -398,3 +397,5 @@ export class AppLayoutComponent extends BaseLitElement implements IAppLayoutComp
     return this._navigationNodes.length > 0;
   }
 }
+
+tryDefine(APP_LAYOUT_TAG_NAME, AppLayoutComponent);

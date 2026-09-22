@@ -1,7 +1,7 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes } from 'lit/decorators.js';
+import { property, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { hideWhenEmpty } from '../core/utils/lit-utils.js';
 import { toggleState, HeadingLevel } from '../core/utils/utils.js';
@@ -49,7 +49,6 @@ export const STRUCTURED_CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-stru
  *
  * @state body-spacing-none - Applied when the `bodySpacing` property is set to `none`. Used to remove default body padding for full-width content.
  */
-@customElement(STRUCTURED_CARD_TAG_NAME)
 export class StructuredCardComponent extends BaseLitElement implements IStructuredCardComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = STRUCTURED_CARD_TAG_NAME;
@@ -131,3 +130,5 @@ export class StructuredCardComponent extends BaseLitElement implements IStructur
     this.requestUpdate();
   }
 }
+
+tryDefine(STRUCTURED_CARD_TAG_NAME, StructuredCardComponent);

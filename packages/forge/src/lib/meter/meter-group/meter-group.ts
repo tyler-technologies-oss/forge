@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, debounce } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, debounce, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
@@ -32,7 +32,6 @@ export const METER_GROUP_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-meter-gr
  * @slot label - Positions a label above the meter group.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement(METER_GROUP_TAG_NAME)
 export class MeterGroupComponent extends BaseLitElement {
   /* @ignore */
   public static styles = unsafeCSS(styles);
@@ -188,6 +187,8 @@ export class MeterGroupComponent extends BaseLitElement {
     this._hasSlottedHeadingContent = !!nodes.length;
   }
 }
+
+tryDefine(METER_GROUP_TAG_NAME, MeterGroupComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -40,7 +40,7 @@ export default function forgeMemberDenyListPlugin() {
     'willUpdate'
   ];
 
-  const LIT_ELEMENT_CLASSES = ['LitElement', 'BaseLitElement', 'OptionConfigComponent', 'OptionGroupConfigComponent'];
+  const LIT_ELEMENT_CLASSES = ['LitElement', 'BaseLitElement', 'OptionConfigComponent', 'OptionGroupConfigComponent', 'BaseButton'];
 
   return {
     name: 'FORGE - MEMBER-DENYLIST',

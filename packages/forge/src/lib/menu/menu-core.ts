@@ -427,7 +427,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
   }
 
   private _selectOptionByIndex(index: number): void {
-    const { options, value } = this._nonDividerOptions[index];
+    const { options, value, onSelect } = this._nonDividerOptions[index];
 
     // We ignore selections if the option has child options
     if (options) {
@@ -441,6 +441,7 @@ export class MenuCore extends CascadingListDropdownAwareCore<IMenuOption | IMenu
     const isCancelled = !this._adapter.emitHostEvent(MENU_CONSTANTS.events.SELECT, data, true, true);
     if (!isCancelled) {
       this._selectedValue = this._persistSelection ? value : undefined;
+      onSelect?.(data);
     }
   }
 

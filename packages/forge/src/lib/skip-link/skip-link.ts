@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit-html/directives/class-map.js';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { FocusIndicatorComponent } from '../focus-indicator/index.js';
 import { StateLayerComponent } from '../state-layer/index.js';
@@ -49,7 +49,6 @@ export interface ISkipLinkComponent extends BaseLitElement {
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  */
-@customElement(SKIP_LINK_CONSTANTS.elementName)
 export class SkipLinkComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -150,6 +149,8 @@ export class SkipLinkComponent extends BaseLitElement {
     targetElement?.scrollIntoView({ behavior: 'smooth' });
   }
 }
+
+tryDefine(SKIP_LINK_CONSTANTS.elementName, SkipLinkComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

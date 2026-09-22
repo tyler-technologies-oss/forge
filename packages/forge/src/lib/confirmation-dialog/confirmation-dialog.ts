@@ -1,8 +1,8 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAssignedNodes } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { when } from 'lit/directives/when.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconClose } from '@tylertech/tyler-icons';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { composeSlottedTextContent } from '../core/utils/lit-utils.js';
@@ -61,7 +61,6 @@ export const CONFIRMATION_DIALOG_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-
  *
  * @event {CustomEvent<ConfirmationDialogActionEventData>} forge-confirmation-dialog-action - Fired when an action button is clicked. Will contain `false` if the secondary button is clicked, `true` if the primary button is clicked.
  */
-@customElement(CONFIRMATION_DIALOG_TAG_NAME)
 export class ConfirmationDialogComponent extends BaseLitElement implements IConfirmationDialogComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CONFIRMATION_DIALOG_TAG_NAME;
@@ -231,3 +230,5 @@ export class ConfirmationDialogComponent extends BaseLitElement implements IConf
     }
   }
 }
+
+tryDefine(CONFIRMATION_DIALOG_TAG_NAME, ConfirmationDialogComponent);
