@@ -1,5 +1,6 @@
 .content .card {
-  max-width: 1075px;
+  max-width: none;
+  margin-inline: var(--forge-spacing-medium);
 }
 
 .swatches {

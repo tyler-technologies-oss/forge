@@ -7,14 +7,14 @@
 
 $tokens: (
   // Base
-  background: utils.module-val(file-picker, background, theme.variable(surface-dim)),
+  background: utils.module-val(file-picker, background, theme.variable(control-bg-filled)),
   width: utils.module-val(file-picker, width, auto),
   height: utils.module-val(file-picker, height, auto),
   max-width: utils.module-val(file-picker, max-width, auto),
   // Border
   border-width: utils.module-val(file-picker, border-width, border.variable(thin)),
   border-style: utils.module-val(file-picker, border-style, dashed),
-  border-color: utils.module-val(file-picker, border-color, theme.variable(outline-low)),
+  border-color: utils.module-val(file-picker, border-color, theme.variable(outline)),
   // Spacing
   gap: utils.module-val(file-picker, gap, spacing.variable(medium)),
   padding: utils.module-val(file-picker, padding, spacing.variable(medium)),

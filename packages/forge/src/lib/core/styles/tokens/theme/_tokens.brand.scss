@@ -2,16 +2,18 @@
 @use '../../utils';
 @use './token-utils';
 @use './tokens.surface' as surface;
-@use '../color-palette';
+@use '../color-palette/material-color-palette' as material-color-palette;
+@use '../color-palette/radix-color-palette' as color-palette;
+@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
 
 // Light
 $tokens: (
-  brand: color-palette.$indigo-800,
+  brand: material-color-palette.$indigo-800,
   on-brand: color-palette.$white
 );
 
 // Dark
 $tokens-dark: (
-  brand: color-palette.$grey-900,
+  brand: color-palette-dark.$slate-1,
   on-brand: color-palette.$white
 );

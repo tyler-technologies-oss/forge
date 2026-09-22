@@ -1,0 +1,14 @@
+@use '../color-palette/radix-color-palette' as color-palette;
+@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
+
+// Light
+$tokens: (
+  control-bg: color-palette.$neutral-a2,
+  control-bg-filled: color-palette.$slate-a2
+);
+
+// Dark
+$tokens-dark: (
+  control-bg: color-palette-dark.$neutral-a1,
+  control-bg-filled: color-palette-dark.$slate-a2
+);
