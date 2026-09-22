@@ -1,0 +1,139 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as EditorStories from './Editor.stories';
+import * as FeaturesStories from './Features.stories';
+import * as RendererStories from './Renderer.stories';
+import * as RecipesStories from './Recipes.stories';
+
+<Meta of={EditorStories} />
+
+<Title />
+
+The rich text editor provides a WYSIWYG editing surface built on [Tiptap](https://tiptap.dev/), along with a read-only renderer for displaying saved
+content. Unlike most Forge components it ships in its own package, `@tylertech/forge-rich-text-editor`, because Tiptap is a heavy dependency that
+consumers of the main library should not pay for. `@tylertech/forge` is a peer dependency.
+
+<Canvas of={EditorStories.Demo} />
+
+## Installation
+
+```bash
+npm install @tylertech/forge-rich-text-editor
+```
+
+Registration is split in two so an application only pays for the tools it uses. The core elements and the feature elements are registered separately:
+
+```ts
+import { defineRichTextEditorComponents } from '@tylertech/forge-rich-text-editor';
+import { defineRteFeatureComponents } from '@tylertech/forge-rich-text-editor/features';
+
+defineRichTextEditorComponents();
+defineRteFeatureComponents();
+```
+
+Or simply side-effect import both entry points:
+
+```ts
+import '@tylertech/forge-rich-text-editor';
+import '@tylertech/forge-rich-text-editor/features';
+```
+
+## Composition
+
+**The editor's capabilities are determined by the feature elements slotted into it.** Each `<forge-rte-*>` element contributes its own Tiptap extension,
+and the editor collects them to build its schema. An editor with nothing slotted supports no formatting at all.
+
+This is the most important thing to understand about the component, and the most common source of confusion: content handling looks broken when the
+feature providing a given mark simply is not slotted. `<forge-rte-standard-tools>` is the usual starting point — it composes ten of the feature elements,
+excluding `code` and `link`, which are opt-in.
+
+```html
+<forge-rich-text-editor>
+  <forge-rte-standard-tools></forge-rte-standard-tools>
+</forge-rich-text-editor>
+```
+
+Individual features can be composed instead when a narrower toolbar is wanted, and they can be arranged freely alongside dividers.
+
+<Canvas of={FeaturesStories.ComposedLayout} />
+
+## Content
+
+The `content` property accepts **either an HTML string or a ProseMirror document** — the same shape the editor's `change` event emits and `toJSON()`
+returns. This means saved content can round-trip without being serialized to HTML first.
+
+The matching `content` **attribute** is necessarily HTML-only, since an attribute cannot carry an object. Pass a document through the property.
+
+<Canvas of={RecipesStories.OutputFormats} />
+
+Document input is stricter than HTML input, and the difference matters. ProseMirror discards the **entire** document when it encounters a mark it has no
+extension for, whereas HTML parsing drops the unknown formatting and keeps the text. Because the schema is built from the slotted features, a document
+that round-trips in one editor can be rejected wholesale by another with a narrower toolbar.
+
+When a document is rejected the editor dispatches its `error` event with `{ context: 'Invalid document content', error }`, where the message names the
+offending mark. The content is still discarded — the event reports the failure so an application can react to it, which Tiptap alone does not allow.
+HTML input is deliberately not reported, since dropping unsupported formatting there is expected behaviour rather than a fault.
+
+## Displaying saved content
+
+Use `<forge-rich-text-renderer>` to present content read-only. It takes **only a ProseMirror document**; an HTML string renders as escaped text.
+
+<Canvas of={RendererStories.Renderer} />
+
+## Links
+
+`<forge-rte-link>` is opt-in, and adds a popover for entering and editing URLs anchored to the current selection. URLs are protocol-checked, and
+dangerous protocols are rejected.
+
+<Canvas of={FeaturesStories.Links} />
+
+## Character limits and validation
+
+`maxLength` limits the content length and can be changed on an editor that already exists. The count includes block boundaries, so adding paragraphs
+counts toward the limit rather than being free.
+
+`showCharacterCount` and `showWordCount` render counters in the footer. When content exceeds the limit the editor reports through its `validation` event
+with `{ isValid, errors }`, which is the hook to gate form submission on.
+
+<Canvas of={EditorStories.ContentValidation} />
+
+Note that a paste which would exceed the limit is refused in its entirety rather than truncated to fit.
+
+## Disabled and read-only
+
+Both states prevent editing and are visually dimmed, but they differ in intent. `disabled` presents the content as inactive and makes it unselectable.
+`readOnly` keeps the content selectable and copyable, which is usually what is wanted for presenting content the user may need to read or quote.
+
+<Canvas of={EditorStories.DisabledState} />
+<Canvas of={EditorStories.ReadOnlyState} />
+
+## Forms
+
+The editor is not a native form control, so its value is read from the component rather than submitted automatically. Listen for `change` and keep the
+document, or read `toJSON()` / `toHTML()` when submitting.
+
+<Canvas of={RecipesStories.FormIntegration} />
+
+## Sanitization
+
+All content is sanitized before it reaches Tiptap — HTML through `sanitizeHTML`, documents through `sanitizeJSON`. Dangerous elements are removed, every
+URL-bearing attribute is protocol-checked, and `on*` handlers are stripped.
+
+Style handling is an allow-list rather than a blanket removal: `text-align`, `color` and `background-color` survive with validated values, because
+alignment has no carrier other than the `style` attribute and would otherwise be lost on save and reload. `class` and `data-*` attributes are stripped
+entirely, so formatting that depends on them is not preserved.
+
+<Canvas of={EditorStories.PasteHandling} />
+
+## Accessibility
+
+- Tiptap builds its own `contenteditable` element inside the one it is handed, and **that inner element is the real control** — it receives focus and is
+  where assistive technology lands. Anything applied to the outer host does not necessarily reach it.
+- The renderer host takes `role="article"` unless a `role` is already set, so consumers can override it for their own document structure.
+- Toolbar buttons are toggle buttons: they expose their active state through `aria-pressed`, advertise their shortcut via `aria-keyshortcuts`, and are
+  disabled together with the editor.
+- Formatting changes are announced politely through Forge's `LiveAnnouncer`, so applying a mark is not a silent action for screen reader users.
+
+## API
+
+<CustomArgTypes />
