@@ -14,7 +14,6 @@ const observedAttributes = {
   FULLSCREEN_THRESHOLD: 'fullscreen-threshold',
   TRIGGER: 'trigger',
   MOVEABLE: 'moveable',
-  MOVE_TARGET: 'move-target',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
   SIZE_STRATEGY: 'size-strategy',
@@ -61,6 +60,7 @@ const defaults = {
   FULLSCREEN_THRESHOLD: 599
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const DIALOG_CONSTANTS = {
   elementName,
   observedAttributes,

@@ -1,0 +1,49 @@
+<!--
+  @block Structured Card — With Form
+  @type component
+  @description With Form usage example for the forge-structured-card component.
+  @tags structured-card, with-form, storybook, component-example
+-->
+<div class="w-[600px]">
+  <forge-structured-card heading-level="2">
+    <div slot="title">Project Details</div>
+
+    <forge-badge theme="warning" slot="header-actions">
+      <span>In progress</span>
+      <forge-icon name="construction" slot="end"></forge-icon>
+    </forge-badge>
+    <form slot="body">
+      <forge-stack>
+        <forge-text-field label-position="block-start">
+          <label>Project name</label>
+          <input type="text" />
+        </forge-text-field>
+        <forge-text-field label-position="block-start">
+          <label>Description</label>
+          <textarea></textarea>
+        </forge-text-field>
+        <forge-select label="Category" label-position="block-start">
+          <forge-option value="development">Development</forge-option>
+          <forge-option value="design">Design</forge-option>
+          <forge-option value="marketing">Marketing</forge-option>
+          <forge-option value="research">Research</forge-option>
+        </forge-select>
+        <forge-text-field label-position="block-start">
+          <label>Owner</label>
+          <input type="text" />
+        </forge-text-field>
+        <forge-file-picker accept=".jpg,.png,.pdf">
+          <forge-button variant="outlined">Attach files</forge-button>
+        </forge-file-picker>
+      </forge-stack>
+    </form>
+    <forge-button variant="text" slot="footer-secondary-action">
+      <forge-icon slot="start" name="delete"></forge-icon>
+      Cancel
+    </forge-button>
+    <forge-button variant="tonal" slot="footer-primary-action">
+      <forge-icon slot="start" name="save"></forge-icon>
+      Save
+    </forge-button>
+  </forge-structured-card>
+</div>

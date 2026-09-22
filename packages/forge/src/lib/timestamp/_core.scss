@@ -1,0 +1,22 @@
+@use '../core/styles/typography';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+@mixin host {
+  @include typography.style(body1);
+
+  display: inline-block;
+}
+
+@mixin base {
+  color: #{token(color)};
+}
+
+@mixin separator-start {
+  content: '•\00a0';
+}
+
+@mixin separator-end {
+  content: '\00a0•';
+}

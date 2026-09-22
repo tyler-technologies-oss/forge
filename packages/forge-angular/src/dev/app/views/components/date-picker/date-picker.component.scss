@@ -1,0 +1,15 @@
+forge-date-picker {
+  width: 256px;
+}
+
+forge-text-field {
+  --forge-text-field-margin-top: 0;
+  --forge-text-field-margin-bottom: 0;
+}
+
+.disabled-days-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}

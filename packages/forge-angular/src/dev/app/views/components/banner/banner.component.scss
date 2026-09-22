@@ -1,0 +1,28 @@
+forge-banner {
+  //Example of using css custom property overrides
+  // --forge-banner-background-color: darkgreen;
+  // --forge-banner-color: white;
+  // --forge-banner-icon-color: orange;
+
+  forge-button {
+    button {
+      background: white;
+      min-width: 132px;
+    }
+  }
+}
+
+.two-line-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.demo-card-container {
+  margin: 32px 0;
+
+  .banner-state-txt {
+    margin-bottom: 16px;
+  }
+}

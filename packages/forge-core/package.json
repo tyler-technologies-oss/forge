@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-core",
-  "version": "3.3.1",
+  "version": "3.5.1",
   "description": "A library of core web utilities that support Tyler Forge™ based libraries.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
@@ -40,14 +40,14 @@
   "devDependencies": {
     "@tylertech-eslint/eslint-plugin": "^4.0.0",
     "@types/node": "^25.5.0",
-    "@vitest/browser": "^4.1.2",
-    "@vitest/browser-playwright": "^4.1.2",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/browser": "^4.1.11",
+    "@vitest/browser-playwright": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "playwright": "catalog:",
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "typescript": "~5.9.3",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

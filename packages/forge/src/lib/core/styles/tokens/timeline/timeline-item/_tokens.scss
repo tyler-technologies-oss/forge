@@ -1,0 +1,32 @@
+@use 'sass:map';
+@use '../../../spacing';
+@use '../../../theme';
+@use '../../../utils';
+@use '../../../shape';
+
+$tokens: (
+  marker-size: utils.module-val(timeline-item, marker-size, 14px),
+  marker-padding: utils.module-val(timeline-item, marker-padding, 3px),
+  marker-color: utils.module-val(timeline-item, marker-color, theme.variable(text-high)),
+  marker-background: utils.module-val(timeline-item, marker-background, theme.variable(surface-dim)),
+  marker-shape: utils.module-val(timeline-item, marker-shape, shape.variable(full)),
+  default-marker-size: utils.module-val(timeline-item, default-marker-size, spacing.variable(xsmall)),
+  default-marker-shape: utils.module-val(timeline-item, default-marker-shape, shape.variable(full)),
+  sidebar-margin: utils.module-val(timeline-item, sidebar-margin, spacing.variable(xsmall)),
+  line-color: utils.module-val(timeline-item, line-color, theme.variable(outline)),
+  line-width: utils.module-val(timeline-item, line-width, spacing.variable(xxxsmall)),
+  line-inset: utils.module-val(
+      timeline-item,
+      line-inset,
+      calc(
+        #{utils.module-var(timeline-item, marker-size)} / 2 + #{utils.module-var(timeline-item, marker-padding)} -
+          #{utils.module-var(timeline-item, line-width)} / 2
+      )
+    ),
+  summary-gap: utils.module-val(timeline-item, summary-gap, spacing.variable(xsmall)),
+  detail-margin: utils.module-val(timeline-item, detail-margin, spacing.variable(xsmall))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

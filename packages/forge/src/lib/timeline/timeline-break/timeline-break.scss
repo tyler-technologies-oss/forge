@@ -1,0 +1,21 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-timeline-break {
+  @include core.tokens;
+}
+
+.forge-timeline-break {
+  @include core.base;
+}

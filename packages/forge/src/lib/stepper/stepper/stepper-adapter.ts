@@ -57,7 +57,7 @@ export class StepperAdapter extends BaseAdapter<IStepperComponent> implements IS
     this._slotElement.addEventListener('slotchange', listener);
   }
   public removeSlotChangeListener(listener: EventListener): void {
-    this._slotElement.addEventListener('slotchange', listener);
+    this._slotElement.removeEventListener('slotchange', listener);
   }
 
   public getLastStep(): IStepComponent {

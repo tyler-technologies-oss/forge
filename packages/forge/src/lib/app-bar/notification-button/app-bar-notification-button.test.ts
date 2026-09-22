@@ -12,6 +12,7 @@ describe('App Bar Notification Button', () => {
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar-notification-button></forge-app-bar-notification-button>`);
     const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    await frame();
 
     await expect(el).toBeAccessible();
   });

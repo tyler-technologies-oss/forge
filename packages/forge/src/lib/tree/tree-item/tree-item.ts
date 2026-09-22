@@ -1,7 +1,8 @@
 import { consume } from '@lit/context';
+import { tryDefine } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -29,7 +30,6 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
  * @event {CustomEvent<void>} forge-tree-item-open - Dispatched when the user opens a tree item.
  * @event {CustomEvent<void>} forge-tree-item-close - Dispatched when the user closes a tree item.
  */
-@customElement('forge-tree-item')
 export class TreeItemComponent extends LitElement {
   public static styles = unsafeCSS(styles);
 
@@ -377,6 +377,8 @@ export class TreeItemComponent extends LitElement {
     this.dispatchEvent(new CustomEvent('forge-tree-item-update', { bubbles: true, detail: { reason } }));
   }
 }
+
+tryDefine('forge-tree-item', TreeItemComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

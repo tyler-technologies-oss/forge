@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, isDefined } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, isDefined, tryDefine } from '@tylertech/forge-core';
 import { PropertyValues, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { ICON_CONSTANTS, IconExternalType, IconTheme, IconUrlBuilder } from './icon-constants.js';
@@ -41,7 +41,6 @@ export interface IIconComponent extends IIconProperties, IBaseComponent {
  *
  * @cssclass forge-icon - The icon element.
  */
-@customElement(ICON_CONSTANTS.elementName)
 export class IconComponent extends BaseLitElement implements IIconComponent {
   public static styles = unsafeCSS(styles);
 
@@ -174,10 +173,34 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
   }
 
   #safeApplyIcon(): void {
-    if (this.isConnected) {
-      this.#clearIconQueue();
+    if (!this.isConnected) {
+      return;
+    }
+
+    this.#clearIconQueue();
+
+    // Apply immediately for synchronous cases
+    if (this.#canApplyIconSynchronously()) {
+      this.#applyIcon();
+    } else {
       this.#queueIconUpdate();
     }
+  }
+
+  #canApplyIconSynchronously(): boolean {
+    // Direct SVG source provided, or no icon to render
+    if (this.src || !this.name) {
+      return true;
+    }
+
+    // Lazy loading requires IntersectionObserver setup
+    if (this.lazy) {
+      return false;
+    }
+
+    // Check if icon is already cached with a node, or requires fetching.
+    const descriptor = this.#tryGetIcon(this.name);
+    return descriptor?.node != null;
   }
 
   #clearIconQueue(): void {
@@ -332,6 +355,8 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
     this.#visibilityObserver = undefined;
   }
 }
+
+tryDefine(ICON_CONSTANTS.elementName, IconComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
