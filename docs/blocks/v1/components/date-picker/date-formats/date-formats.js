@@ -1,1 +1,1 @@
-import{l as n,ak as t}from"../../../chunks/icon-CWOq2OoU.js";n.define([t]);
+import{k as n,ar as t}from"../../../chunks/icon-le5EYnD1.js";n.define([t]);

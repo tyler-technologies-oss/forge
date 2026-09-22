@@ -1,1 +1,1 @@
-import{l as o,bu as t,bp as a}from"../../../chunks/icon-CWOq2OoU.js";o.define([t,a]);const e=document.querySelector("forge-menu");e&&(e.options=[{label:"View details",value:"details"},{label:"Export data",value:"export"},{label:"Remove card",value:"remove"}]);
+import{k as o,bB as t,bw as a}from"../../../chunks/icon-le5EYnD1.js";o.define([t,a]);const e=document.querySelector("forge-menu");e&&(e.options=[{label:"View details",value:"details"},{label:"Export data",value:"export"},{label:"Remove card",value:"remove"}]);
