@@ -1,0 +1,42 @@
+/*
+ * The card's footer slots are left empty on purpose: the body and footer live together inside a
+ * single expansion panel so they collapse as one unit. Zeroing the scaffold padding keeps a
+ * collapsed card flush with its header instead of leaving an empty padded footer strip behind.
+ */
+.instruction-card {
+  --forge-content-scaffold-body-padding-inline: 0;
+  --forge-content-scaffold-body-padding-block: 0;
+  --forge-content-scaffold-footer-full-padding: 0;
+}
+
+.instruction-card.dragging {
+  opacity: 0.4;
+}
+
+.instruction-card[data-disabled] [data-panel-content] {
+  opacity: 0.5;
+}
+
+.drag-handle {
+  --forge-icon-color: var(--forge-theme-text-medium);
+
+  margin-inline: var(--forge-spacing-small) var(--forge-spacing-xsmall);
+  cursor: grab;
+}
+
+.instruction-card.dragging .drag-handle {
+  cursor: grabbing;
+}
+
+/* Typography comes from the card's own `::slotted([slot='title'])` rule, so only the button chrome is reset here. */
+.title-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--forge-spacing-xsmall);
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  text-align: start;
+}

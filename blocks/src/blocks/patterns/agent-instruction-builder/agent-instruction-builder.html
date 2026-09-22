@@ -1,0 +1,257 @@
+<!--
+  @block Agent Instruction Builder
+  @type pattern
+  @description Stack of structured cards that collapse and expand from their title, reorder with up and down buttons or drag and drop, and carry an enable switch and delete button in the header, a text field in the body, and a text field, checkbox and add button in the footer. Use as a reference for sortable card lists and progressive disclosure editors.
+  @tags cards, structured-card, reorder, sortable, drag-and-drop, collapsible, expansion-panel, accordion, switch, checkbox, chips, text-field, interactive, pattern
+-->
+<div class="p-medium">
+  <div class="mx-auto flex max-w-4xl flex-col gap-medium">
+    <div class="flex flex-wrap items-end justify-between gap-medium">
+      <div class="flex flex-col gap-xxsmall">
+        <h1 class="text-heading3">Agent instructions</h1>
+        <p class="text-body2 text-medium" id="stack-summary">3 sections &middot; drag to reorder</p>
+      </div>
+      <forge-button variant="filled" id="add-instruction">
+        <forge-icon name="add" slot="start" external></forge-icon>
+        Add instruction
+      </forge-button>
+    </div>
+
+    <div id="instruction-stack" class="flex flex-col gap-medium">
+      <forge-structured-card class="instruction-card" heading-level="2">
+        <forge-icon slot="before-title" name="drag_indicator" class="drag-handle" data-drag-handle aria-hidden="true" external></forge-icon>
+
+        <button type="button" slot="title" class="title-trigger" data-title-trigger aria-expanded="true" aria-controls="instr-role-content">
+          <forge-open-icon open data-open-icon></forge-open-icon>
+          <span data-title-text>Role and persona</span>
+        </button>
+
+        <div slot="header-actions" class="flex items-center gap-xsmall">
+          <forge-switch dense checked label-position="start" data-enabled-switch>Enabled</forge-switch>
+          <forge-icon-button aria-label="Move Role and persona up" data-move-up>
+            <forge-icon name="arrow_upward" external></forge-icon>
+          </forge-icon-button>
+          <forge-icon-button aria-label="Move Role and persona down" data-move-down>
+            <forge-icon name="arrow_downward" external></forge-icon>
+          </forge-icon-button>
+        </div>
+
+        <forge-icon-button slot="after-header-actions" aria-label="Delete Role and persona" data-delete>
+          <forge-icon name="close" external></forge-icon>
+        </forge-icon-button>
+
+        <forge-expansion-panel slot="body" open data-panel>
+          <div id="instr-role-content" data-panel-content>
+            <div class="flex flex-col gap-medium px-medium pb-medium">
+              <forge-text-field label-position="block-start">
+                <label for="instr-role-text" data-instruction-label>Instruction</label>
+                <textarea id="instr-role-text" rows="3" data-instruction-input>
+You are a support agent for a municipal utility billing department. Stay factual, cite account data you were given, and never guess at balances.</textarea
+                >
+              </forge-text-field>
+
+              <div class="flex flex-col gap-xsmall" data-keyword-group>
+                <span class="text-label1 text-medium">Trigger keywords</span>
+                <forge-chip-set type="field" data-keyword-set>
+                  <forge-chip value="billing">billing</forge-chip>
+                  <forge-chip value="account">account</forge-chip>
+                </forge-chip-set>
+              </div>
+            </div>
+
+            <forge-divider></forge-divider>
+
+            <form class="flex flex-wrap items-center gap-medium px-medium py-small" data-keyword-form>
+              <forge-text-field class="min-w-[200px] flex-1" density="small" label-position="block-start">
+                <label for="instr-role-keyword" data-keyword-label>Add keyword</label>
+                <input type="text" id="instr-role-keyword" autocomplete="off" data-keyword-input />
+              </forge-text-field>
+              <forge-checkbox dense data-case-sensitive>Case sensitive</forge-checkbox>
+              <forge-icon-button type="submit" aria-label="Add keyword" data-keyword-add disabled>
+                <forge-icon name="add" external></forge-icon>
+              </forge-icon-button>
+            </form>
+          </div>
+        </forge-expansion-panel>
+      </forge-structured-card>
+
+      <forge-structured-card class="instruction-card" heading-level="2">
+        <forge-icon slot="before-title" name="drag_indicator" class="drag-handle" data-drag-handle aria-hidden="true" external></forge-icon>
+
+        <button type="button" slot="title" class="title-trigger" data-title-trigger aria-expanded="false" aria-controls="instr-tone-content">
+          <forge-open-icon data-open-icon></forge-open-icon>
+          <span data-title-text>Tone of voice</span>
+        </button>
+
+        <div slot="header-actions" class="flex items-center gap-xsmall">
+          <forge-switch dense checked label-position="start" data-enabled-switch>Enabled</forge-switch>
+          <forge-icon-button aria-label="Move Tone of voice up" data-move-up>
+            <forge-icon name="arrow_upward" external></forge-icon>
+          </forge-icon-button>
+          <forge-icon-button aria-label="Move Tone of voice down" data-move-down>
+            <forge-icon name="arrow_downward" external></forge-icon>
+          </forge-icon-button>
+        </div>
+
+        <forge-icon-button slot="after-header-actions" aria-label="Delete Tone of voice" data-delete>
+          <forge-icon name="close" external></forge-icon>
+        </forge-icon-button>
+
+        <forge-expansion-panel slot="body" data-panel>
+          <div id="instr-tone-content" data-panel-content>
+            <div class="flex flex-col gap-medium px-medium pb-medium">
+              <forge-text-field label-position="block-start">
+                <label for="instr-tone-text" data-instruction-label>Instruction</label>
+                <textarea id="instr-tone-text" rows="3" data-instruction-input>
+Write in plain language at a sixth grade reading level. Keep replies under four sentences unless the resident asks for detail.</textarea
+                >
+              </forge-text-field>
+
+              <div class="flex flex-col gap-xsmall" data-keyword-group>
+                <span class="text-label1 text-medium">Trigger keywords</span>
+                <forge-chip-set type="field" data-keyword-set>
+                  <forge-chip value="explain">explain</forge-chip>
+                </forge-chip-set>
+              </div>
+            </div>
+
+            <forge-divider></forge-divider>
+
+            <form class="flex flex-wrap items-center gap-medium px-medium py-small" data-keyword-form>
+              <forge-text-field class="min-w-[200px] flex-1" density="small" label-position="block-start">
+                <label for="instr-tone-keyword" data-keyword-label>Add keyword</label>
+                <input type="text" id="instr-tone-keyword" autocomplete="off" data-keyword-input />
+              </forge-text-field>
+              <forge-checkbox dense data-case-sensitive>Case sensitive</forge-checkbox>
+              <forge-icon-button type="submit" aria-label="Add keyword" data-keyword-add disabled>
+                <forge-icon name="add" external></forge-icon>
+              </forge-icon-button>
+            </form>
+          </div>
+        </forge-expansion-panel>
+      </forge-structured-card>
+
+      <forge-structured-card class="instruction-card" heading-level="2">
+        <forge-icon slot="before-title" name="drag_indicator" class="drag-handle" data-drag-handle aria-hidden="true" external></forge-icon>
+
+        <button type="button" slot="title" class="title-trigger" data-title-trigger aria-expanded="false" aria-controls="instr-escalation-content">
+          <forge-open-icon data-open-icon></forge-open-icon>
+          <span data-title-text>Escalation rules</span>
+        </button>
+
+        <div slot="header-actions" class="flex items-center gap-xsmall">
+          <forge-switch dense label-position="start" data-enabled-switch>Enabled</forge-switch>
+          <forge-icon-button aria-label="Move Escalation rules up" data-move-up>
+            <forge-icon name="arrow_upward" external></forge-icon>
+          </forge-icon-button>
+          <forge-icon-button aria-label="Move Escalation rules down" data-move-down>
+            <forge-icon name="arrow_downward" external></forge-icon>
+          </forge-icon-button>
+        </div>
+
+        <forge-icon-button slot="after-header-actions" aria-label="Delete Escalation rules" data-delete>
+          <forge-icon name="close" external></forge-icon>
+        </forge-icon-button>
+
+        <forge-expansion-panel slot="body" data-panel>
+          <div id="instr-escalation-content" data-panel-content>
+            <div class="flex flex-col gap-medium px-medium pb-medium">
+              <forge-text-field label-position="block-start">
+                <label for="instr-escalation-text" data-instruction-label>Instruction</label>
+                <textarea id="instr-escalation-text" rows="3" data-instruction-input>
+Hand off to a human agent when the resident mentions a shutoff notice, a payment dispute over $500, or asks for a supervisor.</textarea
+                >
+              </forge-text-field>
+
+              <div class="flex flex-col gap-xsmall" data-keyword-group>
+                <span class="text-label1 text-medium">Trigger keywords</span>
+                <forge-chip-set type="field" data-keyword-set>
+                  <forge-chip value="shutoff">shutoff</forge-chip>
+                  <forge-chip value="supervisor">supervisor</forge-chip>
+                  <forge-chip value="RMA" data-case-sensitive-keyword remove-button-label="Remove case sensitive keyword RMA">
+                    <forge-icon slot="start" name="case_sensitive_alt" external></forge-icon>
+                    RMA
+                  </forge-chip>
+                </forge-chip-set>
+              </div>
+            </div>
+
+            <forge-divider></forge-divider>
+
+            <form class="flex flex-wrap items-center gap-medium px-medium py-small" data-keyword-form>
+              <forge-text-field class="min-w-[200px] flex-1" density="small" label-position="block-start">
+                <label for="instr-escalation-keyword" data-keyword-label>Add keyword</label>
+                <input type="text" id="instr-escalation-keyword" autocomplete="off" data-keyword-input />
+              </forge-text-field>
+              <forge-checkbox dense data-case-sensitive>Case sensitive</forge-checkbox>
+              <forge-icon-button type="submit" aria-label="Add keyword" data-keyword-add disabled>
+                <forge-icon name="add" external></forge-icon>
+              </forge-icon-button>
+            </form>
+          </div>
+        </forge-expansion-panel>
+      </forge-structured-card>
+    </div>
+
+    <div id="empty-state" class="hidden flex flex-col items-center gap-small p-large">
+      <forge-icon name="robot" class="text-[64px] [--forge-icon-color:var(--forge-theme-text-medium)]" external></forge-icon>
+      <p class="text-body1 text-medium">No instructions yet. Add one to start building the agent.</p>
+    </div>
+
+    <div class="sr-only" role="status" aria-live="polite" id="stack-announcer"></div>
+  </div>
+</div>
+
+<template id="instruction-card-template">
+  <forge-structured-card class="instruction-card" heading-level="2">
+    <forge-icon slot="before-title" name="drag_indicator" class="drag-handle" data-drag-handle aria-hidden="true" external></forge-icon>
+
+    <button type="button" slot="title" class="title-trigger" data-title-trigger aria-expanded="true">
+      <forge-open-icon open data-open-icon></forge-open-icon>
+      <span data-title-text>New instruction</span>
+    </button>
+
+    <div slot="header-actions" class="flex items-center gap-xsmall">
+      <forge-switch dense checked label-position="start" data-enabled-switch>Enabled</forge-switch>
+      <forge-icon-button data-move-up>
+        <forge-icon name="arrow_upward" external></forge-icon>
+      </forge-icon-button>
+      <forge-icon-button data-move-down>
+        <forge-icon name="arrow_downward" external></forge-icon>
+      </forge-icon-button>
+    </div>
+
+    <forge-icon-button slot="after-header-actions" data-delete>
+      <forge-icon name="close" external></forge-icon>
+    </forge-icon-button>
+
+    <forge-expansion-panel slot="body" open data-panel>
+      <div data-panel-content>
+        <div class="flex flex-col gap-medium px-medium pb-medium">
+          <forge-text-field label-position="block-start">
+            <label data-instruction-label>Instruction</label>
+            <textarea rows="3" data-instruction-input></textarea>
+          </forge-text-field>
+
+          <div class="flex flex-col gap-xsmall" data-keyword-group>
+            <span class="text-label1 text-medium">Trigger keywords</span>
+            <forge-chip-set type="field" data-keyword-set></forge-chip-set>
+          </div>
+        </div>
+
+        <forge-divider></forge-divider>
+
+        <form class="flex flex-wrap items-center gap-medium px-medium py-small" data-keyword-form>
+          <forge-text-field class="min-w-[200px] flex-1" density="small" label-position="block-start">
+            <label data-keyword-label>Add keyword</label>
+            <input type="text" autocomplete="off" data-keyword-input />
+          </forge-text-field>
+          <forge-checkbox dense data-case-sensitive>Case sensitive</forge-checkbox>
+          <forge-icon-button type="submit" aria-label="Add keyword" data-keyword-add disabled>
+            <forge-icon name="add" external></forge-icon>
+          </forge-icon-button>
+        </form>
+      </div>
+    </forge-expansion-panel>
+  </forge-structured-card>
+</template>
