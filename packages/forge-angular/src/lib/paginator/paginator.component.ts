@@ -93,7 +93,7 @@ export class PaginatorComponent {
     return this.nativeElement.firstLast;
   }
 
-  /** Whether to show the first page button. Default is false. */
+  /** Whether to show the first page button. */
   @Input({ transform: booleanAttribute })
   public set first(value: PaginatorComponentCustomElement['first']) {
     this.zone.runOutsideAngular(() => {

@@ -1,0 +1,321 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AppLayoutStories from './AppLayout.stories';
+import * as AppLayoutMiniDrawerStories from './AppLayoutMiniDrawer.stories';
+import * as AppLayoutCustomMobileContentStories from './AppLayoutCustomMobileContent.stories';
+import * as AppLayoutMockedApplicationStories from './AppLayoutMockedApplication.stories';
+
+<Meta of={AppLayoutStories} />
+
+<Title />
+
+The `<forge-app-layout>` component provides a responsive layout structure for Tyler Cloud applications, featuring an embedded app bar with navigation drawer functionality. This component adapts automatically to different screen sizes, providing an optimal user experience across desktop and mobile devices.
+
+The layout includes a built-in app bar with configurable slots and a responsive navigation system that transforms between a persistent side drawer on large screens and a modal drawer on smaller screens.
+
+<Canvas of={AppLayoutStories.Demo} />
+
+## Usage
+
+The `<forge-app-layout>` component serves as the foundational layout structure for applications, providing both the app bar and navigation framework in a single, cohesive component.
+
+```html
+<forge-app-layout app-title="My Application">
+  <!-- App bar content -->
+  <img src="/logo.png" alt="Company Logo" slot="app-bar-logo" />
+  <forge-button slot="app-bar-end" variant="raised">Action</forge-button>
+
+  <!-- Navigation content -->
+  <forge-list slot="navigation">
+    <forge-list-item>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <button type="button">Dashboard</button>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <button type="button">Users</button>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main>
+    <h1>Page Content</h1>
+    <p>Your application content goes here.</p>
+  </main>
+
+  <!-- Footer -->
+  <div slot="footer">
+    <p>&copy; 2024 Tyler Technologies</p>
+  </div>
+</forge-app-layout>
+```
+
+## App Bar Integration
+
+The component includes an embedded `<forge-app-bar>` with several configurable slots for custom content. The app bar automatically includes a menu button on small screens to control the navigation drawer.
+
+### App Bar Slots
+
+The app bar provides dedicated slots for different types of content:
+
+- **Logo slot**: For company or application branding
+- **Start slot**: For actions at the beginning of the app bar
+- **Center slot**: For centered content like search bars
+- **End slot**: For actions at the end of the app bar (user profile, settings, etc.)
+
+```html
+<forge-app-layout app-title="Dashboard">
+  <!-- Logo in the app bar -->
+  <forge-avatar slot="app-bar-logo" size="small">
+    <img src="/company-logo.png" alt="Company" />
+  </forge-avatar>
+
+  <!-- Start actions -->
+  <forge-button slot="app-bar-start" variant="text">
+    <forge-icon name="refresh" slot="start"></forge-icon>
+    Refresh
+  </forge-button>
+
+  <!-- Center content -->
+  <forge-text-field slot="app-bar-center" placeholder="Search...">
+    <forge-icon slot="leading" name="search"></forge-icon>
+  </forge-text-field>
+
+  <!-- End actions -->
+  <forge-user-profile slot="app-bar-end" full-name="John Doe" email="john.doe@example.com"> </forge-user-profile>
+</forge-app-layout>
+```
+
+## Responsive Behavior
+
+The component automatically adapts to screen size using a configurable breakpoint (default: 960px):
+
+### Large Screens (>= breakpoint)
+
+- Navigation appears as a persistent drawer in the body-left area
+- Can use standard drawer (default) or mini drawer mode via the `use-mini-drawer` attribute
+- Menu button is hidden since navigation is always visible
+- Full scaffold layout with dedicated navigation space
+- Toggle button available to collapse/expand the drawer
+
+### Small Screens (< breakpoint)
+
+- Navigation appears as a modal drawer triggered by the menu button
+- Menu button becomes visible in the app bar start slot
+- Drawer overlays content and can be toggled open/closed
+- Drawer automatically closes when screen size increases
+- Always uses a modal dialog drawer regardless of `use-mini-drawer` setting
+
+### Auto-close on Navigation
+
+On small screens, you can automatically close the modal drawer when a user clicks on a navigation item by adding the `data-forge-app-layout-close` attribute to any element within the navigation slot. The attribute can be placed on a parent element (like `<forge-list>`) to close the drawer on any click within that element:
+
+```html
+<forge-app-layout app-title="My Application">
+  <!-- All clicks within this list will close the drawer -->
+  <forge-list slot="navigation" navlist data-forge-app-layout-close>
+    <forge-list-item>
+      <forge-icon slot="start" name="home"></forge-icon>
+      <a href="/home">Home</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="settings"></forge-icon>
+      <a href="/settings">Settings</a>
+    </forge-list-item>
+  </forge-list>
+</forge-app-layout>
+```
+
+For more granular control, you can place the attribute on individual items:
+
+```html
+<forge-app-layout app-title="My Application">
+  <forge-list slot="navigation" navlist>
+    <!-- These items will close the drawer when clicked -->
+    <forge-list-item data-forge-app-layout-close>
+      <forge-icon slot="start" name="home"></forge-icon>
+      <a href="/home">Home</a>
+    </forge-list-item>
+
+    <!-- This item won't close the drawer (e.g., submenu toggle) -->
+    <forge-list-item>
+      <forge-icon slot="start" name="expand_more"></forge-icon>
+      <button type="button">Expand submenu</button>
+    </forge-list-item>
+  </forge-list>
+</forge-app-layout>
+```
+
+You can also programmatically close the drawer using the `closeDrawer()` method:
+
+```javascript
+const appLayout = document.querySelector('forge-app-layout');
+appLayout.closeDrawer();
+```
+
+The `APP_LAYOUT_CLOSE_ATTRIBUTE` constant is exported for use in JavaScript/TypeScript:
+
+```typescript
+import { APP_LAYOUT_CLOSE_ATTRIBUTE } from '@tylertech/forge/app-layout';
+
+element.setAttribute(APP_LAYOUT_CLOSE_ATTRIBUTE, '');
+```
+
+### Custom Breakpoint
+
+You can customize the responsive breakpoint by setting the `breakpoint` property:
+
+```html
+<!-- Use a 1024px breakpoint instead of the default 960px -->
+<forge-app-layout app-title="Desktop App" breakpoint="1024">
+  <!-- Navigation will switch to drawer mode at 1024px -->
+</forge-app-layout>
+
+<!-- Use a smaller 768px breakpoint for tablets -->
+<forge-app-layout app-title="Tablet App" breakpoint="768">
+  <!-- Navigation switches to drawer mode at 768px -->
+</forge-app-layout>
+```
+
+### Custom Content Per Breakpoint
+
+You can listen for the `forge-app-layout-breakpoint-change` event to render different navigation (or other) content depending on whether the layout is currently in its small or large state:
+
+<Canvas of={AppLayoutCustomMobileContentStories.CustomMobileContent} />
+
+## Navigation Content
+
+The navigation slot accepts any content but works best with structured navigation elements like `<forge-list>`:
+
+```html
+<forge-app-layout app-title="Administration">
+  <forge-list slot="navigation" navlist>
+    <!-- Dashboard Section -->
+    <forge-list-item>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <a href="/dashboard">Dashboard</a>
+    </forge-list-item>
+
+    <!-- Divider -->
+    <forge-divider></forge-divider>
+
+    <!-- Users Section -->
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <a href="/users">Users</a>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="admin_panel_settings"></forge-icon>
+      <a href="/roles">Roles & Permissions</a>
+    </forge-list-item>
+  </forge-list>
+</forge-app-layout>
+```
+
+## Mini Drawer Mode
+
+The app-layout component supports using a mini drawer for navigation on large screens. The mini drawer provides a collapsed view that shows only icons, allowing for more content space while maintaining quick access to navigation.
+
+### Using Mini Drawer
+
+Enable mini drawer mode by setting the `use-mini-drawer` attribute:
+
+```html
+<forge-app-layout app-title="My Application" use-mini-drawer>
+  <forge-list slot="navigation" navlist>
+    <forge-list-item>
+      <forge-icon slot="start" name="dashboard"></forge-icon>
+      <button type="button">Dashboard</button>
+    </forge-list-item>
+    <forge-list-item>
+      <forge-icon slot="start" name="people"></forge-icon>
+      <button type="button">Users</button>
+    </forge-list-item>
+  </forge-list>
+
+  <!-- Main content -->
+  <main>Your content here</main>
+</forge-app-layout>
+```
+
+When enabled, the navigation drawer on large screens will use the `<forge-mini-drawer>` component instead of the standard `<forge-drawer>`, providing a more compact navigation experience.
+
+<Canvas of={AppLayoutMiniDrawerStories.MiniDrawer} />
+
+### Hover Expansion
+
+Enable hover expansion to allow the mini drawer to temporarily expand when the user hovers over it:
+
+```html
+<forge-app-layout app-title="My Application" use-mini-drawer mini-hover>
+  <forge-list slot="navigation" navlist>
+    <!-- Navigation items -->
+  </forge-list>
+</forge-app-layout>
+```
+
+When `mini-hover` is enabled:
+
+- The drawer remains collapsed by default, showing only icons
+- Hovering over the drawer temporarily expands it to show full labels
+- The drawer collapses again when the mouse leaves the drawer area
+- This provides a space-efficient navigation option while maintaining easy access to full labels
+
+> **Note:** The mini drawer mode only affects the navigation drawer on large screens (above the breakpoint). On small screens, the navigation will always use a modal drawer regardless of the `use-mini-drawer` setting.
+
+## Layout Slots
+
+Beyond the app bar and navigation, the component provides additional layout slots for content placement:
+
+- **Default slot**: Main content area
+- **Body slots**: `body-header`, `body-footer`, `body-left`, `body-right` for additional content areas
+- **Footer slot**: Application footer content
+
+```html
+<forge-app-layout app-title="Complex Layout">
+  <!-- Navigation -->
+  <nav slot="navigation">...</nav>
+
+  <!-- Body header -->
+  <div slot="body-header">
+    <forge-toolbar>
+      <h1>Page Title</h1>
+      <forge-button slot="end">Action</forge-button>
+    </forge-toolbar>
+  </div>
+
+  <!-- Main content (default slot) -->
+  <main>
+    <h2>Primary Content</h2>
+    <p>Your main application content.</p>
+  </main>
+
+  <!-- Body footer -->
+  <div slot="body-footer">
+    <forge-pagination></forge-pagination>
+  </div>
+
+  <!-- Application footer -->
+  <footer slot="footer">
+    <p>&copy; 2024 Tyler Technologies. All rights reserved.</p>
+  </footer>
+</forge-app-layout>
+```
+
+## Full Application Example
+
+A more complete example showing the app-layout composed with cards, tabs, a select, and a date picker to build out a realistic application screen:
+
+<Canvas of={AppLayoutMockedApplicationStories.MockedApplication} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The embedded menu button includes appropriate focus management and keyboard navigation
+- Navigation drawer follows standard dialog accessibility patterns when in modal mode
+- App bar maintains proper heading structure and landmark roles
+- All slots support proper semantic markup for screen readers
+- Responsive behavior maintains keyboard accessibility across screen sizes

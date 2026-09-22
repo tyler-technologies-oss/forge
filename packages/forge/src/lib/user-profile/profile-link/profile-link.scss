@@ -1,0 +1,12 @@
+@use '../../core/styles/spacing';
+@use '../../core/styles/typography';
+
+forge-list-item {
+  --forge-list-item-gap: #{spacing.variable(medium)};
+  --forge-icon-size: 20px;
+  --forge-list-item-height: 40px;
+
+  &::part(text-container) {
+    @include typography.style(body1);
+  }
+}

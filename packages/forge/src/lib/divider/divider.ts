@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/index.js';
 import { DIVIDER_CONSTANTS } from './divider-constants.js';
@@ -28,7 +28,6 @@ export interface IDividerComponent extends BaseLitElement {
  *
  * @cssclass forge-divider - The divider class.
  */
-@customElement(DIVIDER_CONSTANTS.elementName)
 export class DividerComponent extends BaseLitElement implements IDividerComponent {
   public static styles = unsafeCSS(styles);
 
@@ -60,6 +59,8 @@ export class DividerComponent extends BaseLitElement implements IDividerComponen
     return html`<div class="forge-divider" part="root"></div>`;
   }
 }
+
+tryDefine(DIVIDER_CONSTANTS.elementName, DividerComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

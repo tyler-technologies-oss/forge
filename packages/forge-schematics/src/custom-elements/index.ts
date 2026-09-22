@@ -38,7 +38,7 @@ export function customElements(inputOptions: IOptions): Rule {
         template({
           ...element,
           baseName: toBaseName(element.name),
-          importPath: options.importPath,
+          importPath: options.importPathOverrides?.[element.tagName] ?? options.importPath,
           useDefineFunction: options.useDefineFunction,
           methods: element.members?.filter(x => x.kind === 'method' && x.privacy === 'public') ?? [],
           properties: element.members?.filter(x => x.kind === 'field' && x.privacy === 'public') ?? [],
@@ -72,7 +72,7 @@ export function customElements(inputOptions: IOptions): Rule {
           baseName: toBaseName(element.name),
           moduleName: elementMap[element.tagName].moduleName,
           dependencies: options.componentDependencies?.[element.tagName]?.map(tag => elementMap[tag]) ?? [],
-          importPath: options.importPath,
+          importPath: options.importPathOverrides?.[element.tagName] ?? options.importPath,
           useDefineFunction: options.useDefineFunction
         }),
         (moduleTree: Tree): Tree => {
