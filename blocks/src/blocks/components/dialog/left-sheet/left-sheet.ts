@@ -1,13 +1,13 @@
-import type { IButtonComponent, IDialogComponent, IIconButtonComponent } from '@tylertech/forge';
+import type { ButtonComponent, IDialogComponent, IconButtonComponent } from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconClose } from '@tylertech/tyler-icons';
 
 IconRegistry.define([tylIconClose]);
 
-const openButton = document.getElementById('open-dialog-button-left-sheet') as IButtonComponent;
+const openButton = document.getElementById('open-dialog-button-left-sheet') as ButtonComponent;
 const dialog = document.getElementById('dialog-left-sheet') as IDialogComponent;
-const closeIconButton = document.getElementById('close-dialog-icon-button-left-sheet') as IIconButtonComponent;
-const closeButton = document.getElementById('close-dialog-button-left-sheet') as IButtonComponent;
+const closeIconButton = document.getElementById('close-dialog-icon-button-left-sheet') as IconButtonComponent;
+const closeButton = document.getElementById('close-dialog-button-left-sheet') as ButtonComponent;
 
 openButton?.addEventListener('click', () => (dialog.open = true));
 closeIconButton?.addEventListener('click', () => (dialog.open = false));

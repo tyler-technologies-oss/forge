@@ -1,12 +1,10 @@
 import type { IPopoverComponent, IPopoverToggleEventData } from '@tylertech/forge/popover';
-import type { IButtonComponent } from '@tylertech/forge/button';
+import type { ButtonComponent } from '@tylertech/forge/button';
 import { ToastComponent } from '@tylertech/forge/toast';
 
 const popover = document.querySelector<IPopoverComponent>('forge-popover');
 const input = popover?.querySelector<HTMLInputElement>('input[name="your-name"]');
-const [cancelButton, saveButton] = popover
-  ? Array.from(popover.querySelectorAll<IButtonComponent>('forge-toolbar[slot="footer"] forge-button'))
-  : [];
+const [cancelButton, saveButton] = popover ? Array.from(popover.querySelectorAll<ButtonComponent>('forge-toolbar[slot="footer"] forge-button')) : [];
 
 function handleInput(): void {
   if (saveButton) {
