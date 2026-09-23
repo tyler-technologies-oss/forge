@@ -1,0 +1,18 @@
+import{u as n,j as o,M as s,T as p,C as i}from"./blocks-fUy4QAFv.js";import{C as m}from"./CustomArgTypes-CagqRkLp.js";import{C as a}from"./CssOnlyInformation-BCHmRpxZ.js";import{D as c,a as d,C as l}from"./Drawer.stories-DPYSNRMN.js";import"./preload-helper-PPVm8Dsz.js";import"./index-CtUy9-VI.js";import"./iframe-DhPPATOI.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-BUEgyQuR.js";import"./icon-DaCKLlYs.js";import"./service-adapter-gy1PbA1l.js";import"./property-Dg1Vmfps.js";import"./base-lit-element-HaqO9pkv.js";import"./directive-CwRn8Fwj.js";import"./constants-BPFI0b36.js";import"./feature-detection-Q4q-Y4Ic.js";import"./ref-BhDBbNSW.js";import"./drawer-lU6k92RL.js";import"./base-component-RfQ5fKAq.js";import"./base-drawer-BL5lye2C.js";import"./dom-utils-Dwl6Rho5.js";import"./event-utils-zQ4FLDwK.js";import"./base-adapter-CdkfKU0P.js";import"./utils-DrKqfkBZ.js";import"./list-BQeID-EI.js";import"./list-item-Czcdb5bP.js";import"./state-layer-D75fz-rw.js";import"./focus-indicator-Cy6URCXv.js";import"./with-element-internals-CFSngiIf.js";import"./a11y-utils-CbIWIoQU.js";import"./toolbar-7MtW3mBN.js";import"./class-map-CEQgffN4.js";import"./scaffold-BVJBr1z1.js";import"./card-xZjk_lrn.js";import"./app-bar-menu-button-DD6-mDnN.js";import"./icon-button-C2v-Sinx.js";import"./base-button-DXDc4OJ8.js";import"./state-Co1I3z7K.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./icon-button-constants-CAk_t8Bl.js";import"./tooltip-BJ-I3FD9.js";import"./overlay-DnA59UKB.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./with-longpress-listener-D8NLSSJF.js";import"./dismissible-stack-Hc6LlN2C.js";import"./app-bar-profile-button-kCSUMpdG.js";import"./badge-C-_a_oin.js";import"./menu-BDuuGK0D.js";import"./list-dropdown-aware-core-DFEHM-H2.js";import"./list-dropdown-D_9KJkm_.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-BGu4ylYb.js";import"./popover-B6Lyp91L.js";import"./skeleton-D0Kw-TGm.js";import"./a11y-BxM9_46k.js";import"./base-component-delegate-DwAXToO-.js";import"./avatar-Db8N8ihi.js";import"./style-map-CcP_kdqL.js";import"./avatar-constants-CMJV38kh.js";import"./button-D5tK2bf-.js";import"./button-constants-G4LMDyUn.js";function e(t){const r={code:"code",h2:"h2",li:"li",p:"p",strong:"strong",ul:"ul",...n(),...t.components};return o.jsxs(o.Fragment,{children:[o.jsx(s,{of:c}),`
+`,o.jsx(p,{}),`
+`,o.jsx(r.p,{children:"Drawers are used to display content that is not a primary focus of the page. They can be used for navigation, settings, or other secondary content."}),`
+`,o.jsx(r.p,{children:"There are two types of drawers:"}),`
+`,o.jsxs(r.ul,{children:[`
+`,o.jsxs(r.li,{children:[o.jsx(r.strong,{children:"dismissible:"})," can be hidden by the user via a button provided by the developer"]}),`
+`,o.jsxs(r.li,{children:[o.jsx(r.strong,{children:"permanent:"})," always visible"]}),`
+`]}),`
+`,o.jsx(i,{of:d}),`
+`,o.jsx(r.h2,{id:"api",children:"API"}),`
+`,o.jsx(m,{}),`
+`,o.jsx(r.h2,{id:"accessibility",children:"Accessibility"}),`
+`,o.jsxs(r.p,{children:["The drawer component does ",o.jsx(r.strong,{children:"not"})," provide any semantics by default. Developers should provide their own ",o.jsx(r.code,{children:"<aside>"}),` for navigation,
+or various ARIA roles in other scenarios.`]}),`
+`,o.jsx(r.h2,{id:"css-only",children:"CSS-Only"}),`
+`,o.jsx(r.p,{children:"The drawer component is also available as a CSS-only component without the need for JavaScript."}),`
+`,o.jsx(i,{of:l}),`
+`,o.jsx(a,{})]})}function wo(t={}){const{wrapper:r}={...n(),...t.components};return r?o.jsx(r,{...t,children:o.jsx(e,{...t})}):e(t)}export{wo as default};
