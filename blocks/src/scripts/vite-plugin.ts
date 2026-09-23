@@ -42,12 +42,17 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
     configureServer(server: ViteDevServer) {
       server.watcher.add(partialsPath);
       server.watcher.add(indexPath);
+      server.watcher.add(layoutPath);
+      server.watcher.add(blocksPath);
       server.watcher.on('change', (filePath: string): void => {
         if (filePath.includes('partials') && filePath.endsWith('.hbs')) {
           partialRegistry.load();
           server.ws.send({ type: 'full-reload' });
+          return;
         }
-        if (filePath === indexPath) {
+        // Reload on any block source file (html/ts/css) or the shared layout — resolved-path
+        // comparison, not a raw string match, so it holds up under symlinked workspace mounts.
+        if (filePath === indexPath || filePath === layoutPath || path.resolve(filePath).startsWith(resolvedBlocksPath)) {
           server.ws.send({ type: 'full-reload' });
         }
       });
