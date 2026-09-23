@@ -1,5 +1,7 @@
-import { expect, fixture, html } from '@open-wc/testing';
-import { sendKeys } from '@web/test-runner-commands';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../testing/fixture.js';
+import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
 import type { RichTextContextComponent } from '../rich-text-context.js';
 import type { RichTextContentComponent } from '../rich-text-content.js';
@@ -18,143 +20,182 @@ async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextConte
 
 describe('RTE Content Validation', () => {
   it('should contain shadow root', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.shadowRoot).not.to.be.null;
+    expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should have maxLength property with default value of 0', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.maxLength).to.equal(0);
+    expect(el.maxLength).toBe(0);
   });
 
   it('should set maxLength property', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor max-length="100">
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor max-length="100">
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.maxLength).to.equal(100);
+    expect(el.maxLength).toBe(100);
   });
 
   it('should have showCharacterCount property with default value of false', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.showCharacterCount).to.be.false;
+    expect(el.showCharacterCount).toBe(false);
   });
 
   it('should set showCharacterCount property', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor show-character-count>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor show-character-count>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.showCharacterCount).to.be.true;
+    expect(el.showCharacterCount).toBe(true);
   });
 
   it('should have showWordCount property with default value of false', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.showWordCount).to.be.false;
+    expect(el.showWordCount).toBe(false);
   });
 
   it('should set showWordCount property', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor show-word-count>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor show-word-count>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.showWordCount).to.be.true;
+    expect(el.showWordCount).toBe(true);
   });
 
   it('should have errorMessage property with default empty string', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor>
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor>
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.errorMessage).to.equal('');
+    expect(el.errorMessage).toBe('');
   });
 
   it('should set errorMessage property', async () => {
-    const el = await fixture<RichTextEditorComponent>(html`
-      <forge-rich-text-editor error-message="Custom error">
-        <forge-rte-bold></forge-rte-bold>
-      </forge-rich-text-editor>
-    `);
+    const el = await renderFixture<RichTextEditorComponent>(
+      html`
+        <forge-rich-text-editor error-message="Custom error">
+          <forge-rte-bold></forge-rte-bold>
+        </forge-rich-text-editor>
+      `,
+      'forge-rich-text-editor'
+    );
 
-    expect(el.errorMessage).to.equal('Custom error');
+    expect(el.errorMessage).toBe('Custom error');
   });
 
   describe('Character Count Display', () => {
     it('should not display character count by default', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).to.be.null;
+      expect(countsEl).toBeNull();
     });
 
     it('should display character count when enabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).not.to.be.null;
-      expect(countsEl?.textContent).to.include('0 characters');
+      expect(countsEl).not.toBeNull();
+      expect(countsEl?.textContent).toContain('0 characters');
     });
 
     it('should display character count with max length', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count max-length="100">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count max-length="100">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).not.to.be.null;
-      expect(countsEl?.textContent).to.include('0 / 100 characters');
+      expect(countsEl).not.toBeNull();
+      expect(countsEl?.textContent).toContain('0 / 100 characters');
     });
 
     it('should update character count when typing', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -162,48 +203,57 @@ describe('RTE Content Validation', () => {
       const editorEl = content?.shadowRoot?.querySelector('.ProseMirror') as HTMLElement;
       editorEl?.focus();
 
-      await sendKeys({ type: 'Hello world' });
+      await userEvent.keyboard('Hello world');
       await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl?.textContent).to.include('11 characters');
+      expect(countsEl?.textContent).toContain('11 characters');
     });
   });
 
   describe('Word Count Display', () => {
     it('should not display word count by default', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).to.be.null;
+      expect(countsEl).toBeNull();
     });
 
     it('should display word count when enabled', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-word-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-word-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).not.to.be.null;
-      expect(countsEl?.textContent).to.include('0 words');
+      expect(countsEl).not.toBeNull();
+      expect(countsEl?.textContent).toContain('0 words');
     });
 
     it('should update word count when typing', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-word-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-word-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -211,37 +261,43 @@ describe('RTE Content Validation', () => {
       const editorEl = content?.shadowRoot?.querySelector('.ProseMirror') as HTMLElement;
       editorEl?.focus();
 
-      await sendKeys({ type: 'Hello world test' });
+      await userEvent.keyboard('Hello world test');
       await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl?.textContent).to.include('3 words');
+      expect(countsEl?.textContent).toContain('3 words');
     });
 
     it('should display both character and word count', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count show-word-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count show-word-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl).not.to.be.null;
-      expect(countsEl?.textContent).to.include('0 characters');
-      expect(countsEl?.textContent).to.include('0 words');
-      expect(countsEl?.textContent).to.include('•');
+      expect(countsEl).not.toBeNull();
+      expect(countsEl?.textContent).toContain('0 characters');
+      expect(countsEl?.textContent).toContain('0 words');
+      expect(countsEl?.textContent).toContain('•');
     });
   });
 
   describe('Max Length Validation', () => {
     it('should not show error when content is under max length', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor max-length="100">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor max-length="100">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -249,19 +305,22 @@ describe('RTE Content Validation', () => {
       const editorEl = content?.shadowRoot?.querySelector('.ProseMirror') as HTMLElement;
       editorEl?.focus();
 
-      await sendKeys({ type: 'Hello' });
+      await userEvent.keyboard('Hello');
       await waitForEditor(el);
 
       const errorEl = context?.shadowRoot?.querySelector('.editor-error');
-      expect(errorEl).to.be.null;
+      expect(errorEl).toBeNull();
     });
 
     it('should hard-enforce maxLength — keyboard input is blocked at the limit', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor max-length="5">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor max-length="5">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -270,20 +329,23 @@ describe('RTE Content Validation', () => {
       editorEl?.focus();
 
       // Attempt to type more than maxLength — TipTap's CharacterCount limit blocks the excess
-      await sendKeys({ type: 'Hello world' });
+      await userEvent.keyboard('Hello world');
       await waitForEditor(el);
 
       // Content must be capped at 5 characters; input beyond the limit is rejected
       const editorContent = editorEl?.textContent ?? '';
-      expect(editorContent.length).to.be.at.most(5);
+      expect(editorContent.length).toBeLessThanOrEqual(5);
     });
 
     it('should hard-enforce maxLength — no error UI shown because input is blocked before exceeding limit', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor max-length="5">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor max-length="5">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -291,31 +353,37 @@ describe('RTE Content Validation', () => {
       const editorEl = content?.shadowRoot?.querySelector('.ProseMirror') as HTMLElement;
       editorEl?.focus();
 
-      await sendKeys({ type: 'Hello world' });
+      await userEvent.keyboard('Hello world');
       await waitForEditor(el);
 
       // No error state — the limit is enforced by blocking input, not by displaying an error
       const errorEl = context?.shadowRoot?.querySelector('.editor-error');
-      expect(errorEl).to.be.null;
+      expect(errorEl).toBeNull();
     });
 
     it('should have errorMessage property available for consumer-driven validation', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor max-length="5" error-message="Too long!">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor max-length="5" error-message="Too long!">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       // errorMessage property should be readable regardless of editor state
-      expect(el.errorMessage).to.equal('Too long!');
+      expect(el.errorMessage).toBe('Too long!');
     });
 
     it('should not fire validation event on blocked keyboard input — content never exceeds limit', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor max-length="5">
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor max-length="5">
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
@@ -330,10 +398,10 @@ describe('RTE Content Validation', () => {
       editorEl?.focus();
 
       // Attempt to type past the limit — blocked by TipTap, so onUpdate never marks as invalid
-      await sendKeys({ type: 'Hello world' });
+      await userEvent.keyboard('Hello world');
       await waitForEditor(el);
 
-      expect(validationFired).to.be.false;
+      expect(validationFired).toBe(false);
     });
 
     it.skip('should fire validation event when content becomes valid again after overflow', async () => {
@@ -359,29 +427,35 @@ describe('RTE Content Validation', () => {
     });
 
     it('should have aria-live on character count', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl?.getAttribute('aria-live')).to.equal('polite');
+      expect(countsEl?.getAttribute('aria-live')).toBe('polite');
     });
 
     it('should have aria-atomic on character count', async () => {
-      const el = await fixture<RichTextEditorComponent>(html`
-        <forge-rich-text-editor show-character-count>
-          <forge-rte-bold></forge-rte-bold>
-        </forge-rich-text-editor>
-      `);
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`
+          <forge-rich-text-editor show-character-count>
+            <forge-rte-bold></forge-rte-bold>
+          </forge-rich-text-editor>
+        `,
+        'forge-rich-text-editor'
+      );
 
       const context = await waitForEditor(el);
 
       const countsEl = context?.shadowRoot?.querySelector('.editor-counts');
-      expect(countsEl?.getAttribute('aria-atomic')).to.equal('true');
+      expect(countsEl?.getAttribute('aria-atomic')).toBe('true');
     });
   });
 });

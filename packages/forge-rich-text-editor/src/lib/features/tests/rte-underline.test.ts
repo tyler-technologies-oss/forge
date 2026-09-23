@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteUnderlineComponent } from '../rte-underline.js';
@@ -11,33 +12,33 @@ describe('RTE Underline Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.underlineFeature.shadowRoot).to.be.ok;
+    expect(harness.underlineFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.underlineFeature.label).to.equal('Underline');
+    expect(harness.underlineFeature.label).toBe('Underline');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Add Underline' });
 
-    expect(harness.underlineFeature.label).to.equal('Add Underline');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Add Underline');
+    expect(harness.underlineFeature.label).toBe('Add Underline');
+    expect(harness.button().getAttribute('aria-label')).toBe('Add Underline');
   });
 
   it('should render underline button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure underline extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.underlineFeature.extensions).to.have.lengthOf(1);
-    expect(harness.underlineFeature.extensions[0].name).to.equal('underline');
+    expect(harness.underlineFeature.extensions).toHaveLength(1);
+    expect(harness.underlineFeature.extensions[0].name).toBe('underline');
   });
 
   it('should toggle underline when button is clicked', async () => {
@@ -54,19 +55,19 @@ describe('RTE Underline Feature', () => {
 
     // Verify underline was applied
     const output = editor.getHTML();
-    expect(output).to.include('<u>test text</u>');
+    expect(output).toContain('<u>test text</u>');
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when text is underlined', async () => {
@@ -82,13 +83,13 @@ describe('RTE Underline Feature', () => {
     editor.chain().focus().toggleUnderline().run();
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when text is not underlined', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should toggle off underline when clicking active button', async () => {
@@ -100,11 +101,11 @@ describe('RTE Underline Feature', () => {
     editor.commands.selectAll();
     editor.chain().focus().toggleUnderline().run();
     await harness.waitForUpdate();
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Click to toggle off
     await harness.clickButton();
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should apply underline to selected text', async () => {
@@ -120,8 +121,8 @@ describe('RTE Underline Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<u>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<u>');
+    expect(output).toContain('test text');
   });
 
   it('should remove underline from selected underlined text', async () => {
@@ -137,8 +138,8 @@ describe('RTE Underline Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<u>');
-    expect(output).to.include('underlined text');
+    expect(output).not.toContain('<u>');
+    expect(output).toContain('underlined text');
   });
 
   it.skip('should work with keyboard shortcut Ctrl+U', async () => {
@@ -156,7 +157,7 @@ describe('RTE Underline Feature', () => {
     const contentElement = contextElement.shadowRoot!.querySelector('forge-rich-text-content')!;
     const editorElement = contentElement.shadowRoot!.querySelector('.ProseMirror') as HTMLElement;
 
-    expect(editorElement).to.exist;
+    expect(editorElement).toBeTruthy();
 
     // Simulate Ctrl+U
     const event = new KeyboardEvent('keydown', {
@@ -168,7 +169,7 @@ describe('RTE Underline Feature', () => {
     editorElement.dispatchEvent(event);
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 });
 
@@ -188,11 +189,14 @@ interface UnderlineFixture {
 }
 
 async function createFixture(options: UnderlineFixtureOptions = {}): Promise<UnderlineFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-underline label=${options.label || 'Underline'}></forge-rte-underline>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-underline label=${options.label || 'Underline'}></forge-rte-underline>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const underlineFeature = el.querySelector('forge-rte-underline') as RteUnderlineComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -200,7 +204,7 @@ async function createFixture(options: UnderlineFixtureOptions = {}): Promise<Und
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: UnderlineFixture = {
     el,
     underlineFeature,
     button: () => underlineFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -210,7 +214,7 @@ async function createFixture(options: UnderlineFixtureOptions = {}): Promise<Und
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -223,4 +227,6 @@ async function createFixture(options: UnderlineFixtureOptions = {}): Promise<Und
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }

@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteUndoRedoComponent } from '../rte-undo-redo.js';
@@ -11,14 +12,14 @@ describe('RTE Undo Redo Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.undoRedoFeature.shadowRoot).to.be.ok;
+    expect(harness.undoRedoFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default labels', async () => {
     const harness = await createFixture();
 
-    expect(harness.undoRedoFeature.undoLabel).to.equal('Undo');
-    expect(harness.undoRedoFeature.redoLabel).to.equal('Redo');
+    expect(harness.undoRedoFeature.undoLabel).toBe('Undo');
+    expect(harness.undoRedoFeature.redoLabel).toBe('Redo');
   });
 
   it('should set custom labels via properties', async () => {
@@ -29,38 +30,38 @@ describe('RTE Undo Redo Feature', () => {
     harness.undoRedoFeature.redoLabel = 'Go Forward';
     await harness.waitForUpdate();
 
-    expect(harness.undoRedoFeature.undoLabel).to.equal('Go Back');
-    expect(harness.undoRedoFeature.redoLabel).to.equal('Go Forward');
-    expect(harness.undoButton().getAttribute('aria-label')).to.equal('Go Back');
-    expect(harness.redoButton().getAttribute('aria-label')).to.equal('Go Forward');
+    expect(harness.undoRedoFeature.undoLabel).toBe('Go Back');
+    expect(harness.undoRedoFeature.redoLabel).toBe('Go Forward');
+    expect(harness.undoButton().getAttribute('aria-label')).toBe('Go Back');
+    expect(harness.redoButton().getAttribute('aria-label')).toBe('Go Forward');
   });
 
   it('should render undo and redo buttons', async () => {
     const harness = await createFixture();
 
-    expect(harness.undoButton()).to.exist;
-    expect(harness.redoButton()).to.exist;
+    expect(harness.undoButton()).toBeTruthy();
+    expect(harness.redoButton()).toBeTruthy();
   });
 
   it('should configure undo redo extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.undoRedoFeature.extensions).to.have.lengthOf(1);
-    expect(harness.undoRedoFeature.extensions[0].name).to.equal('undoRedo');
+    expect(harness.undoRedoFeature.extensions).toHaveLength(1);
+    expect(harness.undoRedoFeature.extensions[0].name).toBe('undoRedo');
   });
 
   it('should disable undo button when no history', async () => {
     const harness = await createFixture();
 
     // Initially, no history to undo
-    expect(harness.undoButton().hasAttribute('disabled')).to.be.true;
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable redo button when no redo history', async () => {
     const harness = await createFixture();
 
     // Initially, no history to redo
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.true;
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
   });
 
   it('should enable undo button after making a change', async () => {
@@ -71,7 +72,7 @@ describe('RTE Undo Redo Feature', () => {
     editor.commands.setContent('<p>new content</p>');
     await harness.waitForUpdate();
 
-    expect(harness.undoButton().hasAttribute('disabled')).to.be.false;
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(false);
   });
 
   it('should undo content change when undo button clicked', async () => {
@@ -84,14 +85,14 @@ describe('RTE Undo Redo Feature', () => {
     // Make a change
     editor.commands.setContent('<p>modified content</p>');
     await harness.waitForUpdate();
-    expect(editor.getHTML()).to.include('modified content');
+    expect(editor.getHTML()).toContain('modified content');
 
     // Undo the change
     await harness.clickUndoButton();
 
     const output = editor.getHTML();
-    expect(output).to.equal(initialContent);
-    expect(output).not.to.include('modified content');
+    expect(output).toBe(initialContent);
+    expect(output).not.toContain('modified content');
   });
 
   it('should enable redo button after undoing', async () => {
@@ -106,7 +107,7 @@ describe('RTE Undo Redo Feature', () => {
     await harness.clickUndoButton();
 
     // Redo button should now be enabled
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.false;
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
   });
 
   it('should redo content change when redo button clicked', async () => {
@@ -119,13 +120,13 @@ describe('RTE Undo Redo Feature', () => {
 
     // Undo the change
     await harness.clickUndoButton();
-    expect(editor.getHTML()).not.to.include('redoable content');
+    expect(editor.getHTML()).not.toContain('redoable content');
 
     // Redo the change
     await harness.clickRedoButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('redoable content');
+    expect(output).toContain('redoable content');
   });
 
   it('should handle multiple undo operations', async () => {
@@ -145,21 +146,21 @@ describe('RTE Undo Redo Feature', () => {
     // Make third change
     editor.commands.insertContent(' and change 3');
     await harness.waitForUpdate();
-    expect(editor.getHTML()).to.include('change 3');
+    expect(editor.getHTML()).toContain('change 3');
 
     // Undo once - should undo last insertion
     await harness.clickUndoButton();
     const content1 = editor.getHTML();
-    expect(content1).not.to.include('change 3');
+    expect(content1).not.toContain('change 3');
 
     // Undo again
     await harness.clickUndoButton();
     const content2 = editor.getHTML();
-    expect(content2).not.to.include('change 2');
+    expect(content2).not.toContain('change 2');
 
     // Undo again - back to initial
     await harness.clickUndoButton();
-    expect(editor.getHTML()).to.equal(initialContent);
+    expect(editor.getHTML()).toBe(initialContent);
   });
 
   it('should handle multiple redo operations', async () => {
@@ -179,7 +180,7 @@ describe('RTE Undo Redo Feature', () => {
     await harness.waitForUpdate();
 
     const finalContent = editor.getHTML();
-    expect(finalContent).to.include('base one two three');
+    expect(finalContent).toContain('base one two three');
 
     // Undo all incremental changes
     await harness.clickUndoButton();
@@ -188,13 +189,13 @@ describe('RTE Undo Redo Feature', () => {
 
     // Redo changes one by one
     await harness.clickRedoButton();
-    expect(editor.getHTML()).to.include('one');
+    expect(editor.getHTML()).toContain('one');
 
     await harness.clickRedoButton();
-    expect(editor.getHTML()).to.include('two');
+    expect(editor.getHTML()).toContain('two');
 
     await harness.clickRedoButton();
-    expect(editor.getHTML()).to.include('three');
+    expect(editor.getHTML()).toContain('three');
   });
 
   it('should clear redo history after new change', async () => {
@@ -209,14 +210,14 @@ describe('RTE Undo Redo Feature', () => {
     await harness.clickUndoButton();
 
     // Redo should be available
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.false;
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
 
     // Make a new change
     editor.commands.setContent('<p>new branch</p>');
     await harness.waitForUpdate();
 
     // Redo should no longer be available
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.true;
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
   });
 
   it('should handle undo with content changes', async () => {
@@ -229,12 +230,12 @@ describe('RTE Undo Redo Feature', () => {
     // Make a change by inserting content
     editor.commands.insertContent('new content');
     await harness.waitForUpdate();
-    expect(editor.getHTML()).to.include('new content');
+    expect(editor.getHTML()).toContain('new content');
 
     // Undo the change
     await harness.clickUndoButton();
-    expect(editor.getHTML()).to.equal(startContent);
-    expect(editor.getHTML()).not.to.include('new content');
+    expect(editor.getHTML()).toBe(startContent);
+    expect(editor.getHTML()).not.toContain('new content');
   });
 
   it('should preserve text content during undo/redo', async () => {
@@ -245,18 +246,18 @@ describe('RTE Undo Redo Feature', () => {
     editor.commands.insertContent('test content');
     await harness.waitForUpdate();
     const withContent = editor.getHTML();
-    expect(withContent).to.include('test content');
+    expect(withContent).toContain('test content');
 
     // Undo
     await harness.clickUndoButton();
     const afterUndo = editor.getHTML();
-    expect(afterUndo).not.to.include('test content');
+    expect(afterUndo).not.toContain('test content');
 
     // Redo - should restore the content
     await harness.clickRedoButton();
     const afterRedo = editor.getHTML();
-    expect(afterRedo).to.include('test content');
-    expect(afterRedo).to.equal(withContent);
+    expect(afterRedo).toContain('test content');
+    expect(afterRedo).toBe(withContent);
   });
 
   it('should not enable undo button when editor is disabled', async () => {
@@ -266,16 +267,16 @@ describe('RTE Undo Redo Feature', () => {
     // The component has: disabled = isEditable() && !can().undo()
     // When disabled, isEditable() is false, so disabled attribute is false
     // This may be a bug in the component, but testing actual behavior
-    expect(harness.undoButton().hasAttribute('disabled')).to.be.false;
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.false;
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(false);
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
   });
 
   it('should not enable undo button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
     // When editor is readonly, same logic as disabled
-    expect(harness.undoButton().hasAttribute('disabled')).to.be.false;
-    expect(harness.redoButton().hasAttribute('disabled')).to.be.false;
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(false);
+    expect(harness.redoButton().hasAttribute('disabled')).toBe(false);
   });
 });
 
@@ -298,11 +299,14 @@ interface UndoRedoFixture {
 }
 
 async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<UndoRedoFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-undo-redo undo-label=${options.undoLabel || 'Undo'} redo-label=${options.redoLabel || 'Redo'}></forge-rte-undo-redo>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-undo-redo undo-label=${options.undoLabel || 'Undo'} redo-label=${options.redoLabel || 'Redo'}></forge-rte-undo-redo>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const undoRedoFeature = el.querySelector('forge-rte-undo-redo') as RteUndoRedoComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -312,7 +316,7 @@ async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<Undo
 
   const buttons = undoRedoFeature.shadowRoot!.querySelectorAll('forge-icon-button');
 
-  return {
+  const harness: UndoRedoFixture = {
     el,
     undoRedoFeature,
     undoButton: () => buttons[0],
@@ -327,7 +331,7 @@ async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<Undo
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -340,4 +344,6 @@ async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<Undo
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }

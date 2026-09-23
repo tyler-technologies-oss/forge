@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
+import { renderFixture } from '../../../testing/fixture.js';
+import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteOrderedListComponent } from '../rte-ordered-list.js';
@@ -11,34 +12,34 @@ describe('RTE Ordered List Feature', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
 
-    expect(harness.orderedListFeature.shadowRoot).to.be.ok;
+    expect(harness.orderedListFeature.shadowRoot).toBeTruthy();
   });
 
   it('should have expected default label', async () => {
     const harness = await createFixture();
 
-    expect(harness.orderedListFeature.label).to.equal('Ordered List');
+    expect(harness.orderedListFeature.label).toBe('Ordered List');
   });
 
   it('should set custom label', async () => {
     const harness = await createFixture({ label: 'Numbered List' });
 
-    expect(harness.orderedListFeature.label).to.equal('Numbered List');
-    expect(harness.button().getAttribute('aria-label')).to.equal('Numbered List');
+    expect(harness.orderedListFeature.label).toBe('Numbered List');
+    expect(harness.button().getAttribute('aria-label')).toBe('Numbered List');
   });
 
   it('should render ordered list button', async () => {
     const harness = await createFixture();
 
-    expect(harness.button()).to.exist;
+    expect(harness.button()).toBeTruthy();
   });
 
   it('should configure ordered list extension', async () => {
     const harness = await createFixture();
 
-    expect(harness.orderedListFeature.extensions).to.have.lengthOf(2);
-    expect(harness.orderedListFeature.extensions[0].name).to.equal('orderedList');
-    expect(harness.orderedListFeature.extensions[1].name).to.equal('listItem');
+    expect(harness.orderedListFeature.extensions).toHaveLength(2);
+    expect(harness.orderedListFeature.extensions[0].name).toBe('orderedList');
+    expect(harness.orderedListFeature.extensions[1].name).toBe('listItem');
   });
 
   it('should toggle ordered list when button is clicked', async () => {
@@ -55,21 +56,21 @@ describe('RTE Ordered List Feature', () => {
 
     // Verify ordered list was applied
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('<li>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('<li>');
+    expect(output).toContain('test text');
   });
 
   it('should disable button when editor is disabled', async () => {
     const harness = await createFixture({ disabled: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should disable button when editor is readonly', async () => {
     const harness = await createFixture({ readonly: true });
 
-    expect(harness.button().hasAttribute('disabled')).to.be.true;
+    expect(harness.button().hasAttribute('disabled')).toBe(true);
   });
 
   it('should show active state when cursor is in ordered list', async () => {
@@ -85,13 +86,13 @@ describe('RTE Ordered List Feature', () => {
     editor.chain().focus().toggleOrderedList().run();
     await harness.waitForUpdate();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
   });
 
   it('should not show active state when cursor is not in ordered list', async () => {
     const harness = await createFixture();
 
-    expect(harness.button().hasAttribute('pressed')).to.be.false;
+    expect(harness.button().hasAttribute('pressed')).toBe(false);
   });
 
   it('should toggle off ordered list when clicking active button', async () => {
@@ -105,15 +106,15 @@ describe('RTE Ordered List Feature', () => {
     await harness.waitForUpdate();
 
     // Verify button shows as active
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Toggle to remove ordered list
     await harness.clickButton();
 
     // Verify list was removed from HTML
     const output = editor.getHTML();
-    expect(output).not.to.include('<ol>');
-    expect(output).to.include('test');
+    expect(output).not.toContain('<ol>');
+    expect(output).toContain('test');
   });
 
   it('should apply ordered list to selected text', async () => {
@@ -129,9 +130,9 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('<li>');
-    expect(output).to.include('test text');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('<li>');
+    expect(output).toContain('test text');
   });
 
   it('should remove ordered list from selected list items', async () => {
@@ -145,15 +146,15 @@ describe('RTE Ordered List Feature', () => {
     await harness.waitForUpdate();
 
     // Verify button shows as active
-    expect(harness.button().hasAttribute('pressed')).to.be.true;
+    expect(harness.button().hasAttribute('pressed')).toBe(true);
 
     // Toggle to remove ordered list
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).not.to.include('<ol>');
-    expect(output).not.to.include('<li>');
-    expect(output).to.include('list item');
+    expect(output).not.toContain('<ol>');
+    expect(output).not.toContain('<li>');
+    expect(output).toContain('list item');
   });
 
   it.skip('should work with keyboard shortcut', async () => {
@@ -173,11 +174,11 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('<li>');
-    expect(output).to.include('paragraph text');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('<li>');
+    expect(output).toContain('paragraph text');
     // TipTap wraps list item content in paragraphs
-    expect(output).to.include('<li><p>paragraph text</p></li>');
+    expect(output).toContain('<li><p>paragraph text</p></li>');
   });
 
   it('should handle multiple list items', async () => {
@@ -193,13 +194,13 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('item one');
-    expect(output).to.include('item two');
-    expect(output).to.include('item three');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('item one');
+    expect(output).toContain('item two');
+    expect(output).toContain('item three');
     // Count list items
     const liMatches = output.match(/<li>/g);
-    expect(liMatches).to.have.lengthOf(3);
+    expect(liMatches).toHaveLength(3);
   });
 
   it.skip('should convert from bullet list to ordered list', async () => {
@@ -217,10 +218,10 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('<li>');
-    expect(output).to.include('bullet item');
-    expect(output).not.to.include('<ul>');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('<li>');
+    expect(output).toContain('bullet item');
+    expect(output).not.toContain('<ul>');
   });
 
   it.skip('should preserve text when converting from bullet list', async () => {
@@ -238,11 +239,11 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('first');
-    expect(output).to.include('second');
-    expect(output).to.include('third');
-    expect(output).not.to.include('<ul>');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('first');
+    expect(output).toContain('second');
+    expect(output).toContain('third');
+    expect(output).not.toContain('<ul>');
   });
 
   it('should handle empty paragraphs', async () => {
@@ -258,8 +259,8 @@ describe('RTE Ordered List Feature', () => {
     await harness.clickButton();
 
     const output = editor.getHTML();
-    expect(output).to.include('<ol>');
-    expect(output).to.include('<li>');
+    expect(output).toContain('<ol>');
+    expect(output).toContain('<li>');
   });
 });
 
@@ -279,11 +280,14 @@ interface OrderedListFixture {
 }
 
 async function createFixture(options: OrderedListFixtureOptions = {}): Promise<OrderedListFixture> {
-  const el = await fixture<RichTextEditorComponent>(html`
-    <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
-      <forge-rte-ordered-list label=${options.label || 'Ordered List'}></forge-rte-ordered-list>
-    </forge-rich-text-editor>
-  `);
+  const el = await renderFixture<RichTextEditorComponent>(
+    html`
+      <forge-rich-text-editor ?disabled=${options.disabled} ?readonly=${options.readonly}>
+        <forge-rte-ordered-list label=${options.label || 'Ordered List'}></forge-rte-ordered-list>
+      </forge-rich-text-editor>
+    `,
+    'forge-rich-text-editor'
+  );
 
   const orderedListFeature = el.querySelector('forge-rte-ordered-list') as RteOrderedListComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
@@ -291,7 +295,7 @@ async function createFixture(options: OrderedListFixtureOptions = {}): Promise<O
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  return {
+  const harness: OrderedListFixture = {
     el,
     orderedListFeature,
     button: () => orderedListFeature.shadowRoot!.querySelector('forge-rte-tool-button')!.shadowRoot!.querySelector('forge-icon-button')!,
@@ -301,7 +305,7 @@ async function createFixture(options: OrderedListFixtureOptions = {}): Promise<O
     },
     async getEditor(): Promise<Editor> {
       // Access the editor from the context component
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const context = (contextComponent as any).editorContext;
       return context.editor;
     },
@@ -314,4 +318,6 @@ async function createFixture(options: OrderedListFixtureOptions = {}): Promise<O
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   };
+
+  return harness;
 }
