@@ -16,7 +16,7 @@ export class IconButtonComponent {
   /** The forge-icon-button element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
-  /** Whether or not the icon button can be toggled. */
+  /** Gets/sets whether the icon button can be toggled. */
   @Input({ transform: booleanAttribute })
   public set toggle(value: IconButtonComponentCustomElement['toggle']) {
     this.zone.runOutsideAngular(() => {
@@ -27,7 +27,7 @@ export class IconButtonComponent {
     return this.nativeElement.toggle;
   }
 
-  /** Whether or not the toggle button is pressed. Only applies when `toggle` is `true`. */
+  /** Gets/sets whether the toggle button is pressed. Only applies when `toggle` is `true`. */
   @Input({ transform: booleanAttribute })
   public set pressed(value: IconButtonComponentCustomElement['pressed']) {
     this.zone.runOutsideAngular(() => {
@@ -49,18 +49,7 @@ export class IconButtonComponent {
     return this.nativeElement.on;
   }
 
-  /** The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`. */
-  @Input()
-  public set theme(value: IconButtonComponentCustomElement['theme']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.theme = value;
-    });
-  }
-  public get theme(): IconButtonComponentCustomElement['theme'] {
-    return this.nativeElement.theme;
-  }
-
-  /** The variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`. */
+  /** Gets/sets the variant of the button. Valid values are `text`, `outlined`, `filled`, and `raised`. */
   @Input()
   public set variant(value: IconButtonComponentCustomElement['variant']) {
     this.zone.runOutsideAngular(() => {
@@ -71,7 +60,18 @@ export class IconButtonComponent {
     return this.nativeElement.variant;
   }
 
-  /** The shape of the button. Valid values are `circular` and `squared`. */
+  /** Gets/sets the theme of the button. Valid values are `text`, `outlined`, `filled`, and `raised`. */
+  @Input()
+  public set theme(value: IconButtonComponentCustomElement['theme']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.theme = value;
+    });
+  }
+  public get theme(): IconButtonComponentCustomElement['theme'] {
+    return this.nativeElement.theme;
+  }
+
+  /** Gets/sets the shape of the button. Valid values are `circular` and `squared`. */
   @Input()
   public set shape(value: IconButtonComponentCustomElement['shape']) {
     this.zone.runOutsideAngular(() => {
@@ -82,7 +82,7 @@ export class IconButtonComponent {
     return this.nativeElement.shape;
   }
 
-  /** The density of the button. Valid values are `small`, `medium`, and `large`. */
+  /** Gets/sets the density of the button. Valid values are `small`, `medium`, and `large`. */
   @Input()
   public set density(value: IconButtonComponentCustomElement['density']) {
     this.zone.runOutsideAngular(() => {
@@ -93,29 +93,7 @@ export class IconButtonComponent {
     return this.nativeElement.density;
   }
 
-  /** The name of the button. */
-  @Input()
-  public set name(value: IconButtonComponentCustomElement['name']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.name = value;
-    });
-  }
-  public get name(): IconButtonComponentCustomElement['name'] {
-    return this.nativeElement.name;
-  }
-
-  /** The value of the button. */
-  @Input()
-  public set value(value: IconButtonComponentCustomElement['value']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.value = value;
-    });
-  }
-  public get value(): IconButtonComponentCustomElement['value'] {
-    return this.nativeElement.value;
-  }
-
-  /** Sets the type of the button. Possible values are `button`, `submit`, and `reset`. */
+  /** Gets/sets the type of button. */
   @Input()
   public set type(value: IconButtonComponentCustomElement['type']) {
     this.zone.runOutsideAngular(() => {
@@ -126,7 +104,7 @@ export class IconButtonComponent {
     return this.nativeElement.type;
   }
 
-  /** Disables the button. */
+  /** Gets/sets whether the button is disabled. */
   @Input({ transform: booleanAttribute })
   public set disabled(value: IconButtonComponentCustomElement['disabled']) {
     this.zone.runOutsideAngular(() => {
@@ -137,18 +115,7 @@ export class IconButtonComponent {
     return this.nativeElement.disabled;
   }
 
-  /** Shows a popover icon on the button. */
-  @Input({ transform: booleanAttribute })
-  public set popoverIcon(value: IconButtonComponentCustomElement['popoverIcon']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.popoverIcon = value;
-    });
-  }
-  public get popoverIcon(): IconButtonComponentCustomElement['popoverIcon'] {
-    return this.nativeElement.popoverIcon;
-  }
-
-  /** Sets the density of the button. */
+  /** Gets/sets whether the button is dense. */
   @Input({ transform: booleanAttribute })
   public set dense(value: IconButtonComponentCustomElement['dense']) {
     this.zone.runOutsideAngular(() => {
@@ -159,12 +126,76 @@ export class IconButtonComponent {
     return this.nativeElement.dense;
   }
 
-  /** Clicks the button. */
+  /** Gets/sets whether to show a popover icon. */
+  @Input({ transform: booleanAttribute })
+  public set popoverIcon(value: IconButtonComponentCustomElement['popoverIcon']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.popoverIcon = value;
+    });
+  }
+  public get popoverIcon(): IconButtonComponentCustomElement['popoverIcon'] {
+    return this.nativeElement.popoverIcon;
+  }
+
+  /** Gets/sets the button name for form association. */
+  @Input()
+  public set name(value: IconButtonComponentCustomElement['name']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.name = value;
+    });
+  }
+  public get name(): IconButtonComponentCustomElement['name'] {
+    return this.nativeElement.name;
+  }
+
+  /** Gets/sets the button value for form submission. */
+  @Input()
+  public set value(value: IconButtonComponentCustomElement['value']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.value = value;
+    });
+  }
+  public get value(): IconButtonComponentCustomElement['value'] {
+    return this.nativeElement.value;
+  }
+
+  /** Indicates to the targeted element which action to take. */
+  @Input()
+  public set command(value: IconButtonComponentCustomElement['command']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.command = value;
+    });
+  }
+  public get command(): IconButtonComponentCustomElement['command'] {
+    return this.nativeElement.command;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandFor(value: IconButtonComponentCustomElement['commandFor']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandFor = value;
+    });
+  }
+  public get commandFor(): IconButtonComponentCustomElement['commandFor'] {
+    return this.nativeElement.commandFor;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandForElement(value: IconButtonComponentCustomElement['commandForElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandForElement = value;
+    });
+  }
+  public get commandForElement(): IconButtonComponentCustomElement['commandForElement'] {
+    return this.nativeElement.commandForElement;
+  }
+
   public click(...args: Parameters<IconButtonComponentCustomElement['click']>): ReturnType<IconButtonComponentCustomElement['click']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.click(...args));
   }
 
-  /** Focuses the button. */
   public focus(...args: Parameters<IconButtonComponentCustomElement['focus']>): ReturnType<IconButtonComponentCustomElement['focus']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.focus(...args));
   }

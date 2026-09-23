@@ -38,6 +38,7 @@ export class SelectComponent {
     return this.nativeElement.placeholder;
   }
 
+  /** Controls whether the select is readonly. */
   @Input({ transform: booleanAttribute })
   public set readonly(value: SelectComponentCustomElement['readonly']) {
     this.zone.runOutsideAngular(() => {

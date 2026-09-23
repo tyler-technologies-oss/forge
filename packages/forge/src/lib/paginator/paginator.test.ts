@@ -6,7 +6,7 @@ import type { IPaginatorComponent } from './paginator.js';
 import type { IPaginatorChangeEventData } from './paginator-constants.js';
 import { PAGINATOR_CONSTANTS } from './paginator-constants.js';
 import type { ISelectComponent } from '../select/select/select.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
+import type { IconButtonComponent } from '../icon-button/index.js';
 import { LiveAnnouncer } from '@tylertech/forge-core';
 
 import './paginator.js';
@@ -354,7 +354,7 @@ describe('Paginator', () => {
       expect(harness.rangeLabelText).toBe('1-20 of 100');
     });
 
-    it('should hide page size select if no options', async () => {
+    it('should remove page size select from DOM when set to an empty array', async () => {
       const harness = await createFixture();
 
       expect(harness.pageSizeSelect).toBeTruthy();
@@ -362,7 +362,43 @@ describe('Paginator', () => {
       harness.paginatorElement.pageSizeOptions = [];
       await harness.paginatorElement.updateComplete;
 
-      expect(harness.pageSizeSelect.hidden).toBe(true);
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should remove page size select from DOM when set to null', async () => {
+      const harness = await createFixture();
+
+      expect(harness.pageSizeSelect).toBeTruthy();
+
+      harness.paginatorElement.pageSizeOptions = null as unknown as number[];
+      await harness.paginatorElement.updateComplete;
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should remove page size select from DOM when set to undefined', async () => {
+      const harness = await createFixture();
+
+      expect(harness.pageSizeSelect).toBeTruthy();
+
+      harness.paginatorElement.pageSizeOptions = undefined as unknown as number[];
+      await harness.paginatorElement.updateComplete;
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should not render page size select on initialization when pageSizeOptions is an empty array', async () => {
+      const harness = await createFixture({ pageSizeOptions: [] });
+
+      expect(harness.pageSizeSelect).toBeNull();
+    });
+
+    it('should allow a pageSize that is not included in pageSizeOptions on initialization', async () => {
+      const harness = await createFixture({ pageSize: 40, pageSizeOptions: [10, 20, 30] });
+
+      expect(harness.paginatorElement.pageSize).toBe(40);
+      expect(harness.paginatorElement.pageSizeOptions).toEqual([10, 20, 30]);
+      expect(harness.pageSizeSelect.value).toBe('40');
     });
   });
 
@@ -902,20 +938,20 @@ class PaginatorHarness {
     return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PAGE_SIZE_SELECT) as ISelectComponent;
   }
 
-  public get firstButton(): IIconButtonComponent | null {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IIconButtonComponent;
+  public get firstButton(): IconButtonComponent | null {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.FIRST_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get previousButton(): IIconButtonComponent {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IIconButtonComponent;
+  public get previousButton(): IconButtonComponent {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.PREVIOUS_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get nextButton(): IIconButtonComponent {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IIconButtonComponent;
+  public get nextButton(): IconButtonComponent {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.NEXT_PAGE_BUTTON) as IconButtonComponent;
   }
 
-  public get lastButton(): IIconButtonComponent | null {
-    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IIconButtonComponent;
+  public get lastButton(): IconButtonComponent | null {
+    return getShadowElement(this.paginatorElement, PAGINATOR_CONSTANTS.selectors.LAST_PAGE_BUTTON) as IconButtonComponent;
   }
 }
 
@@ -923,6 +959,7 @@ interface IPaginatorFixtureConfig {
   total?: number;
   pageIndex?: number;
   pageSize?: number;
+  pageSizeOptions?: number[];
   offset?: number;
   label?: string;
   firstLast?: boolean;
@@ -935,6 +972,7 @@ async function createFixture({
   total,
   pageIndex,
   pageSize,
+  pageSizeOptions,
   offset,
   label,
   firstLast,
@@ -947,6 +985,7 @@ async function createFixture({
       total=${total ?? nothing}
       page-index=${pageIndex ?? nothing}
       page-size=${pageSize ?? nothing}
+      .pageSizeOptions=${pageSizeOptions ?? nothing}
       offset=${offset ?? nothing}
       label=${label ?? nothing}
       ?first-last=${firstLast}
@@ -956,5 +995,6 @@ async function createFixture({
   `);
 
   const el = screen.container.querySelector('forge-paginator') as IPaginatorComponent;
+  await el.updateComplete;
   return new PaginatorHarness(el);
 }

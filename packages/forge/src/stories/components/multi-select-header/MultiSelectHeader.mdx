@@ -1,0 +1,47 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as MultiSelectHeaderStories from './MultiSelectHeader.stories';
+
+<Meta of={MultiSelectHeaderStories} />
+
+<Title />
+
+The Multi Select Header provides a consistent toolbar interface for displaying selection state and actions when multiple items are selected in data tables, lists, or grids. It builds upon the `<forge-toolbar>` component with a distinctive light blue background to visually indicate an active selection state.
+
+<Canvas of={MultiSelectHeaderStories.Demo} />
+
+## Usage
+
+The Multi Select Header is designed to appear when users have selected one or more items from a collection. It displays custom text (typically showing selection count) and provides space for relevant actions like delete, export, or bulk operations.
+
+### Basic Implementation
+
+<Canvas of={MultiSelectHeaderStories.BasicImplementation} />
+
+### With Custom Text
+
+<Canvas of={MultiSelectHeaderStories.WithCustomText} />
+
+### With Select All Button
+
+<Canvas of={MultiSelectHeaderStories.WithSelectAllButton} />
+
+## When to Use
+
+Use the Multi Select Header when:
+
+- Users can select multiple items from a data table, list, or grid
+- You need to provide bulk actions for selected items
+- You want to clearly communicate selection state to users
+- You need a consistent selection interface across your application
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Ensure action buttons have descriptive `aria-label` attributes
+- The header text provides clear feedback to screen readers
+- Action buttons should be keyboard accessible
+- Consider announcing selection changes to screen readers in your application logic

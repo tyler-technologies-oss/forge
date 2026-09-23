@@ -1,7 +1,7 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 
@@ -61,7 +61,6 @@ export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
  * @cssclass forge-toolbar - Apply to the root element _(required)_.
  * @cssclass forge-toolbar--inverted - Inverts the toolbar so the divider is at the top.
  */
-@customElement(TOOLBAR_TAG_NAME)
 export class ToolbarComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -100,6 +99,8 @@ export class ToolbarComponent extends BaseLitElement {
     </div>`;
   }
 }
+
+tryDefine(TOOLBAR_TAG_NAME, ToolbarComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

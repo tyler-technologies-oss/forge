@@ -1,0 +1,103 @@
+name: Post Release to Teams
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to replay (e.g. v1.2.3)"
+        required: true
+        type: string
+      webhook_url:
+        description: "Override Teams webhook URL for testing (leave blank to use the TEAMS_WEBHOOK_URL secret)"
+        required: false
+        type: string
+
+concurrency: 1
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get release info
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RELEASE_JSON=$(gh api "repos/${{ github.repository }}/releases/tags/${{ inputs.tag }}")
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+            echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
+            echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build Teams message JSON
+        id: message
+        env:
+          RELEASE_BODY: ${{ steps.release.outputs.body }}
+        run: |
+          SECTIONS=$(jq -n \
+            --arg body "$RELEASE_BODY" \
+            '[
+              {
+                text: $body
+              }
+            ]')
+
+          # Save to output
+          echo "sections<<EOF" >> $GITHUB_OUTPUT
+          echo "$SECTIONS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post to Microsoft Teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ inputs.webhook_url || secrets.TEAMS_WEBHOOK_URL }}
+          RELEASE_NAME: ${{ steps.release.outputs.name }}
+          RELEASE_URL: ${{ steps.release.outputs.url }}
+          REPO_URL: ${{ github.event.repository.html_url }}
+          SECTIONS_JSON: ${{ steps.message.outputs.sections }}
+        run: |
+          PAYLOAD=$(jq -n \
+            --arg name "$RELEASE_NAME" \
+            --arg releaseUrl "$RELEASE_URL" \
+            --arg repoUrl "$REPO_URL" \
+            --argjson sections "$SECTIONS_JSON" \
+            '{
+              "@type": "MessageCard",
+              "@context": "https://schema.org/extensions",
+              summary: "New Release: \($name)",
+              themeColor: "0078D7",
+              title: "🚀 New Release: \($name)",
+              sections: $sections,
+              potentialAction: [
+                {
+                  "@type": "OpenUri",
+                  name: "View Release",
+                  targets: [{ os: "default", uri: $releaseUrl }]
+                },
+                {
+                  "@type": "OpenUri",
+                  name: "View Repository",
+                  targets: [{ os: "default", uri: $repoUrl }]
+                }
+              ]
+            }')
+
+          curl -H 'Content-Type: application/json' -d "$PAYLOAD" "$TEAMS_WEBHOOK_URL"

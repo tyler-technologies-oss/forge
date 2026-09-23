@@ -4,15 +4,15 @@ import {
   CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
   CUSTOM_ELEMENT_NAME_PROPERTY,
   isArray,
-  LiveAnnouncer
+  LiveAnnouncer,
+  tryDefine
 } from '@tylertech/forge-core';
 import { tylIconFirstPage, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconLastPage } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { removeEmptyAttribute } from '../core/utils/lit-utils.js';
 import { IconButtonComponent } from '../icon-button/icon-button.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
 import { IconRegistry } from '../icon/icon-registry.js';
 import type { ISelectComponent, ISelectOption } from '../select/index.js';
 import { SelectComponent } from '../select/select/index.js';
@@ -79,7 +79,6 @@ export interface IPaginatorComponent extends BaseLitElement {
  * @slot previous-page-tooltip - Overrides the default tooltip for the previous page button.
  * @slot next-page-tooltip - Overrides the default tooltip for the next page button.
  */
-@customElement(PAGINATOR_CONSTANTS.elementName)
 export class PaginatorComponent extends BaseLitElement implements IPaginatorComponent {
   public static styles = unsafeCSS(styles);
 
@@ -240,10 +239,10 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
     return this.#rangeLabelCallback;
   }
 
-  @query('.first-page') private _firstPageButton?: IIconButtonComponent;
-  @query('.previous-page', true) private _previousPageButton!: IIconButtonComponent;
-  @query('.next-page', true) private _nextPageButton!: IIconButtonComponent;
-  @query('.last-page') private _lastPageButton?: IIconButtonComponent;
+  @query('.first-page') private _firstPageButton?: IconButtonComponent;
+  @query('.previous-page', true) private _previousPageButton!: IconButtonComponent;
+  @query('.next-page', true) private _nextPageButton!: IconButtonComponent;
+  @query('.last-page') private _lastPageButton?: IconButtonComponent;
   @query('.page-size-options', true) private _pageSizeSelect!: ISelectComponent;
 
   public override connectedCallback(): void {
@@ -345,18 +344,7 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
           <div class="label" part="label" id="label">
             <slot name="label">${this.label}</slot>
           </div>
-
-          <forge-select
-            class="page-size-options"
-            aria-labelledby="label"
-            label-position="none"
-            density="extra-small"
-            part="page-size-options"
-            ?hidden=${!this.pageSizeOptions.length}
-            ?disabled=${this.disabled}
-            .value=${String(this.pageSize)}
-            @change=${this.#handlePageSizeChange}></forge-select>
-
+          ${this.#renderPageSizeSelect()}
           <div class="range-label" part="range-label">
             <slot name="range-label">${this.#rangeLabel}</slot>
           </div>
@@ -400,6 +388,23 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
           ${this.firstLast ? this.#renderLastPageButton() : nothing}
         </div>
       </div>
+    `;
+  }
+
+  #renderPageSizeSelect(): TemplateResult | typeof nothing {
+    if (!isArray(this.pageSizeOptions) || !this.pageSizeOptions.length) {
+      return nothing;
+    }
+    return html`
+      <forge-select
+        class="page-size-options"
+        aria-labelledby="label"
+        label-position="none"
+        density="extra-small"
+        part="page-size-options"
+        ?disabled=${this.disabled}
+        .value=${String(this.pageSize)}
+        @change=${this.#handlePageSizeChange}></forge-select>
     `;
   }
 
@@ -542,12 +547,9 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
       .map(o => ({ label: `${o}`, value: `${o}` }))
       .sort((a, b) => coerceNumber(a.value) - coerceNumber(b.value));
     this._pageSizeSelect.options = options;
-    if (!options.find(o => coerceNumber(o.value) === this.pageSize)) {
-      this.pageSize = coerceNumber(options[0].value);
-    }
   }
 
-  #tryFocus(elements: Array<IIconButtonComponent | ISelectComponent | undefined>, options?: FocusOptions): void {
+  #tryFocus(elements: Array<IconButtonComponent | ISelectComponent | undefined>, options?: FocusOptions): void {
     const preventScroll = typeof options?.preventScroll === 'boolean' ? options.preventScroll : true;
     for (const el of elements) {
       if (el && el.isConnected && !el.disabled && el.style.display !== 'none') {
@@ -557,6 +559,8 @@ export class PaginatorComponent extends BaseLitElement implements IPaginatorComp
     }
   }
 }
+
+tryDefine(PAGINATOR_CONSTANTS.elementName, PaginatorComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
