@@ -14,6 +14,22 @@ catalog:
   '@tylertech-eslint/eslint-plugin': ^4.0.0
   '@tylertech/stylelint-rules': ^5.1.2
   '@tylertech/tyler-icons': ^2.1.0
+  '@tiptap/core': ^3.27.1
+  '@tiptap/extension-bold': ^3.27.1
+  '@tiptap/extension-character-count': ^3.27.1
+  '@tiptap/extension-code': ^3.27.1
+  '@tiptap/extension-document': ^3.27.1
+  '@tiptap/extension-heading': ^3.27.1
+  '@tiptap/extension-italic': ^3.27.1
+  '@tiptap/extension-link': ^3.27.1
+  '@tiptap/extension-list': ^3.27.1
+  '@tiptap/extension-paragraph': ^3.27.1
+  '@tiptap/extension-strike': ^3.27.1
+  '@tiptap/extension-text': ^3.27.1
+  '@tiptap/extension-text-align': ^3.27.1
+  '@tiptap/extension-underline': ^3.27.1
+  '@tiptap/extensions': ^3.27.1
+  '@tiptap/pm': ^3.27.1
   '@types/node': ^25.5.0
   '@vueless/storybook-dark-mode': ^10.0.7
   eslint: ^9.39.4
