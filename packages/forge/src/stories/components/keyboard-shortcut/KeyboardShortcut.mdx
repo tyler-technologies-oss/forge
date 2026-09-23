@@ -1,4 +1,4 @@
-import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta, Title } from '@storybook/addon-docs/blocks';
 import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as KeyboardShortcutStories from './KeyboardShortcut.stories';
 
@@ -6,49 +6,189 @@ import * as KeyboardShortcutStories from './KeyboardShortcut.stories';
 
 <Title />
 
-The keyboard shortcut component provides a simple way to attach keyboard driven functionality to an
-element via the DOM. By default placing `<forge-keyboard-shortcut>` as a sibling after an element
-enables the shortcut when focus is within the element.
-
-The shortcut can also be enabled on the entire document body with the `global` attribute or other
-elements with the `target` attribute which accepts a CSS selector.
+The keyboard shortcut component provides a declarative way to bind keyboard shortcuts to elements.
+Place `<forge-keyboard-shortcut>` as a sibling after an element to listen for key combinations
+within the nearest scope.
 
 <Canvas of={KeyboardShortcutStories.Demo} />
 
-### Targeting a different host element
+## Anchors
 
-Keyboard shortcut can also target a specific element using the `target` attribute:
+The **anchor** is the element that the shortcut is logically associated with. It receives
+`aria-keyshortcuts` automatically and is checked for disabled state.
+
+By default the anchor is the previous sibling element. You can also target a specific element using
+the `anchor` attribute with an element id:
 
 ```html
-<forge-button type="raised" id="shortcut-target">
-  <button type="button">Button</button>
-</forge-button>
-<p>Some other element</p>
-<forge-keyboard-shortcut id="shortcut" key="shift+a" target="#shortcut-target"></forge-keyboard-shortcut>
+<button id="save-btn">Save</button>
+<forge-keyboard-shortcut key="Control+s" anchor="save-btn"></forge-keyboard-shortcut>
 ```
 
-> **Note:** the `target` attribute must be a valid CSS selector.
+You can also set `anchorElement` programmatically to bypass the anchor resolution logic.
 
-### Targeting the document body
+You are still responsible for ensuring that any action to perform (e.g. clicking the button) is executed 
+when the shortcut is triggered.
 
-Additionally, keyboard shortcut can be set to work across the whole page using the `global` attribute:
+## Scopes
+
+A **scope** determines where the shortcut listens for keyboard events. The closest ancestor with the
+`forge-keyboard-shortcut-scope` attribute becomes the scope element. When the same key is bound in
+nested scopes, only the innermost scope that contains the event target activates.
 
 ```html
-<forge-keyboard-shortcut id="shortcut" key="shift+a" global></forge-keyboard-shortcut>
+<div forge-keyboard-shortcut-scope>
+  <button id="bold-1">Bold</button>
+  <forge-keyboard-shortcut key="mod+b" anchor="bold-1"></forge-keyboard-shortcut>
+</div>
+
+<div forge-keyboard-shortcut-scope>
+  <button id="bold-2">Bold</button>
+  <forge-keyboard-shortcut key="mod+b" anchor="bold-2"></forge-keyboard-shortcut>
+</div>
+```
+
+<Canvas of={KeyboardShortcutStories.ScopedEditors} />
+
+In this example, pressing Ctrl+B (or Cmd+B on Mac) only activates the shortcut in the focused
+editor. Each shortcut automatically binds to its nearest ancestor scope marker.
+
+You can also target a specific element by id with the `scope` attribute, bypassing the ancestor
+marker walk:
+
+```html
+<div id="app-scope" forge-keyboard-shortcut-scope>
+  <div forge-keyboard-shortcut-scope>
+    <!-- This shortcut binds to #app-scope, not the nearest marker -->
+    <forge-keyboard-shortcut key="/" scope="app-scope"></forge-keyboard-shortcut>
+  </div>
+</div>
+```
+
+You can also set `scopeElement` programmatically to bypass the scope resolution logic.
+
+Use the `global` attribute to listen on the entire document regardless of scope markers.
+
+## Key syntax
+
+Keys are written as modifier names joined by `+` with the key name last. A space separates
+alternative bindings. Matching is case-insensitive.
+
+| Alias | Resolves to |
+| --- | --- |
+| `mod` | `Meta` on Mac, `Control` elsewhere |
+| `ctrl` | `Control` |
+| `cmd` | `Meta` |
+| `option` | `Alt` |
+| `esc` | `Escape` |
+| `return` | `Enter` |
+| `del` | `Delete` |
+| `up` / `down` / `left` / `right` | Arrow keys |
+| `plus` | `+` |
+| `space` | ` ` |
+
+Examples: `mod+b`, `Control+Shift+s`, `esc`, `a b` (activates on either a or b).
+
+### Key sequences
+
+Use `>` to define multi-step sequences where chords must be pressed in order within a 1-second
+timeout window, matching the VS Code chord pattern:
+
+```html
+<!-- Two-chord sequence: Ctrl+K then Ctrl+C -->
+<forge-keyboard-shortcut key="Control+k>Control+c"></forge-keyboard-shortcut>
+
+<!-- Sequence OR single chord (two alternatives) -->
+<forge-keyboard-shortcut key="Control+k>Control+c Control+/"></forge-keyboard-shortcut>
+
+<!-- Three-chord sequence -->
+<forge-keyboard-shortcut key="a>b>c"></forge-keyboard-shortcut>
+```
+
+When a sequence start chord conflicts with a standalone shortcut bound to the same key, the
+standalone is deferred — if the sequence completes, the standalone is discarded; if the timeout
+expires or a non-matching key is pressed, the deferred standalone fires instead.
+
+Multi-chord sequences are omitted from `aria-keyshortcuts` as the ARIA spec has no sequence syntax.
+
+<Canvas of={KeyboardShortcutStories.KeySequence} />
+
+## Handling activation
+
+Listen for the `forge-keyboard-shortcut-activate` event. The event bubbles, so you can use a single
+listener on a container and read `event.target.anchorElement` to determine which shortcut fired.
+
+```html
+<div forge-keyboard-shortcut-scope @forge-keyboard-shortcut-activate=${handleActivate}>
+  <button id="cut-btn">Cut</button>
+  <forge-keyboard-shortcut key="mod+x" anchor="cut-btn"></forge-keyboard-shortcut>
+
+  <button id="copy-btn">Copy</button>
+  <forge-keyboard-shortcut key="mod+c" anchor="copy-btn"></forge-keyboard-shortcut>
+</div>
+```
+
+<Canvas of={KeyboardShortcutStories.GlobalShortcut} />
+
+## Imperative registration
+
+`registerKeyboardShortcut()` registers a shortcut without rendering an element, which is useful when
+the shortcut belongs to code rather than a template. The options mirror the element's properties.
+
+```ts
+import { registerKeyboardShortcut } from '@tylertech/forge/keyboard-shortcut';
+
+const registration = registerKeyboardShortcut({
+  key: 'mod+s',
+  scopeElement: editor,
+  onActivate: () => save()
+});
+
+// Later, when the shortcut should stop listening
+registration.dispose();
+```
+
+Pass one of three options to say where the shortcut listens:
+
+- `global` — the whole document.
+- `scopeElement` — that element.
+- `ownerElement` — the closest ancestor with the `forge-keyboard-shortcut-scope` attribute, the same
+  lookup the element does.
+
+If more than one is passed, the first in this list wins. The call throws if none is passed, or if
+`ownerElement` has no scope marker above it.
+
+Registrations otherwise behave like element-based ones, including the nesting rule above: when the
+same key is bound in nested scopes, only the innermost scope containing the event target activates.
+
+## Accessibility
+
+- The component automatically sets `aria-keyshortcuts` on the anchor element when
+  `anchorAccessibility` is `'auto'` (the default). Set it to `'none'` to opt out.
+- `formatKeyboardShortcutBinding()` returns a human-readable string for a binding (e.g. `Ctrl+A`) for use in
+  visible hints such as menu items and tooltips.
+- Don't override browser, operating system, or assistive technology shortcuts.
+- Avoid using the `accesskey` attribute.
+- Don't duplicate behavior provided by the browser.
+
+> The element itself doesn't affect accessibility or layout (`display: none`).
+
+## Migrating from `target`
+
+The `target` attribute is deprecated. Replace it with `anchor` (for the element to act on) and a
+`forge-keyboard-shortcut-scope` marker (for where to listen).
+
+```html
+<!-- Before -->
+<forge-keyboard-shortcut key="a" target="#my-button"></forge-keyboard-shortcut>
+
+<!-- After -->
+<div forge-keyboard-shortcut-scope>
+  <button id="my-button">Click me</button>
+  <forge-keyboard-shortcut key="a" anchor="my-button"></forge-keyboard-shortcut>
+</div>
 ```
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility
-
-- Ensure that the shortcut is described in a logical, visible spot on the page. Include its function and the key combination that activates it.
-- Don't override browser, operating system, or assistive technology shortcuts.
-- Set `aria-keyshortcuts` on any element that is focused or activated by a global shortcut. See the
-  [MDN docs](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts) for more information.
-- Avoid using the `accesskey` attribute. See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey) for more information.
-- Don't duplicate behavior provided by the browser. A form will automatically submit when enter is pressed if it includes a submit button.
-
-> Even though the keyboard shortcut component exists in the DOM, the element itself doesn't affect
-> accessibility or layout due to having its `display` style property set to `none`.
