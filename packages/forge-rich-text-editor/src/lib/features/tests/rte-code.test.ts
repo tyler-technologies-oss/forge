@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureCodeComponent } from '../rte-code.js';
+import { RteCodeComponent } from '../rte-code.js';
 
 import '../../rich-text-editor.js';
 import '../rte-code.js';
@@ -190,7 +190,7 @@ interface CodeFixtureOptions {
 
 interface CodeFixture {
   el: RichTextEditorComponent;
-  codeFeature: RichTextFeatureCodeComponent;
+  codeFeature: RteCodeComponent;
   button: () => HTMLElement;
   clickButton: () => Promise<void>;
   getEditor: () => Promise<Editor>;
@@ -204,7 +204,7 @@ async function createFixture(options: CodeFixtureOptions = {}): Promise<CodeFixt
     </forge-rich-text-editor>
   `);
 
-  const codeFeature = el.querySelector('forge-rte-code') as RichTextFeatureCodeComponent;
+  const codeFeature = el.querySelector('forge-rte-code') as RteCodeComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize

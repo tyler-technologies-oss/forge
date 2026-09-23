@@ -1,6 +1,6 @@
 import { createContext } from '@lit/context';
 import { Editor } from '@tiptap/core';
-import { RichTextEditorFeature } from './features/rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './features/rich-text-editor-feature.js';
 
 /**
  * Detail object for the 'change' event.
@@ -69,7 +69,7 @@ export interface EditorContext {
   setEditorElement: (element: HTMLElement) => void;
 
   /** Register a new feature (extension) with the editor */
-  registerFeature: (feature: RichTextEditorFeature) => void;
+  registerFeature: (feature: IRichTextEditorFeature) => void;
 
   /** Announces a message to screen readers via ARIA live region */
   announce: (message: string) => void;

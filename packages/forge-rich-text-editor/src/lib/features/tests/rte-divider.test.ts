@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureDividerComponent } from '../rte-feature-divider.js';
+import { RteDividerComponent } from '../rte-divider.js';
 
 import '../../rich-text-editor.js';
-import '../rte-feature-divider.js';
+import '../rte-divider.js';
 
 describe('RTE Feature Divider', () => {
   it('should contain shadow root', async () => {
@@ -30,19 +30,19 @@ describe('RTE Feature Divider', () => {
 
   interface DividerHarness {
     editor: RichTextEditorComponent;
-    dividerFeature: RichTextFeatureDividerComponent;
+    dividerFeature: RteDividerComponent;
     divider(): HTMLElement;
   }
 
   async function createFixture(): Promise<DividerHarness> {
     const editor = await fixture<RichTextEditorComponent>(html`
       <forge-rich-text-editor>
-        <forge-rte-feature-divider></forge-rte-feature-divider>
+        <forge-rte-divider></forge-rte-divider>
       </forge-rich-text-editor>
     `);
     await editor.updateComplete;
 
-    const dividerFeature = editor.querySelector<RichTextFeatureDividerComponent>('forge-rte-feature-divider')!;
+    const dividerFeature = editor.querySelector<RteDividerComponent>('forge-rte-divider')!;
     await dividerFeature.updateComplete;
 
     return {

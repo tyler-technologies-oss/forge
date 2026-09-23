@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureBoldComponent } from '../rte-bold.js';
+import { RteBoldComponent } from '../rte-bold.js';
 
 import '../../rich-text-editor.js';
 import '../rte-bold.js';
@@ -180,7 +180,7 @@ interface BoldFixtureOptions {
 
 interface BoldFixture {
   el: RichTextEditorComponent;
-  boldFeature: RichTextFeatureBoldComponent;
+  boldFeature: RteBoldComponent;
   button: () => HTMLElement;
   clickButton: () => Promise<void>;
   getEditor: () => Promise<Editor>;
@@ -194,7 +194,7 @@ async function createFixture(options: BoldFixtureOptions = {}): Promise<BoldFixt
     </forge-rich-text-editor>
   `);
 
-  const boldFeature = el.querySelector('forge-rte-bold') as RichTextFeatureBoldComponent;
+  const boldFeature = el.querySelector('forge-rte-bold') as RteBoldComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize

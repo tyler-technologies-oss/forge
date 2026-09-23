@@ -1,5 +1,6 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './rte-bold.js';
@@ -11,7 +12,7 @@ import './rte-ordered-list.js';
 import './rte-heading.js';
 import './rte-align.js';
 import './rte-undo-redo.js';
-import './rte-feature-divider.js';
+import './rte-divider.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -19,7 +20,7 @@ declare global {
   }
 }
 
-export const RteStandardToolsComponentTagName: keyof HTMLElementTagNameMap = 'forge-rte-standard-tools';
+export const RTE_STANDARD_TOOLS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-standard-tools';
 
 /**
  * @tag forge-rte-standard-tools
@@ -38,24 +39,27 @@ export const RteStandardToolsComponentTagName: keyof HTMLElementTagNameMap = 'fo
  * Each feature can be customized by passing properties to this component, which forwards them
  * to the individual feature components.
  */
-@customElement(RteStandardToolsComponentTagName)
+@customElement(RTE_STANDARD_TOOLS_TAG_NAME)
 export class RteStandardToolsComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_STANDARD_TOOLS_TAG_NAME;
+
   public static override styles = featureHostStyles;
 
   public override render(): TemplateResult {
     return html`
       <forge-rte-heading></forge-rte-heading>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-bold></forge-rte-bold>
       <forge-rte-italic></forge-rte-italic>
       <forge-rte-underline></forge-rte-underline>
       <forge-rte-strike></forge-rte-strike>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-bullet-list></forge-rte-bullet-list>
       <forge-rte-ordered-list></forge-rte-ordered-list>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-align></forge-rte-align>
-      <forge-rte-feature-divider></forge-rte-feature-divider>
+      <forge-rte-divider></forge-rte-divider>
       <forge-rte-undo-redo></forge-rte-undo-redo>
     `;
   }

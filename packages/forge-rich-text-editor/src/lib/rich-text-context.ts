@@ -1,5 +1,5 @@
 import { provide } from '@lit/context';
-import { LiveAnnouncer } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
 import { type AnyExtension, type Content, Editor as TipTapEditor } from '@tiptap/core';
 import { Document } from '@tiptap/extension-document';
 import { Text } from '@tiptap/extension-text';
@@ -18,7 +18,7 @@ import {
   RichTextEditorInitializationErrorEventDetail,
   RichTextEditorErrorEventDetail
 } from './editor-context.js';
-import { RichTextEditorFeature } from './features/rich-text-editor-feature.js';
+import { IRichTextEditorFeature } from './features/rich-text-editor-feature.js';
 import { PasteHandler } from './extensions/paste-handler.js';
 import { MarkdownSerializer } from './extensions/markdown-serializer.js';
 import { sanitizeHTML, sanitizeJSON } from './extensions/sanitize-utils.js';
@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-export const RichTextContextComponentTagName: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
+export const RICH_TEXT_CONTEXT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
 
 const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
 
@@ -81,8 +81,11 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  * @method isInitialized - Getter that returns whether the editor has been successfully initialized.
  * @method initializationError - Getter that returns the initialization error message, if any.
  */
-@customElement(RichTextContextComponentTagName)
+@customElement(RICH_TEXT_CONTEXT_TAG_NAME)
 export class RichTextContextComponent extends LitElement {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RICH_TEXT_CONTEXT_TAG_NAME;
+
   public static override styles = unsafeCSS(styles);
 
   /** The ID of the element to instantiate the editor against. */
@@ -149,7 +152,7 @@ export class RichTextContextComponent extends LitElement {
   @state()
   private _initializationError: string | null = null;
 
-  #featureInstances: Set<RichTextEditorFeature> = new Set();
+  #featureInstances: Set<IRichTextEditorFeature> = new Set();
   #initFrame: number | undefined;
   #editorElement: HTMLElement | undefined;
 
@@ -185,7 +188,7 @@ export class RichTextContextComponent extends LitElement {
    *
    * @param instance The feature instance to register.
    */
-  #registerFeature(instance: RichTextEditorFeature): void {
+  #registerFeature(instance: IRichTextEditorFeature): void {
     this.#featureInstances.add(instance);
 
     if (this.#initFrame) {

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixture, html } from '@open-wc/testing';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
-import { RichTextFeatureUndoRedoComponent } from '../rte-undo-redo.js';
+import { RteUndoRedoComponent } from '../rte-undo-redo.js';
 
 import '../../rich-text-editor.js';
 import '../rte-undo-redo.js';
@@ -288,7 +288,7 @@ interface UndoRedoFixtureOptions {
 
 interface UndoRedoFixture {
   el: RichTextEditorComponent;
-  undoRedoFeature: RichTextFeatureUndoRedoComponent;
+  undoRedoFeature: RteUndoRedoComponent;
   undoButton: () => HTMLElement;
   redoButton: () => HTMLElement;
   clickUndoButton: () => Promise<void>;
@@ -304,7 +304,7 @@ async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<Undo
     </forge-rich-text-editor>
   `);
 
-  const undoRedoFeature = el.querySelector('forge-rte-undo-redo') as RichTextFeatureUndoRedoComponent;
+  const undoRedoFeature = el.querySelector('forge-rte-undo-redo') as RteUndoRedoComponent;
   const contextComponent = el.shadowRoot!.querySelector('forge-rich-text-context')!;
 
   // Wait for editor to initialize
