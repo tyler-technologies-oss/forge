@@ -32,6 +32,7 @@ export interface BlocksPluginOptions {
  */
 export function blocksPlugin(options: BlocksPluginOptions): Plugin {
   const { blocksPath, layoutPath, partialsPath, indexPath } = options;
+  const resolvedBlocksPath = path.resolve(blocksPath) + path.sep;
 
   const partialRegistry: PartialRegistry = createPartialRegistry({ partialsPath });
   partialRegistry.load();
@@ -41,12 +42,17 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
     configureServer(server: ViteDevServer) {
       server.watcher.add(partialsPath);
       server.watcher.add(indexPath);
+      server.watcher.add(layoutPath);
+      server.watcher.add(blocksPath);
       server.watcher.on('change', (filePath: string): void => {
         if (filePath.includes('partials') && filePath.endsWith('.hbs')) {
           partialRegistry.load();
           server.ws.send({ type: 'full-reload' });
+          return;
         }
-        if (filePath === indexPath) {
+        // Reload on any block source file (html/ts/css) or the shared layout — resolved-path
+        // comparison, not a raw string match, so it holds up under symlinked workspace mounts.
+        if (filePath === indexPath || filePath === layoutPath || path.resolve(filePath).startsWith(resolvedBlocksPath)) {
           server.ws.send({ type: 'full-reload' });
         }
       });
@@ -85,7 +91,11 @@ export function blocksPlugin(options: BlocksPluginOptions): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler(html: string, ctx: IndexHtmlTransformContext): string {
-        if (ctx.filename.includes('/src/includes/') || ctx.filename === indexPath) {
+        // Only compile files that actually live under `src/blocks/` — comparing filenames
+        // against an exclusion list is fragile to path normalization differences (e.g. a
+        // symlinked workspace mount), which let index.html slip through and get treated as
+        // a block template.
+        if (!path.resolve(ctx.filename).startsWith(resolvedBlocksPath)) {
           return html;
         }
 
