@@ -47,6 +47,10 @@ export default {
         },
         meta: {
           isArray: true
+        },
+        command: {
+          mappedName: 'commands',
+          isArray: true
         }
       }
     })

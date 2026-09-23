@@ -47,6 +47,9 @@ export interface IListboxDropData {
  * into the listbox. Contains the dropped option element, the index where it was dropped, and
  * the source listbox element.
  *
+ * @command --shift-up - Moves the selected option(s) up.
+ * @command --shift-down - Moves the selected option(s) down.
+ *
  * @cssproperty --forge-listbox-divider-margin - The margin around a slotted divider.
  * @cssproperty --forge-listbox-group-margin - The spacing between slotted option groups.
  *
@@ -272,6 +275,9 @@ export class ListboxComponent extends BaseLitElement implements DragSource<Listb
   // The most recently selected option, used as the anchor for shift+space range selection
   #selectionAnchor?: OptionComponent;
 
+  // Reorderable state abort controller
+  #reorderableAbortController?: AbortController;
+
   constructor() {
     super();
     this.#internals = this.attachInternals();
@@ -363,6 +369,14 @@ export class ListboxComponent extends BaseLitElement implements DragSource<Listb
       this.#updateFormValue();
     }
 
+    if (changedProperties.has('reorderable')) {
+      if (this.reorderable) {
+        this.#setReorderable();
+      } else {
+        this.#unsetReorderable();
+      }
+    }
+
     if (
       changedProperties.has('reorderable') ||
       changedProperties.has('dragLink') ||
@@ -389,24 +403,6 @@ export class ListboxComponent extends BaseLitElement implements DragSource<Listb
   }
 
   // *****
-  // Public Methods
-  // *****
-
-  /**
-   * Shifts the selected option up within the listbox, swapping it with the previous sibling if possible.
-   */
-  public shiftSelectedOptionUp(): void {
-    this.#shiftSelectedOptions('up');
-  }
-
-  /**
-   * Shifts the selected option down within the listbox, swapping it with the next sibling if possible.
-   */
-  public shiftSelectedOptionDown(): void {
-    this.#shiftSelectedOptions('down');
-  }
-
-  // *****
   // Option Management
   // *****
 
@@ -422,63 +418,6 @@ export class ListboxComponent extends BaseLitElement implements DragSource<Listb
       return evt.clientX >= rect.left && evt.clientX <= rect.right && evt.clientY >= rect.top && evt.clientY <= rect.bottom;
     });
     return targetGroup;
-  }
-
-  #shiftSelectedOptions(direction: 'up' | 'down'): void {
-    const selectedOptions = this.#options.filter(opt => opt.selected);
-    if (!selectedOptions.length) {
-      return;
-    }
-
-    const orderedOptions = direction === 'up' ? selectedOptions : [...selectedOptions].reverse();
-    orderedOptions.forEach(option => this.#shiftOption(option, direction));
-  }
-
-  #shiftOption(option: OptionComponent, direction: 'up' | 'down'): void {
-    const parent = option.parentElement;
-    if (!parent) {
-      return;
-    }
-
-    const siblings = this.#getPositionSiblings(parent);
-    const index = siblings.indexOf(option);
-    if (direction === 'up') {
-      this.#shiftOptionUp(option, parent, siblings, index);
-    } else {
-      this.#shiftOptionDown(option, parent, siblings, index);
-    }
-  }
-
-  #shiftOptionUp(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
-    if (index > 0) {
-      const previousSibling = siblings[index - 1];
-      if (previousSibling instanceof OptionGroupComponent) {
-        previousSibling.appendChild(option);
-      } else {
-        parent.insertBefore(option, previousSibling);
-      }
-      return;
-    }
-
-    if (parent instanceof OptionGroupComponent) {
-      parent.parentElement?.insertBefore(option, parent);
-    }
-  }
-
-  #shiftOptionDown(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
-    if (index < siblings.length - 1) {
-      const nextSibling = siblings[index + 1];
-      if (nextSibling instanceof OptionGroupComponent) {
-        nextSibling.insertBefore(option, nextSibling.querySelector(OPTION_CONSTANTS.elementName));
-      } else {
-        parent.insertBefore(option, nextSibling.nextSibling);
-      }
-      return;
-    }
-
-    if (parent instanceof OptionGroupComponent) {
-      parent.parentElement?.insertBefore(option, parent.nextSibling);
-    }
   }
 
   #getPositionSiblings(parent: Element): Element[] {
@@ -881,6 +820,102 @@ export class ListboxComponent extends BaseLitElement implements DragSource<Listb
 
   #optionIsSelectable(option: OptionComponent): boolean {
     return !option.disabled && !this.disabled && !this.readonly;
+  }
+
+  // *****
+  // Reordering
+  // *****
+
+  /**
+   * Shifts the selected option up within the listbox, swapping it with the previous sibling if possible.
+   */
+  public shiftSelectedOptionUp(): void {
+    this.#shiftSelectedOptions('up');
+  }
+
+  /**
+   * Shifts the selected option down within the listbox, swapping it with the next sibling if possible.
+   */
+  public shiftSelectedOptionDown(): void {
+    this.#shiftSelectedOptions('down');
+  }
+
+  #shiftSelectedOptions(direction: 'up' | 'down'): void {
+    const selectedOptions = this.#options.filter(opt => opt.selected);
+    if (!selectedOptions.length) {
+      return;
+    }
+
+    const orderedOptions = direction === 'up' ? selectedOptions : [...selectedOptions].reverse();
+    orderedOptions.forEach(option => this.#shiftOption(option, direction));
+  }
+
+  #shiftOption(option: OptionComponent, direction: 'up' | 'down'): void {
+    const parent = option.parentElement;
+    if (!parent) {
+      return;
+    }
+
+    const siblings = this.#getPositionSiblings(parent);
+    const index = siblings.indexOf(option);
+    if (direction === 'up') {
+      this.#shiftOptionUp(option, parent, siblings, index);
+    } else {
+      this.#shiftOptionDown(option, parent, siblings, index);
+    }
+  }
+
+  #shiftOptionUp(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
+    if (index > 0) {
+      const previousSibling = siblings[index - 1];
+      if (previousSibling instanceof OptionGroupComponent) {
+        previousSibling.appendChild(option);
+      } else {
+        parent.insertBefore(option, previousSibling);
+      }
+      return;
+    }
+
+    if (parent instanceof OptionGroupComponent) {
+      parent.parentElement?.insertBefore(option, parent);
+    }
+  }
+
+  #shiftOptionDown(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
+    if (index < siblings.length - 1) {
+      const nextSibling = siblings[index + 1];
+      if (nextSibling instanceof OptionGroupComponent) {
+        nextSibling.insertBefore(option, nextSibling.querySelector(OPTION_CONSTANTS.elementName));
+      } else {
+        parent.insertBefore(option, nextSibling.nextSibling);
+      }
+      return;
+    }
+
+    if (parent instanceof OptionGroupComponent) {
+      parent.parentElement?.insertBefore(option, parent.nextSibling);
+    }
+  }
+
+  #setReorderable(): void {
+    this.#reorderableAbortController = new AbortController();
+    this.addEventListener(
+      'command',
+      // @ts-expect-error CommandEvent is not widely supported yet.
+      (event: CommandEvent) => {
+        if (event.command === '--shift-up') {
+          this.#shiftSelectedOptions('up');
+        } else if (event.command === '--shift-down') {
+          this.#shiftSelectedOptions('down');
+        }
+      },
+      { signal: this.#reorderableAbortController.signal }
+    );
+  }
+
+  #unsetReorderable(): void {
+    this.#reorderableAbortController?.abort();
+    this.#reorderableAbortController = undefined;
   }
 
   // *****

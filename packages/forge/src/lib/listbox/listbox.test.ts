@@ -51,6 +51,12 @@ function dispatchDrag(target: EventTarget, type: string, options: Partial<DragEv
   );
 }
 
+function dispatchCommand(target: EventTarget, command: string): void {
+  const event = new Event('command', { bubbles: true, cancelable: true }) as Event & { command: string };
+  event.command = command;
+  target.dispatchEvent(event);
+}
+
 /** Returns a `clientY` value that will resolve to the given insertion index within `container`. */
 function clientYForIndex(container: HTMLElement, index: number): number {
   const items = Array.from(container.querySelectorAll<HTMLElement>('forge-option'));
@@ -1335,6 +1341,87 @@ describe('Listbox', () => {
       ctx.element.shiftSelectedOptionDown();
 
       expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '4', '2', '3']);
+    });
+  });
+
+  describe('--shift-up/--shift-down commands', () => {
+    it('should shift the selected option up when a --shift-up command is received while reorderable', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      dispatchCommand(ctx.element, '--shift-up');
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['2', '1', '3']);
+    });
+
+    it('should shift the selected option down when a --shift-down command is received while reorderable', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      dispatchCommand(ctx.element, '--shift-down');
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '3', '2']);
+    });
+
+    it('should ignore unrelated command values', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      dispatchCommand(ctx.element, '--toggle');
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '2', '3']);
+    });
+
+    it('should not respond to --shift-up/--shift-down commands when not reorderable', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      dispatchCommand(ctx.element, '--shift-up');
+      dispatchCommand(ctx.element, '--shift-down');
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '2', '3']);
+    });
+
+    it('should stop responding to commands after reorderable is turned off', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox reorderable>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+      await ctx.element.updateComplete;
+
+      ctx.element.reorderable = false;
+      await ctx.element.updateComplete;
+
+      dispatchCommand(ctx.element, '--shift-up');
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '2', '3']);
     });
   });
 });
