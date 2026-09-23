@@ -19,6 +19,8 @@ const emptyState = document.getElementById('empty-state') as HTMLElement;
 const addInstructionButton = document.getElementById('add-instruction') as HTMLElement;
 const cardTemplate = document.getElementById('instruction-card-template') as HTMLTemplateElement;
 
+const REORDER_DURATION = 180;
+
 let idCounter = 0;
 let instructionCounter = 3;
 let draggedCard: HTMLElement | null = null;
@@ -60,6 +62,33 @@ function syncStack(): void {
   emptyState.classList.toggle('hidden', count > 0);
 }
 
+/** Runs a DOM reorder and slides every card that shifted from its old position to its new one. */
+function animateReorder(mutate: () => void): void {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    mutate();
+    return;
+  }
+
+  const previousTops = new Map(cards().map(card => [card, card.offsetTop]));
+  mutate();
+
+  for (const card of cards()) {
+    const previousTop = previousTops.get(card);
+    // The dragged card already follows the pointer, so sliding it too would fight the drag.
+    if (previousTop === undefined || card === draggedCard) {
+      continue;
+    }
+
+    const delta = previousTop - card.offsetTop;
+    if (!delta) {
+      continue;
+    }
+
+    card.getAnimations().forEach(animation => animation.cancel());
+    card.animate([{ transform: `translateY(${delta}px)` }, { transform: 'none' }], { duration: REORDER_DURATION, easing: 'ease-out' });
+  }
+}
+
 function moveCard(card: HTMLElement, offset: -1 | 1): void {
   const list = cards();
   const target = list[list.indexOf(card) + offset];
@@ -67,21 +96,17 @@ function moveCard(card: HTMLElement, offset: -1 | 1): void {
     return;
   }
 
-  stack.insertBefore(card, offset === -1 ? target : target.nextElementSibling);
+  animateReorder(() => stack.insertBefore(card, offset === -1 ? target : target.nextElementSibling));
   syncStack();
   announce(`${titleOf(card)} moved to position ${cards().indexOf(card) + 1} of ${list.length}`);
 }
 
+// Measured in layout space rather than with getBoundingClientRect: a card mid-reorder is
+// translated away from where it will settle, and feeding that back in makes the drop target
+// oscillate under the pointer.
 function dropTargetAt(clientY: number): HTMLElement | null {
-  return (
-    cards().find(card => {
-      if (card === draggedCard) {
-        return false;
-      }
-      const { top, height } = card.getBoundingClientRect();
-      return clientY < top + height / 2;
-    }) ?? null
-  );
+  const originY = stack.getBoundingClientRect().top - stack.offsetTop;
+  return cards().find(card => card !== draggedCard && clientY < originY + card.offsetTop + card.offsetHeight / 2) ?? null;
 }
 
 function initCard(card: HTMLElement): void {
@@ -231,7 +256,8 @@ function initCard(card: HTMLElement): void {
 }
 
 stack.addEventListener('dragover', evt => {
-  if (!draggedCard) {
+  const dragged = draggedCard;
+  if (!dragged) {
     return;
   }
 
@@ -242,11 +268,11 @@ stack.addEventListener('dragover', evt => {
 
   const target = dropTargetAt(evt.clientY);
   if (target) {
-    if (draggedCard.nextElementSibling !== target) {
-      stack.insertBefore(draggedCard, target);
+    if (dragged.nextElementSibling !== target) {
+      animateReorder(() => stack.insertBefore(dragged, target));
     }
-  } else if (stack.lastElementChild !== draggedCard) {
-    stack.appendChild(draggedCard);
+  } else if (stack.lastElementChild !== dragged) {
+    animateReorder(() => stack.appendChild(dragged));
   }
 });
 
