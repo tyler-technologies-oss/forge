@@ -1,0 +1,70 @@
+{
+  "name": "@tylertech/forge-rich-text-editor-angular",
+  "version": "0.0.0",
+  "description": "The official Tyler Forge™ rich text editor adapter library for Angular.",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-rich-text-editor-angular"
+  },
+  "main": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/fesm2022/tylertech-forge-rich-text-editor-angular.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist && pnpm run generate-proxies && ng build forge-rich-text-editor-angular --configuration production",
+    "generate-proxies": "node scripts/generate-proxies.mjs",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,js,mjs,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,json,md}\""
+  },
+  "dependencies": {
+    "tslib": "catalog:"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=20.0.0 < 23.0.0",
+    "@angular/core": ">=20.0.0 < 23.0.0",
+    "@tylertech/forge-rich-text-editor": "^0.1.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.13",
+    "@angular/cli": "^20.3.13",
+    "@angular/common": "^20.3.15",
+    "@angular/compiler": "^20.3.15",
+    "@angular/compiler-cli": "^20.3.15",
+    "@angular/core": "^20.3.15",
+    "@angular/platform-browser": "^20.3.15",
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-adapter-codegen": "workspace:*",
+    "@tylertech/forge-rich-text-editor": "workspace:*",
+    "@types/node": "catalog:",
+    "angular-eslint": "^20.4.0",
+    "eslint": "catalog:",
+    "ng-packagr": "^20.3.2",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "rxjs": "^7.8.2",
+    "sass": "catalog:",
+    "typescript": "~5.9.3",
+    "vite": "catalog:",
+    "zone.js": "~0.15.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
