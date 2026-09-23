@@ -19,7 +19,7 @@
       "outputs": []
     },
     "build:storybook": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["^build", "build", "@tylertech/forge-rich-text-editor#build"],
       "outputs": ["storybook-static/**"],
       "cache": false
     },
@@ -29,7 +29,7 @@
       "cache": false
     },
     "storybook": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "@tylertech/forge-rich-text-editor#build"],
       "persistent": true,
       "cache": false
     }
