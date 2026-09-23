@@ -103,8 +103,8 @@ describe('Listbox', () => {
     expect(ctx.element.readonly).toBe(false);
     expect(ctx.element.multiple).toBe(false);
     expect(ctx.element.reorderable).toBe(false);
-    expect(ctx.element.dragOut).toBe(false);
-    expect(ctx.element.dropFrom).toBe('');
+    expect(ctx.element.dragLink).toBe('');
+    expect(ctx.element.dragLink).toBe('');
     expect(ctx.element.disabled).toBe(false);
     expect(ctx.element.allowDeselect).toBe(false);
   });
@@ -875,44 +875,44 @@ describe('Listbox', () => {
     });
   });
 
-  describe('dropFromElements', () => {
-    it('should compute allowed drop sources from the drop-from attribute', async () => {
+  describe('dragLinkElements', () => {
+    it('should compute allowed drop sources from the drag-link attribute', async () => {
       const screen = render(html`
         <div>
           <forge-listbox id="source-a"></forge-listbox>
-          <forge-listbox id="target" drop-from="source-a"></forge-listbox>
+          <forge-listbox id="target" drag-link="source-a"></forge-listbox>
         </div>
       `);
       const source = screen.container.querySelector('#source-a') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
 
-      expect(target.dropFromElements).toEqual([source]);
+      expect(target.dragLinkElements).toEqual([source]);
     });
 
-    it('should prefer explicitly set dropFromElements over the attribute-derived list', async () => {
+    it('should prefer explicitly set dragLinkElements over the attribute-derived list', async () => {
       const screen = render(html`
         <div>
           <forge-listbox id="source-a"></forge-listbox>
           <forge-listbox id="source-b"></forge-listbox>
-          <forge-listbox id="target" drop-from="source-a"></forge-listbox>
+          <forge-listbox id="target" drag-link="source-a"></forge-listbox>
         </div>
       `);
       const sourceB = screen.container.querySelector('#source-b') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
 
-      target.dropFromElements = [sourceB];
+      target.dragLinkElements = [sourceB];
 
-      expect(target.dropFromElements).toEqual([sourceB]);
+      expect(target.dragLinkElements).toEqual([sourceB]);
     });
 
-    it('should not throw and return an empty array for a whitespace-only drop-from value', async () => {
-      const ctx = await createFixture(html`<forge-listbox drop-from="   "></forge-listbox>`);
+    it('should not throw and return an empty array for a whitespace-only drag-link value', async () => {
+      const ctx = await createFixture(html`<forge-listbox drag-link="   "></forge-listbox>`);
 
-      expect(() => ctx.element.dropFromElements).not.toThrow();
-      expect(ctx.element.dropFromElements).toEqual([]);
+      expect(() => ctx.element.dragLinkElements).not.toThrow();
+      expect(ctx.element.dragLinkElements).toEqual([]);
     });
 
-    it('should reconfigure the drop controller when dropFrom is set after connection', async () => {
+    it('should reconfigure the drop controller when dragLink is set after connection', async () => {
       const screen = render(html`
         <div>
           <forge-listbox id="source-a"></forge-listbox>
@@ -923,10 +923,10 @@ describe('Listbox', () => {
       const target = screen.container.querySelector('#target') as ListboxComponent;
       await target.updateComplete;
 
-      target.dropFrom = 'source-a';
+      target.dragLink = 'source-a';
       await target.updateComplete;
 
-      expect(target.dropFromElements).toEqual([source]);
+      expect(target.dragLinkElements).toEqual([source]);
     });
   });
 
@@ -1095,10 +1095,10 @@ describe('Listbox', () => {
       expect(dropSpy).not.toHaveBeenCalled();
     });
 
-    it('should allow drag out to a listbox that permits drops from the source', async () => {
+    it('should allow drag out when both the source and target mutually opt in via dropLink/dragLink', async () => {
       const screen = render(html`
         <div>
-          <forge-listbox id="source" drag-out>
+          <forge-listbox id="source">
             <forge-option value="1">Option 1</forge-option>
           </forge-listbox>
           <forge-listbox id="target">
@@ -1109,8 +1109,9 @@ describe('Listbox', () => {
       const source = screen.container.querySelector('#source') as ListboxComponent;
       const target = screen.container.querySelector('#target') as ListboxComponent;
       await Promise.all([source.updateComplete, target.updateComplete]);
-      target.dropFromElements = [source];
-      await target.updateComplete;
+      source.dragLinkElements = [target];
+      target.dropLinkElements = [source];
+      await Promise.all([source.updateComplete, target.updateComplete]);
 
       const dropSpy = vi.fn();
       target.addEventListener('forge-listbox-drop', dropSpy);
@@ -1127,6 +1128,213 @@ describe('Listbox', () => {
       const detail = dropSpy.mock.calls[0][0].detail as IListboxDropData;
       expect(detail.source).toBe(source);
       expect(detail.option).toBe(sourceOption);
+    });
+
+    it('should not allow drag out when only the target opts in via dragLink but the source does not opt in via dropLink', async () => {
+      const screen = render(html`
+        <div>
+          <forge-listbox id="source">
+            <forge-option value="1">Option 1</forge-option>
+          </forge-listbox>
+          <forge-listbox id="target">
+            <forge-option value="a">Option A</forge-option>
+          </forge-listbox>
+        </div>
+      `);
+      const source = screen.container.querySelector('#source') as ListboxComponent;
+      const target = screen.container.querySelector('#target') as ListboxComponent;
+      await Promise.all([source.updateComplete, target.updateComplete]);
+      target.dragLinkElements = [source];
+      await target.updateComplete;
+
+      const dropSpy = vi.fn();
+      target.addEventListener('forge-listbox-drop', dropSpy);
+
+      const sourceOption = source.querySelector('forge-option') as OptionComponent;
+      const dataTransfer = createDataTransfer();
+      const targetY = clientYForIndex(target, 1);
+
+      dispatchDrag(sourceOption, 'dragstart', { dataTransfer });
+      dispatchDrag(target, 'dragenter', { dataTransfer, clientY: targetY });
+      dispatchDrag(target, 'drop', { dataTransfer, clientY: targetY });
+
+      expect(dropSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('shiftSelectedOptionUp/Down', () => {
+    it('should do nothing when no option is selected', async () => {
+      const ctx = await createFixture();
+
+      expect(() => ctx.element.shiftSelectedOptionUp()).not.toThrow();
+      expect(() => ctx.element.shiftSelectedOptionDown()).not.toThrow();
+      expect(ctx.options.map(opt => opt.value)).toEqual(['1', '2', '3']);
+    });
+
+    it('should swap a selected option with its previous sibling when shifting up', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionUp();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['2', '1', '3']);
+    });
+
+    it('should swap a selected option with its next sibling when shifting down', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionDown();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '3', '2']);
+    });
+
+    it('should do nothing when shifting up a selected option that is already first', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1" selected>Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionUp();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '2', '3']);
+    });
+
+    it('should do nothing when shifting down a selected option that is already last', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2">Option 2</forge-option>
+          <forge-option value="3" selected>Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionDown();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '2', '3']);
+    });
+
+    it('should move a selected option out of its group when shifting up from the first position in the group', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option-group>
+            <div slot="label">Group</div>
+            <forge-option value="2" selected>Option 2</forge-option>
+            <forge-option value="3">Option 3</forge-option>
+          </forge-option-group>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionUp();
+
+      const topLevel = Array.from(ctx.element.children);
+      expect(topLevel.map(el => el.tagName.toLowerCase())).toEqual(['forge-option', 'forge-option', 'forge-option-group']);
+      expect((topLevel[1] as OptionComponent).value).toBe('2');
+      expect(ctx.groups[0].querySelectorAll('forge-option')).toHaveLength(1);
+      expect((ctx.groups[0].querySelector('forge-option') as OptionComponent).value).toBe('3');
+    });
+
+    it('should move a selected option out of its group when shifting down from the last position in the group', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option-group>
+            <div slot="label">Group</div>
+            <forge-option value="1">Option 1</forge-option>
+            <forge-option value="2" selected>Option 2</forge-option>
+          </forge-option-group>
+          <forge-option value="3">Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionDown();
+
+      const topLevel = Array.from(ctx.element.children);
+      expect(topLevel.map(el => el.tagName.toLowerCase())).toEqual(['forge-option-group', 'forge-option', 'forge-option']);
+      expect((topLevel[1] as OptionComponent).value).toBe('2');
+      expect(ctx.groups[0].querySelectorAll('forge-option')).toHaveLength(1);
+      expect((ctx.groups[0].querySelector('forge-option') as OptionComponent).value).toBe('1');
+    });
+
+    it('should move a selected option into the previous group as its last option when shifting up', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option-group>
+            <div slot="label">Group</div>
+            <forge-option value="1">Option 1</forge-option>
+            <forge-option value="2">Option 2</forge-option>
+          </forge-option-group>
+          <forge-option value="3" selected>Option 3</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionUp();
+
+      expect(Array.from(ctx.element.children).map(el => el.tagName.toLowerCase())).toEqual(['forge-option-group']);
+      const groupOptions = Array.from(ctx.groups[0].querySelectorAll('forge-option')).map(opt => (opt as OptionComponent).value);
+      expect(groupOptions).toEqual(['1', '2', '3']);
+    });
+
+    it('should move a selected option into the next group as its first option when shifting down', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox>
+          <forge-option value="1" selected>Option 1</forge-option>
+          <forge-option-group>
+            <div slot="label">Group</div>
+            <forge-option value="2">Option 2</forge-option>
+            <forge-option value="3">Option 3</forge-option>
+          </forge-option-group>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionDown();
+
+      expect(Array.from(ctx.element.children).map(el => el.tagName.toLowerCase())).toEqual(['forge-option-group']);
+      const groupOptions = Array.from(ctx.groups[0].querySelectorAll('forge-option')).map(opt => (opt as OptionComponent).value);
+      expect(groupOptions).toEqual(['1', '2', '3']);
+    });
+
+    it('should shift a contiguous block of selected options up together, preserving their relative order', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox multiple>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3" selected>Option 3</forge-option>
+          <forge-option value="4">Option 4</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionUp();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['2', '3', '1', '4']);
+    });
+
+    it('should shift a contiguous block of selected options down together, preserving their relative order', async () => {
+      const ctx = await createFixture(html`
+        <forge-listbox multiple>
+          <forge-option value="1">Option 1</forge-option>
+          <forge-option value="2" selected>Option 2</forge-option>
+          <forge-option value="3" selected>Option 3</forge-option>
+          <forge-option value="4">Option 4</forge-option>
+        </forge-listbox>
+      `);
+
+      ctx.element.shiftSelectedOptionDown();
+
+      expect(Array.from(ctx.element.children).map(el => (el as OptionComponent).value)).toEqual(['1', '4', '2', '3']);
     });
   });
 });

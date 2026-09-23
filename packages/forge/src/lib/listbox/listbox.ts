@@ -7,6 +7,7 @@ import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { DragController } from '../core/controllers/drag-controller.js';
 import { DropController, DropEventArgs } from '../core/controllers/drop-controller.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import { DragSource, DropTarget } from '../core/utils/drag-drop-manager.js';
 import { composedPathFrom } from '../core/utils/event-utils.js';
 import { FocusGroupController } from '../core/utils/focus-group.js';
 import { FormRestoreReason, FormRestoreState } from '../core/utils/form-utils.js';
@@ -15,9 +16,10 @@ import { toggleState } from '../core/utils/utils.js';
 import { OptionGroupComponent } from '../option/option-group/option-group.js';
 import { OPTION_CONSTANTS } from '../option/option/option-constants.js';
 import { OptionComponent, OptionUpdateReason } from '../option/option/option.js';
-import { LISTBOX_DENSE, LISTBOX_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from './listbox-constants.js';
+import { LISTBOX_DENSE, LISTBOX_DRAG_LINK, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from './listbox-constants.js';
 
 import styles from './listbox.scss';
+
 export interface IListboxDropData {
   option: OptionComponent;
   group?: OptionGroupComponent;
@@ -57,7 +59,7 @@ export interface IListboxDropData {
  * @slot - The listbox options and option groups.
  */
 @customElement(LISTBOX_TAG_NAME)
-export class ListboxComponent extends BaseLitElement {
+export class ListboxComponent extends BaseLitElement implements DragSource<ListboxComponent>, DropTarget<ListboxComponent> {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
 
@@ -126,38 +128,32 @@ export class ListboxComponent extends BaseLitElement {
   public reorderable = false;
 
   /**
-   * Whether options in this listbox can be dragged to other listboxes.
-   * @default false
-   * @attribute drag-out
-   */
-  @provide({ context: LISTBOX_DRAG_OUT })
-  @property({ type: Boolean, attribute: 'drag-out' })
-  public dragOut = false;
-
-  /**
-   * A space-separated list of the ids of listboxes that are allowed to drop into this listbox.
+   * A space-separated list of the ids of listboxes that are allowed to drop options into this
+   * listbox. Works together with `dropLink` on the linked listbox - a drop is only allowed when
+   * both listboxes mutually opt in to the link.
    * @default ''
-   * @attribute drop-from
+   * @attribute drop-link
    */
-  @property({ attribute: 'drop-from' })
-  public dropFrom = '';
+  @property({ attribute: 'drop-link' })
+  public dropLink = '';
 
   /**
-   * An array of listbox elements that are allowed to drop options into this listbox.
+   * An array of listbox elements that are allowed to drop options into this listbox. Takes
+   * precedence over `dropLink` when set explicitly.
    * @default []
    */
   @property({ attribute: false })
-  public set dropFromElements(elements: ListboxComponent[]) {
-    this.#dropFromElements = [...elements];
+  public set dropLinkElements(elements: ListboxComponent[]) {
+    this.#dropLinkElements = [...elements];
   }
-  public get dropFromElements(): ListboxComponent[] {
-    if (this.#dropFromElements?.length) {
-      return [...this.#dropFromElements];
+  public get dropLinkElements(): ListboxComponent[] {
+    if (this.#dropLinkElements?.length) {
+      return [...this.#dropLinkElements];
     }
-    if (!this.dropFrom) {
+    if (!this.dropLink) {
       return [];
     }
-    const ids = this.dropFrom
+    const ids = this.dropLink
       .split(/\s+/)
       .filter(Boolean)
       .map(id => `#${id}`)
@@ -168,7 +164,46 @@ export class ListboxComponent extends BaseLitElement {
     const selector = `:is(${ids})`;
     return Array.from(this.ownerDocument.querySelectorAll<ListboxComponent>(selector));
   }
-  #dropFromElements: typeof this.dropFromElements = [];
+  #dropLinkElements: typeof this.dropLinkElements = [];
+
+  /**
+   * A space-separated list of the ids of listboxes that options in this listbox are allowed to be
+   * dragged out to. Works together with `dropLink` on the linked listbox - a drop is only allowed
+   * when both listboxes mutually opt in to the link.
+   * @default ''
+   * @attribute drag-link
+   */
+  @property({ attribute: 'drag-link' })
+  public dragLink = '';
+
+  /**
+   * An array of listbox elements that options in this listbox are allowed to be dragged out to.
+   * Takes precedence over `dragLink` when set explicitly.
+   * @default []
+   */
+  @property({ attribute: false })
+  public set dragLinkElements(elements: ListboxComponent[]) {
+    this.#dragLinkElements = [...elements];
+  }
+  public get dragLinkElements(): ListboxComponent[] {
+    if (this.#dragLinkElements?.length) {
+      return [...this.#dragLinkElements];
+    }
+    if (!this.dragLink) {
+      return [];
+    }
+    const ids = this.dragLink
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(id => `#${id}`)
+      .join(',');
+    if (!ids) {
+      return [];
+    }
+    const selector = `:is(${ids})`;
+    return Array.from(this.ownerDocument.querySelectorAll<ListboxComponent>(selector));
+  }
+  #dragLinkElements: typeof this.dragLinkElements = [];
 
   /**
    * Whether the listbox is disabled.
@@ -195,6 +230,9 @@ export class ListboxComponent extends BaseLitElement {
   @provide({ context: LISTBOX_DENSE })
   @property({ type: Boolean })
   public dense = false;
+
+  @provide({ context: LISTBOX_DRAG_LINK })
+  private _canDragOut = false;
 
   get #options(): OptionComponent[] {
     return Array.from(this.querySelectorAll<OptionComponent>(OPTION_CONSTANTS.elementName));
@@ -327,12 +365,14 @@ export class ListboxComponent extends BaseLitElement {
 
     if (
       changedProperties.has('reorderable') ||
-      changedProperties.has('dragOut') ||
-      changedProperties.has('dropFromElements') ||
-      changedProperties.has('dropFrom')
+      changedProperties.has('dragLink') ||
+      changedProperties.has('dragLinkElements') ||
+      changedProperties.has('dropLink') ||
+      changedProperties.has('dropLinkElements')
     ) {
-      this.#dragController.setEnabled(this.reorderable || this.dragOut);
-      this.#dropController.setEnabled(this.reorderable || !!this.dropFromElements.length);
+      this._canDragOut = !!this.dragLinkElements.length;
+      this.#dragController.setEnabled(this.reorderable || this._canDragOut);
+      this.#dropController.setEnabled(this.reorderable || !!this.dropLinkElements.length);
     }
 
     if (changedProperties.has('dense')) {
@@ -346,6 +386,24 @@ export class ListboxComponent extends BaseLitElement {
         <slot></slot>
       </div>
     `;
+  }
+
+  // *****
+  // Public Methods
+  // *****
+
+  /**
+   * Shifts the selected option up within the listbox, swapping it with the previous sibling if possible.
+   */
+  public shiftSelectedOptionUp(): void {
+    this.#shiftSelectedOptions('up');
+  }
+
+  /**
+   * Shifts the selected option down within the listbox, swapping it with the next sibling if possible.
+   */
+  public shiftSelectedOptionDown(): void {
+    this.#shiftSelectedOptions('down');
   }
 
   // *****
@@ -364,6 +422,70 @@ export class ListboxComponent extends BaseLitElement {
       return evt.clientX >= rect.left && evt.clientX <= rect.right && evt.clientY >= rect.top && evt.clientY <= rect.bottom;
     });
     return targetGroup;
+  }
+
+  #shiftSelectedOptions(direction: 'up' | 'down'): void {
+    const selectedOptions = this.#options.filter(opt => opt.selected);
+    if (!selectedOptions.length) {
+      return;
+    }
+
+    const orderedOptions = direction === 'up' ? selectedOptions : [...selectedOptions].reverse();
+    orderedOptions.forEach(option => this.#shiftOption(option, direction));
+  }
+
+  #shiftOption(option: OptionComponent, direction: 'up' | 'down'): void {
+    const parent = option.parentElement;
+    if (!parent) {
+      return;
+    }
+
+    const siblings = this.#getPositionSiblings(parent);
+    const index = siblings.indexOf(option);
+    if (direction === 'up') {
+      this.#shiftOptionUp(option, parent, siblings, index);
+    } else {
+      this.#shiftOptionDown(option, parent, siblings, index);
+    }
+  }
+
+  #shiftOptionUp(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
+    if (index > 0) {
+      const previousSibling = siblings[index - 1];
+      if (previousSibling instanceof OptionGroupComponent) {
+        previousSibling.appendChild(option);
+      } else {
+        parent.insertBefore(option, previousSibling);
+      }
+      return;
+    }
+
+    if (parent instanceof OptionGroupComponent) {
+      parent.parentElement?.insertBefore(option, parent);
+    }
+  }
+
+  #shiftOptionDown(option: OptionComponent, parent: Element, siblings: Element[], index: number): void {
+    if (index < siblings.length - 1) {
+      const nextSibling = siblings[index + 1];
+      if (nextSibling instanceof OptionGroupComponent) {
+        nextSibling.insertBefore(option, nextSibling.querySelector(OPTION_CONSTANTS.elementName));
+      } else {
+        parent.insertBefore(option, nextSibling.nextSibling);
+      }
+      return;
+    }
+
+    if (parent instanceof OptionGroupComponent) {
+      parent.parentElement?.insertBefore(option, parent.nextSibling);
+    }
+  }
+
+  #getPositionSiblings(parent: Element): Element[] {
+    if (parent instanceof OptionGroupComponent) {
+      return Array.from(parent.children).filter(el => el.matches(OPTION_CONSTANTS.elementName));
+    }
+    return Array.from(parent.children);
   }
 
   // *****
@@ -771,12 +893,13 @@ export class ListboxComponent extends BaseLitElement {
     if (!item || item.tagName.toLowerCase() !== OPTION_CONSTANTS.elementName || !source || source.tagName.toLowerCase() !== LISTBOX_TAG_NAME) {
       return false;
     }
-    // Allow drop if the source is this listbox and reordering is enabled, or if the source allows
-    // drag out is in the allowed drop sources
-    if ((this.reorderable && source === this) || ((source as ListboxComponent).dragOut && this.dropFromElements.includes(source as ListboxComponent))) {
+    const sourceListbox = source as ListboxComponent;
+    // Allow drop if the source is this listbox and reordering is enabled, or if this listbox and
+    // the source listbox have mutually opted in to the cross-listbox link
+    if (this.reorderable && sourceListbox === this) {
       return true;
     }
-    return false;
+    return this.dropLinkElements.includes(sourceListbox) && sourceListbox.dragLinkElements.includes(this);
   }
 
   #handleDragLeave(): void {

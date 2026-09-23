@@ -168,9 +168,12 @@ describe('Option', () => {
 
       it('should render a drag-out handle when the listbox allows drag out', async () => {
         const { option } = await createListboxFixture(html`
-          <forge-listbox drag-out>
-            <forge-option value="1">Option 1</forge-option>
-          </forge-listbox>
+          <div>
+            <forge-listbox drag-link="target">
+              <forge-option value="1">Option 1</forge-option>
+            </forge-listbox>
+            <forge-listbox id="target"></forge-listbox>
+          </div>
         `);
         const handle = option.shadowRoot?.querySelector('.drag-handle');
         expect(handle?.getAttribute('name')).toBe('drag');

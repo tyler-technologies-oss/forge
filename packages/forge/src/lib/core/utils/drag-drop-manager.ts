@@ -152,3 +152,19 @@ export class DragDropManager {
     });
   }
 }
+
+/**
+ * Represents a source of draggable elements in a drag and drop operation.
+ */
+export interface DragSource<T = HTMLElement> {
+  dragLink: string;
+  dragLinkElements: T[];
+}
+
+/**
+ * Represents a target for draggable elements in a drag and drop operation.
+ */
+export interface DropTarget<T = HTMLElement> {
+  dropLink: string;
+  dropLinkElements: T[];
+}

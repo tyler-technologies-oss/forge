@@ -9,7 +9,7 @@ import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent, IconRegistry } from '../../icon/index.js';
-import { LISTBOX_DENSE, LISTBOX_DRAG_OUT, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox-constants.js';
+import { LISTBOX_DENSE, LISTBOX_DRAG_LINK, LISTBOX_REORDERABLE, LISTBOX_TAG_NAME } from '../../listbox/listbox-constants.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import type { IOptionConfigComponent } from './option-config.js';
 import { OptionConfigComponent } from './option-config.js';
@@ -141,7 +141,7 @@ export class OptionComponent extends OptionConfigComponent implements IOptionCom
   @state()
   private _reorderable = false;
 
-  @consume({ context: LISTBOX_DRAG_OUT, subscribe: true })
+  @consume({ context: LISTBOX_DRAG_LINK, subscribe: true })
   @state()
   private _dragOut = false;
 

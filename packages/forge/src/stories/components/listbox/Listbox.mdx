@@ -46,13 +46,17 @@ Set `reorderable` to allow options to be reordered within the listbox via drag a
 options are not automatically rearranged in the listbox. You'll need to use information provided in
 the `forge-listbox-drop` event to rearrange the DOM elements via your own script.
 
+When reordering is enabled, be sure to also include buttons alongside the listbox to allow users to
+accessibly reorder the options without relying solely on drag and drop.
+
 <Canvas of={ListboxStories.Reorderable} />
 
 ## Dragging Between Listboxes
 
-Options can be dragged from one listbox to another. Set `drag-out` on the source listbox and
-`drop-from` on the target listbox with a space-separated list of the source listbox `id`s that
-are allowed to drop into it.
+Options can be dragged from one listbox to another. Both listboxes must opt in: set `drag-link` on
+the source listbox with a space-separated list of target listbox `id`s that it's allowed to drop
+into, and set `drop-link` on the target listbox with a space-separated list of source listbox
+`id`s that are allowed to drop into it.
 
 When an option is dropped, the target listbox dispatches a `forge-listbox-drop` event and the
 source listbox dispatches a `forge-listbox-drag-out` event.

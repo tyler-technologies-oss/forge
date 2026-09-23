@@ -62,7 +62,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      exclude: ['value', 'name', 'required', 'dragOut', 'dropFrom', 'dropFromElements', 'reorderable', 'labels', 'form']
+      exclude: ['value', 'name', 'required', 'dragLink', 'dragLinkElements', 'dropLink', 'dropLinkElements', 'reorderable', 'labels', 'form']
     })
   },
   args: {
@@ -150,14 +150,14 @@ export const DragAndDrop: Story = {
   render: () => html`
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" @forge-listbox-drag-out=${dragOutAction} @forge-listbox-drop=${handleListboxDrop}>
       <forge-card style="--forge-card-padding: 0;">
-        <forge-listbox style="min-height: 48px;" id="drag-and-drop-1" drag-out drop-from="drag-and-drop-2">
+        <forge-listbox style="min-height: 48px;" id="drag-and-drop-1" drag-link="drag-and-drop-2" drop-link="drag-and-drop-2">
           <forge-option value="1">Option 1</forge-option>
           <forge-option value="2">Option 2</forge-option>
           <forge-option value="3">Option 3</forge-option>
         </forge-listbox>
       </forge-card>
       <forge-card style="--forge-card-padding: 0;">
-        <forge-listbox style="min-height: 48px;" id="drag-and-drop-2" drag-out drop-from="drag-and-drop-1">
+        <forge-listbox style="min-height: 48px;" id="drag-and-drop-2" drag-link="drag-and-drop-1" drop-link="drag-and-drop-1">
           <forge-option value="a">Option A</forge-option>
           <forge-option value="b">Option B</forge-option>
           <forge-option value="c">Option C</forge-option>
