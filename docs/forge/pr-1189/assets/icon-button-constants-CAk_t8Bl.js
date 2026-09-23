@@ -1,1 +1,0 @@
-import{C as T}from"./constants-BPFI0b36.js";const t=`${T}icon-button`,E={TOGGLE:`${t}-toggle`},e={DEFAULT_VARIANT:"icon",DEFAULT_THEME:"default",DEFAULT_SHAPE:"circular",DEFAULT_DENSITY:"large"},N={elementName:t,events:E,defaults:e};export{N as I};
