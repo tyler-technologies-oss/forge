@@ -86,6 +86,16 @@ const App = (): React.ReactElement => {
       </section>
 
       <section>
+        <h2>Document content</h2>
+        {/* A document's marks must exist in the schema, so the features that provide them have to
+            be slotted - unlike HTML input, unknown marks discard the whole document. */}
+        <ForgeRichTextEditor id="doc-content" content={SAMPLE_DOC}>
+          <ForgeRteStandardTools />
+          <ForgeRteLink />
+        </ForgeRichTextEditor>
+      </section>
+
+      <section>
         <h2>Renderer</h2>
         <ForgeRichTextRenderer content={SAMPLE_DOC} />
       </section>
