@@ -93,18 +93,21 @@ export class RteHeadingComponent extends LitElement implements IRichTextEditorFe
   public override render(): TemplateResult {
     return html`
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle(1)}
         label=${this.h1Label}
         icon=${tylIconFormatHeader1.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive('heading', { level: 1 })}></forge-rte-tool-button>
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle(2)}
         label=${this.h2Label}
         icon=${tylIconFormatHeader2.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive('heading', { level: 2 })}></forge-rte-tool-button>
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle(3)}
         label=${this.h3Label}
         icon=${tylIconFormatHeader3.name}

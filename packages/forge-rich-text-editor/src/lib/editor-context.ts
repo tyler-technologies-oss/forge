@@ -94,6 +94,17 @@ export interface EditorContext {
 
   /** Announces a message to screen readers via ARIA live region */
   announce: (message: string) => void;
+
+  /**
+   * The element tool buttons should point `aria-controls` at, via `ariaControlsElements`.
+   *
+   * It is `forge-rich-text-editor` in the wrapped layout and the `forge-rich-text-context` element
+   * itself when composed, never a consumer's shadow host - rather than
+   * the editable element, which is unreachable. Element references are dropped unless the target is
+   * in the same tree as the referring element or in one of its ancestor trees, and the editable
+   * element sits in `forge-rich-text-content`'s shadow root, a sibling branch to the toolbar's.
+   */
+  readonly controlsElement: HTMLElement | null;
 }
 
 /**

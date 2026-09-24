@@ -69,6 +69,7 @@ export class RteUnderlineComponent extends LitElement implements IRichTextEditor
   public override render(): TemplateResult {
     return html`
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${this._toggle}
         label=${this.label}
         icon=${tylIconFormatUnderlined.name}
