@@ -31,6 +31,8 @@ export const RTE_UNDERLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-un
  * positioned within underlined text. Keyboard shortcut Control+U is supported. The feature
  * announces state changes to screen readers for accessibility.
  *
+ * @dependency forge-rte-tool-button
+ *
  * @property {string} [label='Underline'] - The accessible label for the underline button.
  *
  * @attribute {string} label - The accessible label for the underline button.
