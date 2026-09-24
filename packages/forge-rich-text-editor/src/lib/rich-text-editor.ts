@@ -5,6 +5,7 @@ import { ContextRoot } from '@lit/context';
 import './rich-text-context.js';
 import './rich-text-content.js';
 import type { RichTextContextComponent } from './rich-text-context.js';
+import type { RichTextEditorContent } from './editor-context.js';
 
 import styles from './rich-text-editor.scss';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
@@ -31,7 +32,7 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  *
  * @slot - The default slot is reserved for feature components (toolbar buttons like forge-rte-standard-tools, forge-rte-code, forge-rte-link, etc.).
  *
- * @property {string} [content=''] - The HTML content of the editor.
+ * @property {RichTextEditorContent} [content=''] - The content of the editor, as an HTML string or a ProseMirror document. Both are sanitized.
  * @property {boolean} [disabled=false] - Whether the editor is disabled.
  * @property {boolean} [readOnly=false] - Whether the editor is in readonly mode.
  * @property {number} [maxLength=0] - Maximum character length allowed. 0 means no limit.
@@ -41,7 +42,7 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  * @property {boolean} [allowPasteFormatting=true] - Whether to allow pasted content to retain formatting. When false, all pasted content is treated as plain text.
  * @property {boolean} [allowPasteImages=false] - Whether to allow images to be pasted into the editor.
  *
- * @attribute {string} content - The HTML content of the editor.
+ * @attribute {string} content - The HTML content of the editor. Pass a ProseMirror document through the property instead; an attribute cannot carry an object.
  * @attribute {boolean} disabled - Whether the editor is disabled.
  * @attribute {boolean} readonly - Whether the editor is in readonly mode.
  * @attribute {number} max-length - Maximum character length allowed. 0 means no limit.
@@ -70,9 +71,9 @@ export class RichTextEditorComponent extends LitElement {
 
   public static override styles = unsafeCSS(styles);
 
-  /** The content of the editor. */
+  /** The content of the editor, as an HTML string or a ProseMirror document. */
   @property()
-  public content = '';
+  public content: RichTextEditorContent = '';
 
   /** Whether the editor is disabled. */
   @property({ type: Boolean, reflect: true })

@@ -14,6 +14,7 @@ import {
   editorContext,
   EditorContext,
   RichTextEditorChangeEventDetail,
+  RichTextEditorContent,
   RichTextEditorValidationEventDetail,
   RichTextEditorInitializationErrorEventDetail,
   RichTextEditorErrorEventDetail
@@ -48,7 +49,7 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  * @slot - The default slot for toolbar components and forge-rich-text-content.
  *
  * @property {string} [editorId='editor'] - The ID of the element to instantiate the editor against.
- * @property {string} [content=''] - The HTML content of the editor.
+ * @property {RichTextEditorContent} [content=''] - The content of the editor, as an HTML string or a ProseMirror document. Both are sanitized.
  * @property {boolean} [disabled=false] - Whether the editor is disabled.
  * @property {boolean} [readOnly=false] - Whether the editor is in readonly mode.
  * @property {number} [maxLength=0] - Maximum character length allowed. 0 means no limit.
@@ -59,7 +60,7 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
  * @property {boolean} [allowPasteImages=false] - Whether to allow images to be pasted into the editor.
  *
  * @attribute {string} editor-id - The ID of the element to instantiate the editor against.
- * @attribute {string} content - The HTML content of the editor.
+ * @attribute {string} content - The HTML content of the editor. Pass a ProseMirror document through the property instead; an attribute cannot carry an object.
  * @attribute {boolean} disabled - Whether the editor is disabled.
  * @attribute {boolean} readonly - Whether the editor is in readonly mode.
  * @attribute {number} max-length - Maximum character length allowed. 0 means no limit.
@@ -92,9 +93,9 @@ export class RichTextContextComponent extends LitElement {
   @property({ attribute: 'editor-id' })
   public editorId = 'editor';
 
-  /** The content of the editor. */
+  /** The content of the editor, as an HTML string or a ProseMirror document. */
   @property()
-  public content = '';
+  public content: RichTextEditorContent = '';
 
   /** Whether the editor is disabled. */
   @property({ type: Boolean })
