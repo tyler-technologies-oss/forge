@@ -42,6 +42,12 @@ Document input is stricter than HTML input: ProseMirror rejects a mark it has no
 discards the whole document, whereas HTML parsing drops the unknown formatting and keeps the text.
 Slot the features providing the marks your content uses.
 
+When a document is rejected the editor dispatches its `error` event with
+`{ context: 'Invalid document content', error }`, where the message names the offending mark, and
+logs the same through `console.error`. The content is still discarded — this only reports it, since
+TipTap alone logs a warning that an application cannot react to. HTML input is deliberately not
+reported, because dropping unsupported formatting there is expected behaviour rather than a fault.
+
 ## License
 
 Apache-2.0
