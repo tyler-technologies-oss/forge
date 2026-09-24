@@ -70,10 +70,53 @@ export function sanitizeHTML(html: string, allowImages = false): string {
 }
 
 /**
+ * Node attributes that carry a URL and so need protocol checking.
+ *
+ * `src` is checked even though no node in the editor's current schema uses it: the schema depends
+ * on which feature components a consumer slots in, so a sanitizer that only covered the attributes
+ * reachable today would quietly stop being correct the moment an image or media feature is added.
+ */
+const URL_ATTRIBUTES = ['href', 'src', 'srcset', 'poster'];
+
+/**
+ * Replaces a dangerous URL in `attrs[name]` with `#`, checking both the raw value and its
+ * URL-decoded form. A value that cannot be decoded is treated as dangerous.
+ */
+function neutralizeDangerousUrl(attrs: Record<string, unknown>, name: string): void {
+  const value = attrs[name];
+  if (!value || typeof value !== 'string') {
+    return;
+  }
+
+  const url = value.toLowerCase().trim();
+
+  for (const protocol of DANGEROUS_PROTOCOLS) {
+    if (url.startsWith(protocol)) {
+      console.warn(`[RTE Security] Blocked dangerous protocol in ${name}:`, value);
+      attrs[name] = '#';
+      return;
+    }
+  }
+
+  try {
+    const decoded = decodeURIComponent(url);
+    for (const protocol of DANGEROUS_PROTOCOLS) {
+      if (decoded.includes(protocol)) {
+        console.warn(`[RTE Security] Blocked encoded dangerous protocol in ${name}:`, value);
+        attrs[name] = '#';
+        return;
+      }
+    }
+  } catch {
+    attrs[name] = '#';
+  }
+}
+
+/**
  * Sanitizes a ProseMirror JSON object.
  * - Deep-clones before mutating so the caller's object is never corrupted.
  * - Validates structure depth and node count to prevent DoS.
- * - Blocks dangerous protocols in link marks (raw and URL-encoded variants).
+ * - Blocks dangerous protocols in URL-bearing attributes (raw and URL-encoded variants).
  *
  * @param json The ProseMirror JSON content to sanitize
  * @returns The sanitized deep clone, or throws on DoS limit exceeded
@@ -102,34 +145,9 @@ export function sanitizeJSON(json: unknown): unknown {
 
     const n = node as Record<string, unknown>;
 
-    if (n.type === 'link' || (n.attrs && typeof n.attrs === 'object')) {
-      const attrs = n.attrs as Record<string, unknown>;
-      if (attrs.href && typeof attrs.href === 'string') {
-        const href = attrs.href.toLowerCase().trim();
-
-        for (const protocol of DANGEROUS_PROTOCOLS) {
-          if (href.startsWith(protocol)) {
-            console.warn('[RTE Security] Blocked dangerous protocol in link:', attrs.href);
-            attrs.href = '#';
-            break;
-          }
-        }
-
-        // Check URL-encoded variants (only if href wasn't already replaced)
-        if (attrs.href !== '#') {
-          try {
-            const decoded = decodeURIComponent(href);
-            for (const protocol of DANGEROUS_PROTOCOLS) {
-              if (decoded.includes(protocol)) {
-                console.warn('[RTE Security] Blocked encoded dangerous protocol:', attrs.href);
-                attrs.href = '#';
-                break;
-              }
-            }
-          } catch {
-            attrs.href = '#';
-          }
-        }
+    if (n.attrs && typeof n.attrs === 'object') {
+      for (const attribute of URL_ATTRIBUTES) {
+        neutralizeDangerousUrl(n.attrs as Record<string, unknown>, attribute);
       }
     }
 
