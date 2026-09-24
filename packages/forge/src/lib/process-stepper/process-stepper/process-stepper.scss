@@ -13,16 +13,7 @@
 //
 
 .forge-process-stepper {
-  @include core.tokens;
   @include core.base;
-}
-
-//
-// Title
-//
-
-.title {
-  @include core.title;
 }
 
 //
@@ -47,12 +38,4 @@ slot {
 
 .horizontal ::slotted(forge-process-step) {
   @include core.slotted-step-horizontal;
-}
-
-//
-// Announcer
-//
-
-.announcer {
-  @include core.announcer;
 }

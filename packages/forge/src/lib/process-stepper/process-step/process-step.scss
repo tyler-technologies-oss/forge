@@ -8,10 +8,6 @@
   @include core.host;
 }
 
-:host([state='disabled']) {
-  @include core.disabled;
-}
-
 //
 // Base
 //
@@ -27,6 +23,10 @@
 
 .forge-process-step.horizontal {
   @include core.horizontal;
+}
+
+:host(:state(disabled)) .forge-process-step {
+  @include core.disabled;
 }
 
 //
@@ -142,8 +142,16 @@
   @include core.label-text;
 }
 
+.focus-area {
+  @include core.focus-area;
+}
+
 forge-focus-indicator {
   @include core.label-focus-indicator;
+}
+
+forge-state-layer {
+  @include core.label-state-layer;
 }
 
 .label-row ::slotted(a),

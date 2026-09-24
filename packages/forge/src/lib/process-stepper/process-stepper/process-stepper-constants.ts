@@ -1,5 +1,5 @@
+import { createContext } from '@lit/context';
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
-import type { ProcessStepComponent } from '../process-step/process-step.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}process-stepper`;
 
@@ -7,26 +7,22 @@ const attributes = {
   ORIENTATION: 'orientation'
 };
 
-const events = {
-  CHANGE: `${elementName}-change`
-};
-
 /** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const PROCESS_STEPPER_CONSTANTS = {
   elementName,
-  attributes,
-  events
+  attributes
 };
 
 export type ProcessStepperOrientation = 'vertical' | 'horizontal';
 
-export interface IProcessStepperChangeEventData {
-  /** The index of the step that was activated. */
-  index: number;
-
-  /** The step element that was activated. */
-  step: ProcessStepComponent;
+/** The stepper-wide configuration shared with each step. */
+export interface IProcessStepperContext {
+  count: number;
+  numbered: boolean;
+  orientation: ProcessStepperOrientation;
 }
+
+export const PROCESS_STEPPER_CONTEXT = createContext<IProcessStepperContext>(elementName);
 
 const numbers = {
   /** The container width, in pixels, at or below which the stepper collapses to its compact layout. */

@@ -99,8 +99,14 @@ icon rather than a number.
 
 ## Titles
 
-Use the stepper's `title` slot to label the process. Provide a heading element at the appropriate
-level for the surrounding page.
+The stepper does not render a title of its own. Place a heading at the appropriate level for the
+surrounding page before the stepper, and reference it with `aria-labelledby` so the list is named
+after it:
+
+```html
+<h3 id="record-progress-title" class="forge-typography--subheading1">Record progress</h3>
+<forge-process-stepper aria-labelledby="record-progress-title">...</forge-process-stepper>
+```
 
 <Canvas of={ProcessStepperStories.WithTitle} />
 
@@ -138,7 +144,8 @@ rather than the inset edge of their state layer. Set that property to `0` to opt
 
 ## Validation Messaging
 
-Use a step's `message` slot for validation or warning messaging.
+Place validation or warning messaging, such as a `<forge-inline-message>`, in a step's
+`additional-content` slot.
 
 <Canvas of={ProcessStepperStories.WithMessage} />
 
@@ -169,34 +176,42 @@ not make the step itself interactive. Set `noninteractive` on a step to opt out 
 entirely.
 
 Activating an interactive step dispatches a `forge-process-step-select` event from the step and a
-`forge-process-stepper-change` event from the stepper, carrying the index of the step and the step
-element.
+`change` event from the stepper. Read the activated step from the stepper's `selectedStep`
+property:
+
+```typescript
+stepper.addEventListener('change', (event: Event) => {
+  const { selectedStep } = event.target as ProcessStepperComponent;
+});
+```
 
 Because the interactive area is the consumer's own link or button, steps are reachable with `Tab`
 and activate with the keys native to that element. A `<forge-focus-indicator>` draws the focus ring
 around the label text only, so keyboard focus never outlines the progress line, the label's full
-cell, or the step's content.
+cell, or the step's content, and a `<forge-state-layer>` fills the same area on hover and press.
 
-The ring is offset from the label text and has rounded corners. Both measurements are configurable:
+The ring sits 4px from the label along the inline axis and 2px along the block axis, with rounded
+corners. It is a standard focus indicator, so its tokens can be overridden through the
+`focus-indicator` part:
 
-| Custom property                                     | Default |
-| --------------------------------------------------- | ------- |
-| `--forge-process-step-focus-indicator-offset`       | `4px`   |
-| `--forge-process-step-focus-indicator-offset-block` | `2px`   |
-| `--forge-process-step-focus-indicator-shape`        | `4px`   |
+```css
+forge-process-step::part(focus-indicator) {
+  --forge-focus-indicator-shape: 8px;
+}
+```
 
 The ring's outline is painted outside its offset, so every gap around the label has to accommodate
 the offset plus the outline width for the ring never to touch its neighbours. Three gaps do that
-work, and each leaves at least 4px of visible clearance at the default offsets:
+work, and each leaves at least 4px of visible clearance by default:
 
-| Gap                                        | Separates the label from       | Default |
-| ------------------------------------------ | ------------------------------ | ------- |
-| `--forge-process-step-sidebar-gap`         | the marker, when vertical      | `12px`  |
-| `--forge-process-step-marker-label-gap`    | the marker, when horizontal    | `8px`   |
-| `--forge-process-step-label-content-gap`   | the description and content    | `8px`   |
+| Gap                                      | Separates the label from    | Default |
+| ---------------------------------------- | --------------------------- | ------- |
+| `--forge-process-step-sidebar-gap`       | the marker, when vertical   | `12px`  |
+| `--forge-process-step-marker-label-gap`  | the marker, when horizontal | `8px`   |
+| `--forge-process-step-label-content-gap` | the description and content | `8px`   |
 
-Raising either focus offset past the gap that separates the label from a neighbour will make a
-focused label overlap it, so raise the corresponding gap to match.
+Raising the focus indicator's offset past the gap that separates the label from a neighbour will
+make a focused label overlap it, so raise the corresponding gap to match.
 
 <Canvas of={ProcessStepperStories.Interactive} />
 
@@ -212,21 +227,24 @@ beside its marker rather than beneath it.
 ## Accessibility
 
 Process steppers are rendered as semantic lists with `role="list"` on the stepper and
-`role="listitem"` on each step. The stepper sets `aria-posinset` and `aria-setsize` on each step, and
-`aria-current="step"` on the step in the `current` state. State markers are decorative and marked
+`role="listitem"` on each step. Each step reports its position and the number of steps, and
+`aria-current="step"` when in the `current` state. State markers are decorative and marked
 `aria-hidden="true"`.
 
-Each step is a single list item. A clickable step renders a native button inside that list item for
-the interactive area, and a step's description, meta content, messaging, and slotted content are
-siblings of that button rather than nested inside it, so interactive content keeps its own
-semantics.
+When a stepper only shows part of a longer process, set `aria-posinset` and `aria-setsize` on each
+step. They take precedence over the step's position in the DOM for the accessibility tree, the
+number shown in the marker, and progress announcements.
+
+Each step is a single list item. The interactive area of a clickable step is the consumer's own link
+or button, and a step's description, meta content, and slotted content are siblings of it rather
+than nested inside it, so interactive content keeps its own semantics.
 
 ### Progress Announcements
 
-The stepper contains a polite live region that announces the step a process has moved to, for
-example "Step 3 of 5: Internal review". It announces whenever the step in the `current` state
-changes, including when a consumer advances the process programmatically, and stays silent on the
-initial render so a screen reader is not interrupted when the page loads.
+Steps announce the position a process has moved to through the shared Forge live announcer, for
+example "Step 3 of 5: Internal review". A step announces whenever it moves into the `current` state,
+including when a consumer advances the process programmatically, and stays silent on the initial
+render so a screen reader is not interrupted when the page loads.
 
 ### Best Practices
 

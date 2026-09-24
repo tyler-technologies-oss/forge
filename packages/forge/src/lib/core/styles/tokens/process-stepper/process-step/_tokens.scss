@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '../../../spacing';
 @use '../../../theme';
+@use '../../../border';
 @use '../../../utils';
 @use '../../../shape';
 @use '../../../typography';
@@ -14,8 +15,8 @@ $tokens: (
   marker-inactive-color: utils.module-val(process-step, marker-inactive-color, theme.variable(text-low)),
   marker-border-width: utils.module-val(process-step, marker-border-width, spacing.variable(xxxsmall)),
   marker-error-color: utils.module-val(process-step, marker-error-color, theme.variable(error)),
-  line-width: utils.module-val(process-step, line-width, 3px),
-  line-active-width: utils.module-val(process-step, line-active-width, 3px),
+  line-width: utils.module-val(process-step, line-width, border.variable(medium)),
+  line-active-width: utils.module-ref(process-step, line-active-width, line-width),
   line-color: utils.module-val(process-step, line-color, theme.variable(outline-low)),
   line-active-color: utils.module-val(process-step, line-active-color, theme.variable(text-high)),
   line-gap: utils.module-val(process-step, line-gap, spacing.variable(xsmall)),
@@ -23,7 +24,7 @@ $tokens: (
   content-gap: utils.module-val(process-step, content-gap, spacing.variable(xxsmall)),
   meta-gap: utils.module-val(process-step, meta-gap, spacing.variable(xxsmall)),
   meta-column-gap: utils.module-val(process-step, meta-column-gap, spacing.variable(small)),
-  control-inset: utils.module-val(process-step, control-inset, 12px),
+  control-inset: utils.module-val(process-step, control-inset, spacing.variable(small)),
   actions-gap: utils.module-val(process-step, actions-gap, spacing.variable(xsmall)),
   actions-margin: utils.module-val(process-step, actions-margin, spacing.variable(xsmall)),
   label-color: utils.module-val(process-step, label-color, theme.variable(text-high)),
@@ -34,10 +35,7 @@ $tokens: (
   marker-background: utils.module-val(process-step, marker-background, theme.variable(surface)),
   disabled-opacity: utils.module-val(process-step, disabled-opacity, 0.38),
   label-content-gap: utils.module-val(process-step, label-content-gap, spacing.variable(xsmall)),
-  marker-label-gap: utils.module-val(process-step, marker-label-gap, spacing.variable(xsmall)),
-  focus-indicator-offset: utils.module-val(process-step, focus-indicator-offset, spacing.variable(xxsmall)),
-  focus-indicator-offset-block: utils.module-val(process-step, focus-indicator-offset-block, spacing.variable(xxxsmall)),
-  focus-indicator-shape: utils.module-val(process-step, focus-indicator-shape, shape.variable(medium))
+  marker-label-gap: utils.module-val(process-step, marker-label-gap, spacing.variable(xsmall))
 ) !default;
 
 @function get($key) {

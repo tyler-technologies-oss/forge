@@ -1,9 +1,3 @@
-@use '../../core/styles/typography';
-@use '../../utils/mixins' as mixins;
-@use './token-utils' as *;
-
-@forward './token-utils';
-
 @mixin host {
   display: block;
 }
@@ -12,12 +6,6 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-}
-
-@mixin title {
-  margin-block-end: #{token(title-margin)};
-
-  @include typography.style(subheading1);
 }
 
 @mixin steps {
@@ -33,8 +21,4 @@
 @mixin slotted-step-horizontal {
   flex: 1 1 0;
   min-inline-size: 0;
-}
-
-@mixin announcer {
-  @include mixins.visually-hidden;
 }

@@ -7,7 +7,7 @@ import '@tylertech/forge/process-stepper';
 import { html } from 'lit';
 import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 
-const changeAction = action('forge-process-stepper-change');
+const changeAction = action('change');
 const selectAction = action('forge-process-step-select');
 
 const component = 'forge-process-stepper';
@@ -29,7 +29,7 @@ const meta = {
 
     steps.forEach(({ label, state }) => {
       const step = document.createElement('forge-process-step');
-      step.label = label;
+      step.textContent = label;
       step.state = state as (typeof step)['state'];
       stepper.appendChild(step);
     });
@@ -96,8 +96,8 @@ export const States: Story = {
 export const WithTitle: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-process-stepper orientation="horizontal" numbered>
-      <span slot="title">Record progress</span>
+    <h3 id="record-progress-title" class="forge-typography--subheading1">Record progress</h3>
+    <forge-process-stepper orientation="horizontal" numbered aria-labelledby="record-progress-title">
       <forge-process-step state="completed">
         Application received
         <span slot="meta">Jul 17, 2026</span>
@@ -129,8 +129,8 @@ export const WithMeta: Story = {
 export const WithStepContent: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-process-stepper>
-      <span slot="title">Stage progress</span>
+    <h3 id="stage-progress-title" class="forge-typography--subheading1">Stage progress</h3>
+    <forge-process-stepper aria-labelledby="stage-progress-title">
       <forge-process-step state="completed">
         Verbal warning
         <span slot="meta">Started:</span>
@@ -159,7 +159,7 @@ export const WithMessage: Story = {
       <forge-process-step state="completed">Submit documents</forge-process-step>
       <forge-process-step state="error">
         Plan review
-        <forge-inline-message slot="message" theme="error">Two required documents are missing.</forge-inline-message>
+        <forge-inline-message slot="additional-content" theme="error">Two required documents are missing.</forge-inline-message>
       </forge-process-step>
       <forge-process-step>Permit issued</forge-process-step>
     </forge-process-stepper>
@@ -169,7 +169,7 @@ export const WithMessage: Story = {
 export const Interactive: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-process-stepper orientation="horizontal" @forge-process-stepper-change=${changeAction} @forge-process-step-select=${selectAction}>
+    <forge-process-stepper orientation="horizontal" @change=${changeAction} @forge-process-step-select=${selectAction}>
       <forge-process-step state="completed"><button>Cart</button></forge-process-step>
       <forge-process-step state="current"><button>Shipping</button></forge-process-step>
       <forge-process-step><button>Payment</button></forge-process-step>
@@ -181,7 +181,7 @@ export const Interactive: Story = {
 export const InteractiveVertical: Story = {
   ...standaloneStoryParams,
   render: () => html`
-    <forge-process-stepper @forge-process-stepper-change=${changeAction} @forge-process-step-select=${selectAction}>
+    <forge-process-stepper @change=${changeAction} @forge-process-step-select=${selectAction}>
       <forge-process-step state="completed"><a href="#application">Application received</a></forge-process-step>
       <forge-process-step state="current" description="Assigned to J. Rivera"><a href="#review">Internal review</a></forge-process-step>
       <forge-process-step><a href="#inspection">Site inspection</a></forge-process-step>

@@ -1,8 +1,14 @@
+@use '../../core/styles/shape';
+@use '../../core/styles/spacing';
 @use '../../core/styles/typography';
 @use '../../focus-indicator';
 @use './token-utils' as *;
 
 @forward './token-utils';
+
+// The offset mirrors the focus indicator's default outward offset.
+$_label-ring-offset: spacing.variable(xxsmall);
+$_label-ring-shape: shape.variable(medium);
 
 @mixin host {
   display: block;
@@ -185,17 +191,28 @@
   margin-block-start: calc(#{token(marker-label-gap)} - #{token(content-gap)});
 }
 
-// The ring sits further from the text along the inline axis than the block axis, so short labels
-// are not crowded. `outward-offset` insets the ring evenly on every side, and the block margin
-// pulls it back to the smaller block offset.
+// The focus indicator and state layer are sized from this box. It is inset from the label along the
+// block axis so the ring sits further from the text along the inline axis than the block axis,
+// which keeps short labels from being crowded without pushing the ring into the marker or content.
+@mixin focus-area {
+  inset: #{spacing.variable(xxxsmall)} 0;
+  pointer-events: none;
+  position: absolute;
+}
+
 @mixin label-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      outward-offset: #{token(focus-indicator-offset)},
-      offset-block: calc(#{token(focus-indicator-offset)} - #{token(focus-indicator-offset-block)}),
-      shape: #{token(focus-indicator-shape)}
+      shape: #{$_label-ring-shape}
     )
   );
+}
+
+// The state layer fills the area inside the focus ring, so hover and pressed states share its
+// shape rather than hugging the label text.
+@mixin label-state-layer {
+  border-radius: calc(#{$_label-ring-shape} + #{$_label-ring-offset});
+  inset: calc(-1 * #{$_label-ring-offset});
 }
 
 // The focus ring replaces the native focus outline, so the label is not ringed twice. This is only

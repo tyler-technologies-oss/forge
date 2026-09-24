@@ -1,18 +1,21 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { consume, ContextRoot } from '@lit/context';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer, tryDefine } from '@tylertech/forge-core';
 import { tylIconCheck, tylIconExclamation } from '@tylertech/tyler-icons';
-import { TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements, queryAssignedNodes } from 'lit/decorators.js';
+import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { when } from 'lit/directives/when.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { supportsElementInternalsAria } from '../../core/utils/feature-detection.js';
 import { hideWhenEmpty } from '../../core/utils/lit-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
 import { IconComponent } from '../../icon/icon.js';
-import type { ProcessStepperOrientation } from '../process-stepper/process-stepper-constants.js';
-import { ERROR_STATES, PARTIAL_STATES, PROCESS_STEP_CONSTANTS, PROGRESS_LINE_STATES, ProcessStepState } from './process-step-constants.js';
+import { StateLayerComponent } from '../../state-layer/state-layer.js';
+import { IProcessStepperContext, PROCESS_STEPPER_CONSTANTS, PROCESS_STEPPER_CONTEXT } from '../process-stepper/process-stepper-constants.js';
+import { ERROR_STATES, PARTIAL_STATES, PROCESS_STEP_CONSTANTS, PROGRESS_LINE_STATES, ProcessStepState, stepIndex } from './process-step-constants.js';
 
 import styles from './process-step.scss';
 
@@ -24,15 +27,15 @@ import styles from './process-step.scss';
  *
  * @dependency forge-icon
  * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  *
  * @slot - The step label. A slotted link or button in this slot becomes the step's interactive area.
  * @slot marker - Replaces the generated state marker.
- * @slot additional-content - Content displayed under the label, such as inline form fields.
  * @slot meta - Supporting information displayed under the label, such as dates or assigned users.
- * @slot message - Validation or warning messaging displayed under the meta content.
+ * @slot additional-content - Content displayed under the meta content, such as inline form fields or validation messaging.
  * @slot actions - Actions displayed at the end of the step content.
  *
- * @fires {CustomEvent<void>} forge-process-step-select - Dispatches when an interactive step is activated.
+ * @fires {Event} forge-process-step-select - Dispatches when an interactive step is activated.
  *
  * @cssproperty --forge-process-step-marker-size - The size of the state marker.
  * @cssproperty --forge-process-step-marker-background - The background color of the marker, which masks the progress line behind it.
@@ -62,22 +65,18 @@ import styles from './process-step.scss';
  * @cssproperty --forge-process-step-disabled-opacity - The opacity applied to a disabled step.
  * @cssproperty --forge-process-step-marker-label-gap - The spacing between the marker and the label in the horizontal orientation, which leaves room for the focus ring.
  * @cssproperty --forge-process-step-label-content-gap - The spacing between the label and the step content, which leaves room for the focus ring.
- * @cssproperty --forge-process-step-focus-indicator-offset - The distance between the label text and the focus ring along the inline axis.
- * @cssproperty --forge-process-step-focus-indicator-offset-block - The distance between the label text and the focus ring along the block axis.
- * @cssproperty --forge-process-step-focus-indicator-shape - The corner radius of the focus ring.
  *
  * @csspart root - The root element.
  * @csspart line - The progress line element.
  * @csspart marker - The state marker element.
- * @csspart content - The element containing the description, meta, message, and slotted content.
+ * @csspart content - The element containing the description, meta, and slotted content.
  * @csspart label - The element containing the slotted label.
  * @csspart focus-indicator - The focus indicator shown when an interactive step has keyboard focus.
+ * @csspart state-layer - The state layer shown when an interactive step is hovered or pressed.
  * @csspart description - The description element.
  * @csspart meta - The element containing the slotted meta content.
- * @csspart message - The element containing the slotted message content.
  * @csspart actions - The element containing the slotted actions.
  */
-@customElement(PROCESS_STEP_CONSTANTS.elementName)
 export class ProcessStepComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -85,7 +84,10 @@ export class ProcessStepComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = PROCESS_STEP_CONSTANTS.elementName;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent, FocusIndicatorComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [IconComponent, FocusIndicatorComponent, StateLayerComponent];
+
+  /** @internal */
+  public static contextRoot = new ContextRoot();
 
   static {
     IconRegistry.define([tylIconCheck, tylIconExclamation]);
@@ -96,7 +98,7 @@ export class ProcessStepComponent extends BaseLitElement {
    * @default 'not-started'
    * @attribute
    */
-  @property({ reflect: true })
+  @property()
   public state: ProcessStepState = 'not-started';
 
   /**
@@ -112,45 +114,24 @@ export class ProcessStepComponent extends BaseLitElement {
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true })
+  @property({ type: Boolean })
   public noninteractive = false;
 
-  /**
-   * The one-based position of the step within the process. Set by the parent
-   * `<forge-process-stepper>`.
-   * @default 0
-   */
-  @property({ type: Number, attribute: false })
-  public index = 0;
-
-  /**
-   * Whether the step number is displayed within the marker when the step has no icon treatment.
-   * Set by the parent `<forge-process-stepper>`.
-   * @default false
-   */
-  @property({ type: Boolean, attribute: false })
-  public numbered = false;
-
-  /**
-   * The total number of steps in the process. Set by the parent `<forge-process-stepper>`.
-   * @default 0
-   */
-  @property({ type: Number, attribute: false })
-  public count = 0;
-
-  /**
-   * Whether this is the last step in the process. Set by the parent `<forge-process-stepper>`.
-   * @default false
-   */
-  @property({ type: Boolean, attribute: false })
-  public last = false;
-
-  /**
-   * The orientation inherited from the parent `<forge-process-stepper>`.
-   * @default 'vertical'
-   */
+  /** @internal */
   @property({ attribute: false })
-  public orientation: ProcessStepperOrientation = 'vertical';
+  public [stepIndex] = 0;
+
+  @state()
+  @consume({ context: PROCESS_STEPPER_CONTEXT, subscribe: true })
+  private _stepperContext?: IProcessStepperContext;
+
+  /** A position set by the consumer, which takes precedence over the step's position in the DOM. */
+  @property({ attribute: 'aria-posinset' })
+  private _consumerPosInSet: string | null = null;
+
+  /** A process size set by the consumer, which takes precedence over the number of steps in the DOM. */
+  @property({ attribute: 'aria-setsize' })
+  private _consumerSetSize: string | null = null;
 
   @queryAssignedElements({ slot: 'marker' })
   private readonly _markerElements!: Element[];
@@ -169,6 +150,13 @@ export class ProcessStepComponent extends BaseLitElement {
   }
 
   public connectedCallback(): void {
+    // Attach the parent stepper's context root so that context is provided even if the step is
+    // upgraded before the stepper. This must happen before super.connectedCallback().
+    const stepper = this.closest(PROCESS_STEPPER_CONSTANTS.elementName);
+    if (stepper) {
+      ProcessStepComponent.contextRoot.attach(stepper);
+    }
+
     super.connectedCallback();
     setDefaultAria(this, this.#internals, { role: 'listitem' });
     this.addEventListener('click', this.#onClick);
@@ -179,13 +167,22 @@ export class ProcessStepComponent extends BaseLitElement {
     this.removeEventListener('click', this.#onClick);
   }
 
-  public willUpdate(): void {
+  public willUpdate(changedProperties: PropertyValues<this>): void {
     toggleState(this.#internals, 'disabled', this.state === 'disabled');
     setDefaultAria(this, this.#internals, {
-      ariaCurrent: this.state === 'current' ? 'step' : null,
-      ariaPosInSet: this.index ? `${this.index}` : null,
-      ariaSetSize: this.count ? `${this.count}` : null
+      ariaCurrent: this.state === 'current' ? 'step' : null
     });
+
+    // Positional ARIA is only applied through ElementInternals, so aria-posinset and aria-setsize
+    // set on the host by the consumer take precedence rather than being overwritten.
+    if (supportsElementInternalsAria()) {
+      this.#internals.ariaPosInSet = this.#position ? `${this.#position}` : null;
+      this.#internals.ariaSetSize = this.#setSize ? `${this.#setSize}` : null;
+    }
+
+    if (this.hasUpdated && changedProperties.has('state') && this.state === 'current') {
+      this.#announce();
+    }
   }
 
   /**
@@ -217,6 +214,18 @@ export class ProcessStepComponent extends BaseLitElement {
       .trim();
   }
 
+  get #orientation(): string {
+    return this._stepperContext?.orientation ?? 'vertical';
+  }
+
+  get #position(): number {
+    return Number(this._consumerPosInSet) || this[stepIndex];
+  }
+
+  get #setSize(): number {
+    return Number(this._consumerSetSize) || (this._stepperContext?.count ?? 0);
+  }
+
   get #markerIcon(): string | null {
     if (this.state === 'completed') {
       return 'check';
@@ -239,7 +248,7 @@ export class ProcessStepComponent extends BaseLitElement {
     return html`
       <div part="marker" class=${classMap(classes)} aria-hidden="true">
         <slot name="marker" @slotchange=${this.#handleMarkerSlotChange}
-          >${icon ? html`<forge-icon name=${icon}></forge-icon>` : html`${this.numbered ? this.index || nothing : nothing}`}</slot
+          >${icon ? html`<forge-icon name=${icon}></forge-icon>` : html`${this._stepperContext?.numbered ? this.#position || nothing : nothing}`}</slot
         >
       </div>
     `;
@@ -250,19 +259,26 @@ export class ProcessStepComponent extends BaseLitElement {
     const interactive = this.interactive;
 
     return html`
-      <div part="root" class=${classMap({ 'forge-process-step': true, [this.orientation]: true, [this.state]: true, interactive })}>
-        <div part="line" class=${classMap({ line: true, active: this.lineActive, last: this.last })} aria-hidden="true"></div>
+      <div part="root" class=${classMap({ 'forge-process-step': true, [this.#orientation]: true, [this.state]: true, interactive })}>
+        <div part="line" class=${classMap({ line: true, active: this.lineActive })} aria-hidden="true"></div>
         <div class="sidebar">${this.#marker}</div>
         <div part="label" class="label-row">
           <span class="label">
             <slot @slotchange=${this.#handleLabelSlotChange}></slot>
-            ${when(interactive, () => html`<forge-focus-indicator part="focus-indicator"></forge-focus-indicator>`)}
+            ${when(
+              interactive,
+              () => html`
+                <span class="focus-area">
+                  <forge-state-layer exportparts="surface:state-layer" .disabled=${this.state === 'disabled'}></forge-state-layer>
+                  <forge-focus-indicator part="focus-indicator"></forge-focus-indicator>
+                </span>
+              `
+            )}
           </span>
         </div>
         <div part="content" class="content">
           ${when(this.description, () => html`<span part="description" class="description">${this.description}</span>`)}
           <div part="meta" class="meta" ${hideWhenEmpty()}><slot name="meta"></slot></div>
-          <div part="message" class="message" ${hideWhenEmpty()}><slot name="message"></slot></div>
           <slot name="additional-content"></slot>
           <div part="actions" class="actions" ${hideWhenEmpty()}><slot name="actions"></slot></div>
         </div>
@@ -271,9 +287,14 @@ export class ProcessStepComponent extends BaseLitElement {
   }
 
   public updated(): void {
+    const target = this.#interactiveElement;
     const indicator = this.shadowRoot?.querySelector<FocusIndicatorComponent>('forge-focus-indicator');
+    const stateLayer = this.shadowRoot?.querySelector<StateLayerComponent>('forge-state-layer');
     if (indicator) {
-      indicator.targetElement = this.#interactiveElement ?? undefined;
+      indicator.targetElement = target ?? undefined;
+    }
+    if (stateLayer) {
+      stateLayer.targetElement = target;
     }
   }
 
@@ -289,6 +310,19 @@ export class ProcessStepComponent extends BaseLitElement {
     const elements = this._labelElements ?? [];
     const anchor = elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.ANCHOR));
     return (anchor ?? elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.BUTTON_LIKE)) ?? null) as HTMLElement | null;
+  }
+
+  /** Announces the position of the step when the process moves to it. */
+  #announce(): void {
+    const position = this.#position;
+    const setSize = this.#setSize;
+    if (!this._stepperContext || !position || !setSize) {
+      return;
+    }
+
+    const label = this.labelText;
+    const announcement = `Step ${position} of ${setSize}`;
+    LiveAnnouncer.instance.announce(label ? `${announcement}: ${label}` : announcement, 'polite');
   }
 
   #onClick: EventListener = (evt: Event) => this.#handleClick(evt);
@@ -307,9 +341,11 @@ export class ProcessStepComponent extends BaseLitElement {
       return;
     }
 
-    this.dispatchEvent(new CustomEvent('forge-process-step-select', { bubbles: true, composed: true }));
+    this.dispatchEvent(new Event('forge-process-step-select', { bubbles: true, composed: true }));
   }
 }
+
+tryDefine(PROCESS_STEP_CONSTANTS.elementName, ProcessStepComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -317,6 +353,6 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-process-step-select': CustomEvent<void>;
+    'forge-process-step-select': Event;
   }
 }

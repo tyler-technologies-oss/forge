@@ -40,8 +40,8 @@
 
   <div>
     <h3 class="forge-typography--heading2">Horizontal With Title</h3>
-    <forge-process-stepper orientation="horizontal" numbered>
-      <h4 slot="title" class="forge-typography--heading3">Record progress</h4>
+    <h4 id="record-progress-title" class="forge-typography--heading3">Record progress</h4>
+    <forge-process-stepper orientation="horizontal" numbered aria-labelledby="record-progress-title">
       <forge-process-step state="completed">
           Application received
         <span slot="meta" class="forge-color--text-medium">Jul 17, 2026</span>
@@ -69,8 +69,8 @@
 
   <div>
     <h3 class="forge-typography--heading2">Vertical With Step Content</h3>
-    <forge-process-stepper>
-      <h4 slot="title" class="forge-typography--heading3">Stage progress</h4>
+    <h4 id="stage-progress-title" class="forge-typography--heading3">Stage progress</h4>
+    <forge-process-stepper aria-labelledby="stage-progress-title">
       <forge-process-step state="completed">
           Verbal warning
         <span slot="meta" class="forge-color--text-medium">Started:</span>
@@ -115,7 +115,7 @@
       <forge-process-step state="blocked">Blocked</forge-process-step>
       <forge-process-step state="error">
           Error
-        <forge-inline-message slot="message" theme="error">Two required documents are missing.</forge-inline-message>
+        <forge-inline-message slot="additional-content" theme="error">Two required documents are missing.</forge-inline-message>
       </forge-process-step>
       <forge-process-step state="requires-attention">Requires attention</forge-process-step>
     </forge-process-stepper>

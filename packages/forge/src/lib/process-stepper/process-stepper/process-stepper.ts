@@ -1,13 +1,19 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver } from '@tylertech/forge-core';
-import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
+import { provide } from '@lit/context';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, tryDefine } from '@tylertech/forge-core';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { property, queryAssignedElements, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { hideWhenEmpty } from '../../core/utils/lit-utils.js';
-import { PROCESS_STEP_CONSTANTS } from '../process-step/process-step-constants.js';
+import { PROCESS_STEP_CONSTANTS, stepIndex } from '../process-step/process-step-constants.js';
 import { ProcessStepComponent } from '../process-step/process-step.js';
-import { IProcessStepperChangeEventData, PROCESS_STEPPER_CONSTANTS, PROCESS_STEPPER_NUMBERS, ProcessStepperOrientation } from './process-stepper-constants.js';
+import {
+  IProcessStepperContext,
+  PROCESS_STEPPER_CONSTANTS,
+  PROCESS_STEPPER_CONTEXT,
+  PROCESS_STEPPER_NUMBERS,
+  ProcessStepperOrientation
+} from './process-stepper-constants.js';
 
 import styles from './process-stepper.scss';
 
@@ -20,18 +26,12 @@ import styles from './process-stepper.scss';
  * @dependency forge-process-step
  *
  * @slot - The default slot for `<forge-process-step>` elements.
- * @slot title - A heading displayed above the process.
  *
- * @fires {CustomEvent<IProcessStepperChangeEventData>} forge-process-stepper-change - Dispatches when a clickable step is activated.
- *
- * @cssproperty --forge-process-stepper-title-margin - The spacing between the title and the steps.
+ * @fires {Event} change - Dispatches when an interactive step is activated. The activated step is available from `selectedStep`.
  *
  * @csspart root - The root element.
- * @csspart title - The element containing the slotted title.
  * @csspart steps - The element containing the steps.
- * @csspart announcer - The visually hidden live region that announces progress changes.
  */
-@customElement(PROCESS_STEPPER_CONSTANTS.elementName)
 export class ProcessStepperComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -46,7 +46,7 @@ export class ProcessStepperComponent extends BaseLitElement {
    * @default 'vertical'
    * @attribute
    */
-  @property({ reflect: true })
+  @property()
   public orientation: ProcessStepperOrientation = 'vertical';
 
   /**
@@ -55,7 +55,7 @@ export class ProcessStepperComponent extends BaseLitElement {
    * @default false
    * @attribute
    */
-  @property({ type: Boolean, reflect: true })
+  @property({ type: Boolean })
   public numbered = false;
 
   @queryAssignedElements({ selector: PROCESS_STEP_CONSTANTS.elementName })
@@ -64,16 +64,12 @@ export class ProcessStepperComponent extends BaseLitElement {
   @state()
   private _narrow = false;
 
-  @state()
-  private _announcement = '';
+  @provide({ context: PROCESS_STEPPER_CONTEXT })
+  private _context: IProcessStepperContext = { count: 0, numbered: false, orientation: 'vertical' };
 
   readonly #internals: ElementInternals;
 
-  /** The index of the current step at the last announcement, so only changes are announced. */
-  #announcedIndex: number | null = null;
-
-  /** Watches for step state changes made by consumers, which is how a process advances. */
-  readonly #stateObserver = new MutationObserver(() => this.#announceCurrentStep());
+  #selectedStep: ProcessStepComponent | null = null;
 
   constructor() {
     super();
@@ -85,18 +81,17 @@ export class ProcessStepperComponent extends BaseLitElement {
     setDefaultAria(this, this.#internals, { role: 'list' });
     this.addEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
     ForgeResizeObserver.observe(this, entry => this.#handleResize(entry));
-    this.#stateObserver.observe(this, { attributeFilter: [PROCESS_STEP_CONSTANTS.attributes.STATE], subtree: true });
   }
 
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
     ForgeResizeObserver.unobserve(this);
-    this.#stateObserver.disconnect();
   }
 
-  public updated(): void {
-    this.#syncSteps();
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    super.willUpdate(changedProperties);
+    this.#updateContext();
   }
 
   /**
@@ -105,6 +100,14 @@ export class ProcessStepperComponent extends BaseLitElement {
    */
   public get steps(): ProcessStepComponent[] {
     return [...this._steps];
+  }
+
+  /**
+   * The step most recently activated by the user, or `null` if no step has been activated.
+   * @readonly
+   */
+  public get selectedStep(): ProcessStepComponent | null {
+    return this.#selectedStep && this._steps.includes(this.#selectedStep) ? this.#selectedStep : null;
   }
 
   /**
@@ -134,42 +137,28 @@ export class ProcessStepperComponent extends BaseLitElement {
   public render(): TemplateResult {
     return html`
       <div part="root" class=${classMap({ 'forge-process-stepper': true, [this.#effectiveOrientation]: true, compact: this.compact })}>
-        <div part="title" class="title" ${hideWhenEmpty()}><slot name="title"></slot></div>
         <div part="steps" class="steps">
           <slot @slotchange=${this.#handleSlotChange}></slot>
         </div>
-        <div part="announcer" class="announcer" role="status" aria-live="polite">${this._announcement}</div>
       </div>
     `;
-  }
-
-  /**
-   * Announces the step a process has moved to. The announcer starts empty and is only updated once
-   * the current step changes, so a screen reader is not interrupted on the initial render.
-   */
-  #announceCurrentStep(): void {
-    const steps = this._steps;
-    const index = steps.findIndex(candidate => candidate.state === 'current');
-
-    if (index === this.#announcedIndex) {
-      return;
-    }
-
-    this.#announcedIndex = index;
-
-    if (index === -1) {
-      return;
-    }
-
-    const step = steps[index];
-    const position = `Step ${index + 1} of ${steps.length}`;
-    const label = step.labelText;
-    this._announcement = label ? `${position}: ${label}` : position;
   }
 
   /** The orientation the steps are actually laid out in, which is vertical while compact. */
   get #effectiveOrientation(): ProcessStepperOrientation {
     return this.compact ? 'vertical' : this.orientation;
+  }
+
+  #updateContext(): void {
+    const context: IProcessStepperContext = {
+      count: this._steps?.length ?? 0,
+      numbered: this.numbered,
+      orientation: this.#effectiveOrientation
+    };
+    const changed = (Object.keys(context) as (keyof IProcessStepperContext)[]).some(key => context[key] !== this._context[key]);
+    if (changed) {
+      this._context = context;
+    }
   }
 
   #handleResize(entry: ResizeObserverEntry): void {
@@ -182,47 +171,26 @@ export class ProcessStepperComponent extends BaseLitElement {
   #onStepSelect: EventListener = (evt: Event) => this.#handleStepSelect(evt);
 
   #handleSlotChange(): void {
-    this.#syncSteps();
-  }
-
-  #syncSteps(): void {
-    const steps = this._steps;
-    steps.forEach((step, i) => {
-      step.index = i + 1;
-      step.count = steps.length;
-      step.last = i === steps.length - 1;
-      step.numbered = this.numbered;
-      step.orientation = this.#effectiveOrientation;
-    });
-
-    // Record where the process starts so that the first advance is treated as a change.
-    this.#announcedIndex ??= steps.findIndex(step => step.state === 'current');
+    this._steps.forEach((step, i) => (step[stepIndex] = i + 1));
+    this.requestUpdate();
   }
 
   #handleStepSelect(evt: Event): void {
     const step = evt.target as ProcessStepComponent;
-    const index = this._steps.indexOf(step);
-    if (index === -1) {
+    if (!this._steps.includes(step)) {
       return;
     }
 
     evt.stopPropagation();
-    this.dispatchEvent(
-      new CustomEvent<IProcessStepperChangeEventData>('forge-process-stepper-change', {
-        detail: { index, step },
-        bubbles: true,
-        composed: true
-      })
-    );
+    this.#selectedStep = step;
+    this.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
+
+tryDefine(PROCESS_STEPPER_CONSTANTS.elementName, ProcessStepperComponent);
 
 declare global {
   interface HTMLElementTagNameMap {
     'forge-process-stepper': ProcessStepperComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-process-stepper-change': CustomEvent<IProcessStepperChangeEventData>;
   }
 }

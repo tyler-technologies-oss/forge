@@ -1,5 +1,6 @@
+import { LiveAnnouncer } from '@tylertech/forge-core';
 import { html } from 'lit';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { ProcessStepComponent } from './process-step/process-step.js';
@@ -84,110 +85,157 @@ describe('ProcessStepper', () => {
   });
 
   describe('step synchronization', () => {
-    it('should assign a one-based index to each step', async () => {
-      const { steps } = await createFixture();
+    function markerText(step: ProcessStepComponent): string {
+      return step.shadowRoot?.querySelector('.marker')?.textContent?.trim() ?? '';
+    }
 
-      expect(steps.map(step => step.index)).toEqual([1, 2, 3]);
-    });
-
-    it('should assign the total step count to each step', async () => {
-      const { steps } = await createFixture();
-
-      expect(steps.every(step => step.count === 3)).toBe(true);
-    });
-
-    it('should mark only the final step as last', async () => {
-      const { steps } = await createFixture();
-
-      expect(steps.map(step => step.last)).toEqual([false, false, true]);
-    });
-
-    it('should propagate numbered to each step', async () => {
+    it('should number each step by its position when numbered', async () => {
       const { steps } = await createFixture(html`
+        <forge-process-stepper numbered>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step>Two</forge-process-step>
+          <forge-process-step>Three</forge-process-step>
+        </forge-process-stepper>
+      `);
+
+      expect(steps.map(markerText)).toEqual(['1', '2', '3']);
+    });
+
+    it('should not number steps by default', async () => {
+      const { steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step>Two</forge-process-step>
+        </forge-process-stepper>
+      `);
+
+      expect(steps.map(markerText)).toEqual(['', '']);
+    });
+
+    it('should renumber the steps when a step is added', async () => {
+      const { stepper, steps } = await createFixture(html`
         <forge-process-stepper numbered>
           <forge-process-step>One</forge-process-step>
           <forge-process-step>Two</forge-process-step>
         </forge-process-stepper>
       `);
 
-      expect(steps.every(step => step.numbered)).toBe(true);
+      const added = document.createElement('forge-process-step');
+      stepper.insertBefore(added, steps[0]);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      await Promise.all([added, ...steps].map(step => step.updateComplete));
+
+      expect([added, ...steps].map(markerText)).toEqual(['1', '2', '3']);
     });
 
-    it('should not number steps by default', async () => {
-      const { steps } = await createFixture();
-
-      expect(steps.some(step => step.numbered)).toBe(false);
-    });
-
-    it('should propagate the orientation to each step', async () => {
-      const { steps } = await createFixture(html`
+    it('should lay out each step in the orientation of the stepper', async () => {
+      const { stepper, steps } = await createFixture(html`
         <forge-process-stepper orientation="horizontal">
           <forge-process-step>One</forge-process-step>
           <forge-process-step>Two</forge-process-step>
         </forge-process-stepper>
       `);
 
-      expect(steps.every(step => step.orientation === 'horizontal')).toBe(true);
+      expect(steps.every(step => step.shadowRoot?.querySelector('.forge-process-step.horizontal'))).toBe(true);
+
+      stepper.orientation = 'vertical';
+      await stepper.updateComplete;
+      await Promise.all(steps.map(step => step.updateComplete));
+
+      expect(steps.every(step => step.shadowRoot?.querySelector('.forge-process-step.vertical'))).toBe(true);
     });
 
-    it('should set positional aria attributes on each step', async () => {
-      const { steps } = await createFixture();
+    it('should not overwrite positional aria attributes set on a step', async () => {
+      const { steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step aria-posinset="4" aria-setsize="10">Four</forge-process-step>
+          <forge-process-step aria-posinset="5" aria-setsize="10">Five</forge-process-step>
+        </forge-process-stepper>
+      `);
 
-      expect(steps[1].getAttribute('aria-posinset')).toBe('2');
-      expect(steps[1].getAttribute('aria-setsize')).toBe('3');
+      expect(steps.map(step => step.getAttribute('aria-posinset'))).toEqual(['4', '5']);
+      expect(steps.map(step => step.getAttribute('aria-setsize'))).toEqual(['10', '10']);
+    });
+
+    it('should number a step from its aria-posinset when set', async () => {
+      const { steps } = await createFixture(html`
+        <forge-process-stepper numbered>
+          <forge-process-step aria-posinset="4">Four</forge-process-step>
+          <forge-process-step aria-posinset="5">Five</forge-process-step>
+        </forge-process-stepper>
+      `);
+
+      expect(steps.map(markerText)).toEqual(['4', '5']);
     });
   });
 
   describe('progress announcements', () => {
-    async function settleFrames(): Promise<void> {
-      await new Promise(resolve => requestAnimationFrame(resolve));
-      await new Promise(resolve => requestAnimationFrame(resolve));
-    }
-
-    function announcer(stepper: ProcessStepperComponent): Element | null {
-      return stepper.shadowRoot?.querySelector('[part="announcer"]') ?? null;
-    }
-
-    it('should render a polite live region', async () => {
-      const { stepper } = await createFixture();
-      const region = announcer(stepper);
-
-      expect(region).toBeTruthy();
-      expect(region?.getAttribute('aria-live')).toBe('polite');
-      expect(region?.getAttribute('role')).toBe('status');
+    afterEach(() => {
+      vi.restoreAllMocks();
     });
 
     it('should not announce anything on the initial render', async () => {
-      const { stepper } = await createFixture();
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
 
-      expect(announcer(stepper)?.textContent?.trim()).toBe('');
+      await createFixture();
+
+      expect(announceSpy).not.toHaveBeenCalled();
     });
 
     it('should announce the step the process moves to', async () => {
-      const { stepper, steps } = await createFixture();
+      const { steps } = await createFixture();
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
 
       steps[1].state = 'completed';
       steps[2].state = 'current';
-      await settleFrames();
-      await stepper.updateComplete;
+      await steps[2].updateComplete;
 
-      expect(announcer(stepper)?.textContent?.trim()).toBe('Step 3 of 3: Three');
+      expect(announceSpy).toHaveBeenCalledOnce();
+      expect(announceSpy).toHaveBeenCalledWith('Step 3 of 3: Three', 'polite');
     });
 
     it('should announce the position when a step has no label', async () => {
-      const { stepper, steps } = await createFixture(html`
+      const { steps } = await createFixture(html`
         <forge-process-stepper>
           <forge-process-step state="current"></forge-process-step>
           <forge-process-step></forge-process-step>
         </forge-process-stepper>
       `);
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
 
       steps[0].state = 'completed';
       steps[1].state = 'current';
-      await settleFrames();
-      await stepper.updateComplete;
+      await steps[1].updateComplete;
 
-      expect(announcer(stepper)?.textContent?.trim()).toBe('Step 2 of 2');
+      expect(announceSpy).toHaveBeenCalledWith('Step 2 of 2', 'polite');
+    });
+
+    it('should announce the position from aria-posinset and aria-setsize when set', async () => {
+      const { steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step aria-posinset="4" aria-setsize="10" state="current">Four</forge-process-step>
+          <forge-process-step aria-posinset="5" aria-setsize="10">Five</forge-process-step>
+        </forge-process-stepper>
+      `);
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+
+      steps[0].state = 'completed';
+      steps[1].state = 'current';
+      await steps[1].updateComplete;
+
+      expect(announceSpy).toHaveBeenCalledWith('Step 5 of 10: Five', 'polite');
+    });
+
+    it('should not announce a step that is not within a stepper', async () => {
+      const screen = render(html`<forge-process-step>One</forge-process-step>`);
+      const step = screen.container.querySelector('forge-process-step') as ProcessStepComponent;
+      await step.updateComplete;
+      const announceSpy = vi.spyOn(LiveAnnouncer.instance, 'announce');
+
+      step.state = 'current';
+      await step.updateComplete;
+
+      expect(announceSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -233,7 +281,7 @@ describe('ProcessStepper', () => {
 
       expect(stepper.compact).toBe(true);
       expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.vertical.compact')).toBeTruthy();
-      expect(steps.every(step => step.orientation === 'vertical')).toBe(true);
+      expect(steps.every(step => step.shadowRoot?.querySelector('.forge-process-step.vertical'))).toBe(true);
     });
 
     it('should keep the orientation attribute unchanged when compact', async () => {
@@ -251,7 +299,8 @@ describe('ProcessStepper', () => {
 
       expect(stepper.compact).toBe(false);
       expect(stepper.shadowRoot?.querySelector('.forge-process-stepper.horizontal')).toBeTruthy();
-      expect(stepper.steps.every(step => step.orientation === 'horizontal')).toBe(true);
+      await Promise.all(stepper.steps.map(step => step.updateComplete));
+      expect(stepper.steps.every(step => step.shadowRoot?.querySelector('.forge-process-step.horizontal'))).toBe(true);
     });
 
     it('should not be compact when the stepper is vertical', async () => {
@@ -270,12 +319,47 @@ describe('ProcessStepper', () => {
         </forge-process-stepper>
       `);
       const spy = vi.fn();
-      stepper.addEventListener('forge-process-stepper-change', spy);
+      stepper.addEventListener('change', spy);
 
       steps[1].querySelector('button')?.click();
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy.mock.calls[0][0].detail).toEqual({ index: 1, step: steps[1] });
+      expect(spy.mock.calls[0][0].target).toBe(stepper);
+    });
+
+    it('should expose the activated step as the selected step', async () => {
+      const { stepper, steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step><button>One</button></forge-process-step>
+          <forge-process-step><button>Two</button></forge-process-step>
+        </forge-process-stepper>
+      `);
+      let selected: ProcessStepComponent | null = null;
+      stepper.addEventListener('change', evt => (selected = (evt.target as ProcessStepperComponent).selectedStep));
+
+      steps[1].querySelector('button')?.click();
+
+      expect(selected).toBe(steps[1]);
+      expect(stepper.selectedStep).toBe(steps[1]);
+    });
+
+    it('should not have a selected step before a step is activated', async () => {
+      const { stepper } = await createFixture();
+
+      expect(stepper.selectedStep).toBeNull();
+    });
+
+    it('should clear the selected step when it is removed', async () => {
+      const { stepper, steps } = await createFixture(html`
+        <forge-process-stepper>
+          <forge-process-step><button>One</button></forge-process-step>
+        </forge-process-stepper>
+      `);
+
+      steps[0].querySelector('button')?.click();
+      steps[0].remove();
+
+      expect(stepper.selectedStep).toBeNull();
     });
 
     it('should dispatch a change event for a slotted link', async () => {
@@ -285,7 +369,7 @@ describe('ProcessStepper', () => {
         </forge-process-stepper>
       `);
       const spy = vi.fn();
-      stepper.addEventListener('forge-process-stepper-change', spy);
+      stepper.addEventListener('change', spy);
 
       steps[0].querySelector('a')?.addEventListener('click', evt => evt.preventDefault());
       steps[0].querySelector('a')?.click();
@@ -296,7 +380,7 @@ describe('ProcessStepper', () => {
     it('should not dispatch a change event when a step has no interactive element', async () => {
       const { stepper, steps } = await createFixture();
       const spy = vi.fn();
-      stepper.addEventListener('forge-process-stepper-change', spy);
+      stepper.addEventListener('change', spy);
 
       steps[0].click();
 
@@ -313,7 +397,7 @@ describe('ProcessStepper', () => {
         </forge-process-stepper>
       `);
       const spy = vi.fn();
-      stepper.addEventListener('forge-process-stepper-change', spy);
+      stepper.addEventListener('change', spy);
 
       steps[0].querySelector('button')?.click();
 
@@ -388,6 +472,27 @@ describe('ProcessStep', () => {
     expect(step.hasAttribute('aria-current')).toBe(false);
   });
 
+  it('should not reflect its properties to attributes', async () => {
+    const step = await createStep(html`<forge-process-step></forge-process-step>`);
+
+    step.state = 'completed';
+    step.noninteractive = true;
+    await step.updateComplete;
+
+    expect(step.hasAttribute('state')).toBe(false);
+    expect(step.hasAttribute('noninteractive')).toBe(false);
+  });
+
+  it('should match the disabled state when disabled', async () => {
+    const step = await createStep(html`<forge-process-step></forge-process-step>`);
+
+    step.state = 'disabled';
+    await step.updateComplete;
+
+    expect(step.matches(':state(disabled)')).toBe(true);
+    expect(getComputedStyle(step.shadowRoot?.querySelector('.forge-process-step') as HTMLElement).opacity).toBe('0.38');
+  });
+
   describe('marker', () => {
     it('should render a check icon when completed', async () => {
       const step = await createStep(html`<forge-process-step state="completed"></forge-process-step>`);
@@ -413,32 +518,38 @@ describe('ProcessStep', () => {
       expect(marker?.querySelector('forge-icon')).toBeNull();
     });
 
+    async function createNumberedStep(state: string): Promise<ProcessStepComponent> {
+      const screen = render(html`
+        <forge-process-stepper numbered>
+          <forge-process-step>One</forge-process-step>
+          <forge-process-step state=${state}>Two</forge-process-step>
+        </forge-process-stepper>
+      `);
+      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
+      await stepper.updateComplete;
+      const step = stepper.steps[1];
+      await step.updateComplete;
+      return step;
+    }
+
     it('should render an empty dashed marker when not started', async () => {
       const step = await createStep(html`<forge-process-step state="not-started"></forge-process-step>`);
-      step.index = 4;
-      await step.updateComplete;
       const marker = step.shadowRoot?.querySelector('.marker');
 
       expect(marker?.classList.contains('dashed')).toBe(true);
       expect(marker?.textContent?.trim()).toBe('');
     });
 
-    it('should render the index in the marker when numbered', async () => {
-      const step = await createStep(html`<forge-process-step state="not-started"></forge-process-step>`);
-      step.index = 4;
-      step.numbered = true;
-      await step.updateComplete;
+    it('should render the position in the marker when numbered', async () => {
+      const step = await createNumberedStep('not-started');
       const marker = step.shadowRoot?.querySelector('.marker');
 
       expect(marker?.classList.contains('dashed')).toBe(true);
-      expect(marker?.textContent?.trim()).toBe('4');
+      expect(marker?.textContent?.trim()).toBe('2');
     });
 
-    it('should render the icon rather than the index for a completed numbered step', async () => {
-      const step = await createStep(html`<forge-process-step state="completed"></forge-process-step>`);
-      step.index = 4;
-      step.numbered = true;
-      await step.updateComplete;
+    it('should render the icon rather than the position for a completed numbered step', async () => {
+      const step = await createNumberedStep('completed');
       const marker = step.shadowRoot?.querySelector('.marker');
 
       expect(marker?.querySelector('forge-icon')?.getAttribute('name')).toBe('check');
@@ -531,6 +642,28 @@ describe('ProcessStep', () => {
       step.querySelector('button')?.click();
 
       expect(spy).toHaveBeenCalledOnce();
+      expect(spy.mock.calls[0][0]).not.toBeInstanceOf(CustomEvent);
+    });
+
+    it('should render a state layer targeting the interactive element', async () => {
+      const step = await createStep(html`<forge-process-step><button>One</button></forge-process-step>`);
+      const stateLayer = step.shadowRoot?.querySelector('forge-state-layer');
+
+      expect(stateLayer).toBeTruthy();
+      expect((stateLayer as unknown as { targetElement: HTMLElement }).targetElement).toBe(step.querySelector('button'));
+    });
+
+    it('should not render a state layer when the step is not interactive', async () => {
+      const step = await createStep(html`<forge-process-step>One</forge-process-step>`);
+
+      expect(step.shadowRoot?.querySelector('forge-state-layer')).toBeNull();
+    });
+
+    it('should disable the state layer when the step is disabled', async () => {
+      const step = await createStep(html`<forge-process-step state="disabled"><button>One</button></forge-process-step>`);
+      const stateLayer = step.shadowRoot?.querySelector('forge-state-layer') as unknown as { disabled: boolean };
+
+      expect(stateLayer.disabled).toBe(true);
     });
 
     it('should render a focus indicator targeting the interactive element', async () => {
@@ -553,13 +686,15 @@ describe('ProcessStep', () => {
       const label = step.shadowRoot?.querySelector('.label') as HTMLElement;
       const cell = step.shadowRoot?.querySelector('[part="label"]') as HTMLElement;
 
-      expect(step.shadowRoot?.querySelector('forge-focus-indicator')?.parentElement).toBe(label);
+      expect(step.shadowRoot?.querySelector('forge-focus-indicator')?.closest('.label')).toBe(label);
       expect(label.getBoundingClientRect().width).toBeLessThan(cell.getBoundingClientRect().width);
     });
 
-    /** Tabs onto the step's slotted control so that it matches `:focus-visible`. */
+    /** Tabs onto the first step's slotted control so that it matches `:focus-visible`. */
     async function focusStepControl(template: ReturnType<typeof html>): Promise<{ step: ProcessStepComponent; control: HTMLElement }> {
       const screen = render(html`<div><button id="sentinel">Sentinel</button>${template}</div>`);
+      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent | null;
+      await stepper?.updateComplete;
       const step = screen.container.querySelector('forge-process-step') as ProcessStepComponent;
       await step.updateComplete;
 
@@ -572,67 +707,81 @@ describe('ProcessStep', () => {
       return { step, control };
     }
 
+    /**
+     * Returns the visible ring of a focused step once its grow animation has finished, along with
+     * the width of its outline. The outline is painted outside the ring's box, so every clearance
+     * measurement has to count it in.
+     */
+    async function settledRing(step: ProcessStepComponent): Promise<{ box: DOMRect; outlineWidth: number; element: HTMLElement }> {
+      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
+      const element = indicator.shadowRoot?.querySelector('[part="indicator"]') as HTMLElement;
+      await Promise.all(element.getAnimations().map(animation => animation.finished));
+
+      return { box: element.getBoundingClientRect(), outlineWidth: parseFloat(getComputedStyle(element).outlineWidth), element };
+    }
+
+    it('should fill the state layer to the focus ring', async () => {
+      const { step } = await focusStepControl(html`<forge-process-step><button>One</button></forge-process-step>`);
+      const stateLayer = step.shadowRoot?.querySelector('forge-state-layer') as HTMLElement;
+      const ring = await settledRing(step);
+
+      expect(stateLayer.getBoundingClientRect().toJSON()).toEqual(ring.box.toJSON());
+      expect(getComputedStyle(stateLayer).borderTopLeftRadius).toBe(getComputedStyle(ring.element).borderTopLeftRadius);
+    });
+
+    it('should round the corners of the focus ring', async () => {
+      const { step } = await focusStepControl(html`<forge-process-step><button>One</button></forge-process-step>`);
+      const ring = await settledRing(step);
+
+      expect(ring.outlineWidth).toBeGreaterThan(0);
+      expect(parseFloat(getComputedStyle(ring.element).borderTopLeftRadius)).toBeGreaterThan(4);
+    });
+
     it('should replace the native focus outline with the focus ring', async () => {
       const { control } = await focusStepControl(html`<forge-process-step><button>One</button></forge-process-step>`);
 
       expect(getComputedStyle(control).outlineStyle).toBe('none');
     });
 
+    it('should offset the focus ring further from the label along the inline axis', async () => {
+      const { step } = await focusStepControl(html`<forge-process-step><button>One</button></forge-process-step>`);
+      const label = (step.shadowRoot?.querySelector('.label') as HTMLElement).getBoundingClientRect();
+      const { box } = await settledRing(step);
+
+      const inlineOffset = label.left - box.left;
+      const blockOffset = label.top - box.top;
+
+      expect(blockOffset).toBeGreaterThan(0);
+      expect(inlineOffset).toBeGreaterThan(blockOffset);
+    });
+
     it.each(['vertical', 'horizontal'])('should keep the focus ring clear of the marker when %s', async orientation => {
-      const screen = render(html`
-        <div>
-          <button id="sentinel">Sentinel</button>
-          <forge-process-stepper orientation=${orientation}>
-            <forge-process-step state="completed"><button>One</button></forge-process-step>
-            <forge-process-step state="current"><button>Two</button></forge-process-step>
-          </forge-process-stepper>
-        </div>
+      const { step } = await focusStepControl(html`
+        <forge-process-stepper orientation=${orientation}>
+          <forge-process-step state="completed"><button>One</button></forge-process-step>
+          <forge-process-step state="current"><button>Two</button></forge-process-step>
+        </forge-process-stepper>
       `);
-      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
-      await stepper.updateComplete;
-      const step = stepper.querySelector('forge-process-step') as ProcessStepComponent;
-      await step.updateComplete;
+      const marker = (step.shadowRoot?.querySelector('.marker') as HTMLElement).getBoundingClientRect();
+      const { box, outlineWidth } = await settledRing(step);
 
-      (screen.container.querySelector('#sentinel') as HTMLButtonElement).focus();
-      await userEvent.tab();
-
-      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
-      const marker = step.shadowRoot?.querySelector('.marker') as HTMLElement;
-      const outlineWidth = parseFloat(getComputedStyle(indicator).outlineWidth);
-      const ring = indicator.getBoundingClientRect();
-      const markerBox = marker.getBoundingClientRect();
-
-      // The outline is painted outside the indicator's box, so it has to be counted in. The gap has
-      // to be visible rather than merely non-overlapping, so it is checked against the smallest
-      // spacing step rather than zero.
-      const clearance = orientation === 'vertical' ? ring.left - outlineWidth - markerBox.right : ring.top - outlineWidth - markerBox.bottom;
+      // The gap has to be visible rather than merely non-overlapping, so it is checked against the
+      // smallest spacing step rather than zero.
+      const clearance = orientation === 'vertical' ? box.left - outlineWidth - marker.right : box.top - outlineWidth - marker.bottom;
 
       expect(clearance).toBeGreaterThanOrEqual(4);
     });
 
     it('should keep the focus ring clear of the step content', async () => {
-      const screen = render(html`
-        <div>
-          <button id="sentinel">Sentinel</button>
-          <forge-process-stepper>
-            <forge-process-step state="current" description="Assigned to J. Rivera"><button>One</button></forge-process-step>
-          </forge-process-stepper>
-        </div>
+      const { step } = await focusStepControl(html`
+        <forge-process-stepper>
+          <forge-process-step state="current" description="Assigned to J. Rivera"><button>One</button></forge-process-step>
+        </forge-process-stepper>
       `);
-      const stepper = screen.container.querySelector('forge-process-stepper') as ProcessStepperComponent;
-      await stepper.updateComplete;
-      const step = stepper.querySelector('forge-process-step') as ProcessStepComponent;
-      await step.updateComplete;
+      const description = (step.shadowRoot?.querySelector('.description') as HTMLElement).getBoundingClientRect();
+      const { box, outlineWidth } = await settledRing(step);
 
-      (screen.container.querySelector('#sentinel') as HTMLButtonElement).focus();
-      await userEvent.tab();
-
-      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
-      const description = step.shadowRoot?.querySelector('.description') as HTMLElement;
-      const outlineWidth = parseFloat(getComputedStyle(indicator).outlineWidth);
-      const clearance = description.getBoundingClientRect().top - (indicator.getBoundingClientRect().bottom + outlineWidth);
-
-      expect(clearance).toBeGreaterThanOrEqual(4);
+      expect(description.top - (box.bottom + outlineWidth)).toBeGreaterThanOrEqual(4);
     });
 
     it('should keep the native focus outline when the step is not interactive', async () => {
@@ -644,21 +793,20 @@ describe('ProcessStep', () => {
   });
 
   describe('slots', () => {
-    it('should render slotted meta, message, and action content', async () => {
+    it('should render slotted meta, additional, and action content', async () => {
       const step = await createStep(html`
         <forge-process-step>
           One
           <span slot="meta" id="meta">Jul 17, 2026</span>
-          <span slot="message" id="message">Invalid</span>
           <button slot="actions" id="action">Advance</button>
           <input slot="additional-content" id="extra" />
         </forge-process-step>
       `);
+      const assigned = (name: string): Element | undefined => step.shadowRoot?.querySelector<HTMLSlotElement>(`slot[name="${name}"]`)?.assignedElements()[0];
 
-      expect(step.querySelector('#meta')).toBeTruthy();
-      expect(step.querySelector('#message')).toBeTruthy();
-      expect(step.querySelector('#action')).toBeTruthy();
-      expect(step.querySelector('#extra')).toBeTruthy();
+      expect(assigned('meta')?.id).toBe('meta');
+      expect(assigned('actions')?.id).toBe('action');
+      expect(assigned('additional-content')?.id).toBe('extra');
     });
 
     it('should allow the marker to be replaced', async () => {

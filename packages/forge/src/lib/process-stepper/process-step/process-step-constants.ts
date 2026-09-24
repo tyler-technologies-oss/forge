@@ -25,6 +25,9 @@ export const PROCESS_STEP_CONSTANTS = {
   events
 };
 
+/** The one-based position of a step within its process, which is set by the parent stepper. */
+export const stepIndex = Symbol('stepIndex');
+
 export type ProcessStepState =
   | 'not-started'
   | 'current'
