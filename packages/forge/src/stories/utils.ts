@@ -253,6 +253,7 @@ export interface Declaration {
   attributes?: TagItem[];
   properties?: TagItem[];
   events?: TagItem[];
+  commands?: TagItem[];
   methods?: TagItem[];
   members?: TagItem[];
   slots?: TagItem[];
