@@ -39,7 +39,7 @@ import { generateAngularAdapter } from '@tylertech/forge-adapter-codegen/angular
 
 generateAngularAdapter({
   packageName: '@tylertech/forge-rich-text-editor',
-  project: 'forge-angular-rich-text-editor',
+  project: 'forge-rich-text-editor-angular',
   entryPoints: [
     /* as above */
   ],
