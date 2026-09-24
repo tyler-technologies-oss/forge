@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { html } from 'lit';
+import { describe, expect, it, onTestFinished } from 'vitest';
+import { html, render, TemplateResult } from 'lit';
 import { renderFixture } from '../../testing/fixture.js';
 import { expectNoA11yViolations, runAxe } from '../../testing/a11y.js';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
@@ -27,6 +27,34 @@ const SAMPLE_DOCUMENT = {
     { type: 'paragraph', content: [{ type: 'text', text: 'Rendered content.' }] }
   ]
 } as unknown as RichTextRendererContent;
+
+/** Renders `template` into the shadow root of a consumer-owned host, as a shadow-DOM app would. */
+const renderInShadowRoot = (template: TemplateResult): ShadowRoot => {
+  const host = document.createElement('div');
+  document.body.append(host);
+  onTestFinished(() => host.remove());
+  const shadow = host.attachShadow({ mode: 'open' });
+  render(template, shadow);
+  return shadow;
+};
+
+/** Every forge-icon-button beneath `root`, across shadow roots, that carries a controls reference. */
+const controlsButtons = (root: Element): Array<Element & { ariaControlsElements: Element[] | null }> => {
+  const found: Element[] = [];
+  const walk = (node: Element | ShadowRoot): void => {
+    for (const child of node.querySelectorAll('*')) {
+      if (child.localName === 'forge-icon-button') {
+        found.push(child);
+      }
+      if (child.shadowRoot) {
+        walk(child.shadowRoot);
+      }
+    }
+  };
+  walk(root);
+  expect(found.length).toBeGreaterThan(0);
+  return found as Array<Element & { ariaControlsElements: Element[] | null }>;
+};
 
 const settle = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 250));
 
@@ -112,17 +140,43 @@ describe('RichTextEditor accessibility', () => {
     await expectNoA11yViolations(el);
   });
 
-  it('should expose the renderer as a named read-only textbox', async () => {
+  it('should not expose the renderer as a text input', async () => {
     const el = await renderFixture(html`<forge-rich-text-renderer .content=${SAMPLE_DOCUMENT}></forge-rich-text-renderer>`, 'forge-rich-text-renderer');
     await settle();
     const inner = el.shadowRoot!.querySelector('.tiptap') as HTMLElement;
 
-    // ProseMirror marks its element role="textbox" whether or not it is editable. Declaring it
-    // read-only describes it accurately, but a textbox with no accessible name fails
-    // aria-input-field-name, so the name is part of the fix rather than optional.
-    expect(inner.getAttribute('role')).toBe('textbox');
-    expect(inner.getAttribute('aria-readonly')).toBe('true');
-    expect(inner.getAttribute('aria-label')).toBe('Rich text content');
+    expect(el.getAttribute('role')).toBe('article');
+    expect(inner.getAttribute('role')).toBe('presentation');
+    expect(inner.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('should point tool buttons at the editor, not a consumer host, when nested in a shadow root', async () => {
+    const shadow = renderInShadowRoot(
+      html`<forge-rich-text-editor>
+        <forge-rte-standard-tools></forge-rte-standard-tools>
+      </forge-rich-text-editor>`
+    );
+    await settle();
+    const editor = shadow.querySelector('forge-rich-text-editor')!;
+
+    for (const button of controlsButtons(editor)) {
+      expect(button.ariaControlsElements).toEqual([editor]);
+    }
+  });
+
+  it('should point tool buttons at the context, not a consumer host, in a composed layout nested in a shadow root', async () => {
+    const shadow = renderInShadowRoot(
+      html`<forge-rich-text-context>
+        <div><forge-rte-standard-tools></forge-rte-standard-tools></div>
+        <div><forge-rich-text-content></forge-rich-text-content></div>
+      </forge-rich-text-context>`
+    );
+    await settle();
+    const context = shadow.querySelector('forge-rich-text-context')!;
+
+    for (const button of controlsButtons(context)) {
+      expect(button.ariaControlsElements).toEqual([context]);
+    }
   });
 
   it('should name the element TipTap makes editable, not only its container', async () => {

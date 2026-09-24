@@ -34,6 +34,9 @@ declare global {
 
 export const RICH_TEXT_CONTEXT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
 
+// Not imported from rich-text-editor.js, which imports this module.
+const WRAPPING_EDITOR_TAG_NAME = 'forge-rich-text-editor';
+
 const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
 
 /**
@@ -222,24 +225,15 @@ export class RichTextContextComponent extends LitElement {
   };
 
   /**
-   * Resolves the element that represents this editor to the outside world: this element when it is
-   * authored directly, or its host when it is rendered inside another component's shadow root, as
-   * `forge-rich-text-editor` does. Walking to the outermost host is what puts the target in a tree
-   * the toolbar can actually refer to.
+   * Resolves the element that represents this editor to the outside world: the wrapping
+   * `forge-rich-text-editor` when this context is rendered in its shadow root, otherwise this
+   * element. Only that one known wrapper is stepped out of - any other shadow host belongs to the
+   * consumer, and pointing at it would claim the toolbar controls the consumer's component.
    */
   #resolveControlsElement(): HTMLElement {
-    let root = this.getRootNode();
-    if (!(root instanceof ShadowRoot)) {
-      return this;
-    }
-
-    let host = root.host as HTMLElement;
-    root = host.getRootNode();
-    while (root instanceof ShadowRoot) {
-      host = root.host as HTMLElement;
-      root = host.getRootNode();
-    }
-    return host;
+    const root = this.getRootNode();
+    const host = root instanceof ShadowRoot ? (root.host as HTMLElement) : null;
+    return host?.localName === WRAPPING_EDITOR_TAG_NAME ? host : this;
   }
 
   public override disconnectedCallback(): void {
