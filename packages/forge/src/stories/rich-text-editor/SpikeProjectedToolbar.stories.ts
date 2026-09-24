@@ -76,7 +76,13 @@ const wire = (root: HTMLElement, { closeMode, guardToolbarPointer, anchorMode }:
 
     if (guardToolbarPointer) {
       // Clicking toolbar chrome that is not a button would otherwise move focus to body and close it.
-      ctx.querySelector('.spike-toolbar')?.addEventListener('pointerdown', evt => evt.preventDefault());
+      // Editable targets are exempt, or the link popover's inputs could not be clicked into.
+      ctx.querySelector('.spike-toolbar')?.addEventListener('pointerdown', evt => {
+        const isEditable = evt.composedPath().some(node => node instanceof HTMLElement && (node.matches('input, textarea, select') || node.isContentEditable));
+        if (!isEditable) {
+          evt.preventDefault();
+        }
+      });
     }
 
     ctx.addEventListener('focusin', () => {
