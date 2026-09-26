@@ -41,19 +41,18 @@
   @include body;
 }
 
-.body[data-orientation='horizontal'] {
+.body.body--horizontal {
   @include body-horizontal;
 }
 
-.body[data-orientation='vertical'] {
+.body.body--vertical {
   @include body-vertical;
 }
 
-.body[data-orientation='vertical'] .time-section {
+.body.body--vertical .time-section {
   width: 100%;
   padding-top: #{token(body-gap)};
   margin-top: #{token(body-gap)};
-  border-top: solid #{token(outline-width)} #{token(divider-color)};
 }
 
 .body:has(.presets) {
@@ -66,19 +65,18 @@
   @include body-main;
 }
 
-.body-main[data-orientation='horizontal'] {
+.body-main.body-main--horizontal {
   @include body-horizontal;
 }
 
-.body-main[data-orientation='vertical'] {
+.body-main.body-main--vertical {
   @include body-vertical;
 }
 
-.body-main[data-orientation='vertical'] .time-section {
+.body-main.body-main--vertical .time-section {
   width: 100%;
   padding-top: #{token(body-gap)};
   margin-top: #{token(body-gap)};
-  border-top: solid #{token(outline-width)} #{token(divider-color)};
 }
 
 .calendar-section {
@@ -93,8 +91,17 @@ slot[name='time-label'] {
   @include time-label;
 }
 
+.date-actions {
+  display: flex;
+  align-items: center;
+  gap: #{token(separator-gap)};
+}
+
+[part='clear-button'] {
+  margin-inline-start: auto;
+}
+
 .footer {
-  border-top: solid #{token(outline-width)} #{token(divider-color)};
   padding-top: #{token(gap)};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -128,12 +135,12 @@ slot[name='time-label'] {
   @include section;
 }
 
-.time-section[data-mode='single'],
-.time-section[data-mode='range'] {
+.time-section.time-section--single,
+.time-section.time-section--range {
   align-self: start;
 }
 
-.time-section[data-mode='slots'] {
+.time-section.time-section--slots {
   align-self: stretch;
   min-height: 0;
 }
@@ -171,6 +178,31 @@ slot[name='time-label'] {
   @include slot-list;
   align-self: stretch;
   height: 100%;
+}
+
+// Side-by-side slots are capped at the calendar's height; the list scrolls within it.
+// An explicit slot-list-max-height still wins.
+/* stylelint-disable custom-property-pattern */
+.forge-date-time-picker:not(.sheet) .body.body--horizontal > .time-section.time-section--slots {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  max-height: var(--forge-date-time-picker-slot-list-max-height, var(--_calendar-section-height, #{token(slot-list-max-height)}));
+
+  .slot-list {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+}
+/* stylelint-enable custom-property-pattern */
+
+// Stacked layouts line the slot list up with the calendar unless a width is set.
+.body.body--vertical .slot-list,
+.forge-date-time-picker.sheet .slot-list {
+  justify-self: center;
+  width: var(--forge-date-time-picker-slot-list-width, #{token(calendar-max-width)});
 }
 
 .slot-list-inner {
@@ -276,8 +308,6 @@ slot[name='time-label'] {
     gap: #{token(separator-gap)};
     min-width: 0;
     overflow-x: auto;
-    border-inline-end: none;
-    border-block-end: solid #{token(outline-width)} #{token(divider-color)};
     margin: 0 0 #{token(body-gap)};
     padding: 0 0 #{token(body-gap)};
   }

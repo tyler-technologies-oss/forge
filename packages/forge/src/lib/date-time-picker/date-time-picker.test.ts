@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { page } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import 'temporal-polyfill/global';
@@ -29,6 +29,14 @@ async function ready(el: IDateTimePickerComponent): Promise<void> {
   await el.updateComplete;
   // One more tick so child custom elements upgrade.
   await new Promise(resolve => setTimeout(resolve, 0));
+}
+
+function getSlotButton(el: IDateTimePickerComponent, label: string): HTMLElement {
+  return Array.from(el.shadowRoot!.querySelectorAll<HTMLElement>('[role="option"]')).find(option => option.textContent?.trim() === label)!;
+}
+
+function getPresetButton(el: IDateTimePickerComponent, label: string): HTMLElement {
+  return Array.from(el.shadowRoot!.querySelectorAll<HTMLElement>('[part="preset"]')).find(preset => preset.textContent?.trim() === label)!;
 }
 
 function captureChanges(el: IDateTimePickerComponent): IDateTimePickerChangeEventData[] {
@@ -185,19 +193,167 @@ describe('DateTimePicker / rendering', () => {
     const rangeEl = screen.container.querySelectorAll('forge-date-time-picker')[1] as IDateTimePickerComponent;
     await ready(slotEl);
     await ready(rangeEl);
-    const slotBody = slotEl.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
-    const rangeBody = rangeEl.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
-    expect(slotBody.dataset.orientation).toBe('horizontal');
-    expect(rangeBody.dataset.orientation).toBe('vertical');
+    expect(slotEl.matches(':state(horizontal)')).toBe(true);
+    expect(rangeEl.matches(':state(vertical)')).toBe(true);
   });
 
   it('explicit orientation overrides auto', async () => {
     const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="vertical"></forge-date-time-picker>`);
     const el = getEl(screen.container);
     await ready(el);
-    const body = el.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
-    expect(body.dataset.orientation).toBe('vertical');
+    expect(el.matches(':state(vertical)')).toBe(true);
+    expect(el.matches(':state(horizontal)')).toBe(false);
   });
+
+  it('should reflect the time mode as a custom state', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.matches(':state(time-single)')).toBe(true);
+
+    el.timeMode = 'slots';
+    await ready(el);
+    expect(el.matches(':state(time-slots)')).toBe(true);
+    expect(el.matches(':state(time-single)')).toBe(false);
+  });
+
+  it('should match the slot list height to the calendar as the calendar width changes', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendarSection = el.shadowRoot!.querySelector('[part="calendar-section"]') as HTMLElement;
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+
+    for (const width of ['260px', '400px']) {
+      el.style.setProperty('--forge-date-time-picker-calendar-max-width', width);
+      await vi.waitFor(() => {
+        const calendarRect = calendarSection.getBoundingClientRect();
+        const listRect = slotList.getBoundingClientRect();
+        expect(Math.abs(listRect.height - calendarRect.height)).toBeLessThanOrEqual(1);
+      });
+    }
+  });
+
+  it('should render Today and Clear below the calendar and time controls without resizing the calendar', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendarSection = el.shadowRoot!.querySelector('[part="calendar-section"]') as HTMLElement;
+    const initialHeight = calendarSection.getBoundingClientRect().height;
+
+    el.todayButton = true;
+    el.clearButton = true;
+    await ready(el);
+
+    const body = el.shadowRoot!.querySelector('[part="body"]') as HTMLElement;
+    const actions = el.shadowRoot!.querySelector('[part="date-actions"]') as HTMLElement;
+    expect(actions.querySelector('[part="today-button"]')).not.toBeNull();
+    expect(actions.querySelector('[part="clear-button"]')).not.toBeNull();
+    expect(actions.getBoundingClientRect().top).toBeGreaterThanOrEqual(body.getBoundingClientRect().bottom);
+    expect(calendarSection.getBoundingClientRect().height).toBe(initialHeight);
+  });
+
+  it('should clear the value and emit a clear change when Clear is clicked', async () => {
+    const screen = render(
+      html`<forge-date-time-picker time-mode="single" clear-button .value=${new Date(2025, 5, 12, 9, 30) as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    (el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement).click();
+    await ready(el);
+
+    expect(el.value).toBeNull();
+    expect(events.at(-1)?.source).toBe('clear');
+  });
+
+  it('should not emit a change when Clear is clicked with nothing selected', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="single" clear-button></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    (el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement).click();
+    await ready(el);
+
+    expect(events.length).toBe(0);
+  });
+
+  it('should select a slot once when Space is pressed on it', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="30"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    getSlotButton(el, '09:30 AM').focus();
+    await userEvent.keyboard(' ');
+    await ready(el);
+
+    expect(events.filter(e => e.source === 'slot').length).toBe(1);
+  });
+
+  it('should let an explicit slot list max height exceed the calendar height when side-by-side', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="horizontal" step="5"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.style.setProperty('--forge-date-time-picker-slot-list-max-height', '600px');
+    const calendarSection = el.shadowRoot!.querySelector('[part="calendar-section"]') as HTMLElement;
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+    await vi.waitFor(() => expect(slotList.getBoundingClientRect().height).toBeGreaterThan(calendarSection.getBoundingClientRect().height + 50));
+  });
+
+  it('should keep the slot list max height when orientation is vertical', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="vertical"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.style.setProperty('--forge-date-time-picker-slot-list-max-height', '150px');
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+    await vi.waitFor(() => expect(slotList.getBoundingClientRect().height).toBeLessThanOrEqual(150));
+  });
+
+  it('should honor an explicit slot list max height when side-by-side', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="horizontal"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.style.setProperty('--forge-date-time-picker-slot-list-max-height', '150px');
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+    await vi.waitFor(() => expect(slotList.getBoundingClientRect().height).toBeLessThanOrEqual(150));
+  });
+
+  it('should fit a short slot list to its content when side-by-side', async () => {
+    const screen = render(
+      html`<forge-date-time-picker time-mode="slots" orientation="horizontal" .slots=${[{ value: '09:00' }, { value: '09:30' }]}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendarSection = el.shadowRoot!.querySelector('[part="calendar-section"]') as HTMLElement;
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+    await vi.waitFor(() => expect(slotList.getBoundingClientRect().height).toBeLessThan(calendarSection.getBoundingClientRect().height / 2));
+  });
+
+  it('should match the slot list width to the calendar when orientation is vertical', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" orientation="vertical"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const calendarSection = el.shadowRoot!.querySelector('[part="calendar-section"]') as HTMLElement;
+    const slotList = el.shadowRoot!.querySelector('[part="slot-list"]') as HTMLElement;
+    expect(Math.abs(slotList.getBoundingClientRect().width - calendarSection.getBoundingClientRect().width)).toBeLessThanOrEqual(1);
+  });
+
+  for (const timeMode of ['single', 'range']) {
+    it(`should not draw dividers in ${timeMode} time mode`, async () => {
+      const screen = render(html`<forge-date-time-picker time-mode=${timeMode}></forge-date-time-picker>`);
+      const el = getEl(screen.container);
+      await ready(el);
+      const timeSection = el.shadowRoot!.querySelector('[part="time-section"]') as HTMLElement;
+      expect(getComputedStyle(timeSection).borderTopStyle).toBe('none');
+      const footer = el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement | null;
+      if (footer) {
+        expect(getComputedStyle(footer).borderTopStyle).toBe('none');
+      }
+    });
+  }
 
   it('hides the header slot when empty and shows it when assigned content', async () => {
     const screen = render(html`
@@ -273,7 +429,7 @@ describe('DateTimePicker / selection + events', () => {
     await ready(el);
     const events = captureChanges(el);
 
-    const slot = el.shadowRoot!.querySelector('forge-button[role="option"][data-value="09:30"]') as HTMLElement;
+    const slot = getSlotButton(el, '09:30 AM');
     slot.click();
     await ready(el);
 
@@ -306,7 +462,7 @@ describe('DateTimePicker / selection + events', () => {
     el.value = new Date(2025, 5, 12);
     await ready(el);
     const events = captureChanges(el);
-    const disabledBtn = el.shadowRoot!.querySelector('forge-button[data-value="09:30"]') as HTMLElement;
+    const disabledBtn = getSlotButton(el, '09:30 AM');
     disabledBtn.click();
     await ready(el);
     const slotEvents = events.filter(e => e.source === 'slot');
@@ -345,8 +501,8 @@ describe('DateTimePicker / min-max enforcement', () => {
     );
     const el = getEl(screen.container);
     await ready(el);
-    const slot0900 = el.shadowRoot!.querySelector('[data-value="09:00"]') as HTMLElement;
-    const slot0930 = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLElement;
+    const slot0900 = getSlotButton(el, '09:00 AM');
+    const slot0930 = getSlotButton(el, '09:30 AM');
     expect(slot0900.getAttribute('aria-disabled')).toBe('true');
     expect(slot0930.getAttribute('aria-disabled')).toBe('false');
   });
@@ -368,8 +524,8 @@ describe('DateTimePicker / min-max enforcement', () => {
     await ready(el);
     el.disabled = false;
     await ready(el);
-    const slot0900 = el.shadowRoot!.querySelector('[data-value="09:00"]') as HTMLElement;
-    const slot0930 = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLElement;
+    const slot0900 = getSlotButton(el, '09:00 AM');
+    const slot0930 = getSlotButton(el, '09:30 AM');
     expect(slot0900.getAttribute('aria-disabled')).toBe('true');
     expect(slot0930.getAttribute('aria-disabled')).toBe('false');
   });
@@ -607,7 +763,7 @@ describe('DateTimePicker / accessibility', () => {
     await ready(el);
 
     announceSpy.mockClear();
-    const slot = el.shadowRoot!.querySelector('forge-button[role="option"][data-value="09:30"]') as HTMLElement;
+    const slot = getSlotButton(el, '09:30 AM');
     slot.click();
     await ready(el);
 
@@ -1004,6 +1160,25 @@ describe('DateTimePicker / deferred Apply/Cancel (T-P5)', () => {
     expect(events.length).toBe(0);
   });
 
+  it('should commit a cleared range when Clear then Apply are clicked', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date" clear-button></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2026, 5, 1, 9, 0), to: new Date(2026, 5, 3, 17, 0) } as IDateTimePickerRange;
+    await ready(el);
+    const events = captureChanges(el);
+
+    (el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement).click();
+    await ready(el);
+    const applyBtn = el.shadowRoot!.querySelector('[part~="commit-apply"]') as HTMLButtonElement;
+    expect(applyBtn.disabled).toBe(false);
+    applyBtn.click();
+    await ready(el);
+
+    expect(el.value).toBeNull();
+    expect(events.map(e => e.source)).toEqual(['apply']);
+  });
+
   it('should commit and emit exactly one change with the staged range when Apply is clicked', async () => {
     const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date"></forge-date-time-picker>`);
     const el = getEl(screen.container);
@@ -1257,7 +1432,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     } as IDateTimePickerRange;
     await ready(el);
 
-    const todayBtn = el.shadowRoot!.querySelector('[data-preset-id="next-7-days"]') as HTMLElement;
+    const todayBtn = getPresetButton(el, 'Next 7 days');
     expect(todayBtn).not.toBeNull();
 
     const events = captureChanges(el);
@@ -1296,7 +1471,7 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
     const el = getEl(screen.container);
     await ready(el);
 
-    const presetBtn = el.shadowRoot!.querySelector('[data-preset-id="today"]') as HTMLElement;
+    const presetBtn = getPresetButton(el, 'Today');
     expect(presetBtn).not.toBeNull();
 
     presetBtn.click();
@@ -1437,7 +1612,7 @@ describe('DateTimePicker / review fixes', () => {
     first.focus();
     listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     await ready(el);
-    const disabledSlot = el.shadowRoot!.querySelector('forge-button[data-value="09:30"]') as HTMLElement;
+    const disabledSlot = getSlotButton(el, '09:30 AM');
     expect(el.shadowRoot!.activeElement).toBe(disabledSlot);
     expect(disabledSlot.getAttribute('aria-disabled')).toBe('true');
     expect(disabledSlot.hasAttribute('disabled')).toBe(false);
