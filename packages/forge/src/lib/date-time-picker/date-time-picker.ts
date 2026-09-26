@@ -53,6 +53,10 @@ import { ensureTemporal } from './temporal-loader.js';
 
 import styles from './date-time-picker.scss';
 
+const TIME_MODES: readonly TimeMode[] = ['single', 'range', 'slots'];
+
+const CALENDAR_SECTION_HEIGHT_PROPERTY = '--_calendar-section-height';
+
 const PRESET_DEFS: ReadonlyArray<{ id: DateRangePresetId; label: string }> = [
   { id: 'today', label: 'Today' },
   { id: 'this-week', label: 'This week' },
@@ -134,8 +138,8 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @slot time-label - Optional caption rendered above the time UI.
  * @slot previous-month-button-text - Forwarded to the embedded calendar.
  * @slot next-month-button-text - Forwarded to the embedded calendar.
- * @slot today-button-text - Forwarded to the embedded calendar.
- * @slot clear-button-text - Forwarded to the embedded calendar.
+ * @slot today-button-text - Text for the Today button.
+ * @slot clear-button-text - Text for the Clear button.
  *
  * @cssproperty --forge-date-time-picker-summary-background - Summary panel background color.
  * @cssproperty --forge-date-time-picker-summary-color - Summary panel text color.
@@ -150,8 +154,14 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @cssproperty --forge-date-time-picker-slot-background - Slot pill background.
  * @cssproperty --forge-date-time-picker-slot-selected-background - Selected slot background.
  * @cssproperty --forge-date-time-picker-slot-selected-color - Selected slot text color.
- * @cssproperty --forge-date-time-picker-slot-list-max-height - Slot list max height before scrolling.
- * @cssproperty --forge-date-time-picker-slot-list-width - Slot list width (defaults to match the calendar).
+ * @cssproperty --forge-date-time-picker-slot-list-max-height - Slot list max height before scrolling. Side-by-side layouts default to the calendar's height.
+ * @cssproperty --forge-date-time-picker-slot-list-width - Slot list width. Defaults to the widest slot side-by-side, and to the calendar's width when stacked.
+ *
+ * @state horizontal - Applied when the calendar and time controls are laid out side by side.
+ * @state vertical - Applied when the calendar and time controls are stacked.
+ * @state time-single - Applied when `time-mode` is `single`.
+ * @state time-range - Applied when `time-mode` is `range`.
+ * @state time-slots - Applied when `time-mode` is `slots`.
  *
  * @csspart root - The root container.
  * @csspart header - Header slot wrapper.
@@ -164,6 +174,9 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart time-input - Each embedded `forge-time-picker`.
  * @csspart slot-list - The `<ul>` listbox in slots mode.
  * @csspart slot - Each slot pill.
+ * @csspart date-actions - Today/Clear button row below the calendar and time controls.
+ * @csspart today-button - The Today button.
+ * @csspart clear-button - The Clear button.
  * @csspart footer - Footer wrapper (hidden when all three footer sub-slots are empty).
  * @csspart footer-start - Inline-start zone of the footer.
  * @csspart footer-center - Center zone of the footer.
@@ -341,14 +354,14 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   public firstDayOfWeek: DayOfWeek | undefined;
 
   /**
-   * Show calendar clear button.
+   * Show a Clear button below the calendar and time controls.
    * @attribute clear-button
    * @default false
    */
   @property({ type: Boolean, attribute: 'clear-button' }) public clearButton = false;
 
   /**
-   * Show calendar today button.
+   * Show a Today button below the calendar and time controls.
    * @attribute today-button
    * @default false
    */
@@ -446,6 +459,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #intlSummaryFmt: Intl.DateTimeFormat | null = null;
   #announcedValue = false;
   #phoneMql: MediaQueryList | null = null;
+  #calendarSection: HTMLElement | null = null;
+  #calendarSectionHost: HTMLElement | null = null;
+  #calendarResizeObserver: ResizeObserver | null = null;
   #slotFocusGroup = createFocusGroupRef({
     selector: '[part~="slot"]',
     orientation: 'vertical',
@@ -531,6 +547,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       this.#phoneMql.addEventListener('change', this.#onPhoneChange);
       this.#onPhoneChange(this.#phoneMql);
     }
+    if (this.hasUpdated) {
+      this.#observeCalendarSection();
+    }
   }
 
   /** Lazily loads the Temporal polyfill when `valueMode` needs it, re-rendering once available so the public `value` can resolve. */
@@ -614,10 +633,15 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   public override updated(_changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
     this.#slotFocusGroup.update();
+    this.#observeCalendarSection();
     toggleState(this.#internals, 'sheet', this._isPhone && !!(this.#anchorElement ?? this.anchor));
     toggleState(this.#internals, 'summary', this.summary);
     toggleState(this.#internals, 'disabled', this.disabled);
     toggleState(this.#internals, 'readonly', this.readonly);
+    const orientation = this.#resolveOrientation();
+    toggleState(this.#internals, 'horizontal', orientation === 'horizontal');
+    toggleState(this.#internals, 'vertical', orientation === 'vertical');
+    TIME_MODES.forEach(mode => toggleState(this.#internals, `time-${mode}`, this.timeMode === mode));
   }
 
   public override disconnectedCallback(): void {
@@ -628,6 +652,30 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
     this.#phoneMql?.removeEventListener('change', this.#onPhoneChange);
     this.#phoneMql = null;
+    this.#calendarResizeObserver?.disconnect();
+    this.#calendarResizeObserver = null;
+    this.#calendarSection = null;
+    this.#calendarSectionHost = null;
+  }
+
+  /** Tracks the calendar section's height so a side-by-side slot list can match it. */
+  #observeCalendarSection(): void {
+    const section = this.shadowRoot?.querySelector<HTMLElement>('.calendar-section') ?? null;
+    if (section === this.#calendarSection) {
+      return;
+    }
+    this.#calendarSectionHost?.style.removeProperty(CALENDAR_SECTION_HEIGHT_PROPERTY);
+    this.#calendarResizeObserver?.disconnect();
+    this.#calendarSection = section;
+    this.#calendarSectionHost = section?.parentElement ?? null;
+    if (!section || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    this.#calendarResizeObserver ??= new ResizeObserver(([entry]) => {
+      const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
+      this.#calendarSectionHost?.style.setProperty(CALENDAR_SECTION_HEIGHT_PROPERTY, `${height}px`);
+    });
+    this.#calendarResizeObserver.observe(section);
   }
 
   public override render(): TemplateResult {
@@ -691,7 +739,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const resolvedOrientation = this.#resolveOrientation();
     const overlayMode = !!(this.#anchorElement ?? this.anchor);
     const sheet = this._isPhone && overlayMode;
-    const content = html`${this.#renderHeader()} ${this.#renderBody(resolvedOrientation)} ${this.#renderFooter()}`;
+    const content = html`${this.#renderHeader()} ${this.#renderBody(resolvedOrientation)} ${this.#renderDateActions()} ${this.#renderFooter()}`;
     const classes = {
       'forge-date-time-picker': true,
       [this.timeMode]: true,
@@ -765,6 +813,31 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return html`<slot name="header" part="header" ${hideWhenEmpty()}></slot>`;
   }
 
+  #renderDateActions(): TemplateResult | typeof nothing {
+    if (!this.todayButton && !this.clearButton) {
+      return nothing;
+    }
+    const inert = this.disabled || this.readonly;
+    return html`
+      <div part="date-actions" class="date-actions">
+        ${this.todayButton
+          ? html`<forge-button
+              part="today-button"
+              aria-label=${ifDefined(this.#showsPresets() ? 'Go to today' : undefined)}
+              ?disabled=${inert}
+              @click=${this.#onTodayClick}>
+              <slot name="today-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT}</slot>
+            </forge-button>`
+          : nothing}
+        ${this.clearButton
+          ? html`<forge-button part="clear-button" ?disabled=${inert} @click=${this.#onClearClick}>
+              <slot name="clear-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT}</slot>
+            </forge-button>`
+          : nothing}
+      </div>
+    `;
+  }
+
   #renderFooter(): TemplateResult | typeof nothing {
     const showDuration = this.#isRangeValue() && isRange(this.#deferred ? this.#draftValue : this.#value);
     if (!this.showFooter && !this.#deferred && !showDuration) {
@@ -811,34 +884,31 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderBody(orientation: ResolvedOrientation): TemplateResult {
-    const showPresets = this.presets && this.dateMode === 'range' && this.timeMode !== 'slots';
+    const showPresets = this.#showsPresets();
     const calendarAndTime = html`${this.#renderCalendarSection()} ${this.#renderTimeSection()}`;
     return html`
-      <div part="body" class="body" data-orientation=${orientation}>
+      <div part="body" class=${classMap({ body: true, [`body--${orientation}`]: true })}>
         ${showPresets
           ? html`
               ${this.#renderPresets()}
-              <div class="body-main" data-orientation=${orientation}>${calendarAndTime}</div>
+              <div class=${classMap({ 'body-main': true, [`body-main--${orientation}`]: true })}>${calendarAndTime}</div>
             `
           : calendarAndTime}
       </div>
     `;
   }
 
+  #showsPresets(): boolean {
+    return this.presets && this.dateMode === 'range' && this.timeMode !== 'slots';
+  }
+
   #renderPresets(): TemplateResult {
     return html`
-      <div part="presets" class="presets" role="group" aria-label="Quick date ranges" @click=${this.#onPresetClick}>
-        ${PRESET_DEFS.map(p => html`<forge-button type="button" part="preset" data-preset-id=${p.id}>${p.label}</forge-button>`)}
+      <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
+        ${PRESET_DEFS.map(p => html`<forge-button type="button" part="preset" @click=${() => this.#onPresetSelect(p.id)}>${p.label}</forge-button>`)}
       </div>
     `;
   }
-
-  #onPresetClick = (event: Event): void => {
-    const presetId = (event.target as Element).closest<HTMLElement>('[data-preset-id]')?.dataset.presetId as DateRangePresetId | undefined;
-    if (presetId) {
-      this.#onPresetSelect(presetId);
-    }
-  };
 
   #onPresetSelect(id: DateRangePresetId): void {
     const { from, to } = computePreset(id, new Date(), this.firstDayOfWeek ?? 0);
@@ -872,9 +942,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
           prevent-focus
           ?disabled=${this.disabled}
           ?readonly=${this.readonly}
-          ?clear-button=${this.clearButton}
-          ?today-button=${this.todayButton}
-          ?show-header=${this.showHeader}
+          .showHeader=${this.showHeader}
           .value=${calendarValue as any}
           .min=${this.min as any}
           .max=${this.max as any}
@@ -886,15 +954,17 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
           @forge-calendar-date-select=${this.#onCalendarSelect}>
           <slot name="previous-month-button-text" slot="previous-month-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT}</slot>
           <slot name="next-month-button-text" slot="next-month-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_MONTH_BUTTON_TEXT}</slot>
-          <slot name="today-button-text" slot="today-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT}</slot>
-          <slot name="clear-button-text" slot="clear-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT}</slot>
         </forge-calendar>
       </div>
     `;
   }
 
   #renderTimeSection(): TemplateResult {
-    return html` <div part="time-section" class="time-section" data-mode=${this.timeMode}>${this.#renderTimeLabel()} ${this.#renderTimeBody()}</div> `;
+    return html`
+      <div part="time-section" class=${classMap({ 'time-section': true, [`time-section--${this.timeMode}`]: true })}>
+        ${this.#renderTimeLabel()} ${this.#renderTimeBody()}
+      </div>
+    `;
   }
 
   #renderTimeLabel(): TemplateResult {
@@ -975,12 +1045,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         aria-orientation="vertical"
         @keydown=${this.#onSlotListKeydown}
         ${focusGroup(this.#slotFocusGroup)}>
-        <div class="slot-list-inner" role="presentation">${list.map((slot, index) => this.#renderSlot(slot, index, disabledMap[index], labelFmt))}</div>
+        <div class="slot-list-inner" role="presentation">${list.map((slot, index) => this.#renderSlot(slot, disabledMap[index], labelFmt))}</div>
       </div>
     `;
   }
 
-  #renderSlot(slot: ITimeSlot, index: number, slotIsDisabled: boolean, labelFmt: Intl.DateTimeFormat): TemplateResult {
+  #renderSlot(slot: ITimeSlot, slotIsDisabled: boolean, labelFmt: Intl.DateTimeFormat): TemplateResult {
     const selected = this.#activeTime === slot.value;
     // Per the ARIA listbox pattern, an unavailable option stays perceivable and focusable
     // (aria-disabled), so it is NOT natively disabled — only the whole-component disabled/readonly
@@ -1000,23 +1070,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         aria-selected=${String(selected)}
         aria-disabled=${String(slotIsDisabled)}
         tabindex="-1"
-        data-value=${slot.value}
-        data-index=${index}
         ?disabled=${this.disabled || this.readonly}
-        @click=${this.#onSlotClick}>
+        @click=${() => this.#onSlotSelect(slot)}>
         ${slot.label ?? this.#formatSlotLabel(slot.value, labelFmt)}
       </forge-button>
     `;
   }
-
-  #onSlotClick = (event: Event): void => {
-    const index = Number((event.currentTarget as HTMLElement).dataset.index);
-    const list = this.#computedSlots();
-    const slot = list[index];
-    if (slot) {
-      this.#onSlotSelect(slot);
-    }
-  };
 
   #formatSlotLabel(value: string, fmt: Intl.DateTimeFormat): string {
     return formatSlotLabel(value, this.locale, this.use24HourTime, this.allowSeconds, fmt);
@@ -1084,6 +1143,30 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       return undefined;
     }
     return timeFromDate(max, this.allowSeconds) ?? undefined;
+  }
+
+  #onTodayClick = (): void => {
+    const calendar = this.shadowRoot?.querySelector<ICalendarComponent>('forge-calendar');
+    calendar?.today();
+    calendar?.focus?.();
+  };
+
+  #onClearClick = (): void => {
+    if (!this.#hasSelection()) {
+      return;
+    }
+    this.#syncFromValue(null);
+    this.#disabledSlotCache = null;
+    this.#recomputeValue();
+    if (!this.#deferred) {
+      this.#emitChange('clear');
+    }
+    this.requestUpdate();
+  };
+
+  #hasSelection(): boolean {
+    const committed = this.#deferred ? this.#draftValue : this.#value;
+    return committed != null || [this.#activeFromDate, this.#activeToDate, this.#activeTime, this.#activeFrom, this.#activeTo].some(part => part != null);
   }
 
   #onCalendarSelect = (event: Event): void => {
@@ -1159,17 +1242,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (this.#slotFocusGroup.fromEvent(event)) {
       return;
     }
-    if (event.key === 'Enter' || event.key === ' ') {
-      const target = event.target as HTMLElement | null;
-      if (target?.dataset?.value) {
-        event.preventDefault();
-        const slot = list.find(s => s.value === target.dataset.value);
-        if (slot) {
-          this.#onSlotSelect(slot);
-        }
-      }
-      return;
-    }
     if (event.key === 'Escape') {
       const calendar = this.shadowRoot?.querySelector<ICalendarComponent>('forge-calendar');
       calendar?.focus?.();
@@ -1228,6 +1300,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #canApply(): boolean {
+    if (this.#draftValue == null) {
+      return this.#value != null;
+    }
     if (!isRange(this.#draftValue)) {
       return false;
     }
