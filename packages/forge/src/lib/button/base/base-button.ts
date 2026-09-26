@@ -80,6 +80,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
   #disabled = false;
+  #consumerAriaDisabled: string | null | undefined;
 
   /**
    * Gets/sets whether the button is dense.
@@ -200,7 +201,8 @@ export abstract class BaseButton extends BaseLitElement {
   }
 
   public override willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('disabled')) {
+    // Skip the initial enabled state so consumer-provided aria-disabled is preserved.
+    if (changedProperties.has('disabled') && (this.hasUpdated || this.disabled)) {
       this.#handleDisabledChange();
     }
   }
@@ -351,13 +353,23 @@ export abstract class BaseButton extends BaseLitElement {
     if (this._anchorElements.length) {
       this.removeAttribute('tabindex');
       setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
+      this.#consumerAriaDisabled = undefined;
+    } else if (this.disabled) {
+      this.removeAttribute('tabindex');
+      if (this.#consumerAriaDisabled === undefined) {
+        this.#consumerAriaDisabled = this.getAttribute('aria-disabled');
+      }
+      setDefaultAria(this, this._internals, { ariaDisabled: 'true' }, { setAttribute: true });
     } else {
-      if (this.disabled) {
-        this.removeAttribute('tabindex');
-      } else if (!this.hasAttribute('tabindex')) {
+      if (!this.hasAttribute('tabindex')) {
         this.setAttribute('tabindex', '0');
       }
-      setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : null }, { setAttribute: true });
+      // Restore the consumer's aria-disabled rather than clearing it.
+      setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
+      if (this.#consumerAriaDisabled != null) {
+        this.setAttribute('aria-disabled', this.#consumerAriaDisabled);
+      }
+      this.#consumerAriaDisabled = undefined;
     }
   }
 

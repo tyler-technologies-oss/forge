@@ -11,7 +11,7 @@ import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { isSameDate } from '../core/utils/date-utils.js';
 import { createFocusGroupRef, focusGroup } from '../core/utils/focus-group.js';
 import { hideWhenEmpty } from '../core/utils/lit-utils.js';
-import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
+import { CALENDAR_CONSTANTS, type ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
 import { DateRange } from '../calendar/core/date-range.js';
 import {
@@ -884,10 +884,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
           locale=${ifDefined(this.locale)}
           first-day-of-week=${ifDefined(this.firstDayOfWeek as number | undefined)}
           @forge-calendar-date-select=${this.#onCalendarSelect}>
-          <slot name="previous-month-button-text" slot="previous-month-button-text"></slot>
-          <slot name="next-month-button-text" slot="next-month-button-text"></slot>
-          <slot name="today-button-text" slot="today-button-text"></slot>
-          <slot name="clear-button-text" slot="clear-button-text"></slot>
+          <slot name="previous-month-button-text" slot="previous-month-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_PREVIOUS_MONTH_BUTTON_TEXT}</slot>
+          <slot name="next-month-button-text" slot="next-month-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_NEXT_MONTH_BUTTON_TEXT}</slot>
+          <slot name="today-button-text" slot="today-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_TODAY_BUTTON_TEXT}</slot>
+          <slot name="clear-button-text" slot="clear-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT}</slot>
         </forge-calendar>
       </div>
     `;
