@@ -185,6 +185,24 @@ export class DateInputMask {
     this._mask.updateValue();
   }
 
+  /** Toggles whether the unfilled format guide is shown (imask lazy mode) without recreating the mask. */
+  public setShowMaskFormat(show: boolean): void {
+    // Preserve the current selection and focus state due to IMask's lazy operation kicking in,
+    // which pushes the cursor to the end of the input, disrupting user.
+    const root = this._element.getRootNode() as Document | ShadowRoot;
+    const activeElement = root.activeElement;
+    const isFocused = activeElement === this._element;
+    const selectionStart = isFocused ? this._element.selectionStart : null;
+    const selectionEnd = isFocused ? this._element.selectionEnd : null;
+
+    this._mask.updateOptions({ lazy: !show });
+    this._mask.updateControl();
+
+    if (isFocused && selectionStart != null && selectionEnd != null) {
+      this._element.setSelectionRange(selectionStart, selectionEnd);
+    }
+  }
+
   public get maskedValue(): string {
     return this._mask.value;
   }
