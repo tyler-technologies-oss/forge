@@ -22,9 +22,9 @@ $tokens: (
   // Single / range time field. 48px matches the field inset-height (the standard height for a
   // floating-label field) and clears the 44px comfortable touch target.
   time-field-height: utils.module-val(date-time-picker, time-field-height, 48px),
-  // Slot list (defaults to the same width as the calendar so booking pills line up under/beside it)
+  // Slot list (sizes to its widest pill by default)
   slot-list-max-height: utils.module-val(date-time-picker, slot-list-max-height, 320px),
-  slot-list-width: utils.module-val(date-time-picker, slot-list-width, 320px),
+  slot-list-width: utils.module-val(date-time-picker, slot-list-width, max-content),
   slot-list-gap: utils.module-val(date-time-picker, slot-list-gap, spacing.variable(xxsmall)),
   slot-padding-block: utils.module-val(date-time-picker, slot-padding-block, spacing.variable(xsmall)),
   slot-padding-inline: utils.module-val(date-time-picker, slot-padding-inline, spacing.variable(small)),

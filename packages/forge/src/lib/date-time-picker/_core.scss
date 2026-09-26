@@ -158,7 +158,6 @@
   min-width: 140px;
   padding-inline-end: #{token(body-gap)};
   margin-inline-end: #{token(body-gap)};
-  border-inline-end: solid #{token(outline-width)} #{token(divider-color)};
   align-self: stretch;
 }
 
@@ -180,6 +179,8 @@
   max-height: #{token(slot-list-max-height)};
   overflow-y: auto;
   padding: 0;
+  padding-inline-end: #{token(slot-list-gap)};
+  box-sizing: border-box;
   margin: 0;
   list-style: none;
 
@@ -198,8 +199,6 @@
   --forge-button-outlined-color: #{token(slot-color)};
   --forge-button-outlined-border-color: #{token(slot-outline-color)};
   --forge-button-outlined-border-width: #{token(slot-outline-width)};
-  --forge-button-padding-block: #{token(slot-padding-block)};
-  --forge-button-padding-inline: #{token(slot-padding-inline)};
   --forge-button-shape: #{token(slot-shape)};
 }
 
