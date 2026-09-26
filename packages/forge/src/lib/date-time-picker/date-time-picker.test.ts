@@ -351,6 +351,29 @@ describe('DateTimePicker / min-max enforcement', () => {
     expect(slot0930.getAttribute('aria-disabled')).toBe('false');
   });
 
+  it('should keep unavailable slots aria-disabled when re-enabled after being disabled', async () => {
+    const min = new Date(2025, 5, 12, 9, 30);
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        min-time="09:00"
+        max-time="10:00"
+        step="15"
+        .value=${new Date(2025, 5, 12) as any}
+        .min=${min as any}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    el.disabled = true;
+    await ready(el);
+    el.disabled = false;
+    await ready(el);
+    const slot0900 = el.shadowRoot!.querySelector('[data-value="09:00"]') as HTMLElement;
+    const slot0930 = el.shadowRoot!.querySelector('[data-value="09:30"]') as HTMLElement;
+    expect(slot0900.getAttribute('aria-disabled')).toBe('true');
+    expect(slot0930.getAttribute('aria-disabled')).toBe('false');
+  });
+
   it('clamps the single time-picker min to the min time-of-day on the boundary day', async () => {
     const min = new Date(2025, 5, 12, 14, 0);
     const screen = render(
@@ -542,6 +565,23 @@ describe('DateTimePicker / accessibility', () => {
     const el = getEl(screen.container);
     await ready(el);
     await expect(el).toBeAccessible();
+  });
+
+  it('should label calendar navigation buttons with default text when none is slotted', async () => {
+    render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    await expect.element(page.getByRole('button', { name: 'Previous month' })).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Next month' })).toBeInTheDocument();
+  });
+
+  it('should label calendar navigation buttons with slotted text when provided', async () => {
+    render(
+      html`<forge-date-time-picker>
+        <span slot="previous-month-button-text">Mes anterior</span>
+        <span slot="next-month-button-text">Mes siguiente</span>
+      </forge-date-time-picker>`
+    );
+    await expect.element(page.getByRole('button', { name: 'Mes anterior' })).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Mes siguiente' })).toBeInTheDocument();
   });
 
   it('slots mode listbox renders with role and aria-orientation', async () => {
