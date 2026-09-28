@@ -3,6 +3,18 @@ import { parseDateString } from '../core/utils/date-utils.js';
 import { tryCoerceTimeString } from '../core/utils/time-utils.js';
 
 const pad = (n: number): string => String(n).padStart(2, '0');
+
+/** What an endpoint input captures: a date and time, only a date, or only a time. */
+export type DateTimeFieldEndpointKind = 'datetime' | 'date' | 'time';
+
+/** The format hint (and intrinsic width) for an endpoint input of the given kind. */
+export function endpointFormatHint(kind: DateTimeFieldEndpointKind, use24HourTime: boolean, allowSeconds: boolean): string {
+  const time = use24HourTime ? (allowSeconds ? 'HH:mm:ss' : 'HH:mm') : allowSeconds ? 'hh:mm:ss aa' : 'hh:mm aa';
+  if (kind === 'date') {
+    return 'MM/DD/YYYY';
+  }
+  return kind === 'time' ? time : `MM/DD/YYYY ${time}`;
+}
 const DATE_INPUT_PATTERN = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 
 export interface IParsedDateInput {

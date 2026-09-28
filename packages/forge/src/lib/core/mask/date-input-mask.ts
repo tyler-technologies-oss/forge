@@ -1,5 +1,6 @@
 import { isNumeric } from '@tylertech/forge-core';
 import { ChangeDetails, InputMask, MaskedEnum, MaskedRange, createMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
+import type { IMaskView } from './mask-view.js';
 
 export interface IDateInputMaskOptions {
   showMaskFormat?: boolean;
@@ -10,6 +11,87 @@ export interface IDateInputMaskOptions {
 }
 
 export const DEFAULT_DATE_MASK = '0`0{/}`0`0{/}`0`0`0`0';
+export const DEFAULT_DATE_MASK_LENGTH = 10;
+
+export interface IDatePrepareOptions {
+  showMaskFormat?: boolean;
+  /** Overrides the default select-all detection (selection ending at the end of the date). */
+  isAllSelected?: boolean;
+  /** Places the caret after the segment's slash instead of offsetting the post-update caret, which only lands correctly in lazy mode. */
+  useSegmentCursor?: boolean;
+}
+
+const CURSOR_AFTER_MONTH = 3;
+const CURSOR_AFTER_DAY = 6;
+
+function setValueAdjusted(view: IMaskView, value: string, position: number, target: number, options: IDatePrepareOptions): void {
+  view.unmaskedValue = value;
+  view.updateCursor(options.useSegmentCursor ? target : view.cursorPos + position);
+}
+
+/** Default prepare logic for {@link DEFAULT_DATE_MASK}, run against a view whose positions start at the month. */
+export function prepareDateChar(value: string, view: IMaskView, options: IDatePrepareOptions = {}): string {
+  const isAllSelected = options.isAllSelected ?? (!!view._selection && view._selection.end === DEFAULT_DATE_MASK_LENGTH);
+  const currentValue = isAllSelected ? '' : view.value;
+
+  if (!isNumeric(value)) {
+    // Before we ignore this character let's do some checks for common scenarios where the user enters a slash to help with coercion
+    if (value === '/') {
+      const isFinalMonthChar = view.cursorPos === 2 && currentValue.length === 1;
+      if (isFinalMonthChar) {
+        // The user attempted to press the slash key after entering a single month character so let's pad the value
+        setValueAdjusted(view, currentValue.padStart(2, '0'), 3, CURSOR_AFTER_MONTH, options);
+        return '/';
+      }
+
+      const isFinalDayChar = view.cursorPos === 5 && currentValue.length === 4;
+      if (isFinalDayChar) {
+        // The user attempted to press the slash key after entering a single day character so let's pad the value
+        const newValue = `${currentValue.substring(0, 3)}${currentValue[3].padStart(2, '0').padStart(2, '0')}`;
+        setValueAdjusted(view, newValue, 3, CURSOR_AFTER_DAY, options);
+        return '/';
+      }
+    }
+    return value;
+  }
+
+  // We know that the value is numeric so let's coerce it to a number type for comparison below
+  const numValue = +value;
+
+  // Attempt to pad a leading zero to the month segment
+  const isFirstMonthChar = view.cursorPos === 1 && numValue > 1;
+  if (isFirstMonthChar) {
+    // Replace just the month segment with the padded value and update cursor position
+    const newValue = `${String(numValue).padStart(2, '0')}${currentValue.slice(2)}`;
+    setValueAdjusted(view, newValue, 3, CURSOR_AFTER_MONTH, options);
+    return '/';
+  }
+
+  // Attempt to pad a leading zero to the day segment
+  const isFirstDayChar = (view.cursorPos === 3 || view.cursorPos === 4) && numValue > 3;
+  if (isFirstDayChar) {
+    // Replace just the day segment with the padded value and update cursor position
+    const newValue = `${currentValue.substring(0, 3)}${String(numValue).padStart(2, '0')}${currentValue.slice(5)}`;
+    setValueAdjusted(view, newValue, 3, CURSOR_AFTER_DAY, options);
+    return '/';
+  }
+
+  // Attempt to automatically add a slash after the month or day segment is complete and/or move cursor to after slash
+  if (!options.showMaskFormat) {
+    if (view.cursorPos === 2 || view.cursorPos === 5) {
+      let newValue: string;
+      if (view.cursorPos === 2) {
+        newValue = `${currentValue.substring(0, 1)}${numValue}/${currentValue.slice(3)}`;
+      } else {
+        newValue = `${currentValue.substring(0, 4)}${numValue}/${currentValue.slice(6)}`;
+      }
+      setValueAdjusted(view, newValue, 2, view.cursorPos === 2 ? CURSOR_AFTER_MONTH : CURSOR_AFTER_DAY, options);
+      return '';
+    }
+  }
+
+  return value;
+}
 
 const DATE_SEPARATOR = '/';
 const MONTH_START_POSITION = 0;
@@ -18,7 +100,6 @@ const MONTH_SEPARATOR_POSITION = 2;
 const DAY_START_POSITION = 3;
 const DAY_END_POSITION = 4;
 const DAY_SEPARATOR_POSITION = 5;
-const DEFAULT_DATE_LENGTH = 10;
 const MAX_MONTH_FIRST_DIGIT = 1;
 const MAX_DAY_FIRST_DIGIT = 3;
 
@@ -155,7 +236,7 @@ export class DateInputMask {
 
   private _appendDefaultChar(current: string, char: string): string {
     const position = current.length;
-    if (position >= DEFAULT_DATE_LENGTH) {
+    if (position >= DEFAULT_DATE_MASK_LENGTH) {
       return current;
     }
 

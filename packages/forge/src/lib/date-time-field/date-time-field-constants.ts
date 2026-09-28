@@ -8,8 +8,6 @@ const observedAttributes = {
   TIME_MODE: 'time-mode',
   VALUE_MODE: 'value-mode',
   NAME: 'name',
-  LABEL: 'label',
-  PLACEHOLDER: 'placeholder',
   DISABLED: 'disabled',
   READONLY: 'readonly',
   REQUIRED: 'required',
@@ -19,6 +17,7 @@ const observedAttributes = {
   LOCALE: 'locale',
   USE_24_HOUR_TIME: 'use-24-hour-time',
   ALLOW_SECONDS: 'allow-seconds',
+  SHOW_DURATION: 'show-duration',
   MIN: 'min',
   MAX: 'max',
   POPOVER_PLACEMENT: 'popover-placement',
@@ -27,20 +26,6 @@ const observedAttributes = {
 
 const attributes = {
   ...observedAttributes
-} as const;
-
-const slots = {
-  LABEL: 'label',
-  SUPPORT_TEXT: 'support-text',
-  SUPPORT_TEXT_END: 'support-text-end'
-} as const;
-
-const parts = {
-  FIELD: 'field',
-  INPUT: 'input',
-  TOGGLE: 'toggle',
-  TO_DATE_INPUT: 'to-date-input',
-  DURATION: 'duration'
 } as const;
 
 const events = {
@@ -58,15 +43,14 @@ const defaultValues = {
 } as const;
 
 const messages = {
-  END_BEFORE_START: 'End must be after start.'
+  END_BEFORE_START: 'End must be after start.',
+  SLOT_UNAVAILABLE: 'Choose an available time.'
 } as const;
 
 export const DATE_TIME_FIELD_CONSTANTS = {
   elementName,
   observedAttributes,
   attributes,
-  slots,
-  parts,
   events,
   defaultValues,
   MESSAGES: messages
