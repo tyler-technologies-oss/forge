@@ -161,15 +161,6 @@
   align-self: stretch;
 }
 
-@mixin commit-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: #{token(separator-gap)};
-  grid-column: 1 / -1;
-  width: 100%;
-}
-
 @mixin slot-list {
   @include section;
   @include scrollbar.base;
