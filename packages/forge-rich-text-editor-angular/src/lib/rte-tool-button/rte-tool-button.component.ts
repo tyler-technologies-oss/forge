@@ -71,6 +71,25 @@ export class RteToolButtonComponent {
     return this.nativeElement.keyboardShortcut;
   }
 
+  /**
+   * The element this button controls, surfaced to assistive technology through
+   * `ariaControlsElements` rather than `aria-controls`.
+   *
+   * An IDREF cannot cross a shadow boundary, so the editable element - which lives in
+   * `forge-rich-text-content`'s shadow root - cannot be named by id from here. Element references
+   * can cross a boundary, but only into the same tree or an ancestor tree, so this is the editor
+   * element rather than the editable element itself. Features pass it from the editor context.
+   */
+  @Input()
+  public set controlsElement(value: RteToolButtonComponentCustomElement['controlsElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.controlsElement = value;
+    });
+  }
+  public get controlsElement(): RteToolButtonComponentCustomElement['controlsElement'] {
+    return this.nativeElement.controlsElement;
+  }
+
   constructor() {
     defineRteToolButtonComponent();
     const changeDetectorRef = inject(ChangeDetectorRef);
