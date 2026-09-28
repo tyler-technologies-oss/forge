@@ -2,7 +2,7 @@ import { defineCustomElement } from '@tylertech/forge-core';
 import { defineBottomSheetComponent } from '../bottom-sheet/index.js';
 import { defineButtonComponent } from '../button/index.js';
 import { defineCalendarComponent } from '../calendar/index.js';
-import { defineOverlayComponent } from '../overlay/index.js';
+import { definePopoverComponent } from '../popover/index.js';
 import { defineTextFieldComponent } from '../text-field/index.js';
 import { defineTimePickerComponent } from '../time-picker/index.js';
 import { DateTimePickerComponent } from './date-time-picker.js';
@@ -16,7 +16,7 @@ export function defineDateTimePickerComponent(): void {
   defineBottomSheetComponent();
   defineButtonComponent();
   defineCalendarComponent();
-  defineOverlayComponent();
+  definePopoverComponent();
   defineTimePickerComponent();
   defineTextFieldComponent();
   defineCustomElement(DateTimePickerComponent);
