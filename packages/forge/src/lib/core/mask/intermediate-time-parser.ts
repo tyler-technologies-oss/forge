@@ -1,4 +1,4 @@
-import { InputMask, type FactoryArg } from 'imask';
+import type { IMaskView } from './mask-view.js';
 import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser.js';
 
 export const SEGMENT_CURSOR_POSITION = {
@@ -17,7 +17,7 @@ export class IntermediateTimeParser {
 
   constructor(
     private _char: string,
-    private _mask: InputMask<FactoryArg>
+    private _mask: IMaskView
   ) {
     this._segmentParser = new TimeSegmentParser(this._mask.value);
   }
