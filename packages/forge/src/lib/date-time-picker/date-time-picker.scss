@@ -13,6 +13,11 @@
   @include base;
 }
 
+// Inset the card inside the popover surface; the summary layout pads its own content area.
+:host(:not(:state(summary))) forge-popover > .forge-date-time-picker {
+  padding: #{token(padding)};
+}
+
 :host(:state(summary)) .forge-date-time-picker {
   @include base-summary;
 }
@@ -237,10 +242,6 @@ slot[name='time-label'] {
   --forge-button-shape: #{token(slot-shape)};
 }
 
-.commit-actions {
-  @include commit-actions;
-}
-
 .duration {
   @include duration;
 
@@ -345,7 +346,7 @@ slot[name='time-label'] {
     width: 100%;
   }
 
-  // Comfortable touch targets for time fields and the commit actions.
+  // Comfortable touch targets for time fields.
   .time-inputs forge-text-field,
   .range-inputs forge-text-field {
     --forge-field-height: #{token(time-field-height)};
@@ -353,11 +354,5 @@ slot[name='time-label'] {
 
   .footer {
     flex: 0 0 auto;
-  }
-
-  [part='commit-apply'],
-  [part='commit-cancel'] {
-    --forge-button-height: 44px;
-    min-height: 44px;
   }
 }

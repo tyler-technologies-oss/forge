@@ -20,7 +20,6 @@ const meta = {
       .dateMode=${args.dateMode}
       .valueMode=${args.valueMode}
       .orientation=${args.orientation}
-      .autoCommit=${args.autoCommit}
       ?disabled=${args.disabled}
       ?readonly=${args.readonly}
       ?required=${args.required}
@@ -49,7 +48,6 @@ const meta = {
         'dateMode',
         'valueMode',
         'orientation',
-        'autoCommit',
         'disabled',
         'readonly',
         'required',
@@ -90,7 +88,6 @@ const meta = {
     dateMode: 'single',
     valueMode: 'temporal',
     orientation: 'auto',
-    autoCommit: false,
     disabled: false,
     readonly: false,
     required: false,

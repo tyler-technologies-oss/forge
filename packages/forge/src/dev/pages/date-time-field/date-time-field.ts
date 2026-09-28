@@ -7,6 +7,10 @@ import type { IDateTimeFieldChangeEventData, IDateTimeFieldComponent } from '@ty
 import type { IDateTimePickerComponent } from '@tylertech/forge/date-time-picker';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
+import type { ITextFieldComponent } from '@tylertech/forge/text-field';
+
+// Label, placeholder, and field appearance live on the consumer's text field and input.
+const textFieldOf = (f: IDateTimeFieldComponent): ITextFieldComponent => f.querySelector('forge-text-field') as ITextFieldComponent;
 
 const field = document.getElementById('demo-date-time-field') as IDateTimeFieldComponent;
 const picker = document.getElementById('demo-date-time-picker') as IDateTimePickerComponent;
@@ -56,14 +60,29 @@ document.getElementById('demo-validate')?.addEventListener('click', () => {
   console.log('valid:', field.reportValidity());
 });
 
-// The field and picker are independent — shared config must be set on both
-// (the field warns on mismatch rather than forwarding config across the link).
+// The field forwards its modes to a linked picker; setting both keeps the standalone field in step too.
+// Range modes take two endpoint inputs; keep each demo text field's input count in step with the mode.
+function syncInputCount(f: IDateTimeFieldComponent): void {
+  const textField = textFieldOf(f);
+  const wanted = f.timeMode !== 'slots' && (f.dateMode === 'range' || f.timeMode === 'range') ? 2 : 1;
+  const inputs = Array.from(textField.querySelectorAll(':scope > input'));
+  inputs.slice(wanted).forEach(input => input.remove());
+  for (let i = inputs.length; i < wanted; i++) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    const last = textField.querySelectorAll(':scope > input');
+    last[last.length - 1].after(input);
+  }
+}
+
 const dateModeSelect = document.getElementById('opt-date-mode') as ISelectComponent;
 dateModeSelect.addEventListener('change', () => {
   const mode = dateModeSelect.value as 'single' | 'range';
   field.dateMode = mode;
   picker.dateMode = mode;
   standaloneField.dateMode = mode;
+  syncInputCount(field);
+  syncInputCount(standaloneField);
 });
 
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;
@@ -72,6 +91,8 @@ timeModeSelect.addEventListener('change', () => {
   field.timeMode = mode;
   picker.timeMode = mode;
   standaloneField.timeMode = mode;
+  syncInputCount(field);
+  syncInputCount(standaloneField);
 });
 
 const valueModeSelect = document.getElementById('opt-value-mode') as ISelectComponent;
@@ -163,15 +184,24 @@ function bindFieldSelect(id: string, apply: (field: IDateTimeFieldComponent, val
   });
 }
 
-bindFieldText('opt-label', (f, v) => (f.label = v));
-bindFieldText('opt-placeholder', (f, v) => (f.placeholder = v));
+bindFieldText('opt-label', (f, v) => {
+  const label = textFieldOf(f).querySelector('label');
+  if (label) {
+    label.textContent = v;
+  }
+});
+bindFieldText('opt-placeholder', (f, v) =>
+  textFieldOf(f)
+    .querySelectorAll('input')
+    .forEach(input => (v ? input.setAttribute('placeholder', v) : input.removeAttribute('placeholder')))
+);
 bindFieldText('opt-min', (f, v) => (f.min = v || null));
 bindFieldText('opt-max', (f, v) => (f.max = v || null));
 
-bindFieldSelect('opt-label-position', (f, v) => (f.labelPosition = v as typeof f.labelPosition));
-bindFieldSelect('opt-label-alignment', (f, v) => (f.labelAlignment = v as typeof f.labelAlignment));
-bindFieldSelect('opt-variant', (f, v) => (f.variant = v as typeof f.variant));
-bindFieldSelect('opt-density', (f, v) => (f.density = v as typeof f.density));
-bindFieldSelect('opt-shape', (f, v) => (f.shape = v as typeof f.shape));
-bindFieldSelect('opt-theme', (f, v) => (f.theme = v as typeof f.theme));
+bindFieldSelect('opt-label-position', (f, v) => (textFieldOf(f).labelPosition = v as ITextFieldComponent['labelPosition']));
+bindFieldSelect('opt-label-alignment', (f, v) => (textFieldOf(f).labelAlignment = v as ITextFieldComponent['labelAlignment']));
+bindFieldSelect('opt-variant', (f, v) => (textFieldOf(f).variant = v as ITextFieldComponent['variant']));
+bindFieldSelect('opt-density', (f, v) => (textFieldOf(f).density = v as ITextFieldComponent['density']));
+bindFieldSelect('opt-shape', (f, v) => (textFieldOf(f).shape = v as ITextFieldComponent['shape']));
+bindFieldSelect('opt-theme', (f, v) => (textFieldOf(f).theme = v as ITextFieldComponent['theme']));
 bindFieldSelect('opt-popover-placement', (f, v) => (f.popoverPlacement = v));
