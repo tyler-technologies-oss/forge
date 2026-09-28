@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-rich-text-editor-react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The official Tyler Forge™ rich text editor adapter library for React.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
