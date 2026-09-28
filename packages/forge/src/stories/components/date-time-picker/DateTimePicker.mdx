@@ -49,11 +49,9 @@ side-by-side calendar/time layout with `orientation="horizontal"`.
 
 <Canvas of={DateTimePickerStories.Vertical} />
 
-## Deferred Commit
+## Range Selection
 
-By default (`auto-commit="false"`), changes in `date-mode="range"` and `time-mode="range"` are staged and only committed when the
-user confirms via the footer Apply action, so the public `value` does not change mid-edit. Set `auto-commit` to emit changes as the
-user selects.
+In `date-mode="range"` and `time-mode="range"`, the value updates as soon as each selection is made. There is no Apply step.
 
 ## API
 

@@ -14,40 +14,37 @@ const footerSummary = document.getElementById('demo-footer-summary') as HTMLElem
 const headerSlot = document.getElementById('demo-header') as HTMLElement;
 const timeLabelSlot = document.getElementById('demo-time-label') as HTMLElement;
 
+type DebugValue = Date | { toString(): string };
+
+const toText = (value: DebugValue): string => (value instanceof Date ? value.toISOString() : String(value));
+
+// Temporal values have no Date locale helpers, so normalize to a Date for display.
+const toDate = (value: DebugValue): Date => (value instanceof Date ? value : new Date(String(value)));
+
 function formatValueDebug(value: unknown): string {
   if (value == null) {
     return 'null';
   }
-  if (value instanceof Date) {
-    return value.toISOString();
+  if (typeof value === 'object' && 'from' in value && 'to' in value) {
+    const r = value as { from: DebugValue; to: DebugValue };
+    return JSON.stringify({ from: toText(r.from), to: toText(r.to) }, null, 2);
   }
-  if (typeof value === 'object' && value !== null && 'from' in value && 'to' in value) {
-    const r = value as { from: Date; to: Date };
-    return JSON.stringify({ from: r.from.toISOString(), to: r.to.toISOString() }, null, 2);
-  }
-  return String(value);
+  return toText(value as DebugValue);
 }
 
 function formatSummary(detail: IDateTimePickerChangeEventData): string {
-  if (!detail.complete) {
+  const d = detail.value;
+  if (!detail.complete || d == null) {
     return '';
   }
-  const d = detail.value;
-  if (d instanceof Date) {
-    return `Your meeting is booked for ${d.toLocaleDateString(undefined, {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric'
-    })} at ${d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}.`;
+  const time = (at: Date): string => at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  if (typeof d === 'object' && 'from' in d && 'to' in d) {
+    const from = toDate(d.from as DebugValue);
+    const to = toDate(d.to as DebugValue);
+    return `Booked ${from.toLocaleDateString()} ${time(from)} – ${to.toLocaleDateString()} ${time(to)}.`;
   }
-  if (d && typeof d === 'object' && 'from' in d) {
-    const r = d as { from: Date; to: Date };
-    return `Booked ${r.from.toLocaleDateString()} ${r.from.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit'
-    })} – ${r.to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`;
-  }
-  return '';
+  const date = toDate(d as DebugValue);
+  return `Your meeting is booked for ${date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })} at ${time(date)}.`;
 }
 
 picker.addEventListener('forge-date-time-picker-change', evt => {
@@ -67,12 +64,8 @@ document.getElementById('demo-continue')?.addEventListener('click', () => {
 
 let footerEnabled = false;
 
-function isDeferredBehavior(): boolean {
-  return !picker.autoCommit && (picker.dateMode === 'range' || picker.timeMode === 'range');
-}
-
 function updateFooterVisibility(): void {
-  picker.showFooter = footerEnabled && !isDeferredBehavior();
+  picker.showFooter = footerEnabled;
 }
 
 const timeModeSelect = document.getElementById('opt-time-mode') as ISelectComponent;

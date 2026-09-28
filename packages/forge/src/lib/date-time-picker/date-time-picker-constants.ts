@@ -7,7 +7,6 @@ const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}date-t
 const observedAttributes = {
   TIME_MODE: 'time-mode',
   DATE_MODE: 'date-mode',
-  AUTO_COMMIT: 'auto-commit',
   VALUE_MODE: 'value-mode',
   NAME: 'name',
   DISABLED: 'disabled',
@@ -120,7 +119,7 @@ export type Orientation = 'auto' | 'horizontal' | 'vertical';
 
 export type ResolvedOrientation = 'horizontal' | 'vertical';
 
-export type ChangeSource = 'date' | 'time' | 'time-from' | 'time-to' | 'slot' | 'clear' | 'mode-change' | 'initial' | 'apply' | 'cancel' | 'preset';
+export type ChangeSource = 'date' | 'time' | 'time-from' | 'time-to' | 'slot' | 'clear' | 'mode-change' | 'initial' | 'preset';
 
 export interface ITimeSlot {
   /** Time of day as 'HH:mm' or 'HH:mm:ss' (24-hour). */
