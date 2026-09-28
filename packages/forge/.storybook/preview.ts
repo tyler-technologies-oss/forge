@@ -45,6 +45,8 @@ const preview: Preview = {
           'Frameworks',
           ['Angular', 'React', 'Vue', 'Svelte', 'Blazor'],
           'Components',
+          'Rich Text Editor',
+          ['Editor', 'Features', 'Renderer', 'Recipes'],
           'Recipes',
           'Design Tokens',
           ['Introduction'],
