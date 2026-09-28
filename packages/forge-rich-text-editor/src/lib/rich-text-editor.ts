@@ -1,12 +1,13 @@
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { ContextRoot } from '@lit/context';
+import { ContextRoot, provide } from '@lit/context';
 import { createRef, ref } from 'lit/directives/ref.js';
 
 import './rich-text-context.js';
 import './rich-text-content.js';
 import type { RichTextContextComponent } from './rich-text-context.js';
 import type { RichTextEditorContent } from './editor-context.js';
+import { RteToolbarFocus, rteToolbarFocusContext } from './features/core/toolbar-focus.js';
 
 import styles from './rich-text-editor.scss';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
@@ -123,6 +124,17 @@ export class RichTextEditorComponent extends LitElement {
 
   readonly #toolbarRef = createRef<HTMLElement>();
 
+  /** Makes the toolbar a single tab stop, with arrow keys moving between its buttons. */
+  @provide({ context: rteToolbarFocusContext })
+  private readonly _toolbarFocus = new RteToolbarFocus();
+
+  public override firstUpdated(changedProperties: PropertyValues<this>): void {
+    super.firstUpdated(changedProperties);
+    if (this.#toolbarRef.value) {
+      this._toolbarFocus.attach(this.#toolbarRef.value);
+    }
+  }
+
   public override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
     // The toolbar controls the editor, and says so through an element reference. `aria-controls`
@@ -148,8 +160,15 @@ export class RichTextEditorComponent extends LitElement {
         .allowPasteFormatting=${this.allowPasteFormatting}
         .allowPasteImages=${this.allowPasteImages}>
         <div class="forge-rich-text-editor">
-          <div class="editor-toolbar" role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal" ${ref(this.#toolbarRef)}>
-            <slot></slot>
+          <div
+            class="editor-toolbar"
+            role="toolbar"
+            aria-label="Rich text formatting toolbar"
+            aria-orientation="horizontal"
+            ${ref(this.#toolbarRef)}
+            @focusin=${(evt: FocusEvent) => this._toolbarFocus.handleFocusIn(evt)}
+            @keydown=${(evt: KeyboardEvent) => this._toolbarFocus.handleKeydown(evt)}>
+            <slot @slotchange=${() => this._toolbarFocus.requestSync()}></slot>
           </div>
           <forge-rich-text-content></forge-rich-text-content>
         </div>
