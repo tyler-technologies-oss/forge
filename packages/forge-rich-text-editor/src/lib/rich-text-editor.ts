@@ -1,6 +1,7 @@
-import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
+import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ContextRoot } from '@lit/context';
+import { createRef, ref } from 'lit/directives/ref.js';
 
 import './rich-text-context.js';
 import './rich-text-content.js';
@@ -119,6 +120,20 @@ export class RichTextEditorComponent extends LitElement {
     contextRoot.attach(this);
   }
 
+  readonly #toolbarRef = createRef<HTMLElement>();
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    // The toolbar controls the editor, and says so through an element reference. `aria-controls`
+    // cannot express this: the editable element lives in forge-rich-text-content's shadow root and
+    // an IDREF cannot cross a shadow boundary. This host is in an ancestor tree of the toolbar, so
+    // it is a target a reference can legally reach.
+    const toolbar = this.#toolbarRef.value;
+    if (toolbar && 'ariaControlsElements' in toolbar) {
+      (toolbar as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements = [this];
+    }
+  }
+
   public override render(): TemplateResult {
     return html`
       <forge-rich-text-context
@@ -132,7 +147,7 @@ export class RichTextEditorComponent extends LitElement {
         .allowPasteFormatting=${this.allowPasteFormatting}
         .allowPasteImages=${this.allowPasteImages}>
         <div class="forge-rich-text-editor">
-          <div class="editor-toolbar" role="toolbar" aria-label="Rich text formatting toolbar" aria-controls="forge-rte-content" aria-orientation="horizontal">
+          <div class="editor-toolbar" role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal" ${ref(this.#toolbarRef)}>
             <slot></slot>
           </div>
           <forge-rich-text-content></forge-rich-text-content>

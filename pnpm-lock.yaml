@@ -900,6 +900,9 @@ importers:
       '@wc-toolkit/jsdoc-tags':
         specifier: ^1.1.0
         version: 1.1.0
+      axe-core:
+        specifier: ^4.11.2
+        version: 4.11.2
       custom-element-vs-code-integration:
         specifier: ^1.5.0
         version: 1.5.0(patch_hash=bb1736b8f4ba90b573afc0bea1345821b24244e6acabe81ec171e2abb9841297)(prettier@3.8.1)

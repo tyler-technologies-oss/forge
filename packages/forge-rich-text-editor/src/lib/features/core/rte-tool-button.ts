@@ -1,6 +1,6 @@
 import { defineIconButtonComponent } from '@tylertech/forge';
-import { html, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 import { featureHostStyles } from './feature-styles.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
@@ -77,6 +77,38 @@ export class RteToolButtonComponent extends LitElement {
   @property({ attribute: 'keyboard-shortcut' })
   public keyboardShortcut: string | undefined;
 
+  /**
+   * The element this button controls, surfaced to assistive technology through
+   * `ariaControlsElements` rather than `aria-controls`.
+   *
+   * An IDREF cannot cross a shadow boundary, so the editable element - which lives in
+   * `forge-rich-text-content`'s shadow root - cannot be named by id from here. Element references
+   * can cross a boundary, but only into the same tree or an ancestor tree, so this is the editor
+   * element rather than the editable element itself. Features pass it from the editor context.
+   */
+  @property({ attribute: false })
+  public controlsElement: HTMLElement | null = null;
+
+  @query('forge-icon-button')
+  private readonly _iconButton!: HTMLElement | null;
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    if (!changedProperties.has('controlsElement') || !this._iconButton) {
+      return;
+    }
+    // Feature-detected: unsupported engines simply keep no controls relationship, which is the
+    // state this replaced. Assigning the property is preferred over the attribute because the
+    // attribute form cannot express a cross-root reference at all.
+    //
+    // Chrome reflects this by writing an *empty* `aria-controls` attribute. That is expected and
+    // is not a stale IDREF - it references nothing and axe reports no violation - so do not be
+    // alarmed by `aria-controls=""` in the inspector.
+    if ('ariaControlsElements' in this._iconButton) {
+      (this._iconButton as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements = this.controlsElement ? [this.controlsElement] : null;
+    }
+  }
+
   public override render(): TemplateResult {
     return html`
       <forge-icon-button
@@ -89,8 +121,7 @@ export class RteToolButtonComponent extends LitElement {
         @keydown=${this.#handleKeydown}
         ?disabled=${this.disabled}
         aria-label=${this.label}
-        aria-keyshortcuts=${this.keyboardShortcut || ''}
-        aria-controls="forge-rte-content">
+        aria-keyshortcuts=${this.keyboardShortcut || ''}>
         <forge-icon .name=${this.icon}></forge-icon>
         <forge-icon slot="on" .name=${this.icon}></forge-icon>
       </forge-icon-button>

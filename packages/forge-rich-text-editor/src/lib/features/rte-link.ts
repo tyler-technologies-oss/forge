@@ -171,6 +171,7 @@ export class RteLinkComponent extends LitElement implements IRichTextEditorFeatu
 
     return html`
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${this.#toggle}
         label=${this.label}
         icon=${tylIconLink.name}

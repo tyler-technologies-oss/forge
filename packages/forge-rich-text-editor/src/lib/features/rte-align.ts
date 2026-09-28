@@ -104,24 +104,28 @@ export class RteAlignComponent extends LitElement implements IRichTextEditorFeat
   public override render(): TemplateResult {
     return html`
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle('left')}
         label=${this.leftLabel}
         icon=${tylIconFormatAlignLeft.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive({ textAlign: 'left' })}></forge-rte-tool-button>
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle('center')}
         label=${this.centerLabel}
         icon=${tylIconFormatAlignCenter.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive({ textAlign: 'center' })}></forge-rte-tool-button>
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle('right')}
         label=${this.rightLabel}
         icon=${tylIconFormatAlignRight.name}
         ?disabled=${!this._editorContext.isEditable()}
         ?active=${this._editorContext.isActive({ textAlign: 'right' })}></forge-rte-tool-button>
       <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
         @forge-rte-tool-toggle=${() => this._toggle('justify')}
         label=${this.justifyLabel}
         icon=${tylIconFormatAlignJustify.name}

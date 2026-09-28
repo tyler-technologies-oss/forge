@@ -20,8 +20,25 @@ describe('RichTextEditor', () => {
       expect(toolbar).toBeTruthy();
       expect(toolbar?.getAttribute('role')).toBe('toolbar');
       expect(toolbar?.getAttribute('aria-label')).toBe('Rich text formatting toolbar');
-      expect(toolbar?.getAttribute('aria-controls')).toBe('forge-rte-content');
+      // Any aria-controls here is the empty attribute Chrome reflects for an element reference,
+      // never a stale IDREF into another shadow root.
+      expect(toolbar?.getAttribute('aria-controls') ?? '').toBe('');
       expect(toolbar?.getAttribute('aria-orientation')).toBe('horizontal');
+    });
+
+    it('should point the toolbar at the editor with an element reference rather than aria-controls', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
+      const toolbar = el.shadowRoot?.querySelector('[role="toolbar"]') as HTMLElement;
+
+      // An IDREF cannot cross a shadow boundary, so the relationship is expressed as an element
+      // reference instead. The target is the editor rather than the editable element, because a
+      // reference only resolves into the same tree or an ancestor tree.
+      if ('ariaControlsElements' in toolbar) {
+        expect((toolbar as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements).toEqual([el]);
+        // Reflected as an empty attribute rather than an IDREF, which is what makes it able to
+        // cross the boundary at all.
+        expect(toolbar.getAttribute('aria-controls')).toBe('');
+      }
     });
 
     it('should have content area with proper ARIA attributes', async () => {

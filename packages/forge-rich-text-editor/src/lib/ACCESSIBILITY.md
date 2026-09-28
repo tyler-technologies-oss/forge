@@ -178,7 +178,7 @@ The editor implements comprehensive ARIA semantics for assistive technology.
 ### Toolbar
 
 ```html
-<div role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal" aria-controls="forge-rte-content">
+<div role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal">
   <!-- Toolbar buttons -->
 </div>
 ```
@@ -188,12 +188,12 @@ The editor implements comprehensive ARIA semantics for assistive technology.
 - `role="toolbar"` - Identifies the toolbar widget pattern
 - `aria-label` - Descriptive label for the toolbar
 - `aria-orientation="horizontal"` - Indicates horizontal button layout
-- `aria-controls` - References the content area ID
+- `ariaControlsElements` - References the editor element (see [Controls relationship](#controls-relationship))
 
 ### Toolbar Buttons
 
 ```html
-<button aria-label="Bold" aria-pressed="false" aria-keyshortcuts="Control+B" aria-controls="forge-rte-content">
+<button aria-label="Bold" aria-pressed="false" aria-keyshortcuts="Control+B">
   <!-- Button content -->
 </button>
 ```
@@ -203,12 +203,25 @@ The editor implements comprehensive ARIA semantics for assistive technology.
 - `aria-label` - Descriptive label (customizable via properties)
 - `aria-pressed` - Toggle state (true when formatting is active)
 - `aria-keyshortcuts` - Documents keyboard shortcuts
-- `aria-controls` - References the content area ID
+- `ariaControlsElements` - References the editor element (see [Controls relationship](#controls-relationship))
+
+### Controls relationship
+
+The toolbar and its buttons declare what they control with the `ariaControlsElements` property rather
+than an `aria-controls` IDREF, because an IDREF cannot cross a shadow boundary. Element references can,
+but only into the same tree or an ancestor tree, so the target is `forge-rich-text-editor` (or
+`forge-rich-text-context` in a composed layout) rather than the editable element inside
+`forge-rich-text-content`'s shadow root. Browsers reflect the property as an empty `aria-controls=""`
+attribute; that references nothing and is expected. Engines without ARIA element reflection carry no
+controls relationship.
+
+Once browsers support shadow root reference targets, the editor can forward this reference to the
+editable element without changing the buttons.
 
 ### Content Area
 
 ```html
-<div id="forge-rte-content" role="textbox" aria-multiline="true" aria-label="Editor content" aria-readonly="false" aria-disabled="false" contenteditable="true">
+<div role="textbox" aria-multiline="true" aria-label="Rich text editor content" aria-readonly="false" aria-disabled="false" contenteditable="true">
   <!-- Editor content -->
 </div>
 ```

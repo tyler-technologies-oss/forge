@@ -34,6 +34,9 @@ declare global {
 
 export const RICH_TEXT_CONTEXT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-context';
 
+// Not imported from rich-text-editor.js, which imports this module.
+const WRAPPING_EDITOR_TAG_NAME = 'forge-rich-text-editor';
+
 const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
 
 /**
@@ -217,8 +220,21 @@ export class RichTextContextComponent extends LitElement {
     },
     setEditorElement: this.#setEditorElement.bind(this),
     registerFeature: this.#registerFeature.bind(this),
-    announce: this.#announce.bind(this)
+    announce: this.#announce.bind(this),
+    controlsElement: null
   };
+
+  /**
+   * Resolves the element that represents this editor to the outside world: the wrapping
+   * `forge-rich-text-editor` when this context is rendered in its shadow root, otherwise this
+   * element. Only that one known wrapper is stepped out of - any other shadow host belongs to the
+   * consumer, and pointing at it would claim the toolbar controls the consumer's component.
+   */
+  #resolveControlsElement(): HTMLElement {
+    const root = this.getRootNode();
+    const host = root instanceof ShadowRoot ? (root.host as HTMLElement) : null;
+    return host?.localName === WRAPPING_EDITOR_TAG_NAME ? host : this;
+  }
 
   public override disconnectedCallback(): void {
     // Cancel any pending initialization frame
@@ -451,6 +467,15 @@ export class RichTextContextComponent extends LitElement {
         element: this.#editorElement,
         extensions,
         content: initialContent,
+        // TipTap builds its own contenteditable element inside the one it is handed, and that inner
+        // element is the real textbox - focusable, and what assistive technology lands on. Naming
+        // only the container left it unnamed, which axe reports as aria-input-field-name.
+        editorProps: {
+          attributes: {
+            'aria-label': 'Rich text editor content',
+            'aria-multiline': 'true'
+          }
+        },
         editable: !(this.editorContext.disabled || this.editorContext.readOnly),
         injectCSS: false,
         onTransaction: () => {
@@ -494,7 +519,8 @@ export class RichTextContextComponent extends LitElement {
 
       this.editorContext = {
         ...this.editorContext,
-        editor: this._editor
+        editor: this._editor,
+        controlsElement: this.#resolveControlsElement()
       };
 
       // Initialize counts
