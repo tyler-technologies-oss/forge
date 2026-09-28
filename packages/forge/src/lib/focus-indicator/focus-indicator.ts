@@ -1,8 +1,10 @@
+import { autoUpdate } from '@floating-ui/dom';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
-import { nothing, PropertyValues, unsafeCSS } from 'lit';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
 import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
@@ -126,6 +128,8 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
   #targetElement: HTMLElement | undefined;
   #internals: ElementInternals;
+  #indicatorElement: HTMLDivElement | undefined;
+  #cleanupAutoUpdate: (() => void) | undefined;
 
   constructor() {
     super();
@@ -143,10 +147,24 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#detachTargetListeners();
+    this.#stopPositioning();
+    if (this.#indicatorElement) {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+    }
     this.#targetElement = undefined;
   }
 
-  public override willUpdate(changedProperties: PropertyValues<this>): void {
+  public override firstUpdated(): void {
+    if (supportsPopover()) {
+      this.#indicatorElement = this.shadowRoot?.querySelector('.focus-indicator') as HTMLDivElement | undefined;
+    }
+  }
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.hasUpdated) {
       if (changedProperties.has('target')) {
         this.#handleTargetChange();
@@ -155,11 +173,12 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     if (changedProperties.has('active')) {
       this.#handleActiveChange();
+      this.#updateTopLayerState();
     }
   }
 
-  public override render(): typeof nothing {
-    return nothing; // This component does not render any elements, it only applies encapsulated styles to the host element.
+  public render(): TemplateResult {
+    return html`<div class="focus-indicator" part="indicator" popover="manual"></div>`;
   }
 
   #detachTargetListeners(): void {
@@ -205,6 +224,57 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   #handleActiveChange(): void {
     this.toggleAttribute('active', this.active);
     toggleState(this.#internals, 'active', this.active);
+  }
+
+  #updateTopLayerState(): void {
+    if (!supportsPopover() || !this.#indicatorElement) {
+      return;
+    }
+
+    if (this.active) {
+      try {
+        this.#indicatorElement.showPopover();
+        this.#startPositioning();
+      } catch {
+        // Popover already shown or error occurred
+      }
+    } else {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+      this.#stopPositioning();
+    }
+  }
+
+  #startPositioning(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition());
+  }
+
+  #updatePosition(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    const targetRect = this.parentElement?.getBoundingClientRect() ?? this.#targetElement.getBoundingClientRect();
+
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-left', `${targetRect.left}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-top', `${targetRect.top}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-width', `${targetRect.width}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-height', `${targetRect.height}px`);
+
+    this.#indicatorElement.toggleAttribute('inward', this.inward);
+    this.#indicatorElement.toggleAttribute('circular', this.circular);
+  }
+
+  #stopPositioning(): void {
+    this.#cleanupAutoUpdate?.();
+    this.#cleanupAutoUpdate = undefined;
   }
 }
 
