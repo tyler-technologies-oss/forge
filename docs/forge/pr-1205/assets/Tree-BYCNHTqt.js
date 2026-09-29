@@ -1,0 +1,11 @@
+import{u as i,j as t,M as n,T as s,C as p}from"./blocks-Ck8GEe5N.js";import{C as a}from"./CustomArgTypes-BL556TU4.js";import{T as m,D as d}from"./Tree.stories-Abxl4c16.js";import"./preload-helper-PPVm8Dsz.js";import"./index-BieQ8965.js";import"./iframe-BJxToyET.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-UHZ10xki.js";import"./service-adapter-8tADcN_b.js";import"./tree-item-CBO-JSWQ.js";import"./consume-DtITIqjN.js";import"./component-utils-DXwuBG7n.js";import"./tyler-icons-BAsQ94Lf.js";import"./property-DFrfpKpf.js";import"./state-Chsbeeao.js";import"./query-assigned-nodes-D8SsSM9e.js";import"./base-DVmwUFg0.js";import"./class-map-BnEDXcyy.js";import"./directive-CwRn8Fwj.js";import"./style-map-DdyOA5fx.js";import"./a11y-utils-DMYgbTDM.js";import"./dom-utils-BrrHV3zE.js";import"./feature-detection-iQu3yOww.js";import"./platform-EVTRdOou.js";import"./utils-C31il88P.js";import"./icon-CxJqbZxZ.js";import"./base-lit-element-CpHFhxvO.js";import"./async-directive-jA1Mz7ci.js";import"./constants-C55SM-CY.js";import"./create-context-BxR5I8pu.js";import"./provide-CZDhzwTe.js";import"./key-action-lsAysfb-.js";import"./open-icon-SDij93t6.js";function o(r){const e={a:"a",h2:"h2",p:"p",strong:"strong",...i(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:m}),`
+`,t.jsx(s,{}),`
+`,t.jsxs(e.p,{children:["🚧 ",t.jsx(e.strong,{children:"Experimental"})," 🚧"]}),`
+`,t.jsx(e.p,{children:`The Tree component is an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
+and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed.`}),`
+`,t.jsx(e.p,{children:"Trees are interactive lists that allow users to navigate through hierarchical data."}),`
+`,t.jsx(p,{of:d}),`
+`,t.jsx(e.h2,{id:"api",children:"API"}),`
+`,t.jsx(a,{}),`
+`,t.jsx(e.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(e.p,{children:["Implements keyboard shortcuts and ARIA roles, states, and properties defined in the ",t.jsx(e.a,{href:"https://www.w3.org/WAI/ARIA/apg/patterns/treeview/",rel:"nofollow",children:"WAI-ARIA Tree View pattern"}),"."]})]})}function G(r={}){const{wrapper:e}={...i(),...r.components};return e?t.jsx(e,{...r,children:t.jsx(o,{...r})}):o(r)}export{G as default};
