@@ -1,4 +1,0 @@
-{
-  "**/*": ["prettier --write --ignore-unknown"],
-  "*.{ts}": ["eslint --fix", "git add"]
-}
