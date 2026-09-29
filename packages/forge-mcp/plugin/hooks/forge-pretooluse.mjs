@@ -281,9 +281,7 @@ function checkContent(text, filePath) {
     const styleValue = inlineMatch[2];
     // Allow the documented body app-shell styles (height/width/margin/background).
     if (elTag === 'body') {
-      const bodyAllowed =
-        /^(?:\s*(?:background(?:-color)?|height|width|margin)\s*:[^;]+;?\s*)+$/i;
-      if (bodyAllowed.test(styleValue)) {
+      if (isAllowedBodyStyle(styleValue)) {
         continue;
       }
     }
@@ -326,6 +324,17 @@ function block(messages) {
 
 function allow() {
   process.exit(0);
+}
+
+const BODY_ALLOWED_DECLARATION =
+  /^\s*(?:background(?:-color)?|height|width|margin)\s*:[^;]+$/i;
+
+function isAllowedBodyStyle(styleValue) {
+  const declarations = styleValue.split(';');
+  if (declarations.length > 1 && declarations[declarations.length - 1].trim() === '') {
+    declarations.pop();
+  }
+  return declarations.every(declaration => BODY_ALLOWED_DECLARATION.test(declaration));
 }
 
 function main() {

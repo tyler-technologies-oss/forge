@@ -98,7 +98,7 @@ export function createMarkdownTable(items: any[], headers: string[]): string {
     const values = headers.map(header => {
       const value = item[header.toLowerCase()];
       return String(value || '')
-        .replace(/\|/g, '\\|')
+        .replace(/[\\|]/g, '\\$&')
         .replace(/\n/g, ' ');
     });
     return `| ${values.join(' | ')} |`;

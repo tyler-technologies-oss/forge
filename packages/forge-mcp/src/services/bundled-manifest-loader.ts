@@ -59,8 +59,6 @@ export class BundledManifestLoader {
 
     try {
       const filePath = join(this._bundledManifestsPath, filename);
-      await access(filePath);
-
       const content = await readFile(filePath, 'utf-8');
       const parsedContent = JSON.parse(content) as CustomElementsManifest;
 

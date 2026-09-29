@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
-import { readFile, writeFile, mkdir, access } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -35,16 +35,16 @@ async function bundleManifests() {
     try {
       const manifestPath = join(projectRoot, 'node_modules', pkg.name, 'custom-elements.json');
 
-      // Check if manifest exists
+      let manifestContent;
       try {
-        await access(manifestPath);
-      } catch {
+        manifestContent = await readFile(manifestPath, 'utf-8');
+      } catch (error) {
+        if (error.code !== 'ENOENT') {
+          throw error;
+        }
         console.warn(`Warning: ${pkg.name} custom-elements.json not found, skipping...`);
         continue;
       }
-
-      // Read the manifest
-      const manifestContent = await readFile(manifestPath, 'utf-8');
 
       // Validate it's valid JSON
       try {

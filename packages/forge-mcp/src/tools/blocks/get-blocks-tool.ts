@@ -149,7 +149,7 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
       categories: manifest.categories,
       blocks: limitedBlocks.map(block => ({
         name: block.name,
-        description: block.description.replace(/\|/g, '\\|'),
+        description: block.description.replace(/[\\|]/g, '\\$&'),
         componentsPreview: block.componentsUsed?.slice(0, 4).join(', ') || '-',
         id: block.id
       })),

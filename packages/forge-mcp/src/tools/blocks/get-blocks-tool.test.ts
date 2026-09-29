@@ -204,6 +204,24 @@ describe('GetBlocksTool', () => {
     });
   });
 
+  describe('description escaping', () => {
+    it('should escape backslashes and pipes in block descriptions when rendering the table', async () => {
+      const manifest = {
+        ...mockManifest,
+        blocks: [{ ...mockManifest.blocks[0], description: 'Path C:\\temp | pipe \\| already escaped' }]
+      };
+      vi.spyOn(global, 'fetch').mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(manifest)
+      } as Response);
+
+      const result = await tool.execute({});
+      const text = result.content[0].type === 'text' ? result.content[0].text : '';
+
+      expect(text).toContain('Path C:\\\\temp \\| pipe \\\\\\| already escaped');
+    });
+  });
+
   describe('limit parameter', () => {
     beforeEach(() => {
       vi.spyOn(global, 'fetch').mockResolvedValue({

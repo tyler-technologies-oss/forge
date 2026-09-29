@@ -56,7 +56,6 @@ export class PackageDiscoveryService {
       const manifestPath = join(packagePath, manifestFileName);
 
       try {
-        await access(manifestPath);
         const content = await readFile(manifestPath, 'utf-8');
         const manifest: PackageManifest = {
           packageName,

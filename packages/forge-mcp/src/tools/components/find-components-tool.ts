@@ -375,7 +375,7 @@ export class SearchComponentsTool extends BaseToolHandler<SearchComponentsInput>
       const summary = match.component.summary || match.component.description || 'No description available';
       return {
         tagName: match.component.tagName,
-        summary: summary.replace(/\|/g, '\\|'),
+        summary: summary.replace(/[\\|]/g, '\\$&'),
         matchInfo: match.matchReasons.join(', '),
         score: Math.round(match.score * 10) / 10
       };
