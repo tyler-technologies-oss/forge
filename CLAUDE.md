@@ -71,6 +71,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 - `packages/forge-rich-text-editor-react` - React adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-rich-text-editor-angular` - Angular adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-adapter-codegen` - Shared adapter code generation, private to this repo (see its CLAUDE.md)
+- `packages/forge-mcp` - MCP server and Claude Code plugin content for Forge (see its CLAUDE.md)
 
 ## Blocks
 

@@ -1,11 +1,11 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with the `@tylertech/forge-mcp` package in the Forge monorepo. Root conventions (pnpm, turbo, conventional commits, changesets) apply; see the root CLAUDE.md.
 
 ## Commands
 
 ### Development Workflow
-- `pnpm install` - Install dependencies
+- `pnpm install` - Install dependencies (run from the monorepo root)
 - `pnpm run build` - Compile TypeScript to dist/ and bundle manifests
 
 ### Code Quality
@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Versioning & Release
 
-When releasing a new version, update the version number in all three files:
+Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Changesets only bump `package.json`, so when releasing a new version also update the version number in the other two files so all three match:
 - `package.json`
 - `plugin/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
