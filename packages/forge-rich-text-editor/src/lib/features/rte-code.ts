@@ -1,0 +1,96 @@
+import { consume } from '@lit/context';
+import { Code } from '@tiptap/extension-code';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconCode } from '@tylertech/tyler-icons';
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { editorContext, EditorContext } from '../editor-context.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { featureHostStyles } from './core/feature-styles.js';
+
+import './core/rte-tool-button.js';
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-rte-code': RteCodeComponent;
+  }
+}
+
+export const RTE_CODE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-code';
+
+/**
+ * @tag forge-rte-code
+ *
+ * @summary
+ * Provides an inline code formatting button for the rich text editor.
+ *
+ * @description
+ * The code feature component renders a toolbar button that allows users to apply or remove
+ * inline code formatting to selected text. The button shows an active state when the cursor is
+ * positioned within code text. This creates monospaced inline code, not code blocks. The feature
+ * announces state changes to screen readers for accessibility.
+ *
+ * @dependency forge-rte-tool-button
+ *
+ * @property {string} [label='Code'] - The accessible label for the code button.
+ *
+ * @attribute {string} label - The accessible label for the code button.
+ */
+@customElement(RTE_CODE_TAG_NAME)
+export class RteCodeComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_CODE_TAG_NAME;
+
+  static {
+    IconRegistry.define(tylIconCode);
+  }
+
+  public static override styles = featureHostStyles;
+
+  /**
+   * The accessible label for the button.
+   * @default 'Code'
+   * @attribute
+   */
+  @property({ type: String })
+  public label = Code.name;
+
+  public readonly extensions = [Code];
+
+  @state()
+  @consume({ context: editorContext, subscribe: true })
+  private readonly _editorContext!: EditorContext;
+
+  public firstUpdated(_changedProperties: PropertyValues<this>): void {
+    this._editorContext?.registerFeature(this);
+  }
+
+  public override render(): TemplateResult {
+    return html`
+      <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
+        @forge-rte-tool-toggle=${this._toggle}
+        label=${this.label}
+        icon=${tylIconCode.name}
+        ?disabled=${!this._editorContext.isEditable()}
+        ?active=${this._editorContext.isActive(Code.name)}></forge-rte-tool-button>
+    `;
+  }
+
+  private async _toggle(_evt: CustomEvent): Promise<void> {
+    try {
+      const wasActive = this._editorContext.isActive(Code.name);
+      const success = this._editorContext.editor?.chain().focus().toggleCode().run();
+
+      if (success) {
+        const message = wasActive ? 'Code removed' : 'Code applied';
+        this._editorContext.announce(message);
+      } else {
+        console.warn('[RTE Code] Command execution failed');
+      }
+    } catch (error) {
+      console.error('[RTE Code] Error toggling code:', error);
+    }
+  }
+}

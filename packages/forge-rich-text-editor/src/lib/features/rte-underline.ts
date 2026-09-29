@@ -1,0 +1,97 @@
+import { consume } from '@lit/context';
+import Underline from '@tiptap/extension-underline';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconFormatUnderlined } from '@tylertech/tyler-icons';
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { editorContext, EditorContext } from '../editor-context.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { featureHostStyles } from './core/feature-styles.js';
+
+import './core/rte-tool-button.js';
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-rte-underline': RteUnderlineComponent;
+  }
+}
+
+export const RTE_UNDERLINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-underline';
+
+/**
+ * @tag forge-rte-underline
+ *
+ * @summary
+ * Provides an underline text formatting button for the rich text editor.
+ *
+ * @description
+ * The underline feature component renders a toolbar button that allows users to apply or remove
+ * underline formatting to selected text. The button shows an active state when the cursor is
+ * positioned within underlined text. Keyboard shortcut Control+U is supported. The feature
+ * announces state changes to screen readers for accessibility.
+ *
+ * @dependency forge-rte-tool-button
+ *
+ * @property {string} [label='Underline'] - The accessible label for the underline button.
+ *
+ * @attribute {string} label - The accessible label for the underline button.
+ */
+@customElement(RTE_UNDERLINE_TAG_NAME)
+export class RteUnderlineComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_UNDERLINE_TAG_NAME;
+
+  static {
+    IconRegistry.define(tylIconFormatUnderlined);
+  }
+
+  public static override styles = featureHostStyles;
+
+  /**
+   * The accessible label for the button.
+   * @default 'Underline'
+   * @attribute
+   */
+  @property({ type: String })
+  public label = 'Underline';
+
+  public readonly extensions = [Underline];
+
+  @state()
+  @consume({ context: editorContext, subscribe: true })
+  private readonly _editorContext!: EditorContext;
+
+  public firstUpdated(_changedProperties: PropertyValues<this>): void {
+    this._editorContext?.registerFeature(this);
+  }
+
+  public override render(): TemplateResult {
+    return html`
+      <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
+        @forge-rte-tool-toggle=${this._toggle}
+        label=${this.label}
+        icon=${tylIconFormatUnderlined.name}
+        keyboard-shortcut="Control+U"
+        ?disabled=${!this._editorContext.isEditable()}
+        ?active=${this._editorContext.isActive(Underline.name)}></forge-rte-tool-button>
+    `;
+  }
+
+  private _toggle(_evt: CustomEvent<boolean>): void {
+    try {
+      const wasActive = this._editorContext.isActive(Underline.name);
+      const success = this._editorContext.editor?.chain().focus().toggleUnderline().run();
+
+      if (success) {
+        const message = wasActive ? 'Underline removed' : 'Underline applied';
+        this._editorContext.announce(message);
+      } else {
+        console.warn('[RTE Underline] Command execution failed');
+      }
+    } catch (error) {
+      console.error('[RTE Underline] Error toggling underline:', error);
+    }
+  }
+}
