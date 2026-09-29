@@ -1,5 +1,11 @@
 # @tylertech/forge-mcp
 
+## 1.2.0
+
+### Minor Changes
+
+- 42986f7: Treat former `@tylertech/forge-extended` components as core Forge components. The bundled manifest and package discovery now only use `@tylertech/forge` (>=3.17.0), and side-effect imports point to `@tylertech/forge/<component>`.
+
 ## 1.1.0
 
 ### Minor Changes
