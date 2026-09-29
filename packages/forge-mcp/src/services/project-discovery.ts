@@ -14,9 +14,7 @@ export class ProjectDiscoveryService {
   /**
    * Discover project roots starting from the given directory and walking up
    */
-  public async discoverProjectRoots(
-    startPath: string = process.cwd(),
-  ): Promise<ProjectInfo[]> {
+  public async discoverProjectRoots(startPath: string = process.cwd()): Promise<ProjectInfo[]> {
     if (this._discoveryCache.has(startPath)) {
       return this._discoveryCache.get(startPath) as ProjectInfo[];
     }
@@ -47,9 +45,7 @@ export class ProjectDiscoveryService {
   /**
    * Find the nearest project root from the given directory
    */
-  public async findNearestProjectRoot(
-    startPath: string = process.cwd(),
-  ): Promise<ProjectInfo | null> {
+  public async findNearestProjectRoot(startPath: string = process.cwd()): Promise<ProjectInfo | null> {
     const projectRoots = await this.discoverProjectRoots(startPath);
     return projectRoots.length > 0 ? projectRoots[0] : null;
   }
@@ -57,9 +53,7 @@ export class ProjectDiscoveryService {
   /**
    * Get all node_modules directories from discovered project roots
    */
-  public async getNodeModulesPaths(
-    startPath: string = process.cwd(),
-  ): Promise<string[]> {
+  public async getNodeModulesPaths(startPath: string = process.cwd()): Promise<string[]> {
     const projectRoots = await this.discoverProjectRoots(startPath);
     const nodeModulesPaths: string[] = [];
 
@@ -88,9 +82,7 @@ export class ProjectDiscoveryService {
   /**
    * Analyze a directory to determine if it's a project root
    */
-  private async _analyzeDirectory(
-    dirPath: string,
-  ): Promise<ProjectInfo | null> {
+  private async _analyzeDirectory(dirPath: string): Promise<ProjectInfo | null> {
     const indicators = await this._checkProjectIndicators(dirPath);
 
     if (!indicators.hasAnyIndicator) {
@@ -112,10 +104,7 @@ export class ProjectDiscoveryService {
       rootPath: dirPath,
       type: projectType,
       hasNodeModules: indicators.hasNodeModules,
-      isMonorepo: await this._detectMonorepo(
-        dirPath,
-        indicators.hasPackageJson,
-      ),
+      isMonorepo: await this._detectMonorepo(dirPath, indicators.hasPackageJson)
     };
   }
 
@@ -137,7 +126,7 @@ export class ProjectDiscoveryService {
       { file: 'yarn.lock', key: 'hasYarnLock' },
       { file: 'pnpm-lock.yaml', key: 'hasPnpmLock' },
       { file: '.git', key: 'hasGit' },
-      { file: 'node_modules', key: 'hasNodeModules' },
+      { file: 'node_modules', key: 'hasNodeModules' }
     ] as const;
 
     const results: Record<string, boolean> = {};
@@ -150,14 +139,14 @@ export class ProjectDiscoveryService {
         } catch {
           results[key] = false;
         }
-      }),
+      })
     );
 
     const hasAnyIndicator = Object.values(results).some(Boolean);
 
     return {
       hasAnyIndicator,
-      ...results,
+      ...results
     } as {
       hasAnyIndicator: boolean;
       hasPackageJson: boolean;
@@ -172,10 +161,7 @@ export class ProjectDiscoveryService {
   /**
    * Detect if a project is a monorepo by checking package.json workspaces
    */
-  private async _detectMonorepo(
-    dirPath: string,
-    hasPackageJson: boolean,
-  ): Promise<boolean> {
+  private async _detectMonorepo(dirPath: string, hasPackageJson: boolean): Promise<boolean> {
     if (!hasPackageJson) {
       return false;
     }
@@ -189,10 +175,7 @@ export class ProjectDiscoveryService {
       return !!(
         packageJson.workspaces ||
         (packageJson.private === true &&
-          (packageJson.devDependencies?.lerna ||
-            packageJson.devDependencies?.nx ||
-            packageJson.scripts?.lerna ||
-            packageJson.scripts?.nx))
+          (packageJson.devDependencies?.lerna || packageJson.devDependencies?.nx || packageJson.scripts?.lerna || packageJson.scripts?.nx))
       );
     } catch {
       return false;

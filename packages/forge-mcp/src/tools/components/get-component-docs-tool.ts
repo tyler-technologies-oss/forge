@@ -22,7 +22,7 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
   constructor() {
     super(
       'get_component_docs',
-      'Get the API contract (properties, attributes, events, slots, CSS parts, CSS vars) for a Tyler Forge component. Call list_components first if you need to discover available components. For HTML usage code, call `get_forge_blocks` instead — blocks are the sole source of Forge markup.',
+      'Get the API contract (properties, attributes, events, slots, CSS parts, CSS vars) for a Tyler Forge component. Call list_components first if you need to discover available components. For HTML usage code, call `get_forge_blocks` instead — blocks are the sole source of Forge markup.'
     );
   }
 
@@ -35,42 +35,29 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
         properties: {
           component: {
             type: 'string',
-            description:
-              'Component tag name (e.g., "forge-button", "forge-card"). Required — call list_components first if you don\'t know the tag name.',
+            description: 'Component tag name (e.g., "forge-button", "forge-card"). Required — call list_components first if you don\'t know the tag name.'
           },
           sections: {
             type: 'array',
             items: {
               type: 'string',
-              enum: [
-                'properties',
-                'methods',
-                'events',
-                'slots',
-                'css-custom-properties',
-                'css-parts',
-                'css-classes',
-                'states',
-              ],
+              enum: ['properties', 'methods', 'events', 'slots', 'css-custom-properties', 'css-parts', 'css-classes', 'states']
             },
-            description:
-              'Optional: specific documentation sections to include. Only applies to full format.',
+            description: 'Optional: specific documentation sections to include. Only applies to full format.'
           },
           format: {
             type: 'string',
             enum: ['full', 'summary'],
             description:
-              'Documentation format: full (default) or summary (brief overview). For HTML usage code, call `get_forge_blocks` — this tool returns API contract only.',
-          },
+              'Documentation format: full (default) or summary (brief overview). For HTML usage code, call `get_forge_blocks` — this tool returns API contract only.'
+          }
         },
-        required: ['component'],
-      },
+        required: ['component']
+      }
     };
   }
 
-  public async execute(
-    args: ComponentDocumentationInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: ComponentDocumentationInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     this._validateRequired(args, ['component']);
     const { component, sections, format = 'full' } = args;
 
@@ -79,9 +66,7 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
     // Get component data (required for all formats)
     const componentData = this._cemLoader.getComponent(component);
     if (!componentData) {
-      throw new Error(
-        `Component not found: ${component}. Use list_components to see available components.`,
-      );
+      throw new Error(`Component not found: ${component}. Use list_components to see available components.`);
     }
 
     // Generate API quick reference to prepend to all component docs
@@ -89,17 +74,13 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
 
     // Handle summary format
     if (format === 'summary') {
-      const summaryContent =
-        await this._componentSummaryResource.get(componentData);
+      const summaryContent = await this._componentSummaryResource.get(componentData);
       return this._createTextResponse(quickRef + summaryContent);
     }
 
     // Handle full format with specific sections
     if (sections && sections.length > 0) {
-      const sectionContent = await this._generateSectionContent(
-        componentData,
-        sections,
-      );
+      const sectionContent = await this._generateSectionContent(componentData, sections);
       return this._createTextResponse(quickRef + sectionContent);
     }
 
@@ -112,32 +93,22 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
   /**
    * Generate the API Quick Reference header using template
    */
-  private async _generateApiQuickReference(
-    component: CEMComponentDeclaration,
-  ): Promise<string> {
+  private async _generateApiQuickReference(component: CEMComponentDeclaration): Promise<string> {
     const context = buildComponentTemplateContext(component);
-    return await this._templateEngine.render(
-      'components/api-quick-reference.md',
-      context,
-    );
+    return await this._templateEngine.render('components/api-quick-reference.md', context);
   }
 
   /**
    * Generate content for specific sections using CEM data and templates
    */
-  private async _generateSectionContent(
-    component: CEMComponentDeclaration,
-    sections: string[],
-  ): Promise<string> {
+  private async _generateSectionContent(component: CEMComponentDeclaration, sections: string[]): Promise<string> {
     const context = buildComponentTemplateContext(component);
     const contentSections: string[] = [];
 
     // Always include the component title
     contentSections.push(`# API REFERENCE: ${component.name}`);
     contentSections.push('');
-    contentSections.push(
-      `**Tyler Forge Component** | **Tag:** \`<${component.tagName}>\` | **Type:** Web Component`,
-    );
+    contentSections.push(`**Tyler Forge Component** | **Tag:** \`<${component.tagName}>\` | **Type:** Web Component`);
 
     if (component.summary) {
       contentSections.push('');
@@ -155,10 +126,7 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
 
       if (templateName) {
         try {
-          const sectionContent = await this._templateEngine.render(
-            templateName,
-            context,
-          );
+          const sectionContent = await this._templateEngine.render(templateName, context);
           if (sectionContent.trim()) {
             contentSections.push('');
             contentSections.push(sectionContent);
@@ -166,9 +134,7 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
         } catch (_error) {
           // If template doesn't exist, add error message
           contentSections.push('');
-          contentSections.push(
-            `## ${section.toUpperCase()}\n\n*Template not found for section: ${section}*`,
-          );
+          contentSections.push(`## ${section.toUpperCase()}\n\n*Template not found for section: ${section}*`);
         }
       }
     }
@@ -188,7 +154,7 @@ export class ComponentDocumentationTool extends BaseToolHandler<ComponentDocumen
       'css-custom-properties': 'components/component-css-properties.md',
       'css-parts': 'components/component-css-parts.md',
       'css-classes': 'components/component-css-classes.md',
-      states: 'components/component-states.md',
+      states: 'components/component-states.md'
     };
 
     return templateMap[section] || null;

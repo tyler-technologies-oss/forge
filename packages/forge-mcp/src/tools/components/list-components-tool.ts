@@ -10,7 +10,7 @@ export class ListComponentsTool extends BaseToolHandler<ListComponentNamesInput>
   constructor() {
     super(
       'list_components',
-      'Browse all available Tyler Forge components with descriptions. Returns a comprehensive table of all components with their purpose and capabilities.',
+      'Browse all available Tyler Forge components with descriptions. Returns a comprehensive table of all components with their purpose and capabilities.'
     );
   }
 
@@ -21,17 +21,14 @@ export class ListComponentsTool extends BaseToolHandler<ListComponentNamesInput>
       inputSchema: {
         type: 'object',
         properties: {},
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    _args: ListComponentNamesInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(_args: ListComponentNamesInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     await this._resourceManager.initialize();
-    const content =
-      await this._resourceManager.readResource('forge://components');
+    const content = await this._resourceManager.readResource('forge://components');
 
     return this._createTextResponse(content);
   }

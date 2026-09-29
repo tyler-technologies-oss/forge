@@ -13,15 +13,13 @@ export interface ResourceHandler<TInput = any, TOutput = string> {
 /**
  * Base interface for resource handlers that don't require async operations
  */
-export interface SyncResourceHandler<TInput = any, TOutput = string>
-  extends ResourceHandler<TInput, TOutput> {
+export interface SyncResourceHandler<TInput = any, TOutput = string> extends ResourceHandler<TInput, TOutput> {
   get?(input: TInput): TOutput;
 }
 
 /**
  * Base interface for resource handlers that require async operations
  */
-export interface AsyncResourceHandler<TInput = any, TOutput = string>
-  extends ResourceHandler<TInput, TOutput> {
+export interface AsyncResourceHandler<TInput = any, TOutput = string> extends ResourceHandler<TInput, TOutput> {
   get?(input: TInput): Promise<TOutput>;
 }

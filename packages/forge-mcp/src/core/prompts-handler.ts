@@ -1,8 +1,5 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import {
-  ListPromptsRequestSchema,
-  GetPromptRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { ListPromptsRequestSchema, GetPromptRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { getTemplateEngine } from '../services/handlebars-template-engine.js';
 
 interface PromptDefinition {
@@ -19,18 +16,16 @@ export class PromptsHandler {
   private _prompts: PromptDefinition[] = [
     {
       name: 'forge_mode',
-      description:
-        'Activates forge mode with guardrails and rules to guide Tyler Forge tasks successfully',
+      description: 'Activates forge mode with guardrails and rules to guide Tyler Forge tasks successfully',
       template: 'prompts/forge-mode.md',
       arguments: [
         {
           name: 'task',
-          description:
-            'The specific task or request the user wants to accomplish with Tyler Forge',
-          required: true,
-        },
-      ],
-    },
+          description: 'The specific task or request the user wants to accomplish with Tyler Forge',
+          required: true
+        }
+      ]
+    }
   ];
 
   public registerHandlers(server: Server): void {
@@ -41,13 +36,11 @@ export class PromptsHandler {
           prompts: this._prompts.map(prompt => ({
             name: prompt.name,
             description: prompt.description,
-            arguments: prompt.arguments || [],
-          })),
+            arguments: prompt.arguments || []
+          }))
         };
       } catch (error) {
-        throw new Error(
-          `Failed to list prompts: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to list prompts: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
 
@@ -58,16 +51,12 @@ export class PromptsHandler {
 
         const promptDef = this._prompts.find(p => p.name === name);
         if (!promptDef) {
-          throw new Error(
-            `Unknown prompt: ${name}. Available prompts: ${this._prompts.map(p => p.name).join(', ')}`,
-          );
+          throw new Error(`Unknown prompt: ${name}. Available prompts: ${this._prompts.map(p => p.name).join(', ')}`);
         }
 
         return await this._generatePromptResponse(promptDef, args);
       } catch (error) {
-        throw new Error(
-          `Failed to get prompt: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to get prompt: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
   }
@@ -75,26 +64,18 @@ export class PromptsHandler {
   /**
    * Generate a prompt response by loading the template with provided arguments
    */
-  private async _generatePromptResponse(
-    promptDef: PromptDefinition,
-    args?: Record<string, any>,
-  ): Promise<any> {
+  private async _generatePromptResponse(promptDef: PromptDefinition, args?: Record<string, any>): Promise<any> {
     // Validate required arguments
     const requiredArgs = promptDef.arguments?.filter(arg => arg.required) || [];
     for (const requiredArg of requiredArgs) {
       if (!args || !args[requiredArg.name]) {
-        throw new Error(
-          `Missing required argument: ${requiredArg.name}. ${requiredArg.description}`,
-        );
+        throw new Error(`Missing required argument: ${requiredArg.name}. ${requiredArg.description}`);
       }
     }
 
     // Load the template with any provided arguments as context
     const templateContext = args || {};
-    const content = await this._templateEngine.render(
-      promptDef.template,
-      templateContext,
-    );
+    const content = await this._templateEngine.render(promptDef.template, templateContext);
 
     return {
       description: promptDef.description,
@@ -103,10 +84,10 @@ export class PromptsHandler {
           role: 'user' as const,
           content: {
             type: 'text' as const,
-            text: content,
-          },
-        },
-      ],
+            text: content
+          }
+        }
+      ]
     };
   }
 }

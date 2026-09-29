@@ -26,8 +26,7 @@ export function convertToEsmImportName(iconName: string): string {
   );
 }
 
-const ICON_METADATA_URI =
-  'https://cdn.forge.tylertech.com/v1/metadata/icons/tyler-icons-metadata-all.json';
+const ICON_METADATA_URI = 'https://cdn.forge.tylertech.com/v1/metadata/icons/tyler-icons-metadata-all.json';
 const SIMILARITY_THRESHOLD = 0.6;
 const FUZZY_MIN_SCORE = 0.6;
 const FUZZY_SCORE_MULTIPLIER = 0.19;
@@ -78,9 +77,7 @@ export class IconSearchService {
       this._icons = icons;
       return icons;
     } catch (error) {
-      throw new Error(
-        `Failed to load icon metadata: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      throw new Error(`Failed to load icon metadata: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       this._isLoading = false;
     }
@@ -101,10 +98,7 @@ export class IconSearchService {
   /**
    * Search icons by query with fuzzy matching and intelligent scoring
    */
-  public async searchIcons(
-    query: string,
-    limit: number = 10,
-  ): Promise<IconSearchResult[]> {
+  public async searchIcons(query: string, limit: number = 10): Promise<IconSearchResult[]> {
     const icons = await this._loadIcons();
     const searchTerms = query
       .toLowerCase()
@@ -116,7 +110,7 @@ export class IconSearchService {
         ...icon,
         score: 0,
         matchType: 'exact' as const,
-        esmImportName: convertToEsmImportName(icon.name),
+        esmImportName: convertToEsmImportName(icon.name)
       }));
     }
 
@@ -157,9 +151,7 @@ export class IconSearchService {
         // Fuzzy name match
         const nameSimilarity = this._computeSimilarity(iconName, term);
         if (nameSimilarity >= SIMILARITY_THRESHOLD) {
-          const fuzzyScore =
-            FUZZY_MIN_SCORE +
-            (nameSimilarity - FUZZY_MIN_SCORE) * FUZZY_SCORE_MULTIPLIER;
+          const fuzzyScore = FUZZY_MIN_SCORE + (nameSimilarity - FUZZY_MIN_SCORE) * FUZZY_SCORE_MULTIPLIER;
           bestScore = Math.max(bestScore, fuzzyScore);
           if (!['exact', 'prefix', 'contains'].includes(bestMatchType)) {
             bestMatchType = 'fuzzy';
@@ -183,7 +175,7 @@ export class IconSearchService {
           ...icon,
           score: bestScore,
           matchType: bestMatchType,
-          esmImportName: convertToEsmImportName(icon.name),
+          esmImportName: convertToEsmImportName(icon.name)
         });
       }
     }
@@ -194,7 +186,7 @@ export class IconSearchService {
       prefix: 4,
       contains: 3,
       fuzzy: 2,
-      keyword: 1,
+      keyword: 1
     };
 
     results.sort((a, b) => {
@@ -203,8 +195,7 @@ export class IconSearchService {
         return b.score - a.score;
       }
       // Secondary: match type priority
-      const priorityDiff =
-        matchTypePriority[b.matchType] - matchTypePriority[a.matchType];
+      const priorityDiff = matchTypePriority[b.matchType] - matchTypePriority[a.matchType];
       if (priorityDiff !== 0) {
         return priorityDiff;
       }

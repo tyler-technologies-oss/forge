@@ -8,10 +8,7 @@ export class IconsGuideTool extends BaseToolHandler<IconsGuideInput> {
   private _resourceManager = getResourceManager();
 
   constructor() {
-    super(
-      'setup_icons',
-      'Access Tyler Forge icons system including installation, registration, and usage patterns for the forge-icon component.',
-    );
+    super('setup_icons', 'Access Tyler Forge icons system including installation, registration, and usage patterns for the forge-icon component.');
   }
 
   public getTool(): Tool {
@@ -21,14 +18,12 @@ export class IconsGuideTool extends BaseToolHandler<IconsGuideInput> {
       inputSchema: {
         type: 'object',
         properties: {},
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    _args: IconsGuideInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(_args: IconsGuideInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     await this._resourceManager.initialize();
     const content = await this._resourceManager.readResource('forge://icons');
 

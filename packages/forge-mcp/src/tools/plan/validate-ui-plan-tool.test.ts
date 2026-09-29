@@ -7,14 +7,14 @@ vi.mock('../../services/cem-loader.js', () => ({
   getCEMLoader: vi.fn(() => ({
     isLoaded: vi.fn(() => true),
     loadCEM: vi.fn().mockResolvedValue(undefined),
-    getComponentTagNames: vi.fn(() => ['forge-app-bar', 'forge-drawer']),
-  })),
+    getComponentTagNames: vi.fn(() => ['forge-app-bar', 'forge-drawer'])
+  }))
 }));
 
 vi.mock('../../services/icon-search-service.js', () => ({
   getIconSearchService: vi.fn(() => ({
-    searchIcons: vi.fn().mockResolvedValue([]),
-  })),
+    searchIcons: vi.fn().mockResolvedValue([])
+  }))
 }));
 
 describe('ValidateUIPlanTool', () => {
@@ -31,15 +31,14 @@ describe('ValidateUIPlanTool', () => {
       plan: {
         page_type: 'dashboard',
         regions: {
-          header: { component: 'forge-app-bar' },
+          header: { component: 'forge-app-bar' }
         },
         typography: {},
         spacing_scale: 'tokens-only',
-        icons: [],
-      },
+        icons: []
+      }
     });
-    const text =
-      result.content[0].type === 'text' ? result.content[0].text : '';
+    const text = result.content[0].type === 'text' ? result.content[0].text : '';
 
     expect(text).toContain('**Valid:** ✅ true');
     expect(text).not.toContain('## Errors');
@@ -51,15 +50,14 @@ describe('ValidateUIPlanTool', () => {
       plan: JSON.stringify({
         page_type: 'not-a-real-type',
         regions: {
-          header: { component: 'forge-nonexistent' },
+          header: { component: 'forge-nonexistent' }
         },
         typography: {},
         spacing_scale: 'tokens-only',
-        icons: [],
-      }),
+        icons: []
+      })
     });
-    const text =
-      result.content[0].type === 'text' ? result.content[0].text : '';
+    const text = result.content[0].type === 'text' ? result.content[0].text : '';
 
     expect(text).toContain('**Valid:** ❌ false');
     expect(text).toContain('## Errors');

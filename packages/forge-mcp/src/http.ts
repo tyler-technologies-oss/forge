@@ -12,22 +12,17 @@ const MAX_BODY_BYTES = 4 * 1024 * 1024; // 4mb, matches SDK's own request size l
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers':
-    'Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version',
-  'Access-Control-Expose-Headers': 'Mcp-Session-Id',
+  'Access-Control-Allow-Headers': 'Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version',
+  'Access-Control-Expose-Headers': 'Mcp-Session-Id'
 };
 
-function sendJsonRpcError(
-  res: ServerResponse,
-  status: number,
-  message: string,
-): void {
+function sendJsonRpcError(res: ServerResponse, status: number, message: string): void {
   res.writeHead(status, { 'Content-Type': 'application/json' }).end(
     JSON.stringify({
       jsonrpc: '2.0',
       error: { code: -32000, message },
-      id: null,
-    }),
+      id: null
+    })
   );
 }
 
@@ -63,40 +58,33 @@ function readRequestBody(req: IncomingMessage): Promise<unknown> {
   });
 }
 
-async function handleMcpRequest(
-  req: IncomingMessage,
-  res: ServerResponse,
-): Promise<void> {
+async function handleMcpRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
   let parsedBody: unknown;
   try {
     parsedBody = req.method === 'POST' ? await readRequestBody(req) : undefined;
   } catch (error) {
-    sendJsonRpcError(
-      res,
-      400,
-      error instanceof Error ? error.message : 'Invalid request body',
-    );
+    sendJsonRpcError(res, 400, error instanceof Error ? error.message : 'Invalid request body');
     return;
   }
 
   const server = new Server(
     {
       name: '@tylertech/forge-mcp',
-      version: '0.1.0',
+      version: '0.1.0'
     },
     {
       capabilities: {
         tools: {},
         resources: {},
-        prompts: {},
-      },
-    },
+        prompts: {}
+      }
+    }
   );
 
   // Stateless mode: no session ID is issued, so each request gets a fresh
   // Server/transport pair rather than being tied to a long-lived session.
   const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
+    sessionIdGenerator: undefined
   });
 
   res.on('close', () => {
@@ -110,11 +98,7 @@ async function handleMcpRequest(
     await transport.handleRequest(req, res, parsedBody);
   } catch (error) {
     if (!res.headersSent) {
-      sendJsonRpcError(
-        res,
-        500,
-        error instanceof Error ? error.message : 'Internal server error',
-      );
+      sendJsonRpcError(res, 500, error instanceof Error ? error.message : 'Internal server error');
     }
   }
 }
@@ -158,16 +142,12 @@ async function primeCEMData(): Promise<void> {
   try {
     await getCEMLoader().loadCEM();
     for (const pkg of getCEMLoader().getLoadedPackages()) {
-      console.warn(
-        `Forge MCP: loaded ${pkg.packageName} from ${pkg.manifestPath}`,
-      );
+      console.warn(`Forge MCP: loaded ${pkg.packageName} from ${pkg.manifestPath}`);
     }
   } catch (error) {
     // Don't block startup - each request re-attempts loadCEM() via
     // ResourcesHandler.initialize() until it succeeds.
-    console.warn(
-      `Forge MCP: failed to preload CEM data (will retry per-request): ${error instanceof Error ? error.message : error}`,
-    );
+    console.warn(`Forge MCP: failed to preload CEM data (will retry per-request): ${error instanceof Error ? error.message : error}`);
   }
 }
 

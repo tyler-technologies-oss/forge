@@ -13,7 +13,7 @@ export class UsageGuideTool extends BaseToolHandler<UsageGuideInput> {
   constructor() {
     super(
       'get_usage_guide',
-      'Get comprehensive Tyler Forge guides including installation instructions, framework-specific integration, and general usage patterns',
+      'Get comprehensive Tyler Forge guides including installation instructions, framework-specific integration, and general usage patterns'
     );
   }
 
@@ -27,24 +27,20 @@ export class UsageGuideTool extends BaseToolHandler<UsageGuideInput> {
           type: {
             type: 'string',
             enum: ['general', 'installation', 'framework'],
-            description:
-              'Type of guide: general (default - usage patterns), installation (setup instructions), or framework (framework-specific integration)',
+            description: 'Type of guide: general (default - usage patterns), installation (setup instructions), or framework (framework-specific integration)'
           },
           framework: {
             type: 'string',
             enum: ['angular', 'react', 'vue', 'svelte', 'vanilla'],
-            description:
-              'Framework for installation or framework guides. Required for type=framework.',
-          },
+            description: 'Framework for installation or framework guides. Required for type=framework.'
+          }
         },
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    args: UsageGuideInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: UsageGuideInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     const { type = 'general', framework } = args;
 
     await this._resourceManager.initialize();
@@ -53,9 +49,7 @@ export class UsageGuideTool extends BaseToolHandler<UsageGuideInput> {
 
     if (type === 'framework') {
       if (!framework) {
-        throw new Error(
-          'Framework parameter is required when type=framework. Supported frameworks: angular, react, vue, svelte, vanilla',
-        );
+        throw new Error('Framework parameter is required when type=framework. Supported frameworks: angular, react, vue, svelte, vanilla');
       }
       // Get framework-specific guide directly
       content = await this._getFrameworkContent(framework);
@@ -65,9 +59,7 @@ export class UsageGuideTool extends BaseToolHandler<UsageGuideInput> {
         content = await this._getFrameworkContent(framework);
       } else {
         // Get general installation guide
-        content = await this._resourceManager.readResource(
-          'forge://installation',
-        );
+        content = await this._resourceManager.readResource('forge://installation');
       }
     } else {
       // type === 'general' (default)
@@ -93,9 +85,7 @@ export class UsageGuideTool extends BaseToolHandler<UsageGuideInput> {
       case 'lit':
         return await this._resourceManager.getFrameworkLit();
       default:
-        throw new Error(
-          `Framework guide not found for ${framework}. Supported frameworks: angular, react, vue, svelte, vanilla`,
-        );
+        throw new Error(`Framework guide not found for ${framework}. Supported frameworks: angular, react, vue, svelte, vanilla`);
     }
   }
 }

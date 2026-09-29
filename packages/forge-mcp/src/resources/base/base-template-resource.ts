@@ -8,9 +8,7 @@ import { getTemplatePath } from '../../utils/path-utils.js';
  * @returns Promise resolving to the template file content as a string
  * @throws Error if the template file cannot be read
  */
-export async function readTemplateResource(
-  templateFilePath: string,
-): Promise<string> {
+export async function readTemplateResource(templateFilePath: string): Promise<string> {
   const templatePath = getTemplatePath(templateFilePath);
   return await fs.readFile(templatePath, 'utf-8');
 }

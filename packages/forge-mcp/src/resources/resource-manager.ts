@@ -27,9 +27,7 @@ export class ResourceManager {
         await this._cemLoader.loadCEM(workingDirectory);
       } catch (error) {
         // Failed to load Custom Elements Manifest
-        throw new Error(
-          `Resource initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Resource initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
   }
@@ -49,9 +47,8 @@ export class ResourceManager {
     resources.push({
       uri: 'forge://components',
       name: 'Components',
-      description:
-        'Overview list of all Tyler Forge components with names and summaries',
-      mimeType: 'text/markdown',
+      description: 'Overview list of all Tyler Forge components with names and summaries',
+      mimeType: 'text/markdown'
     });
 
     // Add the static, template-backed resources (installation, usage,
@@ -61,8 +58,8 @@ export class ResourceManager {
         uri: definition.uri,
         name: definition.name,
         description: definition.description,
-        mimeType: 'text/markdown',
-      })),
+        mimeType: 'text/markdown'
+      }))
     );
 
     // Add individual component resources
@@ -72,13 +69,10 @@ export class ResourceManager {
         return {
           uri: `forge://component/${tagName}`,
           name: tagName,
-          description:
-            component?.summary ||
-            component?.description ||
-            `Documentation for ${tagName} component`,
-          mimeType: 'text/markdown',
+          description: component?.summary || component?.description || `Documentation for ${tagName} component`,
+          mimeType: 'text/markdown'
         };
-      }),
+      })
     );
 
     return resources;
@@ -99,17 +93,13 @@ export class ResourceManager {
       return this._componentsBrief.get(components);
     }
 
-    const staticResource = STATIC_RESOURCES.find(
-      definition => definition.uri === uri,
-    );
+    const staticResource = STATIC_RESOURCES.find(definition => definition.uri === uri);
     if (staticResource) {
       return await readStaticResource(uri);
     }
 
     // Handle component resources ex. 'forge://component/forge-button'
-    const componentMatch = uri.match(
-      /^forge:\/\/component\/([^/]+)(?:\/(.+))?$/,
-    );
+    const componentMatch = uri.match(/^forge:\/\/component\/([^/]+)(?:\/(.+))?$/);
 
     if (!componentMatch) {
       throw new Error(`Invalid resource URI: ${uri}`);
@@ -134,9 +124,7 @@ export class ResourceManager {
       const resources = await this.listResources();
       return resources.some(resource => resource.uri === uri);
     } catch {
-      return (
-        uri.startsWith(RESOURCE_SCHEME) && uri.length > RESOURCE_SCHEME.length
-      );
+      return uri.startsWith(RESOURCE_SCHEME) && uri.length > RESOURCE_SCHEME.length;
     }
   }
 

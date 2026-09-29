@@ -16,7 +16,7 @@ export class VersionMigrationTool extends BaseToolHandler<VersionMigrationInput>
   constructor() {
     super(
       'get_version_migration_guide',
-      'Get comprehensive migration guides for upgrading between Tyler Forge versions, including breaking changes, API mappings, and upgrade instructions',
+      'Get comprehensive migration guides for upgrading between Tyler Forge versions, including breaking changes, API mappings, and upgrade instructions'
     );
   }
 
@@ -30,38 +30,32 @@ export class VersionMigrationTool extends BaseToolHandler<VersionMigrationInput>
           from: {
             type: 'string',
             description: 'Source version to migrate from (default: "v2")',
-            default: 'v2',
+            default: 'v2'
           },
           to: {
             type: 'string',
             description: 'Target version to migrate to (default: "v3")',
-            default: 'v3',
-          },
+            default: 'v3'
+          }
         },
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    args: VersionMigrationInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: VersionMigrationInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     const { from = 'v2', to = 'v3' } = args;
 
     // Validate supported version combinations
     if (!this._isValidVersionCombination(from, to)) {
-      throw new Error(
-        `Unsupported version migration from ${from} to ${to}. Currently supported: v2 → v3`,
-      );
+      throw new Error(`Unsupported version migration from ${from} to ${to}. Currently supported: v2 → v3`);
     }
 
     try {
       const content = await this._loadMigrationContent(from, to);
       return this._createTextResponse(content);
     } catch (error) {
-      throw new Error(
-        `Failed to load migration guide for ${from} → ${to}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      throw new Error(`Failed to load migration guide for ${from} → ${to}: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -70,15 +64,10 @@ export class VersionMigrationTool extends BaseToolHandler<VersionMigrationInput>
     // Future versions can be added here
     const supportedMigrations = [{ from: 'v2', to: 'v3' }];
 
-    return supportedMigrations.some(
-      migration => migration.from === from && migration.to === to,
-    );
+    return supportedMigrations.some(migration => migration.from === from && migration.to === to);
   }
 
-  private async _loadMigrationContent(
-    from: string,
-    to: string,
-  ): Promise<string> {
+  private async _loadMigrationContent(from: string, to: string): Promise<string> {
     // Determine template directory based on target version
     const templateDir = resolve(__dirname, '../../../templates/migrations', to);
 

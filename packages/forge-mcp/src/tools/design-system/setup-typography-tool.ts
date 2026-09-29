@@ -10,7 +10,7 @@ export class TypographySetupTool extends BaseToolHandler<TypographySetupInput> {
   constructor() {
     super(
       'setup_typography',
-      'Access Tyler Forge typography setup instructions including font families, type scales, weights, and practical usage guidelines for consistent text styling.',
+      'Access Tyler Forge typography setup instructions including font families, type scales, weights, and practical usage guidelines for consistent text styling.'
     );
   }
 
@@ -21,18 +21,14 @@ export class TypographySetupTool extends BaseToolHandler<TypographySetupInput> {
       inputSchema: {
         type: 'object',
         properties: {},
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    _args: TypographySetupInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(_args: TypographySetupInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     await this._resourceManager.initialize();
-    const content = await this._resourceManager.readResource(
-      'forge://design-tokens/typography',
-    );
+    const content = await this._resourceManager.readResource('forge://design-tokens/typography');
 
     return this._createTextResponse(content);
   }

@@ -1,11 +1,6 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { BaseToolHandler, ToolInput } from '../tool-handler.js';
-import {
-  BlockInfo,
-  BlocksManifest,
-  getBlocksManifest,
-  getBlockContent,
-} from '../../services/blocks-manifest-service.js';
+import { BlockInfo, BlocksManifest, getBlocksManifest, getBlockContent } from '../../services/blocks-manifest-service.js';
 import { getTemplateEngine } from '../../services/handlebars-template-engine.js';
 
 export interface GetBlocksInput extends ToolInput {
@@ -22,7 +17,7 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
   constructor() {
     super(
       'get_forge_blocks',
-      'Get Forge UI code blocks - pre-built patterns and examples that demonstrate correct Forge component usage. Use this FIRST before generating any Forge UI code to ensure accurate patterns. Can list/search blocks or fetch specific block content.',
+      'Get Forge UI code blocks - pre-built patterns and examples that demonstrate correct Forge component usage. Use this FIRST before generating any Forge UI code to ensure accurate patterns. Can list/search blocks or fetch specific block content.'
     );
   }
 
@@ -36,37 +31,32 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
           query: {
             type: 'string',
             description:
-              'Describe the UI functionality you need (e.g., "form with validation", "data table with sorting", "user profile card"). Searches block descriptions to find matching functionality. Results are ranked by relevance - top results may be usable directly, while lower-ranked results can serve as starting points.',
+              'Describe the UI functionality you need (e.g., "form with validation", "data table with sorting", "user profile card"). Searches block descriptions to find matching functionality. Results are ranked by relevance - top results may be usable directly, while lower-ranked results can serve as starting points.'
           },
           blockId: {
             type: 'string',
-            description:
-              'Specific block ID to fetch the full HTML content for (e.g., "src/blocks/forms/login").',
+            description: 'Specific block ID to fetch the full HTML content for (e.g., "src/blocks/forms/login").'
           },
           category: {
             type: 'string',
-            description:
-              'Filter blocks by category (e.g., "forms", "tables", "application-layout").',
+            description: 'Filter blocks by category (e.g., "forms", "tables", "application-layout").'
           },
           component: {
             type: 'string',
             description:
-              'Filter blocks by Forge component usage. Returns all blocks that use the specified component (e.g., "forge-card", "forge-table", "forge-button"). Use this to see how a component is used across different contexts and patterns.',
+              'Filter blocks by Forge component usage. Returns all blocks that use the specified component (e.g., "forge-card", "forge-table", "forge-button"). Use this to see how a component is used across different contexts and patterns.'
           },
           limit: {
             type: 'number',
-            description:
-              'Maximum number of blocks to return when listing (default: 20).',
-          },
+            description: 'Maximum number of blocks to return when listing (default: 20).'
+          }
         },
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    args: GetBlocksInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: GetBlocksInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     const { query, blockId, category, component, limit = 20 } = args;
 
     try {
@@ -78,43 +68,24 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
       }
 
       // Otherwise, list/search blocks
-      return await this._listBlocks(
-        manifest,
-        query,
-        category,
-        component,
-        limit,
-      );
+      return await this._listBlocks(manifest, query, category, component, limit);
     } catch (error) {
-      throw new Error(
-        `Failed to fetch blocks: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      throw new Error(`Failed to fetch blocks: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
-  private async _getBlockContent(
-    blockId: string,
-    manifest: BlocksManifest,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  private async _getBlockContent(blockId: string, manifest: BlocksManifest): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     // Find the block in the manifest
-    const block = manifest.blocks.find(
-      b =>
-        b.id === blockId || b.file === blockId || b.file === `${blockId}.html`,
-    );
+    const block = manifest.blocks.find(b => b.id === blockId || b.file === blockId || b.file === `${blockId}.html`);
 
     if (!block) {
       const availableIds = manifest.blocks.map(b => b.id).join('\n- ');
-      throw new Error(
-        `Block not found: "${blockId}". Available blocks:\n- ${availableIds}`,
-      );
+      throw new Error(`Block not found: "${blockId}". Available blocks:\n- ${availableIds}`);
     }
 
     const content = await getBlockContent(block.file);
 
-    const rendered = await this._templateEngine.render(
-      'blocks/block-content.md',
-      { block, content: content.trim() },
-    );
+    const rendered = await this._templateEngine.render('blocks/block-content.md', { block, content: content.trim() });
 
     return this._createTextResponse(rendered);
   }
@@ -124,18 +95,15 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
     query?: string,
     category?: string,
     component?: string,
-    limit: number = 20,
+    limit: number = 20
   ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     let blocks = manifest.blocks;
 
     // Filter by category if specified
     if (category) {
-      const normalize = (s: string): string =>
-        s.toLowerCase().replace(/[\s_-]+/g, '-');
+      const normalize = (s: string): string => s.toLowerCase().replace(/[\s_-]+/g, '-');
       const wanted = normalize(category);
-      blocks = blocks.filter(
-        b => b.category && normalize(b.category) === wanted,
-      );
+      blocks = blocks.filter(b => b.category && normalize(b.category) === wanted);
     }
 
     // Filter by component if specified
@@ -173,26 +141,22 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
     const limitedBlocks = blocks.slice(0, limit);
     const hasMore = blocks.length > limit;
 
-    const rendered = await this._templateEngine.render(
-      'blocks/blocks-list.md',
-      {
-        query,
-        category,
-        component,
-        foundCount: blocks.length,
-        categories: manifest.categories,
-        blocks: limitedBlocks.map(block => ({
-          name: block.name,
-          description: block.description.replace(/\|/g, '\\|'),
-          componentsPreview:
-            block.componentsUsed?.slice(0, 4).join(', ') || '-',
-          id: block.id,
-        })),
-        hasMore,
-        shownCount: limitedBlocks.length,
-        totalCount: blocks.length,
-      },
-    );
+    const rendered = await this._templateEngine.render('blocks/blocks-list.md', {
+      query,
+      category,
+      component,
+      foundCount: blocks.length,
+      categories: manifest.categories,
+      blocks: limitedBlocks.map(block => ({
+        name: block.name,
+        description: block.description.replace(/\|/g, '\\|'),
+        componentsPreview: block.componentsUsed?.slice(0, 4).join(', ') || '-',
+        id: block.id
+      })),
+      hasMore,
+      shownCount: limitedBlocks.length,
+      totalCount: blocks.length
+    });
 
     return this._createTextResponse(rendered);
   }
@@ -201,10 +165,7 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
    * Calculate a relevance score for a block based on search terms.
    * Heavily weights description matches to surface blocks with matching functionality.
    */
-  private _calculateRelevanceScore(
-    block: BlockInfo,
-    searchTerms: string[],
-  ): number {
+  private _calculateRelevanceScore(block: BlockInfo, searchTerms: string[]): number {
     let score = 0;
     const nameLower = block.name.toLowerCase();
     const descLower = block.description.toLowerCase();
@@ -291,7 +252,7 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
           'error',
           'success',
           'warning',
-          'info',
+          'info'
         ];
         if (functionalKeywords.includes(term)) {
           score += 10; // Extra bonus for core functional terms
@@ -311,12 +272,7 @@ export class GetBlocksTool extends BaseToolHandler<GetBlocksInput> {
     }
 
     // Multi-term match bonus: reward blocks that match multiple search terms
-    const matchedTerms = searchTerms.filter(
-      term =>
-        nameLower.includes(term) ||
-        descLower.includes(term) ||
-        tagsLower.some(t => t.includes(term)),
-    );
+    const matchedTerms = searchTerms.filter(term => nameLower.includes(term) || descLower.includes(term) || tagsLower.some(t => t.includes(term)));
     if (matchedTerms.length > 1) {
       score += matchedTerms.length * 8; // Bonus per additional matched term
     }

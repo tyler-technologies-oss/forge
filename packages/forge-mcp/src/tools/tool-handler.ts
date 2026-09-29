@@ -27,12 +27,10 @@ export interface ToolHandler<TInput extends ToolInput = ToolInput> {
 /**
  * Abstract base class providing common tool functionality
  */
-export abstract class BaseToolHandler<TInput extends ToolInput = ToolInput>
-  implements ToolHandler<TInput>
-{
+export abstract class BaseToolHandler<TInput extends ToolInput = ToolInput> implements ToolHandler<TInput> {
   constructor(
     protected readonly name: string,
-    protected readonly description: string,
+    protected readonly description: string
   ) {}
 
   public abstract getTool(): Tool;
@@ -46,19 +44,16 @@ export abstract class BaseToolHandler<TInput extends ToolInput = ToolInput>
       content: [
         {
           type: 'text',
-          text,
-        },
-      ],
+          text
+        }
+      ]
     };
   }
 
   /**
    * Helper method to validate required parameters
    */
-  protected _validateRequired(
-    args: TInput,
-    requiredFields: (keyof TInput)[],
-  ): void {
+  protected _validateRequired(args: TInput, requiredFields: (keyof TInput)[]): void {
     for (const field of requiredFields) {
       if (args[field] === undefined || args[field] === null) {
         throw new Error(`Missing required parameter: ${String(field)}`);

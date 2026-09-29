@@ -13,8 +13,8 @@ const projectRoot = join(__dirname, '..');
 const PACKAGES = [
   {
     name: '@tylertech/forge',
-    outputName: '@tylertech-forge-custom-elements.json',
-  },
+    outputName: '@tylertech-forge-custom-elements.json'
+  }
 ];
 
 /**
@@ -33,20 +33,13 @@ async function bundleManifests() {
   // Copy and rename manifest files
   for (const pkg of PACKAGES) {
     try {
-      const manifestPath = join(
-        projectRoot,
-        'node_modules',
-        pkg.name,
-        'custom-elements.json',
-      );
+      const manifestPath = join(projectRoot, 'node_modules', pkg.name, 'custom-elements.json');
 
       // Check if manifest exists
       try {
         await access(manifestPath);
       } catch {
-        console.warn(
-          `Warning: ${pkg.name} custom-elements.json not found, skipping...`,
-        );
+        console.warn(`Warning: ${pkg.name} custom-elements.json not found, skipping...`);
         continue;
       }
 
@@ -57,9 +50,7 @@ async function bundleManifests() {
       try {
         JSON.parse(manifestContent);
       } catch {
-        console.warn(
-          `Warning: Invalid JSON in ${pkg.name} manifest, skipping...`,
-        );
+        console.warn(`Warning: Invalid JSON in ${pkg.name} manifest, skipping...`);
         continue;
       }
 

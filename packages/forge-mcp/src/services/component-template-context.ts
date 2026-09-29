@@ -5,11 +5,8 @@ import { CEMComponentDeclaration, TemplateContext } from '../types/index.js';
  * of component documentation (full docs, summary, API quick reference) uses
  * this so a new CEM field is exposed everywhere at once.
  */
-export function buildComponentTemplateContext(
-  component: CEMComponentDeclaration,
-): TemplateContext {
-  const publicMembers =
-    component.members?.filter(m => m.privacy === 'public') || [];
+export function buildComponentTemplateContext(component: CEMComponentDeclaration): TemplateContext {
+  const publicMembers = component.members?.filter(m => m.privacy === 'public') || [];
   const properties = publicMembers.filter(m => m.kind === 'field');
   const methods = publicMembers.filter(m => m.kind === 'method');
 
@@ -44,6 +41,6 @@ export function buildComponentTemplateContext(
     hasSlots: (component.slots?.length || 0) > 0,
     hasStates: (component.states?.length || 0) > 0,
     hasCssClasses: (component.cssClasses?.length || 0) > 0,
-    hasDependencies: (component.dependencies?.length || 0) > 0,
+    hasDependencies: (component.dependencies?.length || 0) > 0
   };
 }

@@ -1,16 +1,6 @@
-import {
-  CEMComponentDeclaration,
-  CustomElementsManifest,
-} from '../types/index.js';
-import {
-  getPackageDiscoveryService,
-  PackageDiscoveryService,
-  PackageManifest,
-} from './package-discovery.js';
-import {
-  getBundledManifestLoader,
-  BundledManifestLoader,
-} from './bundled-manifest-loader.js';
+import { CEMComponentDeclaration, CustomElementsManifest } from '../types/index.js';
+import { getPackageDiscoveryService, PackageDiscoveryService, PackageManifest } from './package-discovery.js';
+import { getBundledManifestLoader, BundledManifestLoader } from './bundled-manifest-loader.js';
 import { fetchLatestForgeManifest } from './forge-version-fetcher.js';
 
 const FORGE_PACKAGE_NAME = '@tylertech/forge';
@@ -35,13 +25,9 @@ export class CEMLoader {
   private _bundledManifestLoader: BundledManifestLoader;
   private _loadedPackages: PackageManifest[] = [];
 
-  constructor(
-    packageDiscovery?: PackageDiscoveryService,
-    bundledManifestLoader?: BundledManifestLoader,
-  ) {
+  constructor(packageDiscovery?: PackageDiscoveryService, bundledManifestLoader?: BundledManifestLoader) {
     this._packageDiscovery = packageDiscovery || getPackageDiscoveryService();
-    this._bundledManifestLoader =
-      bundledManifestLoader || getBundledManifestLoader();
+    this._bundledManifestLoader = bundledManifestLoader || getBundledManifestLoader();
   }
 
   /**
@@ -54,9 +40,7 @@ export class CEMLoader {
     // First try to load from user's installed packages
     await this.loadFromPackageDiscovery(workingDirectory);
 
-    const loadedPackageNames = new Set(
-      this._loadedPackages.map(p => p.packageName),
-    );
+    const loadedPackageNames = new Set(this._loadedPackages.map(p => p.packageName));
 
     // No local install found for @tylertech/forge - try the latest published
     // version from npm/unpkg before falling back to the bundled snapshot.
@@ -69,8 +53,7 @@ export class CEMLoader {
     }
 
     // Load bundled manifests for packages not already loaded
-    const bundledPackages =
-      await this._bundledManifestLoader.loadBundledManifests();
+    const bundledPackages = await this._bundledManifestLoader.loadBundledManifests();
 
     for (const bundledPackage of bundledPackages) {
       if (!loadedPackageNames.has(bundledPackage.packageName)) {
@@ -82,29 +65,24 @@ export class CEMLoader {
     if (this._loadedPackages.length === 0) {
       throw new Error(
         'No Tyler Tech packages or bundled manifests found. ' +
-          'Please install @tylertech/forge or other Tyler Tech packages, or ensure this MCP server was built correctly.',
+          'Please install @tylertech/forge or other Tyler Tech packages, or ensure this MCP server was built correctly.'
       );
     }
 
     // Merge all loaded manifests and build component map
-    this._cemData = this._mergeManifests(
-      this._loadedPackages.map(p => p.content),
-    );
+    this._cemData = this._mergeManifests(this._loadedPackages.map(p => p.content));
     this._buildComponentsMap();
   }
 
   /**
    * Load CEM data from Tyler Tech packages using dynamic discovery
    */
-  public async loadFromPackageDiscovery(
-    workingDirectory?: string,
-  ): Promise<void> {
+  public async loadFromPackageDiscovery(workingDirectory?: string): Promise<void> {
     try {
       const startPath = workingDirectory || process.cwd();
-      this._loadedPackages =
-        await this._packageDiscovery.discoverTylerTechPackages({
-          startPath,
-        });
+      this._loadedPackages = await this._packageDiscovery.discoverTylerTechPackages({
+        startPath
+      });
     } catch {
       // Package discovery failed, will try bundled manifests as fallback
       // Don't throw - let bundled manifests be tried as fallback
@@ -116,14 +94,11 @@ export class CEMLoader {
    */
   public async loadFromBundledManifests(): Promise<void> {
     try {
-      const bundledPackages =
-        await this._bundledManifestLoader.loadBundledManifests();
+      const bundledPackages = await this._bundledManifestLoader.loadBundledManifests();
 
       if (bundledPackages.length > 0) {
         this._loadedPackages = bundledPackages;
-        this._cemData = this._mergeManifests(
-          bundledPackages.map(p => p.content),
-        );
+        this._cemData = this._mergeManifests(bundledPackages.map(p => p.content));
       }
     } catch {
       // Bundled manifest loading failed
@@ -143,11 +118,7 @@ export class CEMLoader {
 
     for (const module of this._cemData.modules) {
       for (const declaration of module.declarations) {
-        if (
-          declaration.kind === 'class' &&
-          declaration.customElement &&
-          declaration.tagName
-        ) {
+        if (declaration.kind === 'class' && declaration.customElement && declaration.tagName) {
           this._componentsMap.set(declaration.tagName, declaration);
         }
       }
@@ -199,9 +170,7 @@ export class CEMLoader {
   /**
    * Merge multiple Custom Elements Manifests into a single manifest
    */
-  private _mergeManifests(
-    manifests: CustomElementsManifest[],
-  ): CustomElementsManifest {
+  private _mergeManifests(manifests: CustomElementsManifest[]): CustomElementsManifest {
     if (manifests.length === 0) {
       throw new Error('No manifests to merge');
     }
@@ -214,7 +183,7 @@ export class CEMLoader {
     const merged: CustomElementsManifest = {
       schemaVersion: manifests[0].schemaVersion,
       readme: manifests[0].readme,
-      modules: [],
+      modules: []
     };
 
     // Merge modules from all manifests
@@ -226,17 +195,11 @@ export class CEMLoader {
 
         if (existingModule) {
           // Merge declarations if the module already exists
-          existingModule.declarations = [
-            ...existingModule.declarations,
-            ...module.declarations,
-          ];
+          existingModule.declarations = [...existingModule.declarations, ...module.declarations];
 
           // Merge exports if they exist
           if (module.exports && existingModule.exports) {
-            existingModule.exports = [
-              ...existingModule.exports,
-              ...module.exports,
-            ];
+            existingModule.exports = [...existingModule.exports, ...module.exports];
           } else if (module.exports) {
             existingModule.exports = module.exports;
           }

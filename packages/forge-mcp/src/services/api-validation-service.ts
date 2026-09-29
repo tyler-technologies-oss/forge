@@ -14,15 +14,7 @@ export interface ApiValidationResult {
 /**
  * Types of APIs that can be validated
  */
-export type ApiType =
-  | 'property'
-  | 'attribute'
-  | 'event'
-  | 'method'
-  | 'slot'
-  | 'cssProperty'
-  | 'cssPart'
-  | 'cssClass';
+export type ApiType = 'property' | 'attribute' | 'event' | 'method' | 'slot' | 'cssProperty' | 'cssPart' | 'cssClass';
 
 /**
  * Input for validating component APIs
@@ -82,10 +74,7 @@ export class ApiValidationService {
   /**
    * Validate multiple API types for a component
    */
-  public validateComponentApis(
-    component: CEMComponentDeclaration,
-    apis: ComponentApiValidationInput,
-  ): ComponentValidationResults {
+  public validateComponentApis(component: CEMComponentDeclaration, apis: ComponentApiValidationInput): ComponentValidationResults {
     const allResults: ApiValidationResult[] = [];
 
     // Validate each API type if provided
@@ -105,9 +94,7 @@ export class ApiValidationService {
       allResults.push(...this._validateSlots(component, apis.slots));
     }
     if (apis.cssProperties?.length) {
-      allResults.push(
-        ...this._validateCssProperties(component, apis.cssProperties),
-      );
+      allResults.push(...this._validateCssProperties(component, apis.cssProperties));
     }
     if (apis.cssParts?.length) {
       allResults.push(...this._validateCssParts(component, apis.cssParts));
@@ -131,21 +118,15 @@ export class ApiValidationService {
       invalidApis,
       deprecatedApis,
       totalValidated: allResults.length,
-      availableApis,
+      availableApis
     };
   }
 
   /**
    * Validate component properties
    */
-  private _validateProperties(
-    component: CEMComponentDeclaration,
-    propertyNames: string[],
-  ): ApiValidationResult[] {
-    const publicMembers =
-      component.members?.filter(
-        m => m.privacy === 'public' && m.kind === 'field',
-      ) || [];
+  private _validateProperties(component: CEMComponentDeclaration, propertyNames: string[]): ApiValidationResult[] {
+    const publicMembers = component.members?.filter(m => m.privacy === 'public' && m.kind === 'field') || [];
 
     return propertyNames.map(name => {
       const property = publicMembers.find(m => m.name === name);
@@ -156,14 +137,14 @@ export class ApiValidationService {
           isValid: true,
           isDeprecated: !!property.deprecated,
           deprecationMessage: property.deprecated,
-          apiType: 'property' as const,
+          apiType: 'property' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'property' as const,
+        apiType: 'property' as const
       };
     });
   }
@@ -171,10 +152,7 @@ export class ApiValidationService {
   /**
    * Validate component attributes
    */
-  private _validateAttributes(
-    component: CEMComponentDeclaration,
-    attributeNames: string[],
-  ): ApiValidationResult[] {
+  private _validateAttributes(component: CEMComponentDeclaration, attributeNames: string[]): ApiValidationResult[] {
     const attributes = component.attributes || [];
 
     return attributeNames.map(name => {
@@ -184,14 +162,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'attribute' as const,
+          apiType: 'attribute' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'attribute' as const,
+        apiType: 'attribute' as const
       };
     });
   }
@@ -199,10 +177,7 @@ export class ApiValidationService {
   /**
    * Validate component events
    */
-  private _validateEvents(
-    component: CEMComponentDeclaration,
-    eventNames: string[],
-  ): ApiValidationResult[] {
+  private _validateEvents(component: CEMComponentDeclaration, eventNames: string[]): ApiValidationResult[] {
     const events = component.events || [];
 
     return eventNames.map(name => {
@@ -212,14 +187,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'event' as const,
+          apiType: 'event' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'event' as const,
+        apiType: 'event' as const
       };
     });
   }
@@ -227,14 +202,8 @@ export class ApiValidationService {
   /**
    * Validate component methods
    */
-  private _validateMethods(
-    component: CEMComponentDeclaration,
-    methodNames: string[],
-  ): ApiValidationResult[] {
-    const publicMethods =
-      component.members?.filter(
-        m => m.privacy === 'public' && m.kind === 'method',
-      ) || [];
+  private _validateMethods(component: CEMComponentDeclaration, methodNames: string[]): ApiValidationResult[] {
+    const publicMethods = component.members?.filter(m => m.privacy === 'public' && m.kind === 'method') || [];
 
     return methodNames.map(name => {
       const method = publicMethods.find(m => m.name === name);
@@ -245,14 +214,14 @@ export class ApiValidationService {
           isValid: true,
           isDeprecated: !!method.deprecated,
           deprecationMessage: method.deprecated,
-          apiType: 'method' as const,
+          apiType: 'method' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'method' as const,
+        apiType: 'method' as const
       };
     });
   }
@@ -260,10 +229,7 @@ export class ApiValidationService {
   /**
    * Validate component slots
    */
-  private _validateSlots(
-    component: CEMComponentDeclaration,
-    slotNames: string[],
-  ): ApiValidationResult[] {
+  private _validateSlots(component: CEMComponentDeclaration, slotNames: string[]): ApiValidationResult[] {
     const slots = component.slots || [];
 
     return slotNames.map(name => {
@@ -273,14 +239,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'slot' as const,
+          apiType: 'slot' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'slot' as const,
+        apiType: 'slot' as const
       };
     });
   }
@@ -288,10 +254,7 @@ export class ApiValidationService {
   /**
    * Validate CSS custom properties
    */
-  private _validateCssProperties(
-    component: CEMComponentDeclaration,
-    cssPropertyNames: string[],
-  ): ApiValidationResult[] {
+  private _validateCssProperties(component: CEMComponentDeclaration, cssPropertyNames: string[]): ApiValidationResult[] {
     const cssProperties = component.cssProperties || [];
 
     return cssPropertyNames.map(name => {
@@ -301,14 +264,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'cssProperty' as const,
+          apiType: 'cssProperty' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'cssProperty' as const,
+        apiType: 'cssProperty' as const
       };
     });
   }
@@ -316,10 +279,7 @@ export class ApiValidationService {
   /**
    * Validate CSS parts
    */
-  private _validateCssParts(
-    component: CEMComponentDeclaration,
-    cssPartNames: string[],
-  ): ApiValidationResult[] {
+  private _validateCssParts(component: CEMComponentDeclaration, cssPartNames: string[]): ApiValidationResult[] {
     const cssParts = component.cssParts || [];
 
     return cssPartNames.map(name => {
@@ -329,14 +289,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'cssPart' as const,
+          apiType: 'cssPart' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'cssPart' as const,
+        apiType: 'cssPart' as const
       };
     });
   }
@@ -344,10 +304,7 @@ export class ApiValidationService {
   /**
    * Validate CSS classes
    */
-  private _validateCssClasses(
-    component: CEMComponentDeclaration,
-    cssClassNames: string[],
-  ): ApiValidationResult[] {
+  private _validateCssClasses(component: CEMComponentDeclaration, cssClassNames: string[]): ApiValidationResult[] {
     const cssClasses = component.cssClasses || [];
 
     return cssClassNames.map(name => {
@@ -357,14 +314,14 @@ export class ApiValidationService {
         return {
           name,
           isValid: true,
-          apiType: 'cssClass' as const,
+          apiType: 'cssClass' as const
         };
       }
 
       return {
         name,
         isValid: false,
-        apiType: 'cssClass' as const,
+        apiType: 'cssClass' as const
       };
     });
   }
@@ -374,7 +331,7 @@ export class ApiValidationService {
    */
   private _collectRequestedAvailableApis(
     component: CEMComponentDeclaration,
-    requestedApis: ComponentApiValidationInput,
+    requestedApis: ComponentApiValidationInput
   ): {
     properties: ApiItem[];
     attributes: ApiItem[];
@@ -385,8 +342,7 @@ export class ApiValidationService {
     cssParts: ApiItem[];
     cssClasses: ApiItem[];
   } {
-    const publicMembers =
-      component.members?.filter(m => m.privacy === 'public') || [];
+    const publicMembers = component.members?.filter(m => m.privacy === 'public') || [];
 
     const result = {
       properties: [] as ApiItem[],
@@ -396,7 +352,7 @@ export class ApiValidationService {
       slots: [] as ApiItem[],
       cssProperties: [] as ApiItem[],
       cssParts: [] as ApiItem[],
-      cssClasses: [] as ApiItem[],
+      cssClasses: [] as ApiItem[]
     };
 
     // Only collect APIs for categories that were actually requested
@@ -405,19 +361,19 @@ export class ApiValidationService {
         .filter(m => m.kind === 'field')
         .map(m => ({
           name: m.name,
-          description: m.description,
+          description: m.description
         }));
     }
     if (requestedApis.attributes?.length) {
       result.attributes = (component.attributes || []).map(a => ({
         name: a.name,
-        description: a.description,
+        description: a.description
       }));
     }
     if (requestedApis.events?.length) {
       result.events = (component.events || []).map(e => ({
         name: e.name,
-        description: e.description,
+        description: e.description
       }));
     }
     if (requestedApis.methods?.length) {
@@ -425,31 +381,31 @@ export class ApiValidationService {
         .filter(m => m.kind === 'method')
         .map(m => ({
           name: m.name,
-          description: m.description,
+          description: m.description
         }));
     }
     if (requestedApis.slots?.length) {
       result.slots = (component.slots || []).map(s => ({
         name: s.name,
-        description: s.description,
+        description: s.description
       }));
     }
     if (requestedApis.cssProperties?.length) {
       result.cssProperties = (component.cssProperties || []).map(p => ({
         name: p.name,
-        description: p.description,
+        description: p.description
       }));
     }
     if (requestedApis.cssParts?.length) {
       result.cssParts = (component.cssParts || []).map(p => ({
         name: p.name,
-        description: p.description,
+        description: p.description
       }));
     }
     if (requestedApis.cssClasses?.length) {
       result.cssClasses = (component.cssClasses || []).map(c => ({
         name: c.name,
-        description: c.description,
+        description: c.description
       }));
     }
 

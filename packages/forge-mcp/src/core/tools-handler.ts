@@ -1,8 +1,5 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { createToolRegistry } from '../tools/index.js';
 
 export class ToolsHandler {
@@ -13,12 +10,10 @@ export class ToolsHandler {
     server.setRequestHandler(ListToolsRequestSchema, async () => {
       try {
         return {
-          tools: this._toolRegistry.getTools(),
+          tools: this._toolRegistry.getTools()
         };
       } catch (error) {
-        throw new Error(
-          `Failed to list tools: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to list tools: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
 
@@ -28,9 +23,7 @@ export class ToolsHandler {
         const { name, arguments: args } = request.params;
         return await this._toolRegistry.execute(name, args);
       } catch (error) {
-        throw new Error(
-          `Failed to execute tool: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to execute tool: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
   }

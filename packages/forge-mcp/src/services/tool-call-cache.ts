@@ -64,7 +64,7 @@ export class ToolCallCache {
     return {
       size: this._cache.size,
       hits: this._hits,
-      misses: this._misses,
+      misses: this._misses
     };
   }
 

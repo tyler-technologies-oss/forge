@@ -7,8 +7,7 @@ describe('GenerateUIPlanTool', () => {
 
   it('emits a plan template whose region keys are all legal region names', async () => {
     const result = await tool.execute({ description: 'a dashboard' });
-    const text =
-      result.content[0].type === 'text' ? result.content[0].text : '';
+    const text = result.content[0].type === 'text' ? result.content[0].text : '';
 
     const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
     if (!jsonMatch) {

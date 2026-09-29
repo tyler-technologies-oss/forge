@@ -1,8 +1,5 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import {
-  ListResourcesRequestSchema,
-  ReadResourceRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { ListResourcesRequestSchema, ReadResourceRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { getResourceManager } from '../resources/index.js';
 
 export class ResourcesHandler {
@@ -19,9 +16,7 @@ export class ResourcesHandler {
         const resources = await this._resourceManager.listResources();
         return { resources };
       } catch (error) {
-        throw new Error(
-          `Failed to list resources: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to list resources: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
 
@@ -41,14 +36,12 @@ export class ResourcesHandler {
             {
               uri,
               mimeType: 'text/markdown',
-              text: content,
-            },
-          ],
+              text: content
+            }
+          ]
         };
       } catch (error) {
-        throw new Error(
-          `Failed to read resource: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        throw new Error(`Failed to read resource: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     });
   }

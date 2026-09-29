@@ -30,9 +30,7 @@ export async function getBlocksManifest(): Promise<BlocksManifest> {
   }
   const response = await fetch(`${BLOCKS_BASE_URL}/manifest.json`);
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch blocks manifest: ${response.status} ${response.statusText}`,
-    );
+    throw new Error(`Failed to fetch blocks manifest: ${response.status} ${response.statusText}`);
   }
   _cachedManifest = (await response.json()) as BlocksManifest;
   return _cachedManifest;
@@ -50,9 +48,7 @@ export function _resetBlocksManifestCacheForTests(): void {
 export async function getBlockContent(file: string): Promise<string> {
   const response = await fetch(`${BLOCKS_BASE_URL}/${file}`);
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch block content: ${response.status} ${response.statusText}`,
-    );
+    throw new Error(`Failed to fetch block content: ${response.status} ${response.statusText}`);
   }
   return response.text();
 }

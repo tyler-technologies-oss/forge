@@ -5,8 +5,7 @@ import { getTemplatePath } from '../utils/path-utils.js';
 import { FrameworkTemplateHelpers } from './framework-template-helpers.js';
 
 export class HandlebarsTemplateEngine {
-  private _compiledTemplateCache: Map<string, HandlebarsTemplateDelegate> =
-    new Map();
+  private _compiledTemplateCache: Map<string, HandlebarsTemplateDelegate> = new Map();
 
   constructor() {
     this._registerHelpers();
@@ -16,10 +15,7 @@ export class HandlebarsTemplateEngine {
   /**
    * Render a template with the given context using Handlebars
    */
-  public async render(
-    templateName: string,
-    context: TemplateContext,
-  ): Promise<string> {
+  public async render(templateName: string, context: TemplateContext): Promise<string> {
     const compiledTemplate = await this._getCompiledTemplate(templateName);
     return compiledTemplate(context);
   }
@@ -27,13 +23,9 @@ export class HandlebarsTemplateEngine {
   /**
    * Get a compiled Handlebars template, loading and caching as needed
    */
-  private async _getCompiledTemplate(
-    templateName: string,
-  ): Promise<HandlebarsTemplateDelegate> {
+  private async _getCompiledTemplate(templateName: string): Promise<HandlebarsTemplateDelegate> {
     if (this._compiledTemplateCache.has(templateName)) {
-      return this._compiledTemplateCache.get(
-        templateName,
-      ) as HandlebarsTemplateDelegate;
+      return this._compiledTemplateCache.get(templateName) as HandlebarsTemplateDelegate;
     }
 
     const templatePath = getTemplatePath(templateName);
@@ -157,37 +149,27 @@ export function apiDetails(context: any): string {
   const sections: string[] = [];
 
   if (context.hasProperties) {
-    const propList = context.properties
-      .map((p: any) => `\`${p.name}\``)
-      .join(', ');
+    const propList = context.properties.map((p: any) => `\`${p.name}\``).join(', ');
     sections.push(`- **Properties:** ${propList}`);
   }
 
   if (context.hasMethods) {
-    const methodList = context.methods
-      .map((m: any) => `\`${m.name}()\``)
-      .join(', ');
+    const methodList = context.methods.map((m: any) => `\`${m.name}()\``).join(', ');
     sections.push(`- **Methods:** ${methodList}`);
   }
 
   if (context.hasEvents) {
-    const eventList = context.events
-      .map((e: any) => `\`${e.name}\``)
-      .join(', ');
+    const eventList = context.events.map((e: any) => `\`${e.name}\``).join(', ');
     sections.push(`- **Events:** ${eventList}`);
   }
 
   if (context.hasAttributes) {
-    const attrList = context.attributes
-      .map((a: any) => `\`${a.name}\``)
-      .join(', ');
+    const attrList = context.attributes.map((a: any) => `\`${a.name}\``).join(', ');
     sections.push(`- **Attributes:** ${attrList}`);
   }
 
   if (context.hasSlots) {
-    const slotList = context.slots
-      .map((s: any) => `\`${s.name || 'default'}\``)
-      .join(', ');
+    const slotList = context.slots.map((s: any) => `\`${s.name || 'default'}\``).join(', ');
     sections.push(`- **Slots:** ${slotList}`);
   }
 

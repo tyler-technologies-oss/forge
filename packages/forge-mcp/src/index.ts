@@ -8,15 +8,15 @@ async function main(): Promise<void> {
   const server = new Server(
     {
       name: '@tylertech/forge-mcp',
-      version: '0.1.0',
+      version: '0.1.0'
     },
     {
       capabilities: {
         tools: {},
         resources: {},
-        prompts: {},
-      },
-    },
+        prompts: {}
+      }
+    }
   );
 
   await createForgeDocsServer(server);

@@ -12,7 +12,7 @@ export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
   constructor() {
     super(
       'get_design_tokens',
-      'Get Tyler Forge design tokens for consistent styling. Access color palettes, spacing scales, typography, animation, and other design system values.',
+      'Get Tyler Forge design tokens for consistent styling. Access color palettes, spacing scales, typography, animation, and other design system values.'
     );
   }
 
@@ -25,29 +25,16 @@ export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
         properties: {
           category: {
             type: 'string',
-            enum: [
-              'color',
-              'spacing',
-              'typography',
-              'animation',
-              'border',
-              'elevation',
-              'layering',
-              'shape',
-              'all',
-            ],
-            description:
-              'Optional: specific design token category (default: all categories overview)',
-          },
+            enum: ['color', 'spacing', 'typography', 'animation', 'border', 'elevation', 'layering', 'shape', 'all'],
+            description: 'Optional: specific design token category (default: all categories overview)'
+          }
         },
-        required: [],
-      },
+        required: []
+      }
     };
   }
 
-  public async execute(
-    args: DesignTokensInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: DesignTokensInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     const { category } = args;
 
     await this._resourceManager.initialize();
@@ -64,9 +51,7 @@ export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
       }
     } else {
       // Default to the main design tokens overview
-      content = await this._resourceManager.readResource(
-        'forge://design-tokens',
-      );
+      content = await this._resourceManager.readResource('forge://design-tokens');
     }
 
     return this._createTextResponse(content);

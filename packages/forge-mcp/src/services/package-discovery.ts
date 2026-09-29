@@ -1,9 +1,6 @@
 import { access, readFile } from 'fs/promises';
 import { join } from 'path';
-import {
-  getProjectDiscoveryService,
-  ProjectDiscoveryService,
-} from './project-discovery.js';
+import { getProjectDiscoveryService, ProjectDiscoveryService } from './project-discovery.js';
 
 export interface PackageManifest {
   packageName: string;
@@ -39,15 +36,12 @@ export class PackageDiscoveryService {
   /**
    * Discover a specific package's manifest file
    */
-  public async discoverPackageManifest(
-    packageName: string,
-    options: PackageDiscoveryOptions = {},
-  ): Promise<PackageManifest | null> {
+  public async discoverPackageManifest(packageName: string, options: PackageDiscoveryOptions = {}): Promise<PackageManifest | null> {
     const {
       startPath = process.cwd(),
       manifestFileName = 'custom-elements.json',
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      stopAtFirst = true,
+      stopAtFirst = true
     } = options;
 
     const cacheKey = `${packageName}:${startPath}:${manifestFileName}`;
@@ -55,8 +49,7 @@ export class PackageDiscoveryService {
       return this._manifestCache.get(cacheKey) as PackageManifest | null;
     }
 
-    const nodeModulesPaths =
-      await this._projectDiscovery.getNodeModulesPaths(startPath);
+    const nodeModulesPaths = await this._projectDiscovery.getNodeModulesPaths(startPath);
 
     for (const nodeModulesPath of nodeModulesPaths) {
       const packagePath = join(nodeModulesPath, packageName);
@@ -68,7 +61,7 @@ export class PackageDiscoveryService {
         const manifest: PackageManifest = {
           packageName,
           manifestPath,
-          content: JSON.parse(content),
+          content: JSON.parse(content)
         };
 
         this._manifestCache.set(cacheKey, manifest);
@@ -87,22 +80,16 @@ export class PackageDiscoveryService {
   /**
    * Discover manifests from multiple packages
    */
-  public async discoverMultiplePackageManifests(
-    packageNames: string[],
-    options: PackageDiscoveryOptions = {},
-  ): Promise<PackageManifest[]> {
+  public async discoverMultiplePackageManifests(packageNames: string[], options: PackageDiscoveryOptions = {}): Promise<PackageManifest[]> {
     const manifests: PackageManifest[] = [];
 
     await Promise.all(
       packageNames.map(async packageName => {
-        const manifest = await this.discoverPackageManifest(
-          packageName,
-          options,
-        );
+        const manifest = await this.discoverPackageManifest(packageName, options);
         if (manifest) {
           manifests.push(manifest);
         }
-      }),
+      })
     );
 
     return manifests;
@@ -111,12 +98,8 @@ export class PackageDiscoveryService {
   /**
    * Check if a specific package exists in any of the discovered node_modules
    */
-  public async hasPackage(
-    packageName: string,
-    startPath: string = process.cwd(),
-  ): Promise<boolean> {
-    const nodeModulesPaths =
-      await this._projectDiscovery.getNodeModulesPaths(startPath);
+  public async hasPackage(packageName: string, startPath: string = process.cwd()): Promise<boolean> {
+    const nodeModulesPaths = await this._projectDiscovery.getNodeModulesPaths(startPath);
 
     for (const nodeModulesPath of nodeModulesPaths) {
       const packagePath = join(nodeModulesPath, packageName);
@@ -134,19 +117,11 @@ export class PackageDiscoveryService {
   /**
    * Get the package.json for a specific package
    */
-  public async getPackageInfo(
-    packageName: string,
-    startPath: string = process.cwd(),
-  ): Promise<any | null> {
-    const nodeModulesPaths =
-      await this._projectDiscovery.getNodeModulesPaths(startPath);
+  public async getPackageInfo(packageName: string, startPath: string = process.cwd()): Promise<any | null> {
+    const nodeModulesPaths = await this._projectDiscovery.getNodeModulesPaths(startPath);
 
     for (const nodeModulesPath of nodeModulesPaths) {
-      const packageJsonPath = join(
-        nodeModulesPath,
-        packageName,
-        'package.json',
-      );
+      const packageJsonPath = join(nodeModulesPath, packageName, 'package.json');
       try {
         const content = await readFile(packageJsonPath, 'utf-8');
         return JSON.parse(content);
@@ -161,29 +136,17 @@ export class PackageDiscoveryService {
   /**
    * Discover all Tyler Technologies packages that have custom-elements.json manifests
    */
-  public async discoverTylerTechPackages(
-    options: PackageDiscoveryOptions = {},
-  ): Promise<PackageManifest[]> {
-    const {
-      startPath = process.cwd(),
-      manifestFileName = 'custom-elements.json',
-    } = options;
+  public async discoverTylerTechPackages(options: PackageDiscoveryOptions = {}): Promise<PackageManifest[]> {
+    const { startPath = process.cwd(), manifestFileName = 'custom-elements.json' } = options;
 
     const knownPackages = ['@tylertech/forge'];
 
     // First, try the known packages
-    const manifests = await this.discoverMultiplePackageManifests(
-      knownPackages,
-      options,
-    );
+    const manifests = await this.discoverMultiplePackageManifests(knownPackages, options);
 
     // Optionally, we could search for other @tylertech packages dynamically
     // This would require scanning the node_modules/@tylertech directory
-    const additionalManifests = await this._discoverAdditionalTylerTechPackages(
-      startPath,
-      manifestFileName,
-      knownPackages,
-    );
+    const additionalManifests = await this._discoverAdditionalTylerTechPackages(startPath, manifestFileName, knownPackages);
 
     return [...manifests, ...additionalManifests];
   }
@@ -199,14 +162,9 @@ export class PackageDiscoveryService {
   /**
    * Discover additional Tyler Tech packages not in the known list
    */
-  private async _discoverAdditionalTylerTechPackages(
-    startPath: string,
-    manifestFileName: string,
-    knownPackages: string[],
-  ): Promise<PackageManifest[]> {
+  private async _discoverAdditionalTylerTechPackages(startPath: string, manifestFileName: string, knownPackages: string[]): Promise<PackageManifest[]> {
     const manifests: PackageManifest[] = [];
-    const nodeModulesPaths =
-      await this._projectDiscovery.getNodeModulesPaths(startPath);
+    const nodeModulesPaths = await this._projectDiscovery.getNodeModulesPaths(startPath);
 
     for (const nodeModulesPath of nodeModulesPaths) {
       const tylerTechPath = join(nodeModulesPath, '@tylertech');

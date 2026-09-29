@@ -17,8 +17,7 @@ export class BundledManifestLoader {
 
   constructor(options: BundledManifestLoaderOptions = {}) {
     // Default to the bundled manifests in the dist directory
-    this._bundledManifestsPath =
-      options.bundledManifestsPath || this._getDefaultBundledManifestsPath();
+    this._bundledManifestsPath = options.bundledManifestsPath || this._getDefaultBundledManifestsPath();
   }
 
   /**
@@ -33,9 +32,7 @@ export class BundledManifestLoader {
 
       // Read all files in the bundled manifests directory
       const files = await readdir(this._bundledManifestsPath);
-      const manifestFiles = files.filter(file =>
-        file.endsWith('-custom-elements.json'),
-      );
+      const manifestFiles = files.filter(file => file.endsWith('-custom-elements.json'));
 
       for (const file of manifestFiles) {
         const manifest = await this.loadBundledManifest(file);
@@ -53,9 +50,7 @@ export class BundledManifestLoader {
   /**
    * Load a specific bundled manifest by filename
    */
-  public async loadBundledManifest(
-    filename: string,
-  ): Promise<PackageManifest | null> {
+  public async loadBundledManifest(filename: string): Promise<PackageManifest | null> {
     const cacheKey = `bundled:${filename}`;
 
     if (this._manifestCache.has(cacheKey)) {
@@ -76,7 +71,7 @@ export class BundledManifestLoader {
       const manifest: PackageManifest = {
         packageName,
         manifestPath: filePath,
-        content: parsedContent,
+        content: parsedContent
       };
 
       this._manifestCache.set(cacheKey, manifest);
@@ -149,9 +144,7 @@ let bundledManifestLoaderInstance: BundledManifestLoader | null = null;
 /**
  * Get the singleton bundled manifest loader instance
  */
-export function getBundledManifestLoader(
-  options?: BundledManifestLoaderOptions,
-): BundledManifestLoader {
+export function getBundledManifestLoader(options?: BundledManifestLoaderOptions): BundledManifestLoader {
   if (!bundledManifestLoaderInstance) {
     bundledManifestLoaderInstance = new BundledManifestLoader(options);
   }

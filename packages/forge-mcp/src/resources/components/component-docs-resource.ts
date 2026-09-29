@@ -1,13 +1,8 @@
-import {
-  CEMComponentDeclaration,
-  AsyncResourceHandler,
-} from '../../types/index.js';
+import { CEMComponentDeclaration, AsyncResourceHandler } from '../../types/index.js';
 import { getTemplateEngine } from '../../services/handlebars-template-engine.js';
 import { buildComponentTemplateContext } from '../../services/component-template-context.js';
 
-export class ComponentDocsResource
-  implements AsyncResourceHandler<CEMComponentDeclaration>
-{
+export class ComponentDocsResource implements AsyncResourceHandler<CEMComponentDeclaration> {
   private _templateEngine = getTemplateEngine();
 
   /**
@@ -17,10 +12,7 @@ export class ComponentDocsResource
     const context = buildComponentTemplateContext(component);
 
     try {
-      return await this._templateEngine.render(
-        'components/component.md',
-        context,
-      );
+      return await this._templateEngine.render('components/component.md', context);
     } catch (_error) {
       // Fallback to built-in template if file doesn't exist
       return this._generateFallbackDocumentation(component);
@@ -30,9 +22,7 @@ export class ComponentDocsResource
   /**
    * Generate fallback documentation when template is not available
    */
-  private _generateFallbackDocumentation(
-    component: CEMComponentDeclaration,
-  ): string {
+  private _generateFallbackDocumentation(component: CEMComponentDeclaration): string {
     const sections: string[] = [];
 
     // Header
@@ -56,12 +46,8 @@ export class ComponentDocsResource
       sections.push('');
       for (const attr of component.attributes) {
         const type = attr.type?.text ? ` (\`${attr.type.text}\`)` : '';
-        const defaultVal = attr.default
-          ? ` - Default: \`${attr.default}\``
-          : '';
-        sections.push(
-          `- **${attr.name}**${type}: ${attr.description || 'No description'}${defaultVal}`,
-        );
+        const defaultVal = attr.default ? ` - Default: \`${attr.default}\`` : '';
+        sections.push(`- **${attr.name}**${type}: ${attr.description || 'No description'}${defaultVal}`);
       }
     }
 
@@ -71,44 +57,30 @@ export class ComponentDocsResource
       sections.push('');
       for (const event of component.events) {
         const type = event.type?.text ? ` (\`${event.type.text}\`)` : '';
-        sections.push(
-          `- **${event.name}**${type}: ${event.description || 'No description'}`,
-        );
+        sections.push(`- **${event.name}**${type}: ${event.description || 'No description'}`);
       }
     }
 
     // Properties (public fields)
-    const publicProperties =
-      component.members?.filter(
-        m => m.kind === 'field' && m.privacy === 'public',
-      ) || [];
+    const publicProperties = component.members?.filter(m => m.kind === 'field' && m.privacy === 'public') || [];
     if (publicProperties.length) {
       sections.push(`\n## Properties`);
       sections.push('');
       for (const prop of publicProperties) {
         const type = prop.type?.text ? ` (\`${prop.type.text}\`)` : '';
-        const defaultVal = prop.default
-          ? ` - Default: \`${prop.default}\``
-          : '';
+        const defaultVal = prop.default ? ` - Default: \`${prop.default}\`` : '';
         const readonly = prop.readonly ? ' (readonly)' : '';
-        sections.push(
-          `- **${prop.name}**${type}${readonly}: ${prop.description || 'No description'}${defaultVal}`,
-        );
+        sections.push(`- **${prop.name}**${type}${readonly}: ${prop.description || 'No description'}${defaultVal}`);
       }
     }
 
     // Methods
-    const publicMethods =
-      component.members?.filter(
-        m => m.kind === 'method' && m.privacy === 'public',
-      ) || [];
+    const publicMethods = component.members?.filter(m => m.kind === 'method' && m.privacy === 'public') || [];
     if (publicMethods.length) {
       sections.push(`\n## Methods`);
       sections.push('');
       for (const method of publicMethods) {
-        const returnType = method.return?.type?.text
-          ? `: ${method.return.type.text}`
-          : '';
+        const returnType = method.return?.type?.text ? `: ${method.return.type.text}` : '';
         const params =
           method.parameters
             ?.map(p => {
@@ -131,9 +103,7 @@ export class ComponentDocsResource
       sections.push('');
       for (const cssProp of component.cssProperties) {
         const type = cssProp.type?.text ? ` (\`${cssProp.type.text}\`)` : '';
-        sections.push(
-          `- **${cssProp.name}**${type}: ${cssProp.description || 'No description'}`,
-        );
+        sections.push(`- **${cssProp.name}**${type}: ${cssProp.description || 'No description'}`);
       }
     }
 
@@ -142,9 +112,7 @@ export class ComponentDocsResource
       sections.push(`\n## CSS Parts`);
       sections.push('');
       for (const part of component.cssParts) {
-        sections.push(
-          `- **${part.name}**: ${part.description || 'No description'}`,
-        );
+        sections.push(`- **${part.name}**: ${part.description || 'No description'}`);
       }
     }
 
@@ -154,9 +122,7 @@ export class ComponentDocsResource
       sections.push('');
       for (const slot of component.slots) {
         const slotName = slot.name || 'default';
-        sections.push(
-          `- **${slotName}**: ${slot.description || 'No description'}`,
-        );
+        sections.push(`- **${slotName}**: ${slot.description || 'No description'}`);
       }
     }
 

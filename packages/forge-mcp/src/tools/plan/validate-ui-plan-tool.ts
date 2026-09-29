@@ -13,7 +13,7 @@ import {
   HEADING_ROLES,
   BODY_ROLES,
   SPACING_SCALES,
-  REGION_NAMES,
+  REGION_NAMES
 } from './plan-types.js';
 
 export interface ValidateUIPlanInput extends ToolInput {
@@ -28,7 +28,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
   constructor() {
     super(
       'validate_ui_plan',
-      'Validate a UI plan produced by generate_ui_plan. Checks: page_type enum, region components exist in the CEM, block IDs exist in the block catalogue, typography roles are legal, spacing_scale is tokens-only, icons exist in @tylertech/tyler-icons, and composition rules (no page_title inside card, no hand-rolled tables). Returns pass/fail with per-error hints. Markup must not be written until this returns valid=true.',
+      'Validate a UI plan produced by generate_ui_plan. Checks: page_type enum, region components exist in the CEM, block IDs exist in the block catalogue, typography roles are legal, spacing_scale is tokens-only, icons exist in @tylertech/tyler-icons, and composition rules (no page_title inside card, no hand-rolled tables). Returns pass/fail with per-error hints. Markup must not be written until this returns valid=true.'
     );
   }
 
@@ -41,18 +41,15 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         properties: {
           plan: {
             oneOf: [{ type: 'object' }, { type: 'string' }],
-            description:
-              'The plan object emitted by generate_ui_plan, either as an object or a JSON string.',
-          },
+            description: 'The plan object emitted by generate_ui_plan, either as an object or a JSON string.'
+          }
         },
-        required: ['plan'],
-      },
+        required: ['plan']
+      }
     };
   }
 
-  public async execute(
-    args: ValidateUIPlanInput,
-  ): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
+  public async execute(args: ValidateUIPlanInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
     this._validateRequired(args, ['plan']);
 
     const parsed = this._parsePlan(args.plan);
@@ -64,11 +61,11 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
             {
               path: 'plan',
               message: parsed.error,
-              hint: 'Pass the plan object emitted by generate_ui_plan directly, or a valid JSON string of it.',
-            },
+              hint: 'Pass the plan object emitted by generate_ui_plan directly, or a valid JSON string of it.'
+            }
           ],
-          summary: 'Plan could not be parsed.',
-        }),
+          summary: 'Plan could not be parsed.'
+        })
       );
     }
 
@@ -90,7 +87,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       summary:
         errors.length === 0
           ? 'Plan is valid. Proceed to fetch blocks and write markup.'
-          : `Plan has ${errors.length} issue${errors.length === 1 ? '' : 's'}. Fix and re-validate before writing markup.`,
+          : `Plan has ${errors.length} issue${errors.length === 1 ? '' : 's'}. Fix and re-validate before writing markup.`
     };
 
     return this._createTextResponse(await this._renderResult(result));
@@ -106,7 +103,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         return { error: 'Parsed plan is not an object.' };
       } catch (e) {
         return {
-          error: `Plan string is not valid JSON: ${e instanceof Error ? e.message : 'unknown parse error'}`,
+          error: `Plan string is not valid JSON: ${e instanceof Error ? e.message : 'unknown parse error'}`
         };
       }
     }
@@ -121,13 +118,13 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       errors.push({
         path: 'page_type',
         message: 'page_type is required.',
-        hint: `Pick one of: ${PAGE_TYPES.join(', ')}`,
+        hint: `Pick one of: ${PAGE_TYPES.join(', ')}`
       });
     } else if (!(PAGE_TYPES as readonly string[]).includes(plan.page_type)) {
       errors.push({
         path: 'page_type',
         message: `page_type "${plan.page_type}" is not a legal value.`,
-        hint: `Pick one of: ${PAGE_TYPES.join(', ')}`,
+        hint: `Pick one of: ${PAGE_TYPES.join(', ')}`
       });
     }
 
@@ -135,15 +132,13 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       errors.push({
         path: 'spacing_scale',
         message: 'spacing_scale is required.',
-        hint: `Must be one of: ${SPACING_SCALES.join(', ')}`,
+        hint: `Must be one of: ${SPACING_SCALES.join(', ')}`
       });
-    } else if (
-      !(SPACING_SCALES as readonly string[]).includes(plan.spacing_scale)
-    ) {
+    } else if (!(SPACING_SCALES as readonly string[]).includes(plan.spacing_scale)) {
       errors.push({
         path: 'spacing_scale',
         message: `spacing_scale "${plan.spacing_scale}" is not allowed. Freehand pixel scales are an anti-pattern.`,
-        hint: `Must be: ${SPACING_SCALES.join(', ')}`,
+        hint: `Must be: ${SPACING_SCALES.join(', ')}`
       });
     }
 
@@ -157,7 +152,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: `typography.${key}`,
           message: `"${val}" is not a heading role.`,
-          hint: `Pick one of the text-heading{1..8} or text-display{1..8} roles. See references/typography.md.`,
+          hint: `Pick one of the text-heading{1..8} or text-display{1..8} roles. See references/typography.md.`
         });
       }
     }
@@ -166,16 +161,13 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: 'typography.body',
           message: `"${typography.body}" is not a body role.`,
-          hint: `Pick one of: ${BODY_ROLES.join(', ')}`,
+          hint: `Pick one of: ${BODY_ROLES.join(', ')}`
         });
       }
     }
   }
 
-  private async _checkRegions(
-    plan: UIPlan,
-    errors: PlanValidationError[],
-  ): Promise<void> {
+  private async _checkRegions(plan: UIPlan, errors: PlanValidationError[]): Promise<void> {
     const regions = plan.regions || {};
     const knownTags = new Set(this._cemLoader.getComponentTagNames());
 
@@ -184,7 +176,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: `regions.${key}`,
           message: `"${key}" is not a legal region name.`,
-          hint: `Legal region names: ${REGION_NAMES.join(', ')}`,
+          hint: `Legal region names: ${REGION_NAMES.join(', ')}`
         });
       }
     }
@@ -197,29 +189,24 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
     }
   }
 
-  private _walkRegion(
-    region: RegionSpec,
-    path: string,
-    knownTags: Set<string>,
-    errors: PlanValidationError[],
-  ): void {
+  private _walkRegion(region: RegionSpec, path: string, knownTags: Set<string>, errors: PlanValidationError[]): void {
     if (!region.component) {
       errors.push({
         path: `${path}.component`,
         message: 'Region is missing a component tag.',
-        hint: 'Every region must name the Forge component that owns it (e.g. forge-app-bar for header).',
+        hint: 'Every region must name the Forge component that owns it (e.g. forge-app-bar for header).'
       });
     } else if (region.component.startsWith('REPLACE_')) {
       errors.push({
         path: `${path}.component`,
         message: 'Region component is still a placeholder.',
-        hint: 'Replace REPLACE_WITH_* placeholders with real Forge tag names before validating.',
+        hint: 'Replace REPLACE_WITH_* placeholders with real Forge tag names before validating.'
       });
     } else if (!knownTags.has(region.component)) {
       errors.push({
         path: `${path}.component`,
         message: `Component "${region.component}" is not in the CEM.`,
-        hint: 'Call find_components to look up the real tag name; do not invent one.',
+        hint: 'Call find_components to look up the real tag name; do not invent one.'
       });
     }
 
@@ -233,7 +220,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
           errors.push({
             path: `${path}.components[${i}]`,
             message: 'Placeholder component in components array.',
-            hint: 'Replace placeholders with real Forge tag names.',
+            hint: 'Replace placeholders with real Forge tag names.'
           });
           continue;
         }
@@ -241,7 +228,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
           errors.push({
             path: `${path}.components[${i}]`,
             message: `Component "${tag}" is not in the CEM.`,
-            hint: 'Call find_components to look up the real tag name.',
+            hint: 'Call find_components to look up the real tag name.'
           });
         }
       }
@@ -249,20 +236,12 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
 
     if (Array.isArray(region.children)) {
       for (let i = 0; i < region.children.length; i++) {
-        this._walkRegion(
-          region.children[i],
-          `${path}.children[${i}]`,
-          knownTags,
-          errors,
-        );
+        this._walkRegion(region.children[i], `${path}.children[${i}]`, knownTags, errors);
       }
     }
   }
 
-  private async _checkBlocks(
-    plan: UIPlan,
-    errors: PlanValidationError[],
-  ): Promise<void> {
+  private async _checkBlocks(plan: UIPlan, errors: PlanValidationError[]): Promise<void> {
     const blockIds: Array<{ id: string; path: string }> = [];
     if (plan.scaffold_block_id) {
       blockIds.push({ id: plan.scaffold_block_id, path: 'scaffold_block_id' });
@@ -271,7 +250,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       if (region?.block_id) {
         blockIds.push({
           id: region.block_id,
-          path: `regions.${regionName}.block_id`,
+          path: `regions.${regionName}.block_id`
         });
       }
     }
@@ -286,7 +265,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path,
           message: `Block ID "${id}" is still a placeholder.`,
-          hint: 'Call get_forge_blocks and use a real block ID returned by that tool.',
+          hint: 'Call get_forge_blocks and use a real block ID returned by that tool.'
         });
         return false;
       }
@@ -305,7 +284,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       errors.push({
         path: 'scaffold_block_id',
         message: 'Could not fetch the block manifest to verify block IDs.',
-        hint: 'Re-run validate_ui_plan; if the network is unavailable this check will be skipped.',
+        hint: 'Re-run validate_ui_plan; if the network is unavailable this check will be skipped.'
       });
       return;
     }
@@ -316,16 +295,13 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path,
           message: `Block ID "${id}" is not in the manifest.`,
-          hint: 'Call get_forge_blocks(query: ...) or (component: ...) and use one of the returned IDs.',
+          hint: 'Call get_forge_blocks(query: ...) or (component: ...) and use one of the returned IDs.'
         });
       }
     }
   }
 
-  private async _checkIcons(
-    plan: UIPlan,
-    errors: PlanValidationError[],
-  ): Promise<void> {
+  private async _checkIcons(plan: UIPlan, errors: PlanValidationError[]): Promise<void> {
     if (!Array.isArray(plan.icons) || plan.icons.length === 0) {
       return;
     }
@@ -334,15 +310,11 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
     // exists. Empty results = not found.
     for (let i = 0; i < plan.icons.length; i++) {
       const name = plan.icons[i];
-      if (
-        typeof name !== 'string' ||
-        !name ||
-        name === 'icon_name_without_prefix'
-      ) {
+      if (typeof name !== 'string' || !name || name === 'icon_name_without_prefix') {
         errors.push({
           path: `icons[${i}]`,
           message: `"${name}" is not a real icon name.`,
-          hint: 'Call find_icons to look up a real name; icons use snake_case (e.g. filter_list).',
+          hint: 'Call find_icons to look up a real name; icons use snake_case (e.g. filter_list).'
         });
         continue;
       }
@@ -355,7 +327,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
           errors.push({
             path: `icons[${i}]`,
             message: `Icon "${name}" not found in @tylertech/tyler-icons.`,
-            hint: 'Call find_icons for the exact name; icons use snake_case (e.g. filter_list, not filterList).',
+            hint: 'Call find_icons for the exact name; icons use snake_case (e.g. filter_list, not filterList).'
           });
         }
       } catch {
@@ -381,7 +353,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
           errors.push({
             path: `regions.main`,
             message: `page_title "${pageTitle}" is set but main region is a forge-card. Cards must not host page-level headings.`,
-            hint: 'Move the page title to the header region (forge-app-bar or a forge-toolbar), or reduce card headers to text-heading3.',
+            hint: 'Move the page title to the header region (forge-app-bar or a forge-toolbar), or reduce card headers to text-heading3.'
           });
         }
       }
@@ -399,17 +371,14 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: `regions.${regionName}.components`,
           message: 'Plain <table> in the plan without forge-table.',
-          hint: 'Use forge-table + forge-paginator for data tables. See references/tables.md.',
+          hint: 'Use forge-table + forge-paginator for data tables. See references/tables.md.'
         });
       }
     }
   }
 
   private _regionUsesCard(region: RegionSpec): boolean {
-    if (
-      region.component === 'forge-card' ||
-      region.component === 'forge-structured-card'
-    ) {
+    if (region.component === 'forge-card' || region.component === 'forge-structured-card') {
       return true;
     }
     if (Array.isArray(region.children)) {
@@ -441,7 +410,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
       isValid: result.valid,
       errors: result.errors,
       // Emit a machine-readable copy so the hook can key off the phrase.
-      resultJson: JSON.stringify(result, null, 2),
+      resultJson: JSON.stringify(result, null, 2)
     });
   }
 }

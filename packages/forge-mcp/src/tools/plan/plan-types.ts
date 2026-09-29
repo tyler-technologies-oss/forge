@@ -5,15 +5,7 @@
 // enums in one place lets both tools (generate and validate) agree on what
 // is legal.
 
-export const PAGE_TYPES = [
-  'dashboard',
-  'list-detail',
-  'form',
-  'settings',
-  'wizard',
-  'landing',
-  'single-feature',
-] as const;
+export const PAGE_TYPES = ['dashboard', 'list-detail', 'form', 'settings', 'wizard', 'landing', 'single-feature'] as const;
 export type PageType = (typeof PAGE_TYPES)[number];
 
 export const HEADING_ROLES = [
@@ -32,28 +24,17 @@ export const HEADING_ROLES = [
   'text-display5',
   'text-display6',
   'text-display7',
-  'text-display8',
+  'text-display8'
 ] as const;
 export type HeadingRole = (typeof HEADING_ROLES)[number];
 
-export const BODY_ROLES = [
-  'text-body1',
-  'text-body2',
-  'text-body3',
-  'text-body4',
-] as const;
+export const BODY_ROLES = ['text-body1', 'text-body2', 'text-body3', 'text-body4'] as const;
 export type BodyRole = (typeof BODY_ROLES)[number];
 
 export const SPACING_SCALES = ['tokens-only'] as const;
 export type SpacingScale = (typeof SPACING_SCALES)[number];
 
-export const REGION_NAMES = [
-  'header',
-  'nav',
-  'main',
-  'footer',
-  'aside',
-] as const;
+export const REGION_NAMES = ['header', 'nav', 'main', 'footer', 'aside'] as const;
 export type RegionName = (typeof REGION_NAMES)[number];
 
 export interface RegionSpec {

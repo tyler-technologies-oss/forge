@@ -1,9 +1,6 @@
 import { Tool, CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { ToolHandler, ToolInput } from './tool-handler.js';
-import {
-  getToolCallCache,
-  ToolCallCache,
-} from '../services/tool-call-cache.js';
+import { getToolCallCache, ToolCallCache } from '../services/tool-call-cache.js';
 
 /**
  * Central registry for managing MCP tool handlers, providing registration,
@@ -22,9 +19,7 @@ export class ToolRegistry {
    * @param handler - The tool handler to register
    * @throws Error if a tool with the same name is already registered
    */
-  public register<TInput extends ToolInput>(
-    handler: ToolHandler<TInput>,
-  ): void {
+  public register<TInput extends ToolInput>(handler: ToolHandler<TInput>): void {
     const tool = handler.getTool();
     this._handlers.set(tool.name, handler);
   }
@@ -35,9 +30,7 @@ export class ToolRegistry {
    * @returns Array of Tool definitions for MCP client consumption
    */
   public getTools(): Tool[] {
-    return Array.from(this._handlers.values()).map(handler =>
-      handler.getTool(),
-    );
+    return Array.from(this._handlers.values()).map(handler => handler.getTool());
   }
 
   /**
@@ -49,10 +42,7 @@ export class ToolRegistry {
    * @returns Promise resolving to the tool execution result
    * @throws Error if the tool name is not found in the registry
    */
-  public async execute(
-    name: string,
-    args: ToolInput | undefined,
-  ): Promise<CallToolResult> {
+  public async execute(name: string, args: ToolInput | undefined): Promise<CallToolResult> {
     const handler = this._handlers.get(name);
     if (!handler) {
       throw new Error(`Unknown tool: ${name}`);
