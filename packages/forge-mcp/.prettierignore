@@ -1,0 +1,13 @@
+.github/
+.changeset/
+.vscode/
+.husky/
+**/dist/
+node_modules/
+pnpm-lock.yaml
+CONTRIBUTING.md
+CHANGELOG.md
+**/*.md
+/templates
+LICENSE
+.pnpm-store/

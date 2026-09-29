@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.github
+.claude
+.vscode
+*.md
+plugin
+plans
+docs

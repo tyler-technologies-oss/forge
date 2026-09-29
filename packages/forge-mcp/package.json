@@ -1,0 +1,77 @@
+{
+  "name": "@tylertech/forge-mcp",
+  "version": "1.2.0",
+  "description": "MCP server for Tyler Forge™ web component library documentation",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "forge-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "prebuild": "rimraf dist",
+    "build": "tsc && node scripts/bundle-manifests.js",
+    "heroku-postbuild": "pnpm run build",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "start:http": "node dist/http.js",
+    "debug": "mcp-inspector dist/index.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "release": "pnpm build && changeset publish",
+    "publish:next": "pnpm build && pnpm publish --tag next --no-git-checks"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "tyler-forge",
+    "web-components",
+    "documentation"
+  ],
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge-mcp.git"
+  },
+  "packageManager": "pnpm@10.19.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.21.0",
+    "handlebars": "^4.7.8",
+    "js-levenshtein-esm": "^2.0.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@modelcontextprotocol/inspector": "^0.17.2",
+    "@tylertech-eslint/eslint-plugin": "^3.0.0",
+    "@tylertech/forge": "^3.17.0",
+    "@types/node": "^24.10.0",
+    "commitlint": "^20.1.0",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.1.0",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.10"
+  },
+  "pnpm": {
+    "overrides": {
+      "shell-quote": "^1.10.0",
+      "nanoid": "^3.3.18"
+    }
+  }
+}
