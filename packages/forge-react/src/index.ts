@@ -78,6 +78,7 @@ import {
   ITooltipComponent,
   IViewComponent,
   IViewSwitcherComponent,
+  KbdComponent,
   KeyComponent,
   KeyItemComponent,
   MeterComponent,
@@ -160,6 +161,7 @@ declare global {
       'forge-icon-button': CustomElementProps<IIconButtonComponent>;
       'forge-icon': CustomElementProps<IIconComponent>;
       'forge-inline-message': CustomElementProps<IInlineMessageComponent>;
+      'forge-kbd': CustomElementProps<KbdComponent>;
       'forge-key-item': CustomElementProps<KeyItemComponent>;
       'forge-key': CustomElementProps<KeyComponent>;
       'forge-keyboard-shortcut': CustomElementProps<IKeyboardShortcutComponent>;
