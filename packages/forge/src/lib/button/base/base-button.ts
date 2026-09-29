@@ -14,7 +14,7 @@ import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/i
 import { BASE_BUTTON_CONSTANTS, ButtonType, CommandType } from './base-button-constants.js';
 
 /** @deprecated - This will be removed in the future. Please switch to using BaseButton. */
-export interface IBaseButton {
+export interface IBaseButton extends BaseLitElement {
   type: ButtonType;
   disabled: boolean;
   popoverIcon: boolean;
