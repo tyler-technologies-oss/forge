@@ -8,7 +8,7 @@
 //      anti-patterns cataloged in references/anti-patterns.md
 //      (typography-as-hierarchy, hN inside forge-card, non-token spacing,
 //      div-playing-forge-component, wrong icon import, missing side-effect
-//      imports for forge-extended).
+//      imports for subpath-only components).
 //
 // Exit 2 = block (stderr message surfaces to the model); exit 0 = allow.
 // Fail-open on malformed payloads so a future harness change doesn't wedge writes.
@@ -23,7 +23,9 @@ const PLAN_VALIDATE_TOOL_NAMES = [
   'validate_ui_plan',
 ];
 const FORGE_TAG_RE = /<forge-[a-z0-9-]+\b/i;
-const FORGE_EXTENDED_TAGS = new Set([
+// Components published only via `@tylertech/forge/<name>` subpaths (not
+// registered by the root barrel), so they need a side-effect import.
+const SUBPATH_ONLY_TAGS = new Set([
   'forge-busy-indicator',
   'forge-confirmation-dialog',
   'forge-count-card',
@@ -34,6 +36,9 @@ const FORGE_EXTENDED_TAGS = new Set([
   'forge-app-layout',
   'forge-user-profile',
   'forge-app-launcher',
+  'forge-content-scaffold',
+  'forge-footer',
+  'forge-theme-toggle',
 ]);
 
 function readStdin() {
@@ -182,22 +187,22 @@ function checkContent(text, filePath) {
     });
   }
 
-  // 2. Forge-extended requires side-effect imports. If the file uses any
-  //    extended tag and the file is JS/TS, look for a matching side-effect import.
+  // 2. Subpath-only components require side-effect imports. If the file uses
+  //    any of these tags and the file is JS/TS, look for a matching import.
   if (isJsLike) {
-    for (const tag of FORGE_EXTENDED_TAGS) {
+    for (const tag of SUBPATH_ONLY_TAGS) {
       const usedRe = new RegExp(`<${tag}\\b`, 'i');
       if (!usedRe.test(text)) {
         continue;
       }
       const subpath = tag.replace(/^forge-/, '');
       const sideEffectRe = new RegExp(
-        `import\\s+['"]@tylertech\\/forge-extended\\/${subpath}['"]`,
+        `import\\s+['"]@tylertech\\/forge\\/${subpath}['"]`,
       );
       if (!sideEffectRe.test(text)) {
         violations.push({
-          rule: 'forge-extended-side-effect-import',
-          msg: `<${tag}> requires a side-effect import: import '@tylertech/forge-extended/${subpath}'; — see references/installation.md.`,
+          rule: 'subpath-side-effect-import',
+          msg: `<${tag}> requires a side-effect import: import '@tylertech/forge/${subpath}'; — see references/installation.md.`,
         });
       }
     }

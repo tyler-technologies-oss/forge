@@ -127,11 +127,8 @@ export class BundledManifestLoader {
    */
   private _extractPackageNameFromFilename(filename: string): string {
     // @tylertech-forge-custom-elements.json → @tylertech/forge
-    // @tylertech-forge-extended-custom-elements.json → @tylertech/forge-extended
 
-    if (filename.startsWith('@tylertech-forge-extended-')) {
-      return '@tylertech/forge-extended';
-    } else if (filename.startsWith('@tylertech-forge-')) {
+    if (filename.startsWith('@tylertech-forge-')) {
       return '@tylertech/forge';
     }
 

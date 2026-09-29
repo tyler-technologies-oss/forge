@@ -1,6 +1,6 @@
 ---
 name: forge-design
-description: Tyler Forge design system expert. Trigger when the user mentions Forge, Forge components, Forge blocks, @tylertech/forge, @tylertech/forge-extended, forge-tailwind, tyler-icons, forge-scaffold, forge-card, forge-app-bar, forge-table, forge-dialog, forge-drawer, forge-list, forge-field, forge-structured-card, or asks to build UI with Forge web components. Also use when the codebase imports from @tylertech/forge packages. Provides the workflow, decision ladders, and consistency rules for Tyler Forge UI generation.
+description: Tyler Forge design system expert. Trigger when the user mentions Forge, Forge components, Forge blocks, @tylertech/forge, forge-tailwind, tyler-icons, forge-scaffold, forge-card, forge-app-bar, forge-table, forge-dialog, forge-drawer, forge-list, forge-field, forge-structured-card, or asks to build UI with Forge web components. Also use when the codebase imports from @tylertech/forge packages. Provides the workflow, decision ladders, and consistency rules for Tyler Forge UI generation.
 ---
 
 # Tyler Forge Design System Expert
@@ -14,7 +14,7 @@ You build Forge UI with the Forge MCP server. Every generation must be grounded 
 3. **Plan before writing.** For any UI larger than a single component, call `generate_ui_plan`, then `validate_ui_plan`. Only write markup after the plan validates. See [ui-plan.md](references/ui-plan.md).
 4. **Prefer `forge-scaffold` over custom CSS** for layout inside cards, drawers, dialogs, and page regions. See [layout.md](references/layout.md).
 5. **Icons only from `@tylertech/tyler-icons` root.** No `/standard`, no `/extended`, no subpaths — they do not exist. See [icon.md](references/icon.md).
-6. **`@tylertech/forge-extended` uses side-effect imports.** `import '@tylertech/forge-extended/{component}';` — see the package section at the bottom of this file.
+6. **Subpath-only components use side-effect imports.** `import '@tylertech/forge/{component}';` — see the package section at the bottom of this file.
 7. **No CSS classes on `<forge-*>` elements.** They use Shadow DOM. Wrap in a container div if you need styling.
 8. **No custom typography, shadows, or gradients** unless explicitly requested. Use design tokens.
 9. **Body styles required for app shells** when using `forge-app-layout` / `forge-scaffold` at the app root: `height:100dvh; width:100dvw; margin:0; background-color: var(--forge-theme-surface-dim, #fafafa);`.
@@ -146,13 +146,13 @@ defineButtonComponent();
 import '@tylertech/forge/dist/forge.css';
 ```
 
-### `@tylertech/forge-extended` (extended — side-effect imports)
+### `@tylertech/forge` subpath-only components (side-effect imports)
 ```typescript
-import '@tylertech/forge-extended/app-layout';
-import '@tylertech/forge-extended/structured-card';
-import '@tylertech/forge-extended/busy-indicator';
+import '@tylertech/forge/app-layout';
+import '@tylertech/forge/structured-card';
+import '@tylertech/forge/busy-indicator';
 ```
-Every extended component **must** use a side-effect import. Missing this = the component silently doesn't register.
+Subpath-only components (`forge-app-layout`, `forge-structured-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-count-card`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`, `forge-user-profile`, `forge-app-launcher`, `forge-content-scaffold`, `forge-footer`, `forge-theme-toggle`) are **not** registered by `defineComponents()` and **must** use a side-effect import. Missing this = the component silently doesn't register.
 
 ### `@tylertech/tyler-icons`
 ```typescript
