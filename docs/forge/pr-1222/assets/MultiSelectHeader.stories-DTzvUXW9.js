@@ -1,0 +1,56 @@
+var v=e=>{throw TypeError(e)};var h=(e,o,t)=>o.has(e)||v("Cannot "+t);var g=(e,o,t)=>(h(e,o,"read from private field"),t?t.call(e):o.get(e)),y=(e,o,t)=>o.has(e)?v("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(e):o.set(e,t),E=(e,o,t,c)=>(h(e,o,"write to private field"),c?c.call(e,t):o.set(e,t),t),b=(e,o,t)=>(h(e,o,"access private method"),t);import{b as r,h as M}from"./iframe-CcCZn8Qo.js";import{C as w,a as N}from"./service-adapter-8tADcN_b.js";import{I as R}from"./icon-BIdGKJqZ.js";import{U as z,V as L,W as U,X as W,M as k}from"./tyler-icons-BSgf1RSL.js";import{s as x}from"./utils-BR1rLwc_.js";import{n as $}from"./property-Bfub1J69.js";import{n as j}from"./query-assigned-nodes-D8SsSM9e.js";import{n as F}from"./when-CI7b_ccM.js";import{t as Y}from"./component-utils-vOrACU0E.js";import{B as V}from"./base-lit-element-DZFbmyxG.js";import{B as q}from"./button-CifGyQIr.js";import{T as G}from"./toolbar-B_F4fpMR.js";import"./icon-button-DuRpLS_m.js";import"./menu-DT4vpUsb.js";import"./linear-progress-kQO48laS.js";import"./list-0iJnd8Jh.js";import"./popover-d2r_ayMy.js";import"./overlay-DNJ2GsC-.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./skeleton-C4Wq8Idf.js";import"./list-item-P9WX-v0r.js";const K=':host{display:block}:host forge-toolbar{--forge-toolbar-background: var(--forge-theme-primary-container-low, #e8eaf6)}.start-container{display:flex;align-items:center;gap:var(--forge-spacing-medium, 16px)}.selected-text{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:var(--forge-typography-body1-font-family, var(--forge-typography-font-family, "Roboto", sans-serif));font-size:var(--forge-typography-body1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, .875)));font-weight:var(--forge-typography-body1-font-weight, 400);line-height:var(--forge-typography-body1-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.125)));letter-spacing:var(--forge-typography-body1-letter-spacing, .0357142857em);text-transform:var(--forge-typography-body1-text-transform, inherit);text-decoration:var(--forge-typography-body1-text-decoration, inherit)}';var X=Object.defineProperty,S=(e,o,t,c)=>{for(var s=void 0,u=e.length-1,_;u>=0;u--)(_=e[u])&&(s=_(o,t,s)||s);return s&&X(o,t,s),s},A,T,B;const I="forge-multi-select-header";var a,l,P,D,O;const p=class p extends(B=V,T=w,A=N,B){constructor(){super(...arguments);y(this,l);y(this,a);this.text="",this.noBorder=!0,E(this,a,r`<slot name="select-all-button-text"></slot>`)}render(){return r`
+      <forge-toolbar ?no-divider=${this.noBorder} @slotchange=${b(this,l,D)}>
+        <div slot="start" class="start-container">
+          <span class="selected-text">${this.text}</span>
+          ${g(this,l,P)}
+        </div>
+        <slot name="actions" slot="end"></slot>
+      </forge-toolbar>
+    `}};a=new WeakMap,l=new WeakSet,P=function(){const t=this._slottedSelectAllNodes.length>0;return F(t,()=>r`<forge-button id="select-all-button" @click=${b(this,l,O)}>${g(this,a)}</forge-button>`,()=>r`${g(this,a)}`)},D=function(t){const c=t.target.name;["select-all-button-text","actions"].includes(c)&&this.requestUpdate()},O=function(){const t=new CustomEvent("forge-multi-select-header-select-all",{bubbles:!0,composed:!0});this.dispatchEvent(t)},p[T]=I,p[A]=[q,G],p.styles=M(K);let n=p;S([$({type:String})],n.prototype,"text");S([$({type:Boolean,attribute:"no-border"})],n.prototype,"noBorder");S([j({slot:"select-all-button-text",flatten:!0})],n.prototype,"_slottedSelectAllNodes");Y(I,n);const{action:C}=__STORYBOOK_MODULE_ACTIONS__;R.define([z,L,U,W,k]);const J="forge-multi-select-header",Q={title:"Components/Multi Select Header",component:J,render:e=>{const o=C("forge-multi-select-header-select-all"),t=[{label:"Export as a PDF",value:"option-1",icon:"file_pdf",leadingIconType:"component"},{label:"Export to Excel",value:"option-2",icon:"file_excel",leadingIconType:"component"}];return r`
+      <forge-multi-select-header .text=${e.text} .noBorder=${e.noBorder} @forge-multi-select-header-select-all=${o}>
+        ${e.selectAllText?r`<span slot="select-all-button-text">${e.selectAllText}</span>`:""}
+        <forge-icon-button slot="actions" aria-label="Select all items">
+          <forge-icon name="download"></forge-icon>
+        </forge-icon-button>
+        <forge-icon-button slot="actions" aria-label="Clear selection">
+          <forge-icon name="delete"></forge-icon>
+        </forge-icon-button>
+        <forge-menu slot="actions" .options=${t}>
+          <forge-icon-button aria-label="More actions">
+            <forge-icon name="more_vert"></forge-icon>
+          </forge-icon-button>
+        </forge-menu>
+      </forge-multi-select-header>
+    `},argTypes:{text:{control:"text"},noBorder:{control:"boolean"},selectAllText:{control:"text"}},args:{text:"3 items selected",noBorder:!1,selectAllText:"Select All"}},i={},m={...x,render:()=>r`
+    <forge-multi-select-header text="3 items selected">
+      <forge-icon-button slot="actions" aria-label="Delete selected">
+        <forge-icon name="delete"></forge-icon>
+      </forge-icon-button>
+    </forge-multi-select-header>
+  `},d={...x,render:()=>r`<forge-multi-select-header text="5 rows selected for processing"></forge-multi-select-header>`},f={...x,render:()=>{const e=C("forge-multi-select-header-select-all");return r`
+      <forge-multi-select-header text="3 items selected" @forge-multi-select-header-select-all=${e}>
+        <span slot="select-all-button-text">Select All Items</span>
+      </forge-multi-select-header>
+    `}};i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:"{}",...i.parameters?.docs?.source}}};m.parameters={...m.parameters,docs:{...m.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => html\`
+    <forge-multi-select-header text="3 items selected">
+      <forge-icon-button slot="actions" aria-label="Delete selected">
+        <forge-icon name="delete"></forge-icon>
+      </forge-icon-button>
+    </forge-multi-select-header>
+  \`
+}`,...m.parameters?.docs?.source}}};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => html\`<forge-multi-select-header text="5 rows selected for processing"></forge-multi-select-header>\`
+}`,...d.parameters?.docs?.source}}};f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => {
+    const handleSelectAll = action('forge-multi-select-header-select-all');
+    return html\`
+      <forge-multi-select-header text="3 items selected" @forge-multi-select-header-select-all=\${handleSelectAll}>
+        <span slot="select-all-button-text">Select All Items</span>
+      </forge-multi-select-header>
+    \`;
+  }
+}`,...f.parameters?.docs?.source}}};const Z=["Demo","BasicImplementation","WithCustomText","WithSelectAllButton"],ve=Object.freeze(Object.defineProperty({__proto__:null,BasicImplementation:m,Demo:i,WithCustomText:d,WithSelectAllButton:f,__namedExportsOrder:Z,default:Q},Symbol.toStringTag,{value:"Module"}));export{m as B,i as D,ve as M,d as W,f as a};

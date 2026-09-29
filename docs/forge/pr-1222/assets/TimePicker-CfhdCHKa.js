@@ -1,0 +1,30 @@
+import{u as r,j as e,M as n,T as s,C as l}from"./blocks-NGx9a7zD.js";import{C as c}from"./CustomArgTypes-CCPKm7o2.js";import{T as d,D as m}from"./TimePicker.stories-E0w6FleQ.js";import"./preload-helper-PPVm8Dsz.js";import"./index-BdLFNaKL.js";import"./iframe-CcCZn8Qo.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-BR1rLwc_.js";import"./service-adapter-8tADcN_b.js";import"./text-field-D815X8jF.js";import"./custom-element-DR9AFpIK.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./core-property-Co8uF8PW.js";import"./tyler-icons-BSgf1RSL.js";import"./base-field-BYB1dcoa.js";import"./base-component-BFu9bkgC.js";import"./key-action-lsAysfb-.js";import"./index-5CPwzmQS.js";import"./focus-indicator-CwT8THhK.js";import"./floating-ui.dom-DaMtbvS2.js";import"./property-Bfub1J69.js";import"./base-lit-element-DZFbmyxG.js";import"./async-directive-O3ujTdIx.js";import"./directive-CwRn8Fwj.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./utils-C31il88P.js";import"./dom-utils-BDbRr6KM.js";import"./base-adapter-DOky_or5.js";import"./constants-Bm8g2CKk.js";import"./label-BhaR9I0r.js";import"./button-constants-B9P9oolT.js";import"./button-toggle-group-constants-CgEdCLCn.js";import"./checkbox-constants-BhAYnngS.js";import"./icon-button-constants-DWfjKRvV.js";import"./switch-constants-BnzCn4Xq.js";import"./with-label-aware-CQV8oFwb.js";import"./icon-BIdGKJqZ.js";import"./icon-button-DuRpLS_m.js";import"./class-map-DV-Grsb7.js";import"./base-button-0U9gGSw9.js";import"./state-DhE3q6av.js";import"./query-CtiAP21w.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./a11y-utils-DssnAab5.js";import"./state-layer-CZIH5add.js";import"./tooltip-BTtmmlI8.js";import"./overlay-DNJ2GsC-.js";import"./with-longpress-listener-C31eKfZf.js";import"./dismissible-stack-DyoP5jNB.js";import"./with-element-internals-DsIdl_YT.js";import"./object-utils-CUPteeNI.js";import"./time-picker-DkHcXYkL.js";import"./list-dropdown-DE3FkdIB.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-kQO48laS.js";import"./list-0iJnd8Jh.js";import"./list-item-P9WX-v0r.js";import"./event-utils-zQ4FLDwK.js";import"./popover-d2r_ayMy.js";import"./skeleton-C4Wq8Idf.js";import"./a11y-BxM9_46k.js";import"./scroll-axis-observer-DmuibK9q.js";import"./dialog-DrWomsTl.js";import"./backdrop-C9lBlb_d.js";function o(i){const t={blockquote:"blockquote",code:"code",h2:"h2",li:"li",p:"p",strong:"strong",ul:"ul",...r(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(n,{of:d}),`
+`,e.jsx(s,{}),`
+`,e.jsx(t.p,{children:"The time picker component can be used to allow the user to enter a time manually, or to choose a time from the configurable dropdown list of suggestions. The built-in input mask is enabled by default, and will force users to enter a time in either 12 hour (default) or 24 hour formats."}),`
+`,e.jsxs(t.p,{children:["This component is composable and only requires that an ",e.jsx(t.code,{children:"<input>"})," element be provided as one of its children. It's common that the component wraps a text-field component to provide the Forge look-and-feel, but it can technically attach itself to any instance of a child ",e.jsx(t.code,{children:"<input>"})," element."]}),`
+`,e.jsxs(t.blockquote,{children:[`
+`,e.jsxs(t.p,{children:[e.jsx(t.strong,{children:"Important"}),": all communication with this component through its APIs, such as getting/setting value or listen for change events ",e.jsx(t.strong,{children:"must"}),' be in 24 hour time format. Ex. "15:30".']}),`
+`,e.jsx(t.p,{children:"This is to ensure that a compatible format is used in all locales, as well as to provide a uniform way to interact with the component."}),`
+`]}),`
+`,e.jsx(t.h2,{id:"example",children:"Example"}),`
+`,e.jsxs(t.p,{children:["Values should ",e.jsx(t.strong,{children:"always"})," be set through the ",e.jsx(t.code,{children:"<forge-time-picker>"})," element, ",e.jsx(t.strong,{children:"not"})," the ",e.jsx(t.code,{children:"<input>"})," element."]}),`
+`,e.jsxs(t.p,{children:["You can still use attributes such as ",e.jsx(t.code,{children:"placeholder"})," on the ",e.jsx(t.code,{children:"<input>"})," but things like ",e.jsx(t.code,{children:"value"}),", ",e.jsx(t.code,{children:"disabled"}),", ",e.jsx(t.code,{children:"min"}),", and ",e.jsx(t.code,{children:"max"})," should be set on the ",e.jsx(t.code,{children:"<forge-time-picker>"})," element itself."]}),`
+`,e.jsxs(t.p,{children:[e.jsx(t.strong,{children:"Note"}),": When used in a form where you want the date to be required, you must set the ",e.jsx(t.code,{children:"required"})," property on the embedded ",e.jsx(t.code,{children:"<forge-text-field>"})," element, rather than the ",e.jsx(t.code,{children:"<forge-time-picker>"})," element. This also applies to the invalid property."]}),`
+`,e.jsx(l,{of:m}),`
+`,e.jsx(t.h2,{id:"api",children:"API"}),`
+`,e.jsx(c,{}),`
+`,e.jsx(t.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:"When using a screen reader, ensure keyboard navigation in the dropdown list is announced."}),`
+`,e.jsxs(t.li,{children:["Be sure that you add the proper ",e.jsx(t.code,{children:"aria-label"})," to the ",e.jsx(t.code,{children:"<input>"})," element if not using a ",e.jsx(t.code,{children:"<label>"})," element with a ",e.jsx(t.code,{children:"for"})," attribute."]}),`
+`,e.jsxs(t.li,{children:["The time-picker component will add the following ARIA attributes to the ",e.jsx(t.code,{children:"<input>"})," element for you:",`
+`,e.jsxs(t.ul,{children:[`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-live"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-atomic"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-haspopup"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-expanded"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-owns"})}),`
+`,e.jsx(t.li,{children:e.jsx(t.code,{children:"aria-disabled"})}),`
+`]}),`
+`]}),`
+`]})]})}function ve(i={}){const{wrapper:t}={...r(),...i.components};return t?e.jsx(t,{...i,children:e.jsx(o,{...i})}):o(i)}export{ve as default};
