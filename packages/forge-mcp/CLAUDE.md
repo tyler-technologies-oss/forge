@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Changesets only bump `package.json`, so when releasing a new version also update the version number in the other two files so all three match:
 - `package.json`
 - `plugin/.claude-plugin/plugin.json`
-- `.claude-plugin/marketplace.json`
+- `.claude-plugin/marketplace.json` (at the monorepo root)
 
 ### Data Flow
 

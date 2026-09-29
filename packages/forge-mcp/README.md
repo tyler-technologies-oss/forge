@@ -21,7 +21,7 @@ The plugin bundles the MCP server with a `/forge-design` skill for expert UI gui
 
 **Install:**
 ```bash
-/plugin marketplace add tyler-technologies-oss/forge-mcp
+/plugin marketplace add tyler-technologies-oss/forge
 /plugin install forge@tyler-forge
 ```
 
