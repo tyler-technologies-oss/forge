@@ -169,7 +169,7 @@ export class PackageDiscoveryService {
       manifestFileName = 'custom-elements.json',
     } = options;
 
-    const knownPackages = ['@tylertech/forge', '@tylertech/forge-extended'];
+    const knownPackages = ['@tylertech/forge'];
 
     // First, try the known packages
     const manifests = await this.discoverMultiplePackageManifests(

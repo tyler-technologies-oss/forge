@@ -161,7 +161,7 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
       '- If any region uses a `<table>` for data, replace it with `forge-table` + `forge-paginator` in the plan.',
     );
     sections.push(
-      '- Extended components (`forge-app-layout`, `forge-structured-card`, `forge-count-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-user-profile`, `forge-app-launcher`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`) require side-effect imports in the generated code — note them in `regions.*.components` and remember to import.',
+      '- Subpath-only components (`forge-app-layout`, `forge-structured-card`, `forge-count-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-user-profile`, `forge-app-launcher`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`, `forge-content-scaffold`, `forge-footer`, `forge-theme-toggle`) require a side-effect import from `@tylertech/forge/<name>` in the generated code — note them in `regions.*.components` and remember to import.',
     );
     sections.push('');
     sections.push('## Reference');

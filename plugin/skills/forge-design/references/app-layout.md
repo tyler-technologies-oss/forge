@@ -73,8 +73,8 @@ Use the `use-mini-drawer` attribute for a collapsed sidebar that shows only icon
 
 ## Import
 
-**CRITICAL: This is an extended component. All extended components require side-effect imports.**
+**CRITICAL: This is a subpath-only component. It is not registered by `defineComponents()` and requires a side-effect import.**
 
 ```typescript
-import '@tylertech/forge-extended/app-layout';
+import '@tylertech/forge/app-layout';
 ```

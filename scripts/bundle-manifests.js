@@ -15,10 +15,6 @@ const PACKAGES = [
     name: '@tylertech/forge',
     outputName: '@tylertech-forge-custom-elements.json',
   },
-  {
-    name: '@tylertech/forge-extended',
-    outputName: '@tylertech-forge-extended-custom-elements.json',
-  },
 ];
 
 /**

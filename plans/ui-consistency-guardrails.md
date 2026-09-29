@@ -139,7 +139,7 @@ Expand the existing PreToolUse hook (`forge-pretooluse.mjs`) from "did the model
 - Typography utility classes (`body2`, `caption`, etc.) used as pseudo-headings on `<h*>` or heading-role elements.
 - `<div>` styled as a card/dialog/drawer (heuristic: `role="dialog"` or class names matching `card|modal|dialog|drawer` when no `<forge-*>` equivalent used).
 - Icons imported from anywhere other than `@tylertech/tyler-icons` root.
-- Missing forge-extended side-effect imports when using extended components.
+- Missing `@tylertech/forge/<name>` side-effect imports when using subpath-only components.
 - Missing required body styles (`height:100dvh; width:100dvw`) in generated app shells.
 
 **PostToolUse / Stop hook**: after generation finishes, auto-invoke `validate_component_api` on the touched files. If violations, feed them back into the loop (validator → fix → repeat pattern).

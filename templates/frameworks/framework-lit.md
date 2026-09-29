@@ -45,8 +45,8 @@ import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
 defineButtonComponent();
 defineCardComponent();
 
-// ALWAYS define components from @tylertech/forge-extended using side-effect imports
-import '@tylertech/forge-extended/busy-indicator';
+// ALWAYS register subpath-only components (e.g. busy-indicator) using side-effect imports
+import '@tylertech/forge/busy-indicator';
 
 @customElement('my-app')
 export class MyApp extends LitElement {

@@ -10,7 +10,7 @@
 
 ## Default Component
 
-**Use `<forge-structured-card>` from `@tylertech/forge-extended` for all cards** unless explicitly told otherwise.
+**Use `<forge-structured-card>` from `@tylertech/forge` for all cards** unless explicitly told otherwise.
 
 This component has header/body/footer structure, padding, and spacing built-in - no need for nested scaffolds or manual padding configuration.
 
@@ -21,7 +21,7 @@ This component has header/body/footer structure, padding, and spacing built-in -
 **ALWAYS use a side-effect import for `forge-structured-card`:**
 
 ```typescript
-import '@tylertech/forge-extended/structured-card';
+import '@tylertech/forge/structured-card';
 ```
 
 ---
@@ -62,7 +62,7 @@ Both `<forge-structured-card>` and `<forge-card>` can be used:
 
 | Component | Package | Use When |
 |-----------|---------|----------|
-| `forge-structured-card` | `@tylertech/forge-extended` | **Default choice.** Has built-in guardrails for consistent header/body/footer layout, padding, and spacing. |
+| `forge-structured-card` | `@tylertech/forge` (subpath import) | **Default choice.** Has built-in guardrails for consistent header/body/footer layout, padding, and spacing. |
 | `forge-card` | `@tylertech/forge` | Simple content containers, or when you need full layout control. |
 
 ### Using `<forge-card>` with Proper Structure

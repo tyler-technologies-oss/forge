@@ -5,7 +5,7 @@
 - [2. Choose Styling Approach](#2-choose-styling-approach) (Tailwind or Regular CSS)
 - [3. Import Forge Styles](#3-import-forge-styles-required)
 - [4. Body Styles](#4-body-styles-required-for-full-page-apps)
-- [5. Register Components](#5-register-components) (Core + Extended)
+- [5. Register Components](#5-register-components) (Core + Subpath-only)
 - [6. Register Icons](#6-register-icons)
 - [7. Typography Setup](#7-typography-setup)
 - [Complete Setup Example](#complete-setup-example)
@@ -23,9 +23,6 @@ This reference covers the complete setup required for a new Forge application. *
 ```bash
 # Core Forge package (required)
 npm install @tylertech/forge
-
-# Extended components (recommended)
-npm install @tylertech/forge-extended
 
 # Icons (required for any icons)
 npm install @tylertech/tyler-icons
@@ -174,20 +171,20 @@ import { defineComponents } from '@tylertech/forge';
 defineComponents();
 ```
 
-### Extended Components (@tylertech/forge-extended)
+### Subpath-Only Components (@tylertech/forge/{component})
 
-Extended components use **side-effect imports**:
+Some components are only available from their own subpath and use **side-effect imports**:
 
 ```typescript
 // Each import registers the component automatically
-import '@tylertech/forge-extended/app-layout';
-import '@tylertech/forge-extended/structured-card';
-import '@tylertech/forge-extended/user-profile';
-import '@tylertech/forge-extended/busy-indicator';
-import '@tylertech/forge-extended/confirmation-dialog';
+import '@tylertech/forge/app-layout';
+import '@tylertech/forge/structured-card';
+import '@tylertech/forge/user-profile';
+import '@tylertech/forge/busy-indicator';
+import '@tylertech/forge/confirmation-dialog';
 ```
 
-**⚠️ CRITICAL:** Extended components do NOT have definition functions. Always use side-effect imports.
+**⚠️ CRITICAL:** These components are not registered by `defineComponents()` and their definition functions are deprecated. Always use side-effect imports.
 
 ---
 
@@ -262,9 +259,9 @@ defineListComponent();
 defineListItemComponent();
 defineDrawerComponent();
 
-// 3. Import extended components (side-effect imports)
-import '@tylertech/forge-extended/app-layout';
-import '@tylertech/forge-extended/structured-card';
+// 3. Import subpath-only components (side-effect imports)
+import '@tylertech/forge/app-layout';
+import '@tylertech/forge/structured-card';
 
 // 4. Register icons
 import {
@@ -310,6 +307,6 @@ Before your app will render correctly, verify:
 - [ ] `@tylertech/forge/dist/forge.css` is imported
 - [ ] Body styles are set (height, width, margin, background-color)
 - [ ] Core components are registered via definition functions
-- [ ] Extended components are imported via side-effect imports
+- [ ] Subpath-only components (e.g. `forge-app-layout`, `forge-structured-card`) are imported via side-effect imports
 - [ ] Icons are registered via `IconRegistry.define()`
 - [ ] If using Tailwind: `tailwind.config.js` includes the forge preset

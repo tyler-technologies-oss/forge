@@ -30,7 +30,7 @@ export class ValidateComponentApiTool extends BaseToolHandler<ComponentApiValida
   constructor() {
     super(
       'validate_component_api',
-      'Validate Tyler Forge component-specific API usage after code generation. Supports both core components (@tylertech/forge) and extended components (@tylertech/forge-extended). DO NOT use this tool to validate standard HTML attributes (id, class, style, etc.), ARIA attributes (aria-*), or data attributes (data-*) - these are valid on all elements. Only validate component-specific properties, attributes, events, methods, slots, CSS properties, parts, and classes.',
+      'Validate Tyler Forge component-specific API usage after code generation. Supports all components in @tylertech/forge. DO NOT use this tool to validate standard HTML attributes (id, class, style, etc.), ARIA attributes (aria-*), or data attributes (data-*) - these are valid on all elements. Only validate component-specific properties, attributes, events, methods, slots, CSS properties, parts, and classes.',
     );
   }
 
@@ -44,7 +44,7 @@ export class ValidateComponentApiTool extends BaseToolHandler<ComponentApiValida
           component: {
             type: 'string',
             description:
-              'Component tag name - supports core (e.g., "forge-button", "forge-card") and extended components (e.g., "forge-user-profile", "forge-app-launcher")',
+              'Component tag name - e.g., "forge-button", "forge-card", "forge-user-profile", "forge-app-launcher"',
           },
           apis: {
             type: 'object',
