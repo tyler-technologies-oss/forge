@@ -45,6 +45,7 @@ const meta = {
         ?open=${args.open}
         ?optional=${args.optional}
         ?disabled=${args.disabled}
+        ?readonly=${args.readonly}
         ?required=${args.required}
         ?invalid=${args.invalid}
         style=${style}
@@ -107,6 +108,7 @@ const meta = {
     required: false,
     optional: false,
     disabled: false,
+    readonly: false,
     floatLabel: false,
     supportTextInset: 'none',
     open: false,

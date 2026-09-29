@@ -42,7 +42,9 @@ export default function forgeMemberDenyListPlugin() {
       classes?.forEach(klass => (klass.members = klass?.members?.filter(deny(GENERAL_MEMBER_DENY_LIST))));
 
       // LitElement classes
-      const litElementClasses = classes?.filter(klass => klass.superclass?.name === 'LitElement' || klass.superclass?.name === 'BaseLitElement');
+      const litElementClasses = classes?.filter(
+        klass => klass.superclass?.name === 'LitElement' || klass.superclass?.name === 'BaseLitElement' || klass.superclass?.name === 'BaseButton'
+      );
       litElementClasses?.forEach(klass => (klass.members = klass?.members?.filter(deny(LIT_ELEMENT_MEMBER_DENY_LIST))));
     }
   };

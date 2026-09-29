@@ -1,6 +1,5 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 
@@ -21,7 +20,6 @@ export const TIMELINE_BREAK_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timel
  *
  * @csspart root - The root element.
  */
-@customElement(TIMELINE_BREAK_TAG_NAME)
 export class TimelineBreakComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -44,6 +42,8 @@ export class TimelineBreakComponent extends BaseLitElement {
     return html`<div part="root" class="forge-timeline-break"></div>`;
   }
 }
+
+tryDefine(TIMELINE_BREAK_TAG_NAME, TimelineBreakComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

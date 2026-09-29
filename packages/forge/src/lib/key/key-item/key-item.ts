@@ -1,8 +1,8 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './key-item.scss';
@@ -29,7 +29,6 @@ export const KEY_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-key-item';
  * @csspart label - The label element.
  * @csspart value - The value element.
  */
-@customElement(KEY_ITEM_TAG_NAME)
 export class KeyItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -85,6 +84,8 @@ export class KeyItemComponent extends BaseLitElement {
     this._hasValue = !!nodes.length;
   }
 }
+
+tryDefine(KEY_ITEM_TAG_NAME, KeyItemComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

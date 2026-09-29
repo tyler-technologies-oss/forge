@@ -3,8 +3,8 @@ import { tylIconClose } from '@tylertech/tyler-icons';
 
 IconRegistry.define([tylIconClose]);
 
-const openButton = document.querySelector<HTMLElement>('forge-button');
-const dialog = document.getElementById('css-dialog') as HTMLDialogElement | null;
+const openButton = document.getElementById('open-dialog-button-css-only');
+const dialog = document.getElementById('css-dialog-css-only') as HTMLDialogElement | null;
 const closeButton = dialog?.querySelector<HTMLElement>('forge-icon-button');
 const dismissButton = dialog?.querySelector<HTMLElement>('forge-toolbar[slot="footer"] forge-button');
 

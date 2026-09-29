@@ -1,8 +1,8 @@
 import { provide } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, isDefined, tryDefine } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown, tylIconKeyboardArrowLeft, tylIconKeyboardArrowRight, tylIconKeyboardArrowUp } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { live } from 'lit/directives/live.js';
 import { playStateLayerAnimation } from '../../constants.js';
@@ -82,7 +82,6 @@ type TabBarScrollDirection = 'backward' | 'forward';
  *
  * @slot - The tabs to display.
  */
-@customElement(TAB_BAR_CONSTANTS.elementName)
 export class TabBarComponent extends BaseLitElement implements ITabBarComponent {
   public static styles = unsafeCSS(styles);
 
@@ -848,6 +847,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
   }
 }
+
+tryDefine(TAB_BAR_CONSTANTS.elementName, TabBarComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

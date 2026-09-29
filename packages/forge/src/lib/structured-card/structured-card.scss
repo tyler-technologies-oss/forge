@@ -1,0 +1,91 @@
+@use '../core/styles/spacing';
+@use '../core/styles/typography';
+
+/* stylelint-disable custom-property-pattern */
+
+:host {
+  display: block;
+  --_structured-card-body-height: var(--forge-structured-card-body-height, auto);
+}
+
+:host(:state(body-spacing-none)) {
+  forge-content-scaffold {
+    --forge-content-scaffold-body-padding-inline: 0;
+    --forge-content-scaffold-footer-full-padding: #{spacing.variable(small)} #{spacing.variable(medium)};
+    --forge-content-scaffold-body-padding-block: 0;
+  }
+
+  .footer-container {
+    padding-block-end: 0;
+  }
+}
+
+.header-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  grid-template-areas: 'start . actions';
+  min-height: 48px;
+}
+
+forge-content-scaffold {
+  --forge-content-scaffold-body-height: var(--_structured-card-body-height);
+}
+
+.container {
+  --forge-card-padding: 0;
+  --forge-card-gap: 0;
+  height: 100%;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  grid-area: start;
+}
+
+.title-with-margin {
+  margin-inline-start: #{spacing.variable(medium)};
+}
+
+::slotted([slot='title']) {
+  @include typography.style(heading3);
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  grid-area: actions;
+}
+
+::slotted([slot='header-actions']) {
+  margin-inline-end: #{spacing.variable(medium)};
+}
+
+::slotted([slot='body']) {
+  height: var(--_structured-card-body-height);
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: #{spacing.variable(medium)};
+}
+
+.footer-start-container {
+  flex: 1;
+  flex-basis: content;
+  justify-content: flex-end;
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(medium)};
+}
+
+/* stylelint-enable custom-property-pattern */

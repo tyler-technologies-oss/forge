@@ -1,8 +1,8 @@
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 
 import styles from './avatar.scss';
@@ -54,7 +54,6 @@ export const AVATAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-avatar';
  *
  * @cssclass forge-avatar - The avatar class _(required)_.
  */
-@customElement(AVATAR_TAG_NAME)
 export class AvatarComponent extends BaseLitElement implements IAvatarComponent {
   public static styles = unsafeCSS(styles);
 
@@ -131,3 +130,5 @@ export class AvatarComponent extends BaseLitElement implements IAvatarComponent 
     `;
   }
 }
+
+tryDefine(AVATAR_TAG_NAME, AvatarComponent);

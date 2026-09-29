@@ -1,0 +1,29 @@
+<!--
+  @block Content Scaffold — Full Page
+  @type component
+  @description Full Page usage example for the forge-content-scaffold component.
+  @tags content-scaffold, full-page, storybook, component-example
+-->
+<div class="h-[300px] border border-outline rounded-lg">
+  <forge-content-scaffold>
+    <forge-icon-button aria-label="Back" slot="before-header-start">
+      <forge-icon name="arrow_back"></forge-icon>
+    </forge-icon-button>
+    <h2 slot="header-start" class="text-heading4">Project Details</h2>
+    <forge-icon-button aria-label="More actions" slot="header-end">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+    <div slot="body">
+      <forge-card>
+        <p class="m-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+      </forge-card>
+    </div>
+    <forge-button variant="filled" slot="footer-end">
+      <forge-icon slot="start" name="save"></forge-icon>
+      Save
+    </forge-button>
+  </forge-content-scaffold>
+</div>

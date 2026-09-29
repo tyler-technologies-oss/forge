@@ -1,6 +1,14 @@
 import { ArgTypes, Args, type StoryObj } from '@storybook/web-components-vite';
 import { type ControlType } from '@storybook/addon-docs/blocks';
 import cem from '../../custom-elements.json' with { type: 'json' };
+import rteCem from '../../../forge-rich-text-editor/custom-elements.json' with { type: 'json' };
+
+// The rich text editor ships in its own package with its own manifest, so tag lookups have to span
+// both or its docs page resolves no declaration. Read relatively for the same reason the Vite alias
+// in `.storybook/main.ts` reaches into that package directly: this package does not depend on it,
+// and the storybook turbo tasks already depend on its build.
+const cemModules: any[] = [...cem.modules, ...rteCem.modules];
+const cemForgeTypes = { ...cem.forgeTypes, ...rteCem.forgeTypes } as Record<string, { path: string; lineNumber: number }>;
 
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
@@ -49,7 +57,7 @@ export const removeSourceStyleTagParams: StoryObj = {
  * @returns {object} - The controls object for Storybook
  */
 export function transformCssPropsToControls(tagName: string): object {
-  const declaration = cem.modules.flatMap((module: any) => module.declarations).find((dec: any) => dec.tagName === tagName);
+  const declaration = cemModules.flatMap((module: any) => module.declarations).find((dec: any) => dec.tagName === tagName);
   return declaration.cssProperties.reduce((acc: Record<string, { control: string }>, prop: any) => {
     acc[prop.name] = { control: 'text' };
     return acc;
@@ -181,17 +189,17 @@ function generateArgTypesFrom(items: TagItem[], category: string, controlType?: 
 
 /** Gets the custom elements manifest module for the declaration matching the provided tag name. */
 export function getCustomElementsTagModule(tagName: string): any {
-  return cem.modules.find((module: any) => module.declarations.some((declaration: any) => declaration.tagName === tagName));
+  return cemModules.find((module: any) => module.declarations.some((declaration: any) => declaration.tagName === tagName));
 }
 
 /** Gets the custom elements manifest declaration for the provided tag name. */
 export function getCustomElementsTagDeclaration(tagName: string): Declaration {
-  return cem.modules.flatMap((module: any) => module.declarations).find(declaration => declaration.tagName === tagName);
+  return cemModules.flatMap((module: any) => module.declarations).find((declaration: any) => declaration.tagName === tagName);
 }
 
 /** Attempts to retrieve the Forge type information for the provided type string. */
 export function getCustomElementType(type: string): { path: string; lineNumber: number } | undefined {
-  return (cem.forgeTypes as Record<string, { path: string; lineNumber: number }>)[type];
+  return cemForgeTypes[type];
 }
 
 /** Gets the branch name that the custom elements manifest was generated with. */

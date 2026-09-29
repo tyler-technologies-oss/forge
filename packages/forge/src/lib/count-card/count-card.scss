@@ -1,0 +1,150 @@
+@use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+$icon-container-size: 32px !default;
+
+/* stylelint-disable custom-property-pattern */
+
+:host {
+  display: block;
+  --_count-card-icon-background: var(--forge-count-card-icon-background, #{theme.variable(surface-container)});
+  --_count-card-icon-color: var(--forge-count-card-icon-color, #{theme.variable(on-surface)});
+  --_count-card-icon-container-size: var(--forge-count-card-icon-container-size, #{$icon-container-size});
+  --_count-card-icon-size: var(--forge-count-card-icon-size, calc(#{$icon-container-size} - 8px));
+  --_count-card-color: var(--forge-count-card-color, #{theme.variable(text-high)});
+  height: 100%;
+}
+
+forge-card {
+  --forge-card-padding: 0;
+  height: 100%;
+}
+
+.outer-container {
+  position: relative;
+}
+
+.inner-container {
+  display: flex;
+  flex-direction: column;
+  gap: #{spacing.variable(medium)};
+  padding: #{spacing.variable(medium)};
+}
+
+.action {
+  position: absolute;
+  inset-block-start: #{spacing.variable(xsmall)};
+  inset-inline-end: #{spacing.variable(xsmall)};
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{spacing.variable(small)};
+  padding-inline: #{spacing.variable(medium)};
+  padding-block-start: #{spacing.variable(medium)};
+  min-height: 36px;
+}
+
+.header-start {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(small)};
+}
+
+:host(:state(has-action)) {
+  .header-start {
+    padding-inline-end: #{spacing.variable(xlarge)};
+  }
+}
+
+.header-end {
+  display: flex;
+  align-items: center;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--_count-card-icon-container-size);
+  block-size: var(--_count-card-icon-container-size);
+  inline-size: var(--_count-card-icon-container-size);
+  background-color: var(--_count-card-icon-background);
+  color: var(--_count-card-icon-color);
+  border-radius: #{shape.variable(medium)};
+  --forge-icon-font-size: var(--_count-card-icon-size);
+}
+
+.label {
+  @include typography.style(body1);
+  display: -webkit-box;
+  color: var(--_count-card-color);
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+
+  slot[name='label'] {
+    &,
+    &::slotted(*) {
+      display: block;
+      max-height: 36px;
+    }
+  }
+}
+
+.count-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{spacing.variable(xsmall)};
+  min-inline-size: 0;
+}
+
+.count {
+  @include typography.style(heading6);
+  text-box-trim: trim-both;
+  color: var(--_count-card-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//
+// Theme States
+//
+
+$themes: primary, secondary, tertiary, success, error, warning, info;
+
+@each $theme-name in $themes {
+  :host(:state(#{$theme-name})) {
+    --forge-card-background: #{theme.variable(#{$theme-name}-container-minimum)};
+    --forge-card-color: #{theme.variable(on-#{$theme-name})};
+    --forge-card-outline-color: #{theme.variable(#{$theme-name}-container)};
+    --forge-card-outline-width: 1px;
+    --forge-card-outline-style: solid;
+
+    --_count-card-icon-background: #{theme.variable(#{$theme-name}-container-low)};
+    --_count-card-icon-color: #{theme.variable(on-#{$theme-name}-container)};
+    --_count-card-color: #{theme.variable(on-#{$theme-name}-container)};
+  }
+}
+
+:host(:state(info-secondary)) {
+  --forge-card-background: #{theme.variable(surface-dim)};
+  --forge-card-outline-color: #{theme.variable(outline)};
+  --forge-card-outline-width: 1px;
+  --forge-card-outline-style: solid;
+}
+
+:host(:state(no-border)) {
+  --forge-card-outline-width: 0;
+}
+
+/* stylelint-enable custom-property-pattern */

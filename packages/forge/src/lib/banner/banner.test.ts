@@ -55,6 +55,7 @@ describe('Banner', () => {
     it('should be accessible', async () => {
       const screen = render(html`<forge-banner>Test</forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await frame();
       await expect(el).toBeAccessible();
     });
 

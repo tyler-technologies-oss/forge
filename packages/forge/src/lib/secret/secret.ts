@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer, tryDefine } from '@tylertech/forge-core';
 import { tylIconEyeClosed, tylIconEyeOutline } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -74,7 +74,6 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  *
  * @fires {ToggleEvent} toggle - Dispatched when the secret opens or closes.
  */
-@customElement(SECRET_TAG_NAME)
 export class SecretComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconEyeOutline, tylIconEyeClosed]);
@@ -340,6 +339,8 @@ export class SecretComponent extends BaseLitElement {
     this._mask = content.replace(regex, this.maskCharacter);
   }
 }
+
+tryDefine(SECRET_TAG_NAME, SecretComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

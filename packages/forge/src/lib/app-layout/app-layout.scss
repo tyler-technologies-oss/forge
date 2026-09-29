@@ -1,0 +1,47 @@
+@use '../core/styles/spacing';
+
+/* stylelint-disable custom-property-pattern */
+
+:host {
+  --_drawer-width: var(--forge-app-layout-drawer-width, 320px);
+  --_dialog-width: var(--forge-app-layout-dialog-width, 320px);
+  --_mini-drawer-z-index: var(--forge-app-layout-mini-drawer-z-index, 3);
+  display: block;
+  height: 100%;
+}
+
+forge-app-bar {
+  --forge-app-bar-logo-font-size: 40px;
+  --forge-app-bar-columns: auto 1fr auto;
+}
+
+:host(:state(small)) forge-app-bar {
+  --forge-app-bar-row-padding: 0;
+}
+
+slot[name='app-bar-logo'] {
+  --forge-icon-font-size: var(--forge-app-bar-logo-font-size);
+}
+
+.drawer-container.mini-hover {
+  z-index: var(--_mini-drawer-z-index);
+  overflow: visible;
+}
+
+forge-drawer {
+  --forge-drawer-width: var(--_drawer-width);
+}
+
+.close-drawer-button {
+  padding-inline-start: #{spacing.variable(xxsmall)};
+}
+
+.left-sheet-dialog {
+  --forge-dialog-width: var(--_dialog-width);
+}
+
+.left-sheet-dialog::part(surface) {
+  display: block;
+}
+
+/* stylelint-enable custom-property-pattern */

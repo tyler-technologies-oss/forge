@@ -1,5 +1,11 @@
 # v2.0.0 (Thu Jun 05 2025)
 
+## 2.1.0
+
+### Minor Changes
+
+- 2f37973: feat: support an `importPathOverrides` config option in the custom-elements schematic, for generating proxies to elements that aren't exported from the library's main entry point
+
 ## 2.0.1
 
 ### Patch Changes

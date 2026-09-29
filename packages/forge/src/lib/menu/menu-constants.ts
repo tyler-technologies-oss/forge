@@ -63,6 +63,11 @@ export interface IMenuActiveChangeEventData {
 export interface IMenuOption<T = any> extends IListDropdownOption<T> {
   icon?: string;
   selected?: boolean;
+  /**
+   * Called when this option is selected, after the `forge-menu-select` event has been dispatched.
+   * Not called if the event was cancelled via `preventDefault()`.
+   */
+  onSelect?: (data: IMenuSelectEventData<T>) => void;
 }
 
 export interface IMenuOptionGroup extends IListDropdownOptionGroup {}

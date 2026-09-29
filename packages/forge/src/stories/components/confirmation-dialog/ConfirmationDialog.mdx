@@ -1,0 +1,30 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ConfirmationDialogStories from './ConfirmationDialog.stories';
+
+<Meta of={ConfirmationDialogStories} />
+
+<Title />
+
+A confirmation dialog is a modal component used to present users with a brief message or alert requiring their decision. It typically includes two actions:
+
+- Primary action – The main action that confirms the decision (e.g., "Delete", "Submit", "Confirm").
+- Secondary action – An alternative or dismissive action (e.g., "Cancel", "Go back"), allowing users to exit without proceeding.
+
+For succinct alerts (one sentence or less), the dialog title is usually omitted to maintain a clean and focused UI. However, for longer messages or critical actions, a title can provide additional clarity.
+
+> **Note:** Confirmation dialogs display the same in mobile and desktop contexts.
+
+<Canvas of={ConfirmationDialogStories.Demo} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The confirmation dialog component will add the `role="dialog"` and `aria-modal="true"` attribute for you.
+- Be sure to set the `label` and `description` attributes on the `<forge-confirmation-dialog>` element if needed.
+  - This will allow for a screen reader to properly announce the dialog title and description when it opens.
+  - The `aria-labelledby` and `aria-describedby` attributes will be set automatically for you based on the `label` and `description` attributes. If no `label` or `description` is provided, the component will automatically set these to the content of the title slot and message slot.
+- The `busyLabel` property allows you to customize the aria-label of the `forge-circular-progress` that becomes visible when `isBusy` is set to true. By default this will announce the word "loading" to the screenreader. It's recommended you set this to a more descriptive value based on the context of your application.

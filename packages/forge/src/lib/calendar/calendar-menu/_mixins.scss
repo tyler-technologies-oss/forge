@@ -292,8 +292,13 @@
 }
 
 @mixin view-animation-in($from-left: true) {
+  $direction: 'from-right';
+  @if $from-left {
+    $direction: 'from-left';
+  }
+
   animation-duration: variables.$animation-duration;
-  animation-name: slide-in-#{if($from-left, 'from-left', 'from-right')};
+  animation-name: slide-in-#{$direction};
 
   @media (prefers-reduced-motion) {
     animation-name: fade-in;
@@ -301,8 +306,13 @@
 }
 
 @mixin view-animation-out($to-right: true) {
+  $direction: 'to-left';
+  @if $to-right {
+    $direction: 'to-right';
+  }
+
   animation-duration: variables.$animation-duration;
-  animation-name: slide-out-#{if($to-right, 'to-right', 'to-left')};
+  animation-name: slide-out-#{$direction};
 
   @media (prefers-reduced-motion) {
     animation-name: fade-out;

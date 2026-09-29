@@ -15,6 +15,7 @@ const observedAttributes = {
   LABEL: 'label',
   MULTIPLE: 'multiple',
   DISABLED: 'disabled',
+  READONLY: 'readonly',
   PLACEHOLDER: 'placeholder',
   OBSERVE_SCROLL: 'observe-scroll',
   OBSERVE_SCROLL_THRESHOLD: 'observe-scroll-threshold',

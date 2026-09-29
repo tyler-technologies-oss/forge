@@ -1,0 +1,12 @@
+<app-demo-card headerText="Confirmation Dialog">
+  <forge-button variant="raised" (click)="open = true">Delete item</forge-button>
+  @if (result) {
+    <p>Last action: {{ result }}</p>
+  }
+  <forge-confirmation-dialog [open]="open" (forge-confirmation-dialog-action)="handleAction($event)">
+    <span slot="title">Delete item?</span>
+    <span slot="message">This action cannot be undone.</span>
+    <span slot="secondary-button-text">Cancel</span>
+    <span slot="primary-button-text">Delete</span>
+  </forge-confirmation-dialog>
+</app-demo-card>

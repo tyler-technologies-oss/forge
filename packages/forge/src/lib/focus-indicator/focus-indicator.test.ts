@@ -94,7 +94,8 @@ describe('FocusIndicator', () => {
 
     await focusKeyboard(detachedButton);
 
-    const style = getComputedStyle(focusIndicator);
+    const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+    const style = getComputedStyle(indicatorElement);
 
     expect(style.animationName).toBe('forge-focus-indicator-inward-grow, forge-focus-indicator-inward-shrink');
     expect(button.matches(':focus-visible')).toBe(true);
@@ -102,9 +103,12 @@ describe('FocusIndicator', () => {
   });
 
   it('should set circular', async () => {
-    const { focusIndicator } = await createFixture({ circular: true });
+    const { detachedButton, focusIndicator } = await createFixture({ circular: true });
 
-    const style = getComputedStyle(focusIndicator);
+    await focusKeyboard(detachedButton);
+
+    const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+    const style = getComputedStyle(indicatorElement);
 
     expect(style.getPropertyValue('--_focus-indicator-shape')).toBe('50%');
     expect(focusIndicator.circular).toBe(true);
@@ -181,6 +185,93 @@ describe('FocusIndicator', () => {
     expect(focusIndicator.active).toBe(true);
 
     newButton.remove();
+  });
+
+  describe('top layer (default)', () => {
+    it('should render child element with popover by default', async () => {
+      const { focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator');
+      expect(indicatorElement).not.toBeNull();
+      expect(indicatorElement?.getAttribute('popover')).toBe('manual');
+    });
+
+    it('should show popover when active', async () => {
+      const { detachedButton, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement?.matches(':popover-open')).toBe(true);
+    });
+
+    it('should hide popover when active becomes false', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement?.matches(':popover-open')).toBe(true);
+
+      button.blur();
+      await new Promise(resolve => setTimeout(resolve, 10));
+      expect(focusIndicator.active).toBe(false);
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+    });
+
+    it('should set CSS custom properties for positioning', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement.matches(':popover-open')).toBe(true);
+
+      const targetRect = button.getBoundingClientRect();
+      const computedStyle = getComputedStyle(indicatorElement);
+
+      expect(computedStyle.position).toBe('fixed');
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-left')).toBe(`${targetRect.left}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-top')).toBe(`${targetRect.top}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-width')).toBe(`${targetRect.width}px`);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-height')).toBe(`${targetRect.height}px`);
+    });
+
+    it('should cleanup positioning on disconnect', async () => {
+      const { detachedButton, focusIndicator } = await createFixture();
+
+      await focusKeyboard(detachedButton);
+      expect(focusIndicator.active).toBe(true);
+
+      focusIndicator.remove();
+
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(indicatorElement?.matches(':popover-open')).toBe(false);
+    });
+
+    it('should respect inward property', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ inward: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.inward).toBe(true);
+      expect(indicatorElement?.hasAttribute('inward')).toBe(true);
+    });
+
+    it('should respect circular property', async () => {
+      const { detachedButton, focusIndicator } = await createFixture({ circular: true });
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+
+      expect(focusIndicator.circular).toBe(true);
+      expect(indicatorElement?.hasAttribute('circular')).toBe(true);
+    });
   });
 });
 

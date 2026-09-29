@@ -247,4 +247,24 @@ describe('custom-elements', () => {
     const componentFile = tree.readContent(tree.files[0]);
     expect(componentFile).toMatch(/standalone:\s*false/);
   });
+
+  it('should use importPathOverrides for a matching tag name instead of importPath', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematic<IOptions>(
+      'custom-elements',
+      {
+        ...defaultOptions(),
+        importPathOverrides: { 'forge-accordion': '@tylertech/forge/accordion' }
+      },
+      Tree.empty()
+    );
+
+    const accordionComponentFile = tree.readContent(tree.files[0]);
+    const accordionModuleFile = tree.readContent(tree.files[1]);
+    const expansionPanelComponentFile = tree.readContent(tree.files[2]);
+
+    expect(accordionComponentFile).toContain(`from '@tylertech/forge/accordion';`);
+    expect(accordionModuleFile).toContain(`from '@tylertech/forge/accordion';`);
+    expect(expansionPanelComponentFile).toContain(`from '@tylertech/forge';`);
+  });
 });

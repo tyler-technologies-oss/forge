@@ -5,7 +5,7 @@ import { setAriaControls, tryCreateAriaControlsPlaceholder } from '../core/utils
 import { TIME_PICKER_CONSTANTS } from './time-picker-constants.js';
 import { ITimeInputMaskOptions, TimeInputMask } from '../core/mask/time-input-mask.js';
 import { TEXT_FIELD_CONSTANTS, ITextFieldComponent } from '../text-field/index.js';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../icon-button/index.js';
+import { ICON_BUTTON_CONSTANTS, type IconButtonComponent } from '../icon-button/index.js';
 import { ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
 import { IListDropdownConfig, IListDropdownOption } from '../list-dropdown/list-dropdown-constants.js';
 import { IListDropdown, ListDropdown } from '../list-dropdown/index.js';
@@ -128,11 +128,11 @@ export class TimePickerAdapter extends BaseAdapter<ITimePickerComponent> impleme
     if (textField) {
       const existingIconButton = textField.querySelector(`${ICON_BUTTON_CONSTANTS.elementName}[slot=trailing]`);
       if (existingIconButton || toggleElement) {
-        this._toggleElement = (existingIconButton || toggleElement) as IIconButtonComponent;
+        this._toggleElement = (existingIconButton || toggleElement) as IconButtonComponent;
         return;
       }
 
-      const iconButtonElement = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+      const iconButtonElement = document.createElement(ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
       iconButtonElement.slot = 'trailing';
       iconButtonElement.density = 'medium';
       iconButtonElement.type = 'button';

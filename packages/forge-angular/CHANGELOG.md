@@ -1,5 +1,13 @@
 # v9.1.0 (Tue Jul 28 2026)
 
+## 9.2.0
+
+### Minor Changes
+
+- 2f37973: feat(busy-indicator,confirmation-dialog): add BusyIndicatorService and ConfirmationDialogService for opening these components imperatively, matching the ToastService/DialogService pattern. These were previously available in forge-extended-angular but were not carried over when the components were migrated to @tylertech/forge.
+- 2f37973: feat: add Angular proxy components/modules for the extended components migrated from forge-extended (app-launcher, app-layout, busy-indicator, confirmation-dialog, content-scaffold, count-card, footer, multi-select-header, quantity-field, responsive-toolbar, structured-card, theme-toggle, user-profile)
+- 0ec03e3: Added i18n slots/labels to `forge-theme-toggle` and synced its state with OS `prefers-color-scheme` changes. Added a `groupAriaLabel` property on `forge-theme-toggle` and a `themeToggleAriaLabel` pass-through on `forge-user-profile`, along with `theme-toggle-title`/`theme-toggle-light-label`/`theme-toggle-dark-label`/`theme-toggle-system-label` slots for translating the embedded theme toggle. Regenerated the Angular wrappers to expose the new inputs.
+
 ## 9.1.1
 
 ### Patch Changes

@@ -1,0 +1,272 @@
+[
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Amazon",
+    "applicationID": "amazon",
+    "label": "Amazon",
+    "helpText": "Shop millions of products with fast delivery.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/chart_histogram.svg",
+      "name": "Amazon Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Amazon"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Discord",
+    "applicationID": "discord",
+    "label": "Discord",
+    "helpText": "Talk, chat, hang out, and stay close with your communities.",
+    "icon": {
+      "type": "image",
+      "uri": "https://demo.tcpci.com/tn/dashboard/images/application-icon.svg",
+      "name": "/tn/dashboard/images/application-icon.svg"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 1000,
+    "product": "Discord"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Facebook",
+    "applicationID": "facebook",
+    "label": "Facebook",
+    "helpText": "Connect with friends and family around the world.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/insights.svg",
+      "name": "Facebook Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Facebook"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Gmail",
+    "applicationID": "gmail",
+    "label": "Gmail",
+    "helpText": "Secure, smart, and easy-to-use email service.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/usb_flash_drive.svg",
+      "name": "Gmail Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Gmail"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Google Maps",
+    "applicationID": "google-maps",
+    "label": "Google Maps",
+    "helpText": "Navigate your world with real-time GPS and traffic updates.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/calendar_clock.svg",
+      "name": "Google Maps Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Google Maps"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Instagram",
+    "applicationID": "instagram",
+    "label": "Instagram",
+    "helpText": "Share photos and videos with friends and family.",
+    "icon": {
+      "type": "Image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/account_cash.svg",
+      "name": "Instagram Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 100,
+    "product": "Instagram"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Netflix",
+    "applicationID": "netflix",
+    "label": "Netflix",
+    "helpText": "Watch TV shows and movies anytime, anywhere.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/calculate.svg",
+      "name": "Netflix Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Netflix"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Snapchat",
+    "applicationID": "snapchat",
+    "label": "Snapchat",
+    "helpText": "Share moments with friends through photos and videos.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/pine_tree.svg",
+      "name": "Snapchat Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Snapchat"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Spotify",
+    "applicationID": "spotify",
+    "label": "Spotify",
+    "helpText": "Stream millions of songs and podcasts for free.",
+    "icon": {
+      "type": "Image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/dashboard.svg",
+      "name": "web_asset"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 100,
+    "product": "Spotify"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "TikTok",
+    "applicationID": "tiktok",
+    "label": "TikTok",
+    "helpText": "Create and discover short videos with music and effects.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/home_work.svg",
+      "name": "home_work"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 100,
+    "product": "TikTok"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Twitter",
+    "applicationID": "twitter",
+    "label": "Twitter",
+    "helpText": "Stay connected with what's happening in the world.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/shield_outline.svg",
+      "name": "Twitter Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Twitter"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Uber",
+    "applicationID": "uber",
+    "label": "Uber",
+    "helpText": "Request a ride, order food, or get items delivered.",
+    "icon": {
+      "type": "image",
+      "uri": "https://demo.tcpci.com/tesp/employee-selfservice/images/ess_icon.svg",
+      "name": "/tesp/employee-selfservice/images/ess_icon.svg"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 100,
+    "product": "Uber"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "WhatsApp",
+    "applicationID": "whatsapp",
+    "label": "WhatsApp",
+    "helpText": "Simple, reliable, private messaging and calling for free.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/account_balance.svg",
+      "name": "WhatsApp Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "WhatsApp"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "YouTube",
+    "applicationID": "youtube",
+    "label": "YouTube",
+    "helpText": "Watch and share videos from around the world.",
+    "icon": {
+      "type": "Image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/standard/report_problem.svg",
+      "name": "web_asset"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 100,
+    "product": "YouTube"
+  },
+  {
+    "admin": false,
+    "showProductBage": false,
+    "applicationName": "Zoom",
+    "applicationID": "zoom",
+    "label": "Zoom",
+    "helpText": "Video conferencing and online meetings made easy.",
+    "icon": {
+      "type": "image",
+      "uri": "https://cdn.forge.tylertech.com/v1/icons/svg/extended/file_document.svg",
+      "name": "Zoom Icon"
+    },
+    "uri": "https://google.com",
+    "action": "Main",
+    "category": "Launcher",
+    "priority": 0,
+    "product": "Zoom"
+  }
+]
