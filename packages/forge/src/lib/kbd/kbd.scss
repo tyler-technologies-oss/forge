@@ -25,6 +25,14 @@
   @include dense;
 }
 
+.muted {
+  @include muted;
+
+  .key {
+    @include muted-key;
+  }
+}
+
 $themes: (primary, secondary, tertiary, success, warning, error, info);
 @each $theme in $themes {
   .theme-#{$theme} {

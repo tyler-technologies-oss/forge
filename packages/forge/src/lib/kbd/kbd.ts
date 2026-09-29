@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY, Platform, titleCase } from '@tylertech/forge-core';
-import { html, TemplateResult, unsafeCSS } from 'lit';
+import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -111,6 +111,14 @@ export class KbdComponent extends BaseLitElement {
   @property()
   public theme = '';
 
+  /**
+   * Renders the keys without outlines.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public muted = false;
+
   get #modifierKeys(): string[] {
     const modifierKeys = [];
     if (this.ctrl) {
@@ -129,13 +137,19 @@ export class KbdComponent extends BaseLitElement {
   }
 
   public render(): TemplateResult {
+    const rootClasses = classMap({
+      'forge-kbd': true,
+      muted: this.muted
+    });
     const keyClasses = classMap({
       key: true,
       dense: this.dense,
       [`theme-${this.theme}`]: !!this.theme
     });
     const allKeys = [...this.#modifierKeys, ...this.keys];
-    return html`<kbd class="forge-kbd" part="root">${allKeys.map(key => html`<kbd class="${keyClasses}" part="key">${this.#getKeyGlyph(key)}</kbd>`)}</kbd>`;
+    return html`<kbd class="${rootClasses}" part="root" role="${allKeys.length === 1 ? 'presentation' : nothing}"
+      >${allKeys.map(key => html`<kbd class="${keyClasses}" part="key">${this.#getKeyGlyph(key)}</kbd>`)}</kbd
+    >`;
   }
 
   #getKeyGlyph(key: string): string {

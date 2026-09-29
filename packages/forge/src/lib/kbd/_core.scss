@@ -37,6 +37,17 @@
   padding-inline: spacing.variable(xxxsmall);
 }
 
+@mixin muted {
+  @include override(background, transparent, value);
+  @include override(border-style, none, value);
+  @include override(padding-inline, spacing.variable(xxxsmall), value);
+  @include override(gap, 0, value);
+}
+
+@mixin muted-key {
+  min-inline-size: unset;
+}
+
 @mixin theme($theme) {
   @include override(background, theme.variable(#{$theme}-container-minimum), value);
   @include override(color, theme.variable(on-#{$theme}-container-minimum), value);
