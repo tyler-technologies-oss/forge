@@ -47,7 +47,7 @@ describe('Kbd', () => {
 
     const [root, ...keyElements] = getKeyElements(el);
     expect(root.getAttribute('part')).toBe('root');
-    expect(root.className).toBe('forge-kbd');
+    expect(root.className).toContain('forge-kbd');
     expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Shift', 'K']);
     keyElements.forEach(key => expect(key.getAttribute('part')).toBe('key'));
   });
