@@ -6,7 +6,7 @@ How the Claude Code plugin (skill + hooks) and the `forge-mcp` MCP server work t
 
 Three moving parts, distributed across two packages:
 
-- **`packages/forge-plugin/`** — the Claude Code plugin: registers the MCP server, ships the `forge-design` skill (routing/rules), and two enforcement hooks.
+- **`plugin/`** — the Claude Code plugin: registers the MCP server, ships the `forge-design` skill (routing/rules), and two enforcement hooks.
 - **`src/`** — the `forge-mcp` MCP server itself: resources, tools, and the services/templates that back them.
 - **Claude (the model)** — the consumer, driven by the skill's instructions and gated by the hooks.
 
@@ -16,7 +16,7 @@ flowchart TB
         MODEL["Claude<br/>(model + harness)"]
     end
 
-    subgraph PLUGIN["packages/forge-plugin/ (Claude Code plugin)"]
+    subgraph PLUGIN["plugin/ (Claude Code plugin)"]
         MCPJSON[".mcp.json<br/>registers the server"]
         SKILL["skills/forge-design/SKILL.md<br/>workflow ladder + rules"]
         REFS["skills/forge-design/references/*.md<br/>topic files (forms, tables, layout, a11y, ...)"]
@@ -143,12 +143,12 @@ sequenceDiagram
 
 | Piece | Path |
 |---|---|
-| MCP server registration | `packages/forge-plugin/.mcp.json` |
-| Skill (routing/rules) | `packages/forge-plugin/skills/forge-design/SKILL.md` |
-| Skill reference files | `packages/forge-plugin/skills/forge-design/references/*.md` |
-| Write-time gate | `packages/forge-plugin/hooks/forge-pretooluse.mjs` |
-| Turn-end gate | `packages/forge-plugin/hooks/forge-stop.mjs` |
-| Hook registration | `packages/forge-plugin/.claude-plugin/hooks.json` |
+| MCP server registration | `plugin/.mcp.json` |
+| Skill (routing/rules) | `plugin/skills/forge-design/SKILL.md` |
+| Skill reference files | `plugin/skills/forge-design/references/*.md` |
+| Write-time gate | `plugin/hooks/forge-pretooluse.mjs` |
+| Turn-end gate | `plugin/hooks/forge-stop.mjs` |
+| Hook registration | `plugin/.claude-plugin/hooks.json` |
 | Server entrypoint | `src/index.ts`, `src/server.ts` |
 | Handler wiring | `src/core/server.ts` |
 | Tool registry + cache | `src/tools/tool-registry.ts`, `src/services/tool-call-cache.ts` |

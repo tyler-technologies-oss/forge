@@ -622,24 +622,6 @@ importers:
         specifier: ^4.1.10
         version: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
 
-  packages/forge-plugin:
-    devDependencies:
-      '@tylertech-eslint/eslint-plugin':
-        specifier: 'catalog:'
-        version: 4.0.0(eslint@9.39.4(jiti@2.6.1))(typescript-eslint@8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(typescript@5.9.3)
-      '@types/node':
-        specifier: 'catalog:'
-        version: 25.5.0
-      eslint:
-        specifier: 'catalog:'
-        version: 9.39.4(jiti@2.6.1)
-      prettier:
-        specifier: 'catalog:'
-        version: 3.8.1
-      vitest:
-        specifier: ^4.1.11
-        version: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
-
   packages/forge-react:
     dependencies:
       reactify-wc:
@@ -1056,6 +1038,24 @@ importers:
       sass:
         specifier: 'catalog:'
         version: 1.101.7
+
+  plugin:
+    devDependencies:
+      '@tylertech-eslint/eslint-plugin':
+        specifier: 'catalog:'
+        version: 4.0.0(eslint@9.39.4(jiti@2.6.1))(typescript-eslint@8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(typescript@5.9.3)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.5.0
+      eslint:
+        specifier: 'catalog:'
+        version: 9.39.4(jiti@2.6.1)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.1
+      vitest:
+        specifier: ^4.1.11
+        version: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
 
 packages:
 

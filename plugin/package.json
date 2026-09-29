@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tyler-technologies-oss/forge.git",
-    "directory": "packages/forge-plugin"
+    "directory": "plugin"
   },
   "type": "module",
   "scripts": {
