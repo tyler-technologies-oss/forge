@@ -71,8 +71,9 @@ Use the `global` attribute to listen on the entire document regardless of scope 
 
 ## Key syntax
 
-Keys are written as modifier names joined by `+` with the key name last. A space separates
-alternative bindings. Matching is case-insensitive.
+Keys are written as modifier names joined by `+` with the key name last. A comma separates
+alternative bindings, and a space separates the steps of a [key sequence](#key-sequences). Matching is
+case-insensitive.
 
 | Alias | Resolves to |
 | --- | --- |
@@ -87,22 +88,32 @@ alternative bindings. Matching is case-insensitive.
 | `plus` | `+` |
 | `space` | ` ` |
 
-Examples: `mod+b`, `Control+Shift+s`, `esc`, `a b` (activates on either a or b).
+A comma is only treated as a separator when it directly follows a key. A comma that is preceded by
+whitespace or `+`, or that starts the binding, is the comma key itself:
+
+| Binding | Meaning |
+| --- | --- |
+| `Control+,` | Ctrl and the comma key |
+| `,` | The comma key |
+| `g ,` | `g`, then the comma key (a sequence) |
+| `a,Control+,` | Either `a` or Ctrl and the comma key |
+
+Examples: `mod+b`, `Control+Shift+s`, `esc`, `a,b` (activates on either a or b).
 
 ### Key sequences
 
-Use `>` to define multi-step sequences where chords must be pressed in order within a 1-second
+Separate chords with a space to define multi-step sequences where chords must be pressed in order within a 1-second
 timeout window, matching the VS Code chord pattern:
 
 ```html
 <!-- Two-chord sequence: Ctrl+K then Ctrl+C -->
-<forge-keyboard-shortcut key="Control+k>Control+c"></forge-keyboard-shortcut>
+<forge-keyboard-shortcut key="Control+k Control+c"></forge-keyboard-shortcut>
 
 <!-- Sequence OR single chord (two alternatives) -->
-<forge-keyboard-shortcut key="Control+k>Control+c Control+/"></forge-keyboard-shortcut>
+<forge-keyboard-shortcut key="Control+k Control+c, Control+/"></forge-keyboard-shortcut>
 
 <!-- Three-chord sequence -->
-<forge-keyboard-shortcut key="a>b>c"></forge-keyboard-shortcut>
+<forge-keyboard-shortcut key="a b c"></forge-keyboard-shortcut>
 ```
 
 When a sequence start chord conflicts with a standalone shortcut bound to the same key, the

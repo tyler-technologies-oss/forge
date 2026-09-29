@@ -38,16 +38,16 @@
   </div>
 
   <h3>Key sequences</h3>
-  <p>Multi-step shortcuts using <code>&gt;</code>. Press the first chord, then the second within 1 second.</p>
+  <p>Multi-step shortcuts separated by a space. Press the first chord, then the second within 1 second.</p>
   <div forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid #ccc; padding: 16px; position: relative;">
     <forge-focus-indicator allow-focus></forge-focus-indicator>
     <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
       <forge-button id="seq-comment" variant="outlined">Comment</forge-button>
-      <forge-keyboard-shortcut id="seq-comment-shortcut" key="Control+k>Control+c" anchor="seq-comment"></forge-keyboard-shortcut>
+      <forge-keyboard-shortcut id="seq-comment-shortcut" key="Control+k Control+c" anchor="seq-comment"></forge-keyboard-shortcut>
       <span><kbd>Ctrl+K</kbd> then <kbd>Ctrl+C</kbd></span>
 
       <forge-button id="seq-uncomment" variant="outlined">Uncomment</forge-button>
-      <forge-keyboard-shortcut id="seq-uncomment-shortcut" key="Control+k>Control+u" anchor="seq-uncomment"></forge-keyboard-shortcut>
+      <forge-keyboard-shortcut id="seq-uncomment-shortcut" key="Control+k Control+u" anchor="seq-uncomment"></forge-keyboard-shortcut>
       <span><kbd>Ctrl+K</kbd> then <kbd>Ctrl+U</kbd></span>
     </div>
   </div>
@@ -63,7 +63,7 @@
     <forge-keyboard-shortcut id="conflict-standalone-shortcut" key="Control+k" anchor="conflict-standalone"></forge-keyboard-shortcut>
 
     <forge-button id="conflict-sequence" variant="outlined" style="margin-left: 16px;">Sequence Ctrl+K > Ctrl+C</forge-button>
-    <forge-keyboard-shortcut id="conflict-sequence-shortcut" key="Control+k>Control+c" anchor="conflict-sequence"></forge-keyboard-shortcut>
+    <forge-keyboard-shortcut id="conflict-sequence-shortcut" key="Control+k Control+c" anchor="conflict-sequence"></forge-keyboard-shortcut>
   </div>
 
   <h3>Fallthrough</h3>

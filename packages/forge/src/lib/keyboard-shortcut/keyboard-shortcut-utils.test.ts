@@ -47,6 +47,17 @@ describe('Keyboard Shortcut Utils', () => {
       expect(result).toEqual([{ key: 'Digit1', modifier: 'control' }]);
     });
 
+    it('should parse comma-separated alternatives', () => {
+      expect(parseKeyCombinations('a,Control+b', false, 'pc')).toEqual([
+        { key: 'a', modifier: '' },
+        { key: 'b', modifier: 'control' }
+      ]);
+    });
+
+    it('should treat a comma preceded by plus as the comma key', () => {
+      expect(parseKeyCombinations('Control+,', false, 'pc')).toEqual([{ key: ',', modifier: 'control' }]);
+    });
+
     it('should return an empty array when keys is empty or null', () => {
       expect(parseKeyCombinations('', false, 'pc')).toEqual([]);
       expect(parseKeyCombinations(null, false, 'pc')).toEqual([]);
@@ -60,13 +71,13 @@ describe('Keyboard Shortcut Utils', () => {
       expect(result).toEqual([{ chords: [{ key: 'a', modifier: 'control' }] }]);
     });
 
-    it('should parse space-separated alternatives as separate sequences', () => {
-      const result = parseKeySequences('a b', false, 'pc');
+    it('should parse comma-separated alternatives as separate sequences', () => {
+      const result = parseKeySequences('a, b', false, 'pc');
       expect(result).toEqual([{ chords: [{ key: 'a', modifier: '' }] }, { chords: [{ key: 'b', modifier: '' }] }]);
     });
 
-    it('should parse a two-chord sequence with > separator', () => {
-      const result = parseKeySequences('Control+k>Control+c', false, 'pc');
+    it('should parse whitespace-separated chords as a sequence', () => {
+      const result = parseKeySequences('Control+k Control+c', false, 'pc');
       expect(result).toEqual([
         {
           chords: [
@@ -78,7 +89,7 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should parse mixed alternatives with sequences and single chords', () => {
-      const result = parseKeySequences('Control+k>Control+c Control+shift+/', false, 'pc');
+      const result = parseKeySequences('Control+k Control+c, Control+shift+/', false, 'pc');
       expect(result).toEqual([
         {
           chords: [
@@ -91,7 +102,7 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should parse a three-chord sequence', () => {
-      const result = parseKeySequences('a>b>c', false, 'pc');
+      const result = parseKeySequences('a b c', false, 'pc');
       expect(result).toEqual([
         {
           chords: [
@@ -104,7 +115,7 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should resolve key aliases in sequence chords', () => {
-      const result = parseKeySequences('esc>return', false, 'pc');
+      const result = parseKeySequences('esc return', false, 'pc');
       expect(result).toEqual([
         {
           chords: [
@@ -116,7 +127,7 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should keep code tokens verbatim when useCode is true', () => {
-      const result = parseKeySequences('Control+KeyK>Control+KeyC', true, 'pc');
+      const result = parseKeySequences('Control+KeyK Control+KeyC', true, 'pc');
       expect(result).toEqual([
         {
           chords: [
@@ -124,6 +135,58 @@ describe('Keyboard Shortcut Utils', () => {
             { key: 'KeyC', modifier: 'control' }
           ]
         }
+      ]);
+    });
+
+    it('should treat a comma without leading whitespace or plus as an alternative separator', () => {
+      expect(parseKeySequences('a,b', false, 'pc')).toEqual([{ chords: [{ key: 'a', modifier: '' }] }, { chords: [{ key: 'b', modifier: '' }] }]);
+      expect(parseKeySequences('a , b', false, 'pc')).toEqual([
+        {
+          chords: [
+            { key: 'a', modifier: '' },
+            { key: ',', modifier: '' },
+            { key: 'b', modifier: '' }
+          ]
+        }
+      ]);
+    });
+
+    it('should treat a comma preceded by plus as the comma key', () => {
+      expect(parseKeySequences('Control+,', false, 'pc')).toEqual([{ chords: [{ key: ',', modifier: 'control' }] }]);
+    });
+
+    it('should treat a standalone comma as the comma key', () => {
+      expect(parseKeySequences(',', false, 'pc')).toEqual([{ chords: [{ key: ',', modifier: '' }] }]);
+    });
+
+    it('should treat a comma preceded by whitespace as the comma key within a sequence', () => {
+      expect(parseKeySequences('g ,', false, 'pc')).toEqual([
+        {
+          chords: [
+            { key: 'g', modifier: '' },
+            { key: ',', modifier: '' }
+          ]
+        }
+      ]);
+    });
+
+    it('should separate alternatives when a comma key is adjacent to a separator', () => {
+      expect(parseKeySequences('Control+,,a', false, 'pc')).toEqual([
+        { chords: [{ key: ',', modifier: 'control' }] },
+        { chords: [{ key: 'a', modifier: '' }] }
+      ]);
+      expect(parseKeySequences('a,,', false, 'pc')).toEqual([{ chords: [{ key: 'a', modifier: '' }] }, { chords: [{ key: ',', modifier: '' }] }]);
+    });
+
+    it('should ignore extra whitespace around steps and alternatives', () => {
+      expect(parseKeySequences('  a   b,  c  ', false, 'pc')).toEqual([
+        {
+          chords: [
+            { key: 'a', modifier: '' },
+            { key: 'b', modifier: '' }
+          ]
+        },
+        { chords: [{ key: 'c', modifier: '' }] }
       ]);
     });
 
@@ -148,11 +211,15 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should join alternatives with a comma', () => {
-      expect(formatKeyboardShortcutBinding('Control+a Control+b', 'pc')).toBe('Ctrl+A, Ctrl+B');
+      expect(formatKeyboardShortcutBinding('Control+a, Control+b', 'pc')).toBe('Ctrl+A, Ctrl+B');
     });
 
     it('should join chords within a sequence with space and alternatives with comma', () => {
-      expect(formatKeyboardShortcutBinding('Control+k>Control+c Control+shift+/', 'pc')).toBe('Ctrl+K Ctrl+C, Ctrl+Shift+/');
+      expect(formatKeyboardShortcutBinding('Control+k Control+c, Control+shift+/', 'pc')).toBe('Ctrl+K Ctrl+C, Ctrl+Shift+/');
+    });
+
+    it('should format the comma key without splitting it as an alternative', () => {
+      expect(formatKeyboardShortcutBinding('Control+,, g ,', 'pc')).toBe('Ctrl+,, G ,');
     });
 
     it('should return an empty string when keys is empty', () => {
@@ -180,15 +247,15 @@ describe('Keyboard Shortcut Utils', () => {
     });
 
     it('should separate alternatives with a space', () => {
-      expect(formatAriaKeyShortcuts('Control+a Control+b', 'pc')).toBe('Control+A Control+B');
+      expect(formatAriaKeyShortcuts('Control+a, Control+b', 'pc')).toBe('Control+A Control+B');
     });
 
     it('should omit multi-chord sequences', () => {
-      expect(formatAriaKeyShortcuts('Control+k>Control+c Control+/', 'pc')).toBe('Control+/');
+      expect(formatAriaKeyShortcuts('Control+k Control+c, Control+/', 'pc')).toBe('Control+/');
     });
 
     it('should return empty string when all alternatives are multi-chord sequences', () => {
-      expect(formatAriaKeyShortcuts('Control+k>Control+c a>b', 'pc')).toBe('');
+      expect(formatAriaKeyShortcuts('Control+k Control+c, a b', 'pc')).toBe('');
     });
   });
 

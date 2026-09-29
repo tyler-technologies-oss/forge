@@ -376,7 +376,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       keydown(child, { key: 'c', ctrlKey: true });
@@ -388,7 +388,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
 
       keydown(child, { key: 'c', ctrlKey: true });
       keydown(child, { key: 'k', ctrlKey: true });
@@ -400,7 +400,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       keydown(child, { key: 'x', ctrlKey: true });
@@ -412,7 +412,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       await task(SEQUENCE_TIMEOUT + 100);
@@ -425,7 +425,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       keydown(child, { key: 'Escape' });
@@ -437,7 +437,7 @@ describe('Keyboard Shortcut Registry', () => {
     it('should preventDefault on the first chord of a sequence', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: vi.fn() });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: vi.fn() });
 
       const evt = keydown(child, { key: 'k', ctrlKey: true });
 
@@ -450,7 +450,7 @@ describe('Keyboard Shortcut Registry', () => {
       const standaloneSpy = vi.fn();
       const sequenceSpy = vi.fn();
       reg({ key: 'Control+k', scopeElement: scope, onActivate: standaloneSpy });
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: sequenceSpy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: sequenceSpy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       expect(standaloneSpy).not.toHaveBeenCalled();
@@ -467,7 +467,7 @@ describe('Keyboard Shortcut Registry', () => {
       const standaloneSpy = vi.fn();
       const sequenceSpy = vi.fn();
       reg({ key: 'Control+k', scopeElement: scope, onActivate: standaloneSpy });
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: sequenceSpy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: sequenceSpy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       keydown(child, { key: 'c', ctrlKey: true });
@@ -482,7 +482,7 @@ describe('Keyboard Shortcut Registry', () => {
       const standaloneSpy = vi.fn();
       const sequenceSpy = vi.fn();
       reg({ key: 'Control+k', scopeElement: scope, onActivate: standaloneSpy });
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: sequenceSpy });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: sequenceSpy });
 
       keydown(child, { key: 'k', ctrlKey: true });
       keydown(child, { key: 'Escape' });
@@ -498,7 +498,7 @@ describe('Keyboard Shortcut Registry', () => {
       const child2 = addElement('button', scope2);
       const spy1 = vi.fn();
       const spy2 = vi.fn();
-      reg({ key: 'Control+k>Control+c', scopeElement: scope1, onActivate: spy1 });
+      reg({ key: 'Control+k Control+c', scopeElement: scope1, onActivate: spy1 });
       reg({ key: 'a', scopeElement: scope2, onActivate: spy2 });
 
       keydown(child1, { key: 'k', ctrlKey: true });
@@ -515,7 +515,7 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const child = addElement('button', scope);
       const spy = vi.fn();
-      const r = registerKeyboardShortcut({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: spy });
+      const r = registerKeyboardShortcut({ key: 'Control+k Control+c', scopeElement: scope, onActivate: spy });
       registrations.push(r);
 
       keydown(child, { key: 'k', ctrlKey: true });
@@ -530,8 +530,8 @@ describe('Keyboard Shortcut Registry', () => {
       const scope = addElement('div');
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: vi.fn() });
-      reg({ key: 'Control+k>Control+c', scopeElement: scope, onActivate: vi.fn() });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: vi.fn() });
+      reg({ key: 'Control+k Control+c', scopeElement: scope, onActivate: vi.fn() });
 
       expect(warnSpy).toHaveBeenCalledOnce();
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Duplicate key binding'), expect.anything());

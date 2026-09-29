@@ -100,6 +100,34 @@ function resolveKeyAlias(token: string): string {
   return KEY_ALIASES[token] ?? token;
 }
 
+const ALTERNATIVE_SEPARATOR = ',';
+const NON_SEPARATING_PRECEDING_CHARS = /[\s+]/;
+
+/**
+ * Splits a key string into alternative bindings. A comma separates alternatives unless it is preceded by whitespace
+ * or `+` (or starts an alternative), in which case it is the comma key itself (e.g. `Ctrl+,`, `g ,`).
+ */
+function splitAlternatives(keys: string): string[] {
+  const alternatives: string[] = [];
+  let current = '';
+  for (const char of keys) {
+    const isSeparator = char === ALTERNATIVE_SEPARATOR && current.length > 0 && !NON_SEPARATING_PRECEDING_CHARS.test(current.at(-1) as string);
+    if (isSeparator) {
+      alternatives.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  alternatives.push(current);
+  return alternatives.map(a => a.trim()).filter(a => a.length > 0);
+}
+
+/** Splits an alternative into its whitespace-separated sequence steps */
+function splitSteps(alternative: string): string[] {
+  return alternative.split(/\s+/).filter(step => step.length > 0);
+}
+
 function parseChord(combo: string, useCode: boolean, platform: KeyboardShortcutPlatform): IKeyCombination {
   const parts = combo.split('+');
   const rawKey = parts.pop() || '';
@@ -121,14 +149,10 @@ export function parseKeyCombinations(
     return [];
   }
 
-  return keys
-    .split(' ')
-    .map(k => k.trim())
-    .filter(k => k.length > 0)
-    .map(combo => parseChord(combo, useCode, platform));
+  return splitAlternatives(keys).map(combo => parseChord(combo, useCode, platform));
 }
 
-/** Parses a key string into sequences (space = alternatives, > = sequence steps, + = modifiers) */
+/** Parses a key string into sequences (`,` = alternatives, space = sequence steps, `+` = modifiers) */
 export function parseKeySequences(
   keys: string | null | undefined,
   useCode = false,
@@ -138,18 +162,9 @@ export function parseKeySequences(
     return [];
   }
 
-  return keys
-    .split(' ')
-    .map(k => k.trim())
-    .filter(k => k.length > 0)
-    .map(alternative => {
-      const chords = alternative
-        .split('>')
-        .map(c => c.trim())
-        .filter(c => c.length > 0)
-        .map(chord => parseChord(chord, useCode, platform));
-      return { chords };
-    });
+  return splitAlternatives(keys).map(alternative => ({
+    chords: splitSteps(alternative).map(step => parseChord(step, useCode, platform))
+  }));
 }
 
 /** Checks a keyboard event against a single chord */
@@ -224,18 +239,9 @@ function parseSequenceBindings(keys: string | null | undefined, platform: Keyboa
   if (!keys?.length) {
     return [];
   }
-  return keys
-    .split(' ')
-    .map(k => k.trim())
-    .filter(k => k.length > 0)
-    .map(alternative => {
-      const chords = alternative
-        .split('>')
-        .map(c => c.trim())
-        .filter(c => c.length > 0)
-        .map(chord => parseChordBinding(chord, platform));
-      return { chords };
-    });
+  return splitAlternatives(keys).map(alternative => ({
+    chords: splitSteps(alternative).map(step => parseChordBinding(step, platform))
+  }));
 }
 
 const MODIFIER_DISPLAY_ORDER = ['control', 'alt', 'shift', 'meta'] as const;

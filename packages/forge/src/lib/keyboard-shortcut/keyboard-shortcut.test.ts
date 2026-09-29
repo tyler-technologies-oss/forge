@@ -284,13 +284,26 @@ describe('Keyboard Shortcut', () => {
     });
 
     it('should activate when multiple key bindings are provided', async () => {
-      const harness = await createFixture({ key: 'a b' });
+      const harness = await createFixture({ key: 'a,b' });
 
       const activateSpy = vi.fn();
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
 
       harness.dispatchKeyboardEvent({ key: 'a' });
       harness.dispatchKeyboardEvent({ key: 'b' });
+
+      expect(activateSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should activate on the comma key when the comma is preceded by a modifier', async () => {
+      const harness = await createFixture({ key: 'Control+,,a' });
+
+      const activateSpy = vi.fn();
+      harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
+
+      harness.dispatchKeyboardEvent({ key: ',', ctrlKey: true });
+      harness.dispatchKeyboardEvent({ key: 'a' });
+      harness.dispatchKeyboardEvent({ key: ',' });
 
       expect(activateSpy).toHaveBeenCalledTimes(2);
     });
@@ -1078,7 +1091,7 @@ describe('Keyboard Shortcut', () => {
 
   describe('key sequences', () => {
     it('should emit an activate event when a two-chord sequence is completed', async () => {
-      const harness = await createFixture({ key: 'Control+k>Control+c' });
+      const harness = await createFixture({ key: 'Control+k Control+c' });
 
       const activateSpy = vi.fn();
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
@@ -1090,7 +1103,7 @@ describe('Keyboard Shortcut', () => {
     });
 
     it('should pass the final chord event as the activate event detail', async () => {
-      const harness = await createFixture({ key: 'Control+k>Control+c' });
+      const harness = await createFixture({ key: 'Control+k Control+c' });
 
       let detail: KeyboardEvent | undefined;
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, ((evt: CustomEvent<KeyboardEvent>) => {
@@ -1105,12 +1118,12 @@ describe('Keyboard Shortcut', () => {
     });
 
     it('should not set aria-keyshortcuts for sequence keys', async () => {
-      const harness = await createFixture({ key: 'Control+k>Control+c' });
+      const harness = await createFixture({ key: 'Control+k Control+c' });
       expect(harness.targetEl?.hasAttribute('aria-keyshortcuts')).toBe(false);
     });
 
     it('should complete a sequence when the modifier is released and pressed again between chords', async () => {
-      const harness = await createFixture({ key: 'Control+k>Control+c' });
+      const harness = await createFixture({ key: 'Control+k Control+c' });
 
       const activateSpy = vi.fn();
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
@@ -1125,7 +1138,7 @@ describe('Keyboard Shortcut', () => {
     });
 
     it('should cancel a pending sequence when a non-modifier key does not match the next chord', async () => {
-      const harness = await createFixture({ key: 'Control+k>Control+c' });
+      const harness = await createFixture({ key: 'Control+k Control+c' });
 
       const activateSpy = vi.fn();
       harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);

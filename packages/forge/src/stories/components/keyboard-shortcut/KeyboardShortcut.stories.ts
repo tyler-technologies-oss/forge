@@ -274,7 +274,7 @@ export const KeySequence: Story = {
           @forge-keyboard-shortcut-activate=${recordActivation}
           @focusin=${() => setStatus(FOCUSED)}
           @focusout=${handleFocusOut}>
-          <p>Multi-step keyboard sequences using the <code>&gt;</code> separator:</p>
+          <p>Multi-step keyboard sequences with chords separated by a space:</p>
           <ul>
             <li><kbd>Ctrl+K</kbd> then <kbd>Ctrl+C</kbd> — Comment selection</li>
             <li><kbd>Ctrl+K</kbd> then <kbd>Ctrl+U</kbd> — Uncomment selection</li>
@@ -284,13 +284,13 @@ export const KeySequence: Story = {
           <div style="display: flex; gap: 8px;">
             <forge-button id="seq-comment-btn" variant="outlined" @click=${handleComment}>Comment</forge-button>
             <forge-keyboard-shortcut
-              key="Control+k>Control+c"
+              key="Control+k Control+c"
               anchor="seq-comment-btn"
               @forge-keyboard-shortcut-activate=${handleComment}></forge-keyboard-shortcut>
 
             <forge-button id="seq-uncomment-btn" variant="outlined" @click=${handleUncomment}>Uncomment</forge-button>
             <forge-keyboard-shortcut
-              key="Control+k>Control+u"
+              key="Control+k Control+u"
               anchor="seq-uncomment-btn"
               @forge-keyboard-shortcut-activate=${handleUncomment}></forge-keyboard-shortcut>
 
