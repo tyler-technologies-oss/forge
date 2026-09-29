@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const hookPath = fileURLToPath(new URL('../../plugin/hooks/forge-pretooluse.mjs', import.meta.url));
+const hookPath = fileURLToPath(new URL('../hooks/forge-pretooluse.mjs', import.meta.url));
 
 const runHook = (content: string): SpawnSyncReturns<string> =>
   spawnSync('node', [hookPath], {

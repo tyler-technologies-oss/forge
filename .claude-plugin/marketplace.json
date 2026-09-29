@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "forge",
-      "source": "./packages/forge-mcp/plugin",
+      "source": "./packages/forge-plugin",
       "description": "Tyler Forge design system skills and MCP servers",
       "version": "1.2.0",
       "keywords": [
