@@ -1,3 +1,4 @@
+@use '../core/styles/scrollbar';
 @use './core' as *;
 
 :host {
@@ -56,7 +57,6 @@
 
 .body.body--vertical .time-section {
   width: 100%;
-  padding-top: #{token(body-gap)};
   margin-top: #{token(body-gap)};
 }
 
@@ -80,7 +80,6 @@
 
 .body-main.body-main--vertical .time-section {
   width: 100%;
-  padding-top: #{token(body-gap)};
   margin-top: #{token(body-gap)};
 }
 
@@ -293,6 +292,8 @@ slot[name='time-label'] {
   }
 
   .body:not(:has(.presets)) {
+    @include scrollbar.base;
+
     overflow-y: auto;
   }
 
@@ -303,6 +304,8 @@ slot[name='time-label'] {
   }
 
   .presets {
+    @include scrollbar.base;
+
     flex: 0 0 auto;
     flex-direction: row;
     align-self: stretch;
@@ -310,7 +313,7 @@ slot[name='time-label'] {
     min-width: 0;
     overflow-x: auto;
     margin: 0 0 #{token(body-gap)};
-    padding: 0 0 #{token(body-gap)};
+    padding: 0;
   }
 
   [part='preset'] {
@@ -326,6 +329,8 @@ slot[name='time-label'] {
 
   // Calendar + time stack and fill the scroll body.
   .body-main {
+    @include scrollbar.base;
+
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
