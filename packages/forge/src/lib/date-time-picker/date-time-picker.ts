@@ -184,7 +184,7 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart footer-end - Inline-end zone of the footer.
  * @csspart presets - The quick-range presets sidebar (only present when `presets` and `date-mode="range"`).
  * @csspart preset - Each individual preset button inside the presets sidebar.
- * @csspart duration - The muted duration summary text shown in the footer when a complete range is selected.
+ * @csspart duration - The muted duration summary text shown below the time inputs when a complete range is selected.
  * @csspart summary - The optional left-side summary panel (only present when `summary` is set).
  */
 @customElement(DATE_TIME_PICKER_TAG_NAME)
@@ -454,6 +454,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #value: DateTimePickerValue = null;
   #activeFromDate: Date | null = null;
   #revealValueDate = false;
+  #clickedPresetId: DateRangePresetId | undefined;
   #activeToDate: Date | null = null;
   #activeTime: string | null = null;
   #activeFrom: string | null = null;
@@ -875,15 +876,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderFooter(): TemplateResult | typeof nothing {
-    const showDuration = this.#isRangeValue() && isRange(this.#value);
-    if (!this.showFooter && !showDuration) {
+    if (!this.showFooter) {
       return nothing;
     }
-    const content = html`${this.showFooter ? this.#renderFooterSlots() : nothing} ${showDuration ? this.#renderDuration() : nothing}`;
-    if (showDuration) {
-      return html`<div part="footer" class="footer">${content}</div>`;
-    }
-    return html`<div part="footer" class="footer" ${hideWhenEmpty()}>${content}</div>`;
+    return html`<div part="footer" class="footer" ${hideWhenEmpty()}>${this.#renderFooterSlots()}</div>`;
   }
 
   #renderFooterSlots(): TemplateResult {
@@ -926,20 +922,59 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #renderPresets(): TemplateResult {
+    const selectedId = this.#selectedPresetId();
+    const inert = this.disabled || this.readonly;
     return html`
       <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
-        ${PRESET_DEFS.map(p => html`<forge-button type="button" part="preset" @click=${() => this.#onPresetSelect(p.id)}>${p.label}</forge-button>`)}
+        ${PRESET_DEFS.map(p => {
+          const selected = p.id === selectedId;
+          return html`<forge-button
+            type="button"
+            part="preset"
+            class=${classMap({ preset: true, 'preset--selected': selected })}
+            variant=${selected ? 'filled' : 'text'}
+            aria-pressed=${selected ? 'true' : 'false'}
+            ?disabled=${inert}
+            @click=${() => this.#onPresetSelect(p.id)}>
+            ${p.label}
+          </forge-button>`;
+        })}
       </div>
     `;
   }
 
+  // The preset whose range matches the selected dates, so calendar picks and set values light it up too.
+  // The clicked preset wins when two presets cover the same range.
+  #selectedPresetId(): DateRangePresetId | undefined {
+    const from = this.#activeFromDate?.getTime();
+    const to = this.#activeToDate?.getTime();
+    if (from == null || to == null) {
+      return undefined;
+    }
+    const now = new Date();
+    const matches = (id: DateRangePresetId): boolean => {
+      const range = computePreset(id, now, this.firstDayOfWeek ?? 0);
+      return dateOnly(range.from)?.getTime() === from && dateOnly(range.to)?.getTime() === to;
+    };
+    if (this.#clickedPresetId && matches(this.#clickedPresetId)) {
+      return this.#clickedPresetId;
+    }
+    return PRESET_DEFS.find(({ id }) => matches(id))?.id;
+  }
+
   #onPresetSelect(id: DateRangePresetId): void {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+    this.#clickedPresetId = id;
     const { from, to } = computePreset(id, new Date(), this.firstDayOfWeek ?? 0);
     this.#activeFromDate = dateOnly(from);
     this.#activeToDate = dateOnly(to);
     this.#defaultMissingTimes();
     this.#recomputeValue();
+    this.#revealValueDate = true;
     this.#emitChange('preset');
+    this.requestUpdate();
   }
 
   // A complete date range falls back to min/max time when no time was chosen so the value can resolve.
@@ -996,7 +1031,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   #renderTimeSection(): TemplateResult {
     return html`
       <div part="time-section" class=${classMap({ 'time-section': true, [`time-section--${this.timeMode}`]: true })}>
-        ${this.#renderTimeLabel()} ${this.#renderTimeBody()}
+        ${this.#renderTimeLabel()} ${this.#renderTimeBody()} ${this.#isRangeValue() ? this.#renderDuration() : nothing}
       </div>
     `;
   }

@@ -238,13 +238,13 @@ slot[name='time-label'] {
   --forge-button-color: #{token(color)};
   --forge-button-padding-block: #{token(slot-padding-block)};
   --forge-button-padding-inline: #{token(slot-padding-inline)};
+  --forge-button-text-padding-inline: #{token(slot-padding-inline)};
   --forge-button-shape: #{token(slot-shape)};
 }
 
 .duration {
   @include duration;
 
-  flex: 1;
   color: #{token(time-label-color)};
   min-width: 0;
   overflow: hidden;

@@ -21,6 +21,7 @@ import type { IDateTimePickerComponent } from './date-time-picker.js';
 import type { IDateTimePickerChangeEventData, IDateTimePickerRange, ITimeSlot } from './date-time-picker-constants.js';
 import type { ICalendarDateSelectEventData } from '../calendar/calendar-constants.js';
 import type { ICalendarComponent } from '../calendar/calendar.js';
+import type { DayOfWeek } from '../calendar/calendar-constants.js';
 
 function getEl(container: ParentNode): IDateTimePickerComponent {
   return container.querySelector('forge-date-time-picker') as IDateTimePickerComponent;
@@ -1425,6 +1426,84 @@ describe('DateTimePicker / presets sidebar (T-P6)', () => {
 
     expect(events.map(e => e.source)).toEqual(['preset']);
     expect(el.value).not.toBeNull();
+  });
+
+  it('should render the preset range in the calendar, time inputs, and duration when a preset is clicked', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    getPresetButton(el, 'Next 7 days').click();
+    await ready(el);
+
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as ICalendarComponent;
+    const calendarRange = calendar.value as { from?: Date; to?: Date };
+    const value = el.value as IDateTimePickerRange;
+    expect(calendarRange.from?.getDate()).toBe(value.from.getDate());
+    expect(calendarRange.to?.getDate()).toBe(value.to.getDate());
+    const times = Array.from(el.shadowRoot!.querySelectorAll('forge-time-picker')).map(picker => picker.value);
+    expect(times).toEqual(['09:00', '17:00']);
+    const duration = el.shadowRoot!.querySelector('[part="duration"]') as HTMLElement;
+    expect(duration.textContent).toMatch(/day/i);
+    expect(duration.closest('[part="time-section"]')).not.toBeNull();
+  });
+
+  it('should show only the selected preset as a pressed filled button', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(getPresetButton(el, 'This week').getAttribute('aria-pressed')).toBe('false');
+
+    getPresetButton(el, 'This week').click();
+    await ready(el);
+
+    const thisWeek = getPresetButton(el, 'This week');
+    const today = getPresetButton(el, 'Today');
+    expect(thisWeek.getAttribute('variant')).toBe('filled');
+    expect(thisWeek.getAttribute('aria-pressed')).toBe('true');
+    expect(today.getAttribute('variant')).toBe('text');
+    expect(today.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('should press the clicked preset when two presets cover the same range', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.firstDayOfWeek = new Date().getDay() as DayOfWeek;
+    await ready(el);
+
+    getPresetButton(el, 'Next 7 days').click();
+    await ready(el);
+
+    expect(getPresetButton(el, 'Next 7 days').getAttribute('aria-pressed')).toBe('true');
+    expect(getPresetButton(el, 'This week').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('should not apply a preset when readonly', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" readonly></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    const preset = getPresetButton(el, 'Today');
+    expect(preset.hasAttribute('disabled')).toBe(true);
+    preset.click();
+    await ready(el);
+
+    expect(events.length).toBe(0);
+    expect(el.value).toBeNull();
+  });
+
+  it('should deselect the preset when the calendar range no longer matches it', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    getPresetButton(el, 'This week').click();
+    await ready(el);
+
+    el.value = { from: new Date(2020, 0, 1, 9, 0), to: new Date(2020, 0, 3, 9, 0) } as IDateTimePickerRange;
+    await ready(el);
+
+    expect(getPresetButton(el, 'This week').getAttribute('aria-pressed')).toBe('false');
   });
 
   it('should expose the presets container as a labeled group', async () => {
