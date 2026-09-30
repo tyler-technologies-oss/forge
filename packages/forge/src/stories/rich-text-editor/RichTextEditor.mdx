@@ -53,7 +53,8 @@ excluding `code` and `link`, which are opt-in.
 </forge-rich-text-editor>
 ```
 
-Individual features can be composed instead when a narrower toolbar is wanted, and they can be arranged freely alongside dividers.
+Individual features can be composed instead when a narrower toolbar is wanted, and they can be arranged freely alongside dividers. In a composed
+layout, group them in `<forge-rich-text-toolbar>`, which provides the toolbar role, an accessible name through its `label`, and keyboard navigation.
 
 <Canvas of={FeaturesStories.ComposedLayout} />
 
@@ -104,6 +105,9 @@ Note that a paste which would exceed the limit is refused in its entirety rather
 Both states prevent editing and are visually dimmed, but they differ in intent. `disabled` presents the content as inactive and makes it unselectable.
 `readOnly` keeps the content selectable and copyable, which is usually what is wanted for presenting content the user may need to read or quote.
 
+Readonly dims only the toolbar, and `disabled` dims the whole editor. In a composed layout the same readonly dimming applies to a
+`<forge-rich-text-toolbar>`, and `--forge-rich-text-toolbar-readonly-opacity` adjusts it.
+
 <Canvas of={EditorStories.DisabledState} />
 <Canvas of={EditorStories.ReadOnlyState} />
 
@@ -132,9 +136,10 @@ entirely, so formatting that depends on them is not preserved.
 - The renderer host takes `role="article"` unless a `role` is already set, so consumers can override it for their own document structure.
 - Formatting buttons are toggle buttons: they expose their active state through `aria-pressed`, advertise their shortcut via `aria-keyshortcuts`, and
   are disabled together with the editor. Undo and redo are plain action buttons with no pressed state.
-- The `forge-rich-text-editor` toolbar is a single tab stop, following the WAI-ARIA toolbar pattern. Tab enters it on the last button used, the arrow
-  keys move between buttons, and Home and End jump to the first and last. Disabled buttons are skipped. Tool buttons placed in a composed layout's own
-  toolbar are each a tab stop, as before.
+- The toolbar is a single tab stop, following the WAI-ARIA toolbar pattern. Tab enters it on the last button used, the arrow keys move between
+  buttons, and Home and End jump to the first and last. Disabled buttons are skipped. `forge-rich-text-editor` does this for you. In a composed
+  layout, wrap the tools in `<forge-rich-text-toolbar>` to get the same behaviour, along with the toolbar role and an accessible name; tools in a
+  plain container are each their own tab stop. Several toolbars in one layout are each a separate tab stop.
 - Formatting changes are announced politely through Forge's `LiveAnnouncer`, so applying a mark is not a silent action for screen reader users.
 
 ## API
