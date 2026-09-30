@@ -1,3 +1,4 @@
+import { Platform } from '@tylertech/forge-core';
 import {
   IKeyCombination,
   KEY_ALIASES,
@@ -8,16 +9,8 @@ import {
   type KeyboardShortcutPlatform
 } from './keyboard-shortcut-constants.js';
 
-export function isApplePlatform(): boolean {
-  if (typeof navigator === 'undefined') {
-    return false;
-  }
-  const platform = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ?? navigator.platform ?? '';
-  return /mac|iphone|ipad|ipod/i.test(platform);
-}
-
 export function detectPlatform(): KeyboardShortcutPlatform {
-  return isApplePlatform() ? 'apple' : 'pc';
+  return Platform.APPLE_PLATFORM ? 'apple' : 'pc';
 }
 
 export function isTextEntryElement(el: EventTarget | null): boolean {
