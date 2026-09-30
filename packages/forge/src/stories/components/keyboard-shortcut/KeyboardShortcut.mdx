@@ -21,14 +21,27 @@ By default the anchor is the previous sibling element. You can also target a spe
 the `anchor` attribute with an element id:
 
 ```html
-<button id="save-btn">Save</button>
+<forge-button id="save-btn">Save</forge-button>
 <forge-keyboard-shortcut key="Control+s" anchor="save-btn"></forge-keyboard-shortcut>
 ```
 
 You can also set `anchorElement` programmatically to bypass the anchor resolution logic.
 
-You are still responsible for ensuring that any action to perform (e.g. clicking the button) is executed 
-when the shortcut is triggered.
+### Actions
+
+By default, activating a shortcut only emits the `forge-keyboard-shortcut-activate` event and invokes
+`activateCallback`; you are responsible for performing the work. Set the `action` property to `'click'`
+to also click the anchor element when the shortcut is activated:
+
+```html
+<forge-button id="save-btn">Save</forge-button>
+<forge-keyboard-shortcut key="Control+s" anchor="save-btn" action="click"></forge-keyboard-shortcut>
+```
+
+| Value | Behavior |
+| --- | --- |
+| `'default'` | No action is performed on the anchor. |
+| `'click'` | Calls `click()` on the anchor after the activate event is emitted and `activateCallback` is invoked. |
 
 ## Scopes
 
@@ -38,12 +51,12 @@ nested scopes, only the innermost scope that contains the event target activates
 
 ```html
 <div forge-keyboard-shortcut-scope>
-  <button id="bold-1">Bold</button>
+  <forge-button id="bold-1">Bold</forge-button>
   <forge-keyboard-shortcut key="mod+b" anchor="bold-1"></forge-keyboard-shortcut>
 </div>
 
 <div forge-keyboard-shortcut-scope>
-  <button id="bold-2">Bold</button>
+  <forge-button id="bold-2">Bold</forge-button>
   <forge-keyboard-shortcut key="mod+b" anchor="bold-2"></forge-keyboard-shortcut>
 </div>
 ```
@@ -98,12 +111,10 @@ whitespace or `+`, or that starts the binding, is the comma key itself:
 | `g ,` | `g`, then the comma key (a sequence) |
 | `a,Control+,` | Either `a` or Ctrl and the comma key |
 
-Examples: `mod+b`, `Control+Shift+s`, `esc`, `a,b` (activates on either a or b).
-
 ### Key sequences
 
 Separate chords with a space to define multi-step sequences where chords must be pressed in order within a 1-second
-timeout window, matching the VS Code chord pattern:
+timeout window:
 
 ```html
 <!-- Two-chord sequence: Ctrl+K then Ctrl+C -->
@@ -131,10 +142,10 @@ listener on a container and read `event.target.anchorElement` to determine which
 
 ```html
 <div forge-keyboard-shortcut-scope @forge-keyboard-shortcut-activate=${handleActivate}>
-  <button id="cut-btn">Cut</button>
+  <forge-button id="cut-btn">Cut</forge-button>
   <forge-keyboard-shortcut key="mod+x" anchor="cut-btn"></forge-keyboard-shortcut>
 
-  <button id="copy-btn">Copy</button>
+  <forge-button id="copy-btn">Copy</forge-button>
   <forge-keyboard-shortcut key="mod+c" anchor="copy-btn"></forge-keyboard-shortcut>
 </div>
 ```
@@ -159,14 +170,14 @@ const registration = registerKeyboardShortcut({
 registration.dispose();
 ```
 
-Pass one of three options to say where the shortcut listens:
+Pass one of three options to set where the shortcut listens:
 
 - `global` — the whole document.
 - `scopeElement` — that element.
 - `ownerElement` — the closest ancestor with the `forge-keyboard-shortcut-scope` attribute, the same
   lookup the element does.
 
-If more than one is passed, the first in this list wins. The call throws if none is passed, or if
+If more than one is passed, the first in this list is used. The call throws if none is passed, or if
 `ownerElement` has no scope marker above it.
 
 Registrations otherwise behave like element-based ones, including the nesting rule above: when the
@@ -181,8 +192,6 @@ same key is bound in nested scopes, only the innermost scope containing the even
 - Don't override browser, operating system, or assistive technology shortcuts.
 - Avoid using the `accesskey` attribute.
 - Don't duplicate behavior provided by the browser.
-
-> The element itself doesn't affect accessibility or layout (`display: none`).
 
 ## Migrating from `target`
 

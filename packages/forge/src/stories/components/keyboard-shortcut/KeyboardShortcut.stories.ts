@@ -5,7 +5,7 @@ import { generateCustomElementArgTypes } from '../../utils.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge/keyboard-shortcut';
-import { formatKeyboardShortcutBinding, IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
+import { IKeyboardShortcutComponent } from '@tylertech/forge/keyboard-shortcut';
 import '@tylertech/forge/text-field';
 
 const component = 'forge-keyboard-shortcut';
@@ -32,54 +32,17 @@ const createStatus = (initial: string): HTMLElement => {
   return el;
 };
 
-const clickAnchor = (evt: Event): void => {
-  (evt.target as IKeyboardShortcutComponent).anchorElement?.click();
-};
-
 const meta = {
   title: 'Components/Keyboard Shortcut',
   render: args => {
-    const status = createStatus('Not activated yet.');
-
-    let activationCount = 0;
-    const handleTargetClick = (): void => {
-      activationCount += 1;
-      status.textContent = `Shortcut target clicked ${activationCount} time(s).`;
-    };
-
     const handleActivate = (evt: CustomEvent<KeyboardEvent>): void => {
       activateAction(evt);
-      clickAnchor(evt);
-    };
-
-    const handleFocusIn = (evt: FocusEvent): void => {
-      if (args.allowWhileTyping || !(evt.target instanceof HTMLInputElement)) {
-        return;
-      }
-      status.textContent = 'Focus is in the text field, where the shortcut stays suppressed while allowWhileTyping is off.';
+      alert('Keyboard shortcut activated');
     };
 
     return html`
-      <div
-        forge-keyboard-shortcut-scope
-        tabindex="-1"
-        style="border: 1px solid var(--forge-theme-outline); border-radius: 4px; padding: 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;"
-        @forge-keyboard-shortcut-activate=${handleActivate}
-        @focusin=${handleFocusIn}>
-        <p style="margin: 0;">
-          Click inside this panel to focus the scope, then press <kbd>${formatKeyboardShortcutBinding(args.key) || 'no binding'}</kbd>. Turn on
-          <code>global</code> to listen on the whole document instead, so the shortcut fires without focusing the panel first.
-        </p>
-        <p style="margin: 0;">
-          The text field is exempt until <code>allowWhileTyping</code> is on — with <code>preventDefault</code> also on, the character is then swallowed instead
-          of typed. <code>useCode</code> expects a <code>KeyboardEvent.code</code> value such as <code>KeyA</code>.
-        </p>
-        <forge-button id="demo-shortcut-target" variant="raised" @click=${handleTargetClick}>Shortcut target</forge-button>
-        <forge-text-field>
-          <label for="demo-shortcut-input">Type here</label>
-          <input type="text" id="demo-shortcut-input" />
-        </forge-text-field>
-        ${status}
+      <div forge-keyboard-shortcut-scope @forge-keyboard-shortcut-activate=${handleActivate}>
+        <forge-button id="demo-shortcut-target" variant="raised">Shortcut target (${args.key})</forge-button>
         <forge-keyboard-shortcut
           anchor="demo-shortcut-target"
           .activateCallback=${activateCallbackAction}
@@ -92,6 +55,7 @@ const meta = {
           .capture=${args.capture}
           .useCode=${args.useCode}
           .disabled=${args.disabled}
+          .action=${args.action}
           .anchorAccessibility=${args.anchorAccessibility}>
         </forge-keyboard-shortcut>
       </div>
@@ -103,6 +67,7 @@ const meta = {
       tagName: component,
       exclude: ['activateCallback', 'keyBinding', 'target', 'anchor', 'anchorElement', 'scope', 'scopeElement'],
       controls: {
+        action: { control: 'select', options: ['default', 'click'] },
         anchorAccessibility: { control: 'select', options: ['auto', 'none'] }
       }
     })
@@ -117,6 +82,7 @@ const meta = {
     capture: false,
     useCode: false,
     disabled: false,
+    action: 'click',
     anchorAccessibility: 'auto'
   }
 } satisfies Meta<Partial<IKeyboardShortcutComponent>>;
@@ -139,11 +105,7 @@ export const ScopedEditors: Story = {
     return html`
       <div>
         <div style="display: flex; gap: 16px;">
-          <div
-            forge-keyboard-shortcut-scope
-            tabindex="-1"
-            style="border: 1px solid var(--forge-theme-outline); padding: 16px; flex: 1;"
-            @forge-keyboard-shortcut-activate=${clickAnchor}>
+          <div forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid var(--forge-theme-outline); padding: 16px; flex: 1;">
             <p>Editor 1 — press Ctrl+B / Cmd+B</p>
             <forge-text-field>
               <label>Editor 1 Content</label>
@@ -151,13 +113,9 @@ export const ScopedEditors: Story = {
             </forge-text-field>
             <br />
             <forge-button id="bold-1" variant="outlined" @click=${handleBold('bold-1')}>Bold</forge-button>
-            <forge-keyboard-shortcut key="mod+b" anchor="bold-1" allow-while-typing></forge-keyboard-shortcut>
+            <forge-keyboard-shortcut key="mod+b" anchor="bold-1" allow-while-typing .action=${'click'}></forge-keyboard-shortcut>
           </div>
-          <div
-            forge-keyboard-shortcut-scope
-            tabindex="-1"
-            style="border: 1px solid var(--forge-theme-outline); padding: 16px; flex: 1;"
-            @forge-keyboard-shortcut-activate=${clickAnchor}>
+          <div forge-keyboard-shortcut-scope tabindex="-1" style="border: 1px solid var(--forge-theme-outline); padding: 16px; flex: 1;">
             <p>Editor 2 — press Ctrl+B / Cmd+B</p>
             <forge-text-field>
               <label>Editor 2 Content</label>
@@ -165,7 +123,7 @@ export const ScopedEditors: Story = {
             </forge-text-field>
             <br />
             <forge-button id="bold-2" variant="outlined" @click=${handleBold('bold-2')}>Bold</forge-button>
-            <forge-keyboard-shortcut key="mod+b" anchor="bold-2" allow-while-typing></forge-keyboard-shortcut>
+            <forge-keyboard-shortcut key="mod+b" anchor="bold-2" allow-while-typing .action=${'click'}></forge-keyboard-shortcut>
           </div>
         </div>
         <p>${status}</p>

@@ -4,7 +4,7 @@
 
 Enhanced `forge-keyboard-shortcut` with scoped keyboard shortcut handling.
 
-**New properties:** `anchor`, `anchorElement`, `scope`, `scopeElement`, `allowRepeat`, `fallthrough`, and `anchorAccessibility`.
+**New properties:** `anchor`, `anchorElement`, `scope`, `scopeElement`, `allowRepeat`, `fallthrough`, `anchorAccessibility`, and `action`. Set `action` to `'click'` to click the anchor element when the shortcut is activated (default: `'default'`, which only emits the event and invokes the callback). `action` is a property only and does not reflect to an attribute.
 
 **Behavior changes:**
 

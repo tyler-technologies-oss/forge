@@ -7,6 +7,7 @@ export type {
   IKeyboardShortcutOptions,
   IKeyboardShortcutRegistration,
   IKeyCombination,
+  KeyboardShortcutAction,
   KeyboardShortcutActivateCallback,
   KeyboardShortcutAnchorAccessibility,
   KeyboardShortcutPlatform

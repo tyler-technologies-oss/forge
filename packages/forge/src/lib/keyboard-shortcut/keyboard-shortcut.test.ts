@@ -1151,6 +1151,176 @@ describe('Keyboard Shortcut', () => {
     });
   });
 
+  describe('action', () => {
+    it('should default to the default action', async () => {
+      const harness = await createFixture({ key: 'a' });
+
+      expect(harness.keyboardShortcutEl.action).toBe('default');
+    });
+
+    it('should not reflect to an attribute', async () => {
+      const harness = await createFixture({ key: 'a', action: 'click' });
+      await harness.keyboardShortcutEl.updateComplete;
+
+      expect(harness.keyboardShortcutEl.action).toBe('click');
+      expect(harness.keyboardShortcutEl.hasAttribute('action')).toBe(false);
+    });
+
+    it('should not click the anchor when action is default', async () => {
+      const harness = await createFixture({ key: 'a' });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('should click the anchor when action is click and the shortcut is activated', async () => {
+      const harness = await createFixture({ key: 'a', action: 'click' });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(clickSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should not click the anchor when a non-matching key is pressed', async () => {
+      const harness = await createFixture({ key: 'a', action: 'click' });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'b' });
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('should still emit the activate event and invoke the callback when action is click', async () => {
+      const activateCallback = vi.fn();
+      const harness = await createFixture({ key: 'a', action: 'click', activateCallback });
+      const activateSpy = vi.fn();
+      harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(activateSpy).toHaveBeenCalledOnce();
+      expect(activateCallback).toHaveBeenCalledOnce();
+    });
+
+    it('should emit the activate event and invoke the callback before clicking the anchor', async () => {
+      const calls: string[] = [];
+      const harness = await createFixture({ key: 'a', action: 'click', activateCallback: () => calls.push('callback') });
+      harness.keyboardShortcutEl.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, () => calls.push('event'));
+      harness.targetEl?.addEventListener('click', () => calls.push('click'));
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(calls).toEqual(['event', 'callback', 'click']);
+    });
+
+    it('should start clicking the anchor when action is changed to click', async () => {
+      const harness = await createFixture({ key: 'a' });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+      expect(clickSpy).not.toHaveBeenCalled();
+
+      harness.keyboardShortcutEl.action = 'click';
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(clickSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should not click the anchor when disabled', async () => {
+      const harness = await createFixture({ key: 'a', action: 'click', disabled: true });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'a' });
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('should click the anchor once when a key sequence completes', async () => {
+      const harness = await createFixture({ key: 'g i', action: 'click' });
+      const clickSpy = vi.fn();
+      harness.targetEl?.addEventListener('click', clickSpy);
+
+      harness.dispatchKeyboardEvent({ key: 'g' });
+      expect(clickSpy).not.toHaveBeenCalled();
+
+      harness.dispatchKeyboardEvent({ key: 'i' });
+      expect(clickSpy).toHaveBeenCalledOnce();
+    });
+
+    describe('with an explicit anchor', () => {
+      const elements: Element[] = [];
+
+      afterEach(() => {
+        elements.forEach(el => el.remove());
+        elements.length = 0;
+      });
+
+      it('should click the element referenced by the anchor id', () => {
+        const scope = document.createElement('div');
+        scope.setAttribute('forge-keyboard-shortcut-scope', '');
+        document.body.appendChild(scope);
+        elements.push(scope);
+
+        const anchorBtn = document.createElement('button');
+        anchorBtn.id = 'action-anchor';
+        const otherBtn = document.createElement('button');
+        scope.append(anchorBtn, otherBtn);
+
+        const shortcut = document.createElement('forge-keyboard-shortcut') as IKeyboardShortcutComponent;
+        shortcut.setAttribute('key', 'a');
+        shortcut.setAttribute('anchor', 'action-anchor');
+        shortcut.action = 'click';
+        scope.appendChild(shortcut);
+
+        const anchorSpy = vi.fn();
+        const otherSpy = vi.fn();
+        anchorBtn.addEventListener('click', anchorSpy);
+        otherBtn.addEventListener('click', otherSpy);
+
+        otherBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true, cancelable: true }));
+
+        expect(anchorSpy).toHaveBeenCalledOnce();
+        expect(otherSpy).not.toHaveBeenCalled();
+      });
+
+      it('should not click a disabled native button anchor', () => {
+        const scope = document.createElement('div');
+        scope.setAttribute('forge-keyboard-shortcut-scope', '');
+        document.body.appendChild(scope);
+        elements.push(scope);
+
+        const btn = document.createElement('button');
+        btn.id = 'disabled-action-anchor';
+        btn.disabled = true;
+        scope.appendChild(btn);
+
+        const shortcut = document.createElement('forge-keyboard-shortcut') as IKeyboardShortcutComponent;
+        shortcut.setAttribute('key', 'a');
+        shortcut.setAttribute('anchor', 'disabled-action-anchor');
+        shortcut.action = 'click';
+        scope.appendChild(shortcut);
+
+        const clickSpy = vi.fn();
+        btn.addEventListener('click', clickSpy);
+        const activateSpy = vi.fn();
+        shortcut.addEventListener(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, activateSpy);
+
+        scope.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true, cancelable: true }));
+
+        expect(activateSpy).toHaveBeenCalledOnce();
+        expect(clickSpy).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('deprecated target', () => {
     it('should still attach to the element matched by the target selector', async () => {
       const harness = await createFixture({ key: 'a', target: '#test-target' });
@@ -1193,6 +1363,7 @@ async function createFixture({
   capture,
   useCode,
   disabled,
+  action,
   activateCallback,
   targetElement = 'button',
   appendTooltip
@@ -1213,6 +1384,7 @@ async function createFixture({
         ?capture=${capture ?? nothing}
         ?use-code=${useCode ?? nothing}
         ?disabled=${disabled ?? nothing}
+        .action=${action ?? 'default'}
         .activateCallback=${activateCallback}></forge-keyboard-shortcut>
     </div>
   `);

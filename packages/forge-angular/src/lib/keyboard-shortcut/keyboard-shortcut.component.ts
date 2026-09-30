@@ -170,6 +170,17 @@ export class KeyboardShortcutComponent {
     return this.nativeElement.anchorAccessibility;
   }
 
+  /** Gets/sets the action performed on the anchor element when the shortcut is activated. */
+  @Input()
+  public set action(value: KeyboardShortcutComponentCustomElement['action']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.action = value;
+    });
+  }
+  public get action(): KeyboardShortcutComponentCustomElement['action'] {
+    return this.nativeElement.action;
+  }
+
   /** Gets/sets the activation callback. */
   @Input()
   public set activateCallback(value: KeyboardShortcutComponentCustomElement['activateCallback']) {

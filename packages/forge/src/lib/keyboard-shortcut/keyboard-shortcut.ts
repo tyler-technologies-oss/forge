@@ -4,7 +4,7 @@ import { property } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { locateElementById } from '../core/utils/utils.js';
 import { KEYBOARD_SHORTCUT_CONSTANTS, WARNING_PREFIX, KeyboardShortcutActivateCallback } from './keyboard-shortcut-constants.js';
-import type { KeyboardShortcutAnchorAccessibility, IKeyboardShortcutRegistration } from './keyboard-shortcut-constants.js';
+import type { KeyboardShortcutAction, KeyboardShortcutAnchorAccessibility, IKeyboardShortcutRegistration } from './keyboard-shortcut-constants.js';
 import { registerKeyboardShortcut } from './keyboard-shortcut-registry.js';
 import { findScopeMarker, formatAriaKeyShortcuts } from './keyboard-shortcut-utils.js';
 
@@ -27,6 +27,7 @@ export interface IKeyboardShortcutComponent extends BaseLitElement {
   useCode: boolean;
   disabled: boolean;
   anchorAccessibility: KeyboardShortcutAnchorAccessibility;
+  action: KeyboardShortcutAction;
   activateCallback: KeyboardShortcutActivateCallback | null | undefined;
 }
 
@@ -154,6 +155,13 @@ export class KeyboardShortcutComponent extends BaseLitElement implements IKeyboa
    */
   @property({ attribute: 'anchor-accessibility' })
   public anchorAccessibility: KeyboardShortcutAnchorAccessibility = 'auto';
+
+  /**
+   * Gets/sets the action performed on the anchor element when the shortcut is activated.
+   * @default 'default'
+   */
+  @property()
+  public action: KeyboardShortcutAction = 'default';
 
   /**
    * Gets/sets the activation callback.
@@ -425,6 +433,9 @@ export class KeyboardShortcutComponent extends BaseLitElement implements IKeyboa
     const event = new CustomEvent(KEYBOARD_SHORTCUT_CONSTANTS.events.ACTIVATE, { detail: evt, bubbles: true });
     this.dispatchEvent(event);
     this.activateCallback?.call(null, evt);
+    if (this.action === 'click') {
+      this.anchorElement?.click();
+    }
   }
 
   #tryLateAnchorResolve(): void {

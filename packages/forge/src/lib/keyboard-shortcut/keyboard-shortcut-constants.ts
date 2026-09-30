@@ -50,6 +50,7 @@ export const textInputTypes = ['date', 'datetime', 'datetime-local', 'email', 'm
 export type KeyboardShortcutActivateCallback = (event: KeyboardEvent) => void;
 export type KeyboardShortcutPlatform = 'apple' | 'pc';
 export type KeyboardShortcutAnchorAccessibility = 'auto' | 'none';
+export type KeyboardShortcutAction = 'default' | 'click';
 
 export interface IKeyCombination {
   key: string;

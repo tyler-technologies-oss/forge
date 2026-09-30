@@ -76,7 +76,7 @@ class KeyboardShortcutRegistry {
     }
     for (const seq of entry.sequences) {
       if (scope.hasSequence(seq)) {
-        const binding = seq.chords.map(c => (c.modifier ? `${c.modifier}+${c.key}` : c.key)).join('>');
+        const binding = seq.chords.map(c => (c.modifier ? `${c.modifier}+${c.key}` : c.key)).join(' ');
         const ownerEl = entry.ownerElement ?? scope.element;
         console.warn(`${WARNING_PREFIX} Duplicate key binding "${binding}" registered in the same scope.`, ownerEl);
         return;
