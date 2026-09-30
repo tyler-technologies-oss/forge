@@ -173,7 +173,7 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
  * @csspart time-label - Time label slot wrapper.
  * @csspart time-inputs - Time inputs wrapper (single/range modes).
  * @csspart time-input - Each embedded `forge-time-picker`.
- * @csspart slot-list - The `<ul>` listbox in slots mode.
+ * @csspart slot-list - The `role="listbox"` container in slots mode.
  * @csspart slot - Each slot pill.
  * @csspart date-actions - Today/Clear button row below the calendar and time controls.
  * @csspart today-button - The Today button.
