@@ -11,7 +11,6 @@ $tokens: (
   padding: utils.module-val(date-time-picker, padding, spacing.variable(medium)),
   gap: utils.module-val(date-time-picker, gap, spacing.variable(medium)),
   body-gap: utils.module-val(date-time-picker, body-gap, spacing.variable(small)),
-  divider-color: utils.module-val(date-time-picker, divider-color, theme.variable(outline)),
   // Summary panel
   summary-background: utils.module-val(date-time-picker, summary-background, theme.variable(primary)),
   summary-color: utils.module-val(date-time-picker, summary-color, theme.variable(on-primary)),
