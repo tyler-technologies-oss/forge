@@ -32,8 +32,20 @@ $host-tokens: [display disabled-cursor];
 .forge-fab {
   @include base;
 
-  &--extended {
+  &.extended {
     @include extended;
+  }
+
+  &.small {
+    @include density-small;
+  }
+
+  &.large {
+    @include density-large;
+  }
+
+  &.lowered {
+    @include lowered;
   }
 }
 
@@ -78,36 +90,10 @@ forge-state-layer {
 }
 
 //
-// Density (only when not "extended")
-//
-
-:host(:is([dense], [density='small'])) {
-  .forge-fab {
-    @include density-small;
-  }
-}
-
-:host([density='large']) {
-  .forge-fab {
-    @include density-large;
-  }
-}
-
-//
-// Elevation
-//
-
-:host([elevation='lowered']) {
-  .forge-fab {
-    @include lowered;
-  }
-}
-
-//
 // Disabled
 //
 
-:host([disabled]) {
+:host(:state(disabled)) {
   @include host-disabled;
 
   .forge-fab {
@@ -120,8 +106,8 @@ forge-state-layer {
 //
 
 @mixin theme($theme) {
-  :host([theme='#{$theme}']:not([disabled])) {
-    .forge-fab {
+  :host(:not(:state(disabled))) {
+    .forge-fab.#{$theme} {
       @include override(background, theme.variable($theme), value);
       @include override(color, theme.variable(on-#{$theme}), value);
     }

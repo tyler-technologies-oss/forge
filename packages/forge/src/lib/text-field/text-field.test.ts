@@ -10,7 +10,7 @@ import { TextFieldComponentDelegate } from './text-field-component-delegate.js';
 import { TEXT_FIELD_CONSTANTS } from './text-field-constants.js';
 import type { IFieldComponent } from '../field/index.js';
 import { FIELD_CONSTANTS } from '../field/field-constants.js';
-import type { IIconButtonComponent } from '../icon-button/index.js';
+import type { IconButtonComponent } from '../icon-button/index.js';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button/icon-button-constants.js';
 import { LABEL_CONSTANTS } from '../label/label-constants.js';
 
@@ -27,8 +27,8 @@ class TextFieldHarness extends TestHarness<ITextFieldComponent> {
     return this.element.querySelector('label')!;
   }
 
-  public get clearButtonElement(): IIconButtonComponent | null {
-    return getShadowElement(this.element, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+  public get clearButtonElement(): IconButtonComponent | null {
+    return getShadowElement(this.element, ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
   }
 
   constructor(el: ITextFieldComponent) {

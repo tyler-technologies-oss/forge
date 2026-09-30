@@ -1,5 +1,29 @@
 # @tylertech/forge
 
+## 3.20.0
+
+### Minor Changes
+
+- 696fc4d: Export `VirtualElement` from the public API. It was previously only reachable through the
+  `@tylertech/forge/esm/core/utils/position-utils` deep path, which does not resolve under
+  `NodeNext` module resolution.
+
+## 3.19.0
+
+### Minor Changes
+
+- 86c89ee: feat(icon-button): implement invoker commands api
+- 86c89ee: feat(button): implement invoker commands api
+- 86c89ee: feat(icon-button): migrate to lit
+- 86c89ee: feat(button): migrate to lit
+- 86c89ee: feat(floating-action-button): migrate to lit
+- 86c89ee: feat(floating-action-button): implement invoker commands api
+- 0d3ae25: feat(focus-indicator): render in top layer
+
+### Patch Changes
+
+- 8bbd3de: fix(dialog): prevent dialog from losing initial focus due to Chrome focus-within propagation bug
+
 ## 3.18.0
 
 ### Minor Changes

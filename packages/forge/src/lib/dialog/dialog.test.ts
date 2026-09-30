@@ -779,6 +779,20 @@ describe('Dialog', () => {
       expect(harness.element.matches(':focus-within')).toBe(false);
     });
 
+    it('should not modify focus when dialog content already has focus before opening', async () => {
+      const harness = await createFixture();
+
+      harness.element.show();
+
+      harness.formCloseButton.focus();
+
+      expect(document.activeElement).toBe(harness.formCloseButton);
+
+      await harness.focusDelay();
+
+      expect(document.activeElement).toBe(harness.formCloseButton);
+    });
+
     it('should open immediately when animation type is set to none', async () => {
       const harness = await createFixture({ animationType: 'none' });
 

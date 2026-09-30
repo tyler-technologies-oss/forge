@@ -5,7 +5,7 @@ import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
 import { IProfileCardComponent, PROFILE_CARD_CONSTANTS } from '../../profile-card/index.js';
 import { IAppBarProfileButtonComponent } from './app-bar-profile-button.js';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS, IAppBarProfileCardConfig } from './app-bar-profile-button-constants.js';
-import { ICON_BUTTON_CONSTANTS, IIconButtonComponent } from '../../icon-button/index.js';
+import { ICON_BUTTON_CONSTANTS, type IconButtonComponent } from '../../icon-button/index.js';
 import { forwardAttributes } from '../../core/utils/reflect-utils.js';
 import { type IPopoverComponent } from '../../popover/index.js';
 import { type ITooltipComponent } from '../../tooltip/index.js';
@@ -36,7 +36,7 @@ export interface IAppBarProfileButtonAdapter extends IBaseAdapter {
 export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButtonComponent> implements IAppBarProfileButtonAdapter {
   private _avatarElement: IAvatarComponent;
   private _tooltipElement: ITooltipComponent;
-  private _iconButtonElement: IIconButtonComponent;
+  private _iconButtonElement: IconButtonComponent;
   private _popupElement?: IPopoverComponent;
   private _profileCardElement?: IProfileCardComponent;
   private _forwardObserver?: MutationObserver;
@@ -52,7 +52,7 @@ export class AppBarProfileButtonAdapter extends BaseAdapter<IAppBarProfileButton
   public initialize(): void {
     this._avatarElement = getLightElement(this._component, AVATAR_CONSTANTS.elementName) as IAvatarComponent;
     this._tooltipElement = getLightElement(this._component, 'forge-tooltip') as ITooltipComponent;
-    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
 
     const originalAriaLabelledBy = this._iconButtonElement.getAttribute('aria-labelledby'); // Set by tooltip
 

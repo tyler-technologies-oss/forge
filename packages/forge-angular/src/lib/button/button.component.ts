@@ -16,7 +16,7 @@ export class ButtonComponent {
   /** The forge-button element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
-  /** The variant of the button. */
+  /** Gets/sets the button variant. */
   @Input()
   public set variant(value: ButtonComponentCustomElement['variant']) {
     this.zone.runOutsideAngular(() => {
@@ -27,7 +27,7 @@ export class ButtonComponent {
     return this.nativeElement.variant;
   }
 
-  /** Whether or not the button is pill-shaped. */
+  /** Gets/sets whether the button is pill-shaped. */
   @Input({ transform: booleanAttribute })
   public set pill(value: ButtonComponentCustomElement['pill']) {
     this.zone.runOutsideAngular(() => {
@@ -38,7 +38,7 @@ export class ButtonComponent {
     return this.nativeElement.pill;
   }
 
-  /** The theme of the button. Defaults to `primary`. */
+  /** Gets/sets the button theme. */
   @Input()
   public set theme(value: ButtonComponentCustomElement['theme']) {
     this.zone.runOutsideAngular(() => {
@@ -49,7 +49,7 @@ export class ButtonComponent {
     return this.nativeElement.theme;
   }
 
-  /** Whether or not the button is full-width. */
+  /** Gets/sets whether the button is full-width. */
   @Input({ transform: booleanAttribute })
   public set fullWidth(value: ButtonComponentCustomElement['fullWidth']) {
     this.zone.runOutsideAngular(() => {
@@ -60,7 +60,7 @@ export class ButtonComponent {
     return this.nativeElement.fullWidth;
   }
 
-  /** The type of button. Valid values are `button`, `submit`, and `reset`. */
+  /** Gets/sets the type of button. */
   @Input()
   public set type(value: ButtonComponentCustomElement['type']) {
     this.zone.runOutsideAngular(() => {
@@ -71,7 +71,7 @@ export class ButtonComponent {
     return this.nativeElement.type;
   }
 
-  /** Whether or not the button is disabled. */
+  /** Gets/sets whether the button is disabled. */
   @Input({ transform: booleanAttribute })
   public set disabled(value: ButtonComponentCustomElement['disabled']) {
     this.zone.runOutsideAngular(() => {
@@ -82,40 +82,7 @@ export class ButtonComponent {
     return this.nativeElement.disabled;
   }
 
-  /** Whether or not the button shows a built-in popover icon. */
-  @Input({ transform: booleanAttribute })
-  public set popoverIcon(value: ButtonComponentCustomElement['popoverIcon']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.popoverIcon = value;
-    });
-  }
-  public get popoverIcon(): ButtonComponentCustomElement['popoverIcon'] {
-    return this.nativeElement.popoverIcon;
-  }
-
-  /** The name of the button. */
-  @Input()
-  public set name(value: ButtonComponentCustomElement['name']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.name = value;
-    });
-  }
-  public get name(): ButtonComponentCustomElement['name'] {
-    return this.nativeElement.name;
-  }
-
-  /** The form value of the button. */
-  @Input()
-  public set value(value: ButtonComponentCustomElement['value']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.value = value;
-    });
-  }
-  public get value(): ButtonComponentCustomElement['value'] {
-    return this.nativeElement.value;
-  }
-
-  /** Whether or not the button is dense. */
+  /** Gets/sets whether the button is dense. */
   @Input({ transform: booleanAttribute })
   public set dense(value: ButtonComponentCustomElement['dense']) {
     this.zone.runOutsideAngular(() => {
@@ -126,12 +93,76 @@ export class ButtonComponent {
     return this.nativeElement.dense;
   }
 
-  /** Clicks the button. */
+  /** Gets/sets whether to show a popover icon. */
+  @Input({ transform: booleanAttribute })
+  public set popoverIcon(value: ButtonComponentCustomElement['popoverIcon']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.popoverIcon = value;
+    });
+  }
+  public get popoverIcon(): ButtonComponentCustomElement['popoverIcon'] {
+    return this.nativeElement.popoverIcon;
+  }
+
+  /** Gets/sets the button name for form association. */
+  @Input()
+  public set name(value: ButtonComponentCustomElement['name']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.name = value;
+    });
+  }
+  public get name(): ButtonComponentCustomElement['name'] {
+    return this.nativeElement.name;
+  }
+
+  /** Gets/sets the button value for form submission. */
+  @Input()
+  public set value(value: ButtonComponentCustomElement['value']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.value = value;
+    });
+  }
+  public get value(): ButtonComponentCustomElement['value'] {
+    return this.nativeElement.value;
+  }
+
+  /** Indicates to the targeted element which action to take. */
+  @Input()
+  public set command(value: ButtonComponentCustomElement['command']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.command = value;
+    });
+  }
+  public get command(): ButtonComponentCustomElement['command'] {
+    return this.nativeElement.command;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandFor(value: ButtonComponentCustomElement['commandFor']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandFor = value;
+    });
+  }
+  public get commandFor(): ButtonComponentCustomElement['commandFor'] {
+    return this.nativeElement.commandFor;
+  }
+
+  /** Targets another element to be invoked. */
+  @Input()
+  public set commandForElement(value: ButtonComponentCustomElement['commandForElement']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.commandForElement = value;
+    });
+  }
+  public get commandForElement(): ButtonComponentCustomElement['commandForElement'] {
+    return this.nativeElement.commandForElement;
+  }
+
   public click(...args: Parameters<ButtonComponentCustomElement['click']>): ReturnType<ButtonComponentCustomElement['click']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.click(...args));
   }
 
-  /** Focuses the button. */
   public focus(...args: Parameters<ButtonComponentCustomElement['focus']>): ReturnType<ButtonComponentCustomElement['focus']> {
     return this.zone.runOutsideAngular(() => this.nativeElement.focus(...args));
   }

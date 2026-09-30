@@ -51,6 +51,7 @@ export const ForgeFooterItem = createElementProxy('forge-footer-item');
 export const ForgeIcon = createElementProxy('forge-icon');
 export const ForgeIconButton = createElementProxy('forge-icon-button');
 export const ForgeInlineMessage = createElementProxy('forge-inline-message');
+export const ForgeKbd = createElementProxy('forge-kbd');
 export const ForgeKey = createElementProxy('forge-key');
 export const ForgeKeyboardShortcut = createElementProxy('forge-keyboard-shortcut');
 export const ForgeKeyItem = createElementProxy('forge-key-item');

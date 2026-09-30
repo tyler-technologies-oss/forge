@@ -1,7 +1,7 @@
 import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
-import { IButtonComponent } from '../button/button.js';
+import { type ButtonComponent } from '../button/button.js';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
-import { IIconButtonComponent } from '../icon-button/icon-button.js';
+import { type IconButtonComponent } from '../icon-button/icon-button.js';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
 import { IToastComponent } from './toast.js';
 import { TOAST_CONSTANTS } from './toast-constants.js';
@@ -31,15 +31,15 @@ export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
 export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToastAdapter {
   private _overlayElement: IOverlayComponent;
   private _surfaceElement: HTMLElement;
-  private _actionButtonElement: IButtonComponent;
-  private _closeButtonElement: IIconButtonComponent;
+  private _actionButtonElement: ButtonComponent;
+  private _closeButtonElement: IconButtonComponent;
 
   constructor(component: IToastComponent) {
     super(component);
     this._overlayElement = getShadowElement(component, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
     this._surfaceElement = getShadowElement(component, TOAST_CONSTANTS.selectors.SURFACE);
-    this._actionButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.ACTION_BUTTON) as IButtonComponent;
-    this._closeButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.CLOSE_BUTTON) as IIconButtonComponent;
+    this._actionButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.ACTION_BUTTON) as ButtonComponent;
+    this._closeButtonElement = getShadowElement(component, TOAST_CONSTANTS.selectors.CLOSE_BUTTON) as IconButtonComponent;
   }
 
   public show(): void {
