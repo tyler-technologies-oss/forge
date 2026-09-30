@@ -359,7 +359,7 @@ export class StepperCore implements IStepperCore {
   }
 
   private _patchBrowser(): void {
-    if (new Platform().SAFARI()) {
+    if (Platform.SAFARI) {
       this._adapter.patchSafari();
     }
   }

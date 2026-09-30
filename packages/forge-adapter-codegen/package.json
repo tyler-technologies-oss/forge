@@ -1,0 +1,42 @@
+{
+  "name": "@tylertech/forge-adapter-codegen",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared framework adapter code generation for Tyler Forge™ web component packages.",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    "./core": {
+      "default": "./src/core/index.mjs"
+    },
+    "./react": {
+      "default": "./src/react/index.mjs"
+    },
+    "./angular": {
+      "default": "./src/angular/index.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "scripts": {
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{mjs,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{mjs,js,json,md}\""
+  },
+  "dependencies": {
+    "@angular/cli": "^20.3.13",
+    "@tylertech/forge-schematics": "workspace:*",
+    "change-case": "^5.4.4",
+    "custom-element-react-wrappers": "^1.7.3",
+    "prettier": "catalog:"
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "eslint": "catalog:"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
