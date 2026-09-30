@@ -39,11 +39,23 @@ All other keys are displayed as provided but transformed to title case.
 Modifer keys are displayed using platform-appropriate glyphs.
 
 | Modifier key | Windows / Linux | Apple |
-|--------------|----------------|-------|
-| Control      | `Ctrl`         | `⌃`   |
-| Shift        | `⇧`            | `⇧`   |
-| Alt          | `Alt`          | `⌥`   |
-| Meta         | `Meta`         | `⌘`   |
+|--------------|-----------------|-------|
+| Control      | `Ctrl`          | `⌃`   |
+| Shift        | `⇧`             | `⇧`   |
+| Alt          | `Alt`           | `⌥`   |
+| Meta         | `⊞`             | `⌘`   |
+| Mod          | `Ctrl`          | `⌘`   |
+
+### Mod key
+
+Use the `mod` property to display the primary modifier key for the current platform: `⌘` on Apple
+platforms and `Ctrl` on Windows / Linux.
+
+```html
+<forge-kbd mod keys="S"></forge-kbd>
+```
+
+Modifiers are displayed in the following order: Control, Alt, Shift, Meta, Mod, followed by `keys`.
 
 ## API
 

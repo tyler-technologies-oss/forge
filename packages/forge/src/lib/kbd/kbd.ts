@@ -88,6 +88,14 @@ export class KbdComponent extends BaseLitElement {
   public meta = false;
 
   /**
+   * Whether to display the platform-specific mod key (Command/⌘ on Apple keyboards or Ctrl on Windows keyboards).
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public mod = false;
+
+  /**
    * Whether to display the Shift key.
    * @default false
    * @attribute
@@ -124,14 +132,17 @@ export class KbdComponent extends BaseLitElement {
     if (this.ctrl) {
       modifierKeys.push(Platform.APPLE_PLATFORM ? '⌃' : 'Ctrl');
     }
-    if (this.shift) {
-      modifierKeys.push('⇧');
-    }
     if (this.alt) {
       modifierKeys.push(Platform.APPLE_PLATFORM ? '⌥' : 'Alt');
     }
+    if (this.shift) {
+      modifierKeys.push('⇧');
+    }
     if (this.meta) {
       modifierKeys.push(Platform.APPLE_PLATFORM ? '⌘' : '⊞');
+    }
+    if (this.mod) {
+      modifierKeys.push(Platform.APPLE_PLATFORM ? '⌘' : 'Ctrl');
     }
     return modifierKeys;
   }

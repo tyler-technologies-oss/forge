@@ -60,6 +60,17 @@ export class KbdComponent {
     return this.nativeElement.meta;
   }
 
+  /** Whether to display the platform-specific mod key (Command/⌘ on Apple keyboards or Ctrl on Windows keyboards). */
+  @Input({ transform: booleanAttribute })
+  public set mod(value: KbdComponentCustomElement['mod']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.mod = value;
+    });
+  }
+  public get mod(): KbdComponentCustomElement['mod'] {
+    return this.nativeElement.mod;
+  }
+
   /** Whether to display the Shift key. */
   @Input({ transform: booleanAttribute })
   public set shift(value: KbdComponentCustomElement['shift']) {

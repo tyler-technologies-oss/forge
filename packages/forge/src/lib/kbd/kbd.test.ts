@@ -34,6 +34,7 @@ describe('Kbd', () => {
     expect(el.alt).toBe(false);
     expect(el.ctrl).toBe(false);
     expect(el.meta).toBe(false);
+    expect(el.mod).toBe(false);
     expect(el.shift).toBe(false);
     expect(el.dense).toBe(false);
     expect(el.theme).toBe('');
@@ -78,14 +79,14 @@ describe('Kbd', () => {
     expect(keyElements.map(key => key.textContent?.trim())).toEqual(['J', 'K']);
   });
 
-  it('should render modifiers before keys in ctrl, shift, alt, meta order', async () => {
+  it('should render modifiers before keys in ctrl, alt, shift, meta order', async () => {
     vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(false);
     const screen = render(html`<forge-kbd ctrl shift alt meta keys="K"></forge-kbd>`);
     const el = screen.container.querySelector('forge-kbd')!;
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', '⇧', 'Alt', '⊞', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Alt', '⇧', '⊞', 'K']);
   });
 
   it('should render Windows-style modifier glyphs when not on an Apple platform', async () => {
@@ -95,7 +96,7 @@ describe('Kbd', () => {
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', '⇧', 'Alt', '⊞', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Alt', '⇧', '⊞', 'K']);
   });
 
   it('should render Apple-style modifier glyphs when on an Apple platform', async () => {
@@ -105,7 +106,90 @@ describe('Kbd', () => {
     await el.updateComplete;
 
     const [, ...keyElements] = getKeyElements(el);
-    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌃', '⇧', '⌥', '⌘', 'K']);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌃', '⌥', '⇧', '⌘', 'K']);
+  });
+
+  it('should render the Command glyph for mod when on an Apple platform', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(true);
+    const screen = render(html`<forge-kbd mod keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌘', 'K']);
+  });
+
+  it('should render Ctrl for mod when not on an Apple platform', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(false);
+    const screen = render(html`<forge-kbd mod keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'K']);
+  });
+
+  it('should render only the mod key when no other modifiers or keys are set', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(false);
+    const screen = render(html`<forge-kbd mod></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [root, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl']);
+    expect(root.getAttribute('role')).toBe('presentation');
+  });
+
+  it('should not render a mod key when mod is false', async () => {
+    const screen = render(html`<forge-kbd keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['K']);
+  });
+
+  it('should render the mod key after all other modifiers and before keys', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(true);
+    const screen = render(html`<forge-kbd ctrl alt shift meta mod keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['⌃', '⌥', '⇧', '⌘', '⌘', 'K']);
+  });
+
+  it('should render both Ctrl and the mod key when ctrl and mod are set on a non-Apple platform', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(false);
+    const screen = render(html`<forge-kbd ctrl mod keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    const [, ...keyElements] = getKeyElements(el);
+    expect(keyElements.map(key => key.textContent?.trim())).toEqual(['Ctrl', 'Ctrl', 'K']);
+  });
+
+  it('should re-render when the mod property is toggled', async () => {
+    vi.spyOn(Platform, 'APPLE_PLATFORM', 'get').mockReturnValue(false);
+    const screen = render(html`<forge-kbd keys="K"></forge-kbd>`);
+    const el = screen.container.querySelector('forge-kbd')!;
+    await el.updateComplete;
+
+    el.mod = true;
+    await el.updateComplete;
+    expect(
+      getKeyElements(el)
+        .slice(1)
+        .map(key => key.textContent?.trim())
+    ).toEqual(['Ctrl', 'K']);
+
+    el.mod = false;
+    await el.updateComplete;
+    expect(
+      getKeyElements(el)
+        .slice(1)
+        .map(key => key.textContent?.trim())
+    ).toEqual(['K']);
   });
 
   it('should render "Enter" using the platform-appropriate glyph', async () => {
@@ -177,6 +261,7 @@ describe('Kbd', () => {
     el.setAttribute('shift', '');
     el.setAttribute('alt', '');
     el.setAttribute('meta', '');
+    el.setAttribute('mod', '');
     el.setAttribute('dense', '');
     document.body.append(el);
     await el.updateComplete;
@@ -185,6 +270,7 @@ describe('Kbd', () => {
     expect(el.shift).toBe(true);
     expect(el.alt).toBe(true);
     expect(el.meta).toBe(true);
+    expect(el.mod).toBe(true);
     expect(el.dense).toBe(true);
 
     el.remove();
