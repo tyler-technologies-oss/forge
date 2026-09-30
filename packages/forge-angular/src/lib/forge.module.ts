@@ -49,6 +49,7 @@ import { ForgeFooterItemModule } from './footer-item';
 import { ForgeIconModule } from './icon';
 import { ForgeIconButtonModule } from './icon-button';
 import { ForgeInlineMessageModule } from './inline-message';
+import { ForgeKbdModule } from './kbd';
 import { ForgeKeyModule } from './key/key.module';
 import { ForgeKeyboardShortcutModule } from './keyboard-shortcut';
 import { ForgeLabelModule } from './label';
@@ -159,6 +160,7 @@ import { ForgeTimelineItemModule } from './timeline-item/timeline-item.module';
     ForgeIconModule,
     ForgeIconButtonModule,
     ForgeInlineMessageModule,
+    ForgeKbdModule,
     ForgeKeyModule,
     ForgeKeyboardShortcutModule,
     ForgeLabelModule,

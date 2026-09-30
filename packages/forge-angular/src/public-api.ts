@@ -51,6 +51,7 @@ export * from './lib/footer-item';
 export * from './lib/icon';
 export * from './lib/icon-button';
 export * from './lib/inline-message';
+export * from './lib/kbd';
 export * from './lib/key';
 export * from './lib/keyboard-shortcut';
 export * from './lib/key-item';
