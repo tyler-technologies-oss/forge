@@ -31,6 +31,7 @@ export const RICH_TEXT_CONTENT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ri
  *
  * @cssproperty --forge-rich-text-content-disabled-opacity - The opacity of the content area when
  * the surrounding editor is disabled.
+ * @cssproperty --forge-rich-text-content-padding - The padding around the editable content.
  */
 @customElement(RICH_TEXT_CONTENT_TAG_NAME)
 export class RichTextContentComponent extends LitElement {
