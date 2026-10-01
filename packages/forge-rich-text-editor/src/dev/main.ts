@@ -6,6 +6,9 @@ import type { RichTextEditorComponent, RichTextRendererComponent, RichTextRender
 const editor = document.querySelector<RichTextEditorComponent>('#editor')!;
 const readOnly = document.querySelector<RichTextEditorComponent>('#readonly')!;
 const renderer = document.querySelector<RichTextRendererComponent>('#renderer')!;
+const paddedEditor = document.querySelector<RichTextEditorComponent>('#padded-editor')!;
+const paddedRenderer = document.querySelector<RichTextRendererComponent>('#padded-renderer')!;
+const padding = document.querySelector<HTMLInputElement>('#padding')!;
 const events = document.querySelector<HTMLOutputElement>('#events')!;
 const output = document.querySelector<HTMLPreElement>('#output')!;
 
@@ -33,6 +36,13 @@ const SAMPLE_DOC = {
 
 readOnly.content = SAMPLE_HTML;
 renderer.content = SAMPLE_DOC;
+paddedEditor.content = SAMPLE_HTML;
+paddedRenderer.content = SAMPLE_DOC;
+
+padding.addEventListener('input', () => {
+  paddedEditor.style.setProperty('--forge-rich-text-editor-content-padding', padding.value);
+  paddedRenderer.style.setProperty('--forge-rich-text-renderer-padding', padding.value);
+});
 
 for (const type of ['change', 'validation', 'initialized', 'initialization-error', 'error']) {
   editor.addEventListener(type, event => {
