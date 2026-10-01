@@ -1,7 +1,15 @@
-@use '../core/styles/theme';
 @use './token-utils' as *;
+@use '../divider';
 
-@mixin horizontal {
-  display: flex;
-  flex-direction: row;
+@mixin host {
+  display: block;
+  outline: none;
+}
+
+@mixin base {
+  @include divider.provide-theme(
+    (
+      margin: #{token(divider-margin)}
+    )
+  );
 }

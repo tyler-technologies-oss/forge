@@ -13,7 +13,6 @@ $tokens: (
   margin: utils.module-val(option, margin, 0),
   height: utils.module-val(option, height, 48px),
   dense-height: utils.module-val(option, dense-height, 32px),
-  indent: utils.module-val(option, indent, spacing.variable(xxlarge)),
   cursor: utils.module-val(option, cursor, pointer),
   gap: utils.module-val(option, gap, spacing.variable(large)),
   // Supporting text
@@ -25,14 +24,11 @@ $tokens: (
   selected-color: utils.module-val(option, selected-color, theme.variable(primary)),
   selected-background: utils.module-ref(option, selected-background, selected-color),
   selected-opacity: utils.module-val(option, selected-opacity, theme.emphasis(lowest)),
-  selected-start-color: utils.module-ref(option, selected-start-color, selected-color),
-  selected-end-color: utils.module-ref(option, selected-end-color, selected-color),
   selected-text-color: utils.module-val(option, selected-text-color, theme.variable(text-medium)),
   // Disabled
   disabled-opacity: utils.module-val(option, disabled-opacity, theme.emphasis(medium-low)),
   disabled-cursor: utils.module-val(option, disabled-cursor, not-allowed),
   // Line variants
-  one-line-height: utils.module-ref(option, one-line-height, height),
   two-line-height: utils.module-val(option, two-line-height, utils.module-ref(option, height, 72px, value)),
   three-line-height: utils.module-val(option, three-line-height, utils.module-ref(option, height, 88px, value)),
   // Dense
@@ -40,14 +36,7 @@ $tokens: (
   dense-two-line-height: utils.module-val(option, dense-two-line-height, utils.module-ref(option, dense-height, 56px, value)),
   dense-three-line-height: utils.module-val(option, dense-three-line-height, utils.module-ref(option, dense-height, 72px, value)),
   dense-font-size: utils.module-val(option, dense-font-size, 0.875rem),
-  dense-indent: utils.module-val(option, dense-indent, spacing.variable(xxlarge)),
   dense-gap: utils.module-val(option, dense-gap, spacing.variable(xsmall)),
-  // Start
-  start-selected-color: utils.module-ref(option, start-selected-color, selected-color),
-  // end
-  end-selected-color: utils.module-ref(option, end-selected-color, selected-color),
-  // Wrap
-  wrap-padding: utils.module-val(option, wrap-padding, spacing.variable(xsmall) spacing.variable(medium)),
   // Drag handle
   drag-handle-color: utils.module-val(option, drag-handle-color, theme.variable(text-medium))
 ) !default;

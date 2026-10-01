@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { LISTBOX_TAG_NAME } from '../../listbox/listbox.js';
+import { LISTBOX_TAG_NAME } from '../../listbox/listbox-constants.js';
 import { IOptionGroupConfigComponent, OptionGroupConfigComponent } from './option-group-config.js';
 import { OPTION_GROUP_CONSTANTS } from './option-group-constants.js';
 
@@ -15,7 +15,19 @@ export interface IOptionGroupComponent extends IOptionGroupConfigComponent {}
 /**
  * @tag forge-option-group
  *
- * @summary Groups related options together with an optional label within select components.
+ * @summary Groups related options together with a label within select components.
+ *
+ * @slot - The default slot for options within the group.
+ * @slot label - The label for the option group.
+ *
+ * @cssproperty --forge-option-group-label-color - The text color of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-inline - The inline padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block - The block padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block-start - The block-start padding of an option group's label.
+ * @cssproperty --forge-option-group-label-padding-block-end - The block-end padding of an option group's label.
+ *
+ * @csspart root - The root element of the option group.
+ * @csspart label - The label element of the option group.
  */
 @customElement(OPTION_GROUP_CONSTANTS.elementName)
 export class OptionGroupComponent extends OptionGroupConfigComponent implements IOptionGroupComponent {
@@ -40,7 +52,9 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
     this.#configOnly = !this.closest(LISTBOX_TAG_NAME);
 
     if (this.#configOnly) {
-      return this; // Light DOM for config-only option group
+      // Render into a detached fragment so Lit's marker nodes don't pollute the light DOM,
+      // which would otherwise trigger consumers (eg. forge-select) watching for child mutations.
+      return document.createDocumentFragment();
     }
 
     this.#setupAria();
@@ -48,7 +62,9 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
   }
 
   public firstUpdated(): void {
-    this.#internals.ariaLabelledByElements = [this._labelElement];
+    if (!this.#configOnly) {
+      this.#internals.ariaLabelledByElements = [this._labelElement];
+    }
   }
 
   public render(): TemplateResult {
@@ -62,7 +78,7 @@ export class OptionGroupComponent extends OptionGroupConfigComponent implements 
     };
 
     return html`
-      <div class=${classMap(classes)}>
+      <div class=${classMap(classes)} part="root">
         <div id="label" class="label" part="label" role="presentation">
           <slot name="label"></slot>
         </div>

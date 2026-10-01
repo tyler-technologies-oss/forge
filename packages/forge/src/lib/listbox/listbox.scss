@@ -1,9 +1,9 @@
 @use './token-utils' as *;
 @use './core';
+@use '../divider';
 
 :host {
-  display: block;
-  outline: none;
+  @include core.host;
 }
 
 :host([hidden]) {
@@ -14,6 +14,10 @@
   @include tokens;
 }
 
-.horizontal {
-  @include core.horizontal;
+.forge-listbox {
+  @include core.base;
+}
+
+::slotted(forge-option-group:not(:last-child)) {
+  margin-block-end: #{token(group-margin)};
 }

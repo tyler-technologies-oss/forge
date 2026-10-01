@@ -8,7 +8,8 @@
 @mixin label {
   @include typography.style(overline);
 
-  padding-block-start: #{token(label-padding-start)};
-  padding-block-end: #{token(label-padding-end)};
+  padding-inline: #{token(label-padding-inline)};
+  padding-block-start: #{token(label-padding-block-start)};
+  padding-block-end: #{token(label-padding-block-end)};
   color: #{token(label-color)};
 }

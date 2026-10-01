@@ -16,7 +16,62 @@ export class OptionComponent {
   /** The forge-option element. */
   public readonly nativeElement = this.elementRef.nativeElement;
 
-  /** Gets/sets the value of this option. */
+  /** Whether the option is selected. __Applies only to declarative options.__ */
+  @Input({ transform: booleanAttribute })
+  public set selected(value: OptionComponentCustomElement['selected']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.selected = value;
+    });
+  }
+  public get selected(): OptionComponentCustomElement['selected'] {
+    return this.nativeElement.selected;
+  }
+
+  /** Sets the option's height to fit two lines of text. __Applies only to declarative options.__ */
+  @Input({ transform: booleanAttribute })
+  public set twoLine(value: OptionComponentCustomElement['twoLine']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.twoLine = value;
+    });
+  }
+  public get twoLine(): OptionComponentCustomElement['twoLine'] {
+    return this.nativeElement.twoLine;
+  }
+
+  /** Sets the option's height to fit three lines of text. __Applies only to declarative options.__ */
+  @Input({ transform: booleanAttribute })
+  public set threeLine(value: OptionComponentCustomElement['threeLine']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.threeLine = value;
+    });
+  }
+  public get threeLine(): OptionComponentCustomElement['threeLine'] {
+    return this.nativeElement.threeLine;
+  }
+
+  /** Whether the option uses a dense layout. __Applies only to declarative options.__ */
+  @Input({ transform: booleanAttribute })
+  public set dense(value: OptionComponentCustomElement['dense']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.dense = value;
+    });
+  }
+  public get dense(): OptionComponentCustomElement['dense'] {
+    return this.nativeElement.dense;
+  }
+
+  /** Whether the option is read only. __Applies only to declarative options.__ */
+  @Input({ transform: booleanAttribute })
+  public set readonly(value: OptionComponentCustomElement['readonly']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.readonly = value;
+    });
+  }
+  public get readonly(): OptionComponentCustomElement['readonly'] {
+    return this.nativeElement.readonly;
+  }
+
+  /** The value of the option used for form submission. */
   @Input()
   public set value(value: OptionComponentCustomElement['value']) {
     this.zone.runOutsideAngular(() => {
@@ -27,7 +82,7 @@ export class OptionComponent {
     return this.nativeElement.value;
   }
 
-  /** Gets/sets the label of this option. */
+  /** The label text of the option. __Applies only to config-based options.__ */
   @Input()
   public set label(value: OptionComponentCustomElement['label']) {
     this.zone.runOutsideAngular(() => {
@@ -38,7 +93,7 @@ export class OptionComponent {
     return this.nativeElement.label;
   }
 
-  /** Gets/sets the secondary label of this option. */
+  /** The secondary label text of the option. __Applies only to config-based options.__ */
   @Input()
   public set secondaryLabel(value: OptionComponentCustomElement['secondaryLabel']) {
     this.zone.runOutsideAngular(() => {
@@ -49,7 +104,7 @@ export class OptionComponent {
     return this.nativeElement.secondaryLabel;
   }
 
-  /** Gets/sets the disabled status of this option. */
+  /** Whether the option is disabled. */
   @Input({ transform: booleanAttribute })
   public set disabled(value: OptionComponentCustomElement['disabled']) {
     this.zone.runOutsideAngular(() => {
@@ -60,7 +115,7 @@ export class OptionComponent {
     return this.nativeElement.disabled;
   }
 
-  /** Gets/sets the whether this option is a divider. */
+  /** Whether the option renders as a divider instead of a list item. __Applies only to config-based options.__ */
   @Input({ transform: booleanAttribute })
   public set divider(value: OptionComponentCustomElement['divider']) {
     this.zone.runOutsideAngular(() => {
@@ -71,7 +126,7 @@ export class OptionComponent {
     return this.nativeElement.divider;
   }
 
-  /** Gets/sets the classes of this option. */
+  /** Classes set on the option. __Applies only to config-based options.__ */
   @Input()
   public set optionClass(value: OptionComponentCustomElement['optionClass']) {
     this.zone.runOutsideAngular(() => {
@@ -82,7 +137,7 @@ export class OptionComponent {
     return this.nativeElement.optionClass;
   }
 
-  /** Gets/sets the leading icon of this option. */
+  /** The name of the option's leading icon. __Applies only to config-based options.__ */
   @Input()
   public set leadingIcon(value: OptionComponentCustomElement['leadingIcon']) {
     this.zone.runOutsideAngular(() => {
@@ -93,7 +148,7 @@ export class OptionComponent {
     return this.nativeElement.leadingIcon;
   }
 
-  /** Gets/sets the leading icon class of this option. */
+  /** Classes set on the option's leading icon. __Applies only to config-based options.__ */
   @Input()
   public set leadingIconClass(value: OptionComponentCustomElement['leadingIconClass']) {
     this.zone.runOutsideAngular(() => {
@@ -104,7 +159,7 @@ export class OptionComponent {
     return this.nativeElement.leadingIconClass;
   }
 
-  /** Gets/sets the leading icon type of this option. */
+  /** The type of the option's leading icon, either "font" or "component". __Applies only to config-based options.__ */
   @Input()
   public set leadingIconType(value: OptionComponentCustomElement['leadingIconType']) {
     this.zone.runOutsideAngular(() => {
@@ -115,7 +170,7 @@ export class OptionComponent {
     return this.nativeElement.leadingIconType;
   }
 
-  /** Gets/sets properties on leading icon component. */
+  /** Properties set on the leading icon component. __Applies only to config-based options.__ */
   @Input()
   public set leadingIconComponentProps(value: OptionComponentCustomElement['leadingIconComponentProps']) {
     this.zone.runOutsideAngular(() => {
@@ -126,7 +181,7 @@ export class OptionComponent {
     return this.nativeElement.leadingIconComponentProps;
   }
 
-  /** Gets/sets the trailing icon of this option. */
+  /** The name of the option's trailing icon. __Applies only to config-based options.__ */
   @Input()
   public set trailingIcon(value: OptionComponentCustomElement['trailingIcon']) {
     this.zone.runOutsideAngular(() => {
@@ -137,7 +192,7 @@ export class OptionComponent {
     return this.nativeElement.trailingIcon;
   }
 
-  /** Gets/sets the trailing icon class of this option. */
+  /** Classes set on the option's trailing icon. __Applies only to config-based options.__ */
   @Input()
   public set trailingIconClass(value: OptionComponentCustomElement['trailingIconClass']) {
     this.zone.runOutsideAngular(() => {
@@ -148,7 +203,7 @@ export class OptionComponent {
     return this.nativeElement.trailingIconClass;
   }
 
-  /** Gets/sets the trailing icon type of this option. */
+  /** The type of the option's trailing icon, either "font" or "component". __Applies only to config-based options.__ */
   @Input()
   public set trailingIconType(value: OptionComponentCustomElement['trailingIconType']) {
     this.zone.runOutsideAngular(() => {
@@ -159,7 +214,7 @@ export class OptionComponent {
     return this.nativeElement.trailingIconType;
   }
 
-  /** Gets/sets properties on trailing icon component. */
+  /** Properties set on the trailing icon component. __Applies only to config-based options.__ */
   @Input()
   public set trailingIconComponentProps(value: OptionComponentCustomElement['trailingIconComponentProps']) {
     this.zone.runOutsideAngular(() => {
@@ -170,7 +225,7 @@ export class OptionComponent {
     return this.nativeElement.trailingIconComponentProps;
   }
 
-  /** Gets/sets the leading builder of this option. */
+  /** A callback function that returns an element to render in the option's leading slot. __Applies only to config-based options.__ */
   @Input()
   public set leadingBuilder(value: OptionComponentCustomElement['leadingBuilder']) {
     this.zone.runOutsideAngular(() => {
@@ -181,7 +236,7 @@ export class OptionComponent {
     return this.nativeElement.leadingBuilder;
   }
 
-  /** Gets/sets the trailing builder of this option. */
+  /** A callback function that returns an element to render in the option's trailing slot. __Applies only to config-based options.__ */
   @Input()
   public set trailingBuilder(value: OptionComponentCustomElement['trailingBuilder']) {
     this.zone.runOutsideAngular(() => {
@@ -192,7 +247,11 @@ export class OptionComponent {
     return this.nativeElement.trailingBuilder;
   }
 
-  /** Gets/sets the tooltip configuration for this option. */
+  /**
+   * Configuration options for an attached tooltip. Accepts a plain string via the `tooltip`
+   * attribute (translated to `{ text: <value> }`), or an object via property assignment.
+   * __Applies only to config-based options.__
+   */
   @Input()
   public set tooltip(value: OptionComponentCustomElement['tooltip']) {
     this.zone.runOutsideAngular(() => {

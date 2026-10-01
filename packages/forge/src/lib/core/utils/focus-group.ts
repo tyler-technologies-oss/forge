@@ -4,6 +4,8 @@ import { directive, ElementPart } from 'lit/directive.js';
 import { ExperimentalFocusOptions } from '../../constants.js';
 import { composedPathFrom } from './event-utils.js';
 
+let focusGroupInstanceCounter = 0;
+
 export type FocusGroupOrientation = 'horizontal' | 'vertical' | 'both';
 export type FocusGroupFocusChangeCallback<T extends HTMLElement = HTMLElement> = (args: FocusChangeCallbackArgs<T>) => void;
 export type FocusGroupGetEntryElementCallback<T extends HTMLElement = HTMLElement> = () => T | null;
@@ -104,6 +106,7 @@ export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
   #focusInListener = (evt: FocusEvent): void => this.#handleFocusIn(evt);
   #focusOutListener = (evt: FocusEvent): void => this.#handleFocusOut(evt);
   #isInitialized = false;
+  #instanceId = 0;
 
   get #elements(): T[] {
     return this.#getElements();
@@ -130,6 +133,7 @@ export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
     this.#useActiveDescendant = config.useActiveDescendant ?? false;
     this.#onFocusChange = config.onFocusChange;
     this.#getEntryElement = config.getEntryElement ?? (() => this.#elements[0] ?? null);
+    this.#instanceId = ++focusGroupInstanceCounter;
     this.#isInitialized = true;
 
     // Set tabindex on root element if using active descendant
@@ -258,9 +262,14 @@ export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
 
     // In activeDescendant mode, focus stays on root
     if (this.#useActiveDescendant) {
-      // If focus enters root and no active element, set first as active
-      if (target === this.#rootElement && !this.#lastFocusedElement) {
-        this.focusFirst({ focusVisible });
+      // If focus enters root, (re-)activate the current (or first) element so the active-descendant
+      // state and onFocusChange callback fire again, even if focus previously left and returned.
+      if (target === this.#rootElement) {
+        if (!this.#lastFocusedElement) {
+          this.focusFirst({ focusVisible });
+        } else {
+          this.#focusAtIndex(this.#elements.indexOf(this.#lastFocusedElement), { focusVisible });
+        }
       }
       return;
     }
@@ -344,7 +353,7 @@ export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
       this.#onFocusChange?.({
         event: new FocusEvent('focus'),
         newElement: element,
-        oldElement: this.#lastFocusedElement ?? undefined,
+        oldElement: this.#lastFocusedElement === element ? undefined : (this.#lastFocusedElement ?? undefined),
         focusVisible: options?.focusVisible ?? false
       });
     } else {
@@ -423,7 +432,7 @@ export class BaseFocusGroup<T extends HTMLElement = HTMLElement> {
     if (!element.id) {
       const safeSelector = this.#selector.replace(/[^a-z0-9-]/gi, '-');
       const index = elements.indexOf(element);
-      element.id = `${safeSelector}-${index}`;
+      element.id = `${safeSelector}-${this.#instanceId}-${index}`;
     }
 
     // Update aria-activedescendant on root element

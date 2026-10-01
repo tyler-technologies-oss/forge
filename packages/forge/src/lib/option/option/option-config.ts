@@ -5,6 +5,7 @@ import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import type { IIconComponent } from '../../icon/index.js';
 import { ListDropdownIconType, ListDropdownTooltipConfig } from '../../list-dropdown/list-dropdown-constants.js';
 import { OPTION_CONSTANTS } from './option-constants.js';
+import type { OptionUpdateReason } from './option.js';
 
 export interface IOptionConfigComponent extends BaseLitElement {
   value: any;
@@ -32,7 +33,8 @@ export interface IOptionConfigComponent extends BaseLitElement {
  */
 export abstract class OptionConfigComponent extends BaseLitElement {
   /**
-   * Gets/sets the value of this option.
+   * The value of the option used for form submission.
+   * @default undefined
    * @attribute
    */
   @property()
@@ -41,6 +43,7 @@ export abstract class OptionConfigComponent extends BaseLitElement {
     if (oldValue !== value) {
       this.#value = value;
       this.dispatchEvent(new CustomEvent(OPTION_CONSTANTS.events.VALUE_CHANGE, { detail: value, bubbles: true, composed: true }));
+      this._dispatchUpdate('value-changed');
     }
   }
   public get value(): any {
@@ -49,29 +52,51 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   #value: any;
 
   /**
-   * Gets/sets the label of this option.
+   * Dispatches the unified option update event used by `forge-listbox` to reconcile its value.
+   */
+  protected _dispatchUpdate(reason: OptionUpdateReason): void {
+    this.dispatchEvent(new CustomEvent(OPTION_CONSTANTS.events.UPDATE, { bubbles: true, composed: true, detail: { reason } }));
+  }
+
+  /**
+   * The label text of the option. __Applies only to config-based options.__
+   * @default undefined
    * @attribute
    */
   @property({ reflect: true })
   public label?: string;
 
   /**
-   * Gets/sets the secondary label of this option.
+   * The secondary label text of the option. __Applies only to config-based options.__
+   * @default undefined
    * @attribute secondary-label
    */
   @property({ attribute: 'secondary-label', reflect: true })
   public secondaryLabel?: string;
 
   /**
-   * Gets/sets the disabled status of this option.
+   * Whether the option is disabled.
    * @default false
    * @attribute
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public set disabled(value: boolean) {
+    this.#localDisabled = value;
+    this.#syncDisabled();
+  }
+  public get disabled(): boolean {
+    return this.#combinedDisabled;
+  }
+  #localDisabled = false;
+  #inheritedDisabled = false;
+  #combinedDisabled = false;
+
+  #syncDisabled(): void {
+    this.#combinedDisabled = this.#localDisabled || this.#inheritedDisabled;
+  }
 
   /**
-   * Gets/sets whether this option is a divider.
+   * Whether the option renders as a divider instead of a list item. __Applies only to config-based options.__
    * @default false
    * @attribute
    */
@@ -79,7 +104,8 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public divider = false;
 
   /**
-   * Gets/sets the classes of this option.
+   * Classes set on the option. __Applies only to config-based options.__
+   * @default []
    * @attribute option-class
    */
   @property({
@@ -104,21 +130,23 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public optionClass: string | string[] = [];
 
   /**
-   * Gets/sets the leading icon of this option.
+   * The name of the option's leading icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute leading-icon
    */
   @property({ attribute: 'leading-icon', reflect: true })
   public leadingIcon?: string;
 
   /**
-   * Gets/sets the leading icon class of this option.
+   * Classes set on the option's leading icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute leading-icon-class
    */
   @property({ attribute: 'leading-icon-class', reflect: true })
   public leadingIconClass?: string;
 
   /**
-   * Gets/sets the leading icon type of this option.
+   * The type of the option's leading icon, either "font" or "component". __Applies only to config-based options.__
    * @default "font"
    * @attribute leading-icon-type
    */
@@ -126,27 +154,30 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public leadingIconType?: ListDropdownIconType;
 
   /**
-   * Gets/sets properties on leading icon component.
+   * Properties set on the leading icon component. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public leadingIconComponentProps?: Partial<IIconComponent>;
 
   /**
-   * Gets/sets the trailing icon of this option.
+   * The name of the option's trailing icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute trailing-icon
    */
   @property({ attribute: 'trailing-icon', reflect: true })
   public trailingIcon?: string;
 
   /**
-   * Gets/sets the trailing icon class of this option.
+   * Classes set on the option's trailing icon. __Applies only to config-based options.__
+   * @default undefined
    * @attribute trailing-icon-class
    */
   @property({ attribute: 'trailing-icon-class', reflect: true })
   public trailingIconClass?: string;
 
   /**
-   * Gets/sets the trailing icon type of this option.
+   * The type of the option's trailing icon, either "font" or "component". __Applies only to config-based options.__
    * @default "font"
    * @attribute trailing-icon-type
    */
@@ -154,31 +185,44 @@ export abstract class OptionConfigComponent extends BaseLitElement {
   public trailingIconType?: ListDropdownIconType;
 
   /**
-   * Gets/sets properties on trailing icon component.
+   * Properties set on the trailing icon component. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public trailingIconComponentProps?: Partial<IIconComponent>;
 
   /**
-   * Gets/sets the leading builder of this option.
+   * A callback function that returns an element to render in the option's leading slot. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public leadingBuilder?: () => HTMLElement;
 
   /**
-   * Gets/sets the trailing builder of this option.
+   * A callback function that returns an element to render in the option's trailing slot. __Applies only to config-based options.__
+   * @default undefined
    */
   @property({ attribute: false })
   public trailingBuilder?: () => HTMLElement;
 
   /**
-   * Gets/sets the tooltip configuration for this option.
+   * Configuration options for an attached tooltip. Accepts a plain string via the `tooltip`
+   * attribute (translated to `{ text: <value> }`), or an object via property assignment.
+   * __Applies only to config-based options.__
+   * @default undefined
+   * @attribute
    */
-  @property({ attribute: false })
+  @property({
+    converter: {
+      fromAttribute: (value: string | null) => (value ? { text: value } : undefined),
+      toAttribute: () => null
+    }
+  })
   public tooltip?: ListDropdownTooltipConfig;
 
-  @consume({ context: SELECT_LIKE_DISABLED })
+  @consume({ context: SELECT_LIKE_DISABLED, subscribe: true })
   private set _contextDisabled(value: boolean) {
-    this.disabled = value || this.disabled;
+    this.#inheritedDisabled = value;
+    this.#syncDisabled();
   }
 }

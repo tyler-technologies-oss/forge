@@ -74,3 +74,4 @@ export type ExperimentalFocusOptions = FocusOptions & { focusVisible?: boolean }
 
 export const SELECT_LIKE_DISABLED = createContext<boolean>('select-like-disabled');
 export const SELECT_LIKE_MULTIPLE = createContext<boolean>('select-like-multiple');
+export const SELECT_LIKE_READONLY = createContext<boolean>('select-like-readonly');
