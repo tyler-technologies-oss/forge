@@ -1,0 +1,23 @@
+@use './token-utils' as *;
+@use './core';
+@use '../divider';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-listbox {
+  @include tokens;
+}
+
+.forge-listbox {
+  @include core.base;
+}
+
+::slotted(forge-option-group:not(:last-child)) {
+  margin-block-end: #{token(group-margin)};
+}

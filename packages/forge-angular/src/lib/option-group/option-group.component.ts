@@ -27,6 +27,17 @@ export class OptionGroupComponent {
     return this.nativeElement.label;
   }
 
+  /** The text content for the group. */
+  @Input()
+  public set text(value: OptionGroupComponentCustomElement['text']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.text = value;
+    });
+  }
+  public get text(): OptionGroupComponentCustomElement['text'] {
+    return this.nativeElement.text;
+  }
+
   /** The child options of this group. */
   @Input()
   public set options(value: OptionGroupComponentCustomElement['options']) {
@@ -58,17 +69,6 @@ export class OptionGroupComponent {
   }
   public get value(): OptionGroupComponentCustomElement['value'] {
     return this.nativeElement.value;
-  }
-
-  /** The text content for the group. */
-  @Input()
-  public set text(value: OptionGroupComponentCustomElement['text']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.text = value;
-    });
-  }
-  public get text(): OptionGroupComponentCustomElement['text'] {
-    return this.nativeElement.text;
   }
 
   constructor() {

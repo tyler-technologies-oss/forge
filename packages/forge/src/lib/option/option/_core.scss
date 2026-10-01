@@ -1,0 +1,124 @@
+@use '../../core/styles/typography';
+@use './token-utils' as *;
+
+@mixin base {
+  position: relative;
+  box-sizing: border-box;
+
+  display: flex;
+  gap: #{token(gap)};
+  align-items: center;
+
+  outline: none;
+  border-radius: #{token(shape)};
+  background-color: #{token(background)};
+  height: #{token(height)};
+  min-height: #{token(height)};
+  padding: #{token(padding)};
+  margin: #{token(margin)};
+
+  text-decoration: none;
+
+  cursor: #{token(cursor)};
+}
+
+@mixin label {
+  @include typography.style(body1, $exclude: [font-size font-weight line-height]);
+  @include typography.ellipse;
+
+  box-sizing: border-box;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  font-size: #{token(text-font-size)};
+  font-weight: #{token(text-font-weight)};
+  line-height: #{token(text-line-height)};
+
+  flex: 1;
+
+  contain: layout;
+}
+
+@mixin secondary-text {
+  @include typography.style(body1);
+  @include typography.ellipse;
+
+  color: #{token(text-color)};
+  display: block;
+}
+
+@mixin two-line {
+  height: #{token(two-line-height)};
+  min-height: #{token(two-line-height)};
+}
+
+@mixin three-line {
+  height: #{token(three-line-height)};
+  min-height: #{token(three-line-height)};
+}
+
+@mixin selected {
+  color: #{token(selected-color)};
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: #{token(selected-opacity)};
+    background-color: #{token(selected-background)};
+    pointer-events: none;
+  }
+}
+
+@mixin start-end-selected {
+  color: #{token(selected-color)};
+  isolation: isolate;
+}
+
+@mixin label-selected {
+  color: #{token(selected-color)};
+}
+
+@mixin secondary-text-selected {
+  color: #{token(selected-text-color)};
+}
+
+@mixin drag-handle {
+  color: #{token(drag-handle-color)};
+  cursor: grab;
+}
+
+@mixin dense {
+  @include override(gap, dense-gap);
+
+  height: #{token(dense-one-line-height)};
+  min-height: #{token(dense-one-line-height)};
+}
+
+@mixin dense-label {
+  font-size: #{token(dense-font-size)};
+}
+
+@mixin dense-two-line {
+  height: #{token(dense-two-line-height)};
+  min-height: #{token(dense-two-line-height)};
+}
+
+@mixin dense-three-line {
+  height: #{token(dense-three-line-height)};
+  min-height: #{token(dense-three-line-height)};
+}
+
+@mixin disabled {
+  cursor: #{token(disabled-cursor)};
+  opacity: #{token(disabled-opacity)};
+}
+
+@mixin readonly {
+  cursor: auto;
+  opacity: #{token(disabled-opacity)};
+}
