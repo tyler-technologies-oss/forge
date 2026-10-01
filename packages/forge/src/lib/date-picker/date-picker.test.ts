@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { task, frame } from '../core/utils/utils.js';
 import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '../core/index.js';
@@ -1586,6 +1587,91 @@ describe('DatePickerComponent', () => {
       inputElement.dispatchEvent(new Event('blur'));
 
       expect(inputElement.value).toBe('01/01/202');
+    });
+
+    it('should pad single digit month and continue into the day segment when typing with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('42125');
+
+      expect(inputElement.value).toBe('04/21/25__');
+    });
+
+    it('should pad single digit month and day when slash is typed with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('1/5/2025');
+
+      expect(inputElement.value).toBe('01/05/2025');
+    });
+
+    it('should pad single digit day when typed with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('0152025');
+
+      expect(inputElement.value).toBe('01/05/2025');
+    });
+
+    it('should emit change event with coerced date when input value is coerced on blur', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+      harness.component.allowInvalidDate = true;
+      harness.component.valueMode = 'object';
+      harness.component.value = new Date(2025, 3, 21);
+      const changeSpy = vi.fn();
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('{End}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{Backspace}{Backspace}');
+      expect(inputElement.value).toBe('04/__/2025');
+
+      harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      inputElement.blur();
+
+      const expectedDate = new Date(2025, 3, 20);
+      expect(inputElement.value).toBe('04/20/2025');
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(isSameDate(changeSpy.mock.calls[0][0].detail, expectedDate)).toBe(true);
+      expect(isSameDate(harness.component.value as Date, expectedDate)).toBe(true);
+    });
+
+    it('should pad month and day segments when a full date is entered at once', () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.value = '4/5/2025';
+      inputElement.dispatchEvent(new Event('input'));
+
+      expect(inputElement.value).toBe('04/05/2025');
+    });
+
+    it('should not emit change event on blur when the value is unchanged', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.value = new Date(2025, 3, 21);
+      const changeSpy = vi.fn();
+      harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      inputElement.blur();
+
+      expect(changeSpy).not.toHaveBeenCalled();
     });
 
     it('should clear mask format if the input is cleared programmatically', () => {
