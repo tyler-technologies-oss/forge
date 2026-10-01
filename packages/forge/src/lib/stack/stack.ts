@@ -4,7 +4,7 @@ import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/utils/utils.js';
-import { StackAlignment, STACK_CONSTANTS } from './stack-constants.js';
+import { isStackGapSize, StackAlignment, StackGapSize, STACK_CONSTANTS, STACK_GAP_SIZE_TOKENS } from './stack-constants.js';
 
 import styles from './stack.scss';
 
@@ -12,6 +12,9 @@ const toGapStyle = (gap: string | null): string | undefined => {
   const trimmedGap = gap == null ? undefined : String(gap).trim();
   if (!trimmedGap || trimmedGap === STACK_CONSTANTS.defaults.GAP) {
     return undefined;
+  }
+  if (isStackGapSize(trimmedGap)) {
+    return `var(--forge-stack-gap, var(--forge-spacing-${STACK_GAP_SIZE_TOKENS[trimmedGap]}))`;
   }
   const numericGap = Number(trimmedGap);
   const value = Number.isFinite(numericGap) ? `${numericGap}px` : trimmedGap;
@@ -23,7 +26,7 @@ export interface IStackComponent extends BaseLitElement {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;
-  gap: string;
+  gap: StackGapSize | (string & {});
   alignment: StackAlignment;
   justify: StackAlignment;
 }
@@ -92,12 +95,13 @@ export class StackComponent extends BaseLitElement implements IStackComponent {
   public stretch = false;
 
   /**
-   * Controls the gap between the children within the stack
+   * Controls the gap between the children within the stack. Accepts a CSS length, a unitless pixel number, or a
+   * spacing token size (`xxxs`, `xxs`, `xs`, `s`, `m`, `ml`, `l`, `xl`, `xxl`, `xxxl`) which maps to `--forge-spacing-*`.
    * @default "16"
    * @attribute
    */
   @property({ reflect: true, useDefault: true })
-  public gap = STACK_CONSTANTS.defaults.GAP;
+  public gap: StackGapSize | (string & {}) = STACK_CONSTANTS.defaults.GAP;
 
   /**
    * Controls the align-items property of a row or column

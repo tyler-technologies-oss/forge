@@ -141,6 +141,17 @@ describe('Stack', () => {
     expect(getRootEl(el).style.gap).toBe('var(--forge-stack-gap, 12px)');
   });
 
+  it('should map a size name to the matching spacing token when gap is a size', async () => {
+    const screen = render(html`<forge-stack gap="xxxs"></forge-stack>`);
+    const el = screen.container.querySelector('forge-stack') as IStackComponent;
+    await el.updateComplete;
+    expect(getRootEl(el).style.gap).toBe('var(--forge-stack-gap, var(--forge-spacing-xxxsmall))');
+
+    el.gap = 'ml';
+    await el.updateComplete;
+    expect(getRootEl(el).style.gap).toBe('var(--forge-stack-gap, var(--forge-spacing-medium-large))');
+  });
+
   it('should not set an inline gap style when the gap is whitespace only', async () => {
     const screen = render(html`<forge-stack gap="  "></forge-stack>`);
     const el = screen.container.querySelector('forge-stack') as IStackComponent;

@@ -43,4 +43,21 @@ export const STACK_CONSTANTS = {
   defaults
 };
 
+export const STACK_GAP_SIZE_TOKENS = {
+  xxxs: 'xxxsmall',
+  xxs: 'xxsmall',
+  xs: 'xsmall',
+  s: 'small',
+  m: 'medium',
+  ml: 'medium-large',
+  l: 'large',
+  xl: 'xlarge',
+  xxl: 'xxlarge',
+  xxxl: 'xxxlarge'
+} as const;
+
+export type StackGapSize = keyof typeof STACK_GAP_SIZE_TOKENS;
+
+export const isStackGapSize = (value: string): value is StackGapSize => Object.hasOwn(STACK_GAP_SIZE_TOKENS, value);
+
 export type StackAlignment = 'start' | 'center' | 'end';

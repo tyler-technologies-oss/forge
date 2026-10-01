@@ -20,6 +20,29 @@ It is very easy to overuse the stack component and end up with a lot of nested s
 
 Make sure to use the stack component judiciously and only when necessary, and instead rely on CSS Flexbox and Grid for more complex layouts.
 
+## Gap sizes
+
+In addition to a number of pixels or any CSS length, the `gap` can be set to a spacing token size. Each size maps to the matching `--forge-spacing-*` token.
+
+| Size   | Token                           |
+| ------ | ------------------------------- |
+| `xxxs` | `--forge-spacing-xxxsmall`      |
+| `xxs`  | `--forge-spacing-xxsmall`       |
+| `xs`   | `--forge-spacing-xsmall`        |
+| `s`    | `--forge-spacing-small`         |
+| `m`    | `--forge-spacing-medium`        |
+| `ml`   | `--forge-spacing-medium-large`  |
+| `l`    | `--forge-spacing-large`         |
+| `xl`   | `--forge-spacing-xlarge`        |
+| `xxl`  | `--forge-spacing-xxlarge`       |
+| `xxxl` | `--forge-spacing-xxxlarge`      |
+
+```html
+<forge-stack gap="s">...</forge-stack>
+```
+
+<Canvas of={StackStories.GapSizes} />
+
 ## Simple Vertical Form
 
 You can use the stack to create a simple vertical form layout with even spacing between fields.
