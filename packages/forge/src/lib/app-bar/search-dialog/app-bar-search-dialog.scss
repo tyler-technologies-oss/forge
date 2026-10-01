@@ -1,0 +1,60 @@
+@use '../../core/styles/spacing';
+@use '../../core/styles/typography';
+@use '../../dialog';
+@use '../../toolbar';
+
+//
+// Host
+//
+
+:host {
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Dialog
+//
+
+forge-dialog {
+  @include dialog.provide-theme(
+    (
+      width: min(640px, calc(100vw - #{spacing.variable(large)} * 2))
+    )
+  );
+}
+
+h1 {
+  @include typography.style(heading3);
+
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+forge-toolbar:not([inverted]) {
+  @include toolbar.provide-theme(
+    (
+      background: none
+    )
+  );
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(small)};
+  padding: #{spacing.variable(xsmall)} #{spacing.variable(medium)} #{spacing.variable(medium)};
+}
+
+forge-text-field {
+  flex: 1;
+}

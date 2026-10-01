@@ -1,8 +1,10 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { createRef, ref, type Ref } from 'lit/directives/ref.js';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver, throttle, tryDefine } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { ResponsiveController, RESPONSIVE_CONTROLLER_DEFAULT_DELAY } from '../core/controllers/responsive-controller.js';
+import { isOverlapping } from '../core/utils/layout-utils.js';
 import { toggleState } from '../core/utils/utils.js';
 import { ToolbarComponent } from '../toolbar/index.js';
 import { ResponsiveToolbarState, ResponsiveToolbarUpdateEventData } from './responsive-toolbar-constants.js';
@@ -29,9 +31,6 @@ declare global {
 
 /** The amount of space between the title and actions before the title is considered to be overlapping the actions. */
 const BUFFER = 24;
-
-/** The default delay in milliseconds to throttle resize events. */
-const RESIZE_DELAY = 100;
 
 export const RESPONSIVE_TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-responsive-toolbar';
 
@@ -74,40 +73,35 @@ export class ResponsiveToolbarComponent extends BaseLitElement implements IRespo
 
   /** Controls the delay in milliseconds to throttle resize events. */
   @property({ type: Number, attribute: 'resize-delay' })
-  public resizeDelay = RESIZE_DELAY;
+  public resizeDelay = RESPONSIVE_CONTROLLER_DEFAULT_DELAY;
 
   readonly #startSlotContainer: Ref<HTMLElement> = createRef();
   readonly #endSlotContainer: Ref<HTMLElement> = createRef();
   readonly #internals: ElementInternals;
-  #throttledHandleResize: (() => void) | undefined;
-  #currentState: ResponsiveToolbarState | undefined;
+  readonly #responsive = new ResponsiveController<ResponsiveToolbarState>(this, {
+    delay: this.resizeDelay,
+    measure: () => (isOverlapping(this.#startSlotContainer.value, this.#endSlotContainer.value, BUFFER) ? 'small' : 'large'),
+    onChange: state => {
+      toggleState(this.#internals, 'small', state === 'small');
+      toggleState(this.#internals, 'large', state === 'large');
+      this.#emitOverflowEvent(state);
+    }
+  });
 
   constructor() {
     super();
     this.#internals = this.attachInternals();
   }
 
-  public override connectedCallback(): void {
-    super.connectedCallback();
-    this.#initializeThrottledResizeHandler();
-    ForgeResizeObserver.observe(this, this.#handleResize);
-  }
-
-  public override disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.#currentState = undefined;
-    ForgeResizeObserver.unobserve(this);
-  }
-
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('resizeDelay') && this.resizeDelay !== changedProperties.get('resizeDelay')) {
-      this.#initializeThrottledResizeHandler();
+      this.#responsive.setDelay(this.resizeDelay);
     }
   }
 
   public render(): TemplateResult {
     return html`
-      <forge-toolbar auto-height ?no-divider=${this.noBorder} ?inverted=${this.inverted} @slotchange=${this.#updateOverlapState}>
+      <forge-toolbar auto-height ?no-divider=${this.noBorder} ?inverted=${this.inverted} @slotchange=${() => this.#responsive.measure()}>
         <slot name="before-start" slot="before-start"></slot>
         <div ${ref(this.#startSlotContainer)} slot="start">
           <slot name="start"></slot>
@@ -121,30 +115,6 @@ export class ResponsiveToolbarComponent extends BaseLitElement implements IRespo
         <slot name="after-end" slot="after-end"></slot>
       </forge-toolbar>
     `;
-  }
-
-  #initializeThrottledResizeHandler(): void {
-    this.#throttledHandleResize = throttle(() => requestAnimationFrame(() => this.#updateOverlapState()), this.resizeDelay);
-  }
-
-  #handleResize = (): void => {
-    this.#throttledHandleResize?.();
-  };
-
-  #updateOverlapState(): void {
-    const titleInlineEndEdge = this.#startSlotContainer.value?.getBoundingClientRect().right || 0;
-    const actionsInlineStartEdge = this.#endSlotContainer.value?.getBoundingClientRect().left || 0;
-    const isSmall = titleInlineEndEdge + BUFFER >= actionsInlineStartEdge;
-    const newState: ResponsiveToolbarState = isSmall ? 'small' : 'large';
-
-    if (this.#currentState === newState) {
-      return;
-    }
-
-    this.#currentState = newState;
-    toggleState(this.#internals, 'small', newState === 'small');
-    toggleState(this.#internals, 'large', newState === 'large');
-    this.#emitOverflowEvent(newState);
   }
 
   #emitOverflowEvent(state: ResponsiveToolbarState): void {

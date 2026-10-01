@@ -1,0 +1,49 @@
+<!--
+  @block App Bar — Responsive
+  @type component
+  @description An app bar that swaps its end actions and search input for a search button and overflow menu in the mobile-end slot when the title truncates or the actions no longer fit alongside search. Resize the browser window to see it switch.
+  @tags app-bar, responsive, mobile, mobile-end, search, overflow, component-example
+-->
+<forge-scaffold class="h-dvh">
+  <forge-app-bar slot="header" class="[--forge-app-bar-columns:3fr_2fr_3fr]" title-text="Community Services Directory" theme-mode="scoped">
+    <forge-icon slot="logo" name="forge_logo"></forge-icon>
+    <forge-app-bar-search slot="center">
+      <input type="text" aria-label="Search" />
+    </forge-app-bar-search>
+    <forge-icon-button slot="end" theme="app-bar" aria-label="Help">
+      <forge-icon name="help"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button slot="end" theme="app-bar" aria-label="Notifications">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-app-launcher slot="end" search-placeholder="Search by product or app">
+      <span slot="app-launcher-links-title">Resources</span>
+      <forge-app-launcher-link slot="app-launcher-link">
+        <a href="https://www.tylertech.com" target="_blank">Documentation</a>
+      </forge-app-launcher-link>
+      <forge-app-launcher-link slot="app-launcher-link">
+        <a href="https://www.tylertech.com" target="_blank">Support Center</a>
+      </forge-app-launcher-link>
+    </forge-app-launcher>
+    <forge-user-profile slot="end" theme-toggle full-name="First Last" email="first.last@tylertech.com">
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="settings"></forge-icon>
+        <a href="#">Settings</a>
+      </forge-profile-link>
+      <forge-profile-link slot="link">
+        <forge-icon slot="icon" name="account"></forge-icon>
+        <a href="#">Profile</a>
+      </forge-profile-link>
+    </forge-user-profile>
+    <forge-app-bar-search-dialog slot="mobile-end"></forge-app-bar-search-dialog>
+    <forge-menu slot="mobile-end" id="mobile-menu" placement="bottom-end">
+      <forge-icon-button theme="app-bar" aria-label="More actions">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+  </forge-app-bar>
+
+  <main slot="body" class="p-medium bg-surface-dim">
+    <div class="striped-box min-h-full"></div>
+  </main>
+</forge-scaffold>

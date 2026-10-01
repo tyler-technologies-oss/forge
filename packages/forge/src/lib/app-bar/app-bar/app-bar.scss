@@ -204,3 +204,27 @@ $host-tokens: (background, foreground);
     )
   );
 }
+
+//
+// Mobile
+//
+
+slot[name='mobile-end'] {
+  display: none;
+}
+
+:host(:state(mobile)) .forge-app-bar.has-mobile-end {
+  .row {
+    @include row-no-center;
+  }
+
+  slot[name='end'],
+  #center-section {
+    display: none;
+  }
+
+  slot[name='mobile-end'] {
+    display: flex;
+    align-items: center;
+  }
+}

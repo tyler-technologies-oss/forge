@@ -13,6 +13,7 @@ import {
   defineAppBarMenuButtonComponent,
   defineAppBarNotificationButtonComponent,
   defineAppBarProfileButtonComponent,
+  defineAppBarSearchDialogComponent,
   defineAppBarSearchComponent,
   defineProfileCardComponent
 } from './app-bar/index.js';
@@ -177,6 +178,7 @@ export function defineComponents(): void {
   defineAccordionComponent();
   defineAppBarComponent();
   defineAppBarHelpButtonComponent();
+  defineAppBarSearchDialogComponent();
   defineAppBarMenuButtonComponent();
   defineAppBarNotificationButtonComponent();
   defineAppBarProfileButtonComponent();

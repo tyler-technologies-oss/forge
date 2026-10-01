@@ -29,7 +29,8 @@ const selectors = {
 };
 
 const events = {
-  NAVIGATE: `${elementName}-navigate`
+  NAVIGATE: `${elementName}-navigate`,
+  UPDATE: `${elementName}-update`
 };
 
 export const APP_BAR_CONSTANTS = {
@@ -43,3 +44,12 @@ export const APP_BAR_CONSTANTS = {
 export type AppBarElevation = 'none' | 'raised';
 export type AppBarTheme = 'white' | 'custom' | '';
 export type AppBarThemeMode = 'inherit' | 'scoped';
+
+export type AppBarOverflowReason = 'title' | 'search' | 'end';
+
+export interface AppBarUpdateEventData {
+  /** Whether the app bar is in its mobile state. */
+  mobile: boolean;
+  /** What caused the mobile state: a truncated title, an `end` slot that doesn't fit alongside search, or an `end` slot that doesn't fit. */
+  reason?: AppBarOverflowReason;
+}

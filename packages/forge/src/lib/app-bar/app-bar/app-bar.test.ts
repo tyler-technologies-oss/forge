@@ -159,6 +159,146 @@ describe('App Bar', () => {
     expect(getRootEl(el).classList.contains(APP_BAR_CONSTANTS.classes.NO_CENTER)).toBe(false);
   });
 
+  it('should enter mobile state and show mobile-end when the title is truncated', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="A very long application title that cannot possibly fit" style="width: 200px">
+        <button slot="end">End</button>
+        <button slot="mobile-end">Mobile</button>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    const spy = vi.fn();
+    el.addEventListener('forge-app-bar-update', spy);
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect(spy).toHaveBeenCalled();
+    expect(spy.mock.calls.at(-1)?.[0].detail).toEqual({ mobile: true, reason: 'title' });
+    expect(el.querySelector<HTMLElement>('[slot=mobile-end]')?.getBoundingClientRect().width).toBeGreaterThan(0);
+    expect((el.querySelector('[slot=end]') as HTMLElement).getBoundingClientRect().width).toBe(0);
+  });
+
+  it('should hide the center slot in mobile state when mobile-end has content', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="A very long application title that cannot possibly fit" style="width: 200px">
+        <input slot="center" aria-label="Search" />
+        <button slot="mobile-end">Mobile</button>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect((el.querySelector('[slot=center]') as HTMLElement).getBoundingClientRect().width).toBe(0);
+  });
+
+  it('should keep the center slot visible in mobile state when nothing is slotted in mobile-end', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="A very long application title that cannot possibly fit" style="width: 200px">
+        <input slot="center" aria-label="Search" />
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect((el.querySelector('[slot=center]') as HTMLElement).getBoundingClientRect().width).toBeGreaterThan(0);
+  });
+
+  it('should let the title use the freed space in mobile state', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="Community Services Directory" style="width: 640px">
+        <input slot="center" aria-label="Search" />
+        <button slot="end">End</button>
+        <button slot="mobile-end">Mobile</button>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const titleEl = getTitleEl(el) as HTMLElement;
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect(titleEl.scrollWidth).toBeLessThanOrEqual(titleEl.clientWidth);
+  });
+
+  it('should truncate the title in mobile state when it would overlap the mobile-end content', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="Community Services Directory" style="width: 220px">
+        <button slot="mobile-end">Mobile</button>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const titleEl = getTitleEl(el) as HTMLElement;
+    const mobileEnd = el.querySelector('[slot=mobile-end]') as HTMLElement;
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect(titleEl.scrollWidth).toBeGreaterThan(titleEl.clientWidth);
+    expect(titleEl.getBoundingClientRect().right).toBeLessThanOrEqual(mobileEnd.getBoundingClientRect().left);
+  });
+
+  it('should leave mobile state when the app bar becomes wide enough', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="Community Services Directory" style="width: 300px">
+        <button slot="end">End</button>
+        <button slot="mobile-end">Mobile</button>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    await new Promise(resolve => setTimeout(resolve, 200));
+    expect(el.matches(':state(mobile)')).toBe(true);
+
+    el.style.width = '1200px';
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(false);
+  });
+
+  it('should not enter mobile state when the title fits', async () => {
+    const screen = render(html`<forge-app-bar title-text="Short" style="width: 800px"><button slot="mobile-end">Mobile</button></forge-app-bar>`);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(false);
+    expect(el.querySelector<HTMLElement>('[slot=mobile-end]')?.getBoundingClientRect().width).toBe(0);
+  });
+
+  it('should keep the end slot visible in mobile state when nothing is slotted in mobile-end', async () => {
+    const screen = render(
+      html`<forge-app-bar title-text="A very long application title that cannot possibly fit" style="width: 200px"
+        ><button slot="end">End</button></forge-app-bar
+      >`
+    );
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(el.matches(':state(mobile)')).toBe(true);
+    expect((el.querySelector('[slot=end]') as HTMLElement).getBoundingClientRect().width).toBeGreaterThan(0);
+  });
+
+  it('should report the search reason when end content does not fit alongside search', async () => {
+    const screen = render(html`
+      <forge-app-bar title-text="Hi" style="width: 400px">
+        <forge-app-bar-search slot="center"><input type="search" aria-label="Search" /></forge-app-bar-search>
+        <div slot="end" style="width: 300px; flex: none">End</div>
+      </forge-app-bar>
+    `);
+    const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;
+    const spy = vi.fn();
+    el.addEventListener('forge-app-bar-update', spy);
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    expect(spy.mock.calls.at(-1)?.[0].detail).toEqual({ mobile: true, reason: 'search' });
+  });
+
   it('should dispatch navigate event', async () => {
     const screen = render(html`<forge-app-bar href="javascript: void(0);"></forge-app-bar>`);
     const el = screen.container.querySelector('forge-app-bar') as AppBarComponent;

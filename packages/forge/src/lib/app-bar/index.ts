@@ -1,5 +1,6 @@
 export * from './app-bar/index.js';
 export * from './search/index.js';
+export * from './search-dialog/index.js';
 export * from './menu-button/index.js';
 export * from './notification-button/index.js';
 export * from './help-button/index.js';
