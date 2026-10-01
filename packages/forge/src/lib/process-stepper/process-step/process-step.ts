@@ -236,19 +236,21 @@ export class ProcessStepComponent extends BaseLitElement {
   get #marker(): TemplateResult {
     const icon = this.#markerIcon;
     const custom = this._markerElements?.length > 0;
+    const partial = PARTIAL_STATES.includes(this.state);
+    const numbered = !!this._stepperContext?.numbered && !partial;
     const classes = {
       marker: true,
       custom,
-      partial: !custom && PARTIAL_STATES.includes(this.state),
+      partial: !custom && partial,
       error: !custom && ERROR_STATES.includes(this.state),
       filled: !custom && this.state === 'completed',
-      dashed: !custom && !icon && !PARTIAL_STATES.includes(this.state)
+      dashed: !custom && !icon && !partial
     };
 
     return html`
       <div part="marker" class=${classMap(classes)} aria-hidden="true">
         <slot name="marker" @slotchange=${this.#handleMarkerSlotChange}
-          >${icon ? html`<forge-icon name=${icon}></forge-icon>` : html`${this._stepperContext?.numbered ? this.#position || nothing : nothing}`}</slot
+          >${icon ? html`<forge-icon name=${icon}></forge-icon>` : html`${numbered ? this.#position || nothing : nothing}`}</slot
         >
       </div>
     `;
