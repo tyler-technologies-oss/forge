@@ -1,1 +1,0 @@
-const n=document.getElementById("open-confirmation-dialog-demo"),o=document.getElementById("confirmation-dialog-demo");n?.addEventListener("click",()=>o.open=!0);o?.addEventListener("forge-confirmation-dialog-action",()=>o.open=!1);

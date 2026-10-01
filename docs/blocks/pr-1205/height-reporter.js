@@ -1,1 +1,0 @@
-function o(t){const e={type:"forge-block-height-change",height:t};window.parent.postMessage(e,"*")}window.self!==window.top&&new ResizeObserver(([e])=>{o(Math.ceil(e.target.getBoundingClientRect().height))}).observe(document.body);
