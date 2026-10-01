@@ -1,0 +1,63 @@
+{
+  "name": "@tylertech/forge-mcp",
+  "version": "1.2.0",
+  "description": "MCP server for Tyler Forge™ web component library documentation",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "forge-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc && node scripts/bundle-manifests.js",
+    "heroku-postbuild": "pnpm run build",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "start:http": "node dist/http.js",
+    "debug": "mcp-inspector dist/index.js",
+    "format": "prettier --write \"**/*.{ts,js,json,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,yaml}\"",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "publish:next": "pnpm build && pnpm publish --tag next --no-git-checks"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "tyler-forge",
+    "web-components",
+    "documentation"
+  ],
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-mcp"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.21.0",
+    "handlebars": "^4.7.8",
+    "js-levenshtein-esm": "^2.0.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.17.2",
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.10"
+  }
+}

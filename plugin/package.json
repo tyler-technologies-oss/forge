@@ -1,0 +1,27 @@
+{
+  "name": "@tylertech/forge-plugin",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Tyler Forge™ Claude Code plugin: skills, hooks and MCP server registration",
+  "author": "Tyler Technologies, Inc.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "plugin"
+  },
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,js,json,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,yaml}\"",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "vitest": "^4.1.11"
+  }
+}
