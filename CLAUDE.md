@@ -84,7 +84,7 @@ Blocks are pre-built HTML templates demonstrating Forge component patterns. Use 
 
 ### Finding Blocks
 
-- Use the `mcp__forge__get_forge_blocks` tool to work with blocks:
+- Use the `get_forge_blocks` MCP tool (`mcp__plugin_forge_forge__get_forge_blocks` when installed via the plugin) to work with blocks:
   - Call with no parameters to list all available blocks organized by category
   - Use the `query` parameter to search blocks by name, description, or tags
   - Use the `category` parameter to filter blocks by category

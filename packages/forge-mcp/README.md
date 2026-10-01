@@ -37,9 +37,16 @@ The plugin bundles the MCP server with a `/forge-design` skill for expert UI gui
 claude plugin marketplace update tyler-forge
 ```
 
+If you installed the plugin before the move to the Forge monorepo and updates stop working, re-add the marketplace:
+```bash
+claude plugin marketplace remove tyler-forge
+claude plugin marketplace add tyler-technologies-oss/forge
+claude plugin install forge@tyler-forge
+```
+
 **For local development:**
 ```bash
-claude --plugin-dir /path/to/forge-mcp/plugin
+claude --plugin-dir /path/to/forge/plugin
 ```
 
 ### Claude Code (MCP Only)
