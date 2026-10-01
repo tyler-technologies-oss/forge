@@ -23,17 +23,24 @@ const attributes = {
   ...observedAttributes
 };
 
-const strings = {
-  DEFAULT_GAP: '16'
+const defaults = {
+  GAP: '16',
+  ALIGNMENT: 'start' as StackAlignment
 };
 
+const strings = {
+  DEFAULT_GAP: defaults.GAP
+};
+
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const STACK_CONSTANTS = {
   elementName,
   classes,
   observedAttributes,
   attributes,
   selectors,
-  strings
+  strings,
+  defaults
 };
 
 export type StackAlignment = 'start' | 'center' | 'end';
