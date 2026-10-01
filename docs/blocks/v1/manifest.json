@@ -21,26 +21,6 @@
       "screenshot": "toolbars/toolbar-actions/toolbar-actions.webp"
     },
     {
-      "id": "toolbars/simple/simple",
-      "name": "Simple Toolbar",
-      "type": "pattern",
-      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
-      "tags": [
-        "toolbar",
-        "header",
-        "actions"
-      ],
-      "file": "toolbars/simple/simple.html",
-      "category": "Toolbars",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-toolbar"
-      ],
-      "hasScript": false,
-      "screenshot": "toolbars/simple/simple.webp"
-    },
-    {
       "id": "toolbars/table-header/table-header",
       "name": "Table Header",
       "type": "pattern",
@@ -60,6 +40,26 @@
       ],
       "hasScript": false,
       "screenshot": "toolbars/table-header/table-header.webp"
+    },
+    {
+      "id": "toolbars/simple/simple",
+      "name": "Simple Toolbar",
+      "type": "pattern",
+      "description": "Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions",
+      "tags": [
+        "toolbar",
+        "header",
+        "actions"
+      ],
+      "file": "toolbars/simple/simple.html",
+      "category": "Toolbars",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "hasScript": false,
+      "screenshot": "toolbars/simple/simple.webp"
     },
     {
       "id": "toolbars/page-title-with-back-arrow/page-title-with-back-arrow",
@@ -133,6 +133,40 @@
       "screenshot": "tables/table-with-icon-actions/table-with-icon-actions.webp"
     },
     {
+      "id": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet",
+      "name": "Table with Detail Sidesheet",
+      "type": "template",
+      "description": "Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table",
+      "tags": [
+        "table",
+        "data",
+        "drawer",
+        "sidesheet",
+        "details",
+        "application-layout"
+      ],
+      "file": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.html",
+      "category": "Tables",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-button",
+        "forge-card",
+        "forge-drawer",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-label-value",
+        "forge-profile-link",
+        "forge-scaffold",
+        "forge-tab",
+        "forge-tab-bar",
+        "forge-table",
+        "forge-toolbar",
+        "forge-user-profile"
+      ],
+      "hasScript": true,
+      "screenshot": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.webp"
+    },
+    {
       "id": "tables/table-with-actions/table-with-actions",
       "name": "Table with Actions",
       "type": "pattern",
@@ -178,40 +212,6 @@
       ],
       "hasScript": true,
       "screenshot": "tables/simple/simple.webp"
-    },
-    {
-      "id": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet",
-      "name": "Table with Detail Sidesheet",
-      "type": "template",
-      "description": "Application layout with a data table where the last column contains an icon button that opens a right-side drawer sidesheet to display row details alongside the table",
-      "tags": [
-        "table",
-        "data",
-        "drawer",
-        "sidesheet",
-        "details",
-        "application-layout"
-      ],
-      "file": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.html",
-      "category": "Tables",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-button",
-        "forge-card",
-        "forge-drawer",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-label-value",
-        "forge-profile-link",
-        "forge-scaffold",
-        "forge-tab",
-        "forge-tab-bar",
-        "forge-table",
-        "forge-toolbar",
-        "forge-user-profile"
-      ],
-      "hasScript": true,
-      "screenshot": "tables/table-with-detail-sidesheet/table-with-detail-sidesheet.webp"
     },
     {
       "id": "tables/paginated/paginated",
@@ -426,6 +426,39 @@
       "screenshot": "forms/add-user/add-user.webp"
     },
     {
+      "id": "forms/add-illustration/add-illustration",
+      "name": "Add Illustration Form",
+      "type": "template",
+      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
+      "tags": [
+        "form",
+        "card",
+        "centered",
+        "decorative-background",
+        "chip-field",
+        "file-picker",
+        "create",
+        "scaffold",
+        "toolbar"
+      ],
+      "file": "forms/add-illustration/add-illustration.html",
+      "category": "Forms",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-chip",
+        "forge-chip-field",
+        "forge-file-picker",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-scaffold",
+        "forge-text-field",
+        "forge-toolbar"
+      ],
+      "hasScript": true,
+      "screenshot": "forms/add-illustration/add-illustration.webp"
+    },
+    {
       "id": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections",
       "name": "Complex Form with Grouped Sections",
       "type": "pattern",
@@ -468,39 +501,6 @@
       ],
       "hasScript": false,
       "screenshot": "forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.webp"
-    },
-    {
-      "id": "forms/add-illustration/add-illustration",
-      "name": "Add Illustration Form",
-      "type": "template",
-      "description": "Centered card form displayed over a decorative background with abstract SVG elements, featuring a header with icon and title, text input fields, a textarea for longer descriptions, a chip field for adding searchable tags, and a file picker component for uploading files",
-      "tags": [
-        "form",
-        "card",
-        "centered",
-        "decorative-background",
-        "chip-field",
-        "file-picker",
-        "create",
-        "scaffold",
-        "toolbar"
-      ],
-      "file": "forms/add-illustration/add-illustration.html",
-      "category": "Forms",
-      "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-chip",
-        "forge-chip-field",
-        "forge-file-picker",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-text-field",
-        "forge-toolbar"
-      ],
-      "hasScript": true,
-      "screenshot": "forms/add-illustration/add-illustration.webp"
     },
     {
       "id": "dialogs/simple/simple",
@@ -714,6 +714,33 @@
       "screenshot": "cards/basic-card/basic-card.webp"
     },
     {
+      "id": "cards/avatar-card/avatar-card",
+      "name": "Avatar Card",
+      "type": "pattern",
+      "description": "Profile card with a large centered avatar, name, email link, corner notification badge, and an inverted toolbar footer with actions",
+      "tags": [
+        "card",
+        "avatar",
+        "profile",
+        "user",
+        "toolbar",
+        "notifications"
+      ],
+      "file": "cards/avatar-card/avatar-card.html",
+      "category": "Cards",
+      "componentsUsed": [
+        "forge-avatar",
+        "forge-badge",
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-toolbar"
+      ],
+      "hasScript": false,
+      "screenshot": "cards/avatar-card/avatar-card.webp"
+    },
+    {
       "id": "application-layout/three-panel/three-panel",
       "name": "Three Panel Layout",
       "type": "template",
@@ -839,42 +866,6 @@
       "screenshot": "application-layout/dual-scroll/dual-scroll.webp"
     },
     {
-      "id": "application-layout/compact-context-switcher/compact-context-switcher",
-      "name": "Compact Context Switcher",
-      "type": "template",
-      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
-      "tags": [
-        "layout",
-        "application",
-        "context-switcher",
-        "compact",
-        "minimal",
-        "scope",
-        "workspace",
-        "tenant",
-        "multi-tenant",
-        "organization",
-        "navigation",
-        "drawer",
-        "select",
-        "global-context"
-      ],
-      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
-      "category": "Application Layout",
-      "componentsUsed": [
-        "forge-app-layout",
-        "forge-avatar",
-        "forge-divider",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-option",
-        "forge-select",
-        "forge-toolbar"
-      ],
-      "hasScript": false,
-      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp"
-    },
-    {
       "id": "application-layout/detailed-context-switcher/detailed-context-switcher",
       "name": "Detailed Context Switcher",
       "type": "template",
@@ -910,6 +901,42 @@
       ],
       "hasScript": false,
       "screenshot": "application-layout/detailed-context-switcher/detailed-context-switcher.webp"
+    },
+    {
+      "id": "application-layout/compact-context-switcher/compact-context-switcher",
+      "name": "Compact Context Switcher",
+      "type": "template",
+      "description": "Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.",
+      "tags": [
+        "layout",
+        "application",
+        "context-switcher",
+        "compact",
+        "minimal",
+        "scope",
+        "workspace",
+        "tenant",
+        "multi-tenant",
+        "organization",
+        "navigation",
+        "drawer",
+        "select",
+        "global-context"
+      ],
+      "file": "application-layout/compact-context-switcher/compact-context-switcher.html",
+      "category": "Application Layout",
+      "componentsUsed": [
+        "forge-app-layout",
+        "forge-avatar",
+        "forge-divider",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-option",
+        "forge-select",
+        "forge-toolbar"
+      ],
+      "hasScript": false,
+      "screenshot": "application-layout/compact-context-switcher/compact-context-switcher.webp"
     },
     {
       "id": "application-layout/basic-layout-with-tabs/basic-layout-with-tabs",
@@ -1042,84 +1069,23 @@
       "screenshot": "components/tree/demo/demo.webp"
     },
     {
-      "id": "components/tooltip/type/type",
-      "name": "Tooltip — Type",
+      "id": "components/toolbar/inverted/inverted",
+      "name": "Toolbar — Inverted",
       "type": "component",
-      "description": "Type usage example for the forge-tooltip component.",
+      "description": "Inverted usage example for the forge-toolbar component.",
       "tags": [
-        "tooltip",
-        "type",
+        "toolbar",
+        "inverted",
         "storybook",
         "component-example"
       ],
-      "file": "components/tooltip/type/type.html",
+      "file": "components/toolbar/inverted/inverted.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-button",
-        "forge-tooltip"
+        "forge-toolbar"
       ],
       "hasScript": false,
-      "screenshot": "components/tooltip/type/type.webp"
-    },
-    {
-      "id": "components/tooltip/trigger-type/trigger-type",
-      "name": "Tooltip — Trigger Type",
-      "type": "component",
-      "description": "Trigger Type usage example for the forge-tooltip component.",
-      "tags": [
-        "tooltip",
-        "trigger-type",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/tooltip/trigger-type/trigger-type.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-tooltip"
-      ],
-      "hasScript": false,
-      "screenshot": "components/tooltip/trigger-type/trigger-type.webp"
-    },
-    {
-      "id": "components/tooltip/placement/placement",
-      "name": "Tooltip — Placement",
-      "type": "component",
-      "description": "Placement usage example for the forge-tooltip component.",
-      "tags": [
-        "tooltip",
-        "placement",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/tooltip/placement/placement.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-tooltip"
-      ],
-      "hasScript": false,
-      "screenshot": "components/tooltip/placement/placement.webp"
-    },
-    {
-      "id": "components/tooltip/demo/demo",
-      "name": "Tooltip — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-tooltip component.",
-      "tags": [
-        "tooltip",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/tooltip/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-tooltip"
-      ],
-      "hasScript": false,
-      "screenshot": "components/tooltip/demo/demo.webp"
+      "screenshot": "components/toolbar/inverted/inverted.webp"
     },
     {
       "id": "components/toolbar/demo/demo",
@@ -1139,25 +1105,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/toolbar/demo/demo.webp"
-    },
-    {
-      "id": "components/toolbar/inverted/inverted",
-      "name": "Toolbar — Inverted",
-      "type": "component",
-      "description": "Inverted usage example for the forge-toolbar component.",
-      "tags": [
-        "toolbar",
-        "inverted",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/toolbar/inverted/inverted.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-toolbar"
-      ],
-      "hasScript": false,
-      "screenshot": "components/toolbar/inverted/inverted.webp"
     },
     {
       "id": "components/toolbar/css-only/css-only",
@@ -1253,6 +1200,86 @@
       ],
       "hasScript": false,
       "screenshot": "components/toast/demo/demo.webp"
+    },
+    {
+      "id": "components/tooltip/type/type",
+      "name": "Tooltip — Type",
+      "type": "component",
+      "description": "Type usage example for the forge-tooltip component.",
+      "tags": [
+        "tooltip",
+        "type",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/tooltip/type/type.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-tooltip"
+      ],
+      "hasScript": false,
+      "screenshot": "components/tooltip/type/type.webp"
+    },
+    {
+      "id": "components/tooltip/trigger-type/trigger-type",
+      "name": "Tooltip — Trigger Type",
+      "type": "component",
+      "description": "Trigger Type usage example for the forge-tooltip component.",
+      "tags": [
+        "tooltip",
+        "trigger-type",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/tooltip/trigger-type/trigger-type.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-tooltip"
+      ],
+      "hasScript": false,
+      "screenshot": "components/tooltip/trigger-type/trigger-type.webp"
+    },
+    {
+      "id": "components/tooltip/placement/placement",
+      "name": "Tooltip — Placement",
+      "type": "component",
+      "description": "Placement usage example for the forge-tooltip component.",
+      "tags": [
+        "tooltip",
+        "placement",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/tooltip/placement/placement.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-tooltip"
+      ],
+      "hasScript": false,
+      "screenshot": "components/tooltip/placement/placement.webp"
+    },
+    {
+      "id": "components/tooltip/demo/demo",
+      "name": "Tooltip — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-tooltip component.",
+      "tags": [
+        "tooltip",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/tooltip/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-tooltip"
+      ],
+      "hasScript": false,
+      "screenshot": "components/tooltip/demo/demo.webp"
     },
     {
       "id": "components/time-picker/shortcuts/shortcuts",
@@ -1548,6 +1575,48 @@
       "screenshot": "components/text-field/clear-button/clear-button.webp"
     },
     {
+      "id": "components/user-profile/profile-link/profile-link",
+      "name": "User Profile — Profile Link",
+      "type": "component",
+      "description": "Profile Link usage example for the forge-profile-link component.",
+      "tags": [
+        "user-profile",
+        "profile-link",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/user-profile/profile-link/profile-link.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-profile-link"
+      ],
+      "hasScript": true,
+      "screenshot": "components/user-profile/profile-link/profile-link.webp"
+    },
+    {
+      "id": "components/user-profile/demo/demo",
+      "name": "User Profile — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-user-profile component.",
+      "tags": [
+        "user-profile",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/user-profile/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-app-bar",
+        "forge-icon",
+        "forge-profile-link",
+        "forge-user-profile"
+      ],
+      "hasScript": true,
+      "screenshot": "components/user-profile/demo/demo.webp"
+    },
+    {
       "id": "components/tabs/with-icons/with-icons",
       "name": "Tabs — With Icons",
       "type": "component",
@@ -1750,25 +1819,6 @@
       "screenshot": "components/switch/disabled-and-readonly/disabled-and-readonly.webp"
     },
     {
-      "id": "components/switch/dense/dense",
-      "name": "Switch — Dense",
-      "type": "component",
-      "description": "Dense usage example for the forge-switch component.",
-      "tags": [
-        "switch",
-        "dense",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/switch/dense/dense.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-switch"
-      ],
-      "hasScript": false,
-      "screenshot": "components/switch/dense/dense.webp"
-    },
-    {
       "id": "components/switch/demo/demo",
       "name": "Switch — Demo",
       "type": "component",
@@ -1788,6 +1838,25 @@
       "screenshot": "components/switch/demo/demo.webp"
     },
     {
+      "id": "components/switch/dense/dense",
+      "name": "Switch — Dense",
+      "type": "component",
+      "description": "Dense usage example for the forge-switch component.",
+      "tags": [
+        "switch",
+        "dense",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/switch/dense/dense.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-switch"
+      ],
+      "hasScript": false,
+      "screenshot": "components/switch/dense/dense.webp"
+    },
+    {
       "id": "components/switch/css-only/css-only",
       "name": "Switch — CSS Only",
       "type": "component",
@@ -1805,48 +1874,6 @@
       ],
       "hasScript": true,
       "screenshot": "components/switch/css-only/css-only.webp"
-    },
-    {
-      "id": "components/user-profile/profile-link/profile-link",
-      "name": "User Profile — Profile Link",
-      "type": "component",
-      "description": "Profile Link usage example for the forge-profile-link component.",
-      "tags": [
-        "user-profile",
-        "profile-link",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/user-profile/profile-link/profile-link.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-profile-link"
-      ],
-      "hasScript": true,
-      "screenshot": "components/user-profile/profile-link/profile-link.webp"
-    },
-    {
-      "id": "components/user-profile/demo/demo",
-      "name": "User Profile — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-user-profile component.",
-      "tags": [
-        "user-profile",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/user-profile/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-app-bar",
-        "forge-icon",
-        "forge-profile-link",
-        "forge-user-profile"
-      ],
-      "hasScript": true,
-      "screenshot": "components/user-profile/demo/demo.webp"
     },
     {
       "id": "components/structured-card/with-table-and-start-buttons/with-table-and-start-buttons",
@@ -1874,6 +1901,29 @@
       "screenshot": "components/structured-card/with-table-and-start-buttons/with-table-and-start-buttons.webp"
     },
     {
+      "id": "components/structured-card/with-table/with-table",
+      "name": "Structured Card — With Table",
+      "type": "component",
+      "description": "With Table usage example for the forge-structured-card component.",
+      "tags": [
+        "structured-card",
+        "with-table",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/structured-card/with-table/with-table.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-icon-button",
+        "forge-paginator",
+        "forge-structured-card",
+        "forge-table"
+      ],
+      "hasScript": true,
+      "screenshot": "components/structured-card/with-table/with-table.webp"
+    },
+    {
       "id": "components/structured-card/with-form/with-form",
       "name": "Structured Card — With Form",
       "type": "component",
@@ -1899,29 +1949,6 @@
       ],
       "hasScript": true,
       "screenshot": "components/structured-card/with-form/with-form.webp"
-    },
-    {
-      "id": "components/structured-card/with-table/with-table",
-      "name": "Structured Card — With Table",
-      "type": "component",
-      "description": "With Table usage example for the forge-structured-card component.",
-      "tags": [
-        "structured-card",
-        "with-table",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/structured-card/with-table/with-table.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-icon-button",
-        "forge-paginator",
-        "forge-structured-card",
-        "forge-table"
-      ],
-      "hasScript": true,
-      "screenshot": "components/structured-card/with-table/with-table.webp"
     },
     {
       "id": "components/structured-card/with-before-title-slot/with-before-title-slot",
@@ -2093,6 +2120,23 @@
       "screenshot": "components/state-layer/with-card/with-card.webp"
     },
     {
+      "id": "components/state-layer/css-only/css-only",
+      "name": "State Layer — CSS Only",
+      "type": "component",
+      "description": "CSS Only usage example for the forge-state-layer component.",
+      "tags": [
+        "state-layer",
+        "css-only",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/state-layer/css-only/css-only.html",
+      "category": "Components",
+      "componentsUsed": [],
+      "hasScript": false,
+      "screenshot": "components/state-layer/css-only/css-only.webp"
+    },
+    {
       "id": "components/state-layer/demo/demo",
       "name": "State Layer — Demo",
       "type": "component",
@@ -2110,23 +2154,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/state-layer/demo/demo.webp"
-    },
-    {
-      "id": "components/state-layer/css-only/css-only",
-      "name": "State Layer — CSS Only",
-      "type": "component",
-      "description": "CSS Only usage example for the forge-state-layer component.",
-      "tags": [
-        "state-layer",
-        "css-only",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/state-layer/css-only/css-only.html",
-      "category": "Components",
-      "componentsUsed": [],
-      "hasScript": false,
-      "screenshot": "components/state-layer/css-only/css-only.webp"
     },
     {
       "id": "components/stack/simple-vertical-form/simple-vertical-form",
@@ -2205,26 +2232,6 @@
       "screenshot": "components/stack/complex-form/complex-form.webp"
     },
     {
-      "id": "components/split-view/demo/demo",
-      "name": "Split View — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-split-view component.",
-      "tags": [
-        "split-view",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/split-view/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-split-view",
-        "forge-split-view-panel"
-      ],
-      "hasScript": false,
-      "screenshot": "components/split-view/demo/demo.webp"
-    },
-    {
       "id": "components/split-view/vertical/vertical",
       "name": "Split View — Vertical",
       "type": "component",
@@ -2243,6 +2250,26 @@
       ],
       "hasScript": false,
       "screenshot": "components/split-view/vertical/vertical.webp"
+    },
+    {
+      "id": "components/split-view/demo/demo",
+      "name": "Split View — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-split-view component.",
+      "tags": [
+        "split-view",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/split-view/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-split-view",
+        "forge-split-view-panel"
+      ],
+      "hasScript": false,
+      "screenshot": "components/split-view/demo/demo.webp"
     },
     {
       "id": "components/split-button/multiple-actions/multiple-actions",
@@ -2693,25 +2720,6 @@
       "screenshot": "components/select/demo/demo.webp"
     },
     {
-      "id": "components/secret/demo/demo",
-      "name": "Secret — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-secret component.",
-      "tags": [
-        "secret",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/secret/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-secret"
-      ],
-      "hasScript": false,
-      "screenshot": "components/secret/demo/demo.webp"
-    },
-    {
       "id": "components/secret/named-group/named-group",
       "name": "Secret — Named Group",
       "type": "component",
@@ -2729,6 +2737,25 @@
       ],
       "hasScript": false,
       "screenshot": "components/secret/named-group/named-group.webp"
+    },
+    {
+      "id": "components/secret/demo/demo",
+      "name": "Secret — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-secret component.",
+      "tags": [
+        "secret",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/secret/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-secret"
+      ],
+      "hasScript": false,
+      "screenshot": "components/secret/demo/demo.webp"
     },
     {
       "id": "components/secret/css-only-block/css-only-block",
@@ -2791,6 +2818,33 @@
       "screenshot": "components/secret/block/block.webp"
     },
     {
+      "id": "components/responsive-toolbar/demo/demo",
+      "name": "Responsive Toolbar — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-responsive-toolbar component.",
+      "tags": [
+        "responsive-toolbar",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/responsive-toolbar/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-menu",
+        "forge-responsive-toolbar",
+        "forge-split-view",
+        "forge-split-view-panel",
+        "forge-stack"
+      ],
+      "hasScript": true,
+      "screenshot": "components/responsive-toolbar/demo/demo.webp"
+    },
+    {
       "id": "components/scaffold/full-page-layout/full-page-layout",
       "name": "Scaffold — Full Page Layout",
       "type": "component",
@@ -2850,31 +2904,23 @@
       "screenshot": "components/scaffold/css-only/css-only.webp"
     },
     {
-      "id": "components/responsive-toolbar/demo/demo",
-      "name": "Responsive Toolbar — Demo",
+      "id": "components/quantity-field/demo/demo",
+      "name": "Quantity Field — Demo",
       "type": "component",
-      "description": "Demo usage example for the forge-responsive-toolbar component.",
+      "description": "Demo usage example for the forge-quantity-field component.",
       "tags": [
-        "responsive-toolbar",
+        "quantity-field",
         "demo",
         "storybook",
         "component-example"
       ],
-      "file": "components/responsive-toolbar/demo/demo.html",
+      "file": "components/quantity-field/demo/demo.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-button",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-menu",
-        "forge-responsive-toolbar",
-        "forge-split-view",
-        "forge-split-view-panel",
-        "forge-stack"
+        "forge-quantity-field"
       ],
-      "hasScript": true,
-      "screenshot": "components/responsive-toolbar/demo/demo.webp"
+      "hasScript": false,
+      "screenshot": "components/quantity-field/demo/demo.webp"
     },
     {
       "id": "components/radio/label-position/label-position",
@@ -2934,23 +2980,6 @@
       "screenshot": "components/radio/dense/dense.webp"
     },
     {
-      "id": "components/radio/css-only/css-only",
-      "name": "Radio — CSS Only",
-      "type": "component",
-      "description": "CSS Only usage example for the forge-radio component.",
-      "tags": [
-        "radio",
-        "css-only",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/radio/css-only/css-only.html",
-      "category": "Components",
-      "componentsUsed": [],
-      "hasScript": false,
-      "screenshot": "components/radio/css-only/css-only.webp"
-    },
-    {
       "id": "components/radio/demo/demo",
       "name": "Radio — Demo",
       "type": "component",
@@ -2970,23 +2999,21 @@
       "screenshot": "components/radio/demo/demo.webp"
     },
     {
-      "id": "components/quantity-field/demo/demo",
-      "name": "Quantity Field — Demo",
+      "id": "components/radio/css-only/css-only",
+      "name": "Radio — CSS Only",
       "type": "component",
-      "description": "Demo usage example for the forge-quantity-field component.",
+      "description": "CSS Only usage example for the forge-radio component.",
       "tags": [
-        "quantity-field",
-        "demo",
+        "radio",
+        "css-only",
         "storybook",
         "component-example"
       ],
-      "file": "components/quantity-field/demo/demo.html",
+      "file": "components/radio/css-only/css-only.html",
       "category": "Components",
-      "componentsUsed": [
-        "forge-quantity-field"
-      ],
+      "componentsUsed": [],
       "hasScript": false,
-      "screenshot": "components/quantity-field/demo/demo.webp"
+      "screenshot": "components/radio/css-only/css-only.webp"
     },
     {
       "id": "components/popover/non-modal/non-modal",
@@ -3131,45 +3158,6 @@
       "screenshot": "components/page-state/css-only/css-only.webp"
     },
     {
-      "id": "components/overlay/demo/demo",
-      "name": "Overlay — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-overlay component.",
-      "tags": [
-        "overlay",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/overlay/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-overlay"
-      ],
-      "hasScript": false,
-      "screenshot": "components/overlay/demo/demo.webp"
-    },
-    {
-      "id": "components/overlay/context-menu/context-menu",
-      "name": "Overlay — Context Menu",
-      "type": "component",
-      "description": "Context Menu usage example for the forge-overlay component.",
-      "tags": [
-        "overlay",
-        "context-menu",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/overlay/context-menu/context-menu.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-overlay"
-      ],
-      "hasScript": false,
-      "screenshot": "components/overlay/context-menu/context-menu.webp"
-    },
-    {
       "id": "components/open-icon/horizontal/horizontal",
       "name": "Open Icon — Horizontal",
       "type": "component",
@@ -3187,25 +3175,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/open-icon/horizontal/horizontal.webp"
-    },
-    {
-      "id": "components/open-icon/demo/demo",
-      "name": "Open Icon — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-open-icon component.",
-      "tags": [
-        "open-icon",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/open-icon/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-open-icon"
-      ],
-      "hasScript": false,
-      "screenshot": "components/open-icon/demo/demo.webp"
     },
     {
       "id": "components/open-icon/expansion-panel/expansion-panel",
@@ -3228,23 +3197,42 @@
       "screenshot": "components/open-icon/expansion-panel/expansion-panel.webp"
     },
     {
-      "id": "components/multi-select-header/with-select-all-button/with-select-all-button",
-      "name": "Multi Select Header — With Select All Button",
+      "id": "components/open-icon/demo/demo",
+      "name": "Open Icon — Demo",
       "type": "component",
-      "description": "With Select All Button usage example for the forge-multi-select-header component.",
+      "description": "Demo usage example for the forge-open-icon component.",
       "tags": [
-        "multi-select-header",
-        "with-select-all-button",
+        "open-icon",
+        "demo",
         "storybook",
         "component-example"
       ],
-      "file": "components/multi-select-header/with-select-all-button/with-select-all-button.html",
+      "file": "components/open-icon/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-open-icon"
+      ],
+      "hasScript": false,
+      "screenshot": "components/open-icon/demo/demo.webp"
+    },
+    {
+      "id": "components/multi-select-header/with-custom-text/with-custom-text",
+      "name": "Multi Select Header — With Custom Text",
+      "type": "component",
+      "description": "With Custom Text usage example for the forge-multi-select-header component.",
+      "tags": [
+        "multi-select-header",
+        "with-custom-text",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/multi-select-header/with-custom-text/with-custom-text.html",
       "category": "Components",
       "componentsUsed": [
         "forge-multi-select-header"
       ],
       "hasScript": false,
-      "screenshot": "components/multi-select-header/with-select-all-button/with-select-all-button.webp"
+      "screenshot": "components/multi-select-header/with-custom-text/with-custom-text.webp"
     },
     {
       "id": "components/multi-select-header/demo/demo",
@@ -3269,25 +3257,6 @@
       "screenshot": "components/multi-select-header/demo/demo.webp"
     },
     {
-      "id": "components/multi-select-header/with-custom-text/with-custom-text",
-      "name": "Multi Select Header — With Custom Text",
-      "type": "component",
-      "description": "With Custom Text usage example for the forge-multi-select-header component.",
-      "tags": [
-        "multi-select-header",
-        "with-custom-text",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/multi-select-header/with-custom-text/with-custom-text.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-multi-select-header"
-      ],
-      "hasScript": false,
-      "screenshot": "components/multi-select-header/with-custom-text/with-custom-text.webp"
-    },
-    {
       "id": "components/multi-select-header/basic-implementation/basic-implementation",
       "name": "Multi Select Header — Basic Implementation",
       "type": "component",
@@ -3309,6 +3278,25 @@
       "screenshot": "components/multi-select-header/basic-implementation/basic-implementation.webp"
     },
     {
+      "id": "components/multi-select-header/with-select-all-button/with-select-all-button",
+      "name": "Multi Select Header — With Select All Button",
+      "type": "component",
+      "description": "With Select All Button usage example for the forge-multi-select-header component.",
+      "tags": [
+        "multi-select-header",
+        "with-select-all-button",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/multi-select-header/with-select-all-button/with-select-all-button.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-multi-select-header"
+      ],
+      "hasScript": false,
+      "screenshot": "components/multi-select-header/with-select-all-button/with-select-all-button.webp"
+    },
+    {
       "id": "components/meter/tickmarks/tickmarks",
       "name": "Meter — Tickmarks",
       "type": "component",
@@ -3326,6 +3314,25 @@
       ],
       "hasScript": false,
       "screenshot": "components/meter/tickmarks/tickmarks.webp"
+    },
+    {
+      "id": "components/meter/segmented/segmented",
+      "name": "Meter — Segmented",
+      "type": "component",
+      "description": "Segmented usage example for the forge-meter component.",
+      "tags": [
+        "meter",
+        "segmented",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/meter/segmented/segmented.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-meter"
+      ],
+      "hasScript": false,
+      "screenshot": "components/meter/segmented/segmented.webp"
     },
     {
       "id": "components/meter/grouped/grouped",
@@ -3348,25 +3355,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/meter/grouped/grouped.webp"
-    },
-    {
-      "id": "components/meter/segmented/segmented",
-      "name": "Meter — Segmented",
-      "type": "component",
-      "description": "Segmented usage example for the forge-meter component.",
-      "tags": [
-        "meter",
-        "segmented",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/meter/segmented/segmented.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-meter"
-      ],
-      "hasScript": false,
-      "screenshot": "components/meter/segmented/segmented.webp"
     },
     {
       "id": "components/meter/demo/demo",
@@ -3448,6 +3436,27 @@
       "screenshot": "components/menu/cascading/cascading.webp"
     },
     {
+      "id": "components/listbox/two-line/two-line",
+      "name": "Listbox — Two Line",
+      "type": "component",
+      "description": "A listbox with options that display secondary text on a second line.",
+      "tags": [
+        "listbox",
+        "two-line",
+        "secondary-text",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/listbox/two-line/two-line.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-listbox",
+        "forge-option"
+      ],
+      "hasScript": false,
+      "screenshot": "components/listbox/two-line/two-line.webp"
+    },
+    {
       "id": "components/listbox/three-line/three-line",
       "name": "Listbox — Three Line",
       "type": "component",
@@ -3468,27 +3477,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/listbox/three-line/three-line.webp"
-    },
-    {
-      "id": "components/listbox/reorderable/reorderable",
-      "name": "Listbox — Reorderable",
-      "type": "component",
-      "description": "A listbox whose options can be reordered with drag and drop.",
-      "tags": [
-        "listbox",
-        "reorderable",
-        "drag-and-drop",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/listbox/reorderable/reorderable.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-listbox",
-        "forge-option"
-      ],
-      "hasScript": true,
-      "screenshot": "components/listbox/reorderable/reorderable.webp"
     },
     {
       "id": "components/listbox/option-groups/option-groups",
@@ -3532,27 +3520,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/listbox/multiple/multiple.webp"
-    },
-    {
-      "id": "components/listbox/two-line/two-line",
-      "name": "Listbox — Two Line",
-      "type": "component",
-      "description": "A listbox with options that display secondary text on a second line.",
-      "tags": [
-        "listbox",
-        "two-line",
-        "secondary-text",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/listbox/two-line/two-line.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-listbox",
-        "forge-option"
-      ],
-      "hasScript": false,
-      "screenshot": "components/listbox/two-line/two-line.webp"
     },
     {
       "id": "components/listbox/leading-icons/leading-icons",
@@ -3622,6 +3589,27 @@
       "screenshot": "components/listbox/demo/demo.webp"
     },
     {
+      "id": "components/listbox/reorderable/reorderable",
+      "name": "Listbox — Reorderable",
+      "type": "component",
+      "description": "A listbox whose options can be reordered with drag and drop.",
+      "tags": [
+        "listbox",
+        "reorderable",
+        "drag-and-drop",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/listbox/reorderable/reorderable.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-listbox",
+        "forge-option"
+      ],
+      "hasScript": true,
+      "screenshot": "components/listbox/reorderable/reorderable.webp"
+    },
+    {
       "id": "components/list/with-anchor/with-anchor",
       "name": "List — With Anchor",
       "type": "component",
@@ -3640,27 +3628,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/list/with-anchor/with-anchor.webp"
-    },
-    {
-      "id": "components/list/multicolumn/multicolumn",
-      "name": "List — Multicolumn",
-      "type": "component",
-      "description": "Multicolumn usage example for the forge-list component.",
-      "tags": [
-        "list",
-        "multicolumn",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/list/multicolumn/multicolumn.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-list",
-        "forge-list-item"
-      ],
-      "hasScript": true,
-      "screenshot": "components/list/multicolumn/multicolumn.webp"
     },
     {
       "id": "components/list/navigation-menu/navigation-menu",
@@ -3765,6 +3732,27 @@
       "screenshot": "components/list/css-only/css-only.webp"
     },
     {
+      "id": "components/list/multicolumn/multicolumn",
+      "name": "List — Multicolumn",
+      "type": "component",
+      "description": "Multicolumn usage example for the forge-list component.",
+      "tags": [
+        "list",
+        "multicolumn",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/list/multicolumn/multicolumn.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-list",
+        "forge-list-item"
+      ],
+      "hasScript": true,
+      "screenshot": "components/list/multicolumn/multicolumn.webp"
+    },
+    {
       "id": "components/linear-progress/theme/theme",
       "name": "Linear Progress — Theme",
       "type": "component",
@@ -3782,25 +3770,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/linear-progress/theme/theme.webp"
-    },
-    {
-      "id": "components/linear-progress/determinate/determinate",
-      "name": "Linear Progress — Determinate",
-      "type": "component",
-      "description": "Determinate usage example for the forge-linear-progress component.",
-      "tags": [
-        "linear-progress",
-        "determinate",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/linear-progress/determinate/determinate.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-linear-progress"
-      ],
-      "hasScript": false,
-      "screenshot": "components/linear-progress/determinate/determinate.webp"
     },
     {
       "id": "components/linear-progress/demo/demo",
@@ -3841,6 +3810,25 @@
       "screenshot": "components/linear-progress/buffer/buffer.webp"
     },
     {
+      "id": "components/linear-progress/determinate/determinate",
+      "name": "Linear Progress — Determinate",
+      "type": "component",
+      "description": "Determinate usage example for the forge-linear-progress component.",
+      "tags": [
+        "linear-progress",
+        "determinate",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/linear-progress/determinate/determinate.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-linear-progress"
+      ],
+      "hasScript": false,
+      "screenshot": "components/linear-progress/determinate/determinate.webp"
+    },
+    {
       "id": "components/label-value/inline/inline",
       "name": "Label Value — Inline",
       "type": "component",
@@ -3858,26 +3846,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/label-value/inline/inline.webp"
-    },
-    {
-      "id": "components/label-value/icon/icon",
-      "name": "Label Value — Icon",
-      "type": "component",
-      "description": "Icon usage example for the forge-label-value component.",
-      "tags": [
-        "label-value",
-        "icon",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/label-value/icon/icon.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-label-value"
-      ],
-      "hasScript": true,
-      "screenshot": "components/label-value/icon/icon.webp"
     },
     {
       "id": "components/label-value/empty/empty",
@@ -3918,6 +3886,26 @@
       "screenshot": "components/label-value/ellipsis/ellipsis.webp"
     },
     {
+      "id": "components/label-value/icon/icon",
+      "name": "Label Value — Icon",
+      "type": "component",
+      "description": "Icon usage example for the forge-label-value component.",
+      "tags": [
+        "label-value",
+        "icon",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/label-value/icon/icon.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-label-value"
+      ],
+      "hasScript": true,
+      "screenshot": "components/label-value/icon/icon.webp"
+    },
+    {
       "id": "components/label-value/demo/demo",
       "name": "Label Value — Demo",
       "type": "component",
@@ -3954,44 +3942,43 @@
       "screenshot": "components/label-value/css-only/css-only.webp"
     },
     {
-      "id": "components/keyboard-shortcut/demo/demo",
-      "name": "Keyboard Shortcut — Demo",
+      "id": "components/overlay/demo/demo",
+      "name": "Overlay — Demo",
       "type": "component",
-      "description": "Demo usage example for the forge-keyboard-shortcut component.",
+      "description": "Demo usage example for the forge-overlay component.",
       "tags": [
-        "keyboard-shortcut",
+        "overlay",
         "demo",
         "storybook",
         "component-example"
       ],
-      "file": "components/keyboard-shortcut/demo/demo.html",
+      "file": "components/overlay/demo/demo.html",
       "category": "Components",
       "componentsUsed": [
         "forge-button",
-        "forge-keyboard-shortcut"
+        "forge-overlay"
       ],
       "hasScript": false,
-      "screenshot": "components/keyboard-shortcut/demo/demo.webp"
+      "screenshot": "components/overlay/demo/demo.webp"
     },
     {
-      "id": "components/label/nested/nested",
-      "name": "Label — Nested",
+      "id": "components/overlay/context-menu/context-menu",
+      "name": "Overlay — Context Menu",
       "type": "component",
-      "description": "Nested usage example for the forge-label component.",
+      "description": "Context Menu usage example for the forge-overlay component.",
       "tags": [
-        "label",
-        "nested",
+        "overlay",
+        "context-menu",
         "storybook",
         "component-example"
       ],
-      "file": "components/label/nested/nested.html",
+      "file": "components/overlay/context-menu/context-menu.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-checkbox",
-        "forge-label"
+        "forge-overlay"
       ],
       "hasScript": false,
-      "screenshot": "components/label/nested/nested.webp"
+      "screenshot": "components/overlay/context-menu/context-menu.webp"
     },
     {
       "id": "components/label/with-icon-button/with-icon-button",
@@ -4013,6 +4000,26 @@
       ],
       "hasScript": true,
       "screenshot": "components/label/with-icon-button/with-icon-button.webp"
+    },
+    {
+      "id": "components/label/nested/nested",
+      "name": "Label — Nested",
+      "type": "component",
+      "description": "Nested usage example for the forge-label component.",
+      "tags": [
+        "label",
+        "nested",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/label/nested/nested.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-checkbox",
+        "forge-label"
+      ],
+      "hasScript": false,
+      "screenshot": "components/label/nested/nested.webp"
     },
     {
       "id": "components/label/legend/legend",
@@ -4095,6 +4102,26 @@
       "screenshot": "components/label/aligned-list/aligned-list.webp"
     },
     {
+      "id": "components/keyboard-shortcut/demo/demo",
+      "name": "Keyboard Shortcut — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-keyboard-shortcut component.",
+      "tags": [
+        "keyboard-shortcut",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/keyboard-shortcut/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-keyboard-shortcut"
+      ],
+      "hasScript": false,
+      "screenshot": "components/keyboard-shortcut/demo/demo.webp"
+    },
+    {
       "id": "components/key/demo/demo",
       "name": "Key — Demo",
       "type": "component",
@@ -4113,6 +4140,81 @@
       ],
       "hasScript": false,
       "screenshot": "components/key/demo/demo.webp"
+    },
+    {
+      "id": "components/inline-message/with-title/with-title",
+      "name": "Inline Message — With Title",
+      "type": "component",
+      "description": "With Title usage example for the forge-inline-message component.",
+      "tags": [
+        "inline-message",
+        "with-title",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/inline-message/with-title/with-title.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-inline-message"
+      ],
+      "hasScript": false,
+      "screenshot": "components/inline-message/with-title/with-title.webp"
+    },
+    {
+      "id": "components/inline-message/themed/themed",
+      "name": "Inline Message — Themed",
+      "type": "component",
+      "description": "Themed usage example for the forge-inline-message component.",
+      "tags": [
+        "inline-message",
+        "themed",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/inline-message/themed/themed.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon",
+        "forge-inline-message"
+      ],
+      "hasScript": true,
+      "screenshot": "components/inline-message/themed/themed.webp"
+    },
+    {
+      "id": "components/inline-message/css-only/css-only",
+      "name": "Inline Message — CSS Only",
+      "type": "component",
+      "description": "CSS Only usage example for the forge-inline-message component.",
+      "tags": [
+        "inline-message",
+        "css-only",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/inline-message/css-only/css-only.html",
+      "category": "Components",
+      "componentsUsed": [],
+      "hasScript": false,
+      "screenshot": "components/inline-message/css-only/css-only.webp"
+    },
+    {
+      "id": "components/inline-message/demo/demo",
+      "name": "Inline Message — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-inline-message component.",
+      "tags": [
+        "inline-message",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/inline-message/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-inline-message"
+      ],
+      "hasScript": false,
+      "screenshot": "components/inline-message/demo/demo.webp"
     },
     {
       "id": "components/icon-button/with-label/with-label",
@@ -4313,6 +4415,25 @@
       "screenshot": "components/icon/lazy/lazy.webp"
     },
     {
+      "id": "components/icon/external/external",
+      "name": "Icon — External",
+      "type": "component",
+      "description": "External usage example for the forge-icon component.",
+      "tags": [
+        "icon",
+        "external",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/icon/external/external.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-icon"
+      ],
+      "hasScript": true,
+      "screenshot": "components/icon/external/external.webp"
+    },
+    {
       "id": "components/icon/demo/demo",
       "name": "Icon — Demo",
       "type": "component",
@@ -4368,25 +4489,6 @@
       "screenshot": "components/icon/css-only/css-only.webp"
     },
     {
-      "id": "components/icon/external/external",
-      "name": "Icon — External",
-      "type": "component",
-      "description": "External usage example for the forge-icon component.",
-      "tags": [
-        "icon",
-        "external",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/icon/external/external.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon"
-      ],
-      "hasScript": true,
-      "screenshot": "components/icon/external/external.webp"
-    },
-    {
       "id": "components/footer/demo/demo",
       "name": "Footer — Demo",
       "type": "component",
@@ -4427,23 +4529,6 @@
       "screenshot": "components/focus-indicator/with-card/with-card.webp"
     },
     {
-      "id": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel",
-      "name": "Focus Indicator — CSS Only With Sentinel",
-      "type": "component",
-      "description": "CSS Only With Sentinel usage example for the forge-focus-indicator component.",
-      "tags": [
-        "focus-indicator",
-        "css-only-with-sentinel",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel.html",
-      "category": "Components",
-      "componentsUsed": [],
-      "hasScript": false,
-      "screenshot": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel.webp"
-    },
-    {
       "id": "components/focus-indicator/demo/demo",
       "name": "Focus Indicator — Demo",
       "type": "component",
@@ -4480,79 +4565,21 @@
       "screenshot": "components/focus-indicator/css-only/css-only.webp"
     },
     {
-      "id": "components/inline-message/with-title/with-title",
-      "name": "Inline Message — With Title",
+      "id": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel",
+      "name": "Focus Indicator — CSS Only With Sentinel",
       "type": "component",
-      "description": "With Title usage example for the forge-inline-message component.",
+      "description": "CSS Only With Sentinel usage example for the forge-focus-indicator component.",
       "tags": [
-        "inline-message",
-        "with-title",
+        "focus-indicator",
+        "css-only-with-sentinel",
         "storybook",
         "component-example"
       ],
-      "file": "components/inline-message/with-title/with-title.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-inline-message"
-      ],
-      "hasScript": false,
-      "screenshot": "components/inline-message/with-title/with-title.webp"
-    },
-    {
-      "id": "components/inline-message/themed/themed",
-      "name": "Inline Message — Themed",
-      "type": "component",
-      "description": "Themed usage example for the forge-inline-message component.",
-      "tags": [
-        "inline-message",
-        "themed",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/inline-message/themed/themed.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-icon",
-        "forge-inline-message"
-      ],
-      "hasScript": true,
-      "screenshot": "components/inline-message/themed/themed.webp"
-    },
-    {
-      "id": "components/inline-message/demo/demo",
-      "name": "Inline Message — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-inline-message component.",
-      "tags": [
-        "inline-message",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/inline-message/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-inline-message"
-      ],
-      "hasScript": false,
-      "screenshot": "components/inline-message/demo/demo.webp"
-    },
-    {
-      "id": "components/inline-message/css-only/css-only",
-      "name": "Inline Message — CSS Only",
-      "type": "component",
-      "description": "CSS Only usage example for the forge-inline-message component.",
-      "tags": [
-        "inline-message",
-        "css-only",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/inline-message/css-only/css-only.html",
+      "file": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel.html",
       "category": "Components",
       "componentsUsed": [],
       "hasScript": false,
-      "screenshot": "components/inline-message/css-only/css-only.webp"
+      "screenshot": "components/focus-indicator/css-only-with-sentinel/css-only-with-sentinel.webp"
     },
     {
       "id": "components/floating-action-button/with-anchor/with-anchor",
@@ -4575,26 +4602,6 @@
       "screenshot": "components/floating-action-button/with-anchor/with-anchor.webp"
     },
     {
-      "id": "components/floating-action-button/density/density",
-      "name": "Floating Action Button — Density",
-      "type": "component",
-      "description": "Density usage example for the forge-floating-action-button component.",
-      "tags": [
-        "floating-action-button",
-        "density",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/floating-action-button/density/density.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-fab",
-        "forge-icon"
-      ],
-      "hasScript": true,
-      "screenshot": "components/floating-action-button/density/density.webp"
-    },
-    {
       "id": "components/floating-action-button/extended/extended",
       "name": "Floating Action Button — Extended",
       "type": "component",
@@ -4613,6 +4620,26 @@
       ],
       "hasScript": true,
       "screenshot": "components/floating-action-button/extended/extended.webp"
+    },
+    {
+      "id": "components/floating-action-button/density/density",
+      "name": "Floating Action Button — Density",
+      "type": "component",
+      "description": "Density usage example for the forge-floating-action-button component.",
+      "tags": [
+        "floating-action-button",
+        "density",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/floating-action-button/density/density.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-fab",
+        "forge-icon"
+      ],
+      "hasScript": true,
+      "screenshot": "components/floating-action-button/density/density.webp"
     },
     {
       "id": "components/floating-action-button/demo/demo",
@@ -4752,25 +4779,6 @@
       "screenshot": "components/file-picker/borderless/borderless.webp"
     },
     {
-      "id": "components/field/demo/demo",
-      "name": "Field — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-field component.",
-      "tags": [
-        "field",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/field/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-field"
-      ],
-      "hasScript": false,
-      "screenshot": "components/field/demo/demo.webp"
-    },
-    {
       "id": "components/field/static-field/static-field",
       "name": "Field — Static Field",
       "type": "component",
@@ -4788,6 +4796,25 @@
       ],
       "hasScript": false,
       "screenshot": "components/field/static-field/static-field.webp"
+    },
+    {
+      "id": "components/field/demo/demo",
+      "name": "Field — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-field component.",
+      "tags": [
+        "field",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/field/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-field"
+      ],
+      "hasScript": false,
+      "screenshot": "components/field/demo/demo.webp"
     },
     {
       "id": "components/field/css-only/css-only",
@@ -4849,25 +4876,6 @@
       "screenshot": "components/expansion-panel/with-card/with-card.webp"
     },
     {
-      "id": "components/expansion-panel/named-group/named-group",
-      "name": "Expansion Panel — Named Group",
-      "type": "component",
-      "description": "Named Group usage example for the forge-expansion-panel component.",
-      "tags": [
-        "expansion-panel",
-        "named-group",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/expansion-panel/named-group/named-group.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-expansion-panel"
-      ],
-      "hasScript": false,
-      "screenshot": "components/expansion-panel/named-group/named-group.webp"
-    },
-    {
       "id": "components/expansion-panel/demo/demo",
       "name": "Expansion Panel — Demo",
       "type": "component",
@@ -4885,6 +4893,25 @@
       ],
       "hasScript": false,
       "screenshot": "components/expansion-panel/demo/demo.webp"
+    },
+    {
+      "id": "components/expansion-panel/named-group/named-group",
+      "name": "Expansion Panel — Named Group",
+      "type": "component",
+      "description": "Named Group usage example for the forge-expansion-panel component.",
+      "tags": [
+        "expansion-panel",
+        "named-group",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/expansion-panel/named-group/named-group.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-expansion-panel"
+      ],
+      "hasScript": false,
+      "screenshot": "components/expansion-panel/named-group/named-group.webp"
     },
     {
       "id": "components/expansion-panel/css-only/css-only",
@@ -5002,106 +5029,28 @@
       "screenshot": "components/divider/css-only/css-only.webp"
     },
     {
-      "id": "components/date-range-picker/shortcuts/shortcuts",
-      "name": "Date Range Picker — Shortcuts",
+      "id": "components/dialog/top-sheet/top-sheet",
+      "name": "Dialog — Top Sheet",
       "type": "component",
-      "description": "Shortcuts usage example for the forge-date-range-picker component.",
+      "description": "Top Sheet usage example for the forge-dialog component.",
       "tags": [
-        "date-range-picker",
-        "shortcuts",
+        "dialog",
+        "top-sheet",
         "storybook",
         "component-example"
       ],
-      "file": "components/date-range-picker/shortcuts/shortcuts.html",
+      "file": "components/dialog/top-sheet/top-sheet.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-date-range-picker",
-        "forge-text-field"
-      ],
-      "hasScript": false,
-      "screenshot": "components/date-range-picker/shortcuts/shortcuts.webp"
-    },
-    {
-      "id": "components/date-range-picker/masking/masking",
-      "name": "Date Range Picker — Masking",
-      "type": "component",
-      "description": "Masking usage example for the forge-date-range-picker component.",
-      "tags": [
-        "date-range-picker",
-        "masking",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/date-range-picker/masking/masking.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-date-range-picker",
-        "forge-text-field"
-      ],
-      "hasScript": false,
-      "screenshot": "components/date-range-picker/masking/masking.webp"
-    },
-    {
-      "id": "components/date-range-picker/disabled/disabled",
-      "name": "Date Range Picker — Disabled",
-      "type": "component",
-      "description": "Disabled usage example for the forge-date-range-picker component.",
-      "tags": [
-        "date-range-picker",
-        "disabled",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/date-range-picker/disabled/disabled.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-date-range-picker",
-        "forge-text-field"
-      ],
-      "hasScript": false,
-      "screenshot": "components/date-range-picker/disabled/disabled.webp"
-    },
-    {
-      "id": "components/date-range-picker/demo/demo",
-      "name": "Date Range Picker — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-date-range-picker component.",
-      "tags": [
-        "date-range-picker",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/date-range-picker/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-date-range-picker",
+        "forge-button",
+        "forge-dialog",
         "forge-icon",
         "forge-icon-button",
-        "forge-text-field"
+        "forge-scaffold",
+        "forge-toolbar"
       ],
       "hasScript": true,
-      "screenshot": "components/date-range-picker/demo/demo.webp"
-    },
-    {
-      "id": "components/date-range-picker/constraints/constraints",
-      "name": "Date Range Picker — Constraints",
-      "type": "component",
-      "description": "Constraints usage example for the forge-date-range-picker component.",
-      "tags": [
-        "date-range-picker",
-        "constraints",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/date-range-picker/constraints/constraints.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-date-range-picker",
-        "forge-text-field"
-      ],
-      "hasScript": false,
-      "screenshot": "components/date-range-picker/constraints/constraints.webp"
+      "screenshot": "components/dialog/top-sheet/top-sheet.webp"
     },
     {
       "id": "components/dialog/right-sheet/right-sheet",
@@ -5126,30 +5075,6 @@
       ],
       "hasScript": true,
       "screenshot": "components/dialog/right-sheet/right-sheet.webp"
-    },
-    {
-      "id": "components/dialog/top-sheet/top-sheet",
-      "name": "Dialog — Top Sheet",
-      "type": "component",
-      "description": "Top Sheet usage example for the forge-dialog component.",
-      "tags": [
-        "dialog",
-        "top-sheet",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/dialog/top-sheet/top-sheet.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-dialog",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-scaffold",
-        "forge-toolbar"
-      ],
-      "hasScript": true,
-      "screenshot": "components/dialog/top-sheet/top-sheet.webp"
     },
     {
       "id": "components/dialog/left-sheet/left-sheet",
@@ -5289,6 +5214,108 @@
       ],
       "hasScript": true,
       "screenshot": "components/dialog/bottom-sheet/bottom-sheet.webp"
+    },
+    {
+      "id": "components/date-range-picker/shortcuts/shortcuts",
+      "name": "Date Range Picker — Shortcuts",
+      "type": "component",
+      "description": "Shortcuts usage example for the forge-date-range-picker component.",
+      "tags": [
+        "date-range-picker",
+        "shortcuts",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/date-range-picker/shortcuts/shortcuts.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-date-range-picker",
+        "forge-text-field"
+      ],
+      "hasScript": false,
+      "screenshot": "components/date-range-picker/shortcuts/shortcuts.webp"
+    },
+    {
+      "id": "components/date-range-picker/masking/masking",
+      "name": "Date Range Picker — Masking",
+      "type": "component",
+      "description": "Masking usage example for the forge-date-range-picker component.",
+      "tags": [
+        "date-range-picker",
+        "masking",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/date-range-picker/masking/masking.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-date-range-picker",
+        "forge-text-field"
+      ],
+      "hasScript": false,
+      "screenshot": "components/date-range-picker/masking/masking.webp"
+    },
+    {
+      "id": "components/date-range-picker/disabled/disabled",
+      "name": "Date Range Picker — Disabled",
+      "type": "component",
+      "description": "Disabled usage example for the forge-date-range-picker component.",
+      "tags": [
+        "date-range-picker",
+        "disabled",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/date-range-picker/disabled/disabled.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-date-range-picker",
+        "forge-text-field"
+      ],
+      "hasScript": false,
+      "screenshot": "components/date-range-picker/disabled/disabled.webp"
+    },
+    {
+      "id": "components/date-range-picker/demo/demo",
+      "name": "Date Range Picker — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-date-range-picker component.",
+      "tags": [
+        "date-range-picker",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/date-range-picker/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-date-range-picker",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-text-field"
+      ],
+      "hasScript": true,
+      "screenshot": "components/date-range-picker/demo/demo.webp"
+    },
+    {
+      "id": "components/date-range-picker/constraints/constraints",
+      "name": "Date Range Picker — Constraints",
+      "type": "component",
+      "description": "Constraints usage example for the forge-date-range-picker component.",
+      "tags": [
+        "date-range-picker",
+        "constraints",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/date-range-picker/constraints/constraints.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-date-range-picker",
+        "forge-text-field"
+      ],
+      "hasScript": false,
+      "screenshot": "components/date-range-picker/constraints/constraints.webp"
     },
     {
       "id": "components/date-picker/shortcuts/shortcuts",
@@ -5439,26 +5466,6 @@
       "screenshot": "components/count-card/with-menu/with-menu.webp"
     },
     {
-      "id": "components/count-card/themes/themes",
-      "name": "Count Card — Themes",
-      "type": "component",
-      "description": "Themes usage example for the forge-count-card component.",
-      "tags": [
-        "count-card",
-        "themes",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/count-card/themes/themes.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-count-card",
-        "forge-icon"
-      ],
-      "hasScript": true,
-      "screenshot": "components/count-card/themes/themes.webp"
-    },
-    {
       "id": "components/count-card/with-full-width/with-full-width",
       "name": "Count Card — With Full Width",
       "type": "component",
@@ -5477,6 +5484,26 @@
       ],
       "hasScript": true,
       "screenshot": "components/count-card/with-full-width/with-full-width.webp"
+    },
+    {
+      "id": "components/count-card/themes/themes",
+      "name": "Count Card — Themes",
+      "type": "component",
+      "description": "Themes usage example for the forge-count-card component.",
+      "tags": [
+        "count-card",
+        "themes",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/count-card/themes/themes.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-count-card",
+        "forge-icon"
+      ],
+      "hasScript": true,
+      "screenshot": "components/count-card/themes/themes.webp"
     },
     {
       "id": "components/count-card/slot-variations/slot-variations",
@@ -5586,6 +5613,26 @@
       ],
       "hasScript": true,
       "screenshot": "components/count-card/additional-body-content/additional-body-content.webp"
+    },
+    {
+      "id": "components/confirmation-dialog/demo/demo",
+      "name": "Confirmation Dialog — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-confirmation-dialog component.",
+      "tags": [
+        "confirmation-dialog",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/confirmation-dialog/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button",
+        "forge-confirmation-dialog"
+      ],
+      "hasScript": true,
+      "screenshot": "components/confirmation-dialog/demo/demo.webp"
     },
     {
       "id": "components/content-scaffold/with-card/with-card",
@@ -5717,26 +5764,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/content-scaffold/demo/demo.webp"
-    },
-    {
-      "id": "components/confirmation-dialog/demo/demo",
-      "name": "Confirmation Dialog — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-confirmation-dialog component.",
-      "tags": [
-        "confirmation-dialog",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/confirmation-dialog/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-confirmation-dialog"
-      ],
-      "hasScript": true,
-      "screenshot": "components/confirmation-dialog/demo/demo.webp"
     },
     {
       "id": "components/color-picker/popover/popover",
@@ -5931,6 +5958,26 @@
       "screenshot": "components/chips/css-only/css-only.webp"
     },
     {
+      "id": "components/chips/demo/demo",
+      "name": "Chips — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-chips component.",
+      "tags": [
+        "chips",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/chips/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-chip",
+        "forge-chip-set"
+      ],
+      "hasScript": false,
+      "screenshot": "components/chips/demo/demo.webp"
+    },
+    {
       "id": "components/chips/choice-and-filter/choice-and-filter",
       "name": "Chips — Choice And Filter",
       "type": "component",
@@ -5993,24 +6040,24 @@
       "screenshot": "components/chips/anchor/anchor.webp"
     },
     {
-      "id": "components/chips/demo/demo",
-      "name": "Chips — Demo",
+      "id": "components/chip-field/with-autocomplete/with-autocomplete",
+      "name": "Chip Field — With Autocomplete",
       "type": "component",
-      "description": "Demo usage example for the forge-chips component.",
+      "description": "With Autocomplete usage example for the forge-chip-field component.",
       "tags": [
-        "chips",
-        "demo",
+        "chip-field",
+        "with-autocomplete",
         "storybook",
         "component-example"
       ],
-      "file": "components/chips/demo/demo.html",
+      "file": "components/chip-field/with-autocomplete/with-autocomplete.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-chip",
-        "forge-chip-set"
+        "forge-autocomplete",
+        "forge-chip-field"
       ],
-      "hasScript": false,
-      "screenshot": "components/chips/demo/demo.webp"
+      "hasScript": true,
+      "screenshot": "components/chip-field/with-autocomplete/with-autocomplete.webp"
     },
     {
       "id": "components/chip-field/disabled/disabled",
@@ -6031,26 +6078,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/chip-field/disabled/disabled.webp"
-    },
-    {
-      "id": "components/chip-field/with-autocomplete/with-autocomplete",
-      "name": "Chip Field — With Autocomplete",
-      "type": "component",
-      "description": "With Autocomplete usage example for the forge-chip-field component.",
-      "tags": [
-        "chip-field",
-        "with-autocomplete",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/chip-field/with-autocomplete/with-autocomplete.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-autocomplete",
-        "forge-chip-field"
-      ],
-      "hasScript": true,
-      "screenshot": "components/chip-field/with-autocomplete/with-autocomplete.webp"
     },
     {
       "id": "components/chip-field/demo/demo",
@@ -6130,25 +6157,6 @@
       "screenshot": "components/checkbox/indeterminate/indeterminate.webp"
     },
     {
-      "id": "components/checkbox/disabled-and-readonly/disabled-and-readonly",
-      "name": "Checkbox — Disabled And Readonly",
-      "type": "component",
-      "description": "Disabled And Readonly usage example for the forge-checkbox component.",
-      "tags": [
-        "checkbox",
-        "disabled-and-readonly",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/checkbox/disabled-and-readonly/disabled-and-readonly.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-checkbox"
-      ],
-      "hasScript": false,
-      "screenshot": "components/checkbox/disabled-and-readonly/disabled-and-readonly.webp"
-    },
-    {
       "id": "components/checkbox/dense/dense",
       "name": "Checkbox — Dense",
       "type": "component",
@@ -6168,23 +6176,23 @@
       "screenshot": "components/checkbox/dense/dense.webp"
     },
     {
-      "id": "components/checkbox/demo/demo",
-      "name": "Checkbox — Demo",
+      "id": "components/checkbox/disabled-and-readonly/disabled-and-readonly",
+      "name": "Checkbox — Disabled And Readonly",
       "type": "component",
-      "description": "Demo usage example for the forge-checkbox component.",
+      "description": "Disabled And Readonly usage example for the forge-checkbox component.",
       "tags": [
         "checkbox",
-        "demo",
+        "disabled-and-readonly",
         "storybook",
         "component-example"
       ],
-      "file": "components/checkbox/demo/demo.html",
+      "file": "components/checkbox/disabled-and-readonly/disabled-and-readonly.html",
       "category": "Components",
       "componentsUsed": [
         "forge-checkbox"
       ],
       "hasScript": false,
-      "screenshot": "components/checkbox/demo/demo.webp"
+      "screenshot": "components/checkbox/disabled-and-readonly/disabled-and-readonly.webp"
     },
     {
       "id": "components/checkbox/css-only/css-only",
@@ -6202,6 +6210,25 @@
       "componentsUsed": [],
       "hasScript": false,
       "screenshot": "components/checkbox/css-only/css-only.webp"
+    },
+    {
+      "id": "components/checkbox/demo/demo",
+      "name": "Checkbox — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-checkbox component.",
+      "tags": [
+        "checkbox",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/checkbox/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-checkbox"
+      ],
+      "hasScript": false,
+      "screenshot": "components/checkbox/demo/demo.webp"
     },
     {
       "id": "components/card/styled/styled",
@@ -6248,25 +6275,6 @@
       "screenshot": "components/card/scaffold/scaffold.webp"
     },
     {
-      "id": "components/card/raised/raised",
-      "name": "Card — Raised",
-      "type": "component",
-      "description": "Raised usage example for the forge-card component.",
-      "tags": [
-        "card",
-        "raised",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/card/raised/raised.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-card"
-      ],
-      "hasScript": false,
-      "screenshot": "components/card/raised/raised.webp"
-    },
-    {
       "id": "components/card/demo/demo",
       "name": "Card — Demo",
       "type": "component",
@@ -6301,6 +6309,25 @@
       "componentsUsed": [],
       "hasScript": false,
       "screenshot": "components/card/css-only/css-only.webp"
+    },
+    {
+      "id": "components/card/raised/raised",
+      "name": "Card — Raised",
+      "type": "component",
+      "description": "Raised usage example for the forge-card component.",
+      "tags": [
+        "card",
+        "raised",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/card/raised/raised.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-card"
+      ],
+      "hasScript": false,
+      "screenshot": "components/card/raised/raised.webp"
     },
     {
       "id": "components/calendar/views/views",
@@ -6479,66 +6506,24 @@
       "screenshot": "components/button-toggle/demo/demo.webp"
     },
     {
-      "id": "components/button-area/demo/demo",
-      "name": "Button Area — Demo",
+      "id": "components/button/with-circular-progress/with-circular-progress",
+      "name": "Button — With Circular Progress",
       "type": "component",
-      "description": "Demo usage example for the forge-button-area component.",
+      "description": "With Circular Progress usage example for the forge-button component.",
       "tags": [
-        "button-area",
-        "demo",
+        "button",
+        "with-circular-progress",
         "storybook",
         "component-example"
       ],
-      "file": "components/button-area/demo/demo.html",
+      "file": "components/button/with-circular-progress/with-circular-progress.html",
       "category": "Components",
       "componentsUsed": [
-        "forge-button-area",
-        "forge-card",
-        "forge-icon",
-        "forge-icon-button",
-        "forge-tooltip"
-      ],
-      "hasScript": true,
-      "screenshot": "components/button-area/demo/demo.webp"
-    },
-    {
-      "id": "components/busy-indicator/inline/inline",
-      "name": "Busy Indicator — Inline",
-      "type": "component",
-      "description": "Inline usage example for the forge-busy-indicator component.",
-      "tags": [
-        "busy-indicator",
-        "inline",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/busy-indicator/inline/inline.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-busy-indicator"
+        "forge-button",
+        "forge-circular-progress"
       ],
       "hasScript": false,
-      "screenshot": "components/busy-indicator/inline/inline.webp"
-    },
-    {
-      "id": "components/busy-indicator/demo/demo",
-      "name": "Busy Indicator — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-busy-indicator component.",
-      "tags": [
-        "busy-indicator",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/busy-indicator/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-busy-indicator",
-        "forge-button"
-      ],
-      "hasScript": true,
-      "screenshot": "components/busy-indicator/demo/demo.webp"
+      "screenshot": "components/button/with-circular-progress/with-circular-progress.webp"
     },
     {
       "id": "components/button/with-icon/with-icon",
@@ -6559,26 +6544,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/button/with-icon/with-icon.webp"
-    },
-    {
-      "id": "components/button/with-circular-progress/with-circular-progress",
-      "name": "Button — With Circular Progress",
-      "type": "component",
-      "description": "With Circular Progress usage example for the forge-button component.",
-      "tags": [
-        "button",
-        "with-circular-progress",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/button/with-circular-progress/with-circular-progress.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-button",
-        "forge-circular-progress"
-      ],
-      "hasScript": false,
-      "screenshot": "components/button/with-circular-progress/with-circular-progress.webp"
     },
     {
       "id": "components/button/variants/variants",
@@ -6694,6 +6659,45 @@
       "screenshot": "components/button/anchor/anchor.webp"
     },
     {
+      "id": "components/busy-indicator/inline/inline",
+      "name": "Busy Indicator — Inline",
+      "type": "component",
+      "description": "Inline usage example for the forge-busy-indicator component.",
+      "tags": [
+        "busy-indicator",
+        "inline",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/busy-indicator/inline/inline.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-busy-indicator"
+      ],
+      "hasScript": false,
+      "screenshot": "components/busy-indicator/inline/inline.webp"
+    },
+    {
+      "id": "components/busy-indicator/demo/demo",
+      "name": "Busy Indicator — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-busy-indicator component.",
+      "tags": [
+        "busy-indicator",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/busy-indicator/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-busy-indicator",
+        "forge-button"
+      ],
+      "hasScript": true,
+      "screenshot": "components/busy-indicator/demo/demo.webp"
+    },
+    {
       "id": "components/bottom-sheet/demo/demo",
       "name": "Bottom Sheet — Demo",
       "type": "component",
@@ -6734,25 +6738,6 @@
       "screenshot": "components/banner/themed/themed.webp"
     },
     {
-      "id": "components/banner/default/default",
-      "name": "Banner — Default",
-      "type": "component",
-      "description": "Default usage example for the forge-banner component.",
-      "tags": [
-        "banner",
-        "default",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/banner/default/default.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-banner"
-      ],
-      "hasScript": false,
-      "screenshot": "components/banner/default/default.webp"
-    },
-    {
       "id": "components/banner/persistent/persistent",
       "name": "Banner — Persistent",
       "type": "component",
@@ -6770,6 +6755,25 @@
       ],
       "hasScript": false,
       "screenshot": "components/banner/persistent/persistent.webp"
+    },
+    {
+      "id": "components/banner/default/default",
+      "name": "Banner — Default",
+      "type": "component",
+      "description": "Default usage example for the forge-banner component.",
+      "tags": [
+        "banner",
+        "default",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/banner/default/default.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-banner"
+      ],
+      "hasScript": false,
+      "screenshot": "components/banner/default/default.webp"
     },
     {
       "id": "components/banner/css-only/css-only",
@@ -6831,25 +6835,6 @@
       "screenshot": "components/badge/with-icon-button/with-icon-button.webp"
     },
     {
-      "id": "components/badge/themed/themed",
-      "name": "Badge — Themed",
-      "type": "component",
-      "description": "Themed usage example for the forge-badge component.",
-      "tags": [
-        "badge",
-        "themed",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/badge/themed/themed.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-badge"
-      ],
-      "hasScript": false,
-      "screenshot": "components/badge/themed/themed.webp"
-    },
-    {
       "id": "components/badge/with-icon/with-icon",
       "name": "Badge — With Icon",
       "type": "component",
@@ -6870,23 +6855,23 @@
       "screenshot": "components/badge/with-icon/with-icon.webp"
     },
     {
-      "id": "components/badge/strong/strong",
-      "name": "Badge — Strong",
+      "id": "components/badge/themed/themed",
+      "name": "Badge — Themed",
       "type": "component",
-      "description": "Strong usage example for the forge-badge component.",
+      "description": "Themed usage example for the forge-badge component.",
       "tags": [
         "badge",
-        "strong",
+        "themed",
         "storybook",
         "component-example"
       ],
-      "file": "components/badge/strong/strong.html",
+      "file": "components/badge/themed/themed.html",
       "category": "Components",
       "componentsUsed": [
         "forge-badge"
       ],
       "hasScript": false,
-      "screenshot": "components/badge/strong/strong.webp"
+      "screenshot": "components/badge/themed/themed.webp"
     },
     {
       "id": "components/badge/dot/dot",
@@ -6908,6 +6893,25 @@
       ],
       "hasScript": true,
       "screenshot": "components/badge/dot/dot.webp"
+    },
+    {
+      "id": "components/badge/strong/strong",
+      "name": "Badge — Strong",
+      "type": "component",
+      "description": "Strong usage example for the forge-badge component.",
+      "tags": [
+        "badge",
+        "strong",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/badge/strong/strong.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-badge"
+      ],
+      "hasScript": false,
+      "screenshot": "components/badge/strong/strong.webp"
     },
     {
       "id": "components/badge/demo/demo",
@@ -6944,6 +6948,29 @@
       "componentsUsed": [],
       "hasScript": false,
       "screenshot": "components/badge/css-only/css-only.webp"
+    },
+    {
+      "id": "components/button-area/demo/demo",
+      "name": "Button Area — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-button-area component.",
+      "tags": [
+        "button-area",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/button-area/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-button-area",
+        "forge-card",
+        "forge-icon",
+        "forge-icon-button",
+        "forge-tooltip"
+      ],
+      "hasScript": true,
+      "screenshot": "components/button-area/demo/demo.webp"
     },
     {
       "id": "components/backdrop/demo/demo",
@@ -7080,24 +7107,24 @@
       "screenshot": "components/autocomplete/multi-select/multi-select.webp"
     },
     {
-      "id": "components/autocomplete/empty-state/empty-state",
-      "name": "Autocomplete — Empty State",
+      "id": "components/autocomplete/infinite-scroll/infinite-scroll",
+      "name": "Autocomplete — Infinite Scroll",
       "type": "component",
-      "description": "Empty State usage example for the forge-autocomplete component.",
+      "description": "Infinite Scroll usage example for the forge-autocomplete component.",
       "tags": [
         "autocomplete",
-        "empty-state",
+        "infinite-scroll",
         "storybook",
         "component-example"
       ],
-      "file": "components/autocomplete/empty-state/empty-state.html",
+      "file": "components/autocomplete/infinite-scroll/infinite-scroll.html",
       "category": "Components",
       "componentsUsed": [
         "forge-autocomplete",
         "forge-text-field"
       ],
       "hasScript": true,
-      "screenshot": "components/autocomplete/empty-state/empty-state.webp"
+      "screenshot": "components/autocomplete/infinite-scroll/infinite-scroll.webp"
     },
     {
       "id": "components/autocomplete/demo/demo",
@@ -7120,6 +7147,26 @@
       "screenshot": "components/autocomplete/demo/demo.webp"
     },
     {
+      "id": "components/autocomplete/empty-state/empty-state",
+      "name": "Autocomplete — Empty State",
+      "type": "component",
+      "description": "Empty State usage example for the forge-autocomplete component.",
+      "tags": [
+        "autocomplete",
+        "empty-state",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/autocomplete/empty-state/empty-state.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-autocomplete",
+        "forge-text-field"
+      ],
+      "hasScript": true,
+      "screenshot": "components/autocomplete/empty-state/empty-state.webp"
+    },
+    {
       "id": "components/autocomplete/custom-options/custom-options",
       "name": "Autocomplete — Custom Options",
       "type": "component",
@@ -7138,26 +7185,6 @@
       ],
       "hasScript": true,
       "screenshot": "components/autocomplete/custom-options/custom-options.webp"
-    },
-    {
-      "id": "components/autocomplete/infinite-scroll/infinite-scroll",
-      "name": "Autocomplete — Infinite Scroll",
-      "type": "component",
-      "description": "Infinite Scroll usage example for the forge-autocomplete component.",
-      "tags": [
-        "autocomplete",
-        "infinite-scroll",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/autocomplete/infinite-scroll/infinite-scroll.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-autocomplete",
-        "forge-text-field"
-      ],
-      "hasScript": true,
-      "screenshot": "components/autocomplete/infinite-scroll/infinite-scroll.webp"
     },
     {
       "id": "components/app-launcher/demo/demo",
@@ -7252,6 +7279,23 @@
       "screenshot": "components/app-bar/demo/demo.webp"
     },
     {
+      "id": "components/app-bar/css-only/css-only",
+      "name": "App Bar — CSS Only",
+      "type": "component",
+      "description": "CSS Only usage example for the forge-app-bar component.",
+      "tags": [
+        "app-bar",
+        "css-only",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/app-bar/css-only/css-only.html",
+      "category": "Components",
+      "componentsUsed": [],
+      "hasScript": false,
+      "screenshot": "components/app-bar/css-only/css-only.webp"
+    },
+    {
       "id": "components/app-bar/custom-theme/custom-theme",
       "name": "App Bar — Custom Theme",
       "type": "component",
@@ -7271,23 +7315,6 @@
       ],
       "hasScript": true,
       "screenshot": "components/app-bar/custom-theme/custom-theme.webp"
-    },
-    {
-      "id": "components/app-bar/css-only/css-only",
-      "name": "App Bar — CSS Only",
-      "type": "component",
-      "description": "CSS Only usage example for the forge-app-bar component.",
-      "tags": [
-        "app-bar",
-        "css-only",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/app-bar/css-only/css-only.html",
-      "category": "Components",
-      "componentsUsed": [],
-      "hasScript": false,
-      "screenshot": "components/app-bar/css-only/css-only.webp"
     },
     {
       "id": "components/accordion/demo/demo",
@@ -7330,31 +7357,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/radio/radio-group/demo/demo.webp"
-    },
-    {
-      "id": "components/drawer/mini-drawer/hover/hover",
-      "name": "Mini Drawer — Hover",
-      "type": "component",
-      "description": "Hover usage example for the forge-mini-drawer component.",
-      "tags": [
-        "mini-drawer",
-        "hover",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/drawer/mini-drawer/hover/hover.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-app-bar",
-        "forge-card",
-        "forge-icon",
-        "forge-list",
-        "forge-list-item",
-        "forge-mini-drawer",
-        "forge-scaffold"
-      ],
-      "hasScript": true,
-      "screenshot": "components/drawer/mini-drawer/hover/hover.webp"
     },
     {
       "id": "components/drawer/modal-drawer/demo/demo",
@@ -7410,6 +7412,31 @@
       "screenshot": "components/drawer/mini-drawer/demo/demo.webp"
     },
     {
+      "id": "components/drawer/mini-drawer/hover/hover",
+      "name": "Mini Drawer — Hover",
+      "type": "component",
+      "description": "Hover usage example for the forge-mini-drawer component.",
+      "tags": [
+        "mini-drawer",
+        "hover",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/drawer/mini-drawer/hover/hover.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-app-bar",
+        "forge-card",
+        "forge-icon",
+        "forge-list",
+        "forge-list-item",
+        "forge-mini-drawer",
+        "forge-scaffold"
+      ],
+      "hasScript": true,
+      "screenshot": "components/drawer/mini-drawer/hover/hover.webp"
+    },
+    {
       "id": "components/app-bar/search/demo/demo",
       "name": "Search — Demo",
       "type": "component",
@@ -7428,52 +7455,6 @@
       ],
       "hasScript": false,
       "screenshot": "components/app-bar/search/demo/demo.webp"
-    },
-    {
-      "id": "components/app-bar/profile/with-custom-content/with-custom-content",
-      "name": "Profile — With Custom Content",
-      "type": "component",
-      "description": "With Custom Content usage example for the forge-profile component.",
-      "tags": [
-        "profile",
-        "with-custom-content",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/app-bar/profile/with-custom-content/with-custom-content.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-app-bar",
-        "forge-app-bar-profile-button",
-        "forge-avatar",
-        "forge-icon-button",
-        "forge-tooltip"
-      ],
-      "hasScript": true,
-      "screenshot": "components/app-bar/profile/with-custom-content/with-custom-content.webp"
-    },
-    {
-      "id": "components/app-bar/profile/demo/demo",
-      "name": "Profile — Demo",
-      "type": "component",
-      "description": "Demo usage example for the forge-profile component.",
-      "tags": [
-        "profile",
-        "demo",
-        "storybook",
-        "component-example"
-      ],
-      "file": "components/app-bar/profile/demo/demo.html",
-      "category": "Components",
-      "componentsUsed": [
-        "forge-app-bar",
-        "forge-app-bar-profile-button",
-        "forge-avatar",
-        "forge-icon-button",
-        "forge-tooltip"
-      ],
-      "hasScript": false,
-      "screenshot": "components/app-bar/profile/demo/demo.webp"
     },
     {
       "id": "components/app-bar/notifications/demo/demo",
@@ -7521,6 +7502,52 @@
       ],
       "hasScript": true,
       "screenshot": "components/app-bar/menu-button/demo/demo.webp"
+    },
+    {
+      "id": "components/app-bar/profile/with-custom-content/with-custom-content",
+      "name": "Profile — With Custom Content",
+      "type": "component",
+      "description": "With Custom Content usage example for the forge-profile component.",
+      "tags": [
+        "profile",
+        "with-custom-content",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/app-bar/profile/with-custom-content/with-custom-content.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-app-bar",
+        "forge-app-bar-profile-button",
+        "forge-avatar",
+        "forge-icon-button",
+        "forge-tooltip"
+      ],
+      "hasScript": true,
+      "screenshot": "components/app-bar/profile/with-custom-content/with-custom-content.webp"
+    },
+    {
+      "id": "components/app-bar/profile/demo/demo",
+      "name": "Profile — Demo",
+      "type": "component",
+      "description": "Demo usage example for the forge-profile component.",
+      "tags": [
+        "profile",
+        "demo",
+        "storybook",
+        "component-example"
+      ],
+      "file": "components/app-bar/profile/demo/demo.html",
+      "category": "Components",
+      "componentsUsed": [
+        "forge-app-bar",
+        "forge-app-bar-profile-button",
+        "forge-avatar",
+        "forge-icon-button",
+        "forge-tooltip"
+      ],
+      "hasScript": false,
+      "screenshot": "components/app-bar/profile/demo/demo.webp"
     },
     {
       "id": "components/app-bar/help-button/demo/demo",
@@ -7582,5 +7609,5 @@
       "name": "toolbars"
     }
   ],
-  "generatedAt": "2026-10-01T14:26:19.874Z"
+  "generatedAt": "2026-10-01T15:06:05.120Z"
 }
