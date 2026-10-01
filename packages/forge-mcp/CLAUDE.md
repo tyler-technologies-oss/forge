@@ -5,15 +5,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 ## Commands
 
 ### Development Workflow
+
 - `pnpm install` - Install dependencies (run from the monorepo root)
 - `pnpm run build` - Compile TypeScript to dist/ and bundle manifests
 
 ### Code Quality
+
 - `pnpm run lint` - Run ESLint to check code quality
 - `pnpm run format` - Format code with Prettier
 - `pnpm run format:check` - Check if code is properly formatted
 
 ### Testing
+
 - `pnpm test` - Run all tests
 - `pnpm test:watch` - Run tests in watch mode
 - `pnpm test:coverage` - Run tests with coverage report
@@ -21,6 +24,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 ### Versioning & Release
 
 Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Changesets only bump `package.json`, so when releasing a new version also update the version number in the other two files so all three match:
+
 - `package.json`
 - `plugin/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json` (at the monorepo root)
@@ -51,6 +55,7 @@ Templates are located in the `/templates/` directory, and written in markdown wi
 ## Guidelines for Claude
 
 When suggesting code changes or additions, please adhere to the following guidelines:
+
 - DO NOT run the debug command to test changes, only run the build command.
 - Always use pnpm to run commands. DO NOT use npm or pntml
 - DO NOT generate fallback content for tools unless instructed otherwise.
@@ -58,3 +63,7 @@ When suggesting code changes or additions, please adhere to the following guidel
 - When renaming tools or resources, ensure all references are updated accordingly.
 - Avoid introducing new dependencies unless absolutely necessary.
 - Avoid rendering markdown directly in the code unless its small snippets. Prefer templates instead.
+
+## Hosted deployment
+
+- The hosted HTTP server (`dist/http.js`) runs on Heroku and is deployed manually with `node scripts/deploy-heroku.js --push --app <app>`. It builds the package and force-pushes a minimal artifact, not the monorepo.
