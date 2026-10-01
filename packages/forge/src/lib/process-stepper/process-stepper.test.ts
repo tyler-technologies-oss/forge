@@ -548,6 +548,16 @@ describe('ProcessStep', () => {
       expect(marker?.textContent?.trim()).toBe('2');
     });
 
+    it('should render the partial marker without the position when a current step is numbered', async () => {
+      for (const state of ['current', 'in-progress']) {
+        const step = await createNumberedStep(state);
+        const marker = step.shadowRoot?.querySelector('.marker');
+
+        expect(marker?.classList.contains('partial'), state).toBe(true);
+        expect(marker?.textContent?.trim(), state).toBe('');
+      }
+    });
+
     it('should render the icon rather than the position for a completed numbered step', async () => {
       const step = await createNumberedStep('completed');
       const marker = step.shadowRoot?.querySelector('.marker');
