@@ -115,12 +115,14 @@ pnpm run build
 pnpm run start:http   # listens on PORT (default 3000), serving POST /mcp
 ```
 
-A `Dockerfile` is included for containerized hosting on any platform that runs a Docker image (Cloud Run, Fly.io, Render, ECS, etc.):
+To deploy to Heroku, build and push a small deploy artifact (`dist/`, `templates/`, runtime dependencies, and a `Procfile`) instead of the whole monorepo:
 
 ```bash
-docker build -t forge-mcp-http .
-docker run -p 3000:3000 forge-mcp-http
+node scripts/deploy-heroku.js                        # build and assemble .heroku-deploy/ only
+node scripts/deploy-heroku.js --push --app forge-mcp # also force-push it to the Heroku app
 ```
+
+Pushing requires the Heroku CLI to be logged in with access to the app.
 
 The server is stateless (no `Mcp-Session-Id` is issued; a fresh server/transport pair handles each request), so it scales horizontally with no session affinity required. `GET /healthz` returns `200 ok` for platform health checks.
 

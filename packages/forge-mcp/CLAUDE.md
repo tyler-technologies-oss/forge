@@ -58,3 +58,8 @@ When suggesting code changes or additions, please adhere to the following guidel
 - When renaming tools or resources, ensure all references are updated accordingly.
 - Avoid introducing new dependencies unless absolutely necessary.
 - Avoid rendering markdown directly in the code unless its small snippets. Prefer templates instead.
+
+## Hosted deployment
+
+- The hosted HTTP server (`dist/http.js`) runs on Heroku and is deployed manually with `node scripts/deploy-heroku.js --push --app <app>`. It builds the package and force-pushes a minimal artifact, not the monorepo.
+- Test against a scratch app (e.g. `forge-mcp-skills-test`) before pushing to `forge-mcp`.
