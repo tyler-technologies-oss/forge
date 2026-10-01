@@ -20,6 +20,22 @@ const REGULAR_EXPRESSIONS = {
   overflow: /(auto|scroll)/
 };
 
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button',
+  'input',
+  'select',
+  'textarea',
+  'details',
+  'iframe',
+  'audio[controls]',
+  'video[controls]',
+  '[contenteditable]:not([contenteditable="false"])',
+  '[tabindex]'
+]
+  .map(selector => `${selector}:not([disabled]):not([tabindex="-1"])`)
+  .join(',');
+
 let SCROLLBAR_WIDTH: number | undefined;
 
 /**
@@ -715,6 +731,15 @@ export function deepQuerySelectorAll(rootElement: Element, selectors: string | s
   }
 
   return nodes;
+}
+
+/**
+ * Finds the first focusable descendant of the provided element, traversing shadow DOM and slotted nodes.
+ * @param {Element} element The element to search within.
+ * @returns {Element | undefined}
+ */
+export function getFirstFocusableElement(element: Element): Element | undefined {
+  return deepQuerySelectorAll(element, FOCUSABLE_SELECTOR)[0];
 }
 
 /**

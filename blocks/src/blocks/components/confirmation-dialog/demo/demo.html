@@ -1,0 +1,15 @@
+<!--
+  @block Confirmation Dialog — Demo
+  @type component
+  @description Demo usage example for the forge-confirmation-dialog component.
+  @tags confirmation-dialog, demo, storybook, component-example
+-->
+<div>
+  <forge-button variant="raised">Show Confirmation Dialog</forge-button>
+  <forge-confirmation-dialog>
+    <span slot="title">Delete selected images?</span>
+    <span slot="message">Images will be permanently removed from your account and all synced devices.</span>
+    <span slot="secondary-button-text">No</span>
+    <span slot="primary-button-text">Yes</span>
+  </forge-confirmation-dialog>
+</div>

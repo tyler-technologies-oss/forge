@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { Theme } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
@@ -47,7 +47,6 @@ export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeli
  * @csspart end - The element displayed at the end of the summary.
  * @csspart detail - The element displayed in the detail slot.
  */
-@customElement(TIMELINE_ITEM_TAG_NAME)
 export class TimelineItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -112,6 +111,8 @@ export class TimelineItemComponent extends BaseLitElement {
     `;
   }
 }
+
+tryDefine(TIMELINE_ITEM_TAG_NAME, TimelineItemComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

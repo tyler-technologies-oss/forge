@@ -1,0 +1,55 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as FooterStories from './Footer.stories';
+
+<Meta of={FooterStories} />
+
+<Title />
+
+The `<forge-footer>` component provides a flexible page footer pattern for site navigation, policy links, and secondary information. It supports different layout modes and adapts responsively when `layout="auto"` is used.
+
+<Canvas of={FooterStories.Demo} />
+
+## Usage
+
+The footer is intended to wrap one or more `<forge-footer-item>` children. Each footer item can contain links, text, or other simple inline content.
+
+```html
+<forge-footer>
+  <forge-footer-item>
+    <a href="#">About</a>
+  </forge-footer-item>
+  <forge-footer-item>
+    <a href="#">Contact</a>
+  </forge-footer-item>
+  <forge-footer-item>
+    <a href="#">Privacy</a>
+  </forge-footer-item>
+  <forge-footer-item>
+    <span>© 2026 Tyler Technologies</span>
+  </forge-footer-item>
+
+  <!-- Custom brand logo via the "graphic" slot -->
+  <a slot="graphic" href="https://my.brand.com" target="_blank">
+    <img src="https://path.to/your/logo.svg" alt="Your custom logo" />
+  </a>
+</forge-footer>
+```
+
+### Layout modes
+
+- `standard`: Always render the standard footer layout.
+- `alternative`: Always render the alternative footer layout.
+- `auto`: Responsively switch between `standard` and `alternative` based on the `layoutBreakpoint` width.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The footer uses `role="contentinfo"` to ensure screen reader users can identify and navigate to the footer section.
+- Footer items are rendered as list items with `role="listitem"` within a list structure for proper semantic navigation.
+- All links within footer items should have descriptive text to indicate their purpose to assistive technology users.
+- The footer maintains keyboard navigation accessibility, allowing users to tab through footer links in logical order.
+- Custom content within footer items should follow WCAG guidelines for color contrast, text sizing, and interactive elements.

@@ -1,0 +1,85 @@
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+@use '../core/styles/spacing';
+@use '../dialog/core' as dialog-core;
+
+//
+// Host
+//
+
+:host {
+  display: contents;
+  border-radius: inherit;
+}
+
+//
+// Base
+//
+
+.surface {
+  padding: #{spacing.variable(large)};
+  display: grid;
+  gap: #{spacing.variable(large)};
+}
+
+.layout-container {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(large)};
+
+  .content {
+    display: flex;
+    align-items: center;
+    gap: #{spacing.variable(medium)};
+    width: 100%;
+  }
+}
+
+.message {
+  @include typography.style(body2);
+
+  flex: 1 auto;
+  margin-block: 0;
+  color: #{theme.variable(text-medium)};
+}
+
+.title {
+  @include typography.style(heading4);
+
+  margin: 0;
+}
+
+.progress-container {
+  min-width: 244px;
+}
+
+//
+// Inline Mode
+//
+
+forge-dialog.inline {
+  border-radius: inherit;
+
+  &::part(root) {
+    position: absolute;
+    overflow: clip;
+  }
+
+  &::part(root),
+  &::part(backdrop) {
+    border-radius: inherit;
+  }
+}
+
+//
+// Transparent
+//
+
+.transparent {
+  @include dialog-core.provide-theme(
+    (
+      background: transparent,
+      elevation: none
+    )
+  );
+}

@@ -1,0 +1,24 @@
+<!--
+  @block Card — Scaffold
+  @type component
+  @description Scaffold usage example for the forge-card component.
+  @tags card, scaffold, storybook, component-example
+-->
+<forge-card class="p-0 w-[400px] [--forge-card-height:300px]">
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h1 slot="start" class="text-heading4">Lorem ipsum</h1>
+    </forge-toolbar>
+    <div slot="body" tabindex="0" class="text-body2 p-medium">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus
+      enim sint nesciunt provident excepturi dolorum pariatur illum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias quas sed aliquid cumque
+      sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus enim sint nesciunt provident excepturi dolorum pariatur illum? Lorem ipsum dolor sit amet
+      consectetur adipisicing elit. Molestias quas sed aliquid cumque sunt iste ad, alias quod adipisci? Nulla, libero necessitatibus enim sint nesciunt
+      provident excepturi dolorum pariatur illum?
+    </div>
+    <forge-toolbar slot="footer" inverted>
+      <forge-button type="outlined" slot="end"> Cancel </forge-button>
+      <forge-button type="unelevated" slot="end" style="margin-left: 8px"> Ok </forge-button>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-card>

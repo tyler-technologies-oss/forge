@@ -1,0 +1,92 @@
+<app-demo-card headerText="Chips">
+  <div id="chips-choice">
+    <h4>Choice Chips</h4>
+    <forge-chip-set type="choice">
+      <forge-chip>Small</forge-chip>
+      <forge-chip selected>Medium</forge-chip>
+      <forge-chip>Large</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-choice-vertical">
+    <h4>Choice Chips (Vertical)</h4>
+    <forge-chip-set type="choice" orientation="vertical">
+      <forge-chip>Small</forge-chip>
+      <forge-chip selected>Medium</forge-chip>
+      <forge-chip>Large</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-filter">
+    <h4>Filter Chips</h4>
+    <h5>No leading icon</h5>
+    <forge-chip-set type="filter">
+      <forge-chip selected>Tops</forge-chip>
+      <forge-chip selected>Bottoms</forge-chip>
+      <forge-chip>Shoes</forge-chip>
+      <forge-chip>Accessories</forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-filter-leading">
+    <h5>With leading icon</h5>
+    <forge-chip-set type="filter">
+      <forge-chip selected>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Alice
+      </forge-chip>
+      <forge-chip selected>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Bob
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Charlie
+      </forge-chip>
+      <forge-chip>
+        <forge-icon slot="leading" name="face"></forge-icon>
+        Danielle
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-action">
+    <h4>Action Chips</h4>
+    <forge-chip-set type="action" (forge-chip-select)="onActionChipSelected($event)">
+      <forge-chip value="calendar">
+        <forge-icon slot="leading" name="event"></forge-icon>
+        Add to calendar
+      </forge-chip>
+      <forge-chip value="bookmark">
+        <forge-icon slot="leading" name="bookmark"></forge-icon>
+        Bookmark
+      </forge-chip>
+      <forge-chip value="alarm">
+        <forge-icon slot="leading" name="alarm"></forge-icon>
+      </forge-chip>
+      <forge-chip value="directions">
+        <forge-icon slot="leading" name="directions"></forge-icon>
+        Get directions
+      </forge-chip>
+    </forge-chip-set>
+  </div>
+
+  <div id="chips-input">
+    <h4 class="forge-flex-container--row">
+      Input Chips
+      <span>
+        <forge-icon-button (click)="resetInputChips()" aria-label="Reset input chips">
+          <forge-icon name="refresh"></forge-icon>
+        </forge-icon-button>
+      </span>
+    </h4>
+    <forge-chip-set type="input">
+      @for (chip of inputChips$ | async; track chip) {
+        <forge-chip (forge-chip-delete)="onInputChipDeleted(chip)">
+          <forge-icon slot="leading" [name]="chip.icon"></forge-icon>
+          {{ chip.text }}
+        </forge-chip>
+      }
+    </forge-chip-set>
+  </div>
+</app-demo-card>

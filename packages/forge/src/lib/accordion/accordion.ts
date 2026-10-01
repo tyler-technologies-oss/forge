@@ -1,5 +1,5 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, elementParents } from '@tylertech/forge-core';
-import { customElement, property } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, elementParents, tryDefine } from '@tylertech/forge-core';
+import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { ExpansionPanelComponent } from '../expansion-panel/expansion-panel.js';
@@ -21,7 +21,6 @@ export const ACCORDION_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-accordion'
  *
  * @fires {CustomEvent<IExpansionPanelComponent>} forge-accordion-toggle - Dispatched when a child expansion panel is toggled. Includes the related expansion panel element in the event detail.
  */
-@customElement(ACCORDION_TAG_NAME)
 export class AccordionComponent extends BaseLitElement {
   /** @deprecated - Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = ACCORDION_TAG_NAME;
@@ -91,6 +90,8 @@ export class AccordionComponent extends BaseLitElement {
     return children.filter(child => child.tagName.toLocaleLowerCase() === 'forge-expansion-panel') as ExpansionPanelComponent[];
   }
 }
+
+tryDefine(ACCORDION_TAG_NAME, AccordionComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

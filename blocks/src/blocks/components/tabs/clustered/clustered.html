@@ -1,0 +1,27 @@
+<!--
+  @block Tabs — Clustered
+  @type component
+  @description Clustered usage example for the forge-tabs component.
+  @tags tabs, clustered, storybook, component-example
+-->
+<forge-tab-bar data-aria-label="Demo tabs" active-tab="0" clustered>
+  <forge-tab id="clustered-tab-1" selected>
+    Tab 1
+  </forge-tab>
+  <forge-tab id="clustered-tab-2">
+    Tab 2
+  </forge-tab>
+  <forge-tab id="clustered-tab-3">
+    Tab 3
+  </forge-tab>
+</forge-tab-bar>
+
+<forge-tab-panel for="clustered-tab-1">
+  <div class="p-medium">Tab 1 content</div>
+</forge-tab-panel>
+<forge-tab-panel for="clustered-tab-2">
+  <div class="p-medium">Tab 2 content</div>
+</forge-tab-panel>
+<forge-tab-panel for="clustered-tab-3">
+  <div class="p-medium">Tab 3 content</div>
+</forge-tab-panel>

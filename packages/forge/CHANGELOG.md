@@ -1,5 +1,105 @@
 # @tylertech/forge
 
+## 3.20.0
+
+### Minor Changes
+
+- 696fc4d: Export `VirtualElement` from the public API. It was previously only reachable through the
+  `@tylertech/forge/esm/core/utils/position-utils` deep path, which does not resolve under
+  `NodeNext` module resolution.
+
+## 3.19.0
+
+### Minor Changes
+
+- 86c89ee: feat(icon-button): implement invoker commands api
+- 86c89ee: feat(button): implement invoker commands api
+- 86c89ee: feat(icon-button): migrate to lit
+- 86c89ee: feat(button): migrate to lit
+- 86c89ee: feat(floating-action-button): migrate to lit
+- 86c89ee: feat(floating-action-button): implement invoker commands api
+- 0d3ae25: feat(focus-indicator): render in top layer
+
+### Patch Changes
+
+- 8bbd3de: fix(dialog): prevent dialog from losing initial focus due to Chrome focus-within propagation bug
+
+## 3.18.0
+
+### Minor Changes
+
+- 95d74ca: feat(app-bar-menu-button): add `expanded`, `controls`, and `hasPopup` properties for ARIA state on the internal button
+- 49aa4bc: feat(menu): add an `onSelect` callback to menu options so each option can carry its own handler instead of branching on the `forge-menu-select` event value
+
+### Patch Changes
+
+- f658799: fix: guard against attempts to redefine Forge components (this is a temporary workaround that will be reverted in v4)
+
+## 3.17.0
+
+### Minor Changes
+
+- 2f37973: feat(app-launcher): migrate app launcher and app launcher link components from forge-extended
+- 2f37973: feat(app-layout): migrate app layout component from forge-extended
+- 2f37973: feat(busy-indicator): migrate busy indicator component from forge-extended
+- 2f37973: feat(confirmation-dialog): migrate confirmation dialog component from forge-extended
+- 2f37973: feat(content-scaffold): migrate content scaffold component from forge-extended
+- 2f37973: feat(count-card): migrate count card component from forge-extended
+- 2f37973: feat(footer): migrate footer and footer-item components from forge-extended
+- 2f37973: feat(multi-select-header): migrate multi select header component from forge-extended
+- 2f37973: feat(quantity-field): migrate quantity field component from forge-extended
+- 2f37973: feat(responsive-toolbar): migrate responsive toolbar component from forge-extended
+- 2f37973: feat(structured-card): migrate structured card component from forge-extended
+- 0ec03e3: Added i18n slots/labels to `forge-theme-toggle` and synced its state with OS `prefers-color-scheme` changes. Added a `groupAriaLabel` property on `forge-theme-toggle` and a `themeToggleAriaLabel` pass-through on `forge-user-profile`, along with `theme-toggle-title`/`theme-toggle-light-label`/`theme-toggle-dark-label`/`theme-toggle-system-label` slots for translating the embedded theme toggle. Regenerated the Angular wrappers to expose the new inputs.
+- 2f37973: feat(theme-toggle): migrate theme toggle component from forge-extended
+- 2f37973: feat(user-profile): migrate user profile and profile link components from forge-extended
+
+### Patch Changes
+
+- bbcc817: fix: add `./sass/*` subpath to package `exports` so Sass imports resolve
+- 6f06747: chore(deps): upgrade sass to 1.101.6
+- 5492215: fix: migrate usages of deprecated sass functions
+
+## 3.16.2
+
+### Patch Changes
+
+- 2388ce8: fix(autocomplete): document the second `value` parameter of the `filter`/`forceFilter` callback used for value-to-label resolution
+- 2388ce8: fix(page-state): correct `@slot` documentation from `actions` to `action` to match the actual template slot name
+- 2388ce8: fix(select): implement the `readonly` property so setting it no longer throws at runtime; the dropdown can still be opened to browse options, but the value can no longer be changed
+
+## 3.16.1
+
+### Patch Changes
+
+- dba81e7: fix(paginator): allow default page size that is not in page size options
+- dba81e7: fix(paginator): hide page size options select when page size options is a null value or empty array
+- 236a995: docs(paginator): fix storybook build error
+- Updated dependencies [dba81e7]
+  - @tylertech/forge-core@3.5.1
+
+## 3.16.0
+
+### Minor Changes
+
+- b555bdd: fix(secret): reduce default icon button size
+- 4362fba: feat(dialog): migrate to Lit
+- 79c3d06: feat(paginator): migrate to Lit
+- b555bdd: feat(secret): add button size token
+
+### Patch Changes
+
+- 79c3d06: fix(paginator): ensure button labels are announced by accessibility tools
+- 691a79d: fix(dialog): set focus on first focusable descendent element when opened as modal
+- Updated dependencies [691a79d]
+  - @tylertech/forge-core@3.5.0
+
+## 3.15.2
+
+### Patch Changes
+
+- 7260080: fix(tabs): detect all descendent tabs of tab bar
+
 ## 3.15.1
 
 ### Patch Changes

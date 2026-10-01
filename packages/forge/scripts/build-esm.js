@@ -4,6 +4,27 @@ import { readFileSync } from 'fs';
 import * as sass from 'sass';
 import { getExternalDeps, LICENSE_HEADER } from './build-utils.js';
 
+/**
+ * Components that are intentionally excluded from the `src/lib/index.ts` barrel (to avoid
+ * duplicate custom-element registration with `@tylertech/forge-extended`) but must still be
+ * bundled so their `@tylertech/forge/<name>` subpath export resolves.
+ */
+const SUBPATH_ONLY_ENTRIES = [
+  'app-launcher',
+  'app-layout',
+  'busy-indicator',
+  'confirmation-dialog',
+  'content-scaffold',
+  'count-card',
+  'footer',
+  'multi-select-header',
+  'quantity-field',
+  'responsive-toolbar',
+  'structured-card',
+  'theme-toggle',
+  'user-profile'
+];
+
 const htmlPlugin = () => ({
   name: 'html',
   transform(_code, id) {
@@ -39,7 +60,7 @@ export async function buildEsm({ outdir = 'esm' } = {}) {
   const external = getExternalDeps();
 
   const bundle = await rollup({
-    input: 'src/lib/index.ts',
+    input: ['src/lib/index.ts', ...SUBPATH_ONLY_ENTRIES.map(name => `src/lib/${name}/index.ts`)],
     external: id => external.some(dep => id === dep || id.startsWith(dep + '/')),
     treeshake: false,
     onwarn(warning, warn) {

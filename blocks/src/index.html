@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forge Blocks</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/theme.scss" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/src/index.css" />
+    <script type="module" src="/forge-register.ts"></script>
+    <script type="module" src="/src/index.ts"></script>
+  </head>
+  <body>
+    <forge-app-layout app-title="Forge Blocks">
+      <forge-icon slot="app-bar-logo" name="library" external></forge-icon>
+
+      <div slot="app-bar-end" class="flex items-center gap-xsmall">
+        <forge-icon-button density="medium" aria-label="Forge on GitHub" theme="app-bar">
+          <a href="https://github.com/tyler-technologies-oss/forge" target="_blank" rel="noreferrer">
+            <forge-icon name="github" external></forge-icon>
+          </a>
+        </forge-icon-button>
+      </div>
+
+      <div slot="body-header">
+        <forge-toolbar>
+          <h1 slot="start" class="text-heading3">Block Library</h1>
+          <div slot="end" class="flex items-center gap-small">
+            <forge-text-field density="small" id="search-field" class="search-field" label-position="none" show-clear>
+              <label for="search-input">Search blocks</label>
+              <input id="search-input" type="search" placeholder="Search blocks" />
+              <forge-icon slot="start" name="search"></forge-icon>
+            </forge-text-field>
+            <forge-icon-button density="medium" aria-label="Toggle filters" id="toggle-filters-btn">
+              <forge-icon name="filter_list"></forge-icon>
+            </forge-icon-button>
+          </div>
+        </forge-toolbar>
+      </div>
+
+      <main slot="body" class="p-medium scrollbar-gutter-stable">
+        <forge-structured-card heading-level="2" body-spacing="none">
+          <div slot="title">
+            <span id="visible-count">0</span>
+            <span class="text-body2 text-medium">of <span id="total-count">0</span> blocks</span>
+          </div>
+          <forge-chip-set slot="after-title" id="active-filter-chips" type="field"></forge-chip-set>
+
+          <forge-table slot="body" id="blocks-table" fixed-headers wrap-content layout-type="fixed"></forge-table>
+
+          <forge-paginator slot="footer-primary-action" id="blocks-paginator" page-size="25" page-size-options="[10, 25, 50, 100]" first-last>
+          </forge-paginator>
+        </forge-structured-card>
+      </main>
+
+      <div slot="body-right">
+        <forge-drawer direction="right" id="filter-drawer" open>
+          <forge-scaffold>
+            <forge-toolbar slot="header">
+              <h2 slot="start" class="text-heading3">Filters</h2>
+              <forge-icon-button slot="end" density="medium" aria-label="Close filters" id="close-filters-btn">
+                <forge-icon name="close"></forge-icon>
+              </forge-icon-button>
+            </forge-toolbar>
+
+            <div slot="body" class="p-medium flex flex-col gap-medium">
+              <div class="flex flex-col gap-xsmall">
+                <span class="text-label1 text-medium">Type</span>
+                <forge-list dense>
+                  <forge-list-item>
+                    <forge-checkbox slot="start" dense data-filter="type" value="template"></forge-checkbox>
+                    Templates <span class="text-body2 text-medium" data-count="type:template"></span>
+                  </forge-list-item>
+                  <forge-list-item>
+                    <forge-checkbox slot="start" dense data-filter="type" value="pattern"></forge-checkbox>
+                    Patterns <span class="text-body2 text-medium" data-count="type:pattern"></span>
+                  </forge-list-item>
+                  <forge-list-item>
+                    <forge-checkbox slot="start" dense data-filter="type" value="component"></forge-checkbox>
+                    Components <span class="text-body2 text-medium" data-count="type:component"></span>
+                  </forge-list-item>
+                </forge-list>
+              </div>
+
+              <forge-divider></forge-divider>
+
+              <div class="flex flex-col gap-xsmall">
+                <span class="text-label1 text-medium">Category</span>
+                <forge-list dense id="category-facet-list"></forge-list>
+              </div>
+            </div>
+
+            <forge-toolbar slot="footer" inverted>
+              <div slot="end" class="flex gap-small w-full">
+                <forge-button type="button" class="flex-1" id="clear-filters-btn">Clear all</forge-button>
+              </div>
+            </forge-toolbar>
+          </forge-scaffold>
+        </forge-drawer>
+      </div>
+
+      <footer slot="body-footer">
+        <forge-toolbar inverted>
+          <div slot="center" class="text-body2">© Tyler Forge — Block Library</div>
+        </forge-toolbar>
+      </footer>
+    </forge-app-layout>
+  </body>
+</html>

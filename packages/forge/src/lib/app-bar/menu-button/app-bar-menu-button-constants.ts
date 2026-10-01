@@ -3,7 +3,10 @@ import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}app-bar-menu-button`;
 
 const observedAttributes = {
-  ICON: 'icon'
+  ICON: 'icon',
+  EXPANDED: 'expanded',
+  CONTROLS: 'controls',
+  HAS_POPUP: 'has-popup'
 };
 
 const attributes = {

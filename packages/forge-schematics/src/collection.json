@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "custom-elements": {
+      "description": "Generate proxy Angular components from a custom elements manifest.",
+      "factory": "./custom-elements/index#customElements",
+      "schema": "./custom-elements/schema.json"
+    }
+  }
+}

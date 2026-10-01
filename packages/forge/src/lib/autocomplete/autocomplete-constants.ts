@@ -58,6 +58,10 @@ export const AUTOCOMPLETE_CONSTANTS = {
 
 export type AutocompleteOptionBuilder<T = any> = (option: IAutocompleteOption<T>, filterText: string, parentElement: IListItemComponent) => HTMLElement;
 export type AutocompleteOptionGroupBuilder<T = any> = ListDropdownOptionGroupBuilder<T>;
+/**
+ * @param filterText The current filter query text. Empty when the callback is invoked to resolve the label for an already-selected value (see `value`) rather than to filter the dropdown list.
+ * @param value The currently selected value, or `null`. When set, the callback is expected to return the matching option(s) so their `label` can be resolved for display, rather than filtering by `filterText`.
+ */
 export type AutocompleteFilterCallback<T = any> = (
   filterText: string,
   value: T | null

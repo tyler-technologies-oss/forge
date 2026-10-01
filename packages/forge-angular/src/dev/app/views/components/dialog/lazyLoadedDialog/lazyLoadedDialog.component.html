@@ -1,0 +1,10 @@
+<forge-scaffold>
+  <forge-toolbar slot="header" no-border>
+    <h2 slot="start" id="dialog-title" class="forge-typography--heading4">{{ title }}</h2>
+  </forge-toolbar>
+  <p slot="body" class="body" id="dialog-desc">{{ message }}<br />This content was lazy-loaded.</p>
+  <forge-toolbar slot="footer" no-border>
+    <forge-button slot="end" autofocus (click)="onCancel()">Cancel</forge-button>
+    <forge-button slot="end" variant="raised" (click)="onConfirm()">Confirm</forge-button>
+  </forge-toolbar>
+</forge-scaffold>

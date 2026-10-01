@@ -1,0 +1,20 @@
+<!--
+  @block Count Card — With Full Width
+  @type component
+  @description With Full Width usage example for the forge-count-card component.
+  @tags count-card, with-full-width, storybook, component-example
+-->
+<div class="w-[320px]">
+  <forge-count-card>
+    <forge-icon slot="icon" name="trending_up"></forge-icon>
+    <span slot="label">Weekly Sales</span>
+    <span slot="count">$4,250.00</span>
+    <svg slot="full-width" viewBox="0 0 200 40" class="w-full block">
+      <polyline
+        fill="none"
+        stroke="var(--forge-theme-primary)"
+        stroke-width="2"
+        points="0,35 20,30 40,32 60,25 80,28 100,20 120,22 140,15 160,18 180,10 200,5" />
+    </svg>
+  </forge-count-card>
+</div>

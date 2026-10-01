@@ -1,0 +1,131 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as BusyIndicatorStories from './BusyIndicator.stories';
+
+<Meta of={BusyIndicatorStories} />
+
+<Title />
+
+Busy indicators are a specialized dialog that is used to indicate that a process is running and the user should wait. It is typically used when a process is
+expected to take more than a few seconds to complete. The busy indicator is modal and will prevent the user from interacting with a part, or the rest of the
+application until the process is complete.
+
+> **Note:** The busy indicator is not intended to be used for processes that take less than a few seconds to complete. For processes that take less than a few
+> seconds, consider using a progress indicator instead.
+>
+> Use the busy indicator sparingly, as it can be disruptive to the user experience. **Only use the busy indicator when it is absolutely necessary**.
+
+## Mode
+
+Busy indicators are available in two modes: `fullscreen` (default) and `inline`.
+
+### Fullscreen
+
+The fullscreen mode is the default mode for the busy indicator. It will display a modal dialog that will prevent the user from interacting with the rest of the
+application until the process is complete. The fullscreen mode is best used when the process is expected to take a long time to complete.
+
+<Canvas of={BusyIndicatorStories.Demo} />
+
+Fullscreen busy indicators are displayed in the top-layer above all other elements, and use fixed positioning to cover the viewport.
+
+### Inline
+
+The inline mode will display the busy indicator inline with the rest of the content. The content will still be rendered within a dialog, but it is non-modal.
+The inline mode is best used when the process is expected to take a short amount of time to complete, while still allowing the user to interact with the rest
+of the application.
+
+<Canvas of={BusyIndicatorStories.Inline} />
+
+Inline busy indicators are displayed in the normal flow of the document, use absolute positioning, and will **not** prevent the user from interacting with the element
+obscured by the busy indicator overlay, or other parts of the page. Make sure to disable user interaction with the obscured element(s) if necessary while the busy
+indicator is visible.
+
+> **Note:** When using the inline mode, make sure to provide a `position: relative` style to the parent element of the busy indicator to ensure that it is
+> positioned correctly and constrained within the parent element bounds.
+
+## Variants
+
+The busy indicator is available in multiple variants:
+
+- `spinner` (default) - A simple spinner that indicates that a process is running. This can be accompanied by an optional title and/or message.
+- `progress` - A progress indicator that indicates the progress of a process. This can be accompanied by an optional title and/or message.
+- `message-only` - A message-only variant that displays a title and/or message to the user. This variant does not include a spinner or progress indicator.
+
+## Cancelable
+
+The busy indicator can be made cancelable by providing a `cancelable` attribute. This will render a cancel button that the user can click to cancel the process
+that is running. When the process is canceled, the busy indicator will dispatch a `forge-busy-indicator-cancel` event that can be used to handle the cancellation
+however you see fit. You are responsible for closing the busy indicator manually after the event is dispatched.
+
+## API
+
+<CustomArgTypes />
+
+## Angular Service
+
+The `@tylertech/forge-extended-angular` package provides a `BusyIndicatorService` that makes it easy to programmatically create and control busy indicators without managing the element directly in your template.
+
+The service is provided at the root level and can be injected anywhere in your application.
+
+### Usage
+
+Import the module and inject the service:
+
+```typescript
+import { BusyIndicatorService } from '@tylertech/forge-extended-angular';
+
+@Component({ ... })
+export class MyComponent {
+  private _busyIndicatorService = inject(BusyIndicatorService);
+
+  public doWork(): void {
+    const ref = this._busyIndicatorService.open({ message: 'Loading...' });
+    doSomethingAsync().finally(() => ref.hide());
+  }
+}
+```
+
+### `BusyIndicatorService.open(config?, parent?)`
+
+| Parameter | Type                              | Default         | Description                                                                                    |
+| --------- | --------------------------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| `config`  | `Partial<BusyIndicatorComponent>` | `undefined`     | Optional configuration to apply to the busy indicator element (any property on the component). |
+| `parent`  | `HTMLElement`                     | `document.body` | The element to append the busy indicator to.                                                   |
+
+Returns a `BusyIndicatorRef` instance.
+
+### `BusyIndicatorRef`
+
+The object returned by `open()` provides the following API:
+
+| Member          | Type                            | Description                                                                            |
+| --------------- | ------------------------------- | -------------------------------------------------------------------------------------- |
+| `hide()`        | `void`                          | Closes and removes the busy indicator from the DOM.                                    |
+| `nativeElement` | `BusyIndicatorComponent`        | The underlying `<forge-busy-indicator>` element.                                       |
+| `afterCancel`   | `Observable<CustomEvent<void>>` | Emits when the user clicks the cancel button. Only active when `cancelable` is `true`. |
+
+### Cancelable Example
+
+```typescript
+public doWork(): void {
+  const ref = this._busyIndicatorService.open({
+    message: 'Loading...',
+    cancelable: true
+  });
+
+  ref.afterCancel.subscribe(() => {
+    // Handle cancellation
+    ref.hide();
+  });
+}
+```
+
+## Accessibility
+
+The busy indicator is a dialog that will prevent the user from interacting with the parts of the page while the process is running. It is important to ensure
+that the busy indicator is accessible to all users, including those using assistive technologies.
+
+To provide an accessible label for the busy indicator, use the `label` attribute. To also provide a description of the process that is running, use
+the `description` attribute. The values will be read out by screen readers to provide context to the user.
+
+> **Note:** By default the accessible lable and description will use the `titleText` and `message` properties respectively.

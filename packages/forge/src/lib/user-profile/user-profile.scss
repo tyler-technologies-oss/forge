@@ -1,0 +1,64 @@
+@use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
+
+//
+// Host
+//
+
+:host {
+  display: contents;
+}
+
+//
+// Base
+//
+
+.sign-in-button {
+  --forge-button-spacing: #{spacing.variable(xsmall)};
+  --forge-button-pill-padding-inline: #{spacing.variable(xsmall)};
+  --forge-button-outlined-color: #{theme.variable(on-brand)};
+  --forge-button-outlined-border-color: #{theme.variable(on-brand)};
+  --forge-button-outlined-background: color-mix(in srgb, #{theme.variable(on-brand)} 16%, transparent);
+}
+
+.user-info-container {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: #{spacing.variable(medium)};
+  padding: #{spacing.variable(medium)};
+  align-items: center;
+}
+
+.popover-avatar {
+  --forge-avatar-size: 56px;
+  --forge-avatar-shape: #{shape.variable(extra-large)};
+  --forge-avatar-background: #{theme.variable(secondary-container-low)};
+  --forge-avatar-color: #{theme.variable(on-secondary-container-low)};
+
+  &::part(root) {
+    font-size: calc(var(--forge-avatar-size) * 0.4);
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-name {
+  @include typography.style(heading2);
+}
+
+.email {
+  @include typography.style(body1);
+}
+
+.theme-toggle-container {
+  padding: #{spacing.variable(medium)};
+}
+
+.sign-out-button {
+  --forge-button-color: #{theme.variable(text-high)};
+}

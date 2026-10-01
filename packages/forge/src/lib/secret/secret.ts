@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer, tryDefine } from '@tylertech/forge-core';
 import { tylIconEyeClosed, tylIconEyeOutline } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -38,6 +38,7 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  * @cssproperty --forge-secret-button-color - The text and icon color of the button.
  * @cssproperty --forge-secret-button-shape - The button's border radius.
  * @cssproperty --forge-secret-button-padding - The inline padding around the button or inline and block padding around the text button.
+ * @cssproperty --forge-secret-button-size - The button's width and height.
  * @cssproperty --forge-secret-icon-size - The icon's size.
  * @cssproperty --forge-secret-text-button-shape - The text button's border radius.
  * @cssproperty --forge-secret-text-decoration-line - The decoration line applied to open inline content.
@@ -73,7 +74,6 @@ export const SECRET_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-secret';
  *
  * @fires {ToggleEvent} toggle - Dispatched when the secret opens or closes.
  */
-@customElement(SECRET_TAG_NAME)
 export class SecretComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconEyeOutline, tylIconEyeClosed]);
@@ -205,7 +205,13 @@ export class SecretComponent extends BaseLitElement {
     return html`
       <span
         part="root"
-        class=${classMap({ 'forge-secret': true, reverse: this.buttonPosition === 'start', 'show-on-hover': this.showOnHover })}
+        class=${classMap({
+          'forge-secret': true,
+          open: this.open,
+          block: this.block,
+          reverse: this.buttonPosition === 'start',
+          'show-on-hover': this.showOnHover
+        })}
         @click="${this.#handleClick}">
         <span
           class=${classMap({
@@ -333,6 +339,8 @@ export class SecretComponent extends BaseLitElement {
     this._mask = content.replace(regex, this.maskCharacter);
   }
 }
+
+tryDefine(SECRET_TAG_NAME, SecretComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -411,9 +411,13 @@
 }
 
 @mixin date-inner-gap($force: false) {
+  $important: null;
+  @if $force {
+    $important: '!important';
+  }
   position: absolute;
-  width: calc(100% - #{variables.$date-gap}) #{if($force, '!important', '')};
-  height: calc(100% - #{variables.$date-gap}) #{if($force, '!important', '')};
-  top: calc(#{variables.$date-gap} / 2) #{if($force, '!important', '')};
-  left: calc(#{variables.$date-gap} / 2) #{if($force, '!important', '')};
+  width: calc(100% - #{variables.$date-gap}) #{$important};
+  height: calc(100% - #{variables.$date-gap}) #{$important};
+  top: calc(#{variables.$date-gap} / 2) #{$important};
+  left: calc(#{variables.$date-gap} / 2) #{$important};
 }

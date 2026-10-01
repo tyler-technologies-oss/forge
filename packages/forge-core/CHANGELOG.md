@@ -1,5 +1,17 @@
 # @tylertech/forge-core
 
+## 3.5.1
+
+### Patch Changes
+
+- dba81e7: fix(utils): prevent coerceNumberArray returning [0] when an array should be empty
+
+## 3.5.0
+
+### Minor Changes
+
+- 691a79d: feat: add getFirstFocusableElement function
+
 ## 3.4.0
 
 ### Minor Changes

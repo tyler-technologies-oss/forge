@@ -1,8 +1,8 @@
 import { consume, ContextRoot } from '@lit/context';
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { ExperimentalFocusOptions, playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { toggleState } from '../../core/index.js';
@@ -104,7 +104,6 @@ export interface ITabComponent extends BaseLitElement {
  * @slot start - Content before the label.
  * @slot end - Content after the label.
  */
-@customElement(TAB_CONSTANTS.elementName)
 export class TabComponent extends BaseLitElement implements ITabComponent {
   public static styles = unsafeCSS(styles);
 
@@ -348,6 +347,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   #requestSync(): void {
+    /** @ignore */
     this.dispatchEvent(
       new CustomEvent(TAB_CONSTANTS.events.REQUEST_SYNC, {
         bubbles: true,
@@ -367,6 +367,8 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
     }
   }
 }
+
+tryDefine(TAB_CONSTANTS.elementName, TabComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -98,6 +98,7 @@ describe('Select', () => {
       expect(harness.element.required).toBe(false);
       expect(harness.element.optional).toBe(false);
       expect(harness.element.disabled).toBe(false);
+      expect(harness.element.readonly).toBe(false);
       expect(harness.element.floatLabel).toBe(false);
       expect(harness.element.variant).toBe(FIELD_CONSTANTS.defaults.DEFAULT_VARIANT);
       expect(harness.element.theme).toBe(FIELD_CONSTANTS.defaults.DEFAULT_THEME);
@@ -279,6 +280,36 @@ describe('Select', () => {
       expect(harness.fieldElement.popoverExpanded).toBe(false);
     });
 
+    it('should still open when clicking select while readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+
+      await harness.clickElement(harness.element);
+
+      expect(harness.element.open).toBe(true);
+      expect(harness.popoverElement).toBeTruthy();
+      expect(harness.fieldElement.popoverExpanded).toBe(true);
+    });
+
+    it('should not select an option when clicked while readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+
+      await harness.clickElement(harness.element);
+      await harness.clickElement(harness.getListItems()[0]);
+
+      expect(harness.element.value).toBeFalsy();
+    });
+
+    it('should not select an option via typeahead while readonly and closed', async () => {
+      const harness = await createFixture({ readonly: true });
+
+      harness.element.focus();
+      await harness.pressKey('t');
+      await frame();
+
+      expect(harness.element.value).toBeUndefined();
+      expect(harness.element.open).toBe(false);
+    });
+
     it('should not open dropdown if no options are available', async () => {
       const harness = await createEmptyFixture();
 
@@ -453,6 +484,30 @@ describe('Select', () => {
       expect(harness.element.hasAttribute('disabled')).toBe(true);
       expect(harness.element.disabled).toBe(true);
       expect(harness.fieldElement.disabled).toBe(true);
+    });
+
+    it('should set readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+
+      expect(harness.element.getAttribute('aria-readonly')).toBe('true');
+      expect(harness.element.readonly).toBe(true);
+      expect(harness.element.hasAttribute('readonly')).toBe(true);
+      await expect(harness.element).toBeAccessible();
+
+      harness.element.readonly = false;
+
+      expect(harness.element.getAttribute('aria-readonly')).toBeNull();
+      expect(harness.element.readonly).toBe(false);
+      expect(harness.element.hasAttribute('readonly')).toBe(false);
+    });
+
+    it('should set readonly property from attribute', async () => {
+      const harness = await createFixture();
+
+      harness.element.setAttribute('readonly', '');
+
+      expect(harness.element.hasAttribute('readonly')).toBe(true);
+      expect(harness.element.readonly).toBe(true);
     });
 
     it('should set label-position attribute', async () => {
@@ -971,6 +1026,22 @@ describe('Select', () => {
       expect(el[internals].reportValidity()).toBe(true);
     });
 
+    it('should be exempt from required validation while readonly with no value', async () => {
+      const screen = render(html`<forge-select required readonly></forge-select>`);
+      const el = screen.container.querySelector('forge-select') as ISelectComponent;
+
+      expect(el.value).toBeFalsy();
+      expect(el[internals].validity.valid).toBe(true);
+      expect(el[internals].validationMessage).toBe('');
+      expect(el[internals].checkValidity()).toBe(true);
+      expect(el[internals].reportValidity()).toBe(true);
+
+      el.readonly = false;
+
+      expect(el[internals].validity.valid).toBe(false);
+      expect(el[internals].checkValidity()).toBe(false);
+    });
+
     it('should set custom validity', async () => {
       const screen = render(html`<forge-select required></forge-select>`);
       const el = screen.container.querySelector('forge-select') as ISelectComponent;
@@ -1311,6 +1382,7 @@ interface SelectFixtureConfig {
   required?: boolean;
   optional?: boolean;
   disabled?: boolean;
+  readonly?: boolean;
   floatLabel?: boolean;
   variant?: FieldVariant;
   theme?: FieldTheme;
@@ -1332,6 +1404,7 @@ async function createFixture({
   required,
   optional,
   disabled,
+  readonly,
   floatLabel,
   variant,
   theme,
@@ -1355,6 +1428,7 @@ async function createFixture({
       ?required=${required}
       ?optional=${optional}
       ?disabled=${disabled}
+      ?readonly=${readonly}
       ?float-label=${floatLabel}
       variant=${ifDefined(variant)}
       theme=${ifDefined(theme)}

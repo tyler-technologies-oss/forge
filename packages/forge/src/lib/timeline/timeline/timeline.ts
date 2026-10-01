@@ -1,7 +1,6 @@
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './timeline.scss';
@@ -20,7 +19,6 @@ export const TIMELINE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeline';
  *
  * @csspart root - The root element.
  */
-@customElement(TIMELINE_TAG_NAME)
 export class TimelineComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
@@ -46,6 +44,8 @@ export class TimelineComponent extends BaseLitElement {
     return html`<div part="root" class="forge-timeline"><slot></slot></div>`;
   }
 }
+
+tryDefine(TIMELINE_TAG_NAME, TimelineComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

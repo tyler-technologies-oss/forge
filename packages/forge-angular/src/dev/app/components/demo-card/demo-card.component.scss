@@ -1,0 +1,12 @@
+forge-card {
+  max-width: 1000px;
+  --forge-card-body-overflow: visible;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  &.full-width {
+    max-width: 100%;
+  }
+}

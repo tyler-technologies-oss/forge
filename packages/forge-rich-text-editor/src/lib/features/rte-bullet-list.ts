@@ -1,0 +1,97 @@
+import { consume } from '@lit/context';
+import { BulletList, ListItem } from '@tiptap/extension-list';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconFormatListBulleted } from '@tylertech/tyler-icons';
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { editorContext, EditorContext } from '../editor-context.js';
+import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { featureHostStyles } from './core/feature-styles.js';
+
+import './core/rte-tool-button.js';
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-rte-bullet-list': RteBulletListComponent;
+  }
+}
+
+export const RTE_BULLET_LIST_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-bullet-list';
+
+/**
+ * @tag forge-rte-bullet-list
+ *
+ * @summary
+ * Provides a bulleted (unordered) list button for the rich text editor.
+ *
+ * @description
+ * The bullet list feature component renders a toolbar button that allows users to create or
+ * remove bulleted (unordered) lists. The button shows an active state when the cursor is
+ * positioned within a bullet list. Clicking an active button removes the list formatting,
+ * converting items back to paragraphs. The feature announces state changes to screen readers
+ * for accessibility.
+ *
+ * @dependency forge-rte-tool-button
+ *
+ * @property {string} [label='Bullet List'] - The accessible label for the bullet list button.
+ *
+ * @attribute {string} label - The accessible label for the bullet list button.
+ */
+@customElement(RTE_BULLET_LIST_TAG_NAME)
+export class RteBulletListComponent extends LitElement implements IRichTextEditorFeature {
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = RTE_BULLET_LIST_TAG_NAME;
+
+  static {
+    IconRegistry.define(tylIconFormatListBulleted);
+  }
+
+  public static override styles = featureHostStyles;
+
+  /**
+   * The accessible label for the button.
+   * @default 'Bullet List'
+   * @attribute
+   */
+  @property({ type: String })
+  public label = 'Bullet List';
+
+  public readonly extensions = [BulletList, ListItem];
+
+  @state()
+  @consume({ context: editorContext, subscribe: true })
+  private readonly _editorContext!: EditorContext;
+
+  public firstUpdated(_changedProperties: PropertyValues<this>): void {
+    this._editorContext?.registerFeature(this);
+  }
+
+  public override render(): TemplateResult {
+    return html`
+      <forge-rte-tool-button
+        .controlsElement=${this._editorContext.controlsElement}
+        @forge-rte-tool-toggle=${this._toggle}
+        label=${this.label}
+        icon=${tylIconFormatListBulleted.name}
+        ?disabled=${!this._editorContext.isEditable()}
+        ?active=${this._editorContext.isActive(BulletList.name)}></forge-rte-tool-button>
+    `;
+  }
+
+  private _toggle(_evt: CustomEvent<boolean>): void {
+    try {
+      const wasActive = this._editorContext.isActive(BulletList.name);
+      const success = this._editorContext.editor?.chain().focus().toggleBulletList().run();
+
+      if (success) {
+        const message = wasActive ? 'List removed' : 'Bullet list';
+        this._editorContext.announce(message);
+      } else {
+        console.warn('[RTE BulletList] Command execution failed');
+      }
+    } catch (error) {
+      console.error('[RTE BulletList] Error toggling bullet list:', error);
+    }
+  }
+}

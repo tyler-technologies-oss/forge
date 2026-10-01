@@ -1,0 +1,37 @@
+<!--
+  @block Responsive Toolbar — Demo
+  @type component
+  @description Demo usage example for the forge-responsive-toolbar component.
+  @tags responsive-toolbar, demo, storybook, component-example
+-->
+<forge-split-view auto-close-threshold="120" class="h-[300px]">
+  <forge-split-view-panel>
+    <forge-card no-padding>
+      <forge-responsive-toolbar>
+        <forge-icon-button aria-label="Icon button demo" slot="before-start">
+          <forge-icon name="arrow_back" external></forge-icon>
+        </forge-icon-button>
+        <div slot="start" class="text-heading4 whitespace-nowrap">User management</div>
+        <forge-stack inline alignment="center" slot="end-large">
+          <forge-button variant="text">Add User</forge-button>
+          <forge-button variant="outlined">Remove User</forge-button>
+          <forge-button variant="raised">Third action</forge-button>
+        </forge-stack>
+        <div slot="end-small">
+          <forge-menu id="example-menu">
+            <forge-icon-button aria-label="Open menu">
+              <forge-icon name="more_vert" external></forge-icon>
+            </forge-icon-button>
+          </forge-menu>
+        </div>
+      </forge-responsive-toolbar>
+      <div class="p-medium mt-[64px] flex justify-end">
+        <forge-stack inline alignment="start">
+          <p class="m-0">Resize the split view component to see the responsive behavior.</p>
+          <forge-icon name="arrow_forward" external></forge-icon>
+        </forge-stack>
+      </div>
+    </forge-card>
+  </forge-split-view-panel>
+  <forge-split-view-panel size="150" class="bg-surface-dim grid place-content-center place-items-center text-center"></forge-split-view-panel>
+</forge-split-view>

@@ -1,0 +1,11 @@
+<app-demo-card headerText="Count Card">
+  <div class="count-card-grid">
+    @for (theme of themes; track theme) {
+      <forge-count-card [theme]="theme">
+        <forge-icon slot="icon" name="people" />
+        <span slot="label">{{ theme }}</span>
+        <span slot="count">128</span>
+      </forge-count-card>
+    }
+  </div>
+</app-demo-card>

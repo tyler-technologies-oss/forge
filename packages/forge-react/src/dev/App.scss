@@ -1,0 +1,9 @@
+.app-content {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+}
+
+.demo-divider {
+  margin: 16px 0;
+}

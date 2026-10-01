@@ -1,0 +1,24 @@
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin steps {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin horizontal-steps {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin slotted-step-horizontal {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}

@@ -75,3 +75,25 @@ export function supportsScrollIntoViewContainerOption(): boolean {
   cachedScrollIntoViewContainerSupport = containerAccessed;
   return containerAccessed;
 }
+
+/**
+ * Detects whether the browser supports the Invoker Commands API.
+ * @returns {boolean}
+ */
+export function supportsInvokerCommands(): boolean {
+  return typeof CommandEvent !== 'undefined';
+}
+
+/**
+ * Custom CommandEvent class to be used if the browser does not support the Invoker Commands API.
+ */
+export class CommandEvent extends Event {
+  public command: string;
+  public source: HTMLElement;
+
+  constructor(type: string, eventInitDict: EventInit & { command: string; source: HTMLElement }) {
+    super(type, eventInitDict);
+    this.command = eventInitDict?.command;
+    this.source = eventInitDict?.source;
+  }
+}

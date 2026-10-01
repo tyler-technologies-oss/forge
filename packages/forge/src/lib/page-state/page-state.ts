@@ -47,7 +47,7 @@ declare global {
  * @slot graphic - The slot where the graphic will be rendered.
  * @slot title - The slot where the title will be rendered.
  * @slot message - The slot where the message will be rendered.
- * @slot actions - The slot where the actions will be rendered.
+ * @slot action - The slot where the actions will be rendered.
  */
 @customElement({
   name: PAGE_STATE_CONSTANTS.elementName

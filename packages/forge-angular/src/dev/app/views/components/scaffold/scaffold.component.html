@@ -1,0 +1,30 @@
+<app-demo-card headerText="Scaffold">
+  <div class="align">
+    <div class="container">
+      <forge-scaffold (click)="handleClick($event.target)" class="outer">
+        <div class="slot-container" slot="header">Header</div>
+        <div class="slot-container" slot="body-header">Body header</div>
+        <div class="slot-container" slot="body">
+          <forge-scaffold class="inner">
+            <div class="slot-container" slot="header">Inner header</div>
+            <div class="slot-container" slot="body">
+              Inner body
+              <div class="scrollable"></div>
+            </div>
+            <div class="slot-container" slot="footer">Inner footer</div>
+          </forge-scaffold>
+        </div>
+        <div class="slot-container" slot="body-footer">Body Footer</div>
+        <div class="slot-container" slot="footer">Footer</div>
+        <div class="slot-container" slot="body-left" style="width: 100px">
+          Body left
+          <div class="scrollable"></div>
+        </div>
+        <div class="slot-container" slot="body-right" style="width: 100px">
+          Body right
+          <div class="scrollable"></div>
+        </div>
+      </forge-scaffold>
+    </div>
+  </div>
+</app-demo-card>

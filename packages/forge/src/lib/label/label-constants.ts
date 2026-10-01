@@ -1,10 +1,10 @@
-import { BUTTON_CONSTANTS } from '../button/index.js';
-import { BUTTON_TOGGLE_GROUP_CONSTANTS } from '../button-toggle/index.js';
-import { CHECKBOX_CONSTANTS } from '../checkbox/index.js';
+import { BUTTON_CONSTANTS } from '../button/button-constants.js';
+import { BUTTON_TOGGLE_GROUP_CONSTANTS } from '../button-toggle/button-toggle-group/button-toggle-group-constants.js';
+import { CHECKBOX_CONSTANTS } from '../checkbox/checkbox-constants.js';
 import { COMPONENT_NAME_PREFIX } from '../constants.js';
-import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
-import { RADIO_CONSTANTS } from '../radio/index.js';
-import { SWITCH_CONSTANTS } from '../switch/index.js';
+import { ICON_BUTTON_CONSTANTS } from '../icon-button/icon-button-constants.js';
+import { RADIO_CONSTANTS } from '../radio/radio/radio-constants.js';
+import { SWITCH_CONSTANTS } from '../switch/switch-constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}label`;
 

@@ -1,0 +1,14 @@
+.badge-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.badge-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-column forge-badge ~ forge-badge {
+  margin-top: 8px;
+}

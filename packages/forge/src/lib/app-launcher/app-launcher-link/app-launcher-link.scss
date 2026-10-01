@@ -1,0 +1,11 @@
+@use '../../core/styles/spacing';
+@use '../../list/list-item';
+
+forge-list-item {
+  @include list-item.provide-theme(
+    (
+      padding: #{spacing.variable(xsmall)},
+      shape: #{spacing.variable(xsmall)}
+    )
+  );
+}

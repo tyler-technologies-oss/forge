@@ -1,5 +1,5 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { customElement, property } from 'lit/decorators.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { property } from 'lit/decorators.js';
 import { html, TemplateResult, unsafeCSS } from 'lit';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { SKELETON_CONSTANTS } from './skeleton-constants.js';
@@ -52,7 +52,6 @@ export interface ISkeletonComponent extends BaseLitElement {
  * @cssclass forge-skeleton--button - The button skeleton element.
  * @cssclass forge-skeleton--form-field - The form field skeleton element.
  */
-@customElement(SKELETON_CONSTANTS.elementName)
 export class SkeletonComponent extends BaseLitElement implements ISkeletonComponent {
   public static styles = unsafeCSS(styles);
 
@@ -119,6 +118,8 @@ export class SkeletonComponent extends BaseLitElement implements ISkeletonCompon
     return html`<div class="forge-skeleton" part="root"></div>`;
   }
 }
+
+tryDefine(SKELETON_CONSTANTS.elementName, SkeletonComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

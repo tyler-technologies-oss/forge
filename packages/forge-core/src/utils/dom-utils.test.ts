@@ -637,6 +637,58 @@ describe('DOMUtils', () => {
     });
   });
 
+  describe('getFirstFocusableElement', () => {
+    let element: HTMLElement;
+
+    beforeEach(() => {
+      element = document.createElement('div');
+      document.body.appendChild(element);
+    });
+
+    afterEach(() => {
+      DOMUtils.removeElement(element);
+    });
+
+    it('should return undefined when there is no focusable descendant', () => {
+      element.innerHTML = '<div><span>Not focusable</span></div>';
+      expect(DOMUtils.getFirstFocusableElement(element)).toBeUndefined();
+    });
+
+    it('should return the first focusable descendant', () => {
+      element.innerHTML = '<div><span>Not focusable</span><button>First</button><button>Second</button></div>';
+      const expectedButton = element.querySelector('button') as HTMLButtonElement;
+      expect(DOMUtils.getFirstFocusableElement(element)).toBe(expectedButton);
+    });
+
+    it('should skip disabled and tabindex="-1" elements', () => {
+      element.innerHTML = '<button disabled>Disabled</button><a href="#" tabindex="-1">Not tabbable</a><input />';
+      const expectedInput = element.querySelector('input') as HTMLInputElement;
+      expect(DOMUtils.getFirstFocusableElement(element)).toBe(expectedInput);
+    });
+
+    it('should find a focusable element within a shadow root', () => {
+      const shadowHost = document.createElement('forge-core-test-focusable');
+      const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+      shadowRoot.innerHTML = '<div><input /></div>';
+      element.appendChild(shadowHost);
+
+      const expectedInput = shadowRoot.querySelector('input') as HTMLInputElement;
+      expect(DOMUtils.getFirstFocusableElement(element)).toBe(expectedInput);
+    });
+
+    it('should find a focusable element that is slotted into a shadow root', () => {
+      const shadowHost = document.createElement('forge-core-test-focusable-slot');
+      const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+      shadowRoot.innerHTML = '<div><slot></slot></div>';
+
+      const slottedButton = document.createElement('button');
+      shadowHost.appendChild(slottedButton);
+      element.appendChild(shadowHost);
+
+      expect(DOMUtils.getFirstFocusableElement(element)).toBe(slottedButton);
+    });
+  });
+
   describe('calculateFontWidth', () => {
     it('should return 0 if empty string is provided', () => {
       expect(DOMUtils.calculateFontWidth('')).toBe(0);
