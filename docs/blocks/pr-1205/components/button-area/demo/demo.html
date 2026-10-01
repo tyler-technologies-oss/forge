@@ -1,0 +1,53 @@
+<!--
+  @block Button Area — Demo
+  @type component
+  @description Demo usage example for the forge-button-area component.
+  @tags button-area, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1205/" />
+    <title>Button Area — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1205/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1205/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1205/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/pr-1205/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-card class="p-0 w-[320px] max-w-full">
+  <forge-button-area>
+    <button slot="button" aria-labelledby="button-heading">
+    </button>
+    <div class="flex items-center gap-xsmall p-medium">
+      <div class="me-auto">
+        <div id="button-heading">Heading</div>
+        <div>Content</div>
+      </div>
+      <forge-icon-button forge-ignore>
+        <forge-icon name="favorite" aria-label="A heart graphic">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip aria-hidden="true">Favorite</forge-tooltip>
+      <forge-icon name="chevron_right">
+      </forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>
+<script type="module" src="/blocks/pr-1205/components/button-area/demo/demo.js"></script>
+  </body>
+</html>

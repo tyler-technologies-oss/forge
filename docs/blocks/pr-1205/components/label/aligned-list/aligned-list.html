@@ -1,0 +1,50 @@
+<!--
+  @block Label — Aligned List
+  @type component
+  @description Aligned List usage example for the forge-label component.
+  @tags label, aligned-list, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1205/" />
+    <title>Label — Aligned List</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1205/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1205/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1205/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/pr-1205/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="grid grid-cols-[auto_auto] items-center w-fit">
+  <forge-label for="one" class="w-full">Item One</forge-label>
+  <forge-checkbox id="one" aria-label="Item One" aria-required="false">
+  </forge-checkbox>
+  <forge-label for="two" class="w-full">Item Two with a longer label</forge-label>
+  <forge-checkbox id="two" aria-label="Item Two with a longer label" aria-required="false">
+  </forge-checkbox>
+  <forge-label for="three" class="w-full">Item Three</forge-label>
+  <forge-checkbox id="three" aria-label="Item Three" aria-required="false">
+  </forge-checkbox>
+  <forge-label for="four" class="w-full">Item Four</forge-label>
+  <forge-checkbox id="four" aria-label="Item Four" aria-required="false">
+  </forge-checkbox>
+  <forge-label for="five" class="w-full">Item 5</forge-label>
+  <forge-checkbox id="five" aria-label="Item 5" aria-required="false">
+  </forge-checkbox>
+</div>
+  </body>
+</html>

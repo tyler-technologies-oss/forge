@@ -1,0 +1,44 @@
+<!--
+  @block Scaffold — Demo
+  @type component
+  @description Demo usage example for the forge-scaffold component.
+  @tags scaffold, demo, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1205/" />
+    <title>Scaffold — Demo</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1205/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1205/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1205/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/pr-1205/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-scaffold class="[--forge-scaffold-height:500px] [--forge-scaffold-width:100%]">
+  <div slot="left" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">left</div>
+  <div slot="header" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">header</div>
+  <div slot="body-header" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">body-header</div>
+  <div slot="body-left" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">body-left</div>
+  <div slot="body" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">body</div>
+  <div slot="body-right" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">body-right</div>
+  <div slot="body-footer" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">body-footer</div>
+  <div slot="footer" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">footer</div>
+  <div slot="right" class="border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">right</div>
+</forge-scaffold>
+  </body>
+</html>

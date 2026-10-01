@@ -1,0 +1,1 @@
+import{m as e,br as t,bo as o,L as c,bq as d}from"../../../../chunks/icon-un_iM0BW.js";e.define([t,o,c,d]);const m=document.getElementById("menu-button"),n=document.getElementById("mini-drawer");m?.addEventListener("click",()=>{n.open=!n.open});

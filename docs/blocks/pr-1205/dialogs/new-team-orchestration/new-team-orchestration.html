@@ -1,0 +1,83 @@
+<!--
+  @block Dialog — New object with template selection list
+  @type pattern
+  @description Modal dialog that pairs a short form (name and description fields) with a two-pane master-detail option picker: a scrollable list of selectable choices alongside a detail card whose content updates dynamically for the highlighted choice (e.g. a diagram, preview image, chart, or other contextual content), plus "use when" guidance and an example. Fits any "create an item and choose a type/pattern/template" flow — e.g. picking a team orchestration pattern, project template, automation trigger, or report layout — not just team creation.
+  @tags dialog, modal, scaffold, form, list, detail-panel, master-detail, option-picker, template-picker, preview, create-dialog, selection, orchestration, team
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1205/" />
+    <title>Dialog — New object with template selection list</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1205/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1205/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1205/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/pr-1205/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="flex justify-center items-center min-h-screen">
+  <forge-button id="open-dialog-btn">Create new team</forge-button>
+</div>
+
+<forge-dialog id="new-team-dialog" aria-labelledby="new-team-dialog-title">
+  <forge-scaffold class="h-auto w-[95vw] max-w-[1040px]">
+    <forge-toolbar slot="header">
+      <h2 id="new-team-dialog-title" slot="start" class="text-heading3">Create new team</h2>
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+
+    <div slot="body" class="p-medium flex flex-col gap-medium">
+      <forge-text-field label-position="block-start" class="w-full max-w-[450px]">
+        <label for="team-name">Name</label>
+        <input type="text" id="team-name" value="Support Triage Team" />
+      </forge-text-field>
+
+      <forge-text-field label-position="block-start">
+        <label for="team-description">Description</label>
+        <input type="text" id="team-description" value="Routes incoming customer requests to the right specialist agent" />
+      </forge-text-field>
+
+      <div class="flex flex-col gap-small">
+        <span id="pattern-list-label" class="text-label1">Orchestration pattern</span>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+          <forge-listbox
+            id="pattern-list"
+            aria-labelledby="pattern-list-label"
+            class="border border-outline rounded-md overflow-x-hidden overflow-y-auto max-md:max-h-[200px]">
+          </forge-listbox>
+
+          <forge-card id="pattern-detail" no-padding></forge-card>
+        </div>
+
+        <div id="pattern-detail-summary" class="sr-only" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div class="flex items-center gap-medium" slot="end">
+        <forge-button id="cancel-btn">Cancel</forge-button>
+        <forge-button id="create-btn" variant="filled">Create team</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-dialog>
+<script type="module" src="/blocks/pr-1205/dialogs/new-team-orchestration/new-team-orchestration.js"></script>
+  </body>
+</html>

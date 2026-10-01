@@ -1,0 +1,88 @@
+<!--
+  @block Scaffold — CSS Only
+  @type component
+  @description CSS Only usage example for the forge-scaffold component.
+  @tags scaffold, css-only, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/pr-1205/" />
+    <title>Scaffold — CSS Only</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/theme.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/styles.css" />
+    <link rel="stylesheet" href="/blocks/pr-1205/components/scaffold/css-only/css-only.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/pr-1205/forge-register.js"></script>
+    <script type="module" src="/blocks/pr-1205/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/pr-1205/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/pr-1205/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="forge-scaffold [--forge-scaffold-height:500px] [--forge-scaffold-width:100%]">
+  <div class="forge-scaffold__left border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">left</div>
+  <div class="forge-scaffold__header border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">header</div>
+  <div class="forge-scaffold__body border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">
+    <div class="forge-scaffold">
+      <div class="forge-scaffold__left border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">
+        <div>Body Left</div>
+      </div>
+      <div class="forge-scaffold__right border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">
+        <div>Body Right</div>
+      </div>
+      <div class="forge-scaffold__header border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">
+        <div>Body Header</div>
+      </div>
+      <div class="forge-scaffold__body border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border" tabindex="0">
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam perspiciatis ea laboriosam alias quas incidunt distinctio est praesentium. Sed
+            saepe eius, voluptatibus officia dolores recusandae cum. Molestias est numquam odio.
+          </p>
+        </div>
+      </div>
+      <div class="forge-scaffold__footer border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">
+        <div>Body Footer</div>
+      </div>
+    </div>
+  </div>
+  <div class="forge-scaffold__footer border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">footer</div>
+  <div class="forge-scaffold__right border-2 border-dashed border-outline-low flex flex-col justify-center items-center p-xsmall m-xsmall box-border">right</div>
+</div>
+  </body>
+</html>
