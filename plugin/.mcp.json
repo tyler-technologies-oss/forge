@@ -2,7 +2,7 @@
   "mcpServers": {
     "forge": {
       "command": "npx",
-      "args": ["-y", "@tylertech/forge-mcp@next"]
+      "args": ["-y", "@tylertech/forge-mcp@latest"]
     }
   }
 }
