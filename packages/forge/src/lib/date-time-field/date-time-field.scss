@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+::slotted(forge-text-field) {
+  inline-size: 100%;
+}

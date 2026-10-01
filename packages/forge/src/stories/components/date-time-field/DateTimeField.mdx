@@ -1,0 +1,139 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DateTimeFieldStories from './DateTimeField.stories';
+
+<Meta of={DateTimeFieldStories} />
+
+<Title />
+
+The date time field is a form-associated masked input for entering a date and time. It owns the value, validation, and form
+participation, but doesn't render its own label or inputs — it slots a consumer-provided
+[`forge-text-field`](?path=/docs/components-text-field--docs) and manages the `<input>` element(s) inside it. It optionally links to a
+[`forge-date-time-picker`](?path=/docs/components-date-time-picker--docs) for calendar-driven selection. Link the two with the `picker`
+attribute (an IDREF to a picker in the same root) or the `pickerElement` property.
+
+While a segment input is focused, quick keys speed up entry: `n` inserts _now_ and `t` inserts _today_.
+
+<Canvas of={DateTimeFieldStories.Demo} />
+
+## Markup contract
+
+Slot a `forge-text-field` directly inside `forge-date-time-field`, and slot the endpoint `<input>` element(s) inside that text field.
+The field never renders its own `forge-field`, label, or inputs — it reaches into the slotted text field to manage the inputs it finds:
+
+```html
+<forge-date-time-field picker="dtp" name="appointment">
+  <forge-text-field>
+    <label slot="label">Appointment</label>
+    <input type="text" />
+    <span slot="support-text">Helper text</span>
+  </forge-text-field>
+</forge-date-time-field>
+<forge-date-time-picker id="dtp"></forge-date-time-picker>
+```
+
+Don't put a `name` on the slotted input(s) — the field submits its own value under its `name`, and it warns in the console if it finds
+one.
+
+## Endpoints by mode
+
+The field renders one `<input>` per endpoint. How many endpoints — and what each one captures — depends on `date-mode` and `time-mode`:
+
+| `date-mode` | `time-mode` | Inputs | Start format | End format |
+| --- | --- | --- | --- | --- |
+| `single` | `single` (or slots) | 1 | `MM/DD/YYYY hh:mm AM` | — |
+| `single` | `range` | 2 | `MM/DD/YYYY hh:mm AM` | `hh:mm AM` |
+| `range` | `single` | 2 | `MM/DD/YYYY hh:mm AM` | `MM/DD/YYYY` (shares the start time) |
+| `range` | `range` | 2 | `MM/DD/YYYY hh:mm AM` | `MM/DD/YYYY hh:mm AM` |
+
+`time-mode="slots"` always captures a single date and time in one input; `date-mode="range"` is ignored (and logged as a warning) when
+combined with it. If the slotted text field is missing an input for the current mode, the field warns in the console.
+
+<Canvas of={DateTimeFieldStories.DateAndTimeRange} />
+<Canvas of={DateTimeFieldStories.TimeRange} />
+<Canvas of={DateTimeFieldStories.DateRangeSharedTime} />
+<Canvas of={DateTimeFieldStories.Slots} />
+
+## Standalone (no picker)
+
+When no `picker` is linked, the field renders without a calendar toggle or popover — users type the date and time directly into the
+masked input(s). This is useful when you want masked, validated text entry without the overlay. On blur / <kbd>Enter</kbd>, loosely-typed
+entries are coerced like the picker: a two-digit year gains a century (`1/2/25` → `01/02/2025`), an hour-only time completes
+(`5` → `05:00 AM`), and out-of-range parts clamp (`02/30/2025` → `02/28/2025`).
+
+<Canvas of={DateTimeFieldStories.Standalone} />
+
+## Removed properties
+
+The field no longer renders its own field chrome, so these properties and attributes were removed. Set them on the slotted
+`forge-text-field` (or its `<input>`) instead:
+
+| Removed | Now set on |
+| --- | --- |
+| `label` | The text field's slotted `<label slot="label">` |
+| `placeholder` | The `<input>`'s `placeholder` attribute |
+| `labelPosition` / `label-position` | `forge-text-field`'s `label-position` |
+| `labelAlignment` / `label-alignment` | `forge-text-field`'s `label-alignment` |
+| `variant` | `forge-text-field`'s `variant` |
+| `density` | `forge-text-field`'s `density` |
+| `shape` | `forge-text-field`'s `shape` |
+| `theme` | `forge-text-field`'s `theme` |
+
+The `label`, `support-text`, and `support-text-end` slots, and all CSS parts, were removed from `forge-date-time-field` for the same
+reason — they belong to the slotted `forge-text-field` now.
+
+## Elements the field manages for you
+
+Inside the slotted `forge-text-field`, the field creates and maintains a few elements on the consumer's behalf, reusing one the consumer
+already provides instead of creating a duplicate:
+
+- **Calendar toggle** — a `forge-icon-button[slot="end"]` that opens/closes the linked picker, created only when a picker is linked. If
+  the text field already has one authored, the field reuses it instead of adding a second.
+- **Range separator** — a `<span data-forge-multi-input-separator>` between the two endpoint inputs in a range mode. Author your own with
+  that attribute to customize its content (see below); the field leaves an authored one alone.
+- **Validation message** — while the field is invalid, its `validationMessage` is rendered in the text field's `support-text` slot,
+  unless the consumer has slotted their own `support-text` element. In that case, render `field.validationMessage` yourself.
+- **Range duration** — when `show-duration` is on (the default) and the value is a valid range, a formatted duration (e.g. "2 hours") is
+  rendered in the text field's `support-text-end` slot, unless the consumer has slotted their own `support-text-end` element.
+
+<Canvas of={DateTimeFieldStories.ConsumerToggleAndSeparator} />
+
+## Popover and phone behavior
+
+The linked picker opens in a `forge-popover` anchored to the slotted text field, the same as other Forge pickers (`forge-date-picker`,
+`forge-date-range-picker`, etc.), positioned per `popover-placement`. On phone-sized viewports the picker instead opens in its bottom
+sheet, matching its own standalone behavior.
+
+## Value Mode
+
+The public `value` (and the change event's `value`) is shaped by `value-mode`:
+
+- `temporal` (default) — a `Temporal.PlainDateTime` (or a `{ from, to }` pair for ranges)
+- `iso` — a local ISO `datetime-local` string
+- `date` — a native `Date`
+
+## Required Parts
+
+Use `required-parts` together with `required` to control which segments must be filled for the field to be valid: `both` (default),
+`date` only, or `time` only.
+
+## Slots mode
+
+With `time-mode="slots"`, the time is typed into the same input as the date rather than a separate one. If the linked picker doesn't
+offer that time (checked via its `isTimeSlotAvailable`), the field reports itself invalid with "Choose an available time."
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- A single-input mode is labelled by the slotted text field's `<label>` — no extra work needed.
+- A two-input range mode can't share one label across both inputs, so each endpoint input gets its own `aria-label` ("Start date and
+  time" / "End date and time", or "Start date" / "End date", etc., depending on what it captures).
+- The field host has `role="group"` and is named from the text field's label (or a default "Date and time") so assistive technology
+  announces the composite control's purpose as a whole. Author your own `aria-label` or `aria-labelledby` on the field to override this.
+- The field is form-associated: set a `name` so the value is submitted with the form and validation messages are surfaced via
+  `reportValidity()`.
+- The calendar toggle button (rendered only when a picker is linked) exposes its expanded/collapsed state via `aria-expanded` and
+  `aria-haspopup`.

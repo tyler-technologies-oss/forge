@@ -253,6 +253,30 @@ describe('BaseButton', () => {
     expect(focusIndicator).toBeTruthy();
   });
 
+  it('should preserve consumer-provided aria-disabled when not disabled', async () => {
+    const screen = render(html`<forge-test-base-button aria-disabled="true">Button</forge-test-base-button>`);
+    const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
+    expect(el.disabled).toBe(false);
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+    expect(el.getAttribute('tabindex')).toBe('0');
+  });
+
+  it('should restore consumer-provided aria-disabled when re-enabled', async () => {
+    const screen = render(html`<forge-test-base-button aria-disabled="true">Button</forge-test-base-button>`);
+    const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
+    el.disabled = true;
+    await el.updateComplete;
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+
+    el.disabled = false;
+    await el.updateComplete;
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+  });
+
   it('should not disable when <a> is specified', async () => {
     const screen = render(html`<forge-test-base-button disabled><a href="javascript: void(0);">Button</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
