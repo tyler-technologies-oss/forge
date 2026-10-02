@@ -7,10 +7,9 @@ const readJson = (path: string): { version: string; plugins: { version: string }
 
 describe('plugin version sync', () => {
   const expected: string = readJson(SOURCE_PATH).version;
-  const [packagePath, manifestPath, marketplacePath] = TARGET_PATHS as string[];
+  const [manifestPath, marketplacePath] = TARGET_PATHS as string[];
 
-  it('should match the forge-mcp version in the plugin package and manifest', () => {
-    expect(readJson(packagePath).version).toBe(expected);
+  it('should match the forge-mcp version in the plugin manifest', () => {
     expect(readJson(manifestPath).version).toBe(expected);
   });
 

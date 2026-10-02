@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 const resolve = path => fileURLToPath(new URL(path, import.meta.url));
 
 export const SOURCE_PATH = resolve('../../packages/forge-mcp/package.json');
-export const TARGET_PATHS = [resolve('../package.json'), resolve('../.claude-plugin/plugin.json'), resolve('../../.claude-plugin/marketplace.json')];
+export const TARGET_PATHS = [resolve('../.claude-plugin/plugin.json'), resolve('../../.claude-plugin/marketplace.json')];
 
 const VERSION_PATTERN = /("version":\s*")[^"]+(")/;
 
