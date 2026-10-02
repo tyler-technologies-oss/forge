@@ -1,0 +1,18 @@
+---
+/**
+ * Placeholder body for nav-linked pages that don't have content yet.
+ * Mirrors the "coming soon" card used for empty component-doc tabs
+ * (src/pages/components/[slug]/[tab].astro).
+ */
+interface Props {
+  icon: string;
+  label: string;
+}
+
+const { icon, label } = Astro.props;
+---
+
+<div class="flex flex-col items-center justify-center p-xxlarge bg-surface-container-low rounded-lg text-center text-low">
+  <forge-icon name={icon} external class="text-[48px] mb-medium opacity-50" />
+  <p class="m-0">{label} documentation coming soon.</p>
+</div>

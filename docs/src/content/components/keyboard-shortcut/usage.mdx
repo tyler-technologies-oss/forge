@@ -1,0 +1,65 @@
+---
+title: Keyboard Shortcut
+description: Attaches a keyboard shortcut to an element, or the whole page, without any visible UI of its own.
+status: stable
+source: core
+category: utilities
+storybookId: components-keyboard-shortcut--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-keyboard-shortcut` listens for a key combination and fires `forge-keyboard-shortcut-activate` when it's pressed, through `key`, `target`, `global`, and `disabled` — it renders nothing itself, so it doesn't affect layout on its own. Placed as a sibling right after an element, the shortcut activates while focus is within that element by default; set `target` to a CSS selector to activate it for a different element instead, or `global` to activate it anywhere on the page.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Describe the shortcut's function and key combination somewhere visible on the page, not just in code.",
+      "Set aria-keyshortcuts on the element a global or targeted shortcut activates.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't override a browser, operating system, or assistive technology shortcut.",
+      "Don't use the accesskey attribute alongside it.",
+      "Don't duplicate behavior the browser already provides — a form submits on Enter without any extra wiring.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Placed as a sibling after an element, the shortcut activates while focus is within that element.
+
+<Example
+  description="A keyboard shortcut scoped to focus within a specific element."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/keyboard-shortcut/demo/demo.html"
+/>
+
+## Targeting a different element
+
+Set `target` to a CSS selector to activate the shortcut for an element it isn't a sibling of.
+
+```html
+<forge-button id="shortcut-target">
+  <button type="button">Button</button>
+</forge-button>
+<forge-keyboard-shortcut key="shift+a" target="#shortcut-target"></forge-keyboard-shortcut>
+```
+
+## Targeting the whole page
+
+Set `global` to activate the shortcut anywhere on the page, regardless of focus.
+
+```html
+<forge-keyboard-shortcut key="shift+a" global></forge-keyboard-shortcut>
+```

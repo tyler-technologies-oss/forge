@@ -1,0 +1,75 @@
+---
+title: Color Picker
+description: An interactive color selection component with support for multiple color formats (hex, RGB, HSV) and optional opacity control.
+status: stable
+source: core
+category: forms
+storybookId: components-color-picker--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-color-picker` lets a user select a color visually instead of typing a technical value, tracked through `value` (hex), `rgba`, and `hsva`. Use it inline in a form, or trigger it from a swatch button into a `forge-popover` or `forge-dialog` when space is tight.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Make color selection a visual task — lead with the picker, not a raw text input.",
+      "Offer a value format (hex, RGBA, or HSVA) that matches where the color is headed, such as RGBA when a user is copying a value from another product.",
+      "Set allowOpacity only when transparency is a meaningful option for the value being set.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't expose every color format at once — pick the one your data actually needs.",
+      "Don't let arbitrary color selection bypass an existing brand or theme palette when one exists.",
+      "Don't debounce the change event for a color that drives a live, on-screen preview — the delay reads as lag.",
+    ]}
+  />
+</Rules>
+
+## Value formats
+
+Read or set the current color as `value` (a hex string), `rgba`, or `hsva` — all three stay in sync with whichever one is set.
+
+<Example
+  description="A color picker with an initial hex value."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/color-picker/demo/demo.html"
+/>
+
+## Opacity
+
+Set `allowOpacity` to add an alpha slider to the picker, exposing `opacity` alongside `value`, `rgba`, and `hsva`.
+
+<Example
+  description="allow-opacity adds an alpha slider to the picker."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/color-picker/opacity/opacity.html"
+/>
+
+## In a popover or dialog
+
+Trigger the picker from a swatch button into a `forge-popover` or `forge-dialog` instead of showing it inline, when space is tight.
+
+<Example
+  description="A swatch button opens the color picker in a popover instead of showing it inline."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/color-picker/popover/popover.html"
+/>
+
+## Debounced updates
+
+Set `debounceChangeEvent` to collapse rapid drags into a single change event instead of firing on every pixel of movement.
+
+<Example
+  description="debounce-change-event collapses rapid drags into a single change event."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/color-picker/debounced-updates/debounced-updates.html"
+/>
+

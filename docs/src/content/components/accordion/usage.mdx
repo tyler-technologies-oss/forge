@@ -1,0 +1,47 @@
+---
+title: Accordion
+description: Wraps a set of expansion panels so that opening one automatically closes any other open panel.
+status: stable
+source: core
+category: layout
+storybookId: components-accordion--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-accordion` wraps a set of <a href={`${import.meta.env.BASE_URL}components/expansion-panel/usage/`}>expansion panel</a> children and closes any other open panel whenever one of them opens, through its `panelSelector` property for scoping to panels that aren't direct children. It adds no visual styling of its own; pair it with a <a href={`${import.meta.env.BASE_URL}components/divider/usage/`}>divider</a> between panels for visual separation. If a design calls for more than one panel open at a time, skip the accordion wrapper entirely and use expansion panels on their own.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Reserve an accordion for panels that represent mutually exclusive views of related information.",
+      "Pair panels in an accordion with a divider between them, since the component adds no visual separation of its own.",
+      "Set panelSelector when the panels it manages aren't its direct children.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't wrap panels in an accordion if a design calls for more than one open at a time — use plain expansion panels instead.",
+      "Don't nest an accordion group inside another accordion group's panel.",
+      "Don't rely on the accordion for visual styling — it only manages which panel is open.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Give each panel a `header`-slotted button; opening one panel automatically closes any other open panel in the same accordion.
+
+<Example
+  description="An accordion wrapping three panels, only one open at a time."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/accordion/demo/demo.html"
+/>

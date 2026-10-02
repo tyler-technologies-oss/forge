@@ -1,0 +1,54 @@
+---
+title: Skip Link
+description: Skip links let a user bypass repetitive content and navigate directly to a section of the page, meeting WCAG's bypass-blocks requirement.
+status: stable
+source: core
+category: navigation
+storybookId: components-skip-link--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-skip-link` targets another element by id through `target`, and controls its own visibility and placement through `persistent`, `inline`, `muted`, and `theme`. Place one as the first child of `<body>`, targeting the page's main content, on any page that repeats navigation or other content across multiple pages — this satisfies <a href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html">WCAG 2.4.1</a>, not just a nice-to-have.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Place a skip link as the first child of the body, targeting the page's main content.",
+      "Give the target element tabindex=\"-1\" if it isn't otherwise focusable, so the browser can focus it without adding it to the tab order.",
+      "Write skip link text that clearly states what it navigates to.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't add more skip links than a page genuinely needs — assistive technology users already have their own ways to navigate between landmarks.",
+      "Don't assume a skip link behaves identically everywhere — see the Accessibility tab for a Safari-specific difference.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Set `target` to the id of the element the link should jump to.
+
+<Example
+  description="A skip link targeting the page's main content."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skip-link/demo/demo.html"
+/>
+
+## Inline skip links
+
+A skip link doesn't have to sit only at the top of the page — set `inline` to position one within the normal page flow, useful for bypassing a specific section, like search filters, to jump straight to its results.
+
+## Appearance
+
+Set `persistent` to keep the link visible even when it isn't focused, and `muted` for a lower-contrast color scheme. Set `theme` to match the link's color to the surrounding UI.

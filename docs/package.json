@@ -1,0 +1,41 @@
+{
+  "name": "forge-docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "node --test scripts/*.test.mjs",
+    "build:forge-skill": "node scripts/build-forge-skill.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/svelte": "^8.1.1",
+    "@tailwindcss/vite": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-tailwind": "workspace:*",
+    "@tylertech/tyler-icons": "catalog:",
+    "astro": "^6.1.4",
+    "highlight.js": "^11.11.1",
+    "marked": "^18.0.13",
+    "pagefind": "^1.5.0",
+    "svelte": "^5.55.9",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "sass-embedded": "^1.99.0",
+    "typescript": "^6.0.3",
+    "unified": "^11.0.5"
+  }
+}

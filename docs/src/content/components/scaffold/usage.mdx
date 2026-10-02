@@ -1,0 +1,57 @@
+---
+title: Scaffold
+description: The scaffold lays out a header, scrollable body, and footer using named slots, for full pages or smaller sections alike.
+status: stable
+source: core
+category: layout
+storybookId: components-scaffold--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-scaffold` positions content through named slots — `header`, `body`, `footer`, `left`, `right`, and `body`-prefixed variants for a header/footer/left/right scoped to just the body — plus `viewport` to size itself to the full viewport height. Use it for a full page (typically <a href={`${import.meta.env.BASE_URL}components/app-bar/usage/`}>app bar</a> in `header`, a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a> in `body-left`, and page content in `body`), or to structure a smaller surface like a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a> or <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a> with its own header, scrollable body, and footer.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use the scaffold as the outermost structure for a full page, a dialog, or a card that needs a pinned header and footer.",
+      "Let only the body scroll — keep header, footer, and side slots fixed in place.",
+      "Reach for CSS grid or flexbox inside the body slot for more complex inner layouts.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't nest a scaffold inside another scaffold's body — pick one outer structure.",
+      "Don't put primary page content in a side slot — those are for navigation or supplementary panels.",
+      "Don't set viewport on a scaffold that's structuring a smaller surface like a card, only a full-page layout.",
+    ]}
+  />
+</Rules>
+
+## Structure
+
+Every slot at once shows how the scaffold positions content: `left`/`right` frame everything, `header`/`footer` pin above and below, and the `body`-prefixed slots do the same scoped to just the scrollable body.
+
+<Example
+  description="Every scaffold slot filled in at once, to show how each one is positioned."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/scaffold/demo/demo.html"
+/>
+
+## Full page layout
+
+Set `viewport` to size the scaffold to the full viewport height, with an app bar in `header`, a drawer in `body-left`, and page content in `body`.
+
+<Example
+  description="An app bar, a drawer, and page content, laid out with a scaffold."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/scaffold/full-page-layout/full-page-layout.html"
+/>
+

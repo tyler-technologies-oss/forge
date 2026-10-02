@@ -1,0 +1,67 @@
+---
+title: Banner
+description: Banners inform users of important, page-level information — such as errors, warnings, or success messages — without interrupting their workflow.
+status: stable
+source: core
+category: feedback
+storybookId: components-banner--default
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-banner` displays a persistent, page-level message through `theme`, `dismissed`, and `persistent`, plus optional `icon` and `button` slots. Reserve it for a full-page announcement the user only needs to see once; for guidance scoped to a single field or section, use an <a href={`${import.meta.env.BASE_URL}components/inline-message/usage/`}>inline message</a> instead, for a reactive confirmation of an action use a <a href={`${import.meta.env.BASE_URL}components/toast/usage/`}>toast</a>, and for a high-priority alert that requires a decision use a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a>.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a banner for a page-level announcement the user only needs to see once, like a new feature or maintenance notice.",
+      "Pair the message with a \"Learn more\" action when there's more detail to show, typically opening a dialog.",
+      "Keep banner text succinct — a sentence or two, not a paragraph.",
+      "Place a banner at the top of the page, below the app bar.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a banner for information scoped to a single field or component — use an inline message instead.",
+      "Don't use a banner for a reactive confirmation of an action, like a save or delete — use a toast instead.",
+      "Don't use a banner for a high-priority alert that requires a decision — use a dialog instead.",
+    ]}
+  />
+</Rules>
+
+## Theme
+
+Set `theme` to `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info` (the default), or `info-secondary` to match the message's severity.
+
+<Example
+  description="Every banner theme, ordered from most to least urgent."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/banner/themed/themed.html"
+/>
+
+## With an icon and action
+
+Pair the message with a leading icon in the `icon` slot to reinforce its severity, and a trailing action in the `button` slot when there's more detail to show.
+
+<Example
+  description="A banner with a leading icon and a Learn more action."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/banner/combined/combined.html"
+/>
+
+## Persistent
+
+Set `persistent` to remove the banner's built-in dismiss button when the message shouldn't be dismissed by the user.
+
+<Example
+  description="A persistent banner has no built-in dismiss button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/banner/persistent/persistent.html"
+/>
+

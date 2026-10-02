@@ -1,0 +1,67 @@
+---
+title: Split Button
+description: Splits an action into two parts — typically a primary action and a secondary action that opens a menu or performs an alternative action.
+status: stable
+source: core
+category: actions
+storybookId: components-split-button--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-split-button` groups two or more slotted `forge-button` children into a single visual unit, propagating `variant`, `theme`, `disabled`, `dense`, and `pill` to every button so they render consistently. Pair a primary action with a `forge-menu` trigger for a classic split button, or slot several buttons directly for a segmented group of equally-weighted actions. For actions that aren't related to one another, use individual <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>buttons</a> or <a href={`${import.meta.env.BASE_URL}components/icon-button/usage/`}>icon buttons</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep every button in a split button related to the same task.",
+      "Limit related actions to three, so the group stays easy to scan.",
+      "Use the same sentence-case, actionable labels as standalone buttons.",
+      "Reserve raised for the one primary action per view, same as individual buttons.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't group unrelated actions into one split button — use individual buttons instead.",
+      "Don't use more than one raised split button per page or dialog.",
+      "Don't use success or warning themes — use primary.",
+    ]}
+  />
+</Rules>
+
+## With a menu
+
+Slot a primary `forge-button` alongside a `forge-menu` whose trigger button carries `popover-icon` to open a dropdown of related, secondary actions.
+
+<Example
+  description="A primary action paired with a menu of related actions."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/split-button/demo/demo.html"
+/>
+
+## Multiple actions
+
+Slot several `forge-button` children directly, without a menu, for a segmented group of equally-weighted actions.
+
+<Example
+  description="Three related buttons rendered as one segmented group."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/split-button/multiple-actions/multiple-actions.html"
+/>
+
+## Dense and pill
+
+Set `dense` and `pill` to shape the group into a compact, rounded control.
+
+<Example
+  description="A dense, pill-shaped split button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/split-button/dense-and-pill/dense-and-pill.html"
+/>
+

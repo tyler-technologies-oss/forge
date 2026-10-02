@@ -1,0 +1,58 @@
+---
+/**
+ * ContentHeader - Consistent page header for content pages.
+ *
+ * Displays a title with optional description, badge, and back button.
+ * Used by both ContentPageLayout and ComponentPageLayout.
+ */
+
+interface Props {
+  title: string;
+  description?: string;
+  showBadge?: boolean;
+  badgeText?: string;
+  badgeTheme?: string;
+  showBackButton?: boolean;
+}
+
+const {
+  title,
+  description,
+  showBadge = false,
+  badgeText = "Beta",
+  badgeTheme = "warning",
+  showBackButton = false,
+} = Astro.props;
+---
+
+<header class="content-header mb-large">
+  <div class="flex items-center gap-small flex-wrap">
+    {
+      showBackButton && (
+        <forge-icon-button
+          density="small"
+          aria-label="Go back"
+          data-back>
+          <forge-icon name="arrow_back" />
+        </forge-icon-button>
+      )
+    }
+    <h1 class="text-heading6 m-0">{title}</h1>
+    {showBadge && <forge-badge theme={badgeTheme}>{badgeText}</forge-badge>}
+  </div>
+  {
+    description && (
+      <p class="text-medium mt-xxxsmall mb-0">{description}</p>
+    )
+  }
+</header>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document
+      .querySelectorAll<HTMLElement>("forge-icon-button[data-back]")
+      .forEach((btn) => {
+        btn.addEventListener("click", () => history.back());
+      });
+  });
+</script>

@@ -1,0 +1,76 @@
+---
+title: Slider
+description: Sliders allow users to make selections from a range of values.
+status: stable
+source: core
+category: forms
+storybookId: components-slider--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-slider` selects a value — or, with `range`, a start and end value — along a bounded track through `min`, `max`, `step`, `tickmarks`, and `labeled`, and participates in form submission via `name`. Reserve it for a value that's fine to be approximate; when a user needs to enter a known, specific number, use a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a slider when an approximate value is good enough and dragging gives immediate feedback, like volume or a filter range.",
+      "Keep the current value's label visible so users aren't guessing where the handle sits.",
+      "Live-update any dependent results as the handle drags, not just after it's released.",
+      "Offer a text field alternative alongside a slider when a user might want to enter an exact value.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a slider for a binary on/off setting — use a switch instead.",
+      "Don't use a slider when a user needs to enter a known, specific value — use a text field instead.",
+      "Don't hide the current value's label unless space is truly constrained.",
+    ]}
+  />
+</Rules>
+
+## Range
+
+Set `range` to render two handles — `valueStart` and `valueEnd` — instead of one, for selecting a span rather than a single point.
+
+<Example
+  description="Two handles select a start and end value instead of a single point."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/slider/range/range.html"
+/>
+
+## Tickmarks
+
+Set `tickmarks` to show marks spaced by `step`, giving the handle discrete stops to snap to.
+
+<Example
+  description="Tickmarks spaced by step give the handle discrete stops to snap to."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/slider/tickmarks/tickmarks.html"
+/>
+
+## Disabled and readonly
+
+`disabled` excludes the slider from the form; `readonly` keeps it in the form but locks its value.
+
+<Example
+  description="Disabled excludes the slider from the form; readonly keeps it in the form but locks its value."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/slider/disabled-and-readonly/disabled-and-readonly.html"
+/>
+
+## Custom labels
+
+Set `labelBuilder` (or `label`/`labelStart`/`labelEnd`) to caption the handle with something other than a bare number.
+
+<Example
+  description="A custom label captions the handle instead of a bare number."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/slider/custom-labels/custom-labels.html"
+/>
+

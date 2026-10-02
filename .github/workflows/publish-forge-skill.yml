@@ -1,0 +1,57 @@
+name: Publish Forge Design Skill
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/src/content/components/**'
+      - 'docs/src/content/guides/developing/**'
+      - 'docs/scripts/build-forge-skill.mjs'
+      - 'docs/scripts/forge-skill-template/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-forge-skill
+  cancel-in-progress: true
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build skill bundle
+        run: pnpm --filter forge-docs build:forge-skill
+
+      - name: Zip skill bundle
+        working-directory: docs/skill
+        run: zip -r ../../forge-design-skill.zip forge-design
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: forge-skill-latest
+          name: Forge Design skill (latest)
+          body: |
+            Auto-published from `${{ github.sha }}` on push to `main`.
+            Generated from `docs/src/content/components/**` and `docs/src/content/guides/developing/**`
+            via `pnpm --filter forge-docs build:forge-skill`.
+          make_latest: true
+          files: forge-design-skill.zip

@@ -1,0 +1,66 @@
+---
+title: Avatar
+description: A non-interactive circle that represents an entity — with an image, initials, or an icon.
+status: stable
+source: core
+category: data-display
+storybookId: components-avatar--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-avatar` represents an entity through `imageUrl`, `text` (rendered as initials via `letterCount`), or a slotted icon when neither is set. Use it for people, accounts, or records that are genuinely identifiable by image or initials, most often in a list, table row, card, or navigation header. Skip it when the image or initials add no real information, like using a category's first letter as a stand-in avatar.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a real photo when one is likely to be available and the person is likely to be recognizable.",
+      "Fall back to initials when no image is available, rather than leaving the avatar empty.",
+      "Use a larger avatar in a card or profile header, and a smaller one in a list or table row.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use an avatar when the image or initials don't add information — an icon or plain text may fit better.",
+      "Don't rely on an avatar's initials alone to distinguish records with the same first letter — pair it with a visible name.",
+      "Don't imply interactivity — avatars have no hover or focus state of their own.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Set `text` for an avatar that renders initials — by default, the first letter of each word, controlled by `letterCount`.
+
+<Example
+  description="An avatar rendering initials from its text."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/avatar/demo/demo.html"
+/>
+
+## With an icon
+
+Slot a `forge-icon` instead of setting `text` or `imageUrl` when the avatar represents something other than a named person — like a generic account or object type.
+
+<Example
+  description="An icon slotted in place of text or an image."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/avatar/with-icon/with-icon.html"
+/>
+
+## With an image
+
+Set `imageUrl` to show a photo instead of initials or an icon.
+
+<Example
+  description="An avatar showing a photo instead of initials."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/avatar/with-image/with-image.html"
+/>
+

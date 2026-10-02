@@ -1,0 +1,85 @@
+---
+title: Chip Field
+description: A specialized input field that lets users create and manage a collection of chips representing freeform text values or selections.
+status: deprecated
+source: core
+category: forms
+storybookId: components-chip-field--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+<InlineMessage theme="warning" title="Deprecated">
+  forge-chip-field is deprecated and will be removed in a future release.
+  forge-text-field and forge-select are the intended replacement path once they
+  gain equivalent functionality — avoid building new usage on chip field.
+</InlineMessage>
+
+`forge-chip-field` wraps a slotted `<input>` and shares the same field frame as a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> (`variant`, `theme`, `shape`, `density`, `label-position`, `invalid`, `required`, `disabled`) plus its own `add-on-blur`. The field itself doesn't create chips — it fires `forge-chip-field-member-added` and `forge-chip-field-member-removed`, and the app appends or removes a <a href={`${import.meta.env.BASE_URL}components/chip/usage/`}>chip</a> with `slot="member"` in response. Use it for freeform, removable entries like tags or recipients; for a single value, use a plain text field, and for entries chosen from a known list, pair it with <a href={`${import.meta.env.BASE_URL}components/autocomplete/usage/`}>autocomplete</a> instead of accepting arbitrary text.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Confirm each entered value with a clear affordance, like pressing Enter or blurring the field.",
+      "Give every chip its own remove control so values can be deleted individually.",
+      "Pair with autocomplete when users are choosing from a known set of values, so they aren't typing free text blind.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a chip field for a single, non-repeating value — use a text field instead.",
+      "Don't use a chip field to enter a long phrase or sentence — use a text field or textarea instead.",
+      "Don't display static, non-interactive values as chips — use badges instead.",
+    ]}
+  />
+</Rules>
+
+## Adding chips
+
+Type a value and press Enter to fire `forge-chip-field-member-added` with the entered text; append a `forge-chip` with `slot="member"` in response, and remove it on `forge-chip-field-member-removed`.
+
+<Example
+  description="A chip field with support text guiding how to add a tag."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/chip-field/demo/demo.html"
+  height="350px"
+/>
+
+## With autocomplete
+
+Nest a chip field inside a `forge-autocomplete` to confirm each typed value against a filtered list of suggestions instead of accepting arbitrary free text.
+
+<Example
+  description="A chip field nested inside an autocomplete, with a dropdown trigger and clear button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/chip-field/with-autocomplete/with-autocomplete.html"
+  height="350px"
+/>
+
+## Confirm on blur
+
+Set `add-on-blur` to confirm a chip when focus leaves the field, not just on Enter.
+
+<Example
+  description="add-on-blur confirms a chip when focus leaves the field, not just on Enter."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/chip-field/confirm-on-blur/confirm-on-blur.html"
+  height="350px"
+/>
+
+## Disabled
+
+Set `disabled` to exclude the chip field, and its existing members, from interaction.
+
+<Example
+  description="A disabled chip field with existing members."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/chip-field/disabled/disabled.html"
+  height="350px"
+/>

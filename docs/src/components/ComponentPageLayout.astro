@@ -1,0 +1,56 @@
+---
+/**
+ * ComponentPageLayout - Tabbed layout for component documentation pages.
+ *
+ * Wraps TabbedPageLayout with component-specific tabs.
+ */
+import TabbedPageLayout from "./TabbedPageLayout.astro";
+
+type TabId = "usage" | "api" | "playground" | "accessibility";
+
+interface Props {
+  title: string;
+  description?: string;
+  showBadge?: boolean;
+  badgeText?: string;
+  badgeTheme?: string;
+  currentTab: TabId;
+  slug: string;
+  storybookId?: string;
+}
+
+const {
+  title,
+  description,
+  showBadge = false,
+  badgeText = "Beta",
+  badgeTheme = "warning",
+  currentTab,
+  slug,
+  storybookId,
+} = Astro.props;
+
+const tabs = [
+  { id: "usage", label: "Usage" },
+  { id: "api", label: "API" },
+  ...(storybookId
+    ? [{ id: "playground", label: "Playground", wide: true }]
+    : []),
+  { id: "accessibility", label: "Accessibility" },
+];
+
+const baseUrl = `${import.meta.env.BASE_URL}components`;
+---
+
+<TabbedPageLayout
+  title={title}
+  description={description}
+  showBadge={showBadge}
+  badgeText={badgeText}
+  badgeTheme={badgeTheme}
+  tabs={tabs}
+  currentTab={currentTab}
+  baseUrl={baseUrl}
+  slug={slug}>
+  <slot name="content" />
+</TabbedPageLayout>

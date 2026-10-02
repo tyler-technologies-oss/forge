@@ -1,0 +1,69 @@
+---
+title: Tree
+description: Trees are interactive lists that allow users to navigate through hierarchical data.
+status: beta
+source: core
+category: data-display
+storybookId: components-tree--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<InlineMessage theme="warning" title="Experimental">
+  Tree is an experimental component in developer preview — its API and implementation may change in future versions, and there may be unresolved bugs. Use it with that in mind, and be prepared to update your code as it evolves.
+</InlineMessage>
+
+## Usage
+
+`forge-tree` nests `forge-tree-item` children to let a user navigate hierarchical data, through `mode` (`single`, `multiple`, `leaf`, or `off`), `accordion`, `indentLines`, `selectionFollowsFocus`, and `disabled`, while each item carries its own `open`, `selected`, `lazy`, and `disabled` state. Use it for genuinely hierarchical data — folders, nested categories, an org chart; for a flat set of items, use a plain <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a tree only for data that's genuinely hierarchical, not for a flat list styled to look nested.",
+      "Set indentLines when the hierarchy is deep enough that indentation alone doesn't make the structure clear.",
+      "Use lazy loading for a node whose children are expensive to fetch or render, rather than loading the whole tree up front.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a tree for a flat set of items with no real parent/child relationship — use a list instead.",
+      "Don't ship a tree as the only way to reach content that also needs a non-hierarchical path — it's easy to lose track of a deeply nested item.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Nest `forge-tree-item` elements inside each other to build the hierarchy; each item's `value` identifies it when selected.
+
+<Example description="A tree with nested items, one expanded to show its children.">
+  <forge-tree>
+    <forge-tree-item value="documents" open>
+      Documents
+      <forge-tree-item value="report">Report.docx</forge-tree-item>
+      <forge-tree-item value="budget">Budget.xlsx</forge-tree-item>
+    </forge-tree-item>
+    <forge-tree-item value="photos">Photos</forge-tree-item>
+  </forge-tree>
+</Example>
+
+## Selection
+
+Set `mode` to `single` (the default) or `multiple` to control how many items can be selected at once, or `leaf` to only allow selecting items with no children. Set `mode="off"` to disable selection entirely, and `selectionFollowsFocus` to select an item as soon as it's focused (single mode only).
+
+## Accordion behavior
+
+Set `accordion` so opening one item automatically closes its siblings, instead of allowing multiple branches open at once.
+
+## Lazy loading
+
+Set `lazy` on a `forge-tree-item` for a node whose children should be fetched or rendered only when the item is first opened, rather than up front.

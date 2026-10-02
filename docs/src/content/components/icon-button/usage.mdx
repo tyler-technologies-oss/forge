@@ -1,0 +1,100 @@
+---
+title: Icon Button
+description: Icon buttons are buttons that contain only an icon, and are used to represent actions or commands.
+status: stable
+source: core
+category: actions
+storybookId: components-icon-button--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-icon-button` handles action emphasis through `variant`, `theme`, `shape`, and `density`, plus toggle, anchor, and badge support. Since there's no visible label, always set an accessible name with `aria-label` and pair the button with a <a href={`${import.meta.env.BASE_URL}components/tooltip/usage/`}>tooltip</a> so its action is clear on hover or focus. Reach for a text <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>button</a> instead when the action isn't widely recognizable from an icon alone.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use icon buttons for globally familiar, easily recognized actions (undo, edit, save, close).",
+      "Always set an accessible label with aria-label, since the button has no visible text.",
+      "Pair an icon button with a tooltip so its action is clear without relying on the icon alone.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use an icon button for a domain-specific or unfamiliar action — use a text button instead.",
+      "Don't mix icon buttons and text buttons within the same group or table row.",
+    ]}
+  />
+</Rules>
+
+## Variants
+
+Pick the variant that matches the action's emphasis, same as a text button: `icon` (the default, lowest emphasis) for most toolbar and row-level actions, `outlined` or `tonal` for secondary emphasis, `filled` for a stronger fill, and `raised` for the one primary action in a view.
+
+<Example
+  description="The five icon button variants, ordered from lowest to highest emphasis."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/variants/variants.html"
+/>
+
+## Theme
+
+Icon buttons default to a neutral theme. Set `theme` to a semantic or brand color to reinforce the action's meaning.
+
+<Example
+  description="Every theme available on an icon button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/themed/themed.html"
+/>
+
+## Toggle
+
+Set `toggle` for an icon button that represents a persistent on/off state — such as marking a favorite — and provide an `on` slot icon to swap in when `pressed` is true. Any icon can technically fill either slot, but the convention is an outlined-style icon for the default "off" state and a filled-style version of the same icon for the "on" slot, so the visual weight itself reinforces the state change.
+
+<Example
+  description="A toggle icon button in each variant, swapping icons between its default and on slot."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/toggle/toggle.html"
+/>
+
+## As a link
+
+Wrap an `<a>` inside a `forge-icon-button` to get a navigation link styled as an icon button.
+
+<Example
+  description="An icon button that navigates. Note the anchor child."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/anchor/anchor.html"
+/>
+
+## With a badge
+
+Pass a <a href={`${import.meta.env.BASE_URL}components/badge/usage/`}>badge</a> into the `badge` slot to overlay a count or dot indicator, most often for unread or new content.
+
+<Example
+  description="A numeric badge overlaid on an icon button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/with-badge/with-badge.html"
+/>
+
+## Loading
+
+Swap in a `forge-circular-progress` in place of the icon to indicate a pending action.
+
+<Example
+  description="A circular progress indicator replaces the icon while the action is pending."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/with-circular-progress/with-circular-progress.html"
+/>
+
+## Label aware
+
+Wrap an icon button in a `forge-label` to give it a persistent, visible caption alongside its accessible label — useful when an icon alone may not be immediately familiar to every user.
+
+<Example
+  description="A forge-label caption sits beneath the icon button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon-button/with-label/with-label.html"
+/>

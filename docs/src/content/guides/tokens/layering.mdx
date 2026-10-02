@@ -1,0 +1,30 @@
+---
+title: Layering Tokens
+description: Tokens that define the order in which elements are stacked on top of each other.
+---
+
+Layering tokens define the order in which elements are stacked on top of each other.
+
+This is implemented using the `z-index` CSS property.
+
+It's important to note that these values are not fixed and can be adjusted as needed. If you need to integrate Forge with a
+another library that uses different z-index values, you can override these tokens to match the other library's values, and
+Forge will automatically adjust to use the new values across all components.
+
+<table class="forge-data-table">
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--forge-z-index-surface</code></td><td><code>1</code></td></tr>
+    <tr><td><code>--forge-z-index-header</code></td><td><code>4</code></td></tr>
+    <tr><td><code>--forge-z-index-backdrop</code></td><td><code>7</code></td></tr>
+    <tr><td><code>--forge-z-index-dialog</code></td><td><code>8</code></td></tr>
+    <tr><td><code>--forge-z-index-notification</code></td><td><code>9</code></td></tr>
+    <tr><td><code>--forge-z-index-popup</code></td><td><code>10</code></td></tr>
+    <tr><td><code>--forge-z-index-tooltip</code></td><td><code>11</code></td></tr>
+  </tbody>
+</table>

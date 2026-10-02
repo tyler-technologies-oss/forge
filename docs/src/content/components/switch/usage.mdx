@@ -1,0 +1,76 @@
+---
+title: Switch
+description: Switches toggle the state of a single setting on or off.
+status: stable
+source: core
+category: forms
+storybookId: components-switch--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-switch` toggles a single, independent setting on or off through `checked`, participates natively in form submission and validation (`required`, `readonly`, `name`, `value`), and supports `dense`, `icon`, and `label-position`. It's the third of three selection controls: reach for a <a href={`${import.meta.env.BASE_URL}components/checkbox/usage/`}>checkbox</a> instead when a user can select zero, one, or many options from a list, or a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio button</a> instead when exactly one option in a visible set must be chosen.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a switch for a setting that takes effect immediately, with no separate submit step.",
+      "Write a label that describes what happens when the switch is on — say it aloud with \"on\" appended and it should make sense.",
+      "Keep each switch independent of every other control on the screen.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a switch for an action that needs review or confirmation, like Save or Submit — use a button instead.",
+      "Don't use a switch for a setting with a neutral or indeterminate state — use a checkbox instead.",
+      "Don't use a switch for two opposing options, like list view vs. map view — use a button toggle instead.",
+      "Don't nest switches — use checkboxes instead so a parent control can show an indeterminate state.",
+    ]}
+  />
+</Rules>
+
+## Label position
+
+Set `label-position` to control whether the label sits before or after the switch.
+
+<Example
+  description="label-position controls whether the label sits before or after the switch."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/switch/label-position/label-position.html"
+/>
+
+## Dense
+
+Set `dense` to reduce the switch's size.
+
+<Example
+  description="Dense reduces the switch's size."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/switch/dense/dense.html"
+/>
+
+## Icons
+
+Pass custom icons through the `icon-on` and `icon-off` slots.
+
+<Example
+  description="Custom icons passed through the icon-on and icon-off slots."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/switch/icons/icons.html"
+/>
+
+## Disabled and readonly
+
+`disabled` excludes the switch from the form; `readonly` keeps it in the form but locks its value.
+
+<Example
+  description="Disabled excludes the switch from the form; readonly keeps it in the form but locks its value."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/switch/disabled-and-readonly/disabled-and-readonly.html"
+/>
+

@@ -1,0 +1,94 @@
+---
+title: Tabs
+description: Tabs organize and switch between groups of related content that sit at the same level of hierarchy.
+status: stable
+source: core
+category: navigation
+storybookId: components-tabs--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-tab-bar` groups `forge-tab` children and tracks which one is active through `activeTab`/`activeTabName`, `vertical`, `clustered`, and `scrollButtons`. Pair each tab with a `forge-tab-panel` (matched by `for`) to show and hide its content. Use tabs for closely related content at the same level, inside a card, dialog, or side sheet, or as primary navigation when an app has fewer than five destinations; beyond that, use a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use icons consistently across a tab bar's tabs — either every tab has one, or none does.",
+      "Place tabs directly above the content they control.",
+      "Let tabs scroll horizontally on narrow screens instead of wrapping or shrinking to illegibility.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use tabs for sequential content that must be read in a specific order — use a stepper instead.",
+      "Don't use tabs to compare content across tabs, like different sizes of the same item — show them together instead.",
+      "Don't nest a tab bar inside another tab bar's content.",
+      "Don't disable tabs at both the tab-bar level and the individual-tab level at once — pick one, since mixing the two causes their disabled states to conflict.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Each `forge-tab`'s `id` pairs with a `forge-tab-panel`'s `for` attribute to show that panel only while its tab is active.
+
+<Example
+  description="Three tabs, each paired with a tab panel."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tabs/demo/demo.html"
+/>
+
+## Named tabs
+
+Track the active tab by name instead of index — set `activeTabName` on the tab bar, and name each tab to match:
+
+```html
+<forge-tab-bar active-tab-name="two">
+  <forge-tab name="one">Tab one</forge-tab>
+  <forge-tab name="two">Tab two</forge-tab>
+</forge-tab-bar>
+```
+
+Read the active tab's name off the `forge-tab-bar-change` event's `detail.name`, rather than tracking index and looking it up yourself:
+
+```js
+tabBar.addEventListener("forge-tab-bar-change", (event) => {
+  console.log("Active tab name:", event.detail.name);
+});
+```
+
+## With icons
+
+Pair each tab's label with a leading icon via the `start` slot.
+
+<Example
+  description="Tabs with a leading icon on every label."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tabs/with-icons/with-icons.html"
+/>
+
+## Vertical
+
+Set `vertical` on the tab bar (and each `forge-tab`) to stack tabs down the side of their content instead of across the top.
+
+<Example
+  description="A vertical tab bar beside its content."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tabs/vertical/vertical.html"
+/>
+
+## Clustered
+
+Set `clustered` so tabs cluster together at their minimum width instead of stretching to fill the tab bar.
+
+<Example
+  description="Clustered tabs sit together instead of stretching to fill the bar."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tabs/clustered/clustered.html"
+/>

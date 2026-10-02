@@ -1,0 +1,9 @@
+## No default semantics
+
+A popover has no semantic meaning by default. Add the appropriate ARIA attributes to the popover itself, or to the content inside it, based on what that content actually needs.
+
+## Popover vs. dialog
+
+Popovers are transient and non-modal — they don't block interaction with the rest of the page. Dialogs are typically modal and demand the user's immediate attention. When a design calls for something in between, weigh the UX and accessibility implications of each rather than defaulting to one.
+
+To make a popover behave like a non-modal dialog, add `role="dialog"` and `aria-modal="false"` — this tells screen readers it's a dialog that doesn't block the rest of the page, which is useful for gracefully handling in-progress form entry without risking accidental data loss on dismiss.
