@@ -5,8 +5,10 @@
  * The manifest is fetched from the Forge blocks preview URL.
  */
 
-const MANIFEST_URL = "https://forge.tylerdev.io/blocks/v1/manifest.json";
-const BLOCKS_BASE_URL = "https://forge.tylerdev.io/blocks/v1";
+const BLOCKS_BASE_URL =
+  import.meta.env.PUBLIC_BLOCKS_BASE_URL ??
+  "https://forge.tylerdev.io/blocks/v1";
+const MANIFEST_URL = `${BLOCKS_BASE_URL}/manifest.json`;
 const MAX_DESC_CHAR_COUNT = 135;
 
 // ============================================================================
