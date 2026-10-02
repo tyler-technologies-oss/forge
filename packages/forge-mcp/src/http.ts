@@ -5,6 +5,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createForgeDocsServer } from './core/server.js';
 import { getCEMLoader } from './services/cem-loader.js';
+import { SERVER_VERSION } from './version.js';
 
 const MCP_PATH = '/mcp';
 const MAX_BODY_BYTES = 4 * 1024 * 1024; // 4mb, matches SDK's own request size limit
@@ -70,7 +71,7 @@ async function handleMcpRequest(req: IncomingMessage, res: ServerResponse): Prom
   const server = new Server(
     {
       name: '@tylertech/forge-mcp',
-      version: '0.1.0'
+      version: SERVER_VERSION
     },
     {
       capabilities: {
