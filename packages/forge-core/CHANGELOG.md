@@ -1,5 +1,11 @@
 # @tylertech/forge-core
 
+## 3.6.0
+
+### Minor Changes
+
+- ea6ee64: feat: add titleCase util
+
 ## 3.5.1
 
 ### Patch Changes
