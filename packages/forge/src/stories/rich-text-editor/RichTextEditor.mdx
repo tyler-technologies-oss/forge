@@ -130,8 +130,11 @@ entirely, so formatting that depends on them is not preserved.
 - Tiptap builds its own `contenteditable` element inside the one it is handed, and **that inner element is the real control** — it receives focus and is
   where assistive technology lands. Anything applied to the outer host does not necessarily reach it.
 - The renderer host takes `role="article"` unless a `role` is already set, so consumers can override it for their own document structure.
-- Toolbar buttons are toggle buttons: they expose their active state through `aria-pressed`, advertise their shortcut via `aria-keyshortcuts`, and are
-  disabled together with the editor.
+- Formatting buttons are toggle buttons: they expose their active state through `aria-pressed`, advertise their shortcut via `aria-keyshortcuts`, and
+  are disabled together with the editor. Undo and redo are plain action buttons with no pressed state.
+- The `forge-rich-text-editor` toolbar is a single tab stop, following the WAI-ARIA toolbar pattern. Tab enters it on the last button used, the arrow
+  keys move between buttons, and Home and End jump to the first and last. Disabled buttons are skipped. Tool buttons placed in a composed layout's own
+  toolbar are each a tab stop, as before.
 - Formatting changes are announced politely through Forge's `LiveAnnouncer`, so applying a mark is not a silent action for screen reader users.
 
 ## API

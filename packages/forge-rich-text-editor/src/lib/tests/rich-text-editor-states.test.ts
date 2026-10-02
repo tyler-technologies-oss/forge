@@ -348,17 +348,21 @@ describe('Rich Text Editor - State Visual Indicators', () => {
       );
 
       await waitForEditor(el);
+      // The buttons enable once the editor exists, and the tab stop is assigned after that.
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      const buttons = getToolbarIconButtons(el);
+      const buttons = getToolbarIconButtons(el) as unknown as HTMLElement[];
 
       expect(buttons.length).toBeGreaterThan(0);
 
-      // Forge icon buttons have built-in focus indicators
-      // Verify buttons are focusable
-      buttons.forEach(button => {
-        const tabindex = button.getAttribute('tabindex');
-        expect(tabindex === null || tabindex === '0').toBe(true);
+      // Forge icon buttons have built-in focus indicators. The toolbar is a single tab stop, so every
+      // enabled button stays focusable but only one is in the tab order; the rest are reached with
+      // the arrow keys.
+      const enabled = buttons.filter(button => !button.hasAttribute('disabled'));
+      enabled.forEach(button => {
+        expect(['0', '-1']).toContain(button.getAttribute('tabindex'));
       });
+      expect(enabled.filter(button => button.getAttribute('tabindex') === '0')).toHaveLength(1);
     });
   });
 
