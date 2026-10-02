@@ -1,0 +1,61 @@
+---
+title: View Switcher
+description: A view switcher shows one of several views at a time, animating between them along a shared axis as the active index changes.
+status: stable
+source: core
+category: navigation
+storybookId: components-view-switcher--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-view-switcher` shows one `forge-view` child at a time, set via `index` and transitioning with `animationType` (`none`, `slide`, or `fade`), plus `next()`/`previous()`/`goToStart()`/`goToEnd()` for programmatic control. Drive its `index` from whatever is switching views — most often a <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tab bar</a>'s change event, or a <a href={`${import.meta.env.BASE_URL}components/stepper/usage/`}>stepper</a>'s selected step. The slide/fade transitions reinforce that the views are spatially related, the same way switching tabs in a card should feel connected rather than like a hard cut.
+
+<InlineMessage theme="info">
+  Inactive views stay mounted in the DOM — switching `index` doesn't unmount them. Account for that if an inactive view has running scripts or timers, or holds an element `id` that must stay unique across the page.
+</InlineMessage>
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Drive index from the control that owns the switching decision — a tab bar or stepper — rather than duplicating that state.",
+      "Use a slide or fade transition when the views are spatially or navigationally related, so the motion reinforces that relationship.",
+      "Keep every view's content sized similarly so the transition doesn't jump awkwardly in height.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a view switcher for views that have no real relationship to each other — a hard cut may read more honestly.",
+      "Don't drive index from more than one source at a time — pick a single owner for the active index.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A tab bar's change event sets `index` on the view switcher below it, showing the matching `forge-view`.
+
+<Example
+  description="A tab bar drives which view is active in the switcher below it."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/view-switcher/basic-usage/basic-usage.html"
+/>
+
+## Animation
+
+Set `animationType` to `fade` for a cross-fade between views instead of the default hard cut.
+
+<Example
+  description="A fade transition between views instead of a hard cut."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/view-switcher/animation/animation.html"
+/>
+

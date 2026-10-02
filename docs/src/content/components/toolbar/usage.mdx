@@ -1,0 +1,56 @@
+---
+title: Toolbar
+description: Toolbars align a title and actions inside a full-width container, most often as a header or footer for another surface.
+status: stable
+source: core
+category: layout
+storybookId: components-toolbar--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-toolbar` aligns content to `before-start`, `start`, `center`, `end`, and `after-end` slots inside a full-width container, through `inverted`, `noDivider`, `noPadding`, and `autoHeight`. Use it as a header or footer inside a <a href={`${import.meta.env.BASE_URL}components/scaffold/usage/`}>scaffold</a> or <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a>, as a section within a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a>, or anywhere else a title and actions need consistent alignment.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use start for a title, end for the primary actions, and center only for content that's meant to stay centered regardless of the other slots' widths.",
+      "Pair a toolbar footer's actions the same way you would a dialog footer — confirming action last, dismissive action before it.",
+      "Set noDivider when the toolbar sits directly against another divider or border that already separates it from its neighbor.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't overload a single toolbar with more actions than its slots can hold at the narrowest supported width.",
+      "Don't use a toolbar as a substitute for an app bar at the top of a page — reserve it for a header/footer role inside another surface.",
+      "Don't mix unrelated groups of actions into the same slot without a divider between them.",
+    ]}
+  />
+</Rules>
+
+## Structure
+
+Every slot at once shows how the toolbar positions content: `before-start` and `after-end` sit outside the main three, which align to `start`, `center`, and `end`.
+
+<Example
+  description="Every toolbar slot filled in at once, to show how each one is positioned."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toolbar/demo/demo.html"
+/>
+
+## Inverted
+
+Set `inverted` to move the toolbar's divider from the bottom edge to the top — use it on a footer toolbar, where the divider should separate it from the content above rather than below.
+
+<Example
+  description="An inverted toolbar's divider sits on top instead of the bottom."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toolbar/inverted/inverted.html"
+/>

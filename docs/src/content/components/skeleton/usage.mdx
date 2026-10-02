@@ -1,0 +1,81 @@
+---
+title: Skeleton
+description: A skeleton screen is a low-fidelity placeholder that gradually loads into real content, giving users a visual cue that content is on its way.
+status: stable
+source: core
+category: feedback
+storybookId: components-skeleton--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-skeleton` shapes itself to match the content it's standing in for through `text`, `avatar`, `listItem`, `chip`, `button`, and `formField`, plus `stretch`. Use it whenever the size and shape of the incoming content is already known; when it isn't, use a linear or circular progress indicator, or a busy indicator for a full-page load, instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use skeleton loading when the size and shape of the incoming content is already known and the wait is longer than a second.",
+      "Match each skeleton shape to the specific piece of content it stands in for.",
+      "For a list, two or three skeleton items are enough — they don't need to match the final loaded count.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a skeleton when the content's eventual size or shape is unknown — use a progress indicator instead.",
+      "Don't leave a skeleton on screen once its real content is ready — swap it out immediately.",
+      "Don't mix skeleton loading and a spinner for the same piece of content.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+The default skeleton renders as a generic block; set a shape attribute to match specific content instead.
+
+<Example
+  description="A generic skeleton block."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skeleton/demo/demo.html"
+/>
+
+## Profile layout
+
+Combine `avatar` and `text` skeletons to stand in for a profile-style layout while its real content loads.
+
+<Example
+  description="An avatar paired with text skeletons for a profile card."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skeleton/profile/profile.html"
+/>
+
+## List
+
+Set `listItem` to match the height and spacing of a real list row.
+
+<Example
+  description="A few list-item skeletons standing in for rows that haven't loaded yet."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skeleton/list/list.html"
+/>
+
+## Matching other components
+
+Set `chip`, `button`, or `formField` to match the shape of those specific components while their real content loads.
+
+<Example
+  title="Form field"
+  description="Form-field skeletons standing in for fields that haven't loaded yet."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skeleton/form-field/form-field.html"
+/>
+
+<Example
+  title="Chips"
+  description="Chip skeletons standing in for chips that haven't loaded yet."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/skeleton/chips/chips.html"
+/>

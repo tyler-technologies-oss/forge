@@ -1,0 +1,61 @@
+---
+title: Icon
+description: Icons render a registered SVG from the Tyler Forge icon library, or a custom source, to represent information or reinforce an action.
+status: stable
+source: core
+category: utilities
+storybookId: components-icon--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-icon` renders an SVG by `name` from icons registered via `IconRegistry.define(...)`, or a raw string passed to `src`, through `theme`, `lazy`, and `viewbox`. Register every icon a page uses up front in `IconRegistry.define(...)`; an unregistered `name` with `external` set can fetch from the network instead, but registering ahead of time keeps icons from popping in. Use icons to represent information visually or reinforce an action's meaning — never as the sole way to convey something essential, since not every icon's meaning is obvious to every user.
+
+<InlineMessage theme="warning" title="Register icons where a bundler won't tree-shake the call away">
+  `IconRegistry.define(...)` is side-effectful but not statically analyzable, so bundlers can identify the call as dead code and strip it from a production build even though it worked in dev. Call it inside a class constructor, a static initialization block, or a module that's part of the app's entry point — not a module that's only reachable through an import a bundler could otherwise decide is unused.
+
+  ```js
+  class MyComponent extends HTMLElement {
+    static {
+      IconRegistry.define([tylIconForgeLogo]);
+    }
+  }
+  ```
+</InlineMessage>
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Register every icon a page needs in IconRegistry.define(...) rather than relying on external fetches.",
+      "Pair an icon with a visible label or an accessible name whenever it conveys essential meaning on its own.",
+      "Use icons consistently across a set of related items — either every item has one, or none does.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't rely on an icon alone to convey information essential to completing a task.",
+      "Don't use external for icons on every page load — it adds a network request the registry avoids.",
+      "Don't mix icon styles or weights within the same group of related items.",
+    ]}
+  />
+</Rules>
+
+## Custom SVG
+
+Set `src` to a raw SVG string for a one-off icon that isn't in the registry.
+
+<Example
+  description="A custom SVG passed directly via src."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon/custom-svg/custom-svg.html"
+/>
+

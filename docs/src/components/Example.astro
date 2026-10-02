@@ -1,0 +1,415 @@
+---
+/**
+ * Example — pairs a live preview with the same markup as a syntax-highlighted
+ * code snippet. Author writes the demo once as children (or points at a
+ * published block via `blockUrl`), and the component derives the code string
+ * from the rendered HTML at build time.
+ *
+ * Blocks preview in an iframe pointed directly at `blockUrl` — the block's
+ * own document, styles, and scripts run isolated from the page, which is the
+ * only way to run a block's inline `<script>` without the double-registration
+ * problems of injecting its markup into the page DOM. The iframe starts at a
+ * default height and grows to fit once the block posts
+ * `{ type: 'forge-block-height-change', height }` via `window.postMessage`;
+ * see `initExampleFrames` below.
+ *
+ * Known limitation: MDX interpolation, comments, and long attribute strings
+ * appear verbatim in the snippet. If a demo needs a hand-tuned snippet, pass
+ * one via the `code` prop instead.
+ */
+import type { CodeLanguage } from "astro";
+import { Code } from "astro:components";
+import { getBlockHtml, getBlockSourceJsUrl } from "../data/blocks";
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: CodeLanguage;
+  code?: string;
+  /**
+   * URL to a block's HTML file (e.g. from the blocks manifest via
+   * `getBlockFileUrl`). When set, the preview panel renders the block in an
+   * iframe pointed at this URL, and the block's body markup is fetched at
+   * build time only to derive the Code panel's snippet — the block stays
+   * the single source of truth for both.
+   */
+  blockUrl?: string;
+  /**
+   * Pins the preview iframe to a fixed height (e.g. `"480px"`), overriding
+   * the dynamic `forge-block-height-change` resizing below. Needed for
+   * overlay demos (dialog, sheets, drawers) — their resting body is just a
+   * trigger, so the block's body-height observer reports a tiny height, and
+   * the overlay itself can't grow the iframe because it renders inside the
+   * iframe's own (now tiny) viewport rather than adding to body scroll size.
+   */
+  height?: string;
+}
+
+const {
+  title,
+  description,
+  lang = "html",
+  code: codeProp,
+  blockUrl,
+  height,
+} = Astro.props;
+
+/**
+ * Blocks ship as full HTML documents (head + theme/registration scripts).
+ * Only the `<body>` markup is relevant for a preview — the head's stylesheets
+ * and Forge registration are already handled by the page shell.
+ *
+ * A block's body script (e.g. one that populates an autocomplete's options)
+ * can't survive `set:html` — the browser never executes script tags injected
+ * that way. Strip them out of the markup, but keep their (resolved-absolute)
+ * `src` so the client script below can load them explicitly.
+ */
+interface BlockScript {
+  /** Opening-tag attributes (e.g. `type="module"`), with `src` removed. */
+  attrs: string;
+  /** Resolved absolute URL to the script's source file. */
+  src: string;
+}
+
+function extractBlockBody(
+  html: string,
+  baseUrl: string,
+): { body: string; scripts: BlockScript[] } {
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+  const scripts: BlockScript[] = [];
+
+  const body = (bodyMatch ? bodyMatch[1] : html)
+    .replace(
+      /<script\b([^>]*)>[\s\S]*?<\/script>/gi,
+      (_match, rawAttrs: string) => {
+        const srcMatch = rawAttrs.match(/\bsrc=["']([^"']+)["']/i);
+        if (srcMatch) {
+          scripts.push({
+            attrs: rawAttrs.replace(/\s*\bsrc=["'][^"']+["']/i, "").trim(),
+            src: new URL(srcMatch[1], baseUrl).href,
+          });
+        }
+        return "";
+      },
+    )
+    .trim();
+
+  return { body, scripts };
+}
+
+/**
+ * Astro injects `data-astro-cid-*` attributes onto elements from scoped .astro
+ * files; strip them so the snippet reads like source, not compiled output.
+ * MDX/Astro also serializes boolean attributes as `attr="true"` /
+ * `attr="false"`; rewrite them to the shorthand forms an author would type.
+ *
+ * MDX's Markdown parser also wraps bare text children of elements in <p> tags
+ * (`<forge-button>\n  Dense\n</forge-button>` becomes `<forge-button><p>Dense</p></forge-button>`).
+ * Unwrap any <p> that sits directly inside a custom element — authors don't
+ * put real paragraphs inside forge-* components, so every such <p> is an
+ * MDX-inserted wrap around a label.
+ */
+function cleanHtml(html: string): string {
+  return html
+    .replace(/\sdata-astro-cid-[a-z0-9]+(?:="[^"]*")?/gi, "")
+    .replace(/\sdata-astro-source-[a-z-]+(?:="[^"]*")?/gi, "")
+    .replace(/\s([a-z-]+)="true"/gi, " $1")
+    .replace(/\s([a-z-]+)="false"/gi, "")
+    .replace(
+      /(<[a-z][a-z0-9-]*-[a-z0-9-]+[^>]*>)\s*<p>([\s\S]*?)<\/p>\s*(?=<\/[a-z][a-z0-9-]*-[a-z0-9-]+>)/gi,
+      "$1$2",
+    );
+}
+
+/**
+ * Pretty-print HTML with 2-space indentation. MDX collapses source whitespace,
+ * so this is the only chance to give the snippet a readable shape. Handles the
+ * subset of markup that shows up in these demos: element tags, self-closing
+ * tags, and text nodes. Not a general HTML formatter.
+ */
+function formatHtml(html: string): string {
+  const voidTags = new Set([
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
+  ]);
+
+  const tokens = html.match(/<\/?[^>]+>|[^<]+/g) ?? [];
+  const out: string[] = [];
+  let depth = 0;
+  const indent = () => "  ".repeat(Math.max(0, depth));
+
+  for (const raw of tokens) {
+    const token = raw.trim();
+    if (!token) continue;
+
+    if (token.startsWith("</")) {
+      depth = Math.max(0, depth - 1);
+      out.push(indent() + token);
+    } else if (token.startsWith("<")) {
+      const tagName = token.match(/^<([a-z][a-z0-9-]*)/i)?.[1]?.toLowerCase();
+      const selfClosing =
+        token.endsWith("/>") || (tagName && voidTags.has(tagName));
+      out.push(indent() + token);
+      if (!selfClosing) depth += 1;
+    } else {
+      out.push(indent() + token);
+    }
+  }
+
+  return out.join("\n");
+}
+
+let code = codeProp ?? "";
+let previewHtml: string | undefined;
+
+if (blockUrl) {
+  const html = await getBlockHtml(blockUrl);
+  if (html) {
+    const extracted = extractBlockBody(html, blockUrl);
+    previewHtml = extracted.body;
+
+    if (!code) {
+      const markup = formatHtml(cleanHtml(previewHtml));
+
+      // Inline the block's clean `.source.js` (not the bundled `src`, whose
+      // imports are rewritten to hashed chunk files) so the snippet reads
+      // like the block's original TS source and is safe to copy/paste.
+      const scriptBlocks = await Promise.all(
+        extracted.scripts.map(async ({ attrs, src }) => {
+          const js = await getBlockHtml(getBlockSourceJsUrl(src));
+          if (!js) return "";
+          const openTag = attrs ? `<script ${attrs}>` : "<script>";
+          return `${openTag}\n${js.trim()}\n</script>`;
+        }),
+      );
+
+      code = [markup, ...scriptBlocks.filter(Boolean)].join("\n\n");
+    }
+  }
+}
+
+if (!code && !blockUrl && Astro.slots.has("default")) {
+  const rendered = await Astro.slots.render("default");
+  code = formatHtml(cleanHtml(rendered));
+}
+---
+
+<section class="mb-large">
+  {title && <h3 class="text-subheading2 mt-0 mb-xsmall">{title}</h3>}
+  {description && <p class="mt-0 mb-small text-medium">{description}</p>}
+
+  <forge-card class="p-0 overflow-hidden" data-example-root>
+    <nav aria-label="Example view">
+      <forge-tab-bar active-tab={0} data-example-tabs clustered>
+        <forge-tab>Preview</forge-tab>
+        <forge-tab>Code</forge-tab>
+      </forge-tab-bar>
+    </nav>
+
+    {
+      blockUrl ? (
+        <div
+          class="example-panel active tonal-card flex items-center justify-center"
+          data-panel="preview">
+          <iframe
+            src={blockUrl}
+            title={title ?? "Block preview"}
+            data-example-frame
+            data-fixed-height={height ? "true" : undefined}
+            class="w-full border-0 h-80"
+            style={height ? `height: ${height}` : undefined}
+          />
+        </div>
+      ) : (
+        <div
+          class="example-panel active tonal-card flex flex-wrap items-center justify-center gap-medium"
+          data-panel="preview">
+          <slot />
+        </div>
+      )
+    }
+
+    <div class="example-panel example-code relative" data-panel="code" hidden>
+      <forge-icon-button
+        class="example-copy"
+        aria-label="Copy code"
+        data-code={code}>
+        <forge-icon name="content_copy"></forge-icon>
+      </forge-icon-button>
+      <Code code={code} lang={lang} theme="one-light" />
+    </div>
+  </forge-card>
+</section>
+
+<style>
+  /*
+   * Astro scoped styles compile in isolation; `@reference` lets `@apply` see
+   * the project's utility classes (Tailwind + forge-tailwind).
+   */
+  @reference "../styles/global.css";
+
+  /*
+   * Astro's <Code /> emits a <pre> with theme-baked inline styles. We can't
+   * reach into it with a Forge component; a two-line utility for padding +
+   * overflow is the sanctioned escape hatch per CLAUDE.md.
+   */
+  .example-code :global(pre.astro-code) {
+    @apply m-0 p-medium overflow-x-auto text-label1;
+  }
+
+  .example-copy {
+    position: absolute;
+    inset-block-start: var(--forge-spacing-xsmall);
+    inset-inline-end: var(--forge-spacing-xsmall);
+    z-index: 1;
+  }
+</style>
+
+<script>
+  import { BLOCKS_BASE_URL } from "../data/blocks";
+
+  const BLOCKS_ORIGIN = new URL(BLOCKS_BASE_URL).origin;
+
+  function initCopyButtons(): void {
+    document.querySelectorAll<HTMLElement>(".example-copy").forEach((btn) => {
+      if (btn.dataset.initialized === "true") return;
+      btn.dataset.initialized = "true";
+
+      btn.addEventListener("click", async (event) => {
+        // The copy button sits inside a tab panel; don't let the click bubble
+        // to the tab-bar (Forge doesn't propagate here, but be defensive).
+        event.stopPropagation();
+        const code = btn.dataset.code ?? "";
+        try {
+          await navigator.clipboard.writeText(code);
+          const icon = btn.querySelector("forge-icon");
+          const original = icon?.getAttribute("name") ?? "content_copy";
+          icon?.setAttribute("name", "check");
+          setTimeout(() => icon?.setAttribute("name", original), 1500);
+        } catch {
+          // Clipboard access blocked; fall through silently.
+        }
+      });
+    });
+  }
+
+  /**
+   * Some demos preview an overlay element (dialog, bottom sheet, etc.) that
+   * defaults to `mode="modal"` — setting `open` on it directly in the markup
+   * makes it take over the page the instant it connects. `data-example-open`
+   * / `data-example-close` let an inline demo wire a real trigger/dismiss
+   * button instead, toggling `.open` on the element with the matching `id`.
+   */
+  function initExampleOpenClose(): void {
+    document
+      .querySelectorAll<HTMLElement>(
+        "[data-example-open], [data-example-close]",
+      )
+      .forEach((trigger) => {
+        if (trigger.dataset.initialized === "true") return;
+        trigger.dataset.initialized = "true";
+
+        const root = trigger.closest<HTMLElement>("[data-example-root]");
+        const openId = trigger.dataset.exampleOpen;
+        const closeId = trigger.dataset.exampleClose;
+
+        trigger.addEventListener("click", () => {
+          const target = root?.querySelector<HTMLElement & { open?: boolean }>(
+            `#${openId ?? closeId}`,
+          );
+          if (target) target.open = openId != null;
+        });
+      });
+  }
+
+  /**
+   * Block iframes start at a default height and grow to fit once the block
+   * posts `{ type: 'forge-block-height-change', height }` (see the height
+   * observer in the blocks repo). Verify `event.origin` against the blocks
+   * host per the recommended snippet, then match by `contentWindow` — origin
+   * alone can't tell apart multiple block iframes on the same page. Frames
+   * rendered with the `height` prop (`data-fixed-height`) opt out entirely —
+   * see the `height` prop doc above for why.
+   */
+  let framesListenerAttached = false;
+
+  function initExampleFrames(): void {
+    if (framesListenerAttached) return;
+    framesListenerAttached = true;
+
+    window.addEventListener("message", (event: MessageEvent) => {
+      if (event.origin !== BLOCKS_ORIGIN) return;
+      if (event.data?.type !== "forge-block-height-change") return;
+
+      const height = event.data?.height;
+      if (typeof height !== "number") return;
+
+      document
+        .querySelectorAll<HTMLIFrameElement>(
+          "[data-example-frame]:not([data-fixed-height])",
+        )
+        .forEach((frame) => {
+          if (frame.contentWindow === event.source) {
+            frame.style.height = `${height}px`;
+          }
+        });
+    });
+  }
+
+  function initExampleTabs(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-example-tabs]")
+      .forEach((tabBar) => {
+        if (tabBar.dataset.initialized === "true") return;
+        tabBar.dataset.initialized = "true";
+
+        const root = tabBar.closest<HTMLElement>("[data-example-root]");
+        if (!root) return;
+
+        const previewPanel = root.querySelector<HTMLElement>(
+          '[data-panel="preview"]',
+        );
+        const codePanel = root.querySelector<HTMLElement>(
+          '[data-panel="code"]',
+        );
+        if (!previewPanel || !codePanel) return;
+
+        // Preview is the default. Detach the code panel entirely so it
+        // isn't in the DOM until requested, and drop the SSR `hidden` on
+        // both panels — from here on we control visibility by presence.
+        codePanel.remove();
+        codePanel.removeAttribute("hidden");
+        previewPanel.removeAttribute("hidden");
+
+        let activePanel: HTMLElement = previewPanel;
+
+        tabBar.addEventListener("forge-tab-bar-change", ((
+          event: CustomEvent<{ index: number }>,
+        ) => {
+          const target = event.detail.index === 0 ? previewPanel : codePanel;
+          if (target === activePanel) return;
+          activePanel.replaceWith(target);
+          activePanel = target;
+        }) as EventListener);
+      });
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    initCopyButtons();
+    initExampleTabs();
+    initExampleOpenClose();
+    initExampleFrames();
+  });
+</script>

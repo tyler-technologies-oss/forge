@@ -1,0 +1,75 @@
+---
+title: Card
+description: Cards group related content and actions about a single topic into one surface.
+status: stable
+source: core
+category: layout
+storybookId: components-card--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-card` groups content and actions about one topic through `raised` and `no-padding`. Reach for a `forge-scaffold` inside it once the card needs a distinct header, scrollable body, and footer. Use a card to organize related information or preview a record that links to the full one; avoid it when the content inside isn't actually related, or when scanning and comparing homogeneous data matters more than grouping.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep everything inside a card related to a single topic or record.",
+      "Align content inside a card consistently — centered or left-aligned, not mixed.",
+      "Show a hover or focus state on a card that's clickable or draggable, so its interactivity is obvious.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't group unrelated content into the same card.",
+      "Don't use a card when scanning and comparing homogeneous data matters more than grouping — a table or list fits better.",
+      "Don't mix alignment styles for content within the same card.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A card applies consistent padding and shape to its content by default.
+
+<Example
+  description="A basic card with default padding."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/demo/demo.html"
+/>
+
+## Header, body, and footer
+
+Compose a header (title plus an overflow action), body content, and a footer of actions — all optional, depending on what the card needs.
+
+<Example
+  description="A card with a header, body, and footer of actions."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/styled/styled.html"
+/>
+
+## With a scaffold
+
+Nest a `forge-scaffold` inside a card once it needs a pinned header and footer around a scrollable body.
+
+<Example
+  description="A card structured with a scaffold's header, body, and footer slots."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/scaffold/scaffold.html"
+/>
+
+## Raised
+
+Set `raised` for a stronger shadow that lifts the card above its surroundings.
+
+<Example
+  description="A raised card sits above its surroundings with a stronger shadow."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/raised/raised.html"
+/>
+

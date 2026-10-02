@@ -1,0 +1,57 @@
+---
+title: Paginator
+description: The paginator divides a logically sorted collection into pages, so users can navigate and mentally orient within the set.
+status: stable
+source: core
+category: navigation
+storybookId: components-paginator--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-paginator` navigates a `total`-item collection through `pageIndex`, `pageSize`, `pageSizeOptions`, and `firstLast`/`first` jump buttons, plus an `alternative` compact layout. Pair it with a <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> or <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> whose data is sorted in a logical order, so a user can jump to a page or mentally orient within the set. For casual browsing or discovery, infinite scroll fits better than pagination.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Let users choose how many records to show per page via pageSizeOptions.",
+      "Default to fewer records per page for a large data set if load time is a concern.",
+      "Return a user to their previous page position when they navigate back from a detail view.",
+      "Display the paginator below the content it paginates, never fixed in place or covering content.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use pagination for casual browsing or discovery — infinite scroll fits that better.",
+      "Don't fix the paginator's position so it overlaps the content above it.",
+      "Don't omit page-size control on a data set large enough that users would want to adjust it.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Set `total` to the full item count; the paginator computes page count from `pageSize`.
+
+<Example
+  description="A paginator for a 100-item collection."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/paginator/demo/demo.html"
+/>
+
+## Alternative layout
+
+Set `alternative` for a more compact layout that swaps the page-size select and range label for a simpler page-count label — useful in tight spaces.
+
+<Example
+  description="The compact alternative layout, better suited to tight spaces."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/paginator/alternative/alternative.html"
+/>

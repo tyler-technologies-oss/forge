@@ -1,0 +1,54 @@
+---
+/**
+ * InlineMessage — wraps <forge-inline-message>, exposing `title` as a plain
+ * string prop and the default slot for the message body.
+ *
+ * `title` is a prop (not a slotted child) specifically so there's only one
+ * JSX child position left for MDX to parse. A single-line JSX element like
+ * `<span slot="title">` followed by adjacent body content with no blank line
+ * gets treated as one continuous CommonMark HTML block — the title and body
+ * merge into the same node before Astro's slot distribution ever sees them.
+ * Removing the second child removes that failure mode entirely, with no
+ * blank-line convention required from MDX authors.
+ *
+ * The body still comes through as native slotted content (via <slot />), so
+ * MDX may still wrap it in a <p> — that's handled with CSS below rather than
+ * by inspecting/rewriting the rendered HTML.
+ */
+import type { InlineMessageTheme } from "@tylertech/forge";
+
+interface Props {
+  theme?: InlineMessageTheme;
+  icon?: string;
+  title?: string;
+}
+
+const THEME_ICONS: Partial<Record<InlineMessageTheme, string>> = {
+  info: "info",
+  "info-secondary": "info",
+  success: "check_circle",
+  warning: "warning",
+  error: "error",
+};
+
+const {
+  theme = "info",
+  icon = THEME_ICONS[theme] ?? "info_outline",
+  title,
+} = Astro.props;
+---
+
+<forge-inline-message theme={theme} class="mb-large block">
+  {icon && <forge-icon slot="icon" name={icon} external />}
+  {title && <span slot="title">{title}</span>}
+  <span class="inline-message-body"><slot /></span>
+</forge-inline-message>
+
+<style>
+  /* Slotted MDX content isn't part of this component's own template, so
+     Astro's scoping can't reach it without :global() — same pattern as
+     ContentPageLayout's `.content-body :global(h2)`. */
+  .inline-message-body :global(p) {
+    margin: 0;
+  }
+</style>

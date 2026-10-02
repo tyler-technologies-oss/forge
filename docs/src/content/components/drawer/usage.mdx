@@ -1,0 +1,76 @@
+---
+title: Drawer
+description: Drawers support persistent navigation or supplementary content pinned to the left or right edge of the screen.
+status: stable
+source: core
+category: navigation
+storybookId: components-drawer--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+<InlineMessage theme="warning">
+  The drawer component provides no semantics by default. Supply your own `<aside>` for navigation, or the appropriate ARIA roles for other content.
+</InlineMessage>
+
+`forge-drawer` pins persistent navigation or supplementary content to an edge through `open` and `direction`, and slots into a `forge-scaffold`'s side slots. Use a plain drawer when it should stay visible and dismissible by choice, `forge-mini-drawer` when it should collapse to a narrow icon rail, and `forge-modal-drawer` when it should overlay the page with a backdrop instead of sharing space with it. For apps with fewer than five primary destinations, use <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tabs</a> instead of a navigation drawer.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep the drawer's menu button visible in the app bar at every screen size so it can always be reopened.",
+      "Use a plain, dismissible drawer on desktop and a modal drawer at tablet and mobile widths for the same navigation.",
+      "Use a mini drawer on desktop when the main content needs the extra width a full drawer would take.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't duplicate primary navigation in both a drawer and the app bar — pick one place for it.",
+      "Don't build a modal side panel from forge-modal-drawer for a one-off sidesheet — prefer forge-dialog with a left-sheet or right-sheet preset instead.",
+      "Don't use a navigation drawer for fewer than five primary destinations — tabs are simpler.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A plain drawer sits in a scaffold's side slot alongside the main content, toggled open and closed by a menu button in the app bar.
+
+<Example
+  description="A dismissible drawer with navigation links, inside a scaffold."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/drawer/demo/demo.html"
+  height="350px"
+/>
+
+## Mini drawer
+
+`forge-mini-drawer` collapses to a narrow icon rail and optionally expands to full width on pointer `hover` — use it on desktop when the main content needs the extra width a full drawer would take. Hover-to-expand is a pointer-only affordance and isn't available on touch devices.
+
+<Example
+  description="A mini drawer collapsed to an icon rail, with tooltips labeling each item."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/drawer/mini-drawer/demo/demo.html"
+  height="350px"
+/>
+
+## Modal drawer
+
+<InlineMessage theme="warning" title="Deprecated">
+  `forge-modal-drawer` is being phased out in favor of `forge-dialog` with a sheet preset (`left-sheet` or `right-sheet`) — prefer that for new work.
+</InlineMessage>
+
+`forge-modal-drawer` slides in over the page with a backdrop instead of sharing space with the content — typically used at tablet and mobile widths in place of a dismissible drawer.
+
+<Example
+  description="A modal drawer overlaying the page with a backdrop."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/drawer/modal-drawer/demo/demo.html"
+/>

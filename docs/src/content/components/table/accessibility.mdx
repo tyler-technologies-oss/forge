@@ -1,0 +1,11 @@
+## Don't use a table for layout
+
+Reserve `forge-table` for actual tabular data — using it to lay out unrelated content makes the page harder to parse for screen reader users, who rely on table semantics to mean an actual data grid.
+
+## Row selection
+
+The selection checkbox in each row automatically receives an `aria-label="Select row"`, so no extra labeling is needed there.
+
+## Interactive cell content
+
+If a column renders an interactive control (a button, a link, a form field), make sure it's reachable and operable by keyboard, the same as it would be with a mouse.

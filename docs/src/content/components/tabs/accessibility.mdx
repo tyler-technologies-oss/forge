@@ -1,0 +1,9 @@
+## Tab list and panel roles
+
+A tab bar and its content follow the standard `tablist`/`tab`/`tabpanel` pattern: the container needs a `tablist` role, each tab needs an `aria-controls` pointing at its corresponding content, and each content element needs to be labelled by its tab.
+
+`forge-tab-panel` automatically manages these ARIA relationships and focus for you when paired with `forge-tab-bar` — you don't need to hand-wire `aria-controls` or `aria-labelledby` yourself in that setup.
+
+## Keyboard interaction
+
+Every tab must be reachable by the tab key and selectable by keyboard, the same as it would be with a mouse. Only the content belonging to the currently selected tab should be keyboard-reachable — inactive tab panels should be removed from the tab order, not just visually hidden.

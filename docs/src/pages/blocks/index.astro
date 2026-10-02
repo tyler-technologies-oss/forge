@@ -1,0 +1,191 @@
+---
+/**
+ * Blocks listing page - displays all blocks grouped by category.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentHeader from "../../components/ContentHeader.astro";
+import PageScaffold from "../../components/PageScaffold.astro";
+import {
+  getBlocksGroupedByCategory,
+  getBlockScreenshotUrl,
+  truncateDescription,
+  type GroupedBlocks,
+} from "../../data/blocks";
+
+// Individual component blocks now surface directly on each component's own
+// usage page, so the listing only needs to showcase larger, multi-component patterns.
+const groupedBlocks = (await getBlocksGroupedByCategory()).filter(
+  (group) => group.label !== "Components",
+);
+const categoryOptions = groupedBlocks.map((group) => group.label);
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Blocks"
+  description="Pre-built UI patterns and templates"
+  wide>
+  <PageScaffold class="blocks-page">
+    <ContentHeader
+      slot="header"
+      title="Blocks"
+      description="Pre-built UI patterns and layouts to accelerate development."
+    />
+
+    <div>
+      <div class="mb-xlarge flex flex-col gap-medium">
+        <forge-text-field class="block w-full">
+          <input
+            type="text"
+            id="block-filter"
+            placeholder="Filter by name or tag..."
+          />
+        </forge-text-field>
+        <forge-chip-set id="category-filter" type="filter" dense>
+          {
+            categoryOptions.map((label) => (
+              <forge-chip value={label}>{label}</forge-chip>
+            ))
+          }
+        </forge-chip-set>
+      </div>
+
+      {
+        groupedBlocks.length === 0 ? (
+          <div class="flex flex-col items-center justify-center p-xxlarge bg-surface-container-low rounded-lg text-center text-low">
+            <forge-icon
+              name="widgets"
+              external
+              class="text-[48px] mb-medium opacity-50"
+            />
+            <p class="m-0">
+              Blocks are currently being loaded. Please check back soon.
+            </p>
+          </div>
+        ) : (
+          <div id="blocks-container">
+            {groupedBlocks.map((group) => (
+              <section
+                class="category-section mb-xxlarge"
+                data-category={group.label}>
+                <h2 class="text-heading4 mt-0 mb-large">{group.label}</h2>
+                <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-large">
+                  {group.items.map((block) => (
+                    <div
+                      class="block-card"
+                      data-name={block.name.toLowerCase()}
+                      data-tags={block.tags.join(" ").toLowerCase()}>
+                      <forge-card class="h-full">
+                        <forge-button-area class="h-full">
+                          <a
+                            slot="button"
+                            href={`${baseUrl}blocks/${block.id}/`}
+                            aria-label={`View ${block.name} block`}
+                          />
+                          <div class="block-preview aspect-video w-full overflow-hidden">
+                            <img
+                              src={getBlockScreenshotUrl(block)}
+                              alt={`Preview of ${block.name}`}
+                              loading="lazy"
+                              class="w-full h-full object-cover object-top"
+                            />
+                          </div>
+                          <div class="p-medium">
+                            <h3 class="text-heading3 mt-0 mb-xsmall">
+                              {block.name}
+                            </h3>
+                            <p class="text-medium mt-0 mb-medium">
+                              {truncateDescription(block.description)}
+                            </p>
+                          </div>
+                        </forge-button-area>
+                      </forge-card>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </PageScaffold>
+</BaseLayout>
+
+<script>
+  function initBlockFilter(): void {
+    const filterInput = document.getElementById(
+      "block-filter",
+    ) as HTMLInputElement | null;
+    const categoryChips = document.getElementById("category-filter");
+    if (!filterInput || !categoryChips) return;
+
+    const getSelectedCategories = (): Set<string> => {
+      const selected = new Set<string>();
+      categoryChips
+        .querySelectorAll<
+          HTMLElement & { selected?: boolean; value?: string }
+        >("forge-chip")
+        .forEach((chip) => {
+          if (chip.selected && chip.value) selected.add(chip.value);
+        });
+      return selected;
+    };
+
+    const applyFilters = (): void => {
+      const query = filterInput.value.toLowerCase().trim();
+      const selectedCategories = getSelectedCategories();
+      const filterByCategory = selectedCategories.size > 0;
+      const cards = document.querySelectorAll<HTMLElement>(".block-card");
+      const sections =
+        document.querySelectorAll<HTMLElement>(".category-section");
+
+      cards.forEach((card) => {
+        const name = card.dataset.name ?? "";
+        const tags = card.dataset.tags ?? "";
+        const matches = !query || name.includes(query) || tags.includes(query);
+        card.style.display = matches ? "" : "none";
+      });
+
+      sections.forEach((section) => {
+        const category = section.dataset.category ?? "";
+        const matchesCategory =
+          !filterByCategory || selectedCategories.has(category);
+        const hasVisible = Array.from(
+          section.querySelectorAll<HTMLElement>(".block-card"),
+        ).some((card) => card.style.display !== "none");
+        section.style.display = matchesCategory && hasVisible ? "" : "none";
+      });
+    };
+
+    filterInput.addEventListener("input", applyFilters);
+    categoryChips.addEventListener("forge-chip-select", applyFilters);
+  }
+
+  document.addEventListener("astro:page-load", initBlockFilter);
+</script>
+
+<style is:global>
+  /* Forge component CSS variables (custom properties on <forge-card> and
+     <forge-button-area>) — not representable as Tailwind utilities.
+     `.blocks-page` now lives on PageScaffold's root element, outside this
+     file's scoped-style attribute, so this must be global to still match. */
+  .blocks-page {
+    --card-radius: 12px;
+  }
+
+  .blocks-page forge-button-area {
+    --forge-button-area-shape: var(--card-radius);
+  }
+
+  .block-card forge-card {
+    --forge-card-overflow: hidden;
+    --forge-card-padding: 0;
+    --forge-card-shape: var(--card-radius);
+  }
+
+  /* Top-corner radius on the block preview image matches the card radius. */
+  .block-preview img {
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+  }
+</style>

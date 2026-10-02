@@ -1,0 +1,89 @@
+---
+title: Date Range Picker
+description: A date input component with an integrated calendar popup for selecting date ranges with separate "from" and "to" date values.
+status: stable
+source: core
+category: forms
+storybookId: components-date-range-picker--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-date-range-picker` wraps a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> with two inputs — "from" and "to" — and adds a calendar popup for picking both ends of a range, through `from`, `to`, `min`, `max`, `disabledDates`, `disabledDaysOfWeek`, `masked`, `showToday`, and `showClear`. Use it whenever a user is entering a span of dates, like time off or a project's start and end; for a single date, use a <a href={`${import.meta.env.BASE_URL}components/date-picker/usage/`}>date picker</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Let a user type both dates directly as well as pick them from the calendar.",
+      "Show which end of the range — from or to — a given input represents.",
+      "Constrain the range with min and max when dates outside it are genuinely invalid, not just unlikely.",
+      "Validate that the from date doesn't fall after the to date, and surface a clear, actionable error if it does.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a date range picker for a single date — use a date picker instead.",
+      "Don't rely on the calendar popup alone — typed input needs to work for users who know the exact dates already.",
+      "Don't hide which input is from and which is to.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Type into either input or use the trailing calendar button to open the popup and pick both ends of the range.
+
+<Example
+  description="A date range picker with typed inputs and a calendar popup."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/date-range-picker/demo/demo.html"
+  height="350px"
+/>
+
+## Constraints
+
+Set `min` and `max` to bound both ends of the range to a valid window.
+
+<Example
+  description="A date range picker bounded to a min/max range."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/date-range-picker/constraints/constraints.html"
+  height="350px"
+/>
+
+## Masking
+
+Set `masked` to apply an input mask, shown as a placeholder in each field, so typed dates are corrected to a consistent format as the user types.
+
+<Example
+  description="A masked date range picker showing its format as a placeholder."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/date-range-picker/masking/masking.html"
+  height="350px"
+/>
+
+## Today and clear shortcuts
+
+Set `showToday` and `showClear` to add shortcuts to the calendar popup — disable the Today shortcut for a range that only accepts future dates.
+
+<Example
+  description="Disabling the Today shortcut for a future-only range."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/date-range-picker/shortcuts/shortcuts.html"
+  height="350px"
+/>
+
+## Disabled
+
+Set `disabled` to prevent typing or opening the calendar popup.
+
+<Example
+  description="A disabled date range picker."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/date-range-picker/disabled/disabled.html"
+  height="350px"
+/>

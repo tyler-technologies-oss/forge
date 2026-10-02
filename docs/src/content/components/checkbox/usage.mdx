@@ -1,0 +1,75 @@
+---
+title: Checkbox
+description: Checkboxes allow for selecting multiple options from a set.
+status: stable
+source: core
+category: forms
+storybookId: components-checkbox--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-checkbox` selects one or more independent options through `checked` and `indeterminate`, participates natively in form submission and validation (`required`, `readonly`, `name`), and supports `dense` and `label-position`. Use a checkbox when a user can pick any number of options from a list; use a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio button</a> instead when exactly one option in a set must be chosen, or a <a href={`${import.meta.env.BASE_URL}components/switch/usage/`}>switch</a> instead to toggle a single setting on or off.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use checkboxes when a user can select zero, one, or many options from a list.",
+      "Pair every checkbox with a clear, clickable label — don't rely on the box alone.",
+      "Use the indeterminate state to reflect a parent checkbox whose children are partially selected.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a checkbox for a single on/off setting — use a switch instead.",
+      "Don't use a checkbox when only one option in a set can be selected — use a radio button instead.",
+      "Don't treat indeterminate as user-settable — it's a display-only state the app computes from the children's selection.",
+    ]}
+  />
+</Rules>
+
+## Indeterminate
+
+Set `checked` and `indeterminate` to render distinct marks — indeterminate reflects a parent checkbox whose children are only partially selected.
+
+<Example
+  description="Checked and indeterminate render distinct marks."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/checkbox/indeterminate/indeterminate.html"
+/>
+
+## Label position
+
+Set `label-position` to control whether the label sits before or after the checkbox.
+
+<Example
+  description="label-position controls whether the label sits before or after the checkbox."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/checkbox/label-position/label-position.html"
+/>
+
+## Dense
+
+Set `dense` to reduce the checkbox's size for compact layouts.
+
+<Example
+  description="Dense reduces the checkbox's size for compact layouts."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/checkbox/dense/dense.html"
+/>
+
+## Disabled and readonly
+
+`disabled` excludes the checkbox from the form; `readonly` keeps it in the form but locks its value.
+
+<Example
+  description="Disabled excludes the checkbox from the form; readonly keeps it in the form but locks its value."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/checkbox/disabled-and-readonly/disabled-and-readonly.html"
+/>
+

@@ -1,0 +1,35 @@
+---
+/**
+ * Individual block detail page.
+ * Uses catch-all route [...id] because block IDs can contain slashes.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentHeader from "../../components/ContentHeader.astro";
+import PageScaffold from "../../components/PageScaffold.astro";
+import BlockViewer from "../../components/BlockViewer.svelte";
+import { getAllBlocks, getBlockFileUrl, type Block } from "../../data/blocks";
+
+export async function getStaticPaths() {
+  const blocks = await getAllBlocks();
+
+  return blocks.map((block) => ({
+    params: { id: block.id },
+    props: { block },
+  }));
+}
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+const fileUrl = getBlockFileUrl(block);
+---
+
+<BaseLayout title={block.name} description={block.description} wide>
+  <PageScaffold class="block-detail">
+    <ContentHeader slot="header" title={block.name} description={block.description} showBackButton />
+
+    <BlockViewer client:load title={block.name} iframeUrl={fileUrl} />
+  </PageScaffold>
+</BaseLayout>

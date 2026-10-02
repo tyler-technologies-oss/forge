@@ -1,0 +1,67 @@
+---
+import type { NavItem } from "../config/navigation";
+
+interface Props {
+  item: NavItem;
+  baseUrl: string;
+  indented?: boolean;
+}
+
+const { item, baseUrl, indented } = Astro.props;
+
+const hasChildren = item.children && item.children.length > 0;
+const fullHref = item.href
+  ? `${baseUrl}${item.href.replace(/^\//, "")}`
+  : undefined;
+
+// For expandable items, create unique IDs for trigger/open-icon
+const triggerId = `${item.id}-trigger`;
+const openIconId = `${item.id}-open-icon`;
+---
+
+{
+  hasChildren ? (
+    <forge-list-item>
+      {item.icon && (
+        <forge-icon slot="start" name={item.icon} class="custom-icon" />
+      )}
+      <button type="button" id={triggerId}>
+        {item.label}
+      </button>
+      <forge-open-icon slot="end" id={openIconId} />
+      <forge-expansion-panel
+        slot="additional-content"
+        trigger={triggerId}
+        open-icon={openIconId}>
+        <forge-list indented navlist>
+          {item.children!.map((child) => (
+            <Astro.self
+              item={child}
+              baseUrl={baseUrl}
+              indented={true}
+            />
+          ))}
+        </forge-list>
+      </forge-expansion-panel>
+    </forge-list-item>
+  ) : (
+    <forge-list-item>
+      {item.icon && !indented && (
+        <forge-icon slot="start" name={item.icon} class="custom-icon" />
+      )}
+      <a href={fullHref}>{item.label}</a>
+    </forge-list-item>
+  )
+}
+
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  forge-list {
+    @include nav-list-item();
+  }
+
+  .custom-icon {
+    @include small-icon;
+  }
+</style>

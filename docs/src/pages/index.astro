@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const popular = [
+  {
+    title: "Icon Library",
+    description: "Browse and search Forge's full icon set.",
+    href: `${baseUrl}icons/library/`,
+    icon: "palette",
+  },
+  {
+    title: "Developer Getting Started",
+    description: "Install Forge and start building in minutes.",
+    href: `${baseUrl}developing/installation/`,
+    icon: "code",
+  },
+  {
+    title: "Blocks",
+    description: "Pre-built UI patterns and layouts to accelerate development.",
+    href: `${baseUrl}blocks/`,
+    icon: "widgets",
+  },
+];
+
+const explore = [
+  {
+    title: "Tokens",
+    description: "Color, typography, spacing, and other design tokens.",
+    href: `${baseUrl}tokens/`,
+    icon: "text_shadow",
+  },
+  {
+    title: "FAQ",
+    description: "Answers to common questions about using Forge.",
+    href: `${baseUrl}faq/dropdown-options/`,
+    icon: "help_circle_outline",
+  },
+  {
+    title: "About",
+    description: "Roadmap and release history for the design system.",
+    href: `${baseUrl}about/roadmap/`,
+    icon: "info_outline",
+  },
+];
+---
+
+<BaseLayout title="Home">
+  <div class="home-page">
+    <section class="mb-xxlarge">
+      <h1 class="text-heading6 mt-0 mb-small">Forge Design System</h1>
+      <p class="text-body3 text-medium mt-0 mb-0 max-w-[640px]">
+        Forge is Tyler's enterprise-grade design system for building
+        consistently usable, delightful, and accessible applications.
+      </p>
+    </section>
+
+    <section class="mb-xxlarge">
+      <h2 class="text-heading4 mt-0 mb-medium">Popular</h2>
+      <div
+        class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-medium">
+        {
+          popular.map((item) => (
+            <forge-card class="h-full">
+              <forge-button-area>
+                <a slot="button" href={item.href} aria-label={item.title} />
+                <div class="p-medium">
+                  <div class="w-10 h-10 rounded-full bg-primary-container-low flex items-center justify-center mb-small">
+                    <forge-icon
+                      name={item.icon}
+                      external
+                      class="text-[20px] text-primary"
+                    />
+                  </div>
+                  <h3 class="text-heading3 mt-0 mb-xsmall">{item.title}</h3>
+                  <p class="text-medium mt-0 mb-0">{item.description}</p>
+                </div>
+              </forge-button-area>
+            </forge-card>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-heading4 mt-0 mb-medium">Explore the Docs</h2>
+      <div
+        class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-small">
+        {
+          explore.map((item) => (
+            <forge-card class="h-full">
+              <forge-button-area>
+                <a slot="button" href={item.href} aria-label={item.title} />
+                <div class="p-medium">
+                  <div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center mb-xsmall">
+                    <forge-icon
+                      name={item.icon}
+                      external
+                      class="text-[16px] text-medium"
+                    />
+                  </div>
+                  <h3 class="text-subheading2 mt-0 mb-xxsmall">{item.title}</h3>
+                  <p class="text-low text-label2 mt-0 mb-0">
+                    {item.description}
+                  </p>
+                </div>
+              </forge-button-area>
+            </forge-card>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Forge component CSS variables (custom properties on <forge-card> and
+     <forge-button-area>) — not representable as Tailwind utilities. */
+  .home-page {
+    --card-radius: 12px;
+  }
+
+  .home-page forge-button-area {
+    --forge-button-area-shape: var(--card-radius);
+  }
+
+  .home-page forge-card {
+    --forge-card-overflow: hidden;
+    --forge-card-padding: 0;
+    --forge-card-shape: var(--card-radius);
+  }
+</style>

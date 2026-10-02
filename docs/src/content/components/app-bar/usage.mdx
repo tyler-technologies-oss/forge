@@ -1,0 +1,145 @@
+---
+title: App Bar
+description: App bars are headers used to display branding, navigation, and actions at the top of an application.
+status: stable
+source: core
+category: navigation
+storybookId: components-app-bar--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-app-bar` lays out branding and top-level actions through its `logo`, `title`, `start`, `center`, and `end` slots, plus `elevation`, `theme`, and `themeMode`. Reserve the `start` slot for navigation (typically a menu button that opens a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a>), the `center` slot for app-wide search, and the `end` slot for a small set of purpose-built buttons: help, notifications, an app launcher, and the user's profile.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep the menu button visible at every screen size for apps with a dismissible navigation drawer.",
+      "Reserve center-slot search for apps that are primarily search-driven; place search near the component it searches otherwise.",
+      "Order end-slot actions consistently: help, notifications, app launcher, then profile.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't crowd the end slot with more actions than help, notifications, an app launcher, and profile.",
+      "Don't duplicate primary navigation in both the app bar and a drawer — pick one place for it.",
+      "Don't use app bar search for a filter that's local to a single component on the page.",
+    ]}
+  />
+</Rules>
+
+## Structure
+
+Place a logo in the `logo` slot and a title in the `title` slot (or set `titleText` directly), navigation in `start`, search in `center`, and action buttons in `end`.
+
+<Example
+  description="An app bar composed from every slot at once: menu button, logo, search, and end actions."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/full/full.html"
+/>
+
+## Theme
+
+Set `theme` to tint the app bar, and `themeMode` to `inherit` (the default, applying that theme globally to the app bar and its children) or `scoped` (limiting it to just the app bar itself).
+
+<Example
+  description="A themed app bar, scoped so the theme doesn't leak to the rest of the page."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/white-theme/white-theme.html"
+/>
+
+### Theming pitfalls
+
+<InlineMessage theme="warning">
+  With the default `themeMode="inherit"`, global theme tokens cascade to every child element — including popovers and dialogs opened from the app bar, which can end up styled with the wrong colors. Switch to `themeMode="scoped"` to stop that cascade.
+</InlineMessage>
+
+Scoping the theme comes with a tradeoff: elements placed directly in the app bar no longer inherit its colors automatically either. Set `theme="app-bar"` to opt a child back in — but it's only supported on `forge-button`, `forge-icon-button`, and `forge-tab-bar`. The app bar's own preset buttons (menu, help, profile, notification) already set this for you.
+
+For any other element, reference the app bar's scoped tokens directly — `--forge-app-bar-theme-foreground` and `--forge-app-bar-theme-background-muted`:
+
+```css
+forge-app-bar forge-avatar {
+  --forge-avatar-background: var(--forge-app-bar-theme-foreground);
+  --forge-avatar-color: var(--forge-theme-text-high);
+}
+```
+
+## Menu button
+
+`forge-app-bar-menu-button` is a preset icon button — defaulting to a hamburger `icon` — for opening navigation from the `start` slot.
+
+<Example
+  description="A menu button in the start slot, ready to open a drawer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/menu-button/demo/demo.html"
+/>
+
+## Search
+
+`forge-app-bar-search` wraps a slotted `<input>` with search styling and an icon, through `value`, `placeholder`, and `disabled`, and fires `forge-app-bar-search-input` on Enter.
+
+<Example
+  description="Search in the center slot, styled for the app bar."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/search/demo/demo.html"
+/>
+
+## Help button
+
+`forge-app-bar-help-button` is a preset icon button that opens a dropdown menu of `options` — help links, docs, support contacts.
+
+<Example
+  description="A help button opening a menu of options."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/help-button/demo/demo.html"
+/>
+
+## Notification button
+
+`forge-app-bar-notification-button` pairs a preset bell icon with a <a href={`${import.meta.env.BASE_URL}components/badge/usage/`}>badge</a>, controlled through `showBadge`, `count`, `dot`, and `theme`.
+
+<Example
+  description="A notification button showing an unread dot."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/notifications/demo/demo.html"
+/>
+
+## Profile button
+
+<InlineMessage theme="warning" title="Deprecated">
+  `forge-app-bar-profile-button` is deprecated in favor of the `forge-user-profile` component. It remains available but is frozen — no new features, and possible removal in a future release. Prefer `forge-user-profile` for new work.
+</InlineMessage>
+
+`forge-app-bar-profile-button` shows the signed-in user's avatar and opens a profile card with their `fullName`, `email`, and optional `signOutButton`/`profileButton` actions on click — customize the card further with `profileCardBuilder`.
+
+<Example
+  description="A profile button opening a card with the user's name and email."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/app-bar/profile/demo/demo.html"
+/>
+
+Set `profileCardBuilder` to a callback returning your own DOM to replace the card's default content entirely — useful for a list of account-related links instead of the default name/email/sign-out layout:
+
+```js
+profileButton.profileCardBuilder = () => {
+  const list = document.createElement("forge-list");
+  list.style.setProperty("--forge-list-padding", "0");
+  list.appendChild(buildListItem("My Reports", "assignment"));
+  list.appendChild(buildListItem("My Preferences", "settings"));
+  return list;
+};
+
+function buildListItem(text, icon) {
+  const item = document.createElement("forge-list-item");
+  const iconEl = document.createElement("forge-icon");
+  iconEl.slot = "leading";
+  iconEl.name = icon;
+  item.appendChild(iconEl);
+  item.appendChild(document.createTextNode(text));
+  return item;
+}
+```

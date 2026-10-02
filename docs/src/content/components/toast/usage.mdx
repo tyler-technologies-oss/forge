@@ -1,0 +1,87 @@
+---
+title: Toast
+description: Toasts are brief, non-modal notifications that confirm a user's action and disappear automatically.
+status: stable
+source: core
+category: feedback
+storybookId: components-toast--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-toast` shows a brief, temporary confirmation through `open`, `duration`, `placement`, and `theme`, plus an optional `actionText` and `dismissible` close button. Trigger it imperatively by setting `open` (or calling the static `ToastComponent.present(...)` helper) in response to a user action; reserve it for confirming something that just happened, and show only one at a time. For a message that requires a decision, use a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a> instead; for a page-level announcement, use a <a href={`${import.meta.env.BASE_URL}components/banner/usage/`}>banner</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Confirm an action the user just took, like creating, moving, or updating a record.",
+      "Show only one toast at a time — queue successive toasts instead of stacking them.",
+      "If you add an action label, keep it a genuine alternate action, never \"Dismiss\" or \"Cancel\" — the toast already disappears on its own.",
+      "Display each toast for at least 5 seconds, adding more time for longer messages.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a toast for an error or decision that needs user input — use a dialog instead.",
+      "Don't use a toast for a page-level, persistent announcement — use a banner instead.",
+      "Don't use a toast for information a user might need to reference again — use an inline message instead.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A trigger fires the action, then sets the toast's `open` property (or calls `ToastComponent.present(...)`) to show it. A toast shown via `ToastComponent.present(...)` removes itself from the DOM once `duration` elapses; a declarative `<forge-toast open>` does not — toggle `open` yourself to hide it.
+
+<Example
+  description="A button triggers a toast confirming an action."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toast/demo/demo.html"
+/>
+
+## With dialogs
+
+<InlineMessage theme="warning">
+  A dismissible toast shown while a `forge-dialog` is open is non-interactive by default — the dialog makes everything outside it `inert`. Pass `topLayer: true` to keep it clickable; this appends the toast to the topmost open dialog instead of the page.
+
+  ```js
+  ToastComponent.present({ message: "Save successful", topLayer: true });
+  ```
+</InlineMessage>
+
+## Action and dismiss button
+
+Set `actionText` to add an inline action button, and `dismissible` to add a manual close button alongside the automatic timeout.
+
+<Example
+  description="A dismissible toast adds a manual close button."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toast/dismissible/dismissible.html"
+/>
+
+## Placement
+
+Set `placement` to move the toast to the top of the viewport instead of the default bottom.
+
+<Example
+  description="A toast placed at the top of the viewport instead of the default bottom."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toast/placement/placement.html"
+/>
+
+## Theme
+
+Set `theme` to reinforce the outcome being confirmed, such as `success`.
+
+<Example
+  description="A success-themed toast."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/toast/theme/theme.html"
+/>
+

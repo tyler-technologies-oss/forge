@@ -1,0 +1,29 @@
+---
+/**
+ * ColorSwatch - Renders a single design-token color sample with its name and token.
+ *
+ * Prefer `swatchClass` (a forge-tailwind bg-* utility) when one exists for the token.
+ * Fall back to `token` (a raw CSS custom property) only for tokens with no bg-* utility,
+ * e.g. the text-* and outline-* theme colors.
+ */
+interface Props {
+  title: string;
+  token: string;
+  swatchClass?: string;
+  description?: string;
+}
+
+const { title, token, swatchClass, description } = Astro.props;
+---
+
+<div class="flex items-center gap-medium">
+  <div
+    class:list={["w-10 h-10 rounded-md border border-outline-low shrink-0", swatchClass]}
+    style={swatchClass ? undefined : `background-color: var(${token})`}
+  />
+  <div class="min-w-0">
+    <p class="text-body2 m-0">{title}</p>
+    {description && <p class="text-body3 text-medium m-0">{description}</p>}
+    <code class="text-body3 text-low">{token}</code>
+  </div>
+</div>

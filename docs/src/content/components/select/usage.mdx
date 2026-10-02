@@ -1,0 +1,108 @@
+---
+title: Select
+description: Select components are comboboxes that present a list of options to users for single or multi-selection.
+status: stable
+source: core
+category: forms
+storybookId: components-select--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-select` presents a list of `forge-option` (optionally grouped with `forge-option-group`) inside a field frame, and supports `label`, `placeholder`, `multiple`, and `showSelectAll`. Use it to recommend a default from a closed set of options; reach for a <a href={`${import.meta.env.BASE_URL}components/autocomplete/usage/`}>autocomplete</a> instead once a list runs past 10 or so options, or a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio group</a> instead when every option must stay visible for comparison.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use concise, consistent labels that describe the meaning of the field.",
+      "Use sentence case for every option label.",
+      "Order options logically — alphabetical, numeric, or chronological.",
+      "Recommend a sensible default option when one exists.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a select for more than about 10 options — use an autocomplete instead.",
+      "Don't use a select when only one option can be true and both must stay visible — use radio buttons instead.",
+      "Don't use a colon after the label.",
+      "Don't set option labels in all caps.",
+    ]}
+  />
+</Rules>
+
+## Grouped options
+
+Wrap related `forge-option` elements in a `forge-option-group` to label them as a set.
+
+<Example
+  description="Related options grouped under a labeled forge-option-group."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/grouped-options/grouped-options.html"
+  height="300px"
+/>
+
+## Multiple selection
+
+Set `multiple` to let a user choose more than one option; selected options render as a comma-separated list in the field.
+
+<Example
+  description="Multiple lets a user choose more than one option."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/multiple/multiple.html"
+  height="300px"
+/>
+
+## Select all
+
+Pair `multiple` with `showSelectAll` to add a "select all" option above the list — set `selectAllLabel` to customize its text.
+
+<Example
+  description="showSelectAll adds a select-all option above a multiple select's list."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/select-all/select-all.html"
+  height="300px"
+/>
+
+Clicking "select all" fires `forge-select-all` before the standard `change` event, with `detail.value` (every option's value, or an empty array when deselecting) and `detail.isAllSelected`. Calling `preventDefault()` on `forge-select-all` also suppresses the `change` event that would otherwise follow it.
+
+```js
+selectEl.addEventListener("forge-select-all", (event) => {
+  if (!userMaySelectAll) {
+    event.preventDefault();
+  }
+});
+```
+
+## Label position
+
+Set the field's `label-position` to `inset` (default), `block-start`, or `inline-start` to place the label above, before, or floating inside the field.
+
+<Example
+  title="Above"
+  description="label-position set to block-start."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/label-above/label-above.html"
+  height="300px"
+/>
+
+<Example
+  title="Inline"
+  description="label-position set to inline-start."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/label-inline/label-inline.html"
+  height="300px"
+/>
+
+## Select dropdown
+
+Attach a `forge-select-dropdown` to a button trigger instead of a field, for a select-style menu that isn't tied to a form field's layout.
+
+<Example
+  description="A forge-select-dropdown attached to a button trigger instead of a field."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/select/select-dropdown/select-dropdown.html"
+  height="300px"
+/>

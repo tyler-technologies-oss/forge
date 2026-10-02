@@ -1,0 +1,22 @@
+## Keyboard shortcuts
+
+<table class="forge-data-table">
+  <thead>
+    <tr><th>Key</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Down / Arrow Down</td><td>Opens the dropdown and activates the first option</td></tr>
+    <tr><td>Arrow Up / Arrow Down</td><td>Moves through the list of options</td></tr>
+    <tr><td>Enter</td><td>Selects the active option</td></tr>
+    <tr><td>Home / End</td><td>Jumps to the first or last option</td></tr>
+    <tr><td>Tab</td><td>Single-select: selects the active option and closes the dropdown</td></tr>
+    <tr><td>Escape</td><td>Closes an open dropdown</td></tr>
+    <tr><td>Backspace / Delete</td><td>Edits the input's text; clears a single-select value when the input is empty</td></tr>
+  </tbody>
+</table>
+
+## Screen reader behavior
+
+The input automatically receives `role="combobox"`, `aria-live`, and `aria-owns`. You're still responsible for labeling it yourself — with a `<label>`, `aria-label`, or `aria-labelledby` — the component doesn't provide one for you.
+
+Verify you can tab into the autocomplete and reach every option in the dropdown using only the keyboard.

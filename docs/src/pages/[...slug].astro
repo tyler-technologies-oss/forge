@@ -1,0 +1,20 @@
+---
+import ContentPageLayout from "../layouts/ContentPageLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+
+  return guides.map((guide) => ({
+    params: { slug: guide.id },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+---
+
+<ContentPageLayout frontmatter={guide.data}>
+  <Content />
+</ContentPageLayout>

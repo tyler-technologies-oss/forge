@@ -1,0 +1,87 @@
+---
+title: List
+description: Lists present a vertical, scannable group of related items, from plain text rows to full navigation menus.
+status: stable
+source: core
+category: data-display
+storybookId: components-list--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-list` groups `forge-list-item` children through `dense`, `twoLine`/`threeLine`, `wrap`, `multicolumn`, and `navlist`, while each item carries its own `selected`, `value`, and `start`/`end` slots. Use a list for related, primarily textual items; for content with three or more sortable dimensions, use a <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> instead, and for content built around imagery or non-homogeneous data, use a <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Sort list items in a logical order that makes the content easy to scan.",
+      "Use icons in the start slot consistently — either every item has one, or none does.",
+      "Use navlist styling when a list is functioning as navigation, such as inside a drawer.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a list for content that isn't primarily text — a card handles imagery better.",
+      "Don't use a list when users need to sort or compare across three or more dimensions — use a table instead.",
+      "Don't mix single-line and multi-line items in the same list without a good reason.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Each `forge-list-item` carries its own `value` for identifying which item was interacted with.
+
+<Example
+  description="A basic list of plain text items."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/list/demo/demo.html"
+/>
+
+## Interactive items
+
+Slot a real `<button>` or `<a>` inside a list item and it automatically picks up hover and focus states.
+
+<Example
+  description="List items wrapping interactive buttons."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/list/interactive/interactive.html"
+/>
+
+## As navigation
+
+Set `navlist` on the list and pair each item with a leading icon and an anchor — the pattern used inside a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a>. Mark the active item with its own `selected` attribute, or set `selectedValue` on the list to match an item's `value` — either way, also add `aria-current="page"` to that item, since that's the attribute screen readers actually rely on to announce it as the current page.
+
+<Example
+  description="A navigation-styled list inside a drawer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/list/navigation-menu/navigation-menu.html"
+/>
+
+## Expandable items
+
+Nest an <a href={`${import.meta.env.BASE_URL}components/expansion-panel/usage/`}>expansion panel</a> inside a list item to show or hide additional content or a sub-list. Put that content in an element with `slot="additional-content"` — that's required for it to be visually and structurally separated from the item's main content, and announced correctly by screen readers.
+
+```html
+<forge-list-item>
+  Item with more detail
+  <forge-expansion-panel slot="additional-content">
+    <p>Additional detail shown when expanded.</p>
+  </forge-expansion-panel>
+</forge-list-item>
+```
+
+## Multicolumn
+
+Set `multicolumn` to lay out items in a responsive grid instead of a single column, for a longer list that doesn't need to be scanned top-to-bottom.
+
+<Example
+  description="A longer list laid out in a responsive multicolumn grid."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/list/multicolumn/multicolumn.html"
+/>

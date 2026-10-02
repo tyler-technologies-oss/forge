@@ -1,0 +1,410 @@
+---
+/**
+ * ApiReference — renders a component's public API from CEM data.
+ *
+ * One <forge-structured-card> per API section (Properties, Events, Slots,
+ * CSS Parts, CSS Custom Properties, Methods). Properties + attributes are
+ * merged into a single row so authors see the JS name and the HTML attribute
+ * side by side.
+ */
+import type {
+  ComponentApi,
+  ComponentPropAttr,
+  ComponentEvent,
+  ComponentSlot,
+  ComponentCssPart,
+  ComponentCssProperty,
+  ComponentMethod,
+} from "../data/components";
+import { resolveTypeValues } from "../data/type-resolver";
+import { Code } from "astro:components";
+
+interface Props {
+  api: ComponentApi;
+  source?: "core" | "block";
+}
+
+const { api, source = "core" } = Astro.props;
+
+/**
+ * Derive the side-effect import snippet shown at the top of the API tab.
+ * `source` comes from the MDX frontmatter (`core` → `@tylertech/forge`,
+ * `block` ships without an import); `importSubpath` comes from the
+ * CEM module path. `block` components ship without an import — we skip.
+ */
+function buildImportSnippet(): string | undefined {
+  if (source === "block" || !api.importSubpath) return undefined;
+  return `import "@tylertech/forge/${api.importSubpath}";`;
+}
+
+const importSnippet = buildImportSnippet();
+
+type Cell = string | { code: string } | { type: string; values?: string[] };
+
+/**
+ * Build a type cell, attaching resolved literal values when the CEM type name
+ * matches a known Forge type alias. The badge renders the type name; the
+ * hover popover renders the values.
+ */
+function typeCell(typeText: string): { type: string; values?: string[] } {
+  const values = resolveTypeValues(typeText);
+  return values ? { type: typeText, values } : { type: typeText };
+}
+
+interface TableColumn<T> {
+  header: string;
+  render: (item: T) => Cell;
+  align?: "start" | "end";
+  nowrap?: boolean;
+}
+
+interface ApiSection<T> {
+  title: string;
+  data: T[] | undefined;
+  columns: TableColumn<T>[];
+}
+
+function isCode(v: Cell): v is { code: string } {
+  return typeof v === "object" && v !== null && "code" in v;
+}
+
+function isType(v: Cell): v is { type: string; values?: string[] } {
+  return typeof v === "object" && v !== null && "type" in v;
+}
+
+const sections: ApiSection<
+  | ComponentPropAttr
+  | ComponentEvent
+  | ComponentSlot
+  | ComponentCssPart
+  | ComponentCssProperty
+  | ComponentMethod
+>[] = [
+  {
+    title: "Properties",
+    data: api.propsAndAttrs,
+    columns: [
+      {
+        header: "Property",
+        render: (i) => {
+          const p = (i as ComponentPropAttr).property;
+          return p ? { code: p } : "—";
+        },
+        nowrap: true,
+      },
+      {
+        header: "Attribute",
+        render: (i) => {
+          const a = (i as ComponentPropAttr).attribute;
+          return a ? { code: a } : "—";
+        },
+        nowrap: true,
+      },
+      {
+        header: "Type",
+        render: (i) => typeCell((i as ComponentPropAttr).type),
+      },
+      {
+        header: "Default",
+        render: (i) => {
+          const d = (i as ComponentPropAttr).default;
+          return d ? { code: d } : "—";
+        },
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentPropAttr).description,
+      },
+    ],
+  },
+  {
+    title: "Events",
+    data: api.events,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => ({ code: (i as ComponentEvent).name }),
+        nowrap: true,
+      },
+      { header: "Type", render: (i) => typeCell((i as ComponentEvent).type) },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentEvent).description,
+      },
+    ],
+  },
+  {
+    title: "Slots",
+    data: api.slots,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => ({ code: (i as ComponentSlot).name || "(default)" }),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentSlot).description,
+      },
+    ],
+  },
+  {
+    title: "CSS Parts",
+    data: api.cssParts,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => ({ code: `::part(${(i as ComponentCssPart).name})` }),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentCssPart).description,
+      },
+    ],
+  },
+  {
+    title: "CSS Custom Properties",
+    data: api.cssProperties,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => ({ code: (i as ComponentCssProperty).name }),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentCssProperty).description,
+      },
+    ],
+  },
+  {
+    title: "Methods",
+    data: api.methods,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => ({ code: (i as ComponentMethod).name }),
+        nowrap: true,
+      },
+      {
+        header: "Returns",
+        render: (i) => typeCell((i as ComponentMethod).returnType ?? "void"),
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentMethod).description,
+      },
+    ],
+  },
+];
+
+const activeSections = sections.filter((s) => s.data?.length);
+
+function sectionId(sectionTitle: string): string {
+  return `api-section-${sectionTitle.replace(/\s+/g, "-").toLowerCase()}`;
+}
+---
+
+<div class="flex flex-col gap-large api-content">
+  <!-- <div class="flex items-center gap-small">
+    <forge-badge theme="primary" class="square-badge">
+      <code>{`<${api.tagName}>`}</code>
+    </forge-badge>
+  </div> -->
+
+  {api.summary && <p class="text-body1 text-medium m-0">{api.summary}</p>}
+
+  {
+    importSnippet && (
+      <Code code={importSnippet} lang="ts" theme="one-light" class="p-medium" />
+    )
+  }
+
+  {
+    activeSections.map((section) => (
+      <forge-structured-card heading-level="3" body-spacing="none">
+        <span slot="title" id={sectionId(section.title)} class="text-heading3">
+          {section.title}
+        </span>
+        <div slot="body" class="api-table-wrapper">
+          <table class="forge-data-table">
+            <thead>
+              <tr>
+                {section.columns.map((col) => (
+                  <th
+                    class:list={[
+                      col.align === "end" ? "text-right" : "text-left",
+                      col.nowrap && "whitespace-nowrap",
+                    ]}>
+                    {col.header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {section.data!.map((item, rowIndex) => (
+                <tr>
+                  {section.columns.map((col, colIndex) => {
+                    const value = col.render(item);
+                    const anchorId = `type-${api.tagName}-${section.title.replace(/\s+/g, "-").toLowerCase()}-${rowIndex}-${colIndex}`;
+                    return (
+                      <td
+                        class:list={[
+                          "align-middle",
+                          col.nowrap && "whitespace-nowrap",
+                        ]}>
+                        {isCode(value) ? (
+                          <forge-badge
+                            theme="info-secondary"
+                            class="square-badge">
+                            <code class="font-normal">{value.code}</code>
+                          </forge-badge>
+                        ) : isType(value) ? (
+                          <span class="inline-flex items-center gap-xxsmall">
+                            <forge-badge
+                              theme="info-secondary"
+                              class="square-badge">
+                              <code class="font-normal">{value.type}</code>
+                            </forge-badge>
+                            {value.values && (
+                              <>
+                                <forge-icon-button
+                                  dense
+                                  id={anchorId}
+                                  aria-label={`Show values for ${value.type}`}>
+                                  <forge-icon name="info_outline" external />
+                                </forge-icon-button>
+                                <forge-popover
+                                  anchor={anchorId}
+                                  placement="right">
+                                  <forge-toolbar
+                                    no-border
+                                    class="bg-primary-container-minimum">
+                                    <forge-badge
+                                      slot="start"
+                                      theme="info-secondary"
+                                      class="square-badge">
+                                      <code class="font-normal">
+                                        {value.type}
+                                      </code>
+                                    </forge-badge>
+                                    <forge-icon-button
+                                      slot="end"
+                                      dense
+                                      aria-label="Close"
+                                      data-popover-close>
+                                      <forge-icon name="close" />
+                                    </forge-icon-button>
+                                  </forge-toolbar>
+
+                                  <forge-list
+                                    noninteractive
+                                    class="type-values-list">
+                                    {value.values.map((v) => (
+                                      <forge-list-item>{v}</forge-list-item>
+                                    ))}
+                                  </forge-list>
+                                </forge-popover>
+                              </>
+                            )}
+                          </span>
+                        ) : (
+                          <span class="text-label1 text-medium">{value}</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </forge-structured-card>
+    ))
+  }
+</div>
+
+<style>
+  /*
+   * Scoped styles compile in isolation, so `@apply` needs an `@reference`
+   * to see forge-tailwind utilities. Every value below routes through a
+   * Forge token — no raw sizes, no ad-hoc colors.
+   */
+  @reference "../styles/global.css";
+
+  .api-table-wrapper {
+    @apply overflow-x-auto;
+  }
+
+  /*
+   * `.forge-data-table` handles row height, cell padding, borders, hover, and
+   * header typography. The rules below are the only local overrides:
+   *   1. Kill the last-row bottom border so it lines up with the card edge.
+   *   2. Let the description column wrap while others stay nowrap.
+   */
+  .api-table-wrapper :global(.forge-data-table tbody tr:last-child td) {
+    border-block-end: none;
+  }
+
+  .api-table-wrapper :global(.forge-data-table td:last-child) {
+    min-width: 200px;
+    white-space: normal;
+  }
+
+  /*
+   * These tables are display-only — rows aren't clickable or selectable, so
+   * the hover row-highlight from .forge-data-table just adds noise. Null it
+   * out via the Forge custom property.
+   */
+  .api-table-wrapper :global(.forge-data-table) {
+    --forge-table-theme-row-hover-background: transparent;
+  }
+
+  /*
+   * Popover value list — forge-list handles row height, hover, and dividers.
+   * Only tweak is a tight block padding so the popover hugs the list.
+   */
+  :global(forge-popover:has(.type-values-list)) {
+    --forge-popover-padding: 0;
+    --forge-popover-min-width: 320px;
+  }
+
+  /*
+   * Import snippet — Shiki emits `<pre class="astro-code">` with theme-baked
+   * inline styles, so we just handle padding + spacing between the label and
+   * the code block via forge-tailwind utilities.
+   */
+  .import-snippet {
+    @apply flex flex-col gap-xxsmall;
+  }
+
+  .import-snippet :global(pre.astro-code) {
+    @apply m-0 p-medium overflow-x-auto text-label1 rounded-md;
+  }
+</style>
+
+<script>
+  /**
+   * Close the type-value popover when its toolbar close button is clicked.
+   * The close button lives inside <forge-popover>'s default slot, so we walk
+   * up to the enclosing popover and toggle `.open = false`.
+   */
+  function initTypePopoverClose(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-popover-close]")
+      .forEach((btn) => {
+        if (btn.dataset.initialized === "true") return;
+        btn.dataset.initialized = "true";
+        btn.addEventListener("click", () => {
+          const popover = btn.closest("forge-popover") as
+            | (HTMLElement & { open: boolean })
+            | null;
+          if (popover) popover.open = false;
+        });
+      });
+  }
+
+  document.addEventListener("astro:page-load", initTypePopoverClose);
+</script>
