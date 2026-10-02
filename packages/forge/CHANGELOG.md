@@ -1,5 +1,61 @@
 # @tylertech/forge
 
+## 3.21.0
+
+### Minor Changes
+
+- ea6ee64: feat(typography): add kbd style and css class
+- e922a5c: feat(option): enable declarative usage in listbox
+
+  Breaking changes:
+  - `HTMLElementTagNameMap['forge-option']` now types to `OptionComponent` instead of the deprecated `IOptionComponent`.
+
+- 7f3f8e9: Enhanced `forge-keyboard-shortcut` with scoped keyboard shortcut handling.
+
+  **New properties:** `anchor`, `anchorElement`, `scope`, `scopeElement`, `allowRepeat`, `fallthrough`, `anchorAccessibility`, and `action`. Set `action` to `'click'` to click the anchor element when the shortcut is activated (default: `'default'`, which only emits the event and invokes the callback). `action` is a property only and does not reflect to an attribute.
+
+  **Behavior changes:**
+  - Closest scope wins: when the same key is bound in nested scopes, only the innermost scope containing the event target activates. Opt out with `fallthrough`.
+  - Broader typing suppression: `textarea`, `select`, `contenteditable`, and elements with `textbox`/`searchbox`/`combobox` roles now block activation by default.
+  - Held-key repeats ignored by default; opt in with `allow-repeat`.
+  - IME composition events (`isComposing`) are ignored.
+  - Keys already `defaultPrevented` by external handlers are ignored.
+  - **Key syntax:** alternative bindings are now separated by a comma instead of a space (`a,b` instead of `a b`), because a space now separates the steps of a key sequence. A comma preceded by whitespace or `+`, or at the start of a binding, is the comma key itself (e.g. `Control+,`).
+  - `target` is deprecated in favor of `anchor` and `scope`.
+  - Missing targets warn via `console.warn` instead of `console.error`, and resolution always falls back to the parent element.
+
+  **Key sequences:** Multi-step keyboard shortcuts are defined by separating chords with a space (e.g. `Ctrl+K Ctrl+C`). Two separate keydown events must be pressed in order within a 1-second timeout window. When a sequence start conflicts with a standalone shortcut, the standalone is deferred until the sequence completes or times out.
+
+  **Key aliases:** `mod` (`meta` on Apple platforms, `control` elsewhere), `ctrl`, `cmd`, `command`, `option`, `esc`, `return`, `del`, and arrow aliases (`up`, `down`, `left`, `right`).
+
+  **New utilities:**
+  - `registerKeyboardShortcut()` registers a shortcut imperatively, without rendering an element. Options mirror the element's properties, and the returned registration exposes `dispose()`. Scope comes from `scopeElement`, `global`, or the nearest scope marker above `ownerElement`.
+  - `formatKeyboardShortcutBinding()` formats a key binding for display, using platform-appropriate modifier labels (`Ctrl+K Ctrl+C` on PC, `Cmd+K Cmd+C` on Apple platforms).
+
+  **Accessibility:** `aria-keyshortcuts` is automatically set on the anchor element when `anchorAccessibility` is `'auto'` (the default). Multi-chord sequences are omitted from `aria-keyshortcuts` as the ARIA spec has no sequence syntax.
+
+- ea6ee64: feat(kbd): add kbd component for showing keyboard input
+- cb6e6e1: feat: add `<forge-process-stepper>` and `<forge-process-step>` components
+- e922a5c: feat(listbox): add listbox component
+- e922a5c: feat(option-group): enable declarative usage in listbox
+
+### Patch Changes
+
+- db3de60: fix(date-picker): Emit `forge-date-picker-change` when the input value is coerced to a different date on blur.
+  fix(date-picker): When `showMaskFormat` is enabled, single digit months and days are now padded when the
+  cursor moved to the next segment (typing `42125` produces `04/21/25`), and typing `/` after a single digit pads that
+  segment.
+- ba12107: fix(icon-button): only expose `aria-pressed` in toggle mode
+
+  `forge-icon-button` set `aria-pressed="false"` on every icon button, including plain action buttons that are not toggles. `aria-pressed` is what makes assistive technology announce a toggle button, so screen readers described ordinary icon buttons as "toggle button, not pressed". It is now only set when `toggle` is true, and is removed when `toggle` is turned off.
+
+  Outside toggle mode, an `aria-pressed` attribute the consumer sets is now left alone. Previously it was overwritten with `"false"` on first render.
+
+- 465d3c4: fix(process-stepper): hide the step number on the half-filled marker of a numbered current or in-progress step
+- fa01a32: fix(button): button interfaces extend HTMLElement
+- Updated dependencies [ea6ee64]
+  - @tylertech/forge-core@3.6.0
+
 ## 3.20.0
 
 ### Minor Changes
