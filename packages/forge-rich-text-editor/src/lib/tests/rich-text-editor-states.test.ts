@@ -68,6 +68,32 @@ async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextConte
 }
 
 describe('Rich Text Editor - State Visual Indicators', () => {
+  describe('Content padding', () => {
+    const getEditablePadding = (el: RichTextEditorComponent): string => {
+      const content = el.shadowRoot!.querySelector('forge-rich-text-content')!;
+      const editable = content.shadowRoot!.querySelector('.tiptap') as HTMLElement;
+      return getComputedStyle(editable).padding;
+    };
+
+    it('should pad the content with medium spacing by default', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor style="--forge-spacing-medium: 12px"></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
+      await waitForEditor(el);
+      expect(getEditablePadding(el)).toBe('12px');
+    });
+
+    it('should use the content padding custom property when set', async () => {
+      const el = await renderFixture<RichTextEditorComponent>(
+        html`<forge-rich-text-editor style="--forge-rich-text-editor-content-padding: 4px 8px"></forge-rich-text-editor>`,
+        'forge-rich-text-editor'
+      );
+      await waitForEditor(el);
+      expect(getEditablePadding(el)).toBe('4px 8px');
+    });
+  });
+
   describe('Disabled state', () => {
     it('should apply disabled styling to editor wrapper', async () => {
       const el = await renderFixture<RichTextEditorComponent>(

@@ -42,6 +42,11 @@ const meta = {
     </forge-rich-text-editor>
   `,
   component,
+  subcomponents: {
+    Renderer: 'forge-rich-text-renderer',
+    Context: 'forge-rich-text-context',
+    Content: 'forge-rich-text-content'
+  },
   argTypes: {
     content: {
       control: 'text',

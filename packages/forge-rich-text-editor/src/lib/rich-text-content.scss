@@ -28,7 +28,7 @@
 
   .tiptap {
     height: 100%;
-    padding: var(--forge-spacing-medium);
+    padding: var(--forge-rich-text-content-padding, var(--forge-spacing-medium));
     overflow: auto;
     box-sizing: border-box;
 

@@ -49,6 +49,7 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  * @attribute {string} content - The HTML content of the editor. Pass a ProseMirror document through the property instead; an attribute cannot carry an object.
  * @cssproperty --forge-rich-text-editor-disabled-opacity - The opacity of the editor when it is
  * disabled, and of the toolbar when it is readonly.
+ * @cssproperty --forge-rich-text-editor-content-padding - The padding around the editable content.
  *
  * @attribute {boolean} disabled - Whether the editor is disabled.
  * @attribute {boolean} readonly - Whether the editor is in readonly mode.
