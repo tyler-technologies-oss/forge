@@ -8,7 +8,7 @@
 
 $tokens: (
   // Base
-  background: utils.module-val(toolbar, background, theme.variable(surface)),
+  background: utils.module-val(toolbar, background, theme.variable(surface-elevated-translucent)),
   height: utils.module-val(toolbar, height, 56px),
   min-height: utils.module-ref(toolbar, min-height, height),
   // Divider

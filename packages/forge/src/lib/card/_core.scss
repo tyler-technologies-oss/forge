@@ -25,6 +25,7 @@
 }
 
 @mixin raised {
+  @include override(background, raised-background);
   @include override(elevation, raised-elevation);
   @include override(outline-width, raised-outline-width);
 }

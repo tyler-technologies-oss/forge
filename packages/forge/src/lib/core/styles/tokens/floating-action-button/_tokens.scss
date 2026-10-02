@@ -10,8 +10,8 @@ $tokens: (
   // General
   display: utils.module-val(fab, display, inline-flex),
   gap: utils.module-val(fab, gap, spacing.variable(xsmall)),
-  background: utils.module-val(fab, background, theme.variable(secondary)),
-  color: utils.module-val(fab, color, theme.variable(on-secondary)),
+  background: utils.module-val(fab, background, theme.variable(secondary-container-highest)),
+  color: utils.module-val(fab, color, theme.variable(on-secondary-container-highest)),
   size: utils.module-val(fab, size, 56px),
   padding: utils.module-val(fab, padding, spacing.variable(xsmall)),
   // Elevation - raised
@@ -26,7 +26,7 @@ $tokens: (
   transition-duration: utils.module-val(fab, transition-duration, animation.variable(duration-short3)),
   transition-timing: utils.module-val(fab, transition-timing, animation.variable(easing-standard)),
   // Shape
-  shape: utils.module-val(fab, shape, shape.variable(full)),
+  shape: utils.module-val(fab, shape, shape.variable(extra-large)),
   shape-start-start: utils.module-ref(fab, shape-start-start, shape),
   shape-start-end: utils.module-ref(fab, shape-start-end, shape),
   shape-end-start: utils.module-ref(fab, shape-end-start, shape),
