@@ -27,11 +27,11 @@ function triggerToolButton(feature: Element | null | undefined): void {
 }
 
 /**
- * Trigger a forge-icon-button by dispatching click on the host element.
- * Used for undo/redo which use forge-icon-button directly with @click.
+ * Trigger the tool button at `index` within a feature that renders several, such as undo/redo.
  */
-function triggerIconButton(iconButton: Element | null | undefined): void {
-  iconButton?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+function triggerNthToolButton(feature: Element | null | undefined, index: number): void {
+  const toolButton = feature?.shadowRoot?.querySelectorAll('forge-rte-tool-button')[index];
+  toolButton?.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false, bubbles: true, composed: true }));
 }
 
 async function waitForEditor(el: RichTextEditorComponent): Promise<RichTextContextComponent> {
@@ -455,8 +455,7 @@ describe('RTE Screen Reader Support', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const undoRedoFeature = getFeature(el, 'forge-rte-undo-redo');
-      const undoIconButton = undoRedoFeature?.shadowRoot?.querySelectorAll('forge-icon-button')?.[0];
-      triggerIconButton(undoIconButton);
+      triggerNthToolButton(undoRedoFeature, 0);
 
       await waitForAnnouncement(el, 'Undo');
 
@@ -484,8 +483,7 @@ describe('RTE Screen Reader Support', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const undoRedoFeature = getFeature(el, 'forge-rte-undo-redo');
-      const redoIconButton = undoRedoFeature?.shadowRoot?.querySelectorAll('forge-icon-button')?.[1];
-      triggerIconButton(redoIconButton);
+      triggerNthToolButton(undoRedoFeature, 1);
 
       await waitForAnnouncement(el, 'Redo');
 

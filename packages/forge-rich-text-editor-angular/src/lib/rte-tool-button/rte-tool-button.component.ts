@@ -71,6 +71,17 @@ export class RteToolButtonComponent {
     return this.nativeElement.keyboardShortcut;
   }
 
+  /** Renders a momentary action button with no pressed state, for tools such as undo. */
+  @Input({ transform: booleanAttribute })
+  public set noToggle(value: RteToolButtonComponentCustomElement['noToggle']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.noToggle = value;
+    });
+  }
+  public get noToggle(): RteToolButtonComponentCustomElement['noToggle'] {
+    return this.nativeElement.noToggle;
+  }
+
   /**
    * The element this button controls, surfaced to assistive technology through
    * `ariaControlsElements` rather than `aria-controls`.
@@ -88,6 +99,11 @@ export class RteToolButtonComponent {
   }
   public get controlsElement(): RteToolButtonComponentCustomElement['controlsElement'] {
     return this.nativeElement.controlsElement;
+  }
+
+  /** Moves focus to the button, which lives in this element's shadow root. */
+  public focus(...args: Parameters<RteToolButtonComponentCustomElement['focus']>): ReturnType<RteToolButtonComponentCustomElement['focus']> {
+    return this.zone.runOutsideAngular(() => this.nativeElement.focus(...args));
   }
 
   constructor() {

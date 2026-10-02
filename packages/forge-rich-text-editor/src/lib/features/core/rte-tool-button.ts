@@ -37,14 +37,16 @@ export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  * @property {boolean} [disabled=false] - Whether the button is disabled.
  * @property {boolean} [active=false] - Whether the button is in an active/pressed state.
  * @property {string} [keyboardShortcut] - The keyboard shortcut for this tool (e.g., "Control+B").
+ * @property {boolean} [noToggle=false] - Renders a momentary action button with no pressed state, for tools such as undo.
  *
  * @attribute {string} label - The accessible label for the button.
  * @attribute {string} icon - The icon name to display.
  * @attribute {boolean} disabled - Whether the button is disabled.
  * @attribute {boolean} active - Whether the button is in active state.
  * @attribute {string} keyboard-shortcut - The keyboard shortcut for this tool.
+ * @attribute {boolean} no-toggle - Renders a momentary action button with no pressed state.
  *
- * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the toggle state.
+ * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the requested toggle state, and is always `false` with `no-toggle`.
  */
 @customElement(RTE_TOOL_BUTTON_TAG_NAME)
 export class RteToolButtonComponent extends LitElement {
@@ -76,6 +78,10 @@ export class RteToolButtonComponent extends LitElement {
   /** The keyboard shortcut for this tool (e.g., "Control+B" for bold). */
   @property({ attribute: 'keyboard-shortcut' })
   public keyboardShortcut: string | undefined;
+
+  /** Renders a momentary action button with no pressed state, for tools such as undo. */
+  @property({ type: Boolean, attribute: 'no-toggle' })
+  public noToggle = false;
 
   /**
    * The element this button controls, surfaced to assistive technology through
@@ -114,9 +120,10 @@ export class RteToolButtonComponent extends LitElement {
       <forge-icon-button
         shape="squared"
         density="medium"
-        toggle
-        ?pressed=${this.active}
+        ?toggle=${!this.noToggle}
+        ?pressed=${!this.noToggle && this.active}
         @forge-icon-button-toggle=${this._toggle}
+        @click=${this.#handleClick}
         @pointerdown=${this.#handlePointerDown}
         @keydown=${this.#handleKeydown}
         ?disabled=${this.disabled}
@@ -128,9 +135,21 @@ export class RteToolButtonComponent extends LitElement {
     `;
   }
 
+  /** Moves focus to the button, which lives in this element's shadow root. */
+  public override focus(options?: FocusOptions): void {
+    this._iconButton?.focus(options);
+  }
+
   private async _toggle(evt: CustomEvent<boolean>): Promise<void> {
     evt.preventDefault();
     this.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: evt.detail }));
+  }
+
+  #handleClick(): void {
+    // In toggle mode the icon button reports activation through its own toggle event instead.
+    if (this.noToggle) {
+      this.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false }));
+    }
   }
 
   #handlePointerDown(evt: PointerEvent | KeyboardEvent): void {

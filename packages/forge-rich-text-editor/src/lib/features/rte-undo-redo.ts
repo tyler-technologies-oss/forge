@@ -1,5 +1,5 @@
 import { consume } from '@lit/context';
-import { defineIconButtonComponent, IconRegistry } from '@tylertech/forge';
+import { IconRegistry } from '@tylertech/forge';
 import { UndoRedo } from '@tiptap/extensions';
 import { tylIconRedo, tylIconUndo } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
@@ -7,8 +7,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
 import { featureHostStyles } from './core/feature-styles.js';
-import { createRef, ref } from 'lit/directives/ref.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+
+import './core/rte-tool-button.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -30,8 +31,7 @@ export const RTE_UNDO_REDO_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-un
  * to undo or redo. The feature announces actions to screen readers for accessibility. Keyboard
  * shortcuts Control+Z (undo) and Control+Shift+Z (redo) are supported through TipTap.
  *
- * @dependency forge-icon-button
- * @dependency forge-icon
+ * @dependency forge-rte-tool-button
  *
  * @property {string} [undoLabel='Undo'] - The accessible label for the undo button.
  * @property {string} [redoLabel='Redo'] - The accessible label for the redo button.
@@ -46,7 +46,6 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
 
   static {
     IconRegistry.define([tylIconUndo, tylIconRedo]);
-    defineIconButtonComponent();
   }
 
   public static override styles = featureHostStyles;
@@ -73,48 +72,28 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
   @consume({ context: editorContext, subscribe: true })
   private readonly _editorContext!: EditorContext;
 
-  public override updated(changedProperties: PropertyValues<this>): void {
-    super.updated(changedProperties);
-    // Undo and redo render forge-icon-button directly rather than through forge-rte-tool-button,
-    // so they carry the controls relationship themselves. See rte-tool-button for why this is an
-    // element reference rather than aria-controls.
-    const target = this._editorContext.controlsElement;
-    for (const button of [this.#undoButtonRef.value, this.#redoButtonRef.value]) {
-      if (button && 'ariaControlsElements' in button) {
-        (button as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements = target ? [target] : null;
-      }
-    }
-  }
-
   public firstUpdated(_changedProperties: PropertyValues<this>): void {
     this._editorContext?.registerFeature(this);
   }
 
-  #undoButtonRef = createRef<HTMLButtonElement>();
-  #redoButtonRef = createRef<HTMLButtonElement>();
-
   public override render(): TemplateResult {
     return html`
-      <forge-icon-button
-        ${ref(this.#undoButtonRef)}
-        shape="squared"
-        density="medium"
-        @click=${this.#undo}
-        @keydown=${this.#handleKeydown}
-        ?disabled=${!this._editorContext.isEditable() || !this.#canUndo()}
-        aria-label=${this.undoLabel}>
-        <forge-icon .name=${tylIconUndo.name}></forge-icon>
-      </forge-icon-button>
-      <forge-icon-button
-        ${ref(this.#redoButtonRef)}
-        shape="squared"
-        density="medium"
-        @click=${this.#redo}
-        @keydown=${this.#handleKeydown}
-        ?disabled=${!this._editorContext.isEditable() || !this.#canRedo()}
-        aria-label=${this.redoLabel}>
-        <forge-icon .name=${tylIconRedo.name}></forge-icon>
-      </forge-icon-button>
+      <forge-rte-tool-button
+        no-toggle
+        @forge-rte-tool-toggle=${this.#undo}
+        label=${this.undoLabel}
+        icon=${tylIconUndo.name}
+        keyboard-shortcut="Control+Z"
+        .controlsElement=${this._editorContext.controlsElement}
+        ?disabled=${!this._editorContext.isEditable() || !this.#canUndo()}></forge-rte-tool-button>
+      <forge-rte-tool-button
+        no-toggle
+        @forge-rte-tool-toggle=${this.#redo}
+        label=${this.redoLabel}
+        icon=${tylIconRedo.name}
+        keyboard-shortcut="Control+Shift+Z"
+        .controlsElement=${this._editorContext.controlsElement}
+        ?disabled=${!this._editorContext.isEditable() || !this.#canRedo()}></forge-rte-tool-button>
     `;
   }
 
@@ -128,28 +107,14 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
     return !!editor && !editor.isDestroyed && !!editor.can().redo();
   }
 
-  #handleKeydown(evt: KeyboardEvent): void {
-    if (evt.key === 'Enter') {
-      (evt.target as HTMLElement).click();
-    }
-  }
-
-  async #undo(): Promise<void> {
+  // Both commands return focus to the editor, like every other feature. That keeps focus off the
+  // button, so the button disabling itself after the last step can never strand focus on body.
+  #undo(): void {
     try {
-      const success = this._editorContext.editor?.chain().undo().run();
+      const success = this._editorContext.editor?.chain().focus().undo().run();
 
       if (success) {
         this._editorContext.announce('Undo');
-
-        await this.updateComplete;
-
-        if (!this.#canUndo()) {
-          if (this.#canRedo()) {
-            this.#redoButtonRef.value?.focus();
-          } else {
-            this._editorContext.editor?.chain().focus().run();
-          }
-        }
       } else {
         console.warn('[RTE UndoRedo] Undo command execution failed');
       }
@@ -158,22 +123,12 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
     }
   }
 
-  async #redo(): Promise<void> {
+  #redo(): void {
     try {
-      const success = this._editorContext.editor?.chain().redo().run();
+      const success = this._editorContext.editor?.chain().focus().redo().run();
 
       if (success) {
         this._editorContext.announce('Redo');
-
-        await this.updateComplete;
-
-        if (!this.#canRedo()) {
-          if (this.#canUndo()) {
-            this.#undoButtonRef.value?.focus();
-          } else {
-            this._editorContext.editor?.chain().focus().run();
-          }
-        }
       } else {
         console.warn('[RTE UndoRedo] Redo command execution failed');
       }
