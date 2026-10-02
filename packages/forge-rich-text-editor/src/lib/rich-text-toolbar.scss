@@ -1,0 +1,30 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+
+:host {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--forge-spacing-xxsmall);
+
+  // Active button styling
+  --forge-icon-button-toggle-on-background-color: var(--forge-theme-primary-container);
+  --forge-icon-button-toggle-on-icon-color: var(--forge-theme-on-primary-container);
+
+  // Hover state
+  --forge-icon-button-hover-background-color: var(--forge-theme-surface-container);
+
+  // Focus indicator
+  --forge-focus-indicator-color: var(--forge-theme-primary);
+  --forge-focus-indicator-width: var(--forge-border-medium);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+// Readonly dims only the toolbar: the content stays at full opacity and selectable. Disabled is not
+// handled here - the editor dims its whole frame, and a composed layout's content dims itself.
+:host([readonly]) {
+  opacity: var(--forge-rich-text-toolbar-readonly-opacity, var(--forge-rich-text-editor-disabled-opacity, #{forge-theme.emphasis(medium-low)}));
+  pointer-events: none;
+}

@@ -4,11 +4,13 @@ import { RichTextContentComponent } from './rich-text-content.js';
 import { RichTextContextComponent } from './rich-text-context.js';
 import { RichTextEditorComponent } from './rich-text-editor.js';
 import { RichTextRendererComponent } from './rich-text-renderer.js';
+import { RichTextToolbarComponent } from './rich-text-toolbar.js';
 
 export * from './rich-text-editor.js';
 export * from './rich-text-renderer.js';
 export * from './rich-text-content.js';
 export * from './rich-text-context.js';
+export * from './rich-text-toolbar.js';
 export * from './editor-context.js';
 
 export function defineRichTextEditorComponent(): void {
@@ -27,6 +29,10 @@ export function defineRichTextContextComponent(): void {
   defineCustomElement(RichTextContextComponent);
 }
 
+export function defineRichTextToolbarComponent(): void {
+  defineCustomElement(RichTextToolbarComponent);
+}
+
 /**
  * Registers the rich text editor components with the browser. Feature components are registered
  * separately via `defineRteFeatureComponents` so that consumers only pay for the tools they use.
@@ -36,4 +42,5 @@ export function defineRichTextEditorComponents(): void {
   defineRichTextRendererComponent();
   defineRichTextContentComponent();
   defineRichTextContextComponent();
+  defineRichTextToolbarComponent();
 }

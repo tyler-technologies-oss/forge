@@ -12,8 +12,9 @@ export interface IRteToolbarFocus {
 }
 
 /**
- * Provided by `forge-rich-text-editor` to the tool buttons in its toolbar. A tool button with no
- * provider - one authored in a composed layout, for example - keeps its default tab stop.
+ * Provided by `forge-rich-text-toolbar` to the tool buttons inside it. A tool button with no
+ * provider - one placed in a plain container in a composed layout, for example - keeps its default
+ * tab stop.
  */
 export const rteToolbarFocusContext = createContext<IRteToolbarFocus | undefined>('forge-rte-toolbar-focus');
 

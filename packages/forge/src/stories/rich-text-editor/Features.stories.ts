@@ -52,7 +52,7 @@ export const ComposedLayout: Story = {
       }
       .toolbar-card {
         padding: 12px;
-        background: var(--forge-theme-surface-container);
+        background: var(--forge-theme-surface-container-lowest);
         border: 1px solid var(--forge-theme-outline);
         border-radius: 8px;
       }
@@ -66,12 +66,12 @@ export const ComposedLayout: Story = {
     </style>
     <div class="composed-demo">
       <forge-rich-text-context>
-        <div class="toolbar-card">
+        <forge-rich-text-toolbar class="toolbar-card">
           <forge-rte-standard-tools></forge-rte-standard-tools>
           <forge-rte-divider></forge-rte-divider>
           <forge-rte-code></forge-rte-code>
           <forge-rte-link></forge-rte-link>
-        </div>
+        </forge-rich-text-toolbar>
         <div class="content-card">
           <forge-rich-text-content></forge-rich-text-content>
         </div>
@@ -82,7 +82,7 @@ export const ComposedLayout: Story = {
     docs: {
       description: {
         story:
-          'For advanced layouts, use `<forge-rich-text-context>` to separate the toolbar from the content area. This allows a fixed toolbar, independent positioning, or custom layouts built from `<forge-rich-text-content>`.'
+          'For advanced layouts, use `<forge-rich-text-context>` to separate the toolbar from the content area. This allows a fixed toolbar, independent positioning, or custom layouts built from `<forge-rich-text-content>`. Wrap the tools in `<forge-rich-text-toolbar>` to give them the toolbar role, an accessible name and a single tab stop.'
       }
     }
   }
