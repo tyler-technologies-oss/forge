@@ -1,5 +1,12 @@
 # v3.4.0 (Tue Jul 28 2026)
 
+## 3.6.0
+
+### Minor Changes
+
+- ea6ee64: feat(kbd): add `forge-kbd` component to React adapter
+- e922a5c: feat(listbox): add listbox proxy
+
 ## 3.5.0
 
 ### Minor Changes
