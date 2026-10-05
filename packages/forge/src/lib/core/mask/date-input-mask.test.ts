@@ -52,11 +52,11 @@ describe('DateInputMask', () => {
 
   describe('when the format is shown', () => {
     it.each([
-      ['3', '03/__/____', 5],
-      ['1/', '1_/__/____', 1],
-      ['12', '12/__/____', 2],
-      ['125', '12/05/____', 8],
-      ['34', '03/__/4___', 7],
+      ['3', '03/__/____', 3],
+      ['1/', '01/__/____', 3],
+      ['12', '12/__/____', 3],
+      ['125', '12/05/____', 6],
+      ['34', '03/04/____', 6],
       ['01022025', '01/02/2025', 10]
     ])('should produce the expected value when typing %s', async (keys, expected, caret) => {
       const input = setup({ showMaskFormat: true });
