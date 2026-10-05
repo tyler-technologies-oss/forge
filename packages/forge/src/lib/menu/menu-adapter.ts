@@ -89,8 +89,6 @@ export class MenuAdapter extends BaseAdapter<IMenuComponent> implements IMenuAda
       return;
     }
 
-    this._accessibilityTarget.setAttribute('aria-atomic', 'true');
-    this._accessibilityTarget.setAttribute('aria-live', 'assertive');
     this._accessibilityTarget.setAttribute('aria-haspopup', 'true');
     this._accessibilityTarget.setAttribute('aria-expanded', 'false');
 
