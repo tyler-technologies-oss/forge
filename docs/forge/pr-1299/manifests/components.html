@@ -2466,14 +2466,14 @@ It helps developers discover components, generate framework-specific examples, a
 
 Get started with the Tyler Forge™ MCP server in your AI client:
 
-&gt; The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js &gt;=18 and npm to be installed on your system.
+&gt; The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js &gt;=20.10 and npm to be installed on your system.
 
 ### Claude Code Plugin (Recommended)
 
 For Claude Code, installing the **Forge plugin** is the recommended approach instead of adding the MCP server on its own. The plugin bundles the MCP server together with a `/forge-design` skill and enforcement hooks, so Forge UI is grounded in real component/block data end-to-end rather than relying on the model&#39;s memory.
 
 ```bash
-/plugin marketplace add tyler-technologies-oss/forge-mcp
+/plugin marketplace add tyler-technologies-oss/forge
 /plugin install forge@tyler-forge
 ```
 
@@ -2640,7 +2640,7 @@ know what you need and can provide details to guide the LLM, do so. The more inf
 
 Found issues or have suggestions? The Tyler Forge™ MCP Server is open source and welcomes contributions:
 
-- **Repository**: [tyler-technologies-oss/forge-mcp](https://github.com/tyler-technologies-oss/forge-mcp)
+- **Repository**: [tyler-technologies-oss/forge](https://github.com/tyler-technologies-oss/forge) (`packages/forge-mcp`)
 - **Issues**: Report bugs and request features
 - **Pull Requests**: Submit code changes and enhancements
 - **Discussions**: Share best practices, usage patterns, and improvements
@@ -2648,7 +2648,7 @@ Found issues or have suggestions? The Tyler Forge™ MCP Server is open source a
 ### Documentation
 
 The MCP server will only be as good as its documentation. If you find gaps or areas for improvement, please contribute to the docs via the MCP
-[markdown templates](https://github.com/tyler-technologies-oss/forge-mcp/tree/main/templates), or directly in the [Forge repository](https://github.com/tyler-technologies-oss/forge)
+[markdown templates](https://github.com/tyler-technologies-oss/forge/tree/main/packages/forge-mcp/templates), or directly in the [Forge repository](https://github.com/tyler-technologies-oss/forge)
 where the API docs are generated from.
 
 ## Resources
