@@ -1,16 +1,17 @@
 <div class="vert">
   <div>
-    <h3 class="forge-typography--heading2">Compact (narrow container)</h3>
     <div style="max-inline-size: 360px">
       <forge-process-stepper orientation="horizontal" numbered>
         <forge-process-step state="completed">Cart</forge-process-step>
         <forge-process-step state="completed">Shipping</forge-process-step>
         <forge-process-step state="current">
           Payment
-          <span slot="meta" class="forge-color--text-medium">Started:</span>
-          <span slot="meta">02/03/2026</span>
-          <forge-checkbox slot="additional-content"><label>Save this card</label></forge-checkbox>
-          <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Started</span>
+            <span slot="value">02/03/2026</span>
+          </forge-label-value>
+          <forge-checkbox slot="detail"><label>Save this card</label></forge-checkbox>
+          <forge-button slot="detail" variant="outlined">Advance to next stage</forge-button>
         </forge-process-step>
         <forge-process-step>Review</forge-process-step>
       </forge-process-stepper>
@@ -28,37 +29,28 @@
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Horizontal With Descriptions</h3>
+    <h3 class="forge-typography--heading2">Horizontal With Support Text</h3>
     <forge-process-stepper orientation="horizontal">
-      <forge-process-step state="completed" description="Optional">First step</forge-process-step>
+      <forge-process-step state="completed">
+        First step
+        <span slot="support-text">Optional</span>
+      </forge-process-step>
       <forge-process-step state="current">Second step</forge-process-step>
       <forge-process-step>Third step</forge-process-step>
-      <forge-process-step state="error" description="Example invalid step">Fourth step</forge-process-step>
+      <forge-process-step state="critical">
+        Fourth step
+        <span slot="support-text">Invalid</span>
+      </forge-process-step>
       <forge-process-step>Fifth step</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Horizontal With Title</h3>
-    <h4 id="record-progress-title" class="forge-typography--heading3">Record progress</h4>
-    <forge-process-stepper orientation="horizontal" numbered aria-labelledby="record-progress-title">
-      <forge-process-step state="completed">
-          Application received
-        <span slot="meta" class="forge-color--text-medium">Jul 17, 2026</span>
-      </forge-process-step>
-      <forge-process-step state="completed">Fees paid</forge-process-step>
-      <forge-process-step state="completed">Internal review</forge-process-step>
-      <forge-process-step>Documents approved</forge-process-step>
-      <forge-process-step>Record issued</forge-process-step>
-    </forge-process-stepper>
-  </div>
-
-  <div>
-    <h3 class="forge-typography--heading2">Vertical</h3>
+    <h3 class="forge-typography--heading2">Vertical With Support Text</h3>
     <forge-process-stepper numbered>
       <forge-process-step state="completed">
           Application received
-        <span slot="meta" class="forge-color--text-medium">Jul 17, 2026</span>
+        <span slot="support-text" class="forge-color--text-medium">Jul 17, 2026</span>
       </forge-process-step>
       <forge-process-step state="completed">Fees paid</forge-process-step>
       <forge-process-step state="completed">Internal review</forge-process-step>
@@ -68,34 +60,45 @@
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Vertical With Step Content</h3>
-    <h4 id="stage-progress-title" class="forge-typography--heading3">Stage progress</h4>
+    <h3 class="forge-typography--heading2">Vertical With Detail Content</h3>
     <forge-process-stepper aria-labelledby="stage-progress-title">
       <forge-process-step state="completed">
           Verbal warning
-        <span slot="meta" class="forge-color--text-medium">Started:</span>
-        <span slot="meta">01/15/2026</span>
-        <span slot="meta" class="forge-color--text-medium">Completed:</span>
-        <span slot="meta">01/15/2026</span>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Started</span>
+            <span slot="value">01/15/2026</span>
+          </forge-label-value>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Completed</span>
+            <span slot="value">01/15/2026</span>
+          </forge-label-value>
       </forge-process-step>
       <forge-process-step state="completed">
           Written warning
-        <span slot="meta" class="forge-color--text-medium">Started:</span>
-        <span slot="meta">02/03/2026</span>
-        <span slot="meta" class="forge-color--text-medium">Completed:</span>
-        <span slot="meta">02/03/2026</span>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Started</span>
+            <span slot="value">02/03/2026</span>
+          </forge-label-value>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Completed</span>
+            <span slot="value">02/03/2026</span>
+          </forge-label-value>
       </forge-process-step>
       <forge-process-step state="current">
           Suspension
-        <span slot="meta" class="forge-color--text-medium">Started:</span>
-        <span slot="meta">02/03/2026</span>
-        <span slot="meta" class="forge-color--text-medium">Completed:</span>
-        <span slot="meta">02/03/2026</span>
-        <forge-checkbox slot="additional-content"><label>Issue suspension notice</label></forge-checkbox>
-        <forge-checkbox slot="additional-content"><label>Schedule meeting with union rep</label></forge-checkbox>
-        <forge-checkbox slot="additional-content"><label>Document meeting notes</label></forge-checkbox>
-        <forge-checkbox slot="additional-content"><label>Submit to HR director for approval</label></forge-checkbox>
-        <forge-button slot="actions" variant="outlined">Advance to next stage</forge-button>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Started</span>
+            <span slot="value">02/03/2026</span>
+          </forge-label-value>
+          <forge-label-value slot="detail" inline>
+            <span slot="label">Completed</span>
+            <span slot="value">02/03/2026</span>
+          </forge-label-value>
+        <forge-checkbox slot="detail"><label>Issue suspension notice</label></forge-checkbox>
+        <forge-checkbox slot="detail"><label>Schedule meeting with union rep</label></forge-checkbox>
+        <forge-checkbox slot="detail"><label>Document meeting notes</label></forge-checkbox>
+        <forge-checkbox slot="detail"><label>Submit to HR director for approval</label></forge-checkbox>
+        <forge-button slot="detail" variant="outlined">Advance to next stage</forge-button>
       </forge-process-step>
       <forge-process-step>Termination review</forge-process-step>
     </forge-process-stepper>
@@ -108,69 +111,45 @@
       <forge-process-step state="current">Current</forge-process-step>
       <forge-process-step state="in-progress">In progress</forge-process-step>
       <forge-process-step state="not-started">Not started</forge-process-step>
-      <forge-process-step state="optional" description="Optional">Optional</forge-process-step>
-      <forge-process-step state="skipped">Skipped</forge-process-step>
-      <forge-process-step state="waiting">Waiting</forge-process-step>
-      <forge-process-step state="disabled">Disabled</forge-process-step>
-      <forge-process-step state="blocked">Blocked</forge-process-step>
-      <forge-process-step state="error">
-          Error
-        <forge-inline-message slot="additional-content" theme="error">Two required documents are missing.</forge-inline-message>
+      <forge-process-step disabled>Disabled</forge-process-step>
+      <forge-process-step state="critical">
+          Critical
+        <span slot="support-text">Two required documents are missing</span>
       </forge-process-step>
-      <forge-process-step state="requires-attention">Requires attention</forge-process-step>
     </forge-process-stepper>
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Clickable Steps</h3>
-    <forge-process-stepper id="clickable-stepper" orientation="horizontal">
-      <forge-process-step state="completed"><button>Cart</button></forge-process-step>
-      <forge-process-step state="current"><button>Shipping</button></forge-process-step>
-      <forge-process-step><button>Payment</button></forge-process-step>
-      <forge-process-step><button>Review</button></forge-process-step>
-    </forge-process-stepper>
-    <p id="clickable-output" class="forge-color--text-medium">No step selected.</p>
-  </div>
-
-
-  <div>
-    <h3 class="forge-typography--heading2">Clickable Steps (Vertical)</h3>
-    <forge-process-stepper id="clickable-vertical-stepper">
-      <forge-process-step state="completed"><button>Application received</button></forge-process-step>
-      <forge-process-step state="current" description="Assigned to J. Rivera"><button>Internal review</button></forge-process-step>
-      <forge-process-step><button>Site inspection</button></forge-process-step>
-      <forge-process-step><button>Decision</button></forge-process-step>
-    </forge-process-stepper>
-    <p id="clickable-vertical-output" class="forge-color--text-medium">No step selected.</p>
-  </div>
-
-  <div>
-    <h3 class="forge-typography--heading2">Interactive With Links (Vertical)</h3>
-    <forge-process-stepper numbered>
-      <forge-process-step state="completed"><a href="#cart">Cart</a></forge-process-step>
-      <forge-process-step state="current"><a href="#shipping">Shipping</a></forge-process-step>
-      <forge-process-step><a href="#payment">Payment</a></forge-process-step>
-      <forge-process-step><a href="#review">Review</a></forge-process-step>
-    </forge-process-stepper>
-  </div>
-
-  <div>
-    <h3 class="forge-typography--heading2">Interactive With Links</h3>
-    <forge-process-stepper orientation="horizontal" numbered>
-      <forge-process-step state="completed"><a href="#cart">Cart</a></forge-process-step>
-      <forge-process-step state="current"><a href="#shipping">Shipping</a></forge-process-step>
-      <forge-process-step><a href="#payment">Payment</a></forge-process-step>
-      <forge-process-step><a href="#review">Review</a></forge-process-step>
-    </forge-process-stepper>
-  </div>
-
-  <div>
-    <h3 class="forge-typography--heading2">Read-only (no interactive element)</h3>
-    <forge-process-stepper orientation="horizontal" numbered>
+    <h3 class="forge-typography--heading2">Readonly</h3>
+    <forge-process-stepper id="clickable-stepper" orientation="horizontal" readonly>
       <forge-process-step state="completed">Cart</forge-process-step>
       <forge-process-step state="current">Shipping</forge-process-step>
       <forge-process-step>Payment</forge-process-step>
       <forge-process-step>Review</forge-process-step>
+    </forge-process-stepper>
+  </div>
+
+
+  <div>
+    <h3 class="forge-typography--heading2">Readonly (Vertical)</h3>
+    <forge-process-stepper id="clickable-vertical-stepper" readonly>
+      <forge-process-step state="completed">Application received</forge-process-step>
+      <forge-process-step state="current">
+        Internal review
+        <span slot="detail">Assigned to J. Rivera</span>
+      </forge-process-step>
+      <forge-process-step>Site inspection</forge-process-step>
+      <forge-process-step>Decision</forge-process-step>
+    </forge-process-stepper>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Links (Vertical)</h3>
+    <forge-process-stepper numbered>
+      <forge-process-step state="completed" href="#cart">Cart</forge-process-step>
+      <forge-process-step state="current" href="#shipping">Shipping</forge-process-step>
+      <forge-process-step href="#payment">Payment</forge-process-step>
+      <forge-process-step href="#review">Review</forge-process-step>
     </forge-process-stepper>
   </div>
 

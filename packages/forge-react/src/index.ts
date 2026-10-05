@@ -82,7 +82,9 @@ import {
   KeyComponent,
   KeyItemComponent,
   MeterComponent,
-  MeterGroupComponent
+  MeterGroupComponent,
+  ProcessStepComponent,
+  ProcessStepperComponent
 } from '@tylertech/forge';
 import { IAppLauncherComponent } from '@tylertech/forge/app-launcher';
 import { AppLauncherLinkComponent } from '@tylertech/forge/app-launcher/app-launcher-link';
@@ -182,6 +184,8 @@ declare global {
       'forge-page-state': CustomElementProps<IPageStateComponent>;
       'forge-paginator': CustomElementProps<IPaginatorComponent>;
       'forge-popover': CustomElementProps<IPopoverComponent>;
+      'forge-process-step': CustomElementProps<ProcessStepComponent>;
+      'forge-process-stepper': CustomElementProps<ProcessStepperComponent>;
       'forge-profile-card': CustomElementProps<IProfileCardComponent>;
       'forge-profile-link': CustomElementProps<ProfileLinkComponent>;
       'forge-quantity-field': CustomElementProps<IQuantityFieldComponent>;

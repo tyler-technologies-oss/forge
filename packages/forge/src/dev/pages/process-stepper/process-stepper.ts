@@ -1,10 +1,12 @@
 import '$src/shared';
+import '@tylertech/forge/avatar';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/inline-message';
+import '@tylertech/forge/label-value';
 import '@tylertech/forge/process-stepper';
-import '@tylertech/forge/avatar';
 import type { ProcessStepperComponent } from '@tylertech/forge/process-stepper';
+import './process-stepper.scss';
 
 const outputs: Record<string, string> = {
   '#clickable-stepper': '#clickable-output',

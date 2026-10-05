@@ -1,81 +1,78 @@
-import { consume, ContextRoot } from '@lit/context';
+import { ContextRoot, consume } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer, tryDefine } from '@tylertech/forge-core';
-import { tylIconCheck, tylIconExclamation } from '@tylertech/tyler-icons';
+import { createHideRef, hideWhenEmpty } from '@tylertech/forge/core/utils/lit-utils.js';
+import { tylIconAlertCircleOutline, tylIconCheckCircle, tylIconCircleDotted, tylIconCircleHalfFull } from '@tylertech/tyler-icons';
 import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { property, queryAssignedElements, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { when } from 'lit/directives/when.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { supportsElementInternalsAria } from '../../core/utils/feature-detection.js';
-import { hideWhenEmpty } from '../../core/utils/lit-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
-import { IconRegistry } from '../../icon/icon-registry.js';
 import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { IconRegistry } from '../../icon/icon-registry.js';
 import { IconComponent } from '../../icon/icon.js';
 import { StateLayerComponent } from '../../state-layer/state-layer.js';
-import { IProcessStepperContext, PROCESS_STEPPER_CONSTANTS, PROCESS_STEPPER_CONTEXT } from '../process-stepper/process-stepper-constants.js';
-import { ERROR_STATES, PARTIAL_STATES, PROCESS_STEP_CONSTANTS, PROGRESS_LINE_STATES, ProcessStepState, stepIndex } from './process-step-constants.js';
+import {
+  IProcessStepperContext,
+  PROCESS_STEPPER_CONSTANTS,
+  PROCESS_STEPPER_CONTEXT,
+  PROCESS_STEPPER_ORIENTATIONS
+} from '../process-stepper/process-stepper-constants.js';
+import { PROCESS_STEP_CONSTANTS, PROCESS_STEP_STATES, ProcessStepState, stepIndex } from './process-step-constants.js';
 
 import styles from './process-step.scss';
 
 /**
  * @tag forge-process-step
  *
- * @summary Process steps represent a single stage of a process. A step containing a link or a
- * button is actionable; a step containing only text is a read-only indicator of progress.
+ * @summary Process steps represent a single stage of a process. A step renders a button, or a link
+ * when `href` is set, so it can be activated to navigate or to perform an action. In a read-only
+ * stepper, a step renders only its label.
  *
  * @dependency forge-icon
  * @dependency forge-focus-indicator
  * @dependency forge-state-layer
  *
- * @slot - The step label. A slotted link or button in this slot becomes the step's interactive area.
+ * @slot - The step label, which is rendered inside the step's button or link.
  * @slot marker - Replaces the generated state marker.
- * @slot meta - Supporting information displayed under the label, such as dates or assigned users.
- * @slot additional-content - Content displayed under the meta content, such as inline form fields or validation messaging.
- * @slot actions - Actions displayed at the end of the step content.
+ * @slot support-text - Descriptive text displayed alongside the label.
+ * @slot detail - Content displayed under the label, such as dates, inline form fields, actions, or validation messaging.
  *
- * @fires {Event} forge-process-step-select - Dispatches when an interactive step is activated.
+ * @fires {Event} forge-process-step-select - Dispatches when the step is activated.
  *
  * @cssproperty --forge-process-step-marker-size - The size of the state marker.
- * @cssproperty --forge-process-step-marker-background - The background color of the marker, which masks the progress line behind it.
- * @cssproperty --forge-process-step-marker-shape - The corner radius of the state marker.
- * @cssproperty --forge-process-step-marker-color - The color of a completed or active marker.
- * @cssproperty --forge-process-step-marker-icon-color - The color of the icon within a filled marker.
- * @cssproperty --forge-process-step-marker-inactive-color - The color of an upcoming marker.
- * @cssproperty --forge-process-step-marker-border-width - The border width of an unfilled marker.
- * @cssproperty --forge-process-step-marker-error-color - The color of a marker in an error state.
- * @cssproperty --forge-process-step-line-width - The thickness of the inactive progress line.
- * @cssproperty --forge-process-step-line-active-width - The thickness of the filled progress line.
- * @cssproperty --forge-process-step-line-color - The color of the inactive progress line.
- * @cssproperty --forge-process-step-line-active-color - The color of the filled progress line.
- * @cssproperty --forge-process-step-line-gap - The spacing between the progress line and the step content.
- * @cssproperty --forge-process-step-sidebar-gap - The spacing between the marker and the step content.
- * @cssproperty --forge-process-step-content-gap - The spacing between the label, description, and meta content.
- * @cssproperty --forge-process-step-content-padding-block-end - The spacing below a step in the vertical orientation.
- * @cssproperty --forge-process-step-row-min-block-size - The minimum height of a step in the vertical orientation, which keeps the spacing between steps even.
- * @cssproperty --forge-process-step-content-padding-inline-end - The spacing after a step in the horizontal orientation.
- * @cssproperty --forge-process-step-meta-gap - The spacing between rows of slotted meta content.
- * @cssproperty --forge-process-step-meta-column-gap - The spacing between the label and value columns of slotted meta content.
- * @cssproperty --forge-process-step-control-inset - The amount slotted form controls are pulled back by so their visible box aligns with the text column.
- * @cssproperty --forge-process-step-actions-gap - The spacing between slotted actions.
- * @cssproperty --forge-process-step-actions-margin - The spacing above the slotted actions.
- * @cssproperty --forge-process-step-label-color - The color of the label.
- * @cssproperty --forge-process-step-description-color - The color of the description.
+ * @cssproperty --forge-process-step-marker-color - The color of the state marker.
+ * @cssproperty --forge-process-step-track-width - The thickness of the progress line.
+ * @cssproperty --forge-process-step-track-background - The color of the inactive progress line.
+ * @cssproperty --forge-process-step-track-color - The color of the filled progress line.
+ * @cssproperty --forge-process-step-track-padding - The spacing between the progress line and the step header.
+ * @cssproperty --forge-process-step-padding - The padding around and between elements inside the step.
+ * @cssproperty --forge-process-step-min-block-size - The minimum height of a step in the vertical orientation, which keeps the spacing between steps even.
  * @cssproperty --forge-process-step-disabled-opacity - The opacity applied to a disabled step.
- * @cssproperty --forge-process-step-marker-label-gap - The spacing between the marker and the label in the horizontal orientation, which leaves room for the focus ring.
- * @cssproperty --forge-process-step-label-content-gap - The spacing between the label and the step content, which leaves room for the focus ring.
+ * @cssproperty --forge-theme-error - The color of a step in the critical state.
+ * @cssproperty --forge-theme-text-high - The color of the label and marker number.
+ * @cssproperty --forge-theme-text-medium - The color of the support text.
  *
  * @csspart root - The root element.
- * @csspart line - The progress line element.
  * @csspart marker - The state marker element.
- * @csspart content - The element containing the description, meta, and slotted content.
- * @csspart label - The element containing the slotted label.
- * @csspart focus-indicator - The focus indicator shown when an interactive step has keyboard focus.
- * @csspart state-layer - The state layer shown when an interactive step is hovered or pressed.
- * @csspart description - The description element.
- * @csspart meta - The element containing the slotted meta content.
- * @csspart actions - The element containing the slotted actions.
+ * @csspart marker-number - The element containing the marker number.
+ * @csspart detail - The element containing the slotted detail content.
+ * @csspart label - The element containing the button or link.
+ * @csspart support-text - The element containing the slotted support text.
+ * @csspart focus-indicator - The focus indicator shown when the step has keyboard focus.
+ * @csspart state-layer - The state layer shown when the step is hovered or pressed.
+ *
+ * @state disabled - Applied when the step is disabled.
+ * @state readonly - Applied when the stepper is read-only.
+ * @state not-started - Applied when the step has not been started.
+ * @state in-progress - Applied when the step is currently in progress.
+ * @state completed - Applied when the step has been completed.
+ * @state critical - Applied when the step is in a critical state.
+ * @state horizontal - Applied when the stepper is in the horizontal orientation.
+ * @state vertical - Applied when the stepper is in the vertical orientation.
  */
 export class ProcessStepComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
@@ -90,7 +87,7 @@ export class ProcessStepComponent extends BaseLitElement {
   public static contextRoot = new ContextRoot();
 
   static {
-    IconRegistry.define([tylIconCheck, tylIconExclamation]);
+    IconRegistry.define([tylIconCheckCircle, tylIconCircleDotted, tylIconCircleHalfFull, tylIconAlertCircleOutline]);
   }
 
   /**
@@ -102,20 +99,22 @@ export class ProcessStepComponent extends BaseLitElement {
   public state: ProcessStepState = 'not-started';
 
   /**
-   * The description displayed under the label.
+   * The URL that the step links to. When set, the step renders a link instead of a button. This is
+   * ignored when the stepper is read-only.
+   * @default undefined
    * @attribute
    */
   @property()
-  public description = '';
+  public href?: string;
 
   /**
-   * Whether to ignore an interactive element in the default slot. A step containing a link or a
-   * button is interactive by default.
+   * Whether the step is disabled. A disabled step keeps the marker of its state, is dimmed, and
+   * ignores interaction.
    * @default false
    * @attribute
    */
   @property({ type: Boolean })
-  public noninteractive = false;
+  public disabled = false;
 
   /** @internal */
   @property({ attribute: false })
@@ -133,16 +132,16 @@ export class ProcessStepComponent extends BaseLitElement {
   @property({ attribute: 'aria-setsize' })
   private _consumerSetSize: string | null = null;
 
-  @queryAssignedElements({ slot: 'marker' })
-  private readonly _markerElements!: Element[];
-
-  @queryAssignedElements()
-  private readonly _labelElements!: Element[];
+  @query('.control')
+  private readonly _control?: HTMLElement;
 
   @queryAssignedNodes()
   private readonly _labelNodes!: Node[];
 
   readonly #internals: ElementInternals;
+
+  #supportTextSlotHideRef = createHideRef();
+  #detailSlotHideRef = createHideRef();
 
   constructor() {
     super();
@@ -160,6 +159,10 @@ export class ProcessStepComponent extends BaseLitElement {
     super.connectedCallback();
     setDefaultAria(this, this.#internals, { role: 'listitem' });
     this.addEventListener('click', this.#onClick);
+
+    if (this.hasUpdated) {
+      this.requestUpdate();
+    }
   }
 
   public disconnectedCallback(): void {
@@ -168,10 +171,20 @@ export class ProcessStepComponent extends BaseLitElement {
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
-    toggleState(this.#internals, 'disabled', this.state === 'disabled');
-    setDefaultAria(this, this.#internals, {
-      ariaCurrent: this.state === 'current' ? 'step' : null
-    });
+    if (changedProperties.has('disabled')) {
+      toggleState(this.#internals, 'disabled', this.disabled);
+    }
+
+    if (changedProperties.has('state')) {
+      setDefaultAria(this, this.#internals, {
+        ariaCurrent: this.state === 'current' ? 'step' : null
+      });
+      PROCESS_STEP_STATES.forEach(stepState => toggleState(this.#internals, stepState, this.state === stepState));
+    }
+
+    // The orientation and readonly come from the stepper's context, so they are synced on every update.
+    toggleState(this.#internals, 'readonly', this.#readonly);
+    PROCESS_STEPPER_ORIENTATIONS.forEach(orientation => toggleState(this.#internals, orientation, this.#orientation === orientation));
 
     // Positional ARIA is only applied through ElementInternals, so aria-posinset and aria-setsize
     // set on the host by the consumer take precedence rather than being overwritten.
@@ -185,30 +198,33 @@ export class ProcessStepComponent extends BaseLitElement {
     }
   }
 
-  /**
-   * Whether the progress line through this step is filled.
-   * @readonly
-   */
-  public get lineActive(): boolean {
-    return PROGRESS_LINE_STATES.includes(this.state);
+  public updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('state')) {
+      this.dispatchEvent(new Event(PROCESS_STEP_CONSTANTS.events.STATE_CHANGE, { bubbles: true }));
+    }
+
+    const target = this._control;
+    const indicator = this.shadowRoot?.querySelector<FocusIndicatorComponent>('forge-focus-indicator');
+    const stateLayer = this.shadowRoot?.querySelector<StateLayerComponent>('forge-state-layer');
+    if (target && indicator && stateLayer) {
+      indicator.targetElement = target;
+      stateLayer.targetElement = target;
+    }
   }
 
-  /**
-   * Whether the step has an interactive element, which makes it actionable rather than a read-only
-   * indicator of progress.
-   * @readonly
-   */
-  public get interactive(): boolean {
-    return !!this.#interactiveElement;
-  }
+  /* @internal */
+  public get touched(): boolean {
+    if (this.state === 'current') {
+      return true;
+    }
 
-  /**
-   * The step's label as plain text, taken from the default slot.
-   * @readonly
-   */
+    const currentIndex = this._stepperContext?.currentIndex ?? 0;
+    return currentIndex > 0 && this[stepIndex] <= currentIndex;
+  }
+  /* @internal */
   public get labelText(): string {
-    return (this._labelNodes ?? [])
-      .map(node => node.textContent ?? '')
+    return this._labelNodes
+      .map(node => node.textContent)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
@@ -216,6 +232,10 @@ export class ProcessStepComponent extends BaseLitElement {
 
   get #orientation(): string {
     return this._stepperContext?.orientation ?? 'vertical';
+  }
+
+  get #readonly(): boolean {
+    return this._stepperContext?.readonly ?? false;
   }
 
   get #position(): number {
@@ -227,91 +247,115 @@ export class ProcessStepComponent extends BaseLitElement {
   }
 
   get #markerIcon(): string | null {
-    if (this.state === 'completed') {
-      return 'check';
+    switch (this.state) {
+      case 'not-started':
+        return 'circle_dotted';
+      case 'completed':
+        return 'check_circle';
+      case 'current':
+      case 'in-progress':
+        return 'circle_half_full';
+      case 'critical':
+        return 'alert_circle_outline';
+      default:
+        return null;
     }
-    return ERROR_STATES.includes(this.state) ? 'exclamation' : null;
   }
 
-  get #marker(): TemplateResult {
-    const icon = this.#markerIcon;
-    const custom = this._markerElements?.length > 0;
-    const partial = PARTIAL_STATES.includes(this.state);
-    const numbered = !!this._stepperContext?.numbered && !partial;
-    const classes = {
-      marker: true,
-      custom,
-      partial: !custom && partial,
-      error: !custom && ERROR_STATES.includes(this.state),
-      filled: !custom && this.state === 'completed',
-      dashed: !custom && !icon && !partial
-    };
-
-    return html`
-      <div part="marker" class=${classMap(classes)} aria-hidden="true">
-        <slot name="marker" @slotchange=${this.#handleMarkerSlotChange}
-          >${icon ? html`<forge-icon name=${icon}></forge-icon>` : html`${numbered ? this.#position || nothing : nothing}`}</slot
-        >
-      </div>
-    `;
+  get #stateText(): string {
+    switch (this.state) {
+      case 'not-started':
+        return 'Not started';
+      case 'completed':
+        return 'Completed';
+      case 'current':
+        return 'Current';
+      case 'in-progress':
+        return 'In progress';
+      case 'critical':
+        return 'Critical';
+      default:
+        return '';
+    }
   }
 
   /* @internal */
   public render(): TemplateResult {
-    const interactive = this.interactive;
+    const icon = this.#markerIcon;
+    const readonly = this.#readonly;
 
     return html`
-      <div part="root" class=${classMap({ 'forge-process-step': true, [this.#orientation]: true, [this.state]: true, interactive })}>
-        <div part="line" class=${classMap({ line: true, active: this.lineActive })} aria-hidden="true"></div>
-        <div class="sidebar">${this.#marker}</div>
-        <div part="label" class="label-row">
-          <span class="label">
-            <slot @slotchange=${this.#handleLabelSlotChange}></slot>
-            ${when(
-              interactive,
-              () => html`
-                <span class="focus-area">
-                  <forge-state-layer exportparts="surface:state-layer" .disabled=${this.state === 'disabled'}></forge-state-layer>
-                  <forge-focus-indicator part="focus-indicator"></forge-focus-indicator>
-                </span>
-              `
-            )}
-          </span>
+      <div
+        part="root"
+        class=${classMap({
+          'forge-process-step': true,
+          [this.#orientation]: true,
+          [this.state]: true,
+          disabled: this.disabled,
+          touched: this.touched
+        })}>
+        <div class="header">
+          <div part="marker" class="marker">
+            ${this._stepperContext?.numbered && this.state === 'not-started'
+              ? html`<span part="marker-number" class="marker-number">${this.#position || nothing}</span>`
+              : nothing}
+            <slot name="marker" @slotchange=${this.#handleMarkerSlotChange}>${icon ? html`<forge-icon name=${icon}></forge-icon>` : nothing}</slot>
+          </div>
+          ${this.#renderLabel()}
+          <div part="support-text" id="support-text" class="support-text" ${hideWhenEmpty(this.#supportTextSlotHideRef)}><slot name="support-text"></slot></div>
+          ${when(
+            !readonly,
+            () => html`
+              <forge-state-layer exportparts="surface:state-layer" .disabled=${this.disabled}></forge-state-layer>
+              <forge-focus-indicator part="focus-indicator" inward></forge-focus-indicator>
+            `
+          )}
         </div>
-        <div part="content" class="content">
-          ${when(this.description, () => html`<span part="description" class="description">${this.description}</span>`)}
-          <div part="meta" class="meta" ${hideWhenEmpty()}><slot name="meta"></slot></div>
-          <slot name="additional-content"></slot>
-          <div part="actions" class="actions" ${hideWhenEmpty()}><slot name="actions"></slot></div>
-        </div>
+        <div part="detail" class="detail" ${hideWhenEmpty(this.#detailSlotHideRef)}><slot name="detail"></slot></div>
       </div>
     `;
   }
 
-  public updated(): void {
-    const target = this.#interactiveElement;
-    const indicator = this.shadowRoot?.querySelector<FocusIndicatorComponent>('forge-focus-indicator');
-    const stateLayer = this.shadowRoot?.querySelector<StateLayerComponent>('forge-state-layer');
-    if (indicator) {
-      indicator.targetElement = target ?? undefined;
-    }
-    if (stateLayer) {
-      stateLayer.targetElement = target;
-    }
-  }
+  #renderLabel(): TemplateResult {
+    const stateText = html`<span class="visually-hidden">(${this.#stateText})</span>`;
 
-  /**
-   * The step's interactive element, which is a slotted link or button in the default slot. Content
-   * in the other slots is ignored, so an action button does not make the label interactive.
-   */
-  get #interactiveElement(): HTMLElement | null {
-    if (this.noninteractive) {
-      return null;
+    if (this.#readonly) {
+      return html`
+        <div part="label" class="label">
+          <slot></slot>
+          ${stateText}
+        </div>
+      `;
+    } else if (this.href) {
+      return html`
+        <div part="label" class="label">
+          <a
+            class="control"
+            href=${ifDefined(this.disabled ? undefined : this.href)}
+            role=${ifDefined(this.disabled ? 'link' : undefined)}
+            aria-describedby="support-text"
+            aria-disabled=${ifDefined(this.disabled ? 'true' : undefined)}
+            aria-current=${ifDefined(this.state === 'current' ? 'step' : undefined)}>
+            <slot></slot>
+            ${stateText}
+          </a>
+        </div>
+      `;
     }
 
-    const elements = this._labelElements ?? [];
-    const anchor = elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.ANCHOR));
-    return (anchor ?? elements.find(el => el.matches(PROCESS_STEP_CONSTANTS.selectors.BUTTON_LIKE)) ?? null) as HTMLElement | null;
+    return html`
+      <div part="label" class="label">
+        <button
+          class="control"
+          type="button"
+          aria-describedby="support-text"
+          aria-current=${ifDefined(this.state === 'current' ? 'step' : undefined)}
+          ?disabled=${this.disabled}>
+          <slot></slot>
+          ${stateText}
+        </button>
+      </div>
+    `;
   }
 
   /** Announces the position of the step when the process moves to it. */
@@ -329,17 +373,13 @@ export class ProcessStepComponent extends BaseLitElement {
 
   #onClick: EventListener = (evt: Event) => this.#handleClick(evt);
 
-  #handleLabelSlotChange(): void {
-    this.requestUpdate();
-  }
-
   #handleMarkerSlotChange(): void {
     this.requestUpdate();
   }
 
   #handleClick(evt: Event): void {
-    const interactiveElement = this.#interactiveElement;
-    if (!interactiveElement || !evt.composedPath().includes(interactiveElement)) {
+    const control = this._control;
+    if (this.disabled || !control || !evt.composedPath().includes(control)) {
       return;
     }
 
