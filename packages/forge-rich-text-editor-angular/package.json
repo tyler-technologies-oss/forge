@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-rich-text-editor-angular",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The official Tyler Forge™ rich text editor adapter library for Angular.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
@@ -38,7 +38,7 @@
   "peerDependencies": {
     "@angular/common": ">=20.0.0 < 23.0.0",
     "@angular/core": ">=20.0.0 < 23.0.0",
-    "@tylertech/forge-rich-text-editor": "^0.1.0"
+    "@tylertech/forge-rich-text-editor": "^0.2.0"
   },
   "devDependencies": {
     "@angular/build": "^20.3.13",
