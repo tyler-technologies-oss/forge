@@ -121,7 +121,8 @@ export class ProcessStepperComponent extends BaseLitElement {
   }
 
   /**
-   * The steps within the process.
+   * The steps within the process. Read only.
+   *
    * @readonly
    */
   public get steps(): ProcessStepComponent[] {
@@ -129,7 +130,7 @@ export class ProcessStepperComponent extends BaseLitElement {
   }
 
   /**
-   * The step most recently activated by the user, or `null` if no step has been activated.
+   * The step most recently activated by the user, or `null` if no step has been activated. Read only.
    * @readonly
    */
   public get selectedStep(): ProcessStepComponent | null {
@@ -139,7 +140,7 @@ export class ProcessStepperComponent extends BaseLitElement {
   /**
    * Whether the stepper has collapsed to its compact layout. A horizontal stepper in a container
    * narrower than 600px lays its steps out vertically, because there is not enough width for
-   * legible step labels side by side.
+   * legible step labels side by side. Read only.
    * @readonly
    */
   public get compact(): boolean {
@@ -147,7 +148,7 @@ export class ProcessStepperComponent extends BaseLitElement {
   }
 
   /**
-   * The number of completed steps as a fraction of the total number of steps, between 0 and 1.
+   * The number of completed steps as a fraction of the total number of steps, between 0 and 1. Read only.
    * @readonly
    */
   public get progress(): number {

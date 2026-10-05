@@ -212,6 +212,7 @@ export class ProcessStepComponent extends BaseLitElement {
     }
   }
 
+  /* @internal */
   public get touched(): boolean {
     if (this.state === 'current') {
       return true;
@@ -220,7 +221,7 @@ export class ProcessStepComponent extends BaseLitElement {
     const currentIndex = this._stepperContext?.currentIndex ?? 0;
     return currentIndex > 0 && this[stepIndex] <= currentIndex;
   }
-
+  /* @internal */
   public get labelText(): string {
     return this._labelNodes
       .map(node => node.textContent)
