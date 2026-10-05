@@ -37,4 +37,15 @@ describe('DialogService', () => {
     expect(result).toBe('done');
     expect(completed).toBe(true);
   });
+
+  it('should emit the close result when the dialog closes without animation', async () => {
+    const dialogRef = service.open(TestDialogContentComponent, { options: { animationType: 'none' } });
+    await (dialogRef.nativeElement as unknown as { updateComplete: Promise<boolean> }).updateComplete;
+    const results: unknown[] = [];
+    dialogRef.afterClosed.subscribe(value => results.push(value));
+
+    dialogRef.close('done');
+
+    expect(results).toEqual(['done']);
+  });
 });
