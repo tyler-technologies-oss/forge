@@ -1,5 +1,4 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { action } from 'storybook/actions';
 import '@tylertech/forge/avatar';
 import '@tylertech/forge/button';
 import '@tylertech/forge/checkbox';
@@ -8,9 +7,6 @@ import '@tylertech/forge/process-stepper';
 import '@tylertech/forge/label-value';
 import { html } from 'lit';
 import { applyArgs, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
-
-const changeAction = action('change');
-const selectAction = action('forge-process-step-select');
 
 const component = 'forge-process-stepper';
 
