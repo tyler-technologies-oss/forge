@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- ea6ee64: feat(kbd): add `forge-kbd` component to React adapter
+- ea6ee64: feat(kbd): add kbd proxy
 - e922a5c: feat(listbox): add listbox proxy
 
 ## 3.5.0

@@ -4,13 +4,13 @@
 
 ### Minor Changes
 
-- 7f3f8e9: Regenerated `forge-keyboard-shortcut` proxy with new inputs: `anchor`, `anchorElement`, `scope`, `scopeElement`, `allowRepeat`, `fallthrough`, and `anchorAccessibility`.
+- 7f3f8e9: feat(keyboard-shortcut): add support for new properties `anchor`, `anchorElement`, `scope`, `scopeElement`, `allowRepeat`, `fallthrough`, and `anchorAccessibility`
 - e922a5c: feat(listbox): add listbox component
 - ea6ee64: feat(kbd): add `forge-kbd` component to Angular adapter
 
 ### Patch Changes
 
-- cc62ebb: Fixed `DialogRef.afterClosed` emitting `undefined` instead of the provided result when the dialog uses `animationType: 'none'`.
+- cc62ebb: fix(dialog): fix `DialogRef.afterClosed` emitting `undefined` instead of the provided result when the dialog uses `animationType: 'none'`
 
 ## 9.2.0
 
