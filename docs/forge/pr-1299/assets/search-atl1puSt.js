@@ -1,0 +1,20 @@
+import{u as e,j as t,M as p,T as m,C as n}from"./blocks-DyG_R4cd.js";import{C as s}from"./CustomArgTypes-B74mDj-q.js";import{S as a,D as c}from"./search.stories-CAiiJAze.js";import"./preload-helper-PPVm8Dsz.js";import"./index-DL6KFQ_f.js";import"./iframe-DuTL4nLl.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-CwE7tZFf.js";import"./service-adapter-8tADcN_b.js";import"./app-bar-menu-button-BgLQ5xDT.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./class-map-C0XngG5m.js";import"./directive-CwRn8Fwj.js";import"./property-BGhPRx62.js";import"./base-lit-element-BVpLHOdt.js";import"./async-directive-BKNhKO1r.js";import"./a11y-utils-DssnAab5.js";import"./dom-utils-BDbRr6KM.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./constants-ffvdo6x3.js";import"./create-context-BxR5I8pu.js";import"./custom-element-DR9AFpIK.js";import"./icon-button-CJxY1IBT.js";import"./base-button-C-ej0aEA.js";import"./tyler-icons-_o7MAz4c.js";import"./state-DVz41YCz.js";import"./query-CtiAP21w.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./utils-C31il88P.js";import"./focus-indicator-DnG7A_bn.js";import"./floating-ui.dom-DaMtbvS2.js";import"./icon-BUzV7HWf.js";import"./state-layer-gtlkuVuf.js";import"./core-property-Co8uF8PW.js";import"./base-adapter-DOky_or5.js";import"./base-component-BFu9bkgC.js";import"./icon-button-constants-JHHxiN9v.js";import"./tooltip-D8_0K3tX.js";import"./overlay-i68906s2.js";import"./key-action-lsAysfb-.js";import"./index-BHXiN6PC.js";import"./with-longpress-listener-D4ROnnkg.js";import"./dismissible-stack-DyoP5jNB.js";import"./with-element-internals-CFYP_epH.js";import"./app-bar-profile-button-CvoVcJDN.js";import"./badge-Bcao1v-R.js";import"./menu-tpM8UxCX.js";import"./list-DNtySjlc.js";import"./list-item-BDyrHBxR.js";import"./event-utils-zQ4FLDwK.js";import"./list-dropdown-aware-core-DshtKREU.js";import"./list-dropdown-Csx1M9MA.js";import"./event-utils-C1SDeUaq.js";import"./linear-progress-BuMeIIdZ.js";import"./popover-CLHAAODD.js";import"./skeleton-DWKuOLCj.js";import"./a11y-BxM9_46k.js";import"./scroll-axis-observer-DmuibK9q.js";import"./base-component-delegate-DxZGdeuy.js";import"./avatar-CUnUjMLm.js";import"./style-map-WHZOtuyF.js";import"./avatar-constants-DUcpY0bU.js";import"./button-CXiX07Ik.js";import"./button-constants-DRqTH6Pv.js";import"./toolbar-CTtNvxpG.js";function o(r){const i={code:"code",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...e(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(p,{of:a}),`
+`,t.jsx(m,{}),`
+`,t.jsxs(i.p,{children:["The app-bar search component is essentially just a strictly-styled ",t.jsx(i.code,{children:"<input>"})," element that fits in with the app-bar ecosystem. It provides some additional functionality through its public API, but at the very least it gives a common component to use for a familiar search experience for users."]}),`
+`,t.jsx(i.h2,{id:"default",children:"Default"}),`
+`,t.jsx(n,{of:c}),`
+`,t.jsx(i.h2,{id:"api",children:"API"}),`
+`,t.jsx(s,{}),`
+`,t.jsx(i.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(i.ul,{children:[`
+`,t.jsxs(i.li,{children:["Ensure that you provide a placeholder attribute for the ",t.jsx(i.code,{children:"<input>"})," element to help give users an idea of what to enter."]}),`
+`,t.jsxs(i.li,{children:["Ensure that you add an aria-label or aria-labelledby attribute to the ",t.jsx(i.code,{children:"<input>"}),"."]}),`
+`,t.jsx(i.li,{children:"If using a custom theme, make sure proper color contrast ratios are met and adjust using CSS custom properties if not."}),`
+`]}),`
+`,t.jsx(i.h2,{id:"types",children:"Types"}),`
+`,t.jsx(i.pre,{children:t.jsx(i.code,{className:"language-typescript",children:`interface IAppBarSearchEventData {
+  value: string;
+  combined: boolean;
+  context: string;
+}
+`})})]})}function St(r={}){const{wrapper:i}={...e(),...r.components};return i?t.jsx(i,{...r,children:t.jsx(o,{...r})}):o(r)}export{St as default};
