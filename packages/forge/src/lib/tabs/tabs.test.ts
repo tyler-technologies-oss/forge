@@ -667,6 +667,47 @@ describe('Tabs', () => {
       expect(ctx.hasScrollButtons).toBe(false);
     });
 
+    it('should not steal focus from elements outside the tab bar when scroll buttons are enabled', async () => {
+      const screen = render(html`
+        <input id="outside-input" />
+        <forge-tab-bar scroll-buttons>
+          <forge-tab>First</forge-tab>
+          <forge-tab>Second</forge-tab>
+          <forge-tab>Third</forge-tab>
+        </forge-tab-bar>
+      `);
+      const input = screen.container.querySelector('input') as HTMLInputElement;
+      const tabBar = screen.container.querySelector('forge-tab-bar') as ITabBarComponent;
+      input.focus();
+
+      await tabBar.updateComplete;
+      await frame();
+      await frame();
+
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should not steal focus from elements outside the tab bar when resized with scroll buttons enabled', async () => {
+      const screen = render(html`
+        <input id="outside-input" />
+        <forge-tab-bar scroll-buttons style="width: 9999px">
+          <forge-tab>First</forge-tab>
+          <forge-tab>Second</forge-tab>
+          <forge-tab>Third</forge-tab>
+        </forge-tab-bar>
+      `);
+      const input = screen.container.querySelector('input') as HTMLInputElement;
+      const tabBar = screen.container.querySelector('forge-tab-bar') as ITabBarComponent;
+      await tabBar.updateComplete;
+      input.focus();
+
+      tabBar.style.width = '9000px';
+      await frame();
+      await frame();
+
+      expect(document.activeElement).toBe(input);
+    });
+
     it('should scroll forward when forward scroll button is clicked', async () => {
       const ctx = await createFixture({ scrollButtons: true, width: '150px' });
       const scrollBySpy = vi.spyOn(ctx.scrollContainer, 'scrollBy');
