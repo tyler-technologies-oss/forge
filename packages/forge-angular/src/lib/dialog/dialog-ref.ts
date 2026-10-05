@@ -11,6 +11,8 @@ export class DialogRef<TComponent = any, TResult = any> {
   private readonly _beforeClose = new Subject<CustomEvent<IDialogBeforeCloseEventData>>();
   public beforeClose: Observable<CustomEvent<IDialogBeforeCloseEventData>> = this._beforeClose.asObservable();
 
+  private _isClosed = false;
+
   public componentInstance: TComponent;
   public componentRef: ComponentRef<TComponent>;
 
@@ -20,6 +22,11 @@ export class DialogRef<TComponent = any, TResult = any> {
   }
 
   public close(result?: TResult): void {
+    if (this._isClosed) {
+      return;
+    }
+
+    this._isClosed = true;
     this.nativeElement.open = false;
     this._afterClosed.next(result);
     this._afterClosed.complete();
@@ -31,6 +38,6 @@ export class DialogRef<TComponent = any, TResult = any> {
   }
 
   public get isClosed(): boolean {
-    return this._afterClosed.closed;
+    return this._isClosed;
   }
 }
