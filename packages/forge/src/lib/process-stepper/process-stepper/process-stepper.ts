@@ -5,6 +5,7 @@ import { property, queryAssignedElements, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { toggleState } from '../../core/utils/utils.js';
 import { PROCESS_STEP_CONSTANTS, stepIndex } from '../process-step/process-step-constants.js';
 import { ProcessStepComponent } from '../process-step/process-step.js';
 import {
@@ -12,6 +13,7 @@ import {
   PROCESS_STEPPER_CONSTANTS,
   PROCESS_STEPPER_CONTEXT,
   PROCESS_STEPPER_NUMBERS,
+  PROCESS_STEPPER_ORIENTATIONS,
   ProcessStepperOrientation
 } from './process-stepper-constants.js';
 
@@ -27,10 +29,14 @@ import styles from './process-stepper.scss';
  *
  * @slot - The default slot for `<forge-process-step>` elements.
  *
- * @fires {Event} change - Dispatches when an interactive step is activated. The activated step is available from `selectedStep`.
+ * @fires {Event} change - Dispatches when a step is activated. The activated step is available from `selectedStep`.
  *
  * @csspart root - The root element.
  * @csspart steps - The element containing the steps.
+ *
+ * @state readonly - Applied when the steps are read-only indicators of progress.
+ * @state vertical - Applied when the orientation is vertical.
+ * @state horizontal - Applied when the orientation is horizontal, including while the stepper is compact.
  */
 export class ProcessStepperComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
@@ -58,6 +64,15 @@ export class ProcessStepperComponent extends BaseLitElement {
   @property({ type: Boolean })
   public numbered = false;
 
+  /**
+   * Whether the steps are read-only indicators of progress. Steps in a read-only stepper do not
+   * render a button or link, and cannot be activated.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public readonly = false;
+
   @queryAssignedElements({ selector: PROCESS_STEP_CONSTANTS.elementName })
   private readonly _steps!: ProcessStepComponent[];
 
@@ -65,7 +80,7 @@ export class ProcessStepperComponent extends BaseLitElement {
   private _narrow = false;
 
   @provide({ context: PROCESS_STEPPER_CONTEXT })
-  private _context: IProcessStepperContext = { count: 0, numbered: false, orientation: 'vertical' };
+  private _context: IProcessStepperContext = { count: 0, currentIndex: 0, numbered: false, readonly: false, orientation: 'vertical' };
 
   readonly #internals: ElementInternals;
 
@@ -80,17 +95,28 @@ export class ProcessStepperComponent extends BaseLitElement {
     super.connectedCallback();
     setDefaultAria(this, this.#internals, { role: 'list' });
     this.addEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
+    this.addEventListener(PROCESS_STEP_CONSTANTS.events.STATE_CHANGE, this.#onStepStateChange);
     ForgeResizeObserver.observe(this, entry => this.#handleResize(entry));
   }
 
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEventListener(PROCESS_STEP_CONSTANTS.events.SELECT, this.#onStepSelect);
+    this.removeEventListener(PROCESS_STEP_CONSTANTS.events.STATE_CHANGE, this.#onStepStateChange);
     ForgeResizeObserver.unobserve(this);
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
     super.willUpdate(changedProperties);
+
+    if (changedProperties.has('readonly')) {
+      toggleState(this.#internals, 'readonly', this.readonly);
+    }
+
+    if (changedProperties.has('orientation')) {
+      PROCESS_STEPPER_ORIENTATIONS.forEach(orientation => toggleState(this.#internals, orientation, this.orientation === orientation));
+    }
+
     this.#updateContext();
   }
 
@@ -151,8 +177,10 @@ export class ProcessStepperComponent extends BaseLitElement {
 
   #updateContext(): void {
     const context: IProcessStepperContext = {
-      count: this._steps?.length ?? 0,
+      count: this._steps.length,
+      currentIndex: this._steps.reduce((index, step, i) => (step.state === 'current' ? i + 1 : index), 0),
       numbered: this.numbered,
+      readonly: this.readonly,
       orientation: this.#effectiveOrientation
     };
     const changed = (Object.keys(context) as (keyof IProcessStepperContext)[]).some(key => context[key] !== this._context[key]);
@@ -169,6 +197,8 @@ export class ProcessStepperComponent extends BaseLitElement {
   }
 
   #onStepSelect: EventListener = (evt: Event) => this.#handleStepSelect(evt);
+
+  #onStepStateChange: EventListener = () => this.requestUpdate();
 
   #handleSlotChange(): void {
     this._steps.forEach((step, i) => (step[stepIndex] = i + 1));

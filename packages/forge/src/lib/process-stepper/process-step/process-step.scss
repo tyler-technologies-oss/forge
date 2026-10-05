@@ -1,4 +1,5 @@
 @use './core';
+@use '../../utils/mixins' as utils;
 
 //
 // Host
@@ -14,179 +15,88 @@
 
 .forge-process-step {
   @include core.tokens;
+}
+
+.forge-process-step {
   @include core.base;
+
+  &.vertical {
+    @include core.vertical;
+  }
+
+  &.horizontal {
+    @include core.horizontal;
+  }
+
+  &.disabled {
+    .header,
+    .detail {
+      @include core.disabled;
+    }
+  }
+
+  &.touched {
+    @include core.touched;
+  }
+
+  &.critical {
+    @include core.critical;
+
+    .label,
+    .support-text {
+      @include core.critical;
+    }
+  }
 }
 
-.forge-process-step.vertical {
-  @include core.vertical;
+.header {
+  @include core.header;
 }
 
-.forge-process-step.horizontal {
-  @include core.horizontal;
+.vertical .header {
+  @include core.header-vertical;
 }
 
-:host(:state(disabled)) .forge-process-step {
-  @include core.disabled;
+.horizontal .header {
+  @include core.header-horizontal;
 }
-
-//
-// Progress line
-//
-
-.line {
-  @include core.line;
-}
-
-.line.active {
-  @include core.line-active;
-}
-
-.vertical .line {
-  @include core.line-vertical;
-}
-
-.vertical .line.active {
-  @include core.line-vertical-active;
-}
-
-.horizontal .line {
-  @include core.line-horizontal;
-}
-
-.horizontal .line.active {
-  @include core.line-horizontal-active;
-}
-
-//
-// Sidebar
-//
-
-.sidebar {
-  @include core.sidebar;
-}
-
-.vertical .sidebar {
-  @include core.sidebar-vertical;
-}
-
-.horizontal .sidebar {
-  @include core.sidebar-horizontal;
-}
-
-.horizontal .label-row,
-.horizontal .content {
-  @include core.text-cell-horizontal;
-}
-
-.label-row {
-  @include core.label-row;
-}
-
-.vertical .label-row {
-  @include core.label-row-vertical;
-}
-
-.horizontal .label-row {
-  @include core.label-row-horizontal;
-}
-
-//
-// Marker
-//
 
 .marker {
   @include core.marker;
 }
 
-.marker.dashed {
-  @include core.marker-dashed;
-}
-
-.marker.filled {
-  @include core.marker-filled;
-}
-
-.marker.partial {
-  @include core.marker-partial;
-}
-
-.marker.error {
-  @include core.marker-error;
-}
-
-.marker.custom {
-  @include core.marker-custom;
-}
-
-.marker forge-icon {
-  @include core.marker-icon;
-}
-
-//
-// Content
-//
-
-.content {
-  @include core.content;
-}
-
-.vertical .content {
-  @include core.content-vertical;
-}
-
-.label-row {
-  @include core.label;
+.marker-number {
+  @include core.marker-number;
 }
 
 .label {
-  @include core.label-text;
+  @include core.label;
 }
 
-.focus-area {
-  @include core.focus-area;
+.support-text {
+  @include core.support-text;
+}
+
+.detail {
+  @include core.detail;
 }
 
 forge-focus-indicator {
-  @include core.label-focus-indicator;
+  @include core.focus-indicator;
 }
 
-forge-state-layer {
-  @include core.label-state-layer;
+.control {
+  @include core.control;
 }
 
-.label-row ::slotted(a),
-.label-row ::slotted(button) {
-  @include core.slotted-label-control;
+.control::after {
+  @include core.control-hit-target;
 }
 
-.interactive .label-row ::slotted(a),
-.interactive .label-row ::slotted(button) {
-  @include core.slotted-label-control-interactive;
+.disabled .control {
+  @include core.control-disabled;
 }
 
-.disabled .label-row ::slotted(a),
-.disabled .label-row ::slotted(button) {
-  @include core.slotted-label-control-disabled;
-}
-
-.description {
-  @include core.description;
-}
-
-.meta {
-  @include core.meta;
-}
-
-.actions {
-  @include core.actions;
-}
-
-//
-// Slotted
-//
-
-::slotted(forge-checkbox),
-::slotted(forge-radio),
-::slotted(forge-switch) {
-  @include core.slotted-control;
+.visually-hidden {
+  @include utils.visually-hidden;
 }

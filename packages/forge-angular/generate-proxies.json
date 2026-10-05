@@ -18,6 +18,7 @@
     "forge-key": ["forge-key-item"],
     "forge-list": ["forge-list-item"],
     "forge-meter-group": ["forge-meter"],
+    "forge-process-stepper": ["forge-process-step"],
     "forge-radio-group": ["forge-radio"],
     "forge-select": ["forge-option"],
     "forge-split-view": ["forge-split-view-panel"],
