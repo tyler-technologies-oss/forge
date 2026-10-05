@@ -1,0 +1,9 @@
+{
+  "name": "forge",
+  "description": "Tyler Forge design system skills and MCP servers",
+  "version": "1.2.0",
+  "author": {
+    "name": "Tyler Technologies"
+  },
+  "keywords": ["forge", "tyler", "design-system", "web-components", "ui"]
+}

@@ -142,6 +142,20 @@ export class DatePickerCore extends BaseDatePickerCore<IDatePickerAdapter, Date 
     }
   }
 
+  protected override _onInputBlur(evt: FocusEvent): void {
+    super._onInputBlur(evt);
+    this._syncValueFromInput();
+  }
+
+  /** Emits a change if the input value was coerced (e.g. by the mask or formatter) to a date that differs from the current value. */
+  private _syncValueFromInput(): void {
+    const date = this._coerceDateValue(this._getSanitizedDateString(this._adapter.getInputValue()));
+    this._tryMergeCurrentTime(date);
+    if (!isSameDate(date, this._value) && this._isDateValueAcceptable(date)) {
+      this._emitChangeEvent(date);
+    }
+  }
+
   protected _onInputValueChanged(value: string): void {
     const sanitizedValue = this._getSanitizedDateString(value);
     if (this._masked && sanitizedValue) {

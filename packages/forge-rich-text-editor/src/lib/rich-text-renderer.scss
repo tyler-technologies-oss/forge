@@ -7,7 +7,7 @@
 }
 
 .renderer-content {
-  padding: var(--forge-spacing-medium);
+  padding: var(--forge-rich-text-renderer-padding, var(--forge-spacing-medium));
 
   @include rte-core.content-styles;
 }

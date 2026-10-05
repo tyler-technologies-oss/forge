@@ -5,6 +5,7 @@ import { ForgeRichTextContentModule } from './rich-text-content';
 import { ForgeRichTextContextModule } from './rich-text-context';
 import { ForgeRichTextEditorModule } from './rich-text-editor';
 import { ForgeRichTextRendererModule } from './rich-text-renderer';
+import { ForgeRichTextToolbarModule } from './rich-text-toolbar';
 import { ForgeRteAlignModule } from './rte-align';
 import { ForgeRteBoldModule } from './rte-bold';
 import { ForgeRteBulletListModule } from './rte-bullet-list';
@@ -25,6 +26,7 @@ const MODULES = [
   ForgeRichTextContextModule,
   ForgeRichTextEditorModule,
   ForgeRichTextRendererModule,
+  ForgeRichTextToolbarModule,
   ForgeRteAlignModule,
   ForgeRteBoldModule,
   ForgeRteBulletListModule,

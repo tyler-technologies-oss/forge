@@ -1,10 +1,10 @@
-import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ContextRoot } from '@lit/context';
-import { createRef, ref } from 'lit/directives/ref.js';
 
 import './rich-text-context.js';
 import './rich-text-content.js';
+import './rich-text-toolbar.js';
 import type { RichTextContextComponent } from './rich-text-context.js';
 import type { RichTextEditorContent } from './editor-context.js';
 
@@ -33,6 +33,7 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  *
  * @dependency forge-rich-text-context
  * @dependency forge-rich-text-content
+ * @dependency forge-rich-text-toolbar
  *
  * @slot - The default slot is reserved for feature components (toolbar buttons like forge-rte-standard-tools, forge-rte-code, forge-rte-link, etc.).
  *
@@ -49,6 +50,7 @@ export const RICH_TEXT_EDITOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ric
  * @attribute {string} content - The HTML content of the editor. Pass a ProseMirror document through the property instead; an attribute cannot carry an object.
  * @cssproperty --forge-rich-text-editor-disabled-opacity - The opacity of the editor when it is
  * disabled, and of the toolbar when it is readonly.
+ * @cssproperty --forge-rich-text-editor-content-padding - The padding around the editable content.
  *
  * @attribute {boolean} disabled - Whether the editor is disabled.
  * @attribute {boolean} readonly - Whether the editor is in readonly mode.
@@ -120,20 +122,6 @@ export class RichTextEditorComponent extends LitElement {
     contextRoot.attach(this);
   }
 
-  readonly #toolbarRef = createRef<HTMLElement>();
-
-  public override updated(changedProperties: PropertyValues<this>): void {
-    super.updated(changedProperties);
-    // The toolbar controls the editor, and says so through an element reference. `aria-controls`
-    // cannot express this: the editable element lives in forge-rich-text-content's shadow root and
-    // an IDREF cannot cross a shadow boundary. This host is in an ancestor tree of the toolbar, so
-    // it is a target a reference can legally reach.
-    const toolbar = this.#toolbarRef.value;
-    if (toolbar && 'ariaControlsElements' in toolbar) {
-      (toolbar as unknown as { ariaControlsElements: Element[] | null }).ariaControlsElements = [this];
-    }
-  }
-
   public override render(): TemplateResult {
     return html`
       <forge-rich-text-context
@@ -147,9 +135,9 @@ export class RichTextEditorComponent extends LitElement {
         .allowPasteFormatting=${this.allowPasteFormatting}
         .allowPasteImages=${this.allowPasteImages}>
         <div class="forge-rich-text-editor">
-          <div class="editor-toolbar" role="toolbar" aria-label="Rich text formatting toolbar" aria-orientation="horizontal" ${ref(this.#toolbarRef)}>
+          <forge-rich-text-toolbar class="editor-toolbar">
             <slot></slot>
-          </div>
+          </forge-rich-text-toolbar>
           <forge-rich-text-content></forge-rich-text-content>
         </div>
       </forge-rich-text-context>

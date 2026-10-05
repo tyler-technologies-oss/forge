@@ -1,0 +1,17 @@
+@use '../core/styles/tokens/listbox/tokens';
+@use '../core/styles/tokens/token-utils';
+
+$_module: listbox;
+$_tokens: tokens.$tokens;
+
+@mixin provide-theme($theme) {
+  @include token-utils.provide-theme($_module, $_tokens, $theme);
+}
+
+@function token($name, $type: token) {
+  @return token-utils.token($_module, $_tokens, $name, $type);
+}
+
+@mixin tokens($includes: null, $excludes: null) {
+  @include token-utils.tokens($_module, $_tokens, $includes, $excludes);
+}

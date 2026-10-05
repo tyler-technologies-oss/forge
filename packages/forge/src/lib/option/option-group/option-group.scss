@@ -1,0 +1,22 @@
+@use './token-utils' as *;
+@use './core' as core;
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-option-group {
+  @include tokens;
+}
+
+.forge-option-group {
+  @include core.base;
+}
+
+.label {
+  @include core.label;
+}

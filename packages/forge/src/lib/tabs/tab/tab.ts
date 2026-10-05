@@ -245,7 +245,7 @@ export class TabComponent extends BaseLitElement implements ITabComponent {
   }
 
   public override connectedCallback(): void {
-    // Set the parent tab bar's context root to ensurre context is provided even if the tab is upgraded before the tab bar
+    // Set the parent tab bar's context root to ensure context is provided even if the tab is upgraded before the tab bar
     // This must happen before super.connectedCallback() for the root to catch any context updates that occur during the initial update cycle
     const tabBar = this.closest(TAB_BAR_CONSTANTS.elementName);
     if (tabBar) {

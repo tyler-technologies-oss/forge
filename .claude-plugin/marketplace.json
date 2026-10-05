@@ -1,0 +1,24 @@
+{
+  "name": "tyler-forge",
+  "owner": {
+    "name": "Tyler Technologies"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for building apps with the Tyler Forge Design System"
+  },
+  "plugins": [
+    {
+      "name": "forge",
+      "source": "./plugin",
+      "description": "Tyler Forge design system skills and MCP servers",
+      "version": "1.2.0",
+      "keywords": [
+        "forge",
+        "tyler",
+        "design-system",
+        "web-components",
+        "ui"
+      ]
+    }
+  ]
+}

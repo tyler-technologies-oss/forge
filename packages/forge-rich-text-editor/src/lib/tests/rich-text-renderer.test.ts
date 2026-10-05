@@ -47,6 +47,26 @@ describe('RichTextRendererComponent', () => {
     });
   });
 
+  describe('Padding', () => {
+    it('should pad the content with medium spacing by default', async () => {
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer style="--forge-spacing-medium: 12px"></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
+      const container = el.shadowRoot!.querySelector('.renderer-content') as HTMLElement;
+      expect(getComputedStyle(container).padding).toBe('12px');
+    });
+
+    it('should use the padding custom property when set', async () => {
+      const el = await renderFixture<RichTextRendererComponent>(
+        html`<forge-rich-text-renderer style="--forge-rich-text-renderer-padding: 0"></forge-rich-text-renderer>`,
+        'forge-rich-text-renderer'
+      );
+      const container = el.shadowRoot!.querySelector('.renderer-content') as HTMLElement;
+      expect(getComputedStyle(container).padding).toBe('0px');
+    });
+  });
+
   describe('Content Rendering', () => {
     it('should render empty content', async () => {
       const el = await renderFixture<RichTextRendererComponent>(html`<forge-rich-text-renderer></forge-rich-text-renderer>`, 'forge-rich-text-renderer');

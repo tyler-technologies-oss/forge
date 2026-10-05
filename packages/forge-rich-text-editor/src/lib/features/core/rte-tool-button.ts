@@ -1,7 +1,10 @@
+import { consume } from '@lit/context';
 import { defineIconButtonComponent } from '@tylertech/forge';
-import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { html, LitElement, nothing, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators.js';
+import { live } from 'lit/directives/live.js';
 import { featureHostStyles } from './feature-styles.js';
+import { IRteToolbarFocus, rteToolbarFocusContext } from './toolbar-focus.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 declare global {
@@ -37,14 +40,16 @@ export const RTE_TOOL_BUTTON_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-
  * @property {boolean} [disabled=false] - Whether the button is disabled.
  * @property {boolean} [active=false] - Whether the button is in an active/pressed state.
  * @property {string} [keyboardShortcut] - The keyboard shortcut for this tool (e.g., "Control+B").
+ * @property {boolean} [noToggle=false] - Renders a momentary action button with no pressed state, for tools such as undo.
  *
  * @attribute {string} label - The accessible label for the button.
  * @attribute {string} icon - The icon name to display.
  * @attribute {boolean} disabled - Whether the button is disabled.
  * @attribute {boolean} active - Whether the button is in active state.
  * @attribute {string} keyboard-shortcut - The keyboard shortcut for this tool.
+ * @attribute {boolean} no-toggle - Renders a momentary action button with no pressed state.
  *
- * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the toggle state.
+ * @event {CustomEvent<boolean>} forge-rte-tool-toggle - Fired when the button is clicked or activated. The detail contains the requested toggle state, and is always `false` with `no-toggle`.
  */
 @customElement(RTE_TOOL_BUTTON_TAG_NAME)
 export class RteToolButtonComponent extends LitElement {
@@ -77,6 +82,10 @@ export class RteToolButtonComponent extends LitElement {
   @property({ attribute: 'keyboard-shortcut' })
   public keyboardShortcut: string | undefined;
 
+  /** Renders a momentary action button with no pressed state, for tools such as undo. */
+  @property({ type: Boolean, attribute: 'no-toggle' })
+  public noToggle = false;
+
   /**
    * The element this button controls, surfaced to assistive technology through
    * `ariaControlsElements` rather than `aria-controls`.
@@ -92,8 +101,26 @@ export class RteToolButtonComponent extends LitElement {
   @query('forge-icon-button')
   private readonly _iconButton!: HTMLElement | null;
 
+  @state()
+  @consume({ context: rteToolbarFocusContext, subscribe: true })
+  private readonly _toolbarFocus?: IRteToolbarFocus;
+
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    this._toolbarFocus?.requestSync();
+  }
+
+  public override disconnectedCallback(): void {
+    const toolbarFocus = this._toolbarFocus;
+    super.disconnectedCallback();
+    toolbarFocus?.requestSync();
+  }
+
   public override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
+    if (changedProperties.has('disabled')) {
+      this._toolbarFocus?.requestSync();
+    }
     if (!changedProperties.has('controlsElement') || !this._iconButton) {
       return;
     }
@@ -114,12 +141,14 @@ export class RteToolButtonComponent extends LitElement {
       <forge-icon-button
         shape="squared"
         density="medium"
-        toggle
-        ?pressed=${this.active}
+        ?toggle=${!this.noToggle}
+        ?pressed=${!this.noToggle && this.active}
         @forge-icon-button-toggle=${this._toggle}
+        @click=${this.#handleClick}
         @pointerdown=${this.#handlePointerDown}
         @keydown=${this.#handleKeydown}
         ?disabled=${this.disabled}
+        tabindex=${this.disabled ? nothing : live(this.#tabIndex)}
         aria-label=${this.label}
         aria-keyshortcuts=${this.keyboardShortcut || ''}>
         <forge-icon .name=${this.icon}></forge-icon>
@@ -128,9 +157,30 @@ export class RteToolButtonComponent extends LitElement {
     `;
   }
 
+  /**
+   * Inside an editor toolbar only the toolbar's current tab stop is tabbable. `live` matters: forge's
+   * button removes its tabindex when disabled and restores `0` when re-enabled, behind this
+   * element's back, and `live` re-applies the intended value on the next render.
+   */
+  get #tabIndex(): string {
+    return !this._toolbarFocus || this._toolbarFocus.isTabStop(this) ? '0' : '-1';
+  }
+
+  /** Moves focus to the button, which lives in this element's shadow root. */
+  public override focus(options?: FocusOptions): void {
+    this._iconButton?.focus(options);
+  }
+
   private async _toggle(evt: CustomEvent<boolean>): Promise<void> {
     evt.preventDefault();
     this.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: evt.detail }));
+  }
+
+  #handleClick(): void {
+    // In toggle mode the icon button reports activation through its own toggle event instead.
+    if (this.noToggle) {
+      this.dispatchEvent(new CustomEvent('forge-rte-tool-toggle', { detail: false }));
+    }
   }
 
   #handlePointerDown(evt: PointerEvent | KeyboardEvent): void {

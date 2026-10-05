@@ -16,6 +16,7 @@
     "format:check": "turbo run format:check",
     "setup:playwright": "playwright install --with-deps chromium",
     "test": "turbo run test",
+    "version-packages": "changeset version && node plugin/scripts/sync-version.mjs",
     "release": "pnpm run build && changeset publish"
   },
   "keywords": [

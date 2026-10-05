@@ -1,6 +1,7 @@
 packages:
   - packages/*
   - blocks
+  - plugin
 
 catalog:
   '@custom-elements-manifest/analyzer': ^0.11.0

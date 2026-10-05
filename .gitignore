@@ -9,3 +9,4 @@ dist/
 *storybook.log
 storybook-static/
 blocks/manifest.json
+.heroku-deploy/

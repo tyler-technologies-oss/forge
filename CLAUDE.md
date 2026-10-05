@@ -71,6 +71,12 @@ DO NOT add comments unless code is complex. Defer to configs.
 - `packages/forge-rich-text-editor-react` - React adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-rich-text-editor-angular` - Angular adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-adapter-codegen` - Shared adapter code generation, private to this repo (see its CLAUDE.md)
+- `packages/forge-mcp` - MCP server for Forge (see its CLAUDE.md)
+
+Outside `packages/` (private, not published to npm):
+
+- `blocks` - Pre-built HTML block templates (see Blocks below)
+- `plugin` - Claude Code plugin for Forge: skills, hooks, and MCP registration (see its CLAUDE.md)
 
 ## Blocks
 
@@ -78,7 +84,7 @@ Blocks are pre-built HTML templates demonstrating Forge component patterns. Use 
 
 ### Finding Blocks
 
-- Use the `mcp__forge__get_forge_blocks` tool to work with blocks:
+- Use the `get_forge_blocks` MCP tool (`mcp__plugin_forge_forge__get_forge_blocks` when installed via the plugin) to work with blocks:
   - Call with no parameters to list all available blocks organized by category
   - Use the `query` parameter to search blocks by name, description, or tags
   - Use the `category` parameter to filter blocks by category

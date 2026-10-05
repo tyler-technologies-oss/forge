@@ -136,36 +136,6 @@ export class ButtonToggleGroupComponent {
     return this.nativeElement.theme;
   }
 
-  public get validity(): ButtonToggleGroupComponentCustomElement['validity'] {
-    return this.nativeElement.validity;
-  }
-
-  public get validationMessage(): ButtonToggleGroupComponentCustomElement['validationMessage'] {
-    return this.nativeElement.validationMessage;
-  }
-
-  public get willValidate(): ButtonToggleGroupComponentCustomElement['willValidate'] {
-    return this.nativeElement.willValidate;
-  }
-
-  public checkValidity(
-    ...args: Parameters<ButtonToggleGroupComponentCustomElement['checkValidity']>
-  ): ReturnType<ButtonToggleGroupComponentCustomElement['checkValidity']> {
-    return this.zone.runOutsideAngular(() => this.nativeElement.checkValidity(...args));
-  }
-
-  public reportValidity(
-    ...args: Parameters<ButtonToggleGroupComponentCustomElement['reportValidity']>
-  ): ReturnType<ButtonToggleGroupComponentCustomElement['reportValidity']> {
-    return this.zone.runOutsideAngular(() => this.nativeElement.reportValidity(...args));
-  }
-
-  public setCustomValidity(
-    ...args: Parameters<ButtonToggleGroupComponentCustomElement['setCustomValidity']>
-  ): ReturnType<ButtonToggleGroupComponentCustomElement['setCustomValidity']> {
-    return this.zone.runOutsideAngular(() => this.nativeElement.setCustomValidity(...args));
-  }
-
   constructor() {
     defineButtonToggleGroupComponent();
     const changeDetectorRef = inject(ChangeDetectorRef);

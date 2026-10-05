@@ -1,0 +1,27 @@
+<!--
+  @block Listbox — Dual Listbox
+  @type component
+  @description Two linked listboxes that let options be dragged and dropped between them.
+  @tags listbox, dual-listbox, drag-and-drop, drag-link, drop-link, storybook, component-example
+-->
+<div class="grid grid-cols-2 gap-medium">
+  <forge-card class="p-0">
+    <forge-listbox class="min-h-[48px]" id="dual-listbox-1" drag-link="dual-listbox-2" drop-link="dual-listbox-2">
+      <forge-option value="1">Option 1</forge-option>
+      <forge-option value="2">Option 2</forge-option>
+      <forge-option value="3">Option 3</forge-option>
+    </forge-listbox>
+  </forge-card>
+  <forge-card class="p-0">
+    <forge-listbox class="min-h-[48px]" id="dual-listbox-2" drag-link="dual-listbox-1" drop-link="dual-listbox-1">
+      <forge-option value="a">Option A</forge-option>
+      <forge-option value="b">Option B</forge-option>
+      <forge-option value="c">Option C</forge-option>
+      <forge-option-group>
+        <div slot="label">Group 1</div>
+        <forge-option value="x">Option D</forge-option>
+        <forge-option value="y">Option E</forge-option>
+      </forge-option-group>
+    </forge-listbox>
+  </forge-card>
+</div>

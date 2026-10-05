@@ -1,0 +1,16 @@
+@use 'sass:map';
+@use '../../../utils';
+@use '../../../theme';
+@use '../../../spacing';
+
+$tokens: (
+  label-color: utils.module-val(option-group, label-color, theme.variable(text-medium)),
+  label-padding-inline: utils.module-val(option-group, label-padding-inline, spacing.variable(medium)),
+  label-padding-block: utils.module-val(option-group, label-padding-block, 0),
+  label-padding-block-start: utils.module-ref(option-group, label-padding-block-start, label-padding-block),
+  label-padding-block-end: utils.module-ref(option-group, label-padding-block-end, label-padding-block)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

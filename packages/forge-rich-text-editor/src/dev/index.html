@@ -35,6 +35,18 @@
       </section>
 
       <section>
+        <h2>Content padding</h2>
+        <label>
+          Padding
+          <input id="padding" type="text" value="4px 8px" />
+        </label>
+        <forge-rich-text-editor id="padded-editor" style="--forge-rich-text-editor-content-padding: 4px 8px">
+          <forge-rte-standard-tools></forge-rte-standard-tools>
+        </forge-rich-text-editor>
+        <forge-rich-text-renderer id="padded-renderer" style="--forge-rich-text-renderer-padding: 4px 8px"></forge-rich-text-renderer>
+      </section>
+
+      <section>
         <h2>Output</h2>
         <button id="dump" type="button">Log toJSON / toHTML / toMarkdown</button>
         <pre id="output"></pre>
