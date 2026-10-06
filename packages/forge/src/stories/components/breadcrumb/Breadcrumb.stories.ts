@@ -8,6 +8,7 @@ const component = 'forge-breadcrumb';
 
 const meta = {
   title: 'Components/Breadcrumb',
+  tags: ['new'],
   render: () => html`
     <forge-breadcrumb aria-label="Breadcrumb">
       <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
