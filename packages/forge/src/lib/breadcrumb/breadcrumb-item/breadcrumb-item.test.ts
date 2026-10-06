@@ -5,6 +5,7 @@ import { BreadcrumbItemComponent } from './breadcrumb-item.js';
 
 import '../breadcrumb/breadcrumb.js';
 import './breadcrumb-item.js';
+import '../breadcrumb-overflow-menu/breadcrumb-overflow-menu.js';
 
 describe('Breadcrumb Item', () => {
   it('should instantiate shadow root', async () => {
@@ -42,7 +43,57 @@ describe('Breadcrumb Item', () => {
     await el.updateComplete;
 
     expect(screen.getByRole('link').elements()).toHaveLength(0);
-    expect(el.shadowRoot?.querySelector('[aria-current="page"]')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('a')).toBeNull();
+    expect(el.shadowRoot?.querySelector('forge-focus-indicator')).toBeNull();
+    expect(el.shadowRoot?.querySelector('slot')).not.toBeNull();
+  });
+
+  it('should reflect current attribute', async () => {
+    const screen = render(html`<forge-breadcrumb-item href="/home">Home</forge-breadcrumb-item>`);
+    const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+
+    el.current = true;
+    await el.updateComplete;
+
+    expect(el.hasAttribute('current')).toBe(true);
+  });
+
+  it('should render link within a positioning container when not in an overflow menu', async () => {
+    const screen = render(html`<forge-breadcrumb-item href="/home">Home</forge-breadcrumb-item>`);
+    const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.positioning-container a')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('.forge-breadcrumb-item')?.classList.contains('menu-item')).toBe(false);
+    expect(el.shadowRoot?.querySelector('forge-focus-indicator')?.hasAttribute('inward')).toBe(false);
+  });
+
+  it('should render link without a positioning container when within an overflow menu', async () => {
+    const screen = render(html`
+      <forge-breadcrumb-overflow-menu>
+        <forge-breadcrumb-item href="/home">Home</forge-breadcrumb-item>
+      </forge-breadcrumb-overflow-menu>
+    `);
+    const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.positioning-container')).toBeNull();
+    expect(el.shadowRoot?.querySelector('a')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('.forge-breadcrumb-item')?.classList.contains('menu-item')).toBe(true);
+    expect(el.shadowRoot?.querySelector('forge-focus-indicator')?.hasAttribute('inward')).toBe(true);
+  });
+
+  it('should apply menu item styling to current item within an overflow menu', async () => {
+    const screen = render(html`
+      <forge-breadcrumb-overflow-menu>
+        <forge-breadcrumb-item current>Current</forge-breadcrumb-item>
+      </forge-breadcrumb-overflow-menu>
+    `);
+    const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.forge-breadcrumb-item')?.classList.contains('menu-item')).toBe(true);
+    expect(el.shadowRoot?.querySelector('a')).toBeNull();
   });
 
   it('should restore link when current is removed', async () => {

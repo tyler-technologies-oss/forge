@@ -24,18 +24,18 @@
   @include core.base;
 }
 
-.popover {
-  @include core.popover;
-}
-
 .button {
   @include core.button;
 }
 
-.positioning-container {
-  @include core.positioning-container;
+.popover {
+  @include core.popover;
 }
 
-::slotted(forge-breadcrumb-item) {
-  @include core.menu-item;
+.list {
+  @include core.list;
+}
+
+.positioning-container {
+  @include core.positioning-container;
 }

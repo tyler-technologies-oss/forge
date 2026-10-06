@@ -71,7 +71,7 @@ export class BreadcrumbOverflowMenuComponent extends BaseLitElement {
             preset="list"
             @click=${this._handleClick}
             @focusout=${this._handleFocusOut}>
-            <div role="list"><slot></slot></div>
+            <div class="list" role="list"><slot></slot></div>
           </forge-popover>
         </span>
       </div>

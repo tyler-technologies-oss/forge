@@ -1,4 +1,7 @@
+@use 'sass:math';
 @use '../../core/styles/theme';
+@use '../../list/list-item';
+@use '../../state-layer';
 @use '../item-shared';
 @use '../token-utils' as *;
 
@@ -14,12 +17,23 @@
 
 @mixin link {
   @include item-shared.interactive;
-
-  text-decoration: none;
 }
 
 @mixin current {
   color: #{theme.variable('text-high')};
+}
+
+@mixin menu-item {
+  @include list-item.tokens;
+  @include list-item.base;
+  @include list-item.text-container;
+
+  position: relative;
+}
+
+@mixin menu-item-link {
+  @include list-item.anchor;
+  @include state-layer.standalone;
 }
 
 @mixin positioning-container {

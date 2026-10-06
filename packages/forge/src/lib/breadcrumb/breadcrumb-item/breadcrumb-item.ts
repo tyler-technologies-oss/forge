@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
@@ -21,7 +21,6 @@ export const BREADCRUMB_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-brea
  *
  * @csspart root - The root element.
  * @csspart link - The anchor element. Not rendered when `current` is set.
- * @csspart current - The element rendered in place of the anchor when `current` is set.
  */
 export class BreadcrumbItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
@@ -42,6 +41,8 @@ export class BreadcrumbItemComponent extends BaseLitElement {
    */
   @property({ type: Boolean, reflect: true }) public current = false;
 
+  @state() private _isMenuItem = false;
+
   private _internals: ElementInternals;
 
   constructor() {
@@ -54,22 +55,28 @@ export class BreadcrumbItemComponent extends BaseLitElement {
     setDefaultAria(this, this._internals, {
       role: 'listitem'
     });
+    this.#detectMenuItem();
   }
 
   /* @internal */
   public render(): TemplateResult {
     return html`
-      <div part="root" class="${classMap({ 'forge-breadcrumb-item': true, current: this.current })}">
-        ${this.current
-          ? html`<span part="current" aria-current="page"><slot></slot></span>`
-          : html`
-              <span class="positioning-container">
-                <a part="link" class="link" href=${ifDefined(this.href)}><slot></slot></a>
-                <forge-focus-indicator></forge-focus-indicator>
-              </span>
-            `}
+      <div part="root" class="${classMap({ 'forge-breadcrumb-item': true, current: this.current, 'menu-item': this._isMenuItem })}">
+        ${this.current ? html`<slot></slot>` : this.#renderLink()}
       </div>
     `;
+  }
+
+  #renderLink(): TemplateResult {
+    const link = html`
+      <a part="link" class="link" href=${ifDefined(this.href)}><slot></slot></a>
+      <forge-focus-indicator ?inward=${this._isMenuItem}></forge-focus-indicator>
+    `;
+    return this._isMenuItem ? link : html`<span class="positioning-container">${link}</span>`;
+  }
+
+  #detectMenuItem(): void {
+    this._isMenuItem = !!this.closest('forge-breadcrumb-overflow-menu');
   }
 }
 

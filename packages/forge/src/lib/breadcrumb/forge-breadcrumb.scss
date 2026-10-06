@@ -1,0 +1,106 @@
+@use '../core/styles/shape';
+@use '../focus-indicator';
+@use './breadcrumb/core' as breadcrumb-core;
+@use './breadcrumb-item/core' as breadcrumb-item-core;
+@use './breadcrumb-overflow-menu/core' as breadcrumb-overflow-menu-core;
+
+//
+// Breadcrumb
+//
+
+.forge-breadcrumb {
+  @include breadcrumb-core.tokens;
+}
+
+.forge-breadcrumb {
+  @include breadcrumb-core.host;
+  @include breadcrumb-core.base;
+  @include breadcrumb-core.density(medium);
+
+  &--small {
+    @include breadcrumb-core.density(small);
+  }
+}
+
+//
+// Breadcrumb item
+//
+
+.forge-breadcrumb-item {
+  @include breadcrumb-item-core.tokens;
+}
+
+.forge-breadcrumb-item {
+  @include breadcrumb-item-core.host;
+  @include breadcrumb-item-core.base;
+
+  > a {
+    @include breadcrumb-item-core.link;
+    @include breadcrumb-item-core.positioning-container;
+
+    &:focus-visible {
+      @include focus-indicator.keyframes;
+    }
+
+    @include focus-indicator.standalone;
+  }
+
+  &--current {
+    @include breadcrumb-item-core.current;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+//
+// Breadcrumb overflow menu
+//
+
+.forge-breadcrumb-overflow-menu {
+  @include breadcrumb-overflow-menu-core.tokens;
+}
+
+.forge-breadcrumb-overflow-menu {
+  @include breadcrumb-overflow-menu-core.host;
+  @include breadcrumb-overflow-menu-core.base;
+
+  &__container {
+    @include breadcrumb-overflow-menu-core.positioning-container;
+  }
+
+  &__button {
+    @include breadcrumb-overflow-menu-core.button;
+
+    position: relative;
+
+    @include focus-indicator.standalone;
+  }
+
+  &__popover {
+    @include breadcrumb-overflow-menu-core.popover;
+  }
+
+  &__list {
+    @include breadcrumb-overflow-menu-core.list;
+
+    .forge-breadcrumb-item {
+      @include breadcrumb-item-core.menu-item;
+
+      &::after {
+        display: none;
+      }
+
+      > a {
+        @include breadcrumb-item-core.menu-item-link;
+        @include focus-indicator.standalone('inward');
+        @include focus-indicator.provide-theme(
+          (
+            shape: shape.variable(medium)
+          )
+        );
+      }
+    }
+  }
+}

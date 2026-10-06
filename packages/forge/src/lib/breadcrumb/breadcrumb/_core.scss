@@ -1,5 +1,5 @@
-@use '../token-utils' as *;
 @use '../typography';
+@use '../token-utils' as *;
 
 @forward '../token-utils';
 
@@ -19,8 +19,8 @@
 
 @mixin density($density) {
   @if $density == small {
-    @include typography.provide(body1);
+    @include typography.provide(label2);
   } @else {
-    @include typography.provide(body2);
+    @include typography.provide(body1);
   }
 }
