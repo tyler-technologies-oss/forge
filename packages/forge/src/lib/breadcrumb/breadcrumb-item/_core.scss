@@ -9,11 +9,11 @@
 }
 
 @mixin base {
-  @include item-shared.base();
+  @include item-shared.base;
 }
 
 @mixin link {
-  @include item-shared.interactive();
+  @include item-shared.interactive;
 
   text-decoration: none;
 }

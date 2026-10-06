@@ -10,12 +10,12 @@
 }
 
 @mixin base {
-  @include item-shared.base();
+  @include item-shared.base;
 }
 
 @mixin button {
   @include typography.consume(body2);
-  @include item-shared.interactive();
+  @include item-shared.interactive;
 
   appearance: none;
   margin: 0;
