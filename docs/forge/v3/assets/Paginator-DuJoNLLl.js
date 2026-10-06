@@ -1,0 +1,22 @@
+import{u as n,j as t,M as p,T as s,C as r}from"./blocks-XFXxCHax.js";import{C as m}from"./CustomArgTypes-CWzbzuQH.js";import{P as a,D as l,A as c}from"./Paginator.stories-BaD6QhCN.js";import"./preload-helper-PPVm8Dsz.js";import"./index-BFW4bN8h.js";import"./iframe-oAO0QRyC.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-BUadP3tW.js";import"./service-adapter-8tADcN_b.js";import"./paginator-7U2kqEAR.js";import"./live-announcer-DuLqNKxe.js";import"./a11y-BxM9_46k.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./tyler-icons-_o7MAz4c.js";import"./property-CsZj1UFS.js";import"./query-CtiAP21w.js";import"./base-DVmwUFg0.js";import"./base-lit-element-BfYfGFH_.js";import"./async-directive-B0mdDXAn.js";import"./directive-CwRn8Fwj.js";import"./icon-button-BUDykOqB.js";import"./class-map-DX-Fvzp4.js";import"./base-button-CPl2ikJN.js";import"./state-CcYvR2OD.js";import"./query-assigned-elements-43hYArgI.js";import"./constants-ffvdo6x3.js";import"./create-context-BxR5I8pu.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./a11y-utils-DssnAab5.js";import"./dom-utils-BDbRr6KM.js";import"./utils-C31il88P.js";import"./focus-indicator-DF5CnxaH.js";import"./floating-ui.dom-DaMtbvS2.js";import"./icon-BNaE2C0t.js";import"./state-layer-gtlkuVuf.js";import"./custom-element-DR9AFpIK.js";import"./core-property-Co8uF8PW.js";import"./base-adapter-DOky_or5.js";import"./base-component-BFu9bkgC.js";import"./icon-button-constants-JHHxiN9v.js";import"./select-CG0Pf0k9.js";import"./circular-progress-BCp-Zc6w.js";import"./with-element-internals-CFYP_epH.js";import"./with-form-associated-BZpZ-kob.js";import"./with-label-aware-B4Q13qtt.js";import"./base-field-R00t77-F.js";import"./key-action-lsAysfb-.js";import"./index-BHXiN6PC.js";import"./label-DWc44Up3.js";import"./button-constants-DRqTH6Pv.js";import"./button-toggle-group-constants-CvfmN-z8.js";import"./checkbox-constants-BJ3elUIK.js";import"./switch-constants-BZVST_qJ.js";import"./list-c_yY3uTR.js";import"./list-item-BYmRBlrw.js";import"./event-utils-zQ4FLDwK.js";import"./popover-DCnuFbj-.js";import"./overlay-DWOSAut5.js";import"./with-longpress-listener-D4ROnnkg.js";import"./dismissible-stack-DyoP5jNB.js";import"./scaffold-Ca9xBuAs.js";import"./toolbar-B10vbXo5.js";import"./linear-progress-BuMeIIdZ.js";import"./skeleton-ZraD1p-1.js";import"./option-4PQWN2eg.js";import"./custom-element-C-crYl4r.js";import"./context-root-BrWOZWcP.js";import"./consume-DtITIqjN.js";import"./list-dropdown-aware-core-CWYrGx-s.js";import"./list-dropdown-uZTf9Ap7.js";import"./event-utils-C1SDeUaq.js";import"./scroll-axis-observer-DmuibK9q.js";import"./divider-BINJGSch.js";import"./tooltip-BnZGP5cf.js";function e(i){const o={a:"a",h2:"h2",li:"li",p:"p",ul:"ul",...n(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(p,{of:a}),`
+`,t.jsx(s,{}),`
+`,t.jsx(o.p,{children:"The paginator component is used to navigate through a collection of items."}),`
+`,t.jsxs(o.p,{children:["While this component is typically composed with a ",t.jsx(o.a,{href:"?path=/docs/components-list--docs",children:"list"})," or ",t.jsx(o.a,{href:"?path=/docs/components-table--docs",children:"table"}),` component to
+allow users to navigate large sets of data, it can be used in any context where pagination of content is desired.`]}),`
+`,t.jsx(r,{of:l}),`
+`,t.jsx(o.h2,{id:"alternative",children:"Alternative"}),`
+`,t.jsx(o.p,{children:`The paginator also supports an alternative variant that is less verbose and more compact. This variant removes the page size selector, and uses a simpler
+label for the page count. Use when space is limited, or if you don't want the user to be able to change the page size.`}),`
+`,t.jsx(r,{of:c}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(m,{}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsxs(o.li,{children:["Ensure that all of the controls that are accessible by a mouse are also accessible by keyboard.",`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsx(o.li,{children:"Ensure the controls are reachable by the tab key."}),`
+`,t.jsx(o.li,{children:"Ensure each control can be updated or activated by the keyboard."}),`
+`]}),`
+`]}),`
+`,t.jsx(o.li,{children:"The paginator component will handle adding the proper ARIA attributes to its internal elements."}),`
+`]})]})}function Rt(i={}){const{wrapper:o}={...n(),...i.components};return o?t.jsx(o,{...i,children:t.jsx(e,{...i})}):e(i)}export{Rt as default};
