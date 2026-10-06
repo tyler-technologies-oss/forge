@@ -1,0 +1,15 @@
+@use '../core/styles/typography';
+
+$_properties: font-family, font-size, font-weight, line-height, letter-spacing, text-transform, text-decoration;
+
+@mixin provide($style) {
+  @each $property in $_properties {
+    --_forge-breadcrumb-#{$property}: #{typography.variable($style, $property)};
+  }
+}
+
+@mixin consume($fallback-style) {
+  @each $property in $_properties {
+    #{$property}: var(--_forge-breadcrumb-#{$property}, #{typography.variable($fallback-style, $property)});
+  }
+}

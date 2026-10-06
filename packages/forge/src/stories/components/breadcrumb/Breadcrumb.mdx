@@ -1,0 +1,42 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as BreadcrumbStories from './Breadcrumb.stories';
+
+<Meta of={BreadcrumbStories} />
+
+<Title />
+
+Breadcrumbs show the user's location within a hierarchy and provide links back to parent pages.
+
+<Canvas of={BreadcrumbStories.Demo} />
+
+## Overflow menu
+
+Use `forge-breadcrumb-overflow-menu` to collapse middle items into a popover opened by an overflow
+button. Slot `forge-breadcrumb-item` elements into it.
+
+Use an overflow menu when there are more than five breadcrumb items or too many to display in a
+single line. Place the overflow menu after the first breadcrumb item and include one or two
+breadcrumb items after it.
+
+<Canvas of={BreadcrumbStories.OverflowMenu} />
+
+## Current item
+
+The current item represents the page the user is currently on. It should be marked with the
+`current` attribute and will render as a non-interactive element with `aria-current="page"`.
+
+Only include the current page in the breadcrumb when the page doesn't already have a title displayed
+or is unclear. When the current page is included, it must be the last item in the breadcrumb.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- `forge-breadcrumb` has the `navigation` role. Provide an `aria-label` (such as "Breadcrumb") so it is
+  distinguishable from other navigation landmarks.
+- Set `current` on the item that represents the current page. It renders a non-interactive element with
+  `aria-current="page"` in place of the link.
+- Place content in the overflow menu's `tooltip` slot to provide an accessible name for the overflow button.

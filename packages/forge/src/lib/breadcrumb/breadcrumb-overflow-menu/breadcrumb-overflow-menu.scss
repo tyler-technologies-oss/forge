@@ -1,0 +1,41 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb-overflow-menu {
+  @include core.tokens;
+}
+
+.forge-breadcrumb-overflow-menu {
+  @include core.base;
+}
+
+.popover {
+  @include core.popover;
+}
+
+.button {
+  @include core.button;
+}
+
+.positioning-container {
+  @include core.positioning-container;
+}
+
+::slotted(forge-breadcrumb-item) {
+  @include core.menu-item;
+}

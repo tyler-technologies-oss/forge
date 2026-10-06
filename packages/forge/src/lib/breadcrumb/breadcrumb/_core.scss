@@ -1,0 +1,26 @@
+@use '../token-utils' as *;
+@use '../typography';
+
+@forward '../token-utils';
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin density($density) {
+  @if $density == small {
+    @include typography.provide(body1);
+  } @else {
+    @include typography.provide(body2);
+  }
+}

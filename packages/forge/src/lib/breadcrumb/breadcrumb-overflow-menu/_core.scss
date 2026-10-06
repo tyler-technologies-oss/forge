@@ -1,0 +1,48 @@
+@use '../../core/styles/spacing';
+@use '../item-shared';
+@use '../typography' as typography;
+@use '../token-utils' as *;
+
+@forward '../token-utils';
+
+@mixin host {
+  @include item-shared.host;
+}
+
+@mixin base {
+  @include item-shared.base();
+}
+
+@mixin button {
+  @include typography.consume(body2);
+  @include item-shared.interactive();
+
+  appearance: none;
+  margin: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+@mixin popover {
+  &::part(surface) {
+    margin-inline-start: calc(#{spacing.variable(small)} * -1);
+  }
+}
+
+@mixin menu-item {
+  @include provide-theme(
+    (
+      separator-content: none
+    )
+  );
+
+  display: block;
+  padding-block: #{spacing.variable(small)};
+  padding-inline: #{spacing.variable(medium)};
+}
+
+@mixin positioning-container {
+  @include item-shared.positioning-container;
+}

@@ -1,0 +1,27 @@
+@use '../../core/styles/theme';
+@use '../item-shared';
+@use '../token-utils' as *;
+
+@forward '../token-utils';
+
+@mixin host {
+  @include item-shared.host;
+}
+
+@mixin base {
+  @include item-shared.base();
+}
+
+@mixin link {
+  @include item-shared.interactive();
+
+  text-decoration: none;
+}
+
+@mixin current {
+  color: #{theme.variable('text-high')};
+}
+
+@mixin positioning-container {
+  @include item-shared.positioning-container;
+}

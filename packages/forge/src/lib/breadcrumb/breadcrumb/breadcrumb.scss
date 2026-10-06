@@ -1,0 +1,30 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb {
+  @include core.tokens;
+}
+
+.forge-breadcrumb {
+  @include core.base;
+  @include core.density(medium);
+}
+
+.small {
+  @include core.density(small);
+}

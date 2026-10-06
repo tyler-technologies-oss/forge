@@ -1,0 +1,41 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb-item {
+  @include core.tokens;
+}
+
+.forge-breadcrumb-item {
+  @include core.base;
+}
+
+.link {
+  @include core.link;
+}
+
+.current {
+  @include core.current;
+
+  &::after {
+    display: none;
+  }
+}
+
+.positioning-container {
+  @include core.positioning-container;
+}
