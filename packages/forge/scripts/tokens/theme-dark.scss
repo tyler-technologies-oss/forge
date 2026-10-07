@@ -1,0 +1,5 @@
+@use '../../src/lib/core/styles/theme';
+
+:root {
+  @include theme.properties-dark;
+}
