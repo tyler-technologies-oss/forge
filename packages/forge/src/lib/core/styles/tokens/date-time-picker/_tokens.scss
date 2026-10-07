@@ -16,10 +16,10 @@ $tokens: (
   summary-color: utils.module-val(date-time-picker, summary-color, theme.variable(on-primary)),
   summary-width: utils.module-val(date-time-picker, summary-width, 116px),
   summary-padding: utils.module-val(date-time-picker, summary-padding, spacing.variable(large)),
+  summary-secondary-opacity: utils.module-val(date-time-picker, summary-secondary-opacity, theme.emphasis(highest)),
   // Calendar
   calendar-max-width: utils.module-val(date-time-picker, calendar-max-width, 320px),
-  // Single / range time field. 48px matches the field inset-height (the standard height for a
-  // floating-label field) and clears the 44px comfortable touch target.
+  // Matches the floating-label field inset height and clears the 44px touch target.
   time-field-height: utils.module-val(date-time-picker, time-field-height, 48px),
   // Slot list (sizes to its widest pill by default)
   slot-list-max-height: utils.module-val(date-time-picker, slot-list-max-height, 320px),

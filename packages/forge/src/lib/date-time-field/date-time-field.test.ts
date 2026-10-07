@@ -12,7 +12,7 @@ import type { IPopoverComponent } from '../popover/index.js';
 
 defineDateTimeFieldComponent();
 
-// imask applies caret changes on a 10ms timer, so keys are typed slower than that like a real user
+// imask applies caret changes on a 10ms timer, so type slower than that
 const KEY_DELAY = 30;
 const SEPARATOR_SELECTOR = '[data-forge-multi-input-separator]';
 const TOGGLE_SELECTOR = ':scope > forge-icon-button[slot="end"]';
@@ -209,8 +209,6 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-// ─── Discovery ──────────────────────────────────────────────────────────────
-
 describe('DateTimeField / discovery', () => {
   it('should render only a default slot in its shadow root', async () => {
     const { el } = await renderField();
@@ -294,8 +292,6 @@ describe('DateTimeField / discovery', () => {
   });
 });
 
-// ─── Consumer input attributes ──────────────────────────────────────────────
-
 describe('DateTimeField / input attributes', () => {
   it('should turn off autocomplete and spellcheck on each endpoint input', async () => {
     const { inputs } = await renderField({ dateMode: 'range', timeMode: 'range' });
@@ -371,8 +367,6 @@ describe('DateTimeField / input attributes', () => {
     inputs.forEach(input => expect(input.getAttribute('inputmode')).toBe('numeric'));
   });
 });
-
-// ─── ARIA ───────────────────────────────────────────────────────────────────
 
 describe('DateTimeField / ARIA', () => {
   it('should name both inputs start and end date and time when the mode is range by range', async () => {
@@ -495,8 +489,6 @@ describe('DateTimeField / ARIA', () => {
   });
 });
 
-// ─── Forwarding ─────────────────────────────────────────────────────────────
-
 describe('DateTimeField / forwarding', () => {
   it('should forward disabled to the text field', async () => {
     const { el, textField } = await renderField();
@@ -548,8 +540,6 @@ describe('DateTimeField / forwarding', () => {
     expect((getToggle(textField) as HTMLElement & { disabled: boolean }).disabled).toBe(true);
   });
 });
-
-// ─── Cleanup and restoration ────────────────────────────────────────────────
 
 describe('DateTimeField / cleanup and restoration', () => {
   it('should restore the original input attributes when the text field is removed', async () => {
@@ -652,8 +642,6 @@ describe('DateTimeField / cleanup and restoration', () => {
   });
 });
 
-// ─── Toggle and separator ───────────────────────────────────────────────────
-
 describe('DateTimeField / toggle and separator', () => {
   it('should add a toggle only when a picker is linked', async () => {
     const { textField } = await renderField();
@@ -750,8 +738,6 @@ describe('DateTimeField / toggle and separator', () => {
     expect((textField.querySelector(SEPARATOR_SELECTOR) as HTMLElement).hidden).toBe(false);
   });
 });
-
-// ─── Error text and duration ────────────────────────────────────────────────
 
 describe('DateTimeField / error text', () => {
   it('should show the validation message as support text while invalid', async () => {
@@ -904,8 +890,6 @@ describe('DateTimeField / duration', () => {
   });
 });
 
-// ─── Mask guide ─────────────────────────────────────────────────────────────
-
 describe('DateTimeField / mask guide', () => {
   it('should rest empty when empty and unfocused', async () => {
     const { inputs } = await renderField();
@@ -945,8 +929,6 @@ describe('DateTimeField / mask guide', () => {
     expect(inputs[1].value).toBe('__:__ __');
   });
 });
-
-// ─── Value and events ───────────────────────────────────────────────────────
 
 describe('DateTimeField / value and events', () => {
   it('should be null by default', async () => {
@@ -1085,8 +1067,6 @@ describe('DateTimeField / value modes', () => {
     expect([value.from.getDate(), value.from.getHours(), value.to.getDate(), value.to.getHours()]).toEqual([9, 9, 12, 17]);
   });
 });
-
-// ─── Validation ─────────────────────────────────────────────────────────────
 
 describe('DateTimeField / min and max', () => {
   it('should flag rangeUnderflow when the value is before min', async () => {
@@ -1293,8 +1273,6 @@ describe('DateTimeField / slots validity', () => {
   });
 });
 
-// ─── Form association ───────────────────────────────────────────────────────
-
 describe('DateTimeField / form association', () => {
   it('should expose its form', async () => {
     const { el, wrapper } = await renderField({ form: true });
@@ -1308,6 +1286,23 @@ describe('DateTimeField / form association', () => {
     await settle(el);
     const formValue = new FormData(wrapper as HTMLFormElement).get('appt');
     expect(formValue).toBe(value.toISOString());
+  });
+
+  it('should submit the value when name is set as a property', async () => {
+    const { el, wrapper } = await renderField({ form: true, attrs: { 'value-mode': 'date' } });
+    el.name = 'appt';
+    const value = new Date(2025, 5, 12, 10, 30);
+    el.value = value;
+    await settle(el);
+    expect(new FormData(wrapper as HTMLFormElement).get('appt')).toBe(value.toISOString());
+  });
+
+  it('should be valid when disabled even if required and empty', async () => {
+    const { el } = await renderField({ attrs: { required: '' } });
+    expect(el.checkValidity()).toBe(false);
+    el.disabled = true;
+    await settle(el);
+    expect(el.checkValidity()).toBe(true);
   });
 
   it('should submit nothing when empty', async () => {
@@ -1381,8 +1376,6 @@ describe('DateTimeField / form association', () => {
   });
 });
 
-// ─── Quick keys ─────────────────────────────────────────────────────────────
-
 describe('DateTimeField / quick keys', () => {
   it('should set the current date and time when n is pressed', async () => {
     const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
@@ -1435,8 +1428,6 @@ describe('DateTimeField / quick keys', () => {
     expect(el.value).toBeNull();
   });
 });
-
-// ─── Keyboard navigation ────────────────────────────────────────────────────
 
 describe('DateTimeField / keyboard navigation', () => {
   it('should move to the end of the start input when Backspace is pressed at the start of the end input', async () => {
@@ -1501,8 +1492,6 @@ describe('DateTimeField / keyboard navigation', () => {
     expect(document.activeElement).toBe(inputs[1]);
   });
 });
-
-// ─── Typing (masked entry) ──────────────────────────────────────────────────
 
 describe('DateTimeField / typing', () => {
   it('should commit a value when a complete date and time is typed', async () => {
@@ -1627,8 +1616,6 @@ describe('DateTimeField / typing', () => {
     expect(value.to.getTime()).toBe(new Date(2025, 0, 2, 17, 0).getTime());
   });
 });
-
-// ─── Picker link ────────────────────────────────────────────────────────────
 
 describe('DateTimeField / picker link', () => {
   it('should anchor the picker to the text field popover target', async () => {
@@ -1885,8 +1872,6 @@ describe('DateTimeField / picker value sync', () => {
   });
 });
 
-// ─── Popover open and close ─────────────────────────────────────────────────
-
 describe('DateTimeField / popover', () => {
   it('should open the picker popover when the toggle is clicked and close it on a second click', async () => {
     const { el, textField, picker } = await renderField({ picker: true });
@@ -1923,6 +1908,27 @@ describe('DateTimeField / popover', () => {
     expect(picker!.open).toBe(true);
   });
 
+  it('should move focus into the picker when ArrowDown opens it', async () => {
+    const { el, inputs, picker } = await renderField({ picker: true });
+    await focusInput(inputs[0]);
+    await press('{ArrowDown}');
+    await settle(el, picker);
+    expect(picker!.open).toBe(true);
+    await vi.waitFor(() => expect(picker!.matches(':focus-within')).toBe(true));
+  });
+
+  it('should return focus to the first input when a complete selection closes the picker', async () => {
+    const { el, inputs, picker } = await renderField({ picker: true, attrs: { 'value-mode': 'date' } });
+    await focusInput(inputs[0]);
+    await press('{ArrowDown}');
+    await settle(el, picker);
+    await vi.waitFor(() => expect(picker!.matches(':focus-within')).toBe(true));
+    firePickerChange(picker!, { value: new Date(2025, 5, 12, 9, 0), date: new Date(2025, 5, 12), time: '09:00', complete: true });
+    await settle(el, picker);
+    expect(picker!.open).toBe(false);
+    expect(document.activeElement).toBe(inputs[0]);
+  });
+
   it('should not open on ArrowDown when no picker is linked', async () => {
     const { el, inputs } = await renderField();
     await focusInput(inputs[0]);
@@ -1937,7 +1943,7 @@ describe('DateTimeField / popover', () => {
     el.open = true;
     await settle(el, picker);
     expect(picker!.open).toBe(true);
-    expect(el.hasAttribute('open')).toBe(true);
+    expect(el.matches(':state(open)')).toBe(true);
     expect(opens.length).toBe(1);
     el.open = false;
     await settle(el, picker);
@@ -2162,5 +2168,86 @@ describe('DateTimeField / review fixes', () => {
     await settle(el, picker);
     expect(el.validity.customError).toBe(true);
     expect(el.validationMessage).toBe('Choose an available time.');
+  });
+});
+
+describe('DateTimeField / custom states', () => {
+  it('should not reflect state properties to attributes', async () => {
+    const { el } = await renderField();
+    el.disabled = true;
+    el.readonly = true;
+    el.required = true;
+    el.dateMode = 'range';
+    await settle(el);
+    ['disabled', 'readonly', 'required', 'date-mode'].forEach(name => expect(el.hasAttribute(name)).toBe(false));
+  });
+
+  it('should reflect name so form submission includes the field', async () => {
+    const { el } = await renderField();
+    el.name = 'when';
+    await settle(el);
+    expect(el.getAttribute('name')).toBe('when');
+  });
+
+  it('should set the disabled, readonly, and required states when those properties are set', async () => {
+    const { el } = await renderField();
+    expect(el.matches(':state(disabled)')).toBe(false);
+    expect(el.matches(':state(readonly)')).toBe(false);
+    expect(el.matches(':state(required)')).toBe(false);
+    el.disabled = true;
+    el.readonly = true;
+    el.required = true;
+    await settle(el);
+    expect(el.matches(':state(disabled)')).toBe(true);
+    expect(el.matches(':state(readonly)')).toBe(true);
+    expect(el.matches(':state(required)')).toBe(true);
+    el.disabled = false;
+    await settle(el);
+    expect(el.matches(':state(disabled)')).toBe(false);
+  });
+
+  it('should set the states when configured through attributes', async () => {
+    const { el } = await renderField({ attrs: { disabled: '', readonly: '', required: '' } });
+    expect(el.matches(':state(disabled)')).toBe(true);
+    expect(el.matches(':state(readonly)')).toBe(true);
+    expect(el.matches(':state(required)')).toBe(true);
+  });
+
+  it('should set the invalid state when validation is reported and clear it when a value is set', async () => {
+    const { el } = await renderField({ attrs: { required: '', 'value-mode': 'date' } });
+    expect(el.matches(':state(invalid)')).toBe(false);
+    el.reportValidity();
+    await settle(el);
+    expect(el.matches(':state(invalid)')).toBe(true);
+    el.value = new Date(2025, 5, 12, 9, 0);
+    await settle(el);
+    expect(el.matches(':state(invalid)')).toBe(false);
+  });
+
+  it('should set the open state while the linked picker is open', async () => {
+    const { el, textField, picker } = await renderField({ picker: true });
+    expect(el.matches(':state(open)')).toBe(false);
+    getToggle(textField)!.click();
+    await settle(el, picker);
+    expect(el.matches(':state(open)')).toBe(true);
+    getToggle(textField)!.click();
+    await settle(el, picker);
+    expect(el.matches(':state(open)')).toBe(false);
+  });
+
+  it('should set the range state when the field captures a range', async () => {
+    silenceWarnings();
+    const { el } = await renderField();
+    expect(el.matches(':state(range)')).toBe(false);
+    el.dateMode = 'range';
+    await settle(el);
+    expect(el.matches(':state(range)')).toBe(true);
+    el.dateMode = 'single';
+    el.timeMode = 'range';
+    await settle(el);
+    expect(el.matches(':state(range)')).toBe(true);
+    el.timeMode = 'slots';
+    await settle(el);
+    expect(el.matches(':state(range)')).toBe(false);
   });
 });
