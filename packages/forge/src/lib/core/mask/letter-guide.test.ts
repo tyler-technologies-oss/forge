@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createLetterGuideMask, toUnderscoreGuide } from './letter-guide.js';
+import { createLetterGuideMask, prepareLetterGuide, toUnderscoreGuide } from './letter-guide.js';
 
 describe('letter guide', () => {
   it('should give each format letter its own single-char definition key', () => {
@@ -25,5 +25,22 @@ describe('letter guide', () => {
 
   it('should align to the format at the given offset', () => {
     expect(toUnderscoreGuide(' aa', 'hh:mm aa', 5)).toBe(' __');
+  });
+
+  it('should complete a lone meridiem letter and leave a full one alone', () => {
+    const format = 'hh:mm aa';
+    expect(prepareLetterGuide('a', format, 6)).toBe('aM');
+    expect(prepareLetterGuide('1045p', format, 0)).toBe('1045pM');
+    expect(prepareLetterGuide('10:45 pm', format, 0)).toBe('10:45 pm');
+    expect(prepareLetterGuide(' aa', format, 5)).toBe(' __');
+  });
+
+  it('should not complete a meridiem letter on the second meridiem slot', () => {
+    expect(prepareLetterGuide('p', 'hh:mm aa', 7)).toBe('p');
+    expect(prepareLetterGuide('p', 'hh:mm aa', 6)).toBe('pM');
+  });
+
+  it('should not complete a meridiem when the format has none', () => {
+    expect(prepareLetterGuide('1045a', 'HH:mm', 0)).toBe('1045a');
   });
 });

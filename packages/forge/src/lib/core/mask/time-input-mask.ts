@@ -1,7 +1,7 @@
 import { isNumeric } from '@tylertech/forge-core';
 import { FactoryArg, InputMask, MaskedEnum, createMask, type AppendFlags, type Masked } from 'imask';
 import { IntermediateTimeParser } from './intermediate-time-parser.js';
-import { createLetterGuideMask, MERIDIEM_GUIDE_CHAR, toUnderscoreGuide } from './letter-guide.js';
+import { createLetterGuideMask, MERIDIEM_GUIDE_CHAR, prepareLetterGuide, toUnderscoreGuide } from './letter-guide.js';
 import { createMaskView, isSingleKeyInput, MaskCursorSync, type IMaskView } from './mask-view.js';
 
 export interface ITimeInputMaskOptions {
@@ -266,8 +266,7 @@ export class TimeInputMask {
       prepareChar: (value: string, masked: Masked<string>, flags: AppendFlags) => this._prepare(value, masked, flags, this._mask),
       ...(letterGuide && {
         ...createLetterGuideMask(pattern, getTimeMaskFormat(use24HourTime, showSeconds)),
-        // Re-appended display text (guide toggle, value sets) must not turn the `aa` guide into a meridiem.
-        prepare: (value: string, masked: Masked<string>) => toUnderscoreGuide(value, getTimeMaskFormat(use24HourTime, showSeconds), masked.displayValue.length)
+        prepare: (value: string, masked: Masked<string>) => prepareLetterGuide(value, getTimeMaskFormat(use24HourTime, showSeconds), masked.displayValue.length)
       }),
       blocks: createTimeMaskBlocks(letterGuide)
     };
