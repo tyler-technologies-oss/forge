@@ -74,8 +74,8 @@ export function extractDesignTokens(entry = TOKENS_ENTRY) {
 /**
  * Groups tokens by category, preserving the order in which categories first appear.
  *
- * @param {{ category: string; name: string; value: string }[]} tokens The flat list of extracted tokens.
- * @returns {{ name: string; tokens: { name: string; value: string }[] }[]} One entry per category.
+ * @param {{ category: string; name: string; value: string; values?: { light: string; dark: string } }[]} tokens The flat list of extracted tokens.
+ * @returns {{ name: string; tokens: { name: string; value: string; values?: { light: string; dark: string } }[] }[]} One entry per category.
  */
 export function groupTokensByCategory(tokens) {
   const categories = new Map();
