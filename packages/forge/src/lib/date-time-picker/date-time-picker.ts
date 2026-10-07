@@ -500,6 +500,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   // Lifts the calendar's prevent-focus once focus() hands keyboard focus to the grid.
   @state() private _calendarFocusable = false;
+  @state() private _hasHeader = false;
 
   #internals: ElementInternals;
   #anchorElement: HTMLElement | null = null;
@@ -867,7 +868,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       [this.timeMode]: true,
       [resolvedOrientation]: true,
       sheet,
-      popover: !sheet
+      popover: !sheet,
+      'has-header': this._hasHeader
     };
     return html`
       <div
@@ -931,8 +933,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     `;
   }
 
+  #onHeaderSlotChange = ({ target }: Event): void => {
+    this._hasHeader = (target as HTMLSlotElement).assignedNodes().length > 0;
+  };
+
   #renderHeader(): TemplateResult {
-    return html`<slot name="header" part="header" ${hideWhenEmpty()}></slot>`;
+    return html`<slot name="header" part="header" ${hideWhenEmpty()} @slotchange=${this.#onHeaderSlotChange}></slot>`;
   }
 
   #renderDateActions(): TemplateResult | typeof nothing {

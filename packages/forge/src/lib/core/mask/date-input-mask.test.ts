@@ -66,6 +66,47 @@ describe('DateInputMask', () => {
     });
   });
 
+  describe('letter guide', () => {
+    it.each([
+      ['3', '03/DD/YYYY', 3],
+      ['12', '12/DD/YYYY', 3],
+      ['125', '12/05/YYYY', 6],
+      ['01022025', '01/02/2025', 10]
+    ])('should show the remaining format letters after typing %s', async (keys, expected, caret) => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type(keys);
+      expect(input.value).toBe(expected);
+      expect(input.selectionStart).toBe(caret);
+    });
+
+    it('should show the format letters without the default prepare logic', async () => {
+      const input = setup({ pattern: undefined, showMaskFormat: true, letterGuide: true });
+      await type('122');
+      expect(input.value).toBe('12/2D/YYYY');
+    });
+
+    it('should restore the letter when a digit is deleted with Backspace', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('122');
+      await userEvent.keyboard('{Backspace}');
+      await wait(KEY_DELAY);
+      expect(input.value).toBe('12/DD/YYYY');
+    });
+
+    it('should read unfilled slots as underscores', async () => {
+      setup({ showMaskFormat: true, letterGuide: true });
+      await type('125');
+      expect(mask!.normalizedValue).toBe('12/05/____');
+    });
+
+    it('should keep the underscore guide when letterGuide is off', async () => {
+      const input = setup({ showMaskFormat: true });
+      await type('125');
+      expect(input.value).toBe('12/05/____');
+      expect(mask!.normalizedValue).toBe('12/05/____');
+    });
+  });
+
   it('should start over when all text is selected and a digit is typed', async () => {
     const input = setup({ showMaskFormat: false });
     await type('01022025');

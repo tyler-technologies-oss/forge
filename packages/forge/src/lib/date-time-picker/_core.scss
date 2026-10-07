@@ -146,6 +146,28 @@
   > .body--horizontal:has(> .time-section--slots) {
     margin-inline-end: 0;
   }
+
+  /* stylelint-disable custom-property-pattern */
+  // The side-by-side slot column bleeds through the block padding unless content sits above or below it.
+  > .body.body--horizontal > .time-section.time-section--slots {
+    --_slot-bleed-start: #{token(padding)};
+    --_slot-bleed-end: #{token(padding)};
+
+    margin-block: calc(-1 * var(--_slot-bleed-start)) calc(-1 * var(--_slot-bleed-end));
+    max-height: calc(
+      var(--forge-date-time-picker-slot-list-max-height, var(--_calendar-section-height, #{token(slot-list-max-height)})) + var(--_slot-bleed-start) +
+        var(--_slot-bleed-end)
+    );
+  }
+
+  &.has-header > .body.body--horizontal > .time-section.time-section--slots {
+    --_slot-bleed-start: 0px;
+  }
+
+  &:has(> .date-actions, > .footer) > .body.body--horizontal > .time-section.time-section--slots {
+    --_slot-bleed-end: 0px;
+  }
+  /* stylelint-enable custom-property-pattern */
 }
 
 @mixin stacked-time-section {
