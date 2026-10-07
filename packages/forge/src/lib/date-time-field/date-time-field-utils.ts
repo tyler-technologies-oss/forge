@@ -1,19 +1,21 @@
 import { parseTimeString } from '../date-time-picker/date-time-picker-utils.js';
 import { parseDateString } from '../core/utils/date-utils.js';
 import { tryCoerceTimeString } from '../core/utils/time-utils.js';
+import { DEFAULT_DATE_MASK_FORMAT } from '../core/mask/date-input-mask.js';
+import { getDateTimeMaskFormat } from '../core/mask/date-time-input-mask.js';
+import { getTimeMaskFormat } from '../core/mask/time-input-mask.js';
 
 const pad = (n: number): string => String(n).padStart(2, '0');
 
 /** What an endpoint input captures: a date and time, only a date, or only a time. */
 export type DateTimeFieldEndpointKind = 'datetime' | 'date' | 'time';
 
-/** The format hint (and intrinsic width) for an endpoint input of the given kind. */
+/** The format hint (and intrinsic width) for an endpoint input of the given kind; matches its letter guide. */
 export function endpointFormatHint(kind: DateTimeFieldEndpointKind, use24HourTime: boolean, allowSeconds: boolean): string {
-  const time = use24HourTime ? (allowSeconds ? 'HH:mm:ss' : 'HH:mm') : allowSeconds ? 'hh:mm:ss aa' : 'hh:mm aa';
   if (kind === 'date') {
-    return 'MM/DD/YYYY';
+    return DEFAULT_DATE_MASK_FORMAT;
   }
-  return kind === 'time' ? time : `MM/DD/YYYY ${time}`;
+  return kind === 'time' ? getTimeMaskFormat(use24HourTime, allowSeconds) : getDateTimeMaskFormat(use24HourTime, allowSeconds);
 }
 const DATE_INPUT_PATTERN = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 
