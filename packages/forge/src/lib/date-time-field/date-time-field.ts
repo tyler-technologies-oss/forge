@@ -30,7 +30,7 @@ import {
   valuesEqual
 } from '../date-time-picker/date-time-picker-utils.js';
 import { ensureTemporal } from '../date-time-picker/temporal-loader.js';
-import { DateInputMask } from '../core/mask/date-input-mask.js';
+import { DateInputMask, DEFAULT_DATE_MASK } from '../core/mask/date-input-mask.js';
 import { TimeInputMask } from '../core/mask/time-input-mask.js';
 import { DateTimeInputMask } from '../core/mask/date-time-input-mask.js';
 import {
@@ -107,6 +107,10 @@ interface IEndpointText {
   endDate: string;
   endTime: string;
 }
+
+// `size` assumes an average glyph, but format text is wider, so scale it and keep a roomy minimum.
+const MIN_INPUT_SIZE = 22;
+const HINT_SIZE_RATIO = 1.2;
 
 const MANAGED_INPUT_ATTRIBUTES = [
   'placeholder',
@@ -305,6 +309,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #authorNamedGroup = false;
   #groupNameResolved = false;
   #coercingSegments = false;
+  #applyingGuide = false;
   #warnedSlotsRange = false;
   #warnedShortfall = '';
 
@@ -724,7 +729,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       write('placeholder', this.#textField?.labelPosition === 'inset' ? null : hint);
     }
     if (!authored('size')) {
-      write('size', String(Math.max(hint.length, input.placeholder.length)));
+      write('size', String(Math.max(MIN_INPUT_SIZE, Math.ceil(Math.max(hint.length, input.placeholder.length) * HINT_SIZE_RATIO))));
     }
     if (!authored('aria-label') && !input.hasAttribute('aria-labelledby')) {
       write('aria-label', this.#endpointAriaLabel(kind, index, count) || null);
@@ -899,11 +904,17 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #applyMaskGuide(): void {
     // Re-applying mid-typing fights imask's deferred caret update.
     const visible = this.#guideVisible();
-    for (const entry of this.#masks.values()) {
-      if (entry.guide !== visible) {
-        entry.guide = visible;
-        entry.mask.setShowMaskFormat(visible);
+    // Toggling re-renders the text, which isn't typing (no auto-advance).
+    this.#applyingGuide = true;
+    try {
+      for (const entry of this.#masks.values()) {
+        if (entry.guide !== visible) {
+          entry.guide = visible;
+          entry.mask.setShowMaskFormat(visible);
+        }
       }
+    } finally {
+      this.#applyingGuide = false;
     }
   }
 
@@ -917,7 +928,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return true;
     }
     return this.#endpointInputs().some(input => {
-      const value = input.value ?? '';
+      const value = this.#masks.get(input)?.mask.normalizedValue ?? input.value;
       return value !== '' && !/^[_/:\s]*$/.test(value);
     });
   }
@@ -1217,7 +1228,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   // Masks also fire for programmatic sets; react only to typing.
   #onMaskChange(input: HTMLInputElement): void {
-    if (this.#coercingSegments || !input.matches(':focus')) {
+    if (this.#coercingSegments || this.#applyingGuide || !input.matches(':focus')) {
       return;
     }
     this.#onTypedInput(false);
@@ -1284,7 +1295,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (entry.mask instanceof DateTimeInputMask) {
       return { date: entry.mask.datePart, time: entry.mask.timePart };
     }
-    const text = entry.mask.maskedValue;
+    const text = entry.mask.normalizedValue;
     return entry.kind === 'date' ? { date: text, time: '' } : { date: '', time: text };
   }
 
@@ -1369,7 +1380,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
           }
           continue;
         }
-        const raw = mask.maskedValue;
+        const raw = mask.normalizedValue;
         const coerced = kind === 'date' ? coerceDateInput(raw) : coerceTimeInput(raw, this.use24HourTime, this.allowSeconds);
         if (coerced && coerced !== raw) {
           mask.maskedValue = coerced;
@@ -1398,12 +1409,13 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       }
       const kind = kinds[index];
       const onChange = (): void => this.#onMaskChange(input);
-      const timeOptions = { use24HourTime: this.use24HourTime, showSeconds: this.allowSeconds, showMaskFormat: guide, onChange };
+      const baseOptions = { showMaskFormat: guide, letterGuide: true, onChange };
+      const timeOptions = { ...baseOptions, use24HourTime: this.use24HourTime, showSeconds: this.allowSeconds };
       const mask =
         kind === 'datetime'
           ? new DateTimeInputMask(input, timeOptions)
           : kind === 'date'
-            ? new DateInputMask(input, { showMaskFormat: guide, onChange })
+            ? new DateInputMask(input, { ...baseOptions, pattern: DEFAULT_DATE_MASK })
             : new TimeInputMask(input, timeOptions);
       this.#masks.set(input, { mask, kind, key: keyFor(kind), guide });
     });

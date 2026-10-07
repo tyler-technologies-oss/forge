@@ -1778,6 +1778,38 @@ describe('DateTimePicker / review round 2', () => {
     expect(el.checkValidity()).toBe(true);
   });
 
+  it('should run a side-by-side slot list to the popover top and bottom edges while the calendar stays inset', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-slots-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-slots-anchor" time-mode="slots" orientation="horizontal" open></forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+    const part = (name: string): DOMRect => el.shadowRoot!.querySelector(`[part~="${name}"]`)!.getBoundingClientRect();
+
+    await vi.waitFor(() => expect(Math.round(part('slot-list').bottom)).toBe(Math.round(part('root').bottom)));
+    expect(Math.round(part('slot-list').top)).toBe(Math.round(part('root').top));
+    expect(part('calendar-section').top).toBeGreaterThan(part('root').top);
+  });
+
+  it('should keep the slot list inset below a header in the popover', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-slots-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-slots-anchor" time-mode="slots" orientation="horizontal" open>
+          <span slot="header">Pick a time</span>
+        </forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+    const part = (name: string): DOMRect => el.shadowRoot!.querySelector(`[part~="${name}"]`)!.getBoundingClientRect();
+
+    await vi.waitFor(() => expect(part('slot-list').top).toBeGreaterThan(part('header').bottom));
+  });
+
   it('should prefer an explicit anchorElement over the anchor attribute', async () => {
     const screen = render(html`
       <div>

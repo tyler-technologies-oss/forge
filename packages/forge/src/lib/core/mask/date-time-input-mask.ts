@@ -1,27 +1,25 @@
-import { InputMask, type AppendFlags, type FactoryArg } from 'imask';
-import { DEFAULT_DATE_MASK, DEFAULT_DATE_MASK_LENGTH, prepareDateChar } from './date-input-mask.js';
-import type { IMaskSelection, IMaskView } from './mask-view.js';
-import { createTimeMaskBlocks, createTimeMaskPadState, getTimeMaskPattern, prepareTimeChar } from './time-input-mask.js';
+import { InputMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
+import { DEFAULT_DATE_MASK, DEFAULT_DATE_MASK_FORMAT, DEFAULT_DATE_MASK_LENGTH, prepareDateChar } from './date-input-mask.js';
+import { createLetterGuideMask, toUnderscoreGuide, UNDERSCORE_GUIDE_CHAR } from './letter-guide.js';
+import { createMaskView, isSingleKeyInput, MaskCursorSync, type IMaskSelection, type IMaskView } from './mask-view.js';
+import { createTimeMaskBlocks, createTimeMaskPadState, getTimeMaskFormat, getTimeMaskPattern, prepareTimeChar } from './time-input-mask.js';
 
 export interface IDateTimeInputMaskOptions {
   showMaskFormat?: boolean;
   use24HourTime?: boolean;
   showSeconds?: boolean;
+  /** Shows the format letters (`MM/DD/YYYY hh:mm aa`) instead of `_` in unfilled slots of the guide. */
+  letterGuide?: boolean;
   onChange?: (value: string) => void;
 }
 
 export const DATE_TIME_MASK_SEPARATOR = ' ';
 
 const TIME_START = DEFAULT_DATE_MASK_LENGTH + DATE_TIME_MASK_SEPARATOR.length;
-const PLACEHOLDER_CHAR = '_';
-const TYPED_INPUT_TYPE = 'insertText';
 
 /** Returns the display format of the combined mask, e.g. `MM/DD/YYYY hh:mm aa`. */
 export function getDateTimeMaskFormat(use24HourTime: boolean, showSeconds: boolean): string {
-  const hours = use24HourTime ? 'HH' : 'hh';
-  const seconds = showSeconds ? ':ss' : '';
-  const meridiem = use24HourTime ? '' : ' aa';
-  return `MM/DD/YYYY${DATE_TIME_MASK_SEPARATOR}${hours}:mm${seconds}${meridiem}`;
+  return `${DEFAULT_DATE_MASK_FORMAT}${DATE_TIME_MASK_SEPARATOR}${getTimeMaskFormat(use24HourTime, showSeconds)}`;
 }
 
 /** Input mask for a combined `MM/DD/YYYY` date and time value in a single input. */
@@ -30,21 +28,28 @@ export class DateTimeInputMask {
   private readonly _dateView: IMaskView;
   private readonly _timeView: IMaskView;
   private readonly _timePadState = createTimeMaskPadState();
+  private readonly _format: string;
+  private readonly _cursorSync: MaskCursorSync;
   private readonly _acceptListener?: () => void;
 
   constructor(
     private readonly _element: HTMLInputElement,
     private readonly _options: IDateTimeInputMaskOptions = {}
   ) {
+    const { use24HourTime, showSeconds, letterGuide } = this._options;
+    const pattern = `${DEFAULT_DATE_MASK}{${DATE_TIME_MASK_SEPARATOR}}\`${getTimeMaskPattern(use24HourTime, showSeconds)}`;
+    this._format = getDateTimeMaskFormat(!!use24HourTime, !!showSeconds);
     this._dateView = this._createDateView();
     this._timeView = this._createTimeView();
     this._mask = new InputMask(this._element, {
-      mask: `${DEFAULT_DATE_MASK}{${DATE_TIME_MASK_SEPARATOR}}\`${getTimeMaskPattern(this._options.use24HourTime, this._options.showSeconds)}`,
+      mask: pattern,
       lazy: !this._options.showMaskFormat,
       overwrite: true,
       prepareChar: (char: string, _masked: unknown, flags: AppendFlags) => this._prepareChar(char, flags),
-      blocks: createTimeMaskBlocks()
+      ...(letterGuide && { ...createLetterGuideMask(pattern, this._format), prepare: this._stripGuide }),
+      blocks: createTimeMaskBlocks(letterGuide)
     });
+    this._cursorSync = new MaskCursorSync(this._element, this._mask);
     if (this._options.onChange) {
       this._acceptListener = () => this._options.onChange?.(this._mask.value);
       this._mask.on('accept', this._acceptListener);
@@ -55,6 +60,7 @@ export class DateTimeInputMask {
     if (this._acceptListener) {
       this._mask.off('accept', this._acceptListener);
     }
+    this._cursorSync.destroy();
     this._mask.destroy();
   }
 
@@ -88,9 +94,15 @@ export class DateTimeInputMask {
     return this._mask.unmaskedValue;
   }
 
-  /** `MM/DD/YYYY` portion of the masked value (may contain guide chars, or be partial/empty when lazy). */
+  /** `maskedValue` with letter-guide slots read back as `_`. */
+  public get normalizedValue(): string {
+    const { value } = this._mask;
+    return this._options.letterGuide ? toUnderscoreGuide(value, this._format) : value;
+  }
+
+  /** `MM/DD/YYYY` portion of the value (may contain `_` guide chars, or be partial/empty when lazy). */
   public get datePart(): string {
-    return this._mask.value.slice(0, DEFAULT_DATE_MASK_LENGTH);
+    return this.normalizedValue.slice(0, DEFAULT_DATE_MASK_LENGTH);
   }
   public set datePart(value: string) {
     this._setParts(value, this.timePart);
@@ -98,7 +110,7 @@ export class DateTimeInputMask {
 
   /** Time portion of the masked value after the separator. */
   public get timePart(): string {
-    return this._mask.value.slice(TIME_START);
+    return this.normalizedValue.slice(TIME_START);
   }
   public set timePart(value: string) {
     this._setParts(this.datePart, value);
@@ -106,14 +118,16 @@ export class DateTimeInputMask {
 
   /** imask can't fill slots after an unfilled one, so the time is only kept when the date is complete. */
   private _setParts(date: string, time: string): void {
-    const isDateComplete = date.length === DEFAULT_DATE_MASK_LENGTH && !date.includes(PLACEHOLDER_CHAR);
+    const isDateComplete = date.length === DEFAULT_DATE_MASK_LENGTH && !date.includes(UNDERSCORE_GUIDE_CHAR);
     const hasTime = /[^_:\s]/.test(time);
     this._mask.unmaskedValue = isDateComplete && hasTime ? `${date}${DATE_TIME_MASK_SEPARATOR}${time}` : date;
   }
 
+  // Re-appended display text (guide toggle, value sets) must not turn the `aa` guide into a meridiem.
+  private readonly _stripGuide = (value: string, masked: Masked<string>): string => toUnderscoreGuide(value, this._format, masked.displayValue.length);
+
   private _prepareChar(char: string, flags: AppendFlags): string {
-    const inputType = this._mask?._inputEvent?.inputType;
-    if (!flags.input || !char.length || inputType !== TYPED_INPUT_TYPE) {
+    if (!flags.input || !char.length || !isSingleKeyInput(this._mask?._inputEvent)) {
       return char.toUpperCase();
     }
 
@@ -135,45 +149,29 @@ export class DateTimeInputMask {
 
   /** A view of the whole value that hides the format guide, so the date logic sees the same value in both modes. */
   private _createDateView(): IMaskView {
-    const mask = (): InputMask<FactoryArg> => this._mask;
-
-    return {
-      get value(): string {
-        const { value } = mask();
-        const guideIndex = value.indexOf(PLACEHOLDER_CHAR);
+    return createMaskView(
+      () => this._mask,
+      () => {
+        const value = this.normalizedValue;
+        const guideIndex = value.indexOf(UNDERSCORE_GUIDE_CHAR);
         return guideIndex === -1 ? value : value.slice(0, guideIndex);
       },
-      get cursorPos(): number {
-        return mask().cursorPos;
-      },
-      get _selection(): IMaskSelection {
-        return mask()._selection;
-      },
-      get _inputEvent(): InputEvent | undefined {
-        return mask()._inputEvent;
-      },
-      get unmaskedValue(): string {
-        return mask().unmaskedValue;
-      },
-      set unmaskedValue(value: string) {
-        mask().unmaskedValue = value;
-      },
-      updateCursor(cursorPos: number): void {
-        mask().updateCursor(cursorPos);
-      }
-    };
+      cursorPos => this._cursorSync.updateCursor(cursorPos)
+    );
   }
 
   /** A view of the time portion with positions relative to the start of the time. */
   private _createTimeView(): IMaskView {
     const mask = (): InputMask<FactoryArg> => this._mask;
+    const readValue = (): string => this.normalizedValue;
+    const cursorSync = (): MaskCursorSync => this._cursorSync;
     const getSelection = (): IMaskSelection => mask()._selection ?? { start: 0, end: 0 };
     // A char typed on the separator lands in the first time position
     const getReadOffset = (): number => (getSelection().start === DEFAULT_DATE_MASK_LENGTH ? DEFAULT_DATE_MASK_LENGTH : TIME_START);
 
     return {
       get value(): string {
-        return mask().value.slice(TIME_START);
+        return readValue().slice(TIME_START);
       },
       get cursorPos(): number {
         return mask().cursorPos - getReadOffset();
@@ -189,10 +187,10 @@ export class DateTimeInputMask {
         return mask().unmaskedValue.slice(TIME_START);
       },
       set unmaskedValue(value: string) {
-        mask().unmaskedValue = `${mask().value.slice(0, DEFAULT_DATE_MASK_LENGTH)}${DATE_TIME_MASK_SEPARATOR}${value}`;
+        mask().unmaskedValue = `${readValue().slice(0, DEFAULT_DATE_MASK_LENGTH)}${DATE_TIME_MASK_SEPARATOR}${value}`;
       },
       updateCursor(cursorPos: number): void {
-        mask().updateCursor(cursorPos + TIME_START);
+        cursorSync().updateCursor(cursorPos + TIME_START);
       }
     };
   }
