@@ -403,7 +403,7 @@ describe('DateTimeInputMask', () => {
       ['9', '03/15/2026 09:mm aa', 13],
       ['3', '03/15/2026 09:03 aa', 16],
       ['0', '03/15/2026 09:30 aa', 16],
-      ['a', '03/15/2026 09:30 Aa', 18],
+      ['a', '03/15/2026 09:30 AM', 19],
       ['m', '03/15/2026 09:30 AM', 19]
     ];
 
@@ -463,7 +463,66 @@ describe('DateTimeInputMask', () => {
     it('should not read a typed meridiem as the guide', async () => {
       setup({ showMaskFormat: true, letterGuide: true });
       await type('01022025930a');
-      expect(mask!.timePart).toBe('09:30 A_');
+      expect(mask!.timePart).toBe('09:30 AM');
+    });
+
+    it.each([
+      ['a', '01/02/2026 10:45 AM'],
+      ['A', '01/02/2026 10:45 AM'],
+      ['p', '01/02/2026 10:45 PM'],
+      ['P', '01/02/2026 10:45 PM']
+    ])('should fill the whole meridiem when %s is typed', async (key, expected) => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type(`010220261045${key}`);
+      expect(input.value).toBe(expected);
+      expect(input.selectionStart).toBe(19);
+    });
+
+    it('should fill the whole meridiem when the format is hidden', async () => {
+      const input = setup({ letterGuide: true });
+      await type('010220261045p');
+      expect(input.value).toBe('01/02/2026 10:45 PM');
+    });
+
+    it('should ignore an m typed after the filled meridiem', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('010220261045pm');
+      expect(input.value).toBe('01/02/2026 10:45 PM');
+      expect(input.selectionStart).toBe(19);
+    });
+
+    it('should replace an existing meridiem when a or p is typed over it', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('010220261045a');
+      await select(input, 17, 17);
+      await type('p');
+      expect(input.value).toBe('01/02/2026 10:45 PM');
+      await select(input, 17, 19);
+      await type('a');
+      expect(input.value).toBe('01/02/2026 10:45 AM');
+    });
+
+    it.each([
+      ['010220261045p', '01/02/2026 10:45 PM'],
+      ['01/02/2026 10:45 pm', '01/02/2026 10:45 PM'],
+      ['01/02/2026 10:45a', '01/02/2026 10:45 AM']
+    ])('should fill the whole meridiem when %s is inserted at once', (text, expected) => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      input.setSelectionRange(0, 0);
+      insertText(input, text);
+      expect(input.value).toBe(expected);
+    });
+
+    it('should fill the whole meridiem when a value with a lone meridiem letter is pasted', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      paste(input, '01/02/2026 10:45 p');
+      expect(input.value).toBe('01/02/2026 10:45 PM');
+    });
+
+    it('should not add a meridiem in 24 hour time', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true, use24HourTime: true });
+      await type('010220261045a');
+      expect(input.value).toBe('01/02/2026 10:45');
     });
 
     it('should drop the time when the date is incomplete', () => {
@@ -493,14 +552,11 @@ describe('DateTimeInputMask', () => {
 
     it('should keep a typed meridiem when the guide is toggled', async () => {
       const input = setup({ showMaskFormat: true, letterGuide: true });
-      await type('010220261030a');
+      await type('010220261030p');
       mask!.setShowMaskFormat(false);
-      expect(input.value).toBe('01/02/2026 10:30 A');
+      expect(input.value).toBe('01/02/2026 10:30 PM');
       mask!.setShowMaskFormat(true);
-      expect(input.value).toBe('01/02/2026 10:30 Aa');
-      await type('m');
-      mask!.setShowMaskFormat(false);
-      expect(input.value).toBe('01/02/2026 10:30 AM');
+      expect(input.value).toBe('01/02/2026 10:30 PM');
     });
 
     it('should not set a meridiem when a display string with guide letters is set', () => {
@@ -509,7 +565,7 @@ describe('DateTimeInputMask', () => {
       expect(input.value).toBe('01/02/2026 10:30 aa');
       expect(mask!.timePart).toBe('10:30 __');
       mask!.maskedValue = '01/02/2026 10:30 Aa';
-      expect(mask!.timePart).toBe('10:30 A_');
+      expect(mask!.timePart).toBe('10:30 AM');
     });
 
     it('should keep a lowercase meridiem that is set programmatically', () => {
