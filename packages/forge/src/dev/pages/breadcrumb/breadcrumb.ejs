@@ -1,6 +1,6 @@
 <div class="vert">
   <forge-breadcrumb aria-label="Breadcrumb">
-    <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
+    <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
     <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
     <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
     <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
@@ -9,7 +9,7 @@
   <div>
     <h3 class="forge-typography--heading2">Overflow menu</h3>
     <forge-breadcrumb aria-label="Breadcrumb with overflow">
-      <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
       <forge-breadcrumb-overflow-menu>
         <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
         <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
@@ -21,35 +21,39 @@
   </div>
 
   <div>
-    <h3 class="forge-typography--heading2">Small</h3>
-    <forge-breadcrumb aria-label="Small breadcrumb" density="small">
-      <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
-      <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
-      <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
-      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
-    </forge-breadcrumb>
-  </div>
-
-  <div>
-    <h3 class="forge-typography--heading2">Small with overflow menu</h3>
-    <forge-breadcrumb aria-label="Small breadcrumb with overflow" density="small">
-      <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
+    <h3 class="forge-typography--heading2">With icons</h3>
+    <forge-breadcrumb aria-label="Breadcrumb with icons">
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
       <forge-breadcrumb-overflow-menu>
-        <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
-        <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
-        <forge-breadcrumb-item href="#">Category</forge-breadcrumb-item>
+        <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Section</forge-breadcrumb-item>
+        <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Subsection</forge-breadcrumb-item>
+        <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Category</forge-breadcrumb-item>
       </forge-breadcrumb-overflow-menu>
-      <forge-breadcrumb-item href="#">Parent</forge-breadcrumb-item>
-      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Parent</forge-breadcrumb-item>
+      <forge-breadcrumb-item current><forge-icon slot="start" name="folder"></forge-icon>Current page</forge-breadcrumb-item>
     </forge-breadcrumb>
   </div>
 
   <div>
     <h3 class="forge-typography--heading2">Custom separator</h3>
     <forge-breadcrumb aria-label="Breadcrumb with custom separator" style="--forge-breadcrumb-separator-content: '>';">
-      <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
       <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
       <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
+      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+    </forge-breadcrumb>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Without links</h3>
+    <forge-breadcrumb aria-label="Breadcrumb without links">
+      <forge-breadcrumb-item home></forge-breadcrumb-item>
+      <forge-breadcrumb-overflow-menu>
+        <forge-breadcrumb-item>Section</forge-breadcrumb-item>
+        <forge-breadcrumb-item>Subsection</forge-breadcrumb-item>
+        <forge-breadcrumb-item>Category</forge-breadcrumb-item>
+      </forge-breadcrumb-overflow-menu>
+      <forge-breadcrumb-item>Parent</forge-breadcrumb-item>
       <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
     </forge-breadcrumb>
   </div>

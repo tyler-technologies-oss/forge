@@ -22,9 +22,4 @@
 
 .forge-breadcrumb {
   @include core.base;
-  @include core.density(medium);
-}
-
-.small {
-  @include core.density(small);
 }

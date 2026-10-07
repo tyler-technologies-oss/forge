@@ -1,16 +1,13 @@
 @use '../core/styles/theme';
 @use './token-utils' as *;
-@use './typography';
 
 @mixin host {
   display: inline-block;
 }
 
 @mixin base() {
-  @include typography.consume(body1);
-
   box-sizing: border-box;
-  display: inline-flex;
+  display: flex;
   align-items: center;
 
   &::after {
@@ -18,18 +15,4 @@
     color: #{theme.variable(text-medium)};
     padding-inline: #{token(separator-padding)};
   }
-}
-
-@mixin interactive() {
-  color: #{theme.variable(primary)};
-  text-decoration: none;
-  outline: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-@mixin positioning-container {
-  position: relative;
 }

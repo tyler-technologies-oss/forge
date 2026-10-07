@@ -1,7 +1,9 @@
-@use 'sass:math';
+@use '../../button';
+@use '../../core/styles/spacing';
 @use '../../core/styles/theme';
-@use '../../list/list-item';
-@use '../../state-layer';
+@use '../../core/styles/typography';
+@use '../../icon-button';
+@use '../../icon';
 @use '../item-shared';
 @use '../token-utils' as *;
 
@@ -15,27 +17,75 @@
   @include item-shared.base;
 }
 
-@mixin link {
-  @include item-shared.interactive;
+@mixin icon-button {
+  @include icon.provide-theme(
+    (
+      size: 18px
+    )
+  );
+
+  color: #{theme.variable('primary')};
+}
+
+@mixin button {
+  @include button.provide-theme(
+    (
+      color: #{theme.variable('primary')},
+      min-width: 0,
+      padding: 0 #{spacing.variable('xxsmall')}
+    )
+  );
+
+  &::part(root) {
+    @include typography.style(body1);
+  }
+}
+
+@mixin menu-item {
+  &::after {
+    display: none;
+  }
+}
+
+@mixin start {
+  @include icon.provide-theme(
+    (
+      color: #{theme.variable('text-low')},
+      size: 18px
+    )
+  );
+
+  display: contents;
+}
+
+@mixin list-item {
+  inline-size: 100%;
+}
+
+@mixin text {
+  @include typography.style(body1);
+
+  padding-inline: #{spacing.variable('xxxsmall')};
+}
+
+@mixin text-icon {
+  @include icon.provide-theme(
+    (
+      color: #{theme.variable('text-low')},
+      size: 18px
+    )
+  );
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @mixin current {
   color: #{theme.variable('text-high')};
-}
-
-@mixin menu-item {
-  @include list-item.tokens;
-  @include list-item.base;
-  @include list-item.text-container;
-
-  position: relative;
-}
-
-@mixin menu-item-link {
-  @include list-item.anchor;
-  @include state-layer.standalone;
-}
-
-@mixin positioning-container {
-  @include item-shared.positioning-container;
 }

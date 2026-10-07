@@ -1,13 +1,9 @@
 import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { TemplateResult, html, unsafeCSS } from 'lit';
-import { property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 
 import styles from './breadcrumb.scss';
-
-export type BreadcrumbDensity = 'small' | 'medium';
 
 export const BREADCRUMB_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-breadcrumb';
 
@@ -32,13 +28,6 @@ export class BreadcrumbComponent extends BaseLitElement {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMB_TAG_NAME;
 
-  /**
-   * The font size of the breadcrumb.
-   * @default 'medium'
-   * @attribute
-   */
-  @property() public density: BreadcrumbDensity = 'medium';
-
   private _internals: ElementInternals;
 
   constructor() {
@@ -55,7 +44,7 @@ export class BreadcrumbComponent extends BaseLitElement {
 
   /* @internal */
   public render(): TemplateResult {
-    return html`<ul part="root" class="${classMap({ 'forge-breadcrumb': true, [this.density]: true })}" role="list">
+    return html`<ul part="root" class="forge-breadcrumb" role="list">
       <slot></slot>
     </ul>`;
   }

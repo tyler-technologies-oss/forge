@@ -4,7 +4,7 @@
 
 $tokens: (
   separator-content: utils.module-val(breadcrumb, separator-content, '/'),
-  separator-padding: utils.module-val(breadcrumb, separator-padding, spacing.variable(xsmall))
+  separator-padding: utils.module-val(breadcrumb, separator-padding, spacing.variable(xxsmall))
 ) !default;
 
 @function get($key) {

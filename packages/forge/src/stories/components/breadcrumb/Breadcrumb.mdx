@@ -21,13 +21,33 @@ breadcrumb items after it.
 
 <Canvas of={BreadcrumbStories.OverflowMenu} />
 
+## Home item
+
+Set the `home` attribute on a `forge-breadcrumb-item` to render a home icon in place of its text. Use
+it for the first item in the breadcrumb. A tooltip labels the icon with "Home" by default; slot text into
+the item to provide a different label.
+
 ## Current item
 
 The current item represents the page the user is currently on. It should be marked with the
-`current` attribute and will render as a non-interactive element with `aria-current="page"`.
+`current` attribute and will render as non-interactive text, and the item will have `aria-current="page"`.
 
 Only include the current page in the breadcrumb when the page doesn't already have a title displayed
 or is unclear. When the current page is included, it must be the last item in the breadcrumb.
+
+## Icons
+
+Use the `start` slot to place an icon (or other content) before an item's text. The slot is supported by
+items in the breadcrumb and within the overflow menu.
+
+<Canvas of={BreadcrumbStories.WithIcons} />
+
+## Without links
+
+An item without an `href` renders as non-interactive text instead of a link. Use this for levels of the
+hierarchy that don't have a page of their own.
+
+<Canvas of={BreadcrumbStories.WithoutLinks} />
 
 ## API
 
@@ -37,6 +57,8 @@ or is unclear. When the current page is included, it must be the last item in th
 
 - `forge-breadcrumb` has the `navigation` role. Provide an `aria-label` (such as "Breadcrumb") so it is
   distinguishable from other navigation landmarks.
-- Set `current` on the item that represents the current page. It renders a non-interactive element with
-  `aria-current="page"` in place of the link.
+- Set `current` on the item that represents the current page. It renders non-interactive text in place of
+  the link and sets `aria-current="page"` on the item.
 - Place content in the overflow menu's `tooltip` slot to provide an accessible name for the overflow button.
+- Slot text into a `home` item to provide an accessible name for the home icon other than the default
+  "Home".

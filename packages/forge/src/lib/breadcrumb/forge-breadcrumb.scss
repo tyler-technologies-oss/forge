@@ -15,11 +15,6 @@
 .forge-breadcrumb {
   @include breadcrumb-core.host;
   @include breadcrumb-core.base;
-  @include breadcrumb-core.density(medium);
-
-  &--small {
-    @include breadcrumb-core.density(small);
-  }
 }
 
 //
@@ -36,7 +31,6 @@
 
   > a {
     @include breadcrumb-item-core.link;
-    @include breadcrumb-item-core.positioning-container;
 
     &:focus-visible {
       @include focus-indicator.keyframes;
@@ -66,10 +60,6 @@
   @include breadcrumb-overflow-menu-core.host;
   @include breadcrumb-overflow-menu-core.base;
 
-  &__container {
-    @include breadcrumb-overflow-menu-core.positioning-container;
-  }
-
   &__button {
     @include breadcrumb-overflow-menu-core.button;
 
@@ -80,27 +70,5 @@
 
   &__popover {
     @include breadcrumb-overflow-menu-core.popover;
-  }
-
-  &__list {
-    @include breadcrumb-overflow-menu-core.list;
-
-    .forge-breadcrumb-item {
-      @include breadcrumb-item-core.menu-item;
-
-      &::after {
-        display: none;
-      }
-
-      > a {
-        @include breadcrumb-item-core.menu-item-link;
-        @include focus-indicator.standalone('inward');
-        @include focus-indicator.provide-theme(
-          (
-            shape: shape.variable(medium)
-          )
-        );
-      }
-    }
   }
 }

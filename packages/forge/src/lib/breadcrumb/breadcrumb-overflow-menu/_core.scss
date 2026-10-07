@@ -3,7 +3,6 @@
 @use '../../core/styles/theme';
 @use '../../list/list';
 @use '../item-shared';
-@use '../typography';
 @use '../token-utils' as *;
 
 @forward '../token-utils';
@@ -17,15 +16,7 @@
 }
 
 @mixin button {
-  @include typography.consume(body2);
-  @include item-shared.interactive;
-
-  appearance: none;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
+  color: #{theme.variable('primary')};
 }
 
 @mixin popover {
@@ -38,8 +29,4 @@
   @include list.tokens;
   @include list.base;
   @include list.inner;
-}
-
-@mixin positioning-container {
-  @include item-shared.positioning-container;
 }

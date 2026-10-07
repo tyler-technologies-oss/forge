@@ -1,4 +1,3 @@
-@use '../typography';
 @use '../token-utils' as *;
 
 @forward '../token-utils';
@@ -15,12 +14,4 @@
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-@mixin density($density) {
-  @if $density == small {
-    @include typography.provide(label2);
-  } @else {
-    @include typography.provide(body1);
-  }
 }

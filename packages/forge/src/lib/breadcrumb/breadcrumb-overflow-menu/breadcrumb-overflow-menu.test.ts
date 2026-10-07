@@ -23,10 +23,13 @@ describe('Breadcrumb Overflow Menu', () => {
     expect(el.shadowRoot).not.toBeNull();
   });
 
-  it('should render a button with an ellipsis', async () => {
+  it('should render a button with an ellipsis icon', async () => {
     const screen = render(template);
+    const el = screen.container.querySelector('forge-breadcrumb-overflow-menu') as BreadcrumbOverflowMenuComponent;
+    await el.updateComplete;
 
-    await expect.element(screen.getByRole('button', { name: 'More breadcrumbs' })).toHaveTextContent('…');
+    await expect.element(screen.getByRole('button', { name: 'More breadcrumbs' })).toBeInTheDocument();
+    expect(el.shadowRoot?.querySelector('forge-icon-button forge-icon[name="more_horiz"]')).not.toBeNull();
   });
 
   it('should use tooltip slot content as the accessible name of the button', async () => {
@@ -101,7 +104,9 @@ describe('Breadcrumb Overflow Menu', () => {
 
     await button.click();
     await expect.element(button).toHaveAttribute('aria-expanded', 'true');
-    await screen.getByRole('link', { name: 'One' }).click();
+    const link = screen.getByRole('link', { name: 'One' });
+    (link.element() as HTMLAnchorElement).focus();
+    await userEvent.keyboard('{Enter}');
 
     await expect.element(button).toHaveAttribute('aria-expanded', 'false');
   });

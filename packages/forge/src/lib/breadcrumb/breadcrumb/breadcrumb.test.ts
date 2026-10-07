@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
-import { BreadcrumbItemComponent } from '../breadcrumb-item/breadcrumb-item.js';
 import { BreadcrumbComponent } from './breadcrumb.js';
 
 import './breadcrumb.js';
@@ -49,36 +48,6 @@ describe('Breadcrumb', () => {
 
     expect(first).not.toBe('none');
     expect(last).toBe('none');
-  });
-
-  it('should default density to medium', async () => {
-    const screen = render(html`<forge-breadcrumb></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
-
-    await el.updateComplete;
-
-    expect(el.density).toBe('medium');
-  });
-
-  it('should use a smaller item font size when density is small than when density is medium', async () => {
-    const screen = render(html`
-      <div>
-        <forge-breadcrumb id="medium">
-          <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
-        </forge-breadcrumb>
-        <forge-breadcrumb id="small" density="small">
-          <forge-breadcrumb-item href="#">Home</forge-breadcrumb-item>
-        </forge-breadcrumb>
-      </div>
-    `);
-    const getFontSize = async (id: string): Promise<number> => {
-      const item = screen.container.querySelector(`#${id} forge-breadcrumb-item`) as BreadcrumbItemComponent;
-      await item.updateComplete;
-      const root = item.shadowRoot?.querySelector('.forge-breadcrumb-item') as HTMLElement;
-      return parseFloat(getComputedStyle(root).fontSize);
-    };
-
-    expect(await getFontSize('small')).toBeLessThan(await getFontSize('medium'));
   });
 
   it('should be accessible', async () => {
