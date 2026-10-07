@@ -121,3 +121,18 @@ export interface CustomElementsManifest {
   readme?: string;
   modules: CEMModule[];
 }
+
+export interface DesignToken {
+  name: string;
+  value: string;
+}
+
+export interface DesignTokenCategory {
+  name: string;
+  tokens: DesignToken[];
+}
+
+export interface DesignTokensManifest {
+  schemaVersion: string;
+  categories: DesignTokenCategory[];
+}

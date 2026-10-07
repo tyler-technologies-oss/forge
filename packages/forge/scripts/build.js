@@ -1,6 +1,7 @@
 import { rm } from 'fs/promises';
 import ora from 'ora';
 import { buildCem } from './build-cem.js';
+import { buildTokens } from './build-tokens.js';
 import { buildEsm } from './build-esm.js';
 import { buildTypes } from './build-types.js';
 import { buildCdn } from './build-cdn.js';
@@ -27,11 +28,13 @@ await step('Cleaning', async () => {
     rm('esm', { recursive: true, force: true }),
     rm('sass', { recursive: true, force: true }),
     rm('custom-elements.json', { force: true }),
+    rm('design-tokens.json', { force: true }),
     rm('vscode.html-custom-data.json', { force: true }),
     rm('vscode.css-custom-data.json', { force: true })
   ]);
 });
 await step('Generating CEM', buildCem);
+await step('Generating design tokens', buildTokens);
 await step('Building', buildEsm);
 await step('Generating types', buildTypes);
 await step('Bundling CDN assets', buildCdn);
