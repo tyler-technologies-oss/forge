@@ -156,8 +156,11 @@ export interface IDateTimePickerChangeEventData {
   date: Date | null;
   /** The end calendar date in `date-mode="range"`; `null` otherwise. */
   dateTo: Date | null;
+  /** The selected time when `time-mode` is not `range`; `null` otherwise. */
   time: string | null;
+  /** The start time in `time-mode="range"`; `null` otherwise. */
   from: string | null;
+  /** The end time in `time-mode="range"`; `null` otherwise. */
   to: string | null;
   source: ChangeSource;
   complete: boolean;
