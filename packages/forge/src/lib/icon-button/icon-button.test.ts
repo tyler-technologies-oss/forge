@@ -332,11 +332,66 @@ describe('Icon Button', () => {
   it('should not enable toggle if pressed is set while toggle is off', async () => {
     const screen = render(html`<forge-icon-button pressed>${DEFAULT_ICON}</forge-icon-button>`);
     const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
 
     expect(el.toggle).toBe(false);
     expect(el.pressed).toBe(true);
     expect(el.on).toBe(true);
     expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe(false);
+  });
+
+  it('should not set aria-pressed when not a toggle', async () => {
+    const screen = render(html`<forge-icon-button aria-label="More">${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe(false);
+  });
+
+  it('should set aria-pressed to false on a toggle that is not pressed', async () => {
+    const screen = render(html`<forge-icon-button toggle>${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe('false');
+  });
+
+  it('should set aria-pressed to true on a pressed toggle', async () => {
+    const screen = render(html`<forge-icon-button toggle pressed>${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe('true');
+  });
+
+  it('should set aria-pressed when toggle is turned on', async () => {
+    const screen = render(html`<forge-icon-button pressed>${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    el.toggle = true;
+    await el.updateComplete;
+
+    expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe('true');
+  });
+
+  it('should remove aria-pressed when toggle is turned off', async () => {
+    const screen = render(html`<forge-icon-button toggle pressed>${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    el.toggle = false;
+    await el.updateComplete;
+
+    expect(el.hasAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe(false);
+  });
+
+  it('should keep an aria-pressed attribute set by the consumer when not a toggle', async () => {
+    const screen = render(html`<forge-icon-button aria-pressed="true">${DEFAULT_ICON}</forge-icon-button>`);
+    const el = screen.container.querySelector('forge-icon-button') as IconButtonComponent;
+    await el.updateComplete;
+
+    expect(el.getAttribute(ICON_BUTTON_CONSTANTS.attributes.ARIA_PRESSED)).toBe('true');
   });
 
   describe('IconButtonComponentDelegate', () => {

@@ -1,5 +1,49 @@
 # @tylertech/forge
 
+## 3.21.0
+
+### Minor Changes
+
+- da6d0c4: deprecate: `<forge-stepper>` and `<forge-step>` are deprecated and will be removed in a future release. Use `<forge-process-stepper>` and `<forge-process-step>` instead.
+- ea6ee64: feat(typography): add kbd style and css class
+- e922a5c: feat(option): enable declarative usage in listbox
+
+  Breaking changes:
+  - `HTMLElementTagNameMap['forge-option']` now types to `OptionComponent` instead of the deprecated `IOptionComponent`.
+
+- 7f3f8e9: feat(keyboard-shortcut): add scoped keyboard shortcut handling
+- 7f3f8e9: feat(keyboard-shortcut): add the `action` property with a `click` value to activate a button without custom scripting
+- 7f3f8e9: feat(keyboard-shortcut): enable multi-step key sequences with steps in a sequence separated by a space
+
+  Breaking changes:
+  - alternative key combinations are now separated by commas
+
+- 7f3f8e9: feat(keyboard-shortcut): add `mod` key alias that maps to `meta` on Apple platforms and `control` elsewhere
+- 7f3f8e9: feat(keyboard-shortcut): add `registerKeyboardShortcut()` to register a shortcut imperatively, without rendering an element
+- 7f3f8e9: feat(keyboard-shortcut): add `formatKeyboardShortcutBinding()` to format a key binding for display, using platform-appropriate modifier labels (`Ctrl+K Ctrl+C` on PC, `Cmd+K Cmd+C` on Apple platforms)
+- 7f3f8e9: feat(keyboard-shortcut): automatically set `aria-keyshortcuts` on the anchor element when `anchorAccessibility` is `'auto'` (the default) and the shortcut is a single step
+- ea6ee64: feat(kbd): add kbd component for showing keyboard input
+- cb6e6e1: feat(process-stepper): add process stepper component
+- cb6e6e1: feat(process-step): add process step component
+- b44865d: feat(stack): migrate to lit
+- b44865d: feat(stack): allow `gap` to be set to a spacing token size (`xxxs` through `xxxl`)
+- e922a5c: feat(listbox): add listbox component
+- e922a5c: feat(option-group): enable declarative usage in listbox
+
+### Patch Changes
+
+- db3de60: fix(date-picker): Emit `forge-date-picker-change` when the input value is coerced to a different date on blur.
+  fix(date-picker): When `showMaskFormat` is enabled, single digit months and days are now padded when the
+  cursor moved to the next segment (typing `42125` produces `04/21/25`), and typing `/` after a single digit pads that
+  segment.
+- ba12107: fix(icon-button): only expose `aria-pressed` in toggle mode
+- 38457e6: fix(button): set tabindex and other disabled-related attributes synchronously
+- 465d3c4: fix(process-stepper): hide the step number on the half-filled marker of a numbered current or in-progress step
+- fa01a32: fix(button): button interfaces extend HTMLElement
+- b012fbc: fix(tab-bar): fix `scroll-buttons` causing the tab bar to steal focus from elements outside of it
+- Updated dependencies [ea6ee64]
+  - @tylertech/forge-core@3.6.0
+
 ## 3.20.0
 
 ### Minor Changes

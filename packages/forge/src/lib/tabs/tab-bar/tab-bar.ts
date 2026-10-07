@@ -796,6 +796,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     const activeElement = this.shadowRoot?.activeElement;
 
+    if (!activeElement) {
+      return;
+    }
+
     if (activeElement === this._previousButton && this._scrolledToStart) {
       this._previousButton?.blur();
       return this.#focusGroupRef.focusFirst();

@@ -4,7 +4,8 @@ import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}process-stepper`;
 
 const attributes = {
-  ORIENTATION: 'orientation'
+  ORIENTATION: 'orientation',
+  READONLY: 'readonly'
 };
 
 /** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
@@ -15,10 +16,15 @@ export const PROCESS_STEPPER_CONSTANTS = {
 
 export type ProcessStepperOrientation = 'vertical' | 'horizontal';
 
+export const PROCESS_STEPPER_ORIENTATIONS: ProcessStepperOrientation[] = ['vertical', 'horizontal'];
+
 /** The stepper-wide configuration shared with each step. */
 export interface IProcessStepperContext {
   count: number;
+  /** The one-based position of the last current step, or 0 when no step is current. */
+  currentIndex: number;
   numbered: boolean;
+  readonly: boolean;
   orientation: ProcessStepperOrientation;
 }
 

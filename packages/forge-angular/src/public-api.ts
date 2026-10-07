@@ -73,6 +73,8 @@ export * from './lib/overlay';
 export * from './lib/page-state';
 export * from './lib/paginator';
 export * from './lib/popover';
+export * from './lib/process-step';
+export * from './lib/process-stepper';
 export * from './lib/profile-card';
 export * from './lib/profile-link';
 export * from './lib/quantity-field';

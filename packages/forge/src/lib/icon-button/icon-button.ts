@@ -192,9 +192,25 @@ export class IconButtonComponent extends BaseButton {
     }
 
     if (changedProperties.has('pressed')) {
-      setDefaultAria(this, this._internals, { ariaPressed: this.pressed ? 'true' : 'false' });
       toggleState(this._internals, 'pressed', this.pressed);
     }
+
+    if (changedProperties.has('toggle') || changedProperties.has('pressed')) {
+      this.#syncPressedAria(changedProperties.get('toggle') === true);
+    }
+  }
+
+  /**
+   * `aria-pressed` is what makes assistive technology announce a toggle button, so it is only set
+   * in toggle mode. Outside it the default is cleared, but an `aria-pressed` attribute is only
+   * removed if this element set it while it was a toggle - never one a consumer set themselves.
+   */
+  #syncPressedAria(wasToggle: boolean): void {
+    if (this.toggle) {
+      setDefaultAria(this, this._internals, { ariaPressed: this.pressed ? 'true' : 'false' });
+      return;
+    }
+    setDefaultAria(this, this._internals, { ariaPressed: null }, { setAttribute: wasToggle });
   }
 
   public render(): TemplateResult {

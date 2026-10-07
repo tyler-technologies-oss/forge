@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { renderFixture } from '../../testing/fixture.js';
 import { html } from 'lit';
 import { RichTextEditorComponent } from '../rich-text-editor.js';
@@ -29,6 +29,9 @@ describe('RichTextEditor', () => {
     it('should point the toolbar at the editor with an element reference rather than aria-controls', async () => {
       const el = await renderFixture<RichTextEditorComponent>(html`<forge-rich-text-editor></forge-rich-text-editor>`, 'forge-rich-text-editor');
       const toolbar = el.shadowRoot?.querySelector('[role="toolbar"]') as HTMLElement;
+      // The target comes from the editor context, which names it once the editor has initialized.
+      await vi.waitUntil(() => el.isInitialized);
+      await (toolbar as unknown as { updateComplete: Promise<boolean> }).updateComplete;
 
       // An IDREF cannot cross a shadow boundary, so the relationship is expressed as an element
       // reference instead. The target is the editor rather than the editable element, because a

@@ -9,25 +9,25 @@
   }
 }
 
-:host([inline]) {
+:host(:state(inline)) {
   .forge-stack {
     @include inline;
   }
 }
 
-:host([inline][wrap]) {
+:host(:state(inline):state(wrap)) {
   .forge-stack {
     @include wrap;
   }
 }
 
-:host(:not([inline])) {
+:host(:not(:state(inline))) {
   .forge-stack {
     @include override(height, 100%, value);
   }
 }
 
-:host([stretch]) {
+:host(:state(stretch)) {
   ::slotted(*) {
     @include override(stretch, 1, value);
   }

@@ -76,6 +76,8 @@ export abstract class BaseButton extends BaseLitElement {
     }
     this.#disabled = value;
     if (oldValue !== value) {
+      this.#handleDisabledChange();
+      toggleState(this._internals, 'disabled', value);
       this.requestUpdate('disabled', oldValue);
     }
   }
@@ -197,20 +199,6 @@ export abstract class BaseButton extends BaseLitElement {
     // Initialize after DOM is ready
     this.#detectSlottedAnchor();
     this.#updateDefaultAria();
-  }
-
-  public override willUpdate(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('disabled')) {
-      this.#handleDisabledChange();
-    }
-  }
-
-  public override updated(changedProperties: PropertyValues<this>): void {
-    super.updated(changedProperties);
-
-    if (changedProperties.has('disabled')) {
-      toggleState(this._internals, 'disabled', this.disabled);
-    }
   }
 
   // Render methods

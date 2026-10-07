@@ -89,6 +89,8 @@ const DEFAULT_EXTENSIONS: AnyExtension[] = [
  *
  * @property {RichTextRendererContent} content - The content to render in ProseMirror JSON format.
  * Must be set as a property; it is not settable via attribute.
+ *
+ * @cssproperty --forge-rich-text-renderer-padding - The padding around the rendered content.
  */
 @customElement(RICH_TEXT_RENDERER_TAG_NAME)
 export class RichTextRendererComponent extends LitElement {

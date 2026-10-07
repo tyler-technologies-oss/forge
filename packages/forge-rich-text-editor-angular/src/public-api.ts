@@ -7,6 +7,7 @@ export * from './lib/rich-text-content';
 export * from './lib/rich-text-context';
 export * from './lib/rich-text-editor';
 export * from './lib/rich-text-renderer';
+export * from './lib/rich-text-toolbar';
 export * from './lib/rte-align';
 export * from './lib/rte-bold';
 export * from './lib/rte-bullet-list';

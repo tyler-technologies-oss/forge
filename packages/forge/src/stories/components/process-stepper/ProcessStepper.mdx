@@ -24,44 +24,29 @@ import * as ProcessStepperStories from './ProcessStepper.stories';
 
 <Title />
 
-Process steppers show where a user is within a multi-step process, and allow actions to be completed
-directly from each step. Unlike the stepper component, a process step can contain arbitrary
-interactive content, so users can complete tasks, acknowledge information, or launch a workflow
-without leaving the page.
+Process steppers show where a user is within a multi-step process. Additional details and subtasks
+may be presented directly within each step.
 
 <Canvas of={ProcessStepperStories.Demo} />
 
-<UsageLink text="the stepper component" href="?path=/docs/components-stepper--docs" />
-
 ## Orientation
 
-Process steppers are vertical by default, which gives each step room for descriptions, meta
-content, and interactive content. Set `orientation` to `horizontal` for compact, progress-oriented
+Process steppers are vertical by default, which gives each step room for details and
+interactive content. Set `orientation` to `horizontal` for compact, progress-oriented
 processes where steps are distributed evenly across the available width.
 
 <Canvas of={ProcessStepperStories.Horizontal} />
 
-## Small Screens
+### Responsive Layout
 
-A horizontal stepper has no room for legible labels side by side on a phone — four steps in a 360px
-container leaves roughly 48px each. Below 600px of available width, a horizontal stepper therefore
-lays its steps out vertically, which gives every label, description, and action the width it needs.
-The progress line stays visible as the vertical rail, so progress is still communicated.
+A horizontal stepper has no room for legible labels side by side in a small container — four steps
+in a 360px container leaves roughly 48px each. Below 600px of available width, a horizontal stepper
+therefore lays its steps out vertically, which gives every label and its details the width it needs.
+The progress line stays visible as a vertical rail.
 
 The switch is driven by the stepper's own width rather than the viewport, so a stepper inside a
 narrow column adapts too. The `orientation` attribute is unchanged; the read-only `compact` property
 reports whether the compact layout is active. A stepper that is already vertical never changes.
-
-<Canvas of={ProcessStepperStories.Compact} />
-
-## Progress
-
-A continuous line runs alongside the steps and doubles as the progress indicator: a rail to the
-start of the markers when vertical, and a track above them when horizontal. The line is filled
-through every step in the `completed`, `current`, or `in-progress` state, and unfilled for the steps
-that follow, so it reads as a progress bar that fills as the process advances.
-
-The `progress` property returns the fraction of steps that are completed, between 0 and 1.
 
 ## Step States
 
@@ -71,29 +56,40 @@ the marker treatment:
 | State                | Marker                                 |
 | -------------------- | -------------------------------------- |
 | `not-started`        | Dashed outline                         |
-| `current`            | Partially filled                       |
+| `current`            | Filled with a check icon, and the step is the current step in the process |
 | `in-progress`        | Partially filled                       |
 | `completed`          | Filled with a check icon               |
-| `optional`           | Dashed outline                         |
-| `skipped`            | Dashed outline                         |
-| `disabled`           | Dashed outline, reduced opacity        |
-| `waiting`            | Dashed outline                         |
-| `blocked`            | Error outline with an exclamation icon |
-| `error`              | Error outline with an exclamation icon |
-| `requires-attention` | Error outline with an exclamation icon |
-
-Use the `description` property for supporting text under the label, such as `Optional` or the reason
-a step is invalid.
+| `critical`           | Error outline with an exclamation icon |
 
 <Canvas of={ProcessStepperStories.States} />
+
+### Progress Track
+
+The progress track appears to the left of a vertical process stepper or above a horizontal process
+stepper, indicating the user's current position in the process. Each step up to and including the
+step with the "current" state has its portion of the track filled. If no step is marked current the
+track remains entirely unfilled.
+
+### Disabled Steps
+
+Set the `disabled` property on a step to dim it and prevent interaction.
+
+<Canvas of={ProcessStepperStories.Disabled} />
+
+### Support Text
+
+Use the `support text` slot for additional context under the label, such as `Optional` or a short
+description of of the error on an invalid step.
+
+### Custom Markers
 
 To replace a generated marker entirely, provide your own content in the step's `marker` slot.
 
 ## Step Numbers
 
-Markers are empty by default. Set `numbered` on the stepper to display each step's number inside its
-marker. Steps that render an icon marker, such as completed and error steps, continue to show the
-icon rather than a number.
+Markers render only an icon by default. Set `numbered` on the stepper to display each step's number
+inside its marker. Steps that render a filled icon, such as completed and critical steps, continue
+to show the icon rather than a number.
 
 <Canvas of={ProcessStepperStories.Numbered} />
 
@@ -110,72 +106,34 @@ after it:
 
 <Canvas of={ProcessStepperStories.WithTitle} />
 
-## Meta Content
+## Details
 
-Use a step's `meta` slot for supporting information such as dates or the assigned user. The slot
-lays its content out in two columns, so pass a label and a value as separate children to keep values
-aligned down the step:
+Use a step's `detail` slot for supporting information such as dates or the assigned user. The
+`detail` slot may also contain subtasks or related actions.
 
-```html
-<forge-process-step state="completed">
-  Verbal warning
-  <span slot="meta">Started:</span>
-  <span slot="meta">01/15/2026</span>
-  <span slot="meta">Completed:</span>
-  <span slot="meta">01/15/2026</span>
-</forge-process-step>
-```
-
-A single child per row, such as a lone date, occupies the first column.
-
-<Canvas of={ProcessStepperStories.WithMeta} />
-
-## Step Content and Actions
-
-Content placed in a step's `additional-content` slot renders under its meta content, and content in
-the `actions` slot renders at the end of the step. Use these slots to let users complete a step in place with
-checkboxes, inline form fields, or buttons. Not every step needs content or actions.
-
-Slotted `<forge-checkbox>`, `<forge-radio>`, and `<forge-switch>` controls are pulled back by
-`--forge-process-step-control-inset` so their visible box lines up with the step's text column
-rather than the inset edge of their state layer. Set that property to `0` to opt out.
-
-<Canvas of={ProcessStepperStories.WithStepContent} />
-
-## Validation Messaging
-
-Place validation or warning messaging, such as a `<forge-inline-message>`, in a step's
-`additional-content` slot.
-
-<Canvas of={ProcessStepperStories.WithMessage} />
+<Canvas of={ProcessStepperStories.WithDetails} />
 
 ## Interactive Steps
 
-A stepper is read-only by default: a step whose label is plain text simply reports progress. Put a
-link or a button in the label to make that step actionable, and the stepper becomes interactive
-without a separate variant or attribute.
+Every step renders a button in its shadow DOM, with the slotted label as its content. Set `href` on a
+step to render a link instead.
 
 ```html
-<!-- read-only: reports progress -->
-<forge-process-step state="current">Internal review</forge-process-step>
+<!-- Performs an action -->
+<forge-process-step state="current">Suspension</forge-process-step>
 
-<!-- interactive: navigates -->
-<forge-process-step state="completed"><a href="/cart">Cart</a></forge-process-step>
-
-<!-- interactive: performs an action -->
-<forge-process-step state="current"><button>Suspension</button></forge-process-step>
+<!-- Navigates -->
+<forge-process-step state="completed" href="/cart">Cart</forge-process-step>
 ```
 
-Use a link when activating the step navigates, so it keeps the browser behaviour users expect from
-a link, and a button when it performs an action in place. A slotted link takes precedence if both
-are present. The step reports its state through the read-only `interactive` property, and slotted
-controls are reset so the label still reads as text.
+Use `href` when activating the step navigates, so it keeps the browser behaviour users expect from
+a link, and leave it unset when the step performs an action in place. Set `disabled` to dim the step
+and prevent interaction. A disabled link is rendered without its `href` and with `aria-disabled="true"`.
 
-Only the label slot is considered, so a button in the `actions` or `additional-content` slots does
-not make the step itself interactive. Set `noninteractive` on a step to opt out of the behaviour
-entirely.
+Only the default slot is placed in the button or link, so a button in the `details` slot does not
+make the step itself interactive.
 
-Activating an interactive step dispatches a `forge-process-step-select` event from the step and a
+Activating a step dispatches a `forge-process-step-select` event from the step and a
 `change` event from the stepper. Read the activated step from the stepper's `selectedStep`
 property:
 
@@ -185,40 +143,13 @@ stepper.addEventListener('change', (event: Event) => {
 });
 ```
 
-Because the interactive area is the consumer's own link or button, steps are reachable with `Tab`
-and activate with the keys native to that element. A `<forge-focus-indicator>` draws the focus ring
-around the label text only, so keyboard focus never outlines the progress line, the label's full
-cell, or the step's content, and a `<forge-state-layer>` fills the same area on hover and press.
+## Read Only
 
-The ring sits 4px from the label along the inline axis and 2px along the block axis, with rounded
-corners. It is a standard focus indicator, so its tokens can be overridden through the
-`focus-indicator` part:
+Set `readonly` on the stepper to use it as a non-interactive indicator of progress. Steps in a
+read-only stepper render only their label, without a button or link, so they are not focusable and
+cannot be activated. `href` and `disabled` have no visible effect on a read-only step.
 
-```css
-forge-process-step::part(focus-indicator) {
-  --forge-focus-indicator-shape: 8px;
-}
-```
-
-The ring's outline is painted outside its offset, so every gap around the label has to accommodate
-the offset plus the outline width for the ring never to touch its neighbours. Three gaps do that
-work, and each leaves at least 4px of visible clearance by default:
-
-| Gap                                      | Separates the label from    | Default |
-| ---------------------------------------- | --------------------------- | ------- |
-| `--forge-process-step-sidebar-gap`       | the marker, when vertical   | `12px`  |
-| `--forge-process-step-marker-label-gap`  | the marker, when horizontal | `8px`   |
-| `--forge-process-step-label-content-gap` | the description and content | `8px`   |
-
-Raising the focus indicator's offset past the gap that separates the label from a neighbour will
-make a focused label overlap it, so raise the corresponding gap to match.
-
-<Canvas of={ProcessStepperStories.Interactive} />
-
-Interactive steps work the same way in the vertical orientation, where a link or button label sits
-beside its marker rather than beneath it.
-
-<Canvas of={ProcessStepperStories.InteractiveVertical} />
+<Canvas of={ProcessStepperStories.Readonly} />
 
 ## API
 
@@ -228,30 +159,31 @@ beside its marker rather than beneath it.
 
 Process steppers are rendered as semantic lists with `role="list"` on the stepper and
 `role="listitem"` on each step. Each step reports its position and the number of steps, and
-`aria-current="step"` when in the `current` state. State markers are decorative and marked
+`aria-current="step"` when its state is `current`. State markers are decorative and marked
 `aria-hidden="true"`.
 
 When a stepper only shows part of a longer process, set `aria-posinset` and `aria-setsize` on each
 step. They take precedence over the step's position in the DOM for the accessibility tree, the
 number shown in the marker, and progress announcements.
 
-Each step is a single list item. The interactive area of a clickable step is the consumer's own link
-or button, and a step's description, meta content, and slotted content are siblings of it rather
-than nested inside it, so interactive content keeps its own semantics.
+Each step is a single list item. The interactive area of a step is a native button or link, and a
+step's details content is a sibling of it rather than nested inside it, so interactive content keeps
+its own semantics.
 
 ### Progress Announcements
 
 Steps announce the position a process has moved to through the shared Forge live announcer, for
-example "Step 3 of 5: Internal review". A step announces whenever it moves into the `current` state,
+example "Step 3 of 5: Internal review". A step announces whenever its state is set to `current`,
 including when a consumer advances the process programmatically, and stays silent on the initial
 render so a screen reader is not interrupted when the page loads.
 
 ### Best Practices
 
 - Because the marker is decorative, never rely on it alone to communicate state. Give steps whose
-  state is not obvious from the label a `description`, or a message in the `message` slot
-- Make a step interactive with a link when it navigates and a button when it acts, so it carries the
+  state is not obvious from the label supporting text in the `details` slot
+- Set `href` when a step navigates and leave it unset when it acts, so it carries the
   right semantics and keyboard behaviour for what it does
-- Provide a heading in the `title` slot at the correct level for the surrounding page
-- Interactive content placed in the `actions` or `additional-content` slots keeps its own semantics
+- Provide a heading alongside the process stepper and asssociate it with the stepper using
+  `aria-labelledby`
+- Interactive content placed in the `details` slot keeps its own semantics
   and focus behavior, so label it as you would anywhere else

@@ -1,25 +1,34 @@
-import { customElement, attachShadowTemplate, coerceBoolean, coreProperty } from '@tylertech/forge-core';
-import { StackAdapter } from './stack-adapter.js';
-import { StackCore } from './stack-core.js';
-import { STACK_CONSTANTS, StackAlignment } from './stack-constants.js';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { toggleState } from '../core/utils/utils.js';
+import { isStackGapSize, StackAlignment, StackGapSize, STACK_CONSTANTS, STACK_GAP_SIZE_TOKENS } from './stack-constants.js';
 
-import template from './stack.html';
 import styles from './stack.scss';
 
-export interface IStackComponent extends IBaseComponent {
+const toGapStyle = (gap: string | null): string | undefined => {
+  const trimmedGap = gap == null ? undefined : String(gap).trim();
+  if (!trimmedGap || trimmedGap === STACK_CONSTANTS.defaults.GAP) {
+    return undefined;
+  }
+  if (isStackGapSize(trimmedGap)) {
+    return `var(--forge-stack-gap, var(--forge-spacing-${STACK_GAP_SIZE_TOKENS[trimmedGap]}))`;
+  }
+  const numericGap = Number(trimmedGap);
+  const value = Number.isFinite(numericGap) ? `${numericGap}px` : trimmedGap;
+  return `var(--forge-stack-gap, ${value})`;
+};
+
+/** @deprecated - This will be removed in the future. Please switch to using StackComponent. */
+export interface IStackComponent extends BaseLitElement {
   inline: boolean;
   wrap: boolean;
   stretch: boolean;
-  gap: string;
+  gap: StackGapSize | (string & {});
   alignment: StackAlignment;
   justify: StackAlignment;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-stack': IStackComponent;
-  }
 }
 
 /**
@@ -37,6 +46,10 @@ declare global {
  *
  * @slot - The default/unnamed slot for stack content.
  *
+ * @state inline - Applied when the stack renders in the inline (horizontal) direction.
+ * @state wrap - Applied when the stack allows its children to wrap.
+ * @state stretch - Applied when the stack stretches its children.
+ *
  * @cssclass forge-stack - The base stack container class.
  * @cssclass forge-stack--inline - Renders the stack in the inline (horizontal) direction.
  * @cssclass forge-stack--wrap - Allows the stack to wrap to a new line in inline mode.
@@ -49,90 +62,93 @@ declare global {
  * @cssclass forge-stack--justify-end - Justifies the children to the end of the stack.
  * @cssclass forge-stack--justify-space-between - Justifies the children with equal space between them.
  */
-@customElement({
-  name: STACK_CONSTANTS.elementName
-})
-export class StackComponent extends BaseComponent implements IStackComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(STACK_CONSTANTS.observedAttributes);
-  }
+export class StackComponent extends BaseLitElement implements IStackComponent {
+  public static styles = unsafeCSS(styles);
 
-  private readonly _core: StackCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = STACK_CONSTANTS.elementName;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new StackCore(new StackAdapter(this));
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case STACK_CONSTANTS.observedAttributes.INLINE:
-        this.inline = coerceBoolean(newValue);
-        break;
-      case STACK_CONSTANTS.observedAttributes.WRAP:
-        this.wrap = coerceBoolean(newValue);
-        break;
-      case STACK_CONSTANTS.observedAttributes.STRETCH:
-        this.stretch = coerceBoolean(newValue);
-        break;
-      case STACK_CONSTANTS.observedAttributes.GAP:
-        this.gap = newValue;
-        break;
-      case STACK_CONSTANTS.observedAttributes.ALIGNMENT:
-        this.alignment = newValue as StackAlignment;
-        break;
-      case STACK_CONSTANTS.observedAttributes.JUSTIFY:
-        this.justify = newValue as StackAlignment;
-        break;
-    }
-  }
+  #internals: ElementInternals;
 
   /**
    * Controls the direction of the stack.
    * @default false
    * @attribute
    */
-  @coreProperty()
-  declare public inline: boolean;
+  @property({ type: Boolean, reflect: true })
+  public inline = false;
 
   /**
    * Controls if items wrap to a new line in inline mode
    * @default false
    * @attribute
    */
-  @coreProperty()
-  declare public wrap: boolean;
+  @property({ type: Boolean, reflect: true })
+  public wrap = false;
 
   /**
    * Controls if items stretch and take up the maximum amount of space
    * @default false
    * @attribute
    */
-  @coreProperty()
-  declare public stretch: boolean;
+  @property({ type: Boolean, reflect: true })
+  public stretch = false;
 
   /**
-   * Controls the gap between the children within the stack
-   * @default 16
+   * Controls the gap between the children within the stack. Accepts a CSS length, a unitless pixel number, or a
+   * spacing token size (`xxxs`, `xxs`, `xs`, `s`, `m`, `ml`, `l`, `xl`, `xxl`, `xxxl`) which maps to `--forge-spacing-*`.
+   * @default "16"
    * @attribute
    */
-  @coreProperty()
-  declare public gap: string;
+  @property({ reflect: true, useDefault: true })
+  public gap: StackGapSize | (string & {}) = STACK_CONSTANTS.defaults.GAP;
 
   /**
    * Controls the align-items property of a row or column
    * @default "start"
    * @attribute
    */
-  @coreProperty()
-  declare public alignment: StackAlignment;
+  @property({ reflect: true, useDefault: true })
+  public alignment: StackAlignment = STACK_CONSTANTS.defaults.ALIGNMENT;
 
   /**
    * Controls the justify-content property of a row or column
    * @default "start"
    * @attribute
    */
-  @coreProperty()
-  declare public justify: StackAlignment;
+  @property({ reflect: true, useDefault: true })
+  public justify: StackAlignment = STACK_CONSTANTS.defaults.ALIGNMENT;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('inline')) {
+      toggleState(this.#internals, 'inline', this.inline);
+    }
+    if (changedProperties.has('wrap')) {
+      toggleState(this.#internals, 'wrap', this.wrap);
+    }
+    if (changedProperties.has('stretch')) {
+      toggleState(this.#internals, 'stretch', this.stretch);
+    }
+  }
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-stack" part="root" style=${styleMap({ gap: toGapStyle(this.gap) })}>
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+
+tryDefine(STACK_CONSTANTS.elementName, StackComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-stack': IStackComponent;
+  }
 }

@@ -1,229 +1,135 @@
 @use '../../core/styles/shape';
-@use '../../core/styles/spacing';
+@use '../../core/styles/theme';
 @use '../../core/styles/typography';
 @use '../../focus-indicator';
+@use '../../state-layer';
 @use './token-utils' as *;
+@use '../../icon/token-utils' as icon;
 
 @forward './token-utils';
 
-// The offset mirrors the focus indicator's default outward offset.
-$_label-ring-offset: spacing.variable(xxsmall);
-$_label-ring-shape: shape.variable(medium);
+$_marker-row-block-size: max(#{token(marker-size)}, #{token(marker-size)});
 
 @mixin host {
   display: block;
 }
 
 @mixin base {
-  align-content: start;
-  align-items: start;
+  position: relative;
   box-sizing: border-box;
   display: grid;
-  position: relative;
+  grid-template-areas: 'header header' '. detail';
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: #{token(padding)};
+  align-content: start;
+  align-items: start;
+  border-color: #{token(track-background)};
+  border-width: #{token(track-width)};
+  border-style: none;
 }
 
 @mixin vertical {
-  column-gap: #{token(sidebar-gap)};
-  grid-template-areas: 'marker label' '. content';
-  grid-template-columns: max-content 1fr;
-  min-block-size: #{token(row-min-block-size)};
-  padding-inline-start: calc(#{token(line-active-width)} + #{token(line-gap)});
-  row-gap: #{token(label-content-gap)};
+  grid-template-areas: 'header header .' '. detail detail';
+  grid-template-columns: auto auto 1fr;
+  min-block-size: #{token(min-block-size)};
+  padding-block-end: #{token(padding)};
+  border-inline-start-style: solid;
 }
 
 @mixin horizontal {
-  grid-template-areas: 'line' 'marker' 'label' 'content';
-  grid-template-columns: 1fr;
-  row-gap: #{token(content-gap)};
+  padding-block-end: #{token(padding)};
+  border-block-start-style: solid;
 }
 
-//
-// Progress line
-//
-
-@mixin line {
-  background-color: #{token(line-color)};
-}
-
-@mixin line-active {
-  background-color: #{token(line-active-color)};
-}
-
-@mixin line-vertical {
-  block-size: 100%;
-  inline-size: #{token(line-width)};
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  position: absolute;
-  z-index: 0;
-}
-
-@mixin line-vertical-active {
-  inline-size: #{token(line-active-width)};
-}
-
-@mixin line-horizontal {
-  block-size: #{token(line-width)};
-  grid-area: line;
-  inline-size: 100%;
-}
-
-@mixin line-horizontal-active {
-  block-size: #{token(line-active-width)};
-}
-
-//
-// Sidebar
-//
-
-// The sidebar is sized to a single line of label text so that a marker of any size stays centered
-// against the label rather than the whole step.
-@mixin sidebar {
-  align-items: center;
-  display: flex;
-  grid-area: marker;
+@mixin header {
   position: relative;
-  z-index: 1;
+  display: grid;
+  grid-area: header;
+  grid-template-columns: subgrid;
 }
 
-// In the vertical orientation the marker shares a row with the label. The row is as tall as the
-// taller of the two, so a marker larger than the label never overflows the top of the step — which
-// is where the progress line starts.
-@mixin sidebar-vertical {
-  align-self: center;
-  min-block-size: #{token(marker-row-block-size)};
+@mixin header-vertical {
+  grid-template-areas: 'marker label' '. support-text';
+  grid-template-rows: auto auto;
+  justify-self: start;
+  padding-block: #{token(padding)};
+  padding-inline-start: #{token(track-padding)};
+  padding-inline-end: #{token(padding)};
 }
 
-@mixin label-row {
-  grid-area: label;
-  min-inline-size: 0;
+@mixin header-horizontal {
+  grid-template-areas: 'marker label' '. support-text';
+  grid-template-rows: auto auto;
+  padding-block-start: #{token(track-padding)};
+  padding-block-end: #{token(padding)};
+  padding-inline-end: #{token(padding)};
 }
 
-@mixin label-row-vertical {
-  align-self: center;
-  min-block-size: #{token(marker-row-block-size)};
+@mixin touched {
+  border-color: #{token(track-color)};
 }
 
-@mixin sidebar-horizontal {
-  margin-block-start: calc(#{token(line-gap)} - #{token(content-gap)});
+@mixin critical {
+  color: #{theme.variable(error)};
 }
-
-//
-// Marker
-//
 
 @mixin marker {
+  @include icon.provide-theme(
+    (
+      size: #{token(marker-size)}
+    )
+  );
+
+  display: flex;
+  grid-area: marker;
   align-items: center;
-  aspect-ratio: 1;
-  background-color: #{token(marker-background)};
-  border-radius: #{token(marker-shape)};
-  box-sizing: border-box;
-  color: #{token(marker-inactive-color)};
-  display: flex;
-  flex: 0 0 auto;
+  align-self: start;
   justify-content: center;
-  min-block-size: #{token(marker-size)};
-  min-inline-size: #{token(marker-size)};
-
-  @include typography.style(label2, $exclude: (line-height));
-
-  line-height: 1;
+  block-size: #{$_marker-row-block-size};
+  color: #{token(marker-color)};
 }
 
-@mixin marker-dashed {
-  border: #{token(marker-border-width)} dashed #{token(marker-inactive-color)};
-}
+@mixin marker-number {
+  @include typography.style(label1);
 
-@mixin marker-filled {
-  background-color: #{token(marker-color)};
-  color: #{token(marker-icon-color)};
-}
-
-@mixin marker-partial {
-  background: linear-gradient(to right, #{token(marker-color)} 50%, transparent 50%);
-  border: #{token(marker-border-width)} solid #{token(marker-color)};
-}
-
-@mixin marker-error {
-  border: #{token(marker-border-width)} solid #{token(marker-error-color)};
-  color: #{token(marker-error-color)};
-}
-
-@mixin marker-icon {
-  font-size: calc(#{token(marker-size)} - #{token(marker-border-width)} * 4);
-}
-
-//
-// Content
-//
-
-@mixin content {
+  position: absolute;
   display: flex;
-  flex-direction: column;
-  gap: #{token(content-gap)};
-  grid-area: content;
-  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
+  color: #{theme.variable(text-high)};
+  line-height: 100%;
 }
 
-@mixin content-vertical {
-  padding-block-end: #{token(content-padding-block-end)};
+@mixin detail {
+  grid-area: detail;
+  padding-inline-end: #{token(padding)};
 }
 
 @mixin label {
-  color: #{token(label-color)};
-
   @include typography.style(body2);
+
+  grid-area: label;
+  padding-block: calc((#{$_marker-row-block-size} - #{token(marker-size)}) / 2);
+  color: #{theme.variable(text-high)};
 }
 
-// The label shrink-wraps its text and hosts the focus indicator, so the focus ring sizes to the
-// label itself rather than the full width of the label cell, and stays clear of the progress line
-// and the step content.
-@mixin label-text {
-  display: inline-block;
-  max-inline-size: 100%;
-  position: relative;
+@mixin label-current {
+  font-weight: 500;
 }
 
-// In the horizontal orientation the marker sits above the label, so the marker row needs more
-// space beneath it than the other rows: enough for the focus ring's block offset and its outline,
-// with clearance left over, so a focused label never touches the marker.
-@mixin label-row-horizontal {
-  margin-block-start: calc(#{token(marker-label-gap)} - #{token(content-gap)});
+@mixin support-text {
+  @include typography.style(body1);
+
+  grid-area: support-text;
+  color: #{theme.variable(text-medium)};
 }
 
-// The focus indicator and state layer are sized from this box. It is inset from the label along the
-// block axis so the ring sits further from the text along the inline axis than the block axis,
-// which keeps short labels from being crowded without pushing the ring into the marker or content.
-@mixin focus-area {
-  inset: #{spacing.variable(xxxsmall)} 0;
-  pointer-events: none;
-  position: absolute;
+@mixin focus-indicator {
+  z-index: 1; // Fixes an animation artifact in Safari
 }
 
-@mixin label-focus-indicator {
-  @include focus-indicator.provide-theme(
-    (
-      shape: #{$_label-ring-shape}
-    )
-  );
-}
-
-// The state layer fills the area inside the focus ring, so hover and pressed states share its
-// shape rather than hugging the label text.
-@mixin label-state-layer {
-  border-radius: calc(#{$_label-ring-shape} + #{$_label-ring-offset});
-  inset: calc(-1 * #{$_label-ring-offset});
-}
-
-// The focus ring replaces the native focus outline, so the label is not ringed twice. This is only
-// applied to an interactive step, which is the only case that renders a focus indicator.
-@mixin slotted-label-control-interactive {
-  outline: none;
-}
-
-// A slotted link or button is reset so the label still reads as text. The interactive affordance
-// comes from the cursor and the focus ring rather than native control chrome.
-@mixin slotted-label-control {
+@mixin control {
   appearance: none;
   background: none;
   border: none;
@@ -231,60 +137,23 @@ $_label-ring-shape: shape.variable(medium);
   cursor: pointer;
   font: inherit;
   margin: 0;
+  outline: none;
   padding: 0;
   text-align: start;
   text-decoration: none;
 }
 
-@mixin slotted-label-control-disabled {
+@mixin control-hit-target {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+@mixin control-disabled {
   cursor: default;
   pointer-events: none;
 }
 
-@mixin description {
-  color: #{token(description-color)};
-
-  @include typography.style(body1);
-}
-
-@mixin meta {
-  column-gap: #{token(meta-column-gap)};
-  display: grid;
-  grid-template-columns: max-content auto;
-  row-gap: #{token(meta-gap)};
-}
-
-//
-// Slotted form controls are optically aligned to the text column by pulling them back by the
-// inset between a control's host box and its visible box.
-//
-
-@mixin slotted-control {
-  margin-inline-start: calc(-1 * #{token(control-inset)});
-}
-
-@mixin actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: #{token(actions-gap)};
-  margin-block-start: #{token(actions-margin)};
-}
-
 @mixin disabled {
   opacity: #{token(disabled-opacity)};
-}
-
-// A slotted marker replaces the generated circle entirely, so none of the state treatment applies.
-@mixin marker-custom {
-  aspect-ratio: auto;
-  background: none;
-  border: none;
-  min-block-size: 0;
-  min-inline-size: 0;
-}
-
-// The horizontal step spacing sits on the text cells rather than the step itself, so the progress
-// line still spans the full width of the step and stays continuous between steps.
-@mixin text-cell-horizontal {
-  padding-inline-end: #{token(content-padding-inline-end)};
 }

@@ -11,7 +11,7 @@ the editor renders Forge elements (`forge-icon-button`, `forge-popover`, `forge-
 not bundle them.
 
 Registration is split so consumers only pay for the tools they use:
-`defineRichTextEditorComponents()` registers the four core elements, and
+`defineRichTextEditorComponents()` registers the five core elements, and
 `defineRteFeatureComponents()` (from the `./features` subpath) registers the 14 `forge-rte-*` feature
 elements.
 
@@ -43,6 +43,9 @@ Tiptap alone only logs a warning an application cannot react to.
 - `src/lib/rich-text-renderer.ts` — read-only rendering of a ProseMirror document.
 - `src/lib/rich-text-content.ts` / `rich-text-context.ts` — the content host element and a
   context-only wrapper for composing a toolbar against an editor elsewhere in the tree.
+- `src/lib/rich-text-toolbar.ts` — groups tool buttons into a `role="toolbar"` with a single tab
+  stop. `forge-rich-text-editor` renders one around its slot; composed layouts use it directly. The
+  roving tabindex itself is `features/core/toolbar-focus.ts`, provided to tool buttons by context.
 - `src/lib/editor-context.ts` — the `@lit/context` context plus the package's public types
   (`RichTextDocument`, `RichTextEditorContent`, and every event detail interface).
 - `src/lib/features/` — one file per feature element. Each implements `IRichTextEditorFeature`

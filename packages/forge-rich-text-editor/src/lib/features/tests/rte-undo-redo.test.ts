@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { renderFixture } from '../../../testing/fixture.js';
 import { html } from 'lit';
 import type { Editor } from '@tiptap/core';
 import { RichTextEditorComponent } from '../../rich-text-editor.js';
 import { RteUndoRedoComponent } from '../rte-undo-redo.js';
+import type { RteToolButtonComponent } from '../core/rte-tool-button.js';
 
 import '../../rich-text-editor.js';
 import '../rte-undo-redo.js';
@@ -288,6 +290,52 @@ describe('RTE Undo Redo Feature', () => {
     expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
     expect(harness.redoButton().hasAttribute('disabled')).toBe(true);
   });
+
+  it('should render undo and redo as action buttons rather than toggles', async () => {
+    const harness = await createFixture();
+
+    expect((harness.undoButton() as HTMLElement & { toggle: boolean }).toggle).toBe(false);
+    expect((harness.redoButton() as HTMLElement & { toggle: boolean }).toggle).toBe(false);
+    expect(harness.undoButton().hasAttribute('aria-pressed')).toBe(false);
+    expect(harness.redoButton().hasAttribute('aria-pressed')).toBe(false);
+  });
+
+  it('should expose the undo and redo keyboard shortcuts', async () => {
+    const harness = await createFixture();
+
+    expect(harness.undoButton().getAttribute('aria-keyshortcuts')).toBe('Control+Z');
+    expect(harness.redoButton().getAttribute('aria-keyshortcuts')).toBe('Control+Shift+Z');
+  });
+
+  it('should keep focus in the editor when undo is clicked', async () => {
+    const harness = await createFixture();
+    const editor = await harness.getEditor();
+
+    editor.commands.setContent('<p>clicked content</p>');
+    editor.commands.focus();
+    await harness.waitForUpdate();
+
+    await userEvent.click(harness.undoButton());
+    await harness.waitForUpdate();
+
+    expect(editor.getHTML()).not.toContain('clicked content');
+    expect(editor.isFocused).toBe(true);
+  });
+
+  it('should return focus to the editor when the last undo is activated from the keyboard', async () => {
+    const harness = await createFixture();
+    const editor = await harness.getEditor();
+
+    editor.commands.setContent('<p>keyboard content</p>');
+    await harness.waitForUpdate();
+
+    harness.undoButton().focus();
+    await userEvent.keyboard('{Enter}');
+    await harness.waitForUpdate();
+
+    expect(harness.undoButton().hasAttribute('disabled')).toBe(true);
+    expect(editor.isFocused).toBe(true);
+  });
 });
 
 interface UndoRedoFixtureOptions {
@@ -324,13 +372,14 @@ async function createFixture(options: UndoRedoFixtureOptions = {}): Promise<Undo
   // Wait for editor to initialize
   await new Promise(resolve => setTimeout(resolve, 100));
 
-  const buttons = undoRedoFeature.shadowRoot!.querySelectorAll('forge-icon-button');
+  const toolButtons = (): RteToolButtonComponent[] => Array.from(undoRedoFeature.shadowRoot!.querySelectorAll('forge-rte-tool-button'));
+  const iconButton = (index: number): HTMLElement => toolButtons()[index].shadowRoot!.querySelector('forge-icon-button')!;
 
   const harness: UndoRedoFixture = {
     el,
     undoRedoFeature,
-    undoButton: () => buttons[0],
-    redoButton: () => buttons[1],
+    undoButton: () => iconButton(0),
+    redoButton: () => iconButton(1),
     async clickUndoButton() {
       this.undoButton().click();
       await this.waitForUpdate();
