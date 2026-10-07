@@ -1,0 +1,65 @@
+---
+/**
+ * TokenTable - Renders the tokens of a design token category from design-tokens.json.
+ *
+ * Adds a Description column when any token in the category has a description, and a
+ * Preview column for categories that have a visual representation.
+ */
+import { getTokenCategory } from "../../data/design-tokens";
+
+interface Props {
+  category: string;
+}
+
+const { category } = Astro.props;
+const { tokens } = getTokenCategory(category);
+const hasDescriptions = tokens.some((t) => t.description);
+
+const previews: Record<string, (name: string) => { class: string; style: string }> = {
+  color: (name) => ({
+    class: "w-12 h-12 rounded-md border border-outline-low",
+    style: `background-color: var(--forge-theme-on-surface); opacity: var(${name})`,
+  }),
+  spacing: (name) => ({ class: "h-2 bg-primary rounded-full", style: `width: var(${name})` }),
+  shape: (name) => ({
+    class: name.endsWith("-full") ? "w-[72px] h-12 bg-primary" : "w-12 h-12 bg-primary",
+    style: `border-radius: var(${name})`,
+  }),
+  elevation: (name) => ({
+    class: "w-12 h-12 m-medium rounded-md bg-surface-container-minimum",
+    style: `box-shadow: var(${name})`,
+  }),
+};
+const preview = previews[category];
+---
+
+<table class="forge-data-table">
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Value</th>
+      {hasDescriptions && <th>Description</th>}
+      {preview && <th>Preview</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      tokens.map((token) => (
+        <tr>
+          <td>
+            <code>{token.name}</code>
+          </td>
+          <td>
+            <code>{token.value}</code>
+          </td>
+          {hasDescriptions && <td>{token.description}</td>}
+          {preview && (
+            <td>
+              <div {...preview(token.name)} />
+            </td>
+          )}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

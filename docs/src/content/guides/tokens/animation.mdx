@@ -3,38 +3,8 @@ title: Animation Tokens
 description: Tokens that define the duration and easing of animations used throughout the design system.
 ---
 
+import TokenTable from "../../../components/docs/TokenTable.astro";
+
 Animation tokens define the duration and easing of animations used throughout the design system.
 
-<table class="forge-data-table">
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><code>--forge-animation-duration-short1</code></td><td><code>50ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-short2</code></td><td><code>100ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-short3</code></td><td><code>150ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-short4</code></td><td><code>200ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-medium1</code></td><td><code>250ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-medium2</code></td><td><code>300ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-medium3</code></td><td><code>350ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-medium4</code></td><td><code>400ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-long1</code></td><td><code>450ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-long2</code></td><td><code>500ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-long3</code></td><td><code>550ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-long4</code></td><td><code>600ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-extra-long1</code></td><td><code>700ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-extra-long2</code></td><td><code>800ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-extra-long3</code></td><td><code>900ms</code></td></tr>
-    <tr><td><code>--forge-animation-duration-extra-long4</code></td><td><code>1000ms</code></td></tr>
-    <tr><td><code>--forge-animation-easing-linear</code></td><td><code>cubic-bezier(0, 0, 1, 1)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-standard</code></td><td><code>cubic-bezier(0.2, 0, 0, 1)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-accelerate</code></td><td><code>cubic-bezier(0.3, 0, 1, 1)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-decelerate</code></td><td><code>cubic-bezier(0, 0, 0, 1)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-emphasized</code></td><td><code>cubic-bezier(0.2, 0, 0, 1)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-emphasized-accelerate</code></td><td><code>cubic-bezier(0.3, 0, 0.8, 0.15)</code></td></tr>
-    <tr><td><code>--forge-animation-easing-emphasized-decelerate</code></td><td><code>cubic-bezier(0.05, 0.7, 0.1, 1)</code></td></tr>
-  </tbody>
-</table>
+<TokenTable category="animation" />
