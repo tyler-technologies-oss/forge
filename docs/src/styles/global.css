@@ -23,8 +23,8 @@
  * (TOC-less, wider pages — icon library, blocks gallery, etc).
  */
 @theme {
-  --container-content: 60rem; /* 960px */
-  --container-wide: 120rem; /* 1920px */
+  --container-content: 1024px;
+  --container-wide: 1920px; 
 }
 
 /*
@@ -119,6 +119,14 @@
   .content-body :where(h1, h2, h3, h4, h5, h6, p, li) code,
   .mdx-content :where(h1, h2, h3, h4, h5, h6, p, li) code {
     @apply font-mono text-label3 text-primary bg-surface-dim rounded-sm px-xsmall py-xxsmall;
+  }
+
+  .forge-data-table {
+    @apply [--forge-table-theme-row-hover-background:transparent];
+  }
+
+  .forge-data-table code {
+    @apply text-xs;
   }
 }
 

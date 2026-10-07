@@ -4,9 +4,15 @@
 
 import forgeTokens from "@tylertech/forge/design-tokens.json";
 
+export interface DesignTokenValues {
+  light: string;
+  dark: string;
+}
+
 export interface DesignToken {
   name: string;
   value: string;
+  values?: DesignTokenValues;
   description?: string;
 }
 
