@@ -1,6 +1,6 @@
 import { InputMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
 import { DEFAULT_DATE_MASK, DEFAULT_DATE_MASK_FORMAT, DEFAULT_DATE_MASK_LENGTH, prepareDateChar } from './date-input-mask.js';
-import { createLetterGuideMask, toUnderscoreGuide, UNDERSCORE_GUIDE_CHAR } from './letter-guide.js';
+import { createLetterGuideMask, prepareLetterGuide, toUnderscoreGuide, UNDERSCORE_GUIDE_CHAR } from './letter-guide.js';
 import { createMaskView, isSingleKeyInput, MaskCursorSync, type IMaskSelection, type IMaskView } from './mask-view.js';
 import { createTimeMaskBlocks, createTimeMaskPadState, getTimeMaskFormat, getTimeMaskPattern, prepareTimeChar } from './time-input-mask.js';
 
@@ -46,7 +46,7 @@ export class DateTimeInputMask {
       lazy: !this._options.showMaskFormat,
       overwrite: true,
       prepareChar: (char: string, _masked: unknown, flags: AppendFlags) => this._prepareChar(char, flags),
-      ...(letterGuide && { ...createLetterGuideMask(pattern, this._format), prepare: this._stripGuide }),
+      ...(letterGuide && { ...createLetterGuideMask(pattern, this._format), prepare: this._prepareGuide }),
       blocks: createTimeMaskBlocks(letterGuide)
     });
     this._cursorSync = new MaskCursorSync(this._element, this._mask);
@@ -123,8 +123,7 @@ export class DateTimeInputMask {
     this._mask.unmaskedValue = isDateComplete && hasTime ? `${date}${DATE_TIME_MASK_SEPARATOR}${time}` : date;
   }
 
-  // Re-appended display text (guide toggle, value sets) must not turn the `aa` guide into a meridiem.
-  private readonly _stripGuide = (value: string, masked: Masked<string>): string => toUnderscoreGuide(value, this._format, masked.displayValue.length);
+  private readonly _prepareGuide = (value: string, masked: Masked<string>): string => prepareLetterGuide(value, this._format, masked.displayValue.length);
 
   private _prepareChar(char: string, flags: AppendFlags): string {
     if (!flags.input || !char.length || !isSingleKeyInput(this._mask?._inputEvent)) {

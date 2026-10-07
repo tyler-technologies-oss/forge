@@ -970,7 +970,7 @@ describe('DateTimeField / letter guide', () => {
     ['0', '12/28/2026 10:mm aa', 14],
     ['4', '12/28/2026 10:04 aa', 16],
     ['5', '12/28/2026 10:45 aa', 16],
-    ['a', '12/28/2026 10:45 Aa', 18]
+    ['a', '12/28/2026 10:45 AM', 19]
   ];
   const DATE_STEPS: Array<[string, string, number]> = [
     ['1', '1M/DD/YYYY', 1],
@@ -987,7 +987,7 @@ describe('DateTimeField / letter guide', () => {
     ['0', '10:mm aa', 3],
     ['4', '10:04 aa', 5],
     ['5', '10:45 aa', 5],
-    ['a', '10:45 Aa', 7]
+    ['a', '10:45 AM', 8]
   ];
 
   // imask defers caret moves on a 10ms timer; background tabs throttle it.
@@ -1209,7 +1209,7 @@ describe('DateTimeField / letter guide', () => {
     await typeKeys(inputs[0], '010220261030a');
     el.showMask = false;
     await settle(el);
-    expect(inputs[0].value).toBe('01/02/2026 10:30 A');
+    expect(inputs[0].value).toBe('01/02/2026 10:30 AM');
   });
 
   it('should flag badInput when a partial value is typed over the letter guide', async () => {
@@ -1219,13 +1219,68 @@ describe('DateTimeField / letter guide', () => {
     expect(el.validity.badInput).toBe(true);
   });
 
-  it('should commit a value typed over the letter guide', async () => {
+  it('should fill AM and commit when a is typed in the meridiem slot', async () => {
     const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
-    await typeKeys(inputs[0], '01022025930a');
-    expect(inputs[0].value).toBe('01/02/2025 09:30 Aa');
-    expect(el.value).toBeNull();
-    await typeKeys(inputs[0], 'm');
-    expect((el.value as Date).getTime()).toBe(new Date(2025, 0, 2, 9, 30).getTime());
+    await typeKeys(inputs[0], '122820261045a');
+    expect(inputs[0].value).toBe('12/28/2026 10:45 AM');
+    expect((el.value as Date).getTime()).toBe(new Date(2026, 11, 28, 10, 45).getTime());
+  });
+
+  it('should fill PM and commit when p is typed in the meridiem slot', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '122820261045p');
+    expect(inputs[0].value).toBe('12/28/2026 10:45 PM');
+    expect((el.value as Date).getTime()).toBe(new Date(2026, 11, 28, 22, 45).getTime());
+  });
+
+  it('should keep the value when m is typed after a filled meridiem', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '122820261045pm');
+    expect(inputs[0].value).toBe('12/28/2026 10:45 PM');
+    expect((el.value as Date).getTime()).toBe(new Date(2026, 11, 28, 22, 45).getTime());
+  });
+
+  it('should replace AM with PM when p is typed over the meridiem', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '122820261045a');
+    inputs[0].setSelectionRange(17, 17);
+    await typeKeys(inputs[0], 'p');
+    expect(inputs[0].value).toBe('12/28/2026 10:45 PM');
+    expect((el.value as Date).getTime()).toBe(new Date(2026, 11, 28, 22, 45).getTime());
+  });
+
+  it('should fill the whole meridiem when a value ending in p is pasted', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await focusInput(inputs[0]);
+    inputs[0].setSelectionRange(0, 0);
+    insertText(inputs[0], '122820261045p');
+    await wait(KEY_DELAY);
+    expect(inputs[0].value).toBe('12/28/2026 10:45 PM');
+    expect((el.value as Date).getTime()).toBe(new Date(2026, 11, 28, 22, 45).getTime());
+  });
+
+  it('should fill the whole meridiem in a time-only end input', async () => {
+    const { el, inputs } = await renderField({ timeMode: 'range', attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '122820261045a');
+    expect(document.activeElement).toBe(inputs[1]);
+    await typeKeys(inputs[1], '0530p');
+    expect(inputs[1].value).toBe('05:30 PM');
+    expect((el.value as IDateTimePickerRange).to.getTime()).toBe(new Date(2026, 11, 28, 17, 30).getTime());
+  });
+
+  it('should move to the end input after a and land the following keys there when am is typed', async () => {
+    const { el, inputs } = await renderField({ dateMode: 'range', timeMode: 'range', attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '122820261045a');
+    expect(document.activeElement).toBe(inputs[1]);
+    expect(inputs[1].selectionStart).toBe(0);
+    await typeKeys(inputs[1], 'm');
+    expect(inputs[1].value).toBe(DATETIME_HINT);
+    expect(inputs[1].selectionStart).toBe(0);
+    await typeKeys(inputs[1], '123120260530p');
+    expect(inputs[1].value).toBe('12/31/2026 05:30 PM');
+    const value = el.value as IDateTimePickerRange;
+    expect(value.from.getTime()).toBe(new Date(2026, 11, 28, 10, 45).getTime());
+    expect(value.to.getTime()).toBe(new Date(2026, 11, 31, 17, 30).getTime());
   });
 
   it('should show the date letter guide on a date-only range endpoint', async () => {
