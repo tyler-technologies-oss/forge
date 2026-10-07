@@ -1,17 +1,21 @@
 import { isNumeric } from '@tylertech/forge-core';
 import { ChangeDetails, InputMask, MaskedEnum, MaskedRange, createMask, type AppendFlags, type FactoryArg, type Masked } from 'imask';
+import { createLetterGuideMask, toUnderscoreGuide } from './letter-guide.js';
 import type { IMaskView } from './mask-view.js';
 
 export interface IDateInputMaskOptions {
   showMaskFormat?: boolean;
   pattern?: string;
   useBlockCharPlaceholder?: boolean;
+  /** Shows the format letters (`MM/DD/YYYY`) instead of `_` in unfilled slots of the guide (default pattern only). */
+  letterGuide?: boolean;
   prepareCallback?: (value: string, masked: Masked<string>, flags: AppendFlags, maskInstance: InputMask<FactoryArg>) => string;
   onChange?: (value: string) => void;
 }
 
 export const DEFAULT_DATE_MASK = '0`0{/}`0`0{/}`0`0`0`0';
 export const DEFAULT_DATE_MASK_LENGTH = 10;
+export const DEFAULT_DATE_MASK_FORMAT = 'MM/DD/YYYY';
 
 export interface IDatePrepareOptions {
   showMaskFormat?: boolean;
@@ -155,12 +159,17 @@ export class DateInputMask {
     return { prepare: (value: string, masked: Masked<string>, flags: AppendFlags) => this._prepareDefault(value, masked, flags) };
   }
 
+  private get _hasLetterGuide(): boolean {
+    return !!this._options.letterGuide && (this._options.pattern || DEFAULT_DATE_MASK) === DEFAULT_DATE_MASK;
+  }
+
   private _createOptions(): FactoryArg {
     return {
       mask: this._options.pattern || DEFAULT_DATE_MASK,
       lazy: this._options.showMaskFormat === undefined ? false : !this._options.showMaskFormat,
       overwrite: true,
       ...this._createPrepareOptions(),
+      ...(this._hasLetterGuide && createLetterGuideMask(DEFAULT_DATE_MASK, DEFAULT_DATE_MASK_FORMAT)),
       blocks: {
         MM: {
           mask: MaskedRange,
@@ -293,6 +302,12 @@ export class DateInputMask {
   }
   public set maskedValue(value: string) {
     this._mask.value = value;
+  }
+
+  /** `maskedValue` with letter-guide slots read back as `_`. */
+  public get normalizedValue(): string {
+    const { value } = this._mask;
+    return this._hasLetterGuide ? toUnderscoreGuide(value, DEFAULT_DATE_MASK_FORMAT) : value;
   }
 
   public get unmaskedValue(): string {
