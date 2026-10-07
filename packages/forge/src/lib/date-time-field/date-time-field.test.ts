@@ -166,6 +166,15 @@ async function blurInput(input: HTMLInputElement, el: Element): Promise<void> {
   await settle(el);
 }
 
+/** Inserts several chars in one `insertText` event, like IME, dictation, or automation tools. */
+function insertText(input: HTMLInputElement, text: string): void {
+  const start = input.selectionStart ?? 0;
+  const end = input.selectionEnd ?? start;
+  input.value = `${input.value.slice(0, start)}${text}${input.value.slice(end)}`;
+  input.setSelectionRange(start + text.length, start + text.length);
+  input.dispatchEvent(new InputEvent('input', { inputType: 'insertText', data: text, bubbles: true }));
+}
+
 function collectChanges(el: IDateTimeFieldComponent): IDateTimeFieldChangeEventData[] {
   const events: IDateTimeFieldChangeEventData[] = [];
   el.addEventListener('forge-date-time-field-change', event => events.push((event as CustomEvent<IDateTimeFieldChangeEventData>).detail));
@@ -308,19 +317,36 @@ describe('DateTimeField / input attributes', () => {
     expect(inputs[0].getAttribute('inputmode')).toBe('text');
   });
 
-  it('should size each input to its format hint when the mode is range by range', async () => {
+  it('should give both inputs the minimum natural size when the mode is range by range', async () => {
     const { inputs } = await renderField({ dateMode: 'range', timeMode: 'range' });
-    expect(inputs.map(input => input.getAttribute('size'))).toEqual([String(DATETIME_HINT.length), String(DATETIME_HINT.length)]);
+    expect(inputs.map(input => input.getAttribute('size'))).toEqual(['23', '23']);
   });
 
-  it('should size the end input to the date hint when the mode is range by single', async () => {
+  it('should give a date-only end input the minimum natural size', async () => {
     const { inputs } = await renderField({ dateMode: 'range', timeMode: 'single' });
-    expect(inputs[1].getAttribute('size')).toBe(String(DATE_HINT.length));
+    expect(inputs[1].getAttribute('size')).toBe('22');
   });
 
-  it('should size the end input to the time hint when the mode is single by range', async () => {
+  it('should grow an input past the minimum when its hint is longer', async () => {
+    const { inputs } = await renderField({ attrs: { 'allow-seconds': '' } });
+    expect(Number(inputs[0].getAttribute('size'))).toBeGreaterThan(22);
+  });
+
+  it('should fit the format hint without truncating it', async () => {
+    const { inputs } = await renderField({ labelPosition: 'block-start' });
+    const [input] = inputs;
+    input.style.inlineSize = 'auto';
+    expect(input.scrollWidth).toBeLessThanOrEqual(input.clientWidth);
+    const context = document.createElement('canvas').getContext('2d')!;
+    context.font = getComputedStyle(input).font;
+    const { paddingInlineStart, paddingInlineEnd } = getComputedStyle(input);
+    const contentWidth = input.clientWidth - parseFloat(paddingInlineStart) - parseFloat(paddingInlineEnd);
+    expect(context.measureText(input.placeholder).width).toBeLessThanOrEqual(contentWidth);
+  });
+
+  it('should give a time-only end input the minimum natural size', async () => {
     const { inputs } = await renderField({ dateMode: 'single', timeMode: 'range' });
-    expect(inputs[1].getAttribute('size')).toBe(String(TIME_HINT.length));
+    expect(inputs[1].getAttribute('size')).toBe('22');
   });
 
   it('should add format hint placeholders when the label is not inset', async () => {
@@ -348,7 +374,7 @@ describe('DateTimeField / input attributes', () => {
     const { inputs } = await renderField({ timeMode: 'range', labelPosition: 'block-start', attrs: { 'use-24-hour-time': '' } });
     expect(inputs[0].getAttribute('placeholder')).toBe('MM/DD/YYYY HH:mm');
     expect(inputs[1].getAttribute('placeholder')).toBe('HH:mm');
-    expect(inputs[1].getAttribute('size')).toBe('5');
+    expect(inputs[1].getAttribute('size')).toBe('22');
   });
 
   it('should add seconds to the hints when allow-seconds is set', async () => {
@@ -608,7 +634,7 @@ describe('DateTimeField / cleanup and restoration', () => {
     el.timeMode = 'range';
     await settle(el);
     expect(inputs[1].getAttribute('aria-label')).toBe('End time');
-    expect(inputs[1].getAttribute('size')).toBe(String(TIME_HINT.length));
+    expect(inputs[1].getAttribute('size')).toBe('22');
     expect(inputs[0].nextElementSibling?.matches(SEPARATOR_SELECTOR)).toBe(true);
     expect(textField.querySelectorAll(SEPARATOR_SELECTOR).length).toBe(1);
   });
@@ -899,7 +925,7 @@ describe('DateTimeField / mask guide', () => {
   it('should reveal the format guide on focus and hide it on blur', async () => {
     const { el, inputs } = await renderField();
     await focusInput(inputs[0]);
-    expect(inputs[0].value).toBe('__/__/____ __:__ __');
+    expect(inputs[0].value).toBe(DATETIME_HINT);
     await blurInput(inputs[0], el);
     expect(inputs[0].value).toBe('');
   });
@@ -926,7 +952,300 @@ describe('DateTimeField / mask guide', () => {
   it('should show the guide on every endpoint input when one is focused', async () => {
     const { inputs } = await renderField({ timeMode: 'range' });
     await focusInput(inputs[0]);
-    expect(inputs[1].value).toBe('__:__ __');
+    expect(inputs[1].value).toBe(TIME_HINT);
+  });
+});
+
+describe('DateTimeField / letter guide', () => {
+  const DATETIME_STEPS: Array<[string, string, number]> = [
+    ['1', '1M/DD/YYYY hh:mm aa', 1],
+    ['2', '12/DD/YYYY hh:mm aa', 3],
+    ['2', '12/2D/YYYY hh:mm aa', 4],
+    ['8', '12/28/YYYY hh:mm aa', 6],
+    ['2', '12/28/2YYY hh:mm aa', 7],
+    ['0', '12/28/20YY hh:mm aa', 8],
+    ['2', '12/28/202Y hh:mm aa', 9],
+    ['6', '12/28/2026 hh:mm aa', 10],
+    ['1', '12/28/2026 01:mm aa', 13],
+    ['0', '12/28/2026 10:mm aa', 14],
+    ['4', '12/28/2026 10:04 aa', 16],
+    ['5', '12/28/2026 10:45 aa', 16],
+    ['a', '12/28/2026 10:45 Aa', 18]
+  ];
+  const DATE_STEPS: Array<[string, string, number]> = [
+    ['1', '1M/DD/YYYY', 1],
+    ['2', '12/DD/YYYY', 3],
+    ['2', '12/2D/YYYY', 4],
+    ['8', '12/28/YYYY', 6],
+    ['2', '12/28/2YYY', 7],
+    ['0', '12/28/20YY', 8],
+    ['2', '12/28/202Y', 9],
+    ['6', '12/28/2026', 10]
+  ];
+  const TIME_STEPS: Array<[string, string, number]> = [
+    ['1', '01:mm aa', 2],
+    ['0', '10:mm aa', 3],
+    ['4', '10:04 aa', 5],
+    ['5', '10:45 aa', 5],
+    ['a', '10:45 Aa', 7]
+  ];
+
+  // imask defers caret moves on a 10ms timer; background tabs throttle it.
+  const IMASK_CURSOR_DELAY = 10;
+  const THROTTLED_DELAY = 60_000;
+
+  function throttleCursorTimer(): MockInstance {
+    const realSetTimeout = window.setTimeout.bind(window);
+    return vi
+      .spyOn(window, 'setTimeout')
+      .mockImplementation(((handler: TimerHandler, ms?: number, ...args: unknown[]) =>
+        realSetTimeout(handler, ms === IMASK_CURSOR_DELAY ? THROTTLED_DELAY : ms, ...args)) as typeof window.setTimeout);
+  }
+
+  async function expectSteps(input: HTMLInputElement, steps: Array<[string, string, number]>): Promise<void> {
+    await focusInput(input);
+    await press('{Home}');
+    for (const [key, value, caret] of steps) {
+      await typeKeys(input, key);
+      expect(input.value, `value after ${key}`).toBe(value);
+      expect(input.selectionStart, `caret after ${key}`).toBe(caret);
+    }
+  }
+
+  async function expectThrottledSteps(input: HTMLInputElement, steps: Array<[string, string, number]>): Promise<void> {
+    const spy = throttleCursorTimer();
+    try {
+      await expectSteps(input, steps);
+    } finally {
+      spy.mockRestore();
+    }
+  }
+
+  it('should advance the caret past each separator when the caret timer is throttled in a single field', async () => {
+    const { inputs } = await renderField();
+    await expectThrottledSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when the caret timer is throttled in a range field with persist-mask', async () => {
+    const { inputs } = await renderField({ dateMode: 'range', timeMode: 'range', attrs: { 'persist-mask': '' } });
+    await expectThrottledSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when the caret timer is throttled in a time-only end input', async () => {
+    const { inputs } = await renderField({ timeMode: 'range' });
+    await expectThrottledSteps(inputs[1], TIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when the caret timer is throttled in a date-only end input', async () => {
+    const { inputs } = await renderField({ dateMode: 'range' });
+    await expectThrottledSteps(inputs[1], DATE_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing a date and time in a single field', async () => {
+    const { inputs } = await renderField();
+    await expectSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing in the start input of a range field', async () => {
+    const { inputs } = await renderField({ dateMode: 'range', timeMode: 'range', picker: true });
+    await expectSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing in a range field with persist-mask', async () => {
+    const { inputs } = await renderField({ dateMode: 'range', timeMode: 'range', attrs: { 'persist-mask': '' } });
+    await expectSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing in a single field with persist-mask', async () => {
+    const { inputs } = await renderField({ attrs: { 'persist-mask': '' } });
+    await expectSteps(inputs[0], DATETIME_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing in a date-only end input', async () => {
+    const { inputs } = await renderField({ dateMode: 'range' });
+    await expectSteps(inputs[1], DATE_STEPS);
+  });
+
+  it('should advance the caret past each separator when typing in a time-only end input', async () => {
+    const { inputs } = await renderField({ timeMode: 'range' });
+    await expectSteps(inputs[1], TIME_STEPS);
+  });
+
+  const ADVANCE_CASES: Array<{ name: string; dateMode: DateTimeFieldDateMode; timeMode: TimeMode; endKeys: string; to: Date }> = [
+    { name: 'a datetime end input', dateMode: 'range', timeMode: 'range', endKeys: '123120260530pm', to: new Date(2026, 11, 31, 17, 30) },
+    { name: 'a time-only end input', dateMode: 'single', timeMode: 'range', endKeys: '0530pm', to: new Date(2026, 11, 28, 17, 30) },
+    { name: 'a date-only end input', dateMode: 'range', timeMode: 'single', endKeys: '12312026', to: new Date(2026, 11, 31, 10, 45) }
+  ];
+
+  for (const { name, dateMode, timeMode, endKeys, to } of ADVANCE_CASES) {
+    for (const persist of [false, true]) {
+      for (const throttled of [false, true]) {
+        const when = `${persist ? 'with' : 'without'} persist-mask${throttled ? ' and a throttled caret timer' : ''}`;
+        it(`should move to the start of ${name} and commit the typed range ${when}`, async () => {
+          const attrs: Record<string, string> = { 'value-mode': 'date', ...(persist ? { 'persist-mask': '' } : {}) };
+          const { el, inputs } = await renderField({ dateMode, timeMode, attrs });
+          const spy = throttled ? throttleCursorTimer() : undefined;
+          try {
+            await typeKeys(inputs[0], '122820261045am');
+            expect(document.activeElement).toBe(inputs[1]);
+            expect(inputs[1].selectionStart).toBe(0);
+            expect(inputs[1].selectionEnd).toBe(0);
+            await typeKeys(inputs[1], endKeys);
+          } finally {
+            spy?.mockRestore();
+          }
+          const value = el.value as IDateTimePickerRange;
+          expect(value.from.getTime()).toBe(new Date(2026, 11, 28, 10, 45).getTime());
+          expect(value.to.getTime()).toBe(to.getTime());
+        });
+      }
+    }
+  }
+
+  for (const { name, dateMode, timeMode, endKeys, to } of ADVANCE_CASES) {
+    for (const persist of [false, true]) {
+      it(`should move to the start of ${name} and commit a range inserted as whole strings ${persist ? 'with' : 'without'} persist-mask`, async () => {
+        const attrs: Record<string, string> = { 'value-mode': 'date', ...(persist ? { 'persist-mask': '' } : {}) };
+        const { el, inputs } = await renderField({ dateMode, timeMode, attrs });
+        await focusInput(inputs[0]);
+        inputs[0].setSelectionRange(0, 0);
+        insertText(inputs[0], '122820261045am');
+        await wait(KEY_DELAY);
+        expect(inputs[0].value).toBe('12/28/2026 10:45 AM');
+        expect(document.activeElement).toBe(inputs[1]);
+        expect(inputs[1].selectionStart).toBe(0);
+        insertText(inputs[1], endKeys);
+        await wait(KEY_DELAY);
+        const value = el.value as IDateTimePickerRange;
+        expect(value.from.getTime()).toBe(new Date(2026, 11, 28, 10, 45).getTime());
+        expect(value.to.getTime()).toBe(to.getTime());
+      });
+    }
+  }
+
+  const CLICK_CASES: Array<{ name: string; dateMode?: DateTimeFieldDateMode; timeMode?: TimeMode; index: number; keys: string; expected: string }> = [
+    { name: 'datetime', index: 0, keys: '12', expected: '12/DD/YYYY hh:mm aa' },
+    { name: 'date-only', dateMode: 'range', index: 1, keys: '12', expected: '12/DD/YYYY' },
+    { name: 'time-only', timeMode: 'range', index: 1, keys: '9', expected: '09:mm aa' }
+  ];
+
+  for (const { name, dateMode, timeMode, index, keys, expected } of CLICK_CASES) {
+    for (const persist of [false, true]) {
+      it(`should place the caret at the first slot when an empty ${name} input is clicked ${persist ? 'with' : 'without'} persist-mask`, async () => {
+        const { inputs } = await renderField({ dateMode, timeMode, attrs: persist ? { 'persist-mask': '' } : {} });
+        const input = inputs[index];
+        await userEvent.click(input);
+        await wait(KEY_DELAY);
+        expect(input.selectionStart).toBe(0);
+        await typeKeys(input, keys);
+        expect(input.value).toBe(expected);
+      });
+    }
+  }
+
+  it('should show the 24 hour letter guide when use-24-hour-time is set', async () => {
+    const { inputs } = await renderField({ attrs: { 'use-24-hour-time': '' } });
+    await focusInput(inputs[0]);
+    expect(inputs[0].value).toBe('MM/DD/YYYY HH:mm');
+  });
+
+  it('should show the seconds letters when allow-seconds is set', async () => {
+    const { inputs } = await renderField({ attrs: { 'allow-seconds': '' } });
+    await focusInput(inputs[0]);
+    expect(inputs[0].value).toBe('MM/DD/YYYY hh:mm:ss aa');
+  });
+
+  it('should show typed digits followed by the remaining letters when partially typed', async () => {
+    const { inputs } = await renderField();
+    await typeKeys(inputs[0], '12');
+    expect(inputs[0].value).toBe('12/DD/YYYY hh:mm aa');
+    await typeKeys(inputs[0], '2');
+    expect(inputs[0].value).toBe('12/2D/YYYY hh:mm aa');
+  });
+
+  it('should restore the letter when a typed digit is deleted with Backspace', async () => {
+    const { inputs } = await renderField();
+    await typeKeys(inputs[0], '122');
+    await press('{Backspace}');
+    expect(inputs[0].value).toBe('12/DD/YYYY hh:mm aa');
+  });
+
+  it('should not flag badInput or commit a value when the letter guide is untouched', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await focusInput(inputs[0]);
+    expect(inputs[0].value).toBe(DATETIME_HINT);
+    expect(el.value).toBeNull();
+    expect(el.validity.badInput).toBe(false);
+    await press('{Enter}');
+    await blurInput(inputs[0], el);
+    expect(el.value).toBeNull();
+    expect(el.validity.badInput).toBe(false);
+    expect(inputs[0].value).toBe('');
+  });
+
+  it('should not set a meridiem when show-mask is turned off with a partial time', async () => {
+    const { el, inputs } = await renderField();
+    await typeKeys(inputs[0], '010220261030');
+    expect(inputs[0].value).toBe('01/02/2026 10:30 aa');
+    el.showMask = false;
+    await settle(el);
+    expect(inputs[0].value.trimEnd()).toBe('01/02/2026 10:30');
+    el.showMask = true;
+    await settle(el);
+    expect(inputs[0].value).toBe('01/02/2026 10:30 aa');
+  });
+
+  it('should keep focus and not coerce the start input when show-mask is turned off in a range field', async () => {
+    const { el, inputs } = await renderField({ dateMode: 'range', timeMode: 'range' });
+    await typeKeys(inputs[0], '010220261030');
+    el.showMask = false;
+    await settle(el);
+    expect(document.activeElement).toBe(inputs[0]);
+    expect(inputs[0].value.trimEnd()).toBe('01/02/2026 10:30');
+  });
+
+  it('should keep a typed meridiem when show-mask is turned off', async () => {
+    const { el, inputs } = await renderField();
+    await typeKeys(inputs[0], '010220261030a');
+    el.showMask = false;
+    await settle(el);
+    expect(inputs[0].value).toBe('01/02/2026 10:30 A');
+  });
+
+  it('should flag badInput when a partial value is typed over the letter guide', async () => {
+    const { el, inputs } = await renderField();
+    await typeKeys(inputs[0], '0102');
+    expect(inputs[0].value).toBe('01/02/YYYY hh:mm aa');
+    expect(el.validity.badInput).toBe(true);
+  });
+
+  it('should commit a value typed over the letter guide', async () => {
+    const { el, inputs } = await renderField({ attrs: { 'value-mode': 'date' } });
+    await typeKeys(inputs[0], '01022025930a');
+    expect(inputs[0].value).toBe('01/02/2025 09:30 Aa');
+    expect(el.value).toBeNull();
+    await typeKeys(inputs[0], 'm');
+    expect((el.value as Date).getTime()).toBe(new Date(2025, 0, 2, 9, 30).getTime());
+  });
+
+  it('should show the date letter guide on a date-only range endpoint', async () => {
+    const { inputs } = await renderField({ dateMode: 'range' });
+    await focusInput(inputs[0]);
+    expect(inputs[1].value).toBe(DATE_HINT);
+    await typeKeys(inputs[1], '12');
+    expect(inputs[1].value).toBe('12/DD/YYYY');
+  });
+
+  it('should show the time letter guide on a time-only range endpoint', async () => {
+    const { inputs } = await renderField({ timeMode: 'range' });
+    await typeKeys(inputs[1], '9');
+    expect(inputs[1].value).toBe('09:mm aa');
+  });
+
+  it('should show the 24 hour time letter guide on a time-only range endpoint', async () => {
+    const { inputs } = await renderField({ timeMode: 'range', attrs: { 'use-24-hour-time': '' } });
+    await focusInput(inputs[1]);
+    expect(inputs[1].value).toBe('HH:mm');
   });
 });
 
@@ -1822,7 +2141,7 @@ describe('DateTimeField / picker value sync', () => {
     await settle(el);
     expect(el.value).toBeNull();
     expect(inputs[0].value).toBe('06/09/2026 09:00 AM');
-    expect(inputs[1].value.replace(/[_/:\s]/g, '')).toBe('');
+    expect(inputs[1].value).toBe(DATE_HINT);
   });
 
   it('should show a picked date before a time is chosen', async () => {
