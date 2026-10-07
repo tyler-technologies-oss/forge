@@ -8,6 +8,7 @@ import type {
   ITimeSlot,
   TimeMode
 } from './date-time-picker-constants.js';
+import { isSameDate } from '../core/utils/date-utils.js';
 import { getTemporal } from './temporal-loader.js';
 
 const SLOT_REFERENCE_YEAR = 2000;
@@ -80,11 +81,7 @@ export function compareTimes(a: IParsedTime, b: IParsedTime): number {
   return aTotal - bTotal;
 }
 
-/**
- * Generates slot times between `min` and `max` (inclusive) stepping every `step` minutes.
- * Times are produced as canonical strings; labels are generated at render time so they
- * honor locale/use24/allowSeconds.
- */
+/** Generates canonical slot times from `min` to `max` (inclusive) every `stepMinutes`. */
 export function buildSlotsFromRange(min: string, max: string, stepMinutes: number, allowSeconds: boolean): ITimeSlot[] {
   const parsedMin = parseTimeString(min);
   const parsedMax = parseTimeString(max);
@@ -109,19 +106,12 @@ export function buildSlotsFromRange(min: string, max: string, stepMinutes: numbe
   return result;
 }
 
-/**
- * Builds a Date object for slot label formatting using a fixed reference date so
- * `Intl.DateTimeFormat` output never drifts across DST boundaries.
- */
+/** Uses a fixed reference date so slot labels never drift across DST boundaries. */
 function timeToReferenceDate(time: IParsedTime): Date {
   return new Date(SLOT_REFERENCE_YEAR, SLOT_REFERENCE_MONTH, SLOT_REFERENCE_DAY, time.hours, time.minutes, time.seconds);
 }
 
-/**
- * Formats a canonical time string for display, honoring locale + 12/24h + seconds.
- * Pass a pre-built `formatter` to avoid the per-call `Intl.DateTimeFormat` allocation
- * when rendering many slots.
- */
+/** Formats a canonical time string for display; pass `formatter` to reuse one across many slots. */
 export function formatSlotLabel(
   value: string,
   locale: string | undefined,
@@ -242,10 +232,7 @@ function normalizePrecision(date: Date, allowSeconds: boolean): Date {
   return date;
 }
 
-/**
- * Coerces any accepted `value` input into the normalized internal shape.
- * Accepts `Date`, ISO strings, `{ from, to }` ranges, or `null`.
- */
+/** Coerces a `Date`, ISO string, `{ from, to }` range, or `null` into the internal value shape. */
 export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: boolean): DateTimePickerValue {
   if (input == null || input === '') {
     return null;
@@ -284,12 +271,7 @@ export function coerceValue(input: unknown, timeMode: TimeMode, allowSeconds: bo
 const LOCAL_DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
 const LOCAL_DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?$/;
 
-/**
- * Parses a timezone-less ISO date/datetime string as local wall-clock time. Returns `null` when the
- * string carries a timezone designator (`Z`/offset) or isn't an ISO date — those fall back to the
- * platform `Date` parser. This avoids the JS quirk where date-only strings parse as UTC midnight
- * while every other path in this component treats values as local time.
- */
+/** Parses a timezone-less ISO string as local time (date-only strings would otherwise parse as UTC). */
 function parseLocalIsoString(trimmed: string): Date | null {
   const dateOnlyMatch = trimmed.match(LOCAL_DATE_ONLY);
   if (dateOnlyMatch) {
@@ -333,10 +315,7 @@ export function parseMaybeDate(input: unknown): Date | null {
   return temporalToDate(input);
 }
 
-/**
- * Converts a `Temporal.PlainDateTime` / `PlainDate` (duck-typed by its calendar fields) into a
- * local `Date`. Temporal months are 1-based; missing time fields default to 0.
- */
+/** Converts a duck-typed `Temporal.PlainDateTime`/`PlainDate` into a local `Date`. */
 function temporalToDate(input: unknown): Date | null {
   if (!input || typeof input !== 'object') {
     return null;
@@ -351,15 +330,7 @@ function temporalToDate(input: unknown): Date | null {
   return new Date(candidate.year, candidate.month - 1, candidate.day, hour, minute, second);
 }
 
-/**
- * Computes date endpoints for a named quick-range preset.
- * All returned dates are at 00:00:00.000 local time (midnight).
- * The caller is responsible for merging time-of-day values if desired.
- *
- * @param id - The preset identifier.
- * @param now - The reference instant (do NOT use `Date.now()` — pass this arg).
- * @param firstDayOfWeek - 0 = Sunday, 1 = Monday, etc.
- */
+/** Computes local-midnight date endpoints for a quick-range preset relative to `now`. */
 export function computePreset(id: DateRangePresetId, now: Date, firstDayOfWeek: number): { from: Date; to: Date } {
   const midnight = (d: Date): Date => new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const addDays = (d: Date, n: number): Date => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
@@ -389,24 +360,14 @@ const MS_PER_MINUTE = 60_000;
 const MS_PER_HOUR = 3_600_000;
 const MS_PER_DAY = 86_400_000;
 
-/**
- * Formats the duration between two dates as a human-readable string.
- * Returns `''` when `to <= from`.
- * Prefers `Intl.DurationFormat` when available; otherwise falls back to manual plural formatting.
- *
- * @param from - Start of the range.
- * @param to - End of the range.
- * @param locale - Optional BCP 47 locale tag.
- */
+/** Formats the duration between two dates, or `''` when `to <= from`. */
 export function formatDuration(from: Date, to: Date, locale?: string): string {
   const ms = to.getTime() - from.getTime();
   if (ms <= 0) {
     return '';
   }
 
-  // Decompose as whole calendar days plus the remaining wall-clock time-of-day so DST transitions
-  // (23h/25h days) don't skew the day count or silently drop an hour. Each midnight is computed in
-  // local time, so `days` counts calendar-day boundaries rather than fixed 24h chunks.
+  // Count calendar days, not 24h chunks, so DST days don't skew the result.
   const fromMidnight = new Date(from.getFullYear(), from.getMonth(), from.getDate());
   const toMidnight = new Date(to.getFullYear(), to.getMonth(), to.getDate());
   let days = Math.round((toMidnight.getTime() - fromMidnight.getTime()) / MS_PER_DAY);
@@ -469,15 +430,16 @@ export function buildAnnouncement(value: DateTimePickerValue, locale: string | u
   if (allowSeconds) {
     timeOptions.second = '2-digit';
   }
-  if (isRange(value)) {
-    const rangeDateLabel = new Intl.DateTimeFormat(locale, dateOptions).format(value.from);
-    const fromLabel = new Intl.DateTimeFormat(locale, timeOptions).format(value.from);
-    const toLabel = new Intl.DateTimeFormat(locale, timeOptions).format(value.to);
-    return `Selected ${rangeDateLabel} from ${fromLabel} to ${toLabel}.`;
+  const dateFmt = new Intl.DateTimeFormat(locale, dateOptions);
+  const timeFmt = new Intl.DateTimeFormat(locale, timeOptions);
+  const dateTime = (date: Date): string => `${dateFmt.format(date)} at ${timeFmt.format(date)}`;
+  if (!isRange(value)) {
+    return `Selected ${dateTime(value)}.`;
   }
-  const dateLabel = new Intl.DateTimeFormat(locale, dateOptions).format(value);
-  const timeLabel = new Intl.DateTimeFormat(locale, timeOptions).format(value);
-  return `Selected ${dateLabel} at ${timeLabel}.`;
+  if (isSameDate(value.from, value.to)) {
+    return `Selected ${dateFmt.format(value.from)} from ${timeFmt.format(value.from)} to ${timeFmt.format(value.to)}.`;
+  }
+  return `Selected ${dateTime(value.from)} to ${dateTime(value.to)}.`;
 }
 
 const pad = (n: number): string => String(n).padStart(2, '0');
@@ -497,8 +459,7 @@ function dateToPublic(date: Date, valueMode: DateTimePickerValueMode, allowSecon
   if (valueMode === 'iso') {
     return iso;
   }
-  // 'temporal' — build a PlainDateTime when the namespace is available; otherwise fall back to the
-  // ISO string (a valid datetime-local) until the lazily-loaded polyfill is ready.
+  // Falls back to the ISO string until the Temporal polyfill loads.
   const temporal = getTemporal();
   return temporal ? temporal.PlainDateTime.from(allowSeconds ? iso : `${iso}:00`) : iso;
 }

@@ -55,11 +55,7 @@ export function parseTypedValue(dateInput: string | null | undefined, timeInput:
   return new Date(date.year, date.month - 1, date.day, time.hours, time.minutes, allowSeconds ? time.seconds : 0);
 }
 
-/**
- * Coerces a loosely-typed date segment into the canonical `MM/DD/YYYY` display, mirroring
- * forge-date-picker: two-digit years get a century (`25` → `2025`) and out-of-range parts are
- * clamped. Returns null when nothing parseable was typed, so partial/empty input is left untouched.
- */
+/** Coerces loose date text (`1/2/25`) to `MM/DD/YYYY`; null when nothing parseable was typed. */
 export function coerceDateInput(input: string | null | undefined): string | null {
   if (!input?.trim()) {
     return null;
@@ -68,11 +64,7 @@ export function coerceDateInput(input: string | null | undefined): string | null
   return date ? formatDateInput(date) : null;
 }
 
-/**
- * Coerces a loosely-typed time segment into the field's canonical time string, mirroring
- * forge-time-picker shorthand (`130` → `1:30`, `5p` → `5:00 PM`). Returns null when nothing
- * parseable was typed, so partial/empty input is left untouched.
- */
+/** Coerces loose time text (`130`, `5p`) to the canonical time string; null when nothing parseable was typed. */
 export function coerceTimeInput(input: string | null | undefined, use24HourTime: boolean, allowSeconds: boolean): string | null {
   if (!input?.trim()) {
     return null;
