@@ -106,7 +106,9 @@ describe('TimeInputMask', () => {
     it.each([
       [{}, '5', '05:mm aa'],
       [{}, '12', '12:mm aa'],
-      [{}, '0930p', '09:30 Pa'],
+      [{}, '0930p', '09:30 PM'],
+      [{}, '0930pm', '09:30 PM'],
+      [{}, '0930a', '09:30 AM'],
       [{ use24HourTime: true }, '23', '23:mm'],
       [{ showSeconds: true }, '5', '05:mm:ss aa'],
       [{ use24HourTime: true, showSeconds: true }, '0930', '09:30:ss']
@@ -124,10 +126,20 @@ describe('TimeInputMask', () => {
       expect(input.value).toBe('09:3m aa');
     });
 
+    it('should not complete a meridiem letter typed into its second slot', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('1045a');
+      await userEvent.keyboard('{Backspace}');
+      await wait(KEY_DELAY);
+      await type('p');
+      expect(input.value).not.toBe('10:45 AM');
+      expect(mask!.normalizedValue).toBe('10:45 A_');
+    });
+
     it('should read unfilled slots as underscores', async () => {
       setup({ showMaskFormat: true, letterGuide: true });
-      await type('0930p');
-      expect(mask!.normalizedValue).toBe('09:30 P_');
+      await type('09');
+      expect(mask!.normalizedValue).toBe('09:__ __');
     });
 
     it('should uppercase a pasted meridiem so it is not read as the guide', () => {
@@ -151,7 +163,7 @@ describe('TimeInputMask', () => {
       const input = setup({ showMaskFormat: true, letterGuide: true });
       await type('1030p');
       mask!.setShowMaskFormat(false);
-      expect(input.value).toBe('10:30 P');
+      expect(input.value).toBe('10:30 PM');
     });
 
     it('should not set a meridiem when a display string with guide letters is set', () => {
@@ -159,6 +171,26 @@ describe('TimeInputMask', () => {
       mask!.maskedValue = '10:30 aa';
       expect(input.value).toBe('10:30 aa');
       expect(mask!.normalizedValue).toBe('10:30 __');
+    });
+
+    it('should replace an existing meridiem when a or p is typed over it', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('1045a');
+      input.setSelectionRange(6, 6);
+      await wait(KEY_DELAY);
+      await type('p');
+      expect(input.value).toBe('10:45 PM');
+      expect(input.selectionStart).toBe(8);
+    });
+
+    it.each([
+      ['1045p', '10:45 PM'],
+      ['10:45am', '10:45 AM'],
+      ['10:45 pm', '10:45 PM']
+    ])('should fill the whole meridiem when %s is pasted', (text, expected) => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      paste(input, text);
+      expect(input.value).toBe(expected);
     });
 
     it('should fill the value from one multi-char insert', () => {
