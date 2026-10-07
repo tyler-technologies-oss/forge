@@ -21,6 +21,18 @@ breadcrumb items after it.
 
 <Canvas of={BreadcrumbStories.OverflowMenu} />
 
+## Scroll buttons
+
+Set the `scroll-buttons` attribute to keep the breadcrumb items on a single line instead of wrapping. When
+the items overflow their container, previous and next buttons are displayed to scroll through them, and the
+breadcrumb starts scrolled to the end so the current page is visible.
+
+The scroll buttons are only rendered while the items overflow. The previous button is disabled when scrolled
+to the start, and the next button is disabled when scrolled to the end. Each button shows a tooltip that
+labels it ("Previous breadcrumbs" or "Next breadcrumbs").
+
+<Canvas of={BreadcrumbStories.ScrollButtons} />
+
 ## Home item
 
 Set the `home` attribute on a `forge-breadcrumb-item` to render a home icon in place of its text. Use
@@ -59,6 +71,9 @@ hierarchy that don't have a page of their own.
   distinguishable from other navigation landmarks.
 - Set `current` on the item that represents the current page. It renders non-interactive text in place of
   the link and sets `aria-current="page"` on the item.
+- When `scroll-buttons` is set and the items overflow, the previous and next buttons are focusable
+  buttons labeled by their tooltips. A button is marked `aria-disabled` when there is nothing further to
+  scroll to in that direction.
 - Place content in the overflow menu's `tooltip` slot to provide an accessible name for the overflow button.
 - Slot text into a `home` item to provide an accessible name for the home icon other than the default
   "Home".

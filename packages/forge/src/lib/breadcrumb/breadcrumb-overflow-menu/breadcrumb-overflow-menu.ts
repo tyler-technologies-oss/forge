@@ -23,7 +23,8 @@ const TOOLTIP_CONTENT = 'More breadcrumbs';
  *
  * @summary Collapses breadcrumb items into a popover menu that is opened by an ellipsis button.
  *
- * @dependency forge-focus-indicator
+ * @dependency forge-icon
+ * @dependency forge-icon-button
  * @dependency forge-popover
  * @dependency forge-tooltip
  *

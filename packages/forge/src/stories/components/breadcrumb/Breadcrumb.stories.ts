@@ -85,3 +85,17 @@ export const WithoutLinks: Story = {
     </forge-breadcrumb>
   `
 };
+
+export const ScrollButtons: Story = {
+  render: () => html`
+    <forge-breadcrumb aria-label="Breadcrumb" scroll-buttons style="max-width: 400px;">
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#">Category</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#">Subcategory</forge-breadcrumb-item>
+      <forge-breadcrumb-item href="#">Parent</forge-breadcrumb-item>
+      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+    </forge-breadcrumb>
+  `
+};

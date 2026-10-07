@@ -38,6 +38,17 @@ export class BreadcrumbItemComponent {
     return this.nativeElement.current;
   }
 
+  /** Whether this item represents the home page. Renders a home icon when set to true. */
+  @Input({ transform: booleanAttribute })
+  public set home(value: BreadcrumbItemComponentCustomElement['home']) {
+    this.zone.runOutsideAngular(() => {
+      this.nativeElement.home = value;
+    });
+  }
+  public get home(): BreadcrumbItemComponentCustomElement['home'] {
+    return this.nativeElement.home;
+  }
+
   constructor() {
     defineBreadcrumbItemComponent();
     const changeDetectorRef = inject(ChangeDetectorRef);

@@ -1,3 +1,4 @@
+@use '../../core/styles/theme';
 @use '../token-utils' as *;
 
 @forward '../token-utils';
@@ -7,11 +8,52 @@
 }
 
 @mixin base {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+@mixin list {
   box-sizing: border-box;
   display: flex;
+  flex: 1;
   flex-wrap: wrap;
   align-items: center;
+  min-inline-size: 0;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@mixin scroll {
+  flex-wrap: nowrap;
+  overflow: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin slotted-scroll-buttons {
+  flex: none;
+  white-space: nowrap;
+}
+
+@mixin scroll-button {
+  flex: none;
+}
+
+@mixin scroll-button-previous {
+  border-inline-end: 1px solid #{theme.variable('outline')};
+}
+
+@mixin scroll-button-next {
+  border-inline-start: 1px solid #{theme.variable('outline')};
+}
+
+@mixin scroll-button-disabled {
+  opacity: #{theme.emphasis(medium-low)};
+  pointer-events: none;
 }

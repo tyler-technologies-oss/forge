@@ -22,11 +22,19 @@ export const BREADCRUMB_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-brea
  *
  * @summary Breadcrumb items link to a page in the hierarchy, or represent the current page.
  *
- * @slot - The default slot for the item's content.
+ * @dependency forge-button
+ * @dependency forge-icon
+ * @dependency forge-icon-button
+ * @dependency forge-list-item
+ * @dependency forge-tooltip
+ *
+ * @slot - The default slot for the item's content. When `home` is set on a linked item, this is the
+ * tooltip label for the home icon button.
  * @slot start - Content placed before the item's main content.
  *
  * @csspart root - The root element.
- * @csspart link - The anchor element. Not rendered when `current` is set.
+ * @csspart button - The button or icon button wrapping the anchor. Not rendered when `current` is
+ * set, `href` is not set, or the item is inside an overflow menu.
  */
 export class BreadcrumbItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
