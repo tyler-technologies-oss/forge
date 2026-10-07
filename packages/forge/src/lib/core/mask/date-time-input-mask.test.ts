@@ -35,6 +35,15 @@ function paste(input: HTMLInputElement, text: string): void {
   input.dispatchEvent(new InputEvent('input', { inputType: 'insertFromPaste', data: text, bubbles: true }));
 }
 
+/** Inserts several chars in one `insertText` event, like IME, dictation, or automation tools. */
+function insertText(input: HTMLInputElement, text: string): void {
+  const start = input.selectionStart ?? 0;
+  const end = input.selectionEnd ?? start;
+  input.value = `${input.value.slice(0, start)}${text}${input.value.slice(end)}`;
+  input.setSelectionRange(start + text.length, start + text.length);
+  input.dispatchEvent(new InputEvent('input', { inputType: 'insertText', data: text, bubbles: true }));
+}
+
 describe('DateTimeInputMask', () => {
   afterEach(() => {
     mask?.destroy();
@@ -258,6 +267,30 @@ describe('DateTimeInputMask', () => {
     });
   });
 
+  describe('multi-char insert', () => {
+    for (const letterGuide of [false, true]) {
+      for (const showMaskFormat of [false, true]) {
+        it(`should fill the value from one insert when letterGuide is ${letterGuide} and showMaskFormat is ${showMaskFormat}`, () => {
+          const input = setup({ letterGuide, showMaskFormat });
+          input.setSelectionRange(0, 0);
+          insertText(input, '122820261045am');
+          expect(input.value).toBe('12/28/2026 10:45 AM');
+          expect(input.selectionStart).toBe(19);
+        });
+      }
+    }
+
+    it('should continue typing one key at a time after a partial insert', async () => {
+      const input = setup({ letterGuide: true, showMaskFormat: true });
+      input.setSelectionRange(0, 0);
+      insertText(input, '1228');
+      expect(input.value).toBe('12/28/YYYY hh:mm aa');
+      await select(input, 6, 6);
+      await type('2026');
+      expect(input.value).toBe('12/28/2026 hh:mm aa');
+    });
+  });
+
   describe('datePart and timePart', () => {
     it('should return the date and time portions', () => {
       setup();
@@ -358,6 +391,140 @@ describe('DateTimeInputMask', () => {
       mask = undefined;
       await type('3');
       expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('letter guide', () => {
+    const steps: [string, string, number][] = [
+      ['3', '03/DD/YYYY hh:mm aa', 3],
+      ['1', '03/1D/YYYY hh:mm aa', 4],
+      ['5', '03/15/YYYY hh:mm aa', 6],
+      ['2026', '03/15/2026 hh:mm aa', 10],
+      ['9', '03/15/2026 09:mm aa', 13],
+      ['3', '03/15/2026 09:03 aa', 16],
+      ['0', '03/15/2026 09:30 aa', 16],
+      ['a', '03/15/2026 09:30 Aa', 18],
+      ['m', '03/15/2026 09:30 AM', 19]
+    ];
+
+    it('should show the format letters when the format is shown', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      expect(input.value).toBe('MM/DD/YYYY hh:mm aa');
+    });
+
+    it('should show 24 hour and seconds letters for those options', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true, use24HourTime: true, showSeconds: true });
+      expect(input.value).toBe('MM/DD/YYYY HH:mm:ss');
+    });
+
+    it('should show the meridiem letters with seconds in 12 hour time', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true, showSeconds: true });
+      expect(input.value).toBe('MM/DD/YYYY hh:mm:ss aa');
+    });
+
+    it('should place the caret after each auto-pad when letterGuide is on', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      for (const [keys, value, caret] of steps) {
+        await type(keys);
+        expect(input.value, `after ${keys}`).toBe(value);
+        expect(input.selectionStart, `caret after ${keys}`).toBe(caret);
+      }
+    });
+
+    it('should show typed digits followed by the remaining letters', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('122');
+      expect(input.value).toBe('12/2D/YYYY hh:mm aa');
+    });
+
+    it('should restore the letter when a digit is deleted with Backspace', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('122');
+      await userEvent.keyboard('{Backspace}');
+      await wait(KEY_DELAY);
+      expect(input.value).toBe('12/DD/YYYY hh:mm aa');
+    });
+
+    it('should hide the letters when the format is hidden', async () => {
+      const input = setup({ letterGuide: true });
+      await type('122');
+      expect(input.value).toBe('12/2');
+    });
+
+    it('should read unfilled slots as underscores', async () => {
+      setup({ showMaskFormat: true, letterGuide: true });
+      expect(mask!.normalizedValue).toBe('__/__/____ __:__ __');
+      expect(mask!.datePart).toBe('__/__/____');
+      expect(mask!.timePart).toBe('__:__ __');
+      await type('122');
+      expect(mask!.datePart).toBe('12/2_/____');
+    });
+
+    it('should not read a typed meridiem as the guide', async () => {
+      setup({ showMaskFormat: true, letterGuide: true });
+      await type('01022025930a');
+      expect(mask!.timePart).toBe('09:30 A_');
+    });
+
+    it('should drop the time when the date is incomplete', () => {
+      setup({ showMaskFormat: true, letterGuide: true });
+      mask!.maskedValue = '01/02/2025 09:30 AM';
+      mask!.datePart = '01/0_/____';
+      expect(mask!.maskedValue).toBe('01/0D/YYYY hh:mm aa');
+    });
+
+    it('should keep the time when replacing the date', () => {
+      setup({ showMaskFormat: true, letterGuide: true });
+      mask!.maskedValue = '01/02/2025 09:30 AM';
+      mask!.datePart = '03/04/2026';
+      expect(mask!.maskedValue).toBe('03/04/2026 09:30 AM');
+    });
+
+    it('should not set a meridiem when the guide is hidden after a partial time', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('010220261030');
+      expect(input.value).toBe('01/02/2026 10:30 aa');
+      mask!.setShowMaskFormat(false);
+      expect(input.value.trimEnd()).toBe('01/02/2026 10:30');
+      expect(mask!.timePart.trimEnd()).toBe('10:30');
+      mask!.setShowMaskFormat(true);
+      expect(input.value).toBe('01/02/2026 10:30 aa');
+    });
+
+    it('should keep a typed meridiem when the guide is toggled', async () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      await type('010220261030a');
+      mask!.setShowMaskFormat(false);
+      expect(input.value).toBe('01/02/2026 10:30 A');
+      mask!.setShowMaskFormat(true);
+      expect(input.value).toBe('01/02/2026 10:30 Aa');
+      await type('m');
+      mask!.setShowMaskFormat(false);
+      expect(input.value).toBe('01/02/2026 10:30 AM');
+    });
+
+    it('should not set a meridiem when a display string with guide letters is set', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      mask!.maskedValue = '01/02/2026 10:30 aa';
+      expect(input.value).toBe('01/02/2026 10:30 aa');
+      expect(mask!.timePart).toBe('10:30 __');
+      mask!.maskedValue = '01/02/2026 10:30 Aa';
+      expect(mask!.timePart).toBe('10:30 A_');
+    });
+
+    it('should keep a lowercase meridiem that is set programmatically', () => {
+      const input = setup({ showMaskFormat: true, letterGuide: true });
+      mask!.maskedValue = '01/02/2026 10:30 am';
+      expect(input.value).toBe('01/02/2026 10:30 AM');
+    });
+
+    it('should show the letters and keep the caret when the guide is toggled on', async () => {
+      const input = setup({ letterGuide: true });
+      await type('0102');
+      await select(input, 2, 2);
+      mask!.setShowMaskFormat(true);
+      expect(input.value).toBe('01/02/YYYY hh:mm aa');
+      expect(input.selectionStart).toBe(2);
     });
   });
 
