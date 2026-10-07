@@ -131,8 +131,21 @@
   white-space: nowrap;
 }
 
+// Insets children with margins so scrollable areas can reach the popover edge.
 @mixin popover-inset {
-  padding: #{token(padding)};
+  padding-block: #{token(padding)};
+
+  > * {
+    margin-inline: #{token(padding)};
+  }
+
+  > slot[name='header'] {
+    display: block;
+  }
+
+  > .body--horizontal:has(> .time-section--slots) {
+    margin-inline-end: 0;
+  }
 }
 
 @mixin stacked-time-section {
