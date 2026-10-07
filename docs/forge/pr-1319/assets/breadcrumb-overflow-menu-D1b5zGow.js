@@ -1,0 +1,65 @@
+var N=s=>{throw TypeError(s)};var tt=(s,o,t)=>o.has(s)||N("Cannot "+t);var E=(s,o,t)=>o.has(s)?N("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(s):o.set(s,t);var i=(s,o,t)=>(tt(s,o,"access private method"),t);import{t as C}from"./component-utils-vOrACU0E.js";import{F as O,C as S,a as et}from"./service-adapter-8tADcN_b.js";import{Q as ot,R as rt,e as st,ad as at}from"./tyler-icons-NVf08gHb.js";import{h as A,A as g,b as l}from"./iframe-Doaa3Kdk.js";import{n as x}from"./property-DJuTIPPA.js";import{r as w}from"./state-a4Qik7Qa.js";import{e as j}from"./query-CtiAP21w.js";import{e as k}from"./class-map-CsjCCn6c.js";import{B as P}from"./base-lit-element-CpHmPn0S.js";import{s as m}from"./a11y-utils-DssnAab5.js";import{I as it}from"./icon-button-Ck8_ypsD.js";import{a as lt,I as B}from"./icon-ozIZoPIz.js";import{a as nt}from"./tooltip-BZoCBE_e.js";import{o as z}from"./if-defined-Df7qgOjW.js";import"./button-BsMnzWz3.js";import"./list-item-MbhLyvqr.js";import"./popover-K4jtrW_G.js";const ct=':host{display:block}:host([hidden]){display:none}.forge-breadcrumb{--_breadcrumb-separator-content: var(--forge-breadcrumb-separator-content, "/");--_breadcrumb-separator-padding: var(--forge-breadcrumb-separator-padding, var(--forge-spacing-xxsmall, 4px))}.forge-breadcrumb{display:flex;align-items:center;min-inline-size:0}.list{box-sizing:border-box;display:flex;flex:1;flex-wrap:wrap;align-items:center;min-inline-size:0;margin:0;padding:0;list-style:none}.list.scroll{flex-wrap:nowrap;overflow:auto;scroll-behavior:smooth;scrollbar-width:none}.list.scroll::-webkit-scrollbar{display:none}.list.scroll ::slotted(*){flex:none;white-space:nowrap}.scroll-button{flex:none}.scroll-button-previous:not(.disabled){border-inline-end:1px solid var(--forge-theme-outline, #e0e0e0)}.scroll-button-next:not(.disabled){border-inline-start:1px solid var(--forge-theme-outline, #e0e0e0)}.scroll-button.disabled{opacity:.38;pointer-events:none}';var pt=Object.defineProperty,d=(s,o,t,a)=>{for(var e=void 0,n=s.length-1,c;n>=0;n--)(c=s[n])&&(e=c(o,t,e)||e);return e&&pt(o,t,e),e},D,L,U;const q="forge-breadcrumb";var r,K,Y,Q,V,b,I,R,M;const h=class h extends(U=P,L=S,D=et,U){constructor(){super();E(this,r);this.scrollButtons=!1,this._scrollable=!1,this._scrolledToStart=!0,this._scrolledToEnd=!0,this._internals=this.attachInternals()}connectedCallback(){super.connectedCallback(),m(this,this._internals,{role:"navigation"}),O.observe(this,i(this,r,Y).bind(this))}disconnectedCallback(){super.disconnectedCallback(),O.unobserve(this)}updated(t){t.has("scrollButtons")&&i(this,r,b).call(this)}render(){const t=this.scrollButtons&&this._scrollable;return l`
+      <div part="root" class="forge-breadcrumb">
+        ${t?i(this,r,M).call(this,"backward"):g}
+        <ul part="list" class=${k({list:!0,scroll:this.scrollButtons})} role="list" @scroll=${i(this,r,Q)}>
+          <slot @slotchange=${i(this,r,K)}></slot>
+        </ul>
+        ${t?i(this,r,M).call(this,"forward"):g}
+      </div>
+    `}};r=new WeakSet,K=async function(){i(this,r,b).call(this),this._scrollable&&(await this.updateComplete,i(this,r,R).call(this))},Y=async function(){const t=this._scrollable;i(this,r,b).call(this),!t&&this._scrollable&&(await this.updateComplete,i(this,r,R).call(this))},Q=function(){i(this,r,I).call(this)},V=function(t){const a=t==="forward"?1:-1;this._list.scrollBy({behavior:"smooth",left:this._list.offsetWidth*a})},b=function(){this._scrollable=this.scrollButtons&&this._list.scrollWidth>this._list.clientWidth,i(this,r,I).call(this)},I=function(){const{scrollLeft:t,scrollWidth:a,clientWidth:e}=this._list;this._scrolledToStart=t===0,this._scrolledToEnd=t+e>=a-1},R=function(){this._list.scrollTo({behavior:"instant",left:this._list.scrollWidth})},M=function(t){const a=t==="backward",e=a?this._scrolledToStart:this._scrolledToEnd;return l`
+      <forge-icon-button
+        class=${k({"scroll-button":!0,"scroll-button-previous":a,"scroll-button-next":!a,disabled:e})}
+        type="button"
+        shape="squared"
+        aria-disabled=${e?"true":g}
+        @click=${()=>i(this,r,V).call(this,t)}>
+        <forge-icon .name=${a?"keyboard_arrow_left":"keyboard_arrow_right"}></forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label" placement="bottom">${a?"Previous breadcrumbs":"Next breadcrumbs"}</forge-tooltip>
+    `},h.styles=A(ct),h[L]=q,h[D]=[it,lt,nt],B.define([ot,rt]);let p=h;d([x({type:Boolean,attribute:"scroll-buttons"})],p.prototype,"scrollButtons");d([w()],p.prototype,"_scrollable");d([w()],p.prototype,"_scrolledToStart");d([w()],p.prototype,"_scrolledToEnd");d([j(".list",!0)],p.prototype,"_list");C(q,p);const ft=':host{display:inline-block}:host([hidden]){display:none}.forge-breadcrumb-item{--_breadcrumb-separator-content: var(--forge-breadcrumb-separator-content, "/");--_breadcrumb-separator-padding: var(--forge-breadcrumb-separator-padding, var(--forge-spacing-xxsmall, 4px))}.forge-breadcrumb-item{box-sizing:border-box;display:flex;align-items:center}.forge-breadcrumb-item:after{content:var(--_breadcrumb-separator-content)/"";color:var(--forge-theme-text-medium, rgba(0, 0, 0, .6));padding-inline:var(--_breadcrumb-separator-padding)}.button{--forge-button-color: var(--forge-theme-primary, #3f51b5);--forge-button-min-width: 0;--forge-button-padding: 0 var(--forge-spacing-xxsmall, 4px)}.button::part(root){-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:var(--forge-typography-body1-font-family, var(--forge-typography-font-family, "Roboto", sans-serif));font-size:var(--forge-typography-body1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, .875)));font-weight:var(--forge-typography-body1-font-weight, 400);line-height:var(--forge-typography-body1-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.125)));letter-spacing:var(--forge-typography-body1-letter-spacing, .0357142857em);text-transform:var(--forge-typography-body1-text-transform, inherit);text-decoration:var(--forge-typography-body1-text-decoration, inherit)}.icon-button{--forge-icon-size: 18px;color:var(--forge-theme-primary, #3f51b5)}.menu-item:after{display:none}.list-item{inline-size:100%}.start{--forge-icon-color: var(--forge-theme-text-low, rgba(0, 0, 0, .38));--forge-icon-size: 18px;display:contents}.text{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:var(--forge-typography-body1-font-family, var(--forge-typography-font-family, "Roboto", sans-serif));font-size:var(--forge-typography-body1-font-size, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-font-size-scale, .875)));font-weight:var(--forge-typography-body1-font-weight, 400);line-height:var(--forge-typography-body1-line-height, calc(var(--forge-typography-font-size, 1rem) * var(--forge-typography-body-line-height-scale, 1.125)));letter-spacing:var(--forge-typography-body1-letter-spacing, .0357142857em);text-transform:var(--forge-typography-body1-text-transform, inherit);text-decoration:var(--forge-typography-body1-text-decoration, inherit);padding-inline:var(--forge-spacing-xxxsmall, 2px)}.text-icon{--forge-icon-color: var(--forge-theme-text-low, rgba(0, 0, 0, .38));--forge-icon-size: 18px}.visually-hidden{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.current{color:var(--forge-theme-text-high, rgba(0, 0, 0, .87))}.current:after{display:none}';var ht=Object.defineProperty,$=(s,o,t,a)=>{for(var e=void 0,n=s.length-1,c;n>=0;n--)(c=s[n])&&(e=c(o,t,e)||e);return e&&ht(o,t,e),e},W,F;const J="forge-breadcrumb-item";var v,X;const y=class y extends(F=P,W=S,F){constructor(){super();E(this,v);this.current=!1,this.home=!1,this._isMenuItem=!1,this._internals=this.attachInternals()}connectedCallback(){super.connectedCallback(),m(this,this._internals,{role:"listitem"}),i(this,v,X).call(this)}willUpdate(t){t.has("current")&&m(this,this._internals,{ariaCurrent:this.current?"page":null})}render(){const t=!this.href||this.current;let a;return this._isMenuItem?a=l`
+        <forge-list-item class="list-item" role="presentation">
+          <slot name="start" slot="start"></slot>
+          ${this.home?l`<forge-icon slot="start" name="home"></forge-icon>`:g}
+          ${t?l`<span class="text"><slot></slot></span>`:l`<a href=${z(this.href)}><slot></slot></a>`}
+        </forge-list-item>
+      `:t?a=l`
+        ${this.home?l` <forge-icon class="text-icon" name="home"></forge-icon> `:l`
+              <div class="start">
+                <slot name="start"></slot>
+                <span class="text"><slot></slot></span>
+              </div>
+            `}
+      `:this.home?a=l`
+        <forge-icon-button part="button" class="icon-button" id="button" type="button" dense shape="squared">
+          <a href=${z(this.href)}>
+            <forge-icon name="home"></forge-icon>
+          </a>
+        </forge-icon-button>
+        <forge-tooltip anchor="button" type="label" placement="bottom"><slot>Home</slot></forge-tooltip>
+      `:a=l`
+        <div class="start">
+          <slot name="start"></slot>
+        </div>
+        <forge-button part="button" class="button" type="button" dense>
+          <a href=${z(this.href)}>
+            <slot></slot>
+          </a>
+        </forge-button>
+      `,l`<div part="root" class="${k({"forge-breadcrumb-item":!0,current:this.current,"menu-item":this._isMenuItem})}">${a}</div>`}};v=new WeakSet,X=function(){this._isMenuItem=!!this.closest("forge-breadcrumb-overflow-menu")},y.styles=A(ft),y[W]=J,B.define([st]);let f=y;$([x()],f.prototype,"href");$([x({type:Boolean})],f.prototype,"current");$([x({type:Boolean})],f.prototype,"home");$([w()],f.prototype,"_isMenuItem");C(J,f);const dt=':host{display:inline-block}:host([hidden]){display:none}.forge-breadcrumb-overflow-menu{--_breadcrumb-separator-content: var(--forge-breadcrumb-separator-content, "/");--_breadcrumb-separator-padding: var(--forge-breadcrumb-separator-padding, var(--forge-spacing-xxsmall, 4px))}.forge-breadcrumb-overflow-menu{box-sizing:border-box;display:flex;align-items:center}.forge-breadcrumb-overflow-menu:after{content:var(--_breadcrumb-separator-content)/"";color:var(--forge-theme-text-medium, rgba(0, 0, 0, .6));padding-inline:var(--_breadcrumb-separator-padding)}.button{color:var(--forge-theme-primary, #3f51b5)}.popover::part(surface){margin-inline-start:calc(var(--forge-spacing-small, 12px) * -1)}.list{--_list-spacing: var(--forge-list-spacing, 0);--_list-container-color: var(--forge-list-container-color, transparent);--_list-column-width: var(--forge-list-column-width, 256px);--_list-column-spacing: var(--forge-list-column-spacing, var(--_list-spacing));--_list-navlist-spacing: var(--forge-list-navlist-spacing, var(--forge-spacing-xxsmall, 4px));--_list-navlist-margin: var(--forge-list-navlist-margin, var(--forge-spacing-xxsmall, 4px) var(--forge-spacing-xsmall, 8px));--_list-navlist-height: var(--forge-list-navlist-height, 40px);--_list-navlist-padding: var(--forge-list-navlist-padding, 0 var(--forge-spacing-xsmall, 8px));--_list-navlist-shape: var(--forge-list-navlist-shape, calc(var(--forge-shape-medium, 4px) * var(--forge-shape-factor, 1)));--_list-navlist-font-size: var(--forge-list-navlist-font-size, calc(var(--forge-typography-font-size, 1rem) * .875));--_list-navlist-font-weight: var(--forge-list-navlist-font-weight, 500);outline:none;background-color:var(--_list-container-color);margin:0;border-radius:inherit;min-width:inherit;display:grid;gap:var(--_list-spacing);min-width:0}';var gt=Object.defineProperty,bt=(s,o,t,a)=>{for(var e=void 0,n=s.length-1,c;n>=0;n--)(c=s[n])&&(e=c(o,t,e)||e);return e&&gt(o,t,e),e},G,H;const Z="forge-breadcrumb-overflow-menu",T="trigger",mt="More breadcrumbs",_=class _ extends(H=P,G=S,H){constructor(){super(),this._internals=this.attachInternals()}connectedCallback(){super.connectedCallback(),m(this,this._internals,{role:"listitem"})}render(){return l`
+      <div part="root" class="forge-breadcrumb-overflow-menu">
+        <forge-icon-button part="button" class="button" id=${T} type="button" dense shape="squared">
+          <forge-icon name="more_horiz"></forge-icon>
+        </forge-icon-button>
+        <forge-tooltip anchor=${T} type="label" placement="bottom"><slot name="tooltip">${mt}</slot></forge-tooltip>
+        <forge-popover
+          part="popover"
+          class="popover"
+          anchor=${T}
+          placement="bottom-start"
+          preset="list"
+          @click=${this._handleClick}
+          @focusout=${this._handleFocusOut}>
+          <div class="list" role="list"><slot></slot></div>
+        </forge-popover>
+      </div>
+    `}_handleClick(o){o.composedPath().some(t=>t instanceof HTMLAnchorElement)&&(this._popover.open=!1)}_handleFocusOut(o){const{relatedTarget:t}=o;t instanceof Node&&this.contains(t)||(this._popover.open=!1)}};_.styles=A(dt),_[G]=Z,B.define([at]);let u=_;bt([j("forge-popover",!0)],u.prototype,"_popover");C(Z,u);
