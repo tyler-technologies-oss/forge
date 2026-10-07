@@ -3,6 +3,7 @@ import '@tylertech/forge/date-time-field';
 import '@tylertech/forge/date-time-picker';
 import '@tylertech/forge/button';
 import '@tylertech/forge/label-value';
+import './date-time-field.scss';
 import type { IDateTimeFieldChangeEventData, IDateTimeFieldComponent } from '@tylertech/forge/date-time-field';
 import type { IDateTimePickerComponent } from '@tylertech/forge/date-time-picker';
 import type { ISelectComponent } from '@tylertech/forge/select';
