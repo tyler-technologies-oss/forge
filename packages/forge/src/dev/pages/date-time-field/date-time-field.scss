@@ -1,0 +1,5 @@
+// Size each endpoint input to its format (`size`) instead of forge-field's full width.
+forge-date-time-field input {
+  inline-size: auto;
+  min-inline-size: 0;
+}
