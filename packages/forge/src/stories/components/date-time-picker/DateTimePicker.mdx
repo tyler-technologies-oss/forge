@@ -6,7 +6,7 @@ import * as DateTimePickerStories from './DateTimePicker.stories';
 
 <Title />
 
-The date time picker is an inline composite that combines a calendar with a time-picking UI so users can choose a date and a
+The date time picker is a composite that combines a calendar with a time-picking UI so users can choose a date and a
 time together. It can pick a single date+time, a time range, a set of bookable time slots, or a full date range, and it emits a
 single value shaped by the `value-mode` attribute (a `Temporal.PlainDateTime`, an ISO string, or a `Date`).
 
@@ -49,9 +49,12 @@ side-by-side calendar/time layout with `orientation="horizontal"`.
 
 <Canvas of={DateTimePickerStories.Vertical} />
 
-## Range Selection
+## With a date time field
 
-In `date-mode="range"` and `time-mode="range"`, the value updates as soon as each selection is made. There is no Apply step.
+Pair the picker with a [`forge-date-time-field`](?path=/docs/components-date-time-field--docs) by setting the field's `picker` attribute
+to the picker's `id`. The field then hosts the picker in a `forge-popover` anchored to its text field, and selections are committed to
+the field as soon as they are made. On phone-sized viewports (599px and narrower) the anchored picker opens as a full-height
+`forge-bottom-sheet` with a horizontal preset rail, a single calendar, and stacked time inputs.
 
 ## API
 

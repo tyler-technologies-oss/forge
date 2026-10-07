@@ -7,6 +7,7 @@ import { Temporal } from 'temporal-polyfill';
 import { LiveAnnouncer } from '@tylertech/forge-core';
 import './index.js';
 import {
+  buildAnnouncement,
   buildSlotsFromRange,
   coerceValue,
   computePreset,
@@ -1678,5 +1679,242 @@ describe('DateTimePicker / review fixes', () => {
     const root = el.shadowRoot!.querySelector('[part="root"]') as HTMLElement;
     expect(root.getAttribute('role')).toBe('dialog');
     expect(root.getAttribute('aria-label')).toBeTruthy();
+  });
+});
+
+describe('DateTimePicker / review round 2', () => {
+  function dispatchCalendarSelect(el: IDateTimePickerComponent, detail: Partial<ICalendarDateSelectEventData>): void {
+    el.shadowRoot!.querySelector('forge-calendar')!.dispatchEvent(
+      new CustomEvent('forge-calendar-date-select', {
+        detail: { selected: false, type: 'date', ...detail },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  function getPopover(el: IDateTimePickerComponent): HTMLElement & { open: boolean; anchorElement: HTMLElement | null } {
+    return el.shadowRoot!.querySelector('forge-popover') as HTMLElement & { open: boolean; anchorElement: HTMLElement | null };
+  }
+
+  it('should announce both dates and times when a range spans multiple days', () => {
+    const text = buildAnnouncement({ from: new Date(2026, 5, 1, 9, 0), to: new Date(2026, 5, 7, 17, 0) }, 'en-US', false, false);
+    expect(text).toMatch(/^Selected Monday, June 1, 2026 at 0?9:00\sAM to Sunday, June 7, 2026 at 0?5:00\sPM\.$/);
+  });
+
+  it('should announce one date with a time range when a range falls on the same day', () => {
+    const text = buildAnnouncement({ from: new Date(2026, 5, 1, 9, 0), to: new Date(2026, 5, 1, 17, 0) }, 'en-US', false, false);
+    expect(text).toMatch(/^Selected Monday, June 1, 2026 from 0?9:00\sAM to 0?5:00\sPM\.$/);
+  });
+
+  it('should anchor the popover to the element referenced by the anchor attribute', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-anchor"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    const popover = getPopover(el);
+    expect(popover).not.toBeNull();
+    expect(popover.anchorElement).toBe(screen.container.querySelector('#dtp-anchor'));
+    expect(el.shadowRoot!.querySelector('[part="root"]')!.getAttribute('role')).toBe('dialog');
+  });
+
+  it('should render as a popover and anchor once a late anchor element is added', async () => {
+    const screen = render(html`<div><forge-date-time-picker anchor="dtp-late-anchor"></forge-date-time-picker></div>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(getPopover(el)).not.toBeNull();
+
+    const button = document.createElement('button');
+    button.id = 'dtp-late-anchor';
+    screen.container.firstElementChild!.append(button);
+    el.open = true;
+    await ready(el);
+
+    expect(getPopover(el).anchorElement).toBe(button);
+  });
+
+  it('should keep the calendar from taking focus when focus is called while an anchored picker is closed', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-anchor"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.focus();
+    await ready(el);
+    el.open = true;
+    await ready(el);
+
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as ICalendarComponent;
+    expect(calendar.preventFocus).toBe(true);
+  });
+
+  it('should reflect name to an attribute when set as a property', async () => {
+    const screen = render(html`<forge-date-time-picker></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    el.name = 'appointment';
+    await ready(el);
+
+    expect(el.getAttribute('name')).toBe('appointment');
+  });
+
+  it('should be valid when disabled even if required and empty', async () => {
+    const screen = render(html`<forge-date-time-picker required></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    expect(el.checkValidity()).toBe(false);
+
+    el.disabled = true;
+    await ready(el);
+
+    expect(el.checkValidity()).toBe(true);
+  });
+
+  it('should prefer an explicit anchorElement over the anchor attribute', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-anchor-a">A</button>
+        <button id="dtp-anchor-b">B</button>
+        <forge-date-time-picker anchor="dtp-anchor-a"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    const explicit = screen.container.querySelector('#dtp-anchor-b') as HTMLElement;
+    el.anchorElement = explicit;
+    await ready(el);
+
+    expect(getPopover(el).anchorElement).toBe(explicit);
+  });
+
+  it('should light dismiss on outside clicks but not anchor clicks when anchored by id', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-anchor"></forge-date-time-picker>
+        <div id="outside" style="position: fixed; right: 0; bottom: 0; width: 20px; height: 20px;"></div>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    el.open = true;
+    await ready(el);
+    const events: string[] = [];
+    el.addEventListener('forge-date-time-picker-close', () => events.push('close'));
+
+    await userEvent.click(screen.container.querySelector('#dtp-anchor')!);
+    await ready(el);
+    expect(el.open).toBe(true);
+
+    await userEvent.click(screen.container.querySelector('#outside')!);
+    await vi.waitFor(() => expect(el.open).toBe(false));
+    expect(events).toEqual(['close']);
+  });
+
+  it('should emit the shared time before the range is complete when date-mode is range and time-mode is single', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="single" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    el.shadowRoot!.querySelector('forge-time-picker')!.dispatchEvent(new CustomEvent('forge-time-picker-change', { detail: '10:30', bubbles: true }));
+    await ready(el);
+    const fromDate = new Date(2026, 5, 9);
+    dispatchCalendarSelect(el, { date: fromDate, range: { from: fromDate }, rangeSelectionState: 'from' } as Partial<ICalendarDateSelectEventData>);
+    await ready(el);
+
+    const last = events.at(-1)!;
+    expect(last.complete).toBe(false);
+    expect(last.time).toBe('10:30');
+    expect(last.from).toBeNull();
+    expect(last.to).toBeNull();
+  });
+
+  it('should move focus to the selected calendar date when focus is called', async () => {
+    const screen = render(html`<forge-date-time-picker value-mode="date" .value=${new Date(2026, 5, 12, 9, 0)}></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.focus();
+
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as ICalendarComponent;
+    expect(el.shadowRoot!.activeElement).toBe(calendar);
+    const focusedDay = calendar.shadowRoot!.activeElement as HTMLElement;
+    expect(focusedDay).not.toBeNull();
+    expect(focusedDay.textContent?.trim()).toBe('12');
+  });
+
+  it('should move focus into the calendar when focus is called right after opening the popover', async () => {
+    const screen = render(html`
+      <div>
+        <button id="dtp-anchor">Open</button>
+        <forge-date-time-picker anchor="dtp-anchor"></forge-date-time-picker>
+      </div>
+    `);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    el.open = true;
+    el.focus();
+
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as ICalendarComponent;
+    await vi.waitFor(() => expect(calendar.shadowRoot!.activeElement).not.toBeNull());
+    expect(el.shadowRoot!.activeElement).toBe(calendar);
+  });
+
+  it('should not move the calendar back to the start month when only the end date changes', async () => {
+    const screen = render(html`<forge-date-time-picker date-mode="range" time-mode="range" value-mode="date"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+    el.value = { from: new Date(2026, 0, 5, 9, 0), to: new Date(2026, 2, 10, 17, 0) } as IDateTimePickerRange;
+    await ready(el);
+    const calendar = el.shadowRoot!.querySelector('forge-calendar') as ICalendarComponent;
+    expect(calendar.month).toBe(0);
+
+    calendar.goToDate(new Date(2026, 2, 10));
+    el.value = { from: new Date(2026, 0, 5, 9, 0), to: new Date(2026, 2, 12, 17, 0) } as IDateTimePickerRange;
+    await ready(el);
+    expect(calendar.month).toBe(2);
+
+    el.value = { from: new Date(2026, 1, 2, 9, 0), to: new Date(2026, 2, 12, 17, 0) } as IDateTimePickerRange;
+    await ready(el);
+    expect(calendar.month).toBe(1);
+  });
+
+  it('should expose slots as options of the listbox without a presentational wrapper', async () => {
+    const screen = render(html`<forge-date-time-picker time-mode="slots" min-time="09:00" max-time="10:00" step="30"></forge-date-time-picker>`);
+    const el = getEl(screen.container);
+    await ready(el);
+
+    expect(el.shadowRoot!.querySelector('[role="presentation"]')).toBeNull();
+    await expect.element(page.getByRole('listbox', { name: 'Available times' }).getByRole('option')).toHaveLength(3);
+    await expect(el).toBeAccessible();
+  });
+
+  it('should select a slot through the delegated list click handler', async () => {
+    const screen = render(
+      html`<forge-date-time-picker
+        time-mode="slots"
+        value-mode="date"
+        min-time="09:00"
+        max-time="10:00"
+        step="30"
+        .value=${new Date(2026, 5, 12)}></forge-date-time-picker>`
+    );
+    const el = getEl(screen.container);
+    await ready(el);
+    const events = captureChanges(el);
+
+    await userEvent.click(getSlotButton(el, '10:00 AM'));
+    await ready(el);
+
+    expect(events.at(-1)?.source).toBe('slot');
+    expect((el.value as Date).getHours()).toBe(10);
   });
 });

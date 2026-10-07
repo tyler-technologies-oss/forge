@@ -4,7 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
-import { toggleState } from '../core/utils/utils.js';
+import { locateElementById, toggleState } from '../core/utils/utils.js';
 import type { IPopoverToggleEventData } from '../popover/popover-constants.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
 import { isSameDate } from '../core/utils/date-utils.js';
@@ -56,6 +56,9 @@ import styles from './date-time-picker.scss';
 const TIME_MODES: readonly TimeMode[] = ['single', 'range', 'slots'];
 
 const CALENDAR_SECTION_HEIGHT_PROPERTY = '--_calendar-section-height';
+
+const clickedButton = (event: Event): (HTMLElement & { value: string }) | null =>
+  (event.target as HTMLElement).closest<HTMLElement & { value: string }>('forge-button');
 
 const PRESET_DEFS: ReadonlyArray<{ id: DateRangePresetId; label: string }> = [
   { id: 'today', label: 'Today' },
@@ -122,8 +125,8 @@ export const DATE_TIME_PICKER_TAG_NAME: keyof HTMLElementTagNameMap = DATE_TIME_
 /**
  * @tag forge-date-time-picker
  *
- * @summary An inline composite that combines a calendar with a time-picking UI
- * (single time, time range, or preset time slots). Form-associated and WCAG 2.1 AA.
+ * @summary A composite calendar and time picker (single time, time range, or time slots). Renders inline,
+ * or anchored in a `forge-popover` (a bottom sheet on small screens) when `anchor`/`anchorElement` is set. Form-associated.
  *
  * @fires {CustomEvent<void>} forge-date-time-picker-open - Fires when the overlay opens.
  * @fires {CustomEvent<void>} forge-date-time-picker-close - Fires when the overlay closes.
@@ -229,17 +232,14 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     if (valuesEqual(next, this.#value)) {
       return;
     }
+    const previousFromDate = this.#activeFromDate;
     this.#value = next;
     this.#syncFromValue(next);
-    this.#revealValueDate = this.#activeFromDate != null;
+    this.#revealValueDate ||= !!this.#activeFromDate && !isSameDate(previousFromDate, this.#activeFromDate);
     this.requestUpdate();
   }
 
-  /**
-   * In `date-mode=range` + non-range time the UI exposes a single shared time input, so an asymmetric
-   * incoming range can't be represented and would silently collapse on the next recompute. Normalize it
-   * up front to the start endpoint's time-of-day so the value stays consistent before and after edits.
-   */
+  /** A single shared time input can't represent an asymmetric range, so align `to` with `from`'s time. */
   #normalizeRangeTime(value: DateTimePickerValue): DateTimePickerValue {
     if (this.dateMode === 'range' && this.timeMode !== 'range' && isRange(value)) {
       const to = new Date(value.to);
@@ -253,7 +253,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
    * Form field name.
    * @attribute name
    */
-  @property() public name = '';
+  @property({ reflect: true }) public name = '';
 
   /**
    * Disables all interactive children.
@@ -401,10 +401,31 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
    */
   @property({ attribute: 'to-label' }) public toLabel = 'End time';
 
+  /**
+   * Explicit time slots for `time-mode="slots"`. When unset or empty, slots are generated from `min-time`, `max-time`, and `step`.
+   */
   @property({ attribute: false }) public slots: ITimeSlot[] | undefined;
+
+  /**
+   * Dates that cannot be selected in the calendar.
+   * @default []
+   */
   @property({ attribute: false }) public disabledDates: Date[] = [];
+
+  /**
+   * Days of the week (0 = Sunday) that cannot be selected in the calendar.
+   * @default []
+   */
   @property({ attribute: false }) public disabledDaysOfWeek: DayOfWeek[] = [];
+
+  /**
+   * Called for each calendar day; return `true` to disable that day.
+   */
   @property({ attribute: false }) public disableDayCallback: CalendarDisabledDateBuilder | undefined;
+
+  /**
+   * Called with the selected date and each slot; return `true` to mark that slot unavailable.
+   */
   @property({ attribute: false }) public disableSlotCallback: DisableSlotCallback | undefined;
 
   /** Whether `date`'s time of day matches an available (non-disabled) slot on that date. */
@@ -423,6 +444,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return !day || !this.disableSlotCallback?.(day, slot);
   }
 
+  /**
+   * Element to anchor the picker to. When set, the picker renders in a `forge-popover` (a bottom sheet on
+   * small screens) instead of inline. Pointer presses on the anchor (or its shadow host) don't light-dismiss.
+   * Takes precedence over `anchor`.
+   * @default null
+   */
   @property({ attribute: false })
   public get anchorElement(): HTMLElement | null {
     return this.#anchorElement;
@@ -432,25 +459,51 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.requestUpdate();
   }
 
+  /**
+   * ID of the element to anchor the picker to, resolved within the picker's own root (document or shadow root).
+   * Ignored when `anchorElement` is set.
+   * @attribute anchor
+   */
   @property() public anchor = '';
+
+  /**
+   * Whether the anchored picker is open. Has no effect when rendered inline.
+   * @attribute open
+   * @default false
+   */
   @property({ type: Boolean }) public open = false;
+
+  /**
+   * Prevents light dismiss (outside clicks and Escape) of the anchored picker.
+   * @attribute persistent
+   * @default false
+   */
   @property({ type: Boolean }) public persistent = false;
+
+  /**
+   * Popover placement relative to the anchor.
+   * @attribute placement
+   * @default 'bottom-start'
+   */
   @property({ attribute: 'placement' }) public placement = 'bottom-start';
 
   /**
-   * When `true` and `date-mode="range"`, renders a quick-range presets sidebar to the left of the calendar
-   * (Today, This week, Next 7 days, This month).
+   * Renders a quick-range presets sidebar (Today, This week, Next 7 days, This month) beside the calendar
+   * when `date-mode="range"` and `time-mode` is not `slots`.
    * @attribute presets
    * @default true
    */
   @property({ type: Boolean }) public presets = true;
 
-  // True when the viewport is phone-sized; an anchored picker then opens as a
-  // full-height bottom sheet instead of a popover. Mirrors Forge's $phone (599px).
+  // Mirrors Forge's $phone breakpoint; anchored pickers open as a bottom sheet.
   @state() private _isPhone = false;
+
+  // Lifts the calendar's prevent-focus once focus() hands keyboard focus to the grid.
+  @state() private _calendarFocusable = false;
 
   #internals: ElementInternals;
   #anchorElement: HTMLElement | null = null;
+  #resolvedAnchor: HTMLElement | null = null;
   #value: DateTimePickerValue = null;
   #activeFromDate: Date | null = null;
   #revealValueDate = false;
@@ -551,6 +604,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
     this.#syncFromValue(this.#value);
     this.#updateFormValueAndValidity();
+    this.#resolveAnchor();
     this.#warmTemporal();
     if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
       this.#phoneMql = window.matchMedia('(max-width: 599px)');
@@ -562,7 +616,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
   }
 
-  /** Lazily loads the Temporal polyfill when `valueMode` needs it, re-rendering once available so the public `value` can resolve. */
+  /** Lazily loads the Temporal polyfill when `valueMode` needs it. */
   #warmTemporal(): void {
     if (this.valueMode !== 'temporal') {
       return;
@@ -570,7 +624,36 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     void ensureTemporal().then(() => this.requestUpdate());
   }
 
+  /** Moves focus to the calendar's selected date (or today), e.g. when a linked field opens the picker from the keyboard. */
+  public override focus(options?: FocusOptions): void {
+    if (this.isUpdatePending) {
+      void this.updateComplete.then(() => this.#focusCalendar(options));
+      return;
+    }
+    this.#focusCalendar(options);
+  }
+
+  #focusCalendar(options?: FocusOptions): void {
+    const calendar = this.shadowRoot?.querySelector<ICalendarComponent>('forge-calendar');
+    if (!calendar) {
+      super.focus(options);
+      return;
+    }
+    if (this.#isAnchored() && !this.open) {
+      super.focus(options);
+      return;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this._calendarFocusable = true;
+    calendar.preventFocus = false;
+    calendar.goToDate(this.#activeFromDate ?? today, true);
+  }
+
   public override willUpdate(changed: PropertyValues<this>): void {
+    if (changed.has('anchor') || (this.anchor && !this.#resolvedAnchor?.isConnected)) {
+      this.#resolveAnchor();
+    }
     this.#handleOpenChange(changed);
     this.#handleTimeModeChange(changed);
     this.#handleLocaleOrFormatChange(changed);
@@ -580,6 +663,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #handleOpenChange(changed: PropertyValues<this>): void {
+    if (changed.has('open')) {
+      this._calendarFocusable = false;
+    }
     if (changed.has('open') && changed.get('open') !== undefined) {
       const eventName = this.open ? DATE_TIME_PICKER_CONSTANTS.events.OPEN : DATE_TIME_PICKER_CONSTANTS.events.CLOSE;
       this.dispatchEvent(new CustomEvent(eventName, { bubbles: true, composed: true }));
@@ -587,18 +673,12 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #handleTimeModeChange(changed: PropertyValues<this>): void {
-    if (changed.has('timeMode') && changed.get('timeMode') !== undefined) {
-      const previousMode = changed.get('timeMode') as TimeMode | undefined;
-      if (previousMode) {
-        this.#value = null;
-        this.#activeFromDate = null;
-        this.#activeToDate = null;
-        this.#activeTime = null;
-        this.#activeFrom = null;
-        this.#activeTo = null;
-        void this.updateComplete.then(() => this.#emitChange('mode-change'));
-      }
+    if (!changed.get('timeMode')) {
+      return;
     }
+    this.#value = null;
+    this.#syncFromValue(null);
+    void this.updateComplete.then(() => this.#emitChange('mode-change'));
   }
 
   #handleLocaleOrFormatChange(changed: PropertyValues<this>): void {
@@ -625,7 +705,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   #handleMinMaxChange(changed: PropertyValues<this>): void {
     if (changed.has('min') || changed.has('max')) {
-      // Out-of-range slot disabling depends on min/max.
       this.#disabledSlotCache = null;
     }
   }
@@ -640,7 +719,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.#updateFormValueAndValidity();
     this.#slotFocusGroup.update();
     this.#observeCalendarSection();
-    toggleState(this.#internals, 'sheet', this._isPhone && !!(this.#anchorElement ?? this.anchor));
+    toggleState(this.#internals, 'sheet', this._isPhone && this.#isAnchored());
     toggleState(this.#internals, 'summary', this.summary);
     toggleState(this.#internals, 'disabled', this.disabled);
     toggleState(this.#internals, 'readonly', this.readonly);
@@ -648,7 +727,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     toggleState(this.#internals, 'horizontal', orientation === 'horizontal');
     toggleState(this.#internals, 'vertical', orientation === 'vertical');
     TIME_MODES.forEach(mode => toggleState(this.#internals, `time-${mode}`, this.timeMode === mode));
-    this.#trackDismissPointer(this.open && !!this.#anchorElement);
+    this.#trackDismissPointer(this.open && !!this.#effectiveAnchor());
     this.#revealCalendarValue();
   }
 
@@ -665,6 +744,19 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.#calendarResizeObserver = null;
     this.#calendarSection = null;
     this.#calendarSectionHost = null;
+  }
+
+  #resolveAnchor(): void {
+    this.#resolvedAnchor = this.anchor ? locateElementById(this, this.anchor) : null;
+  }
+
+  #effectiveAnchor(): HTMLElement | null {
+    return this.#anchorElement ?? this.#resolvedAnchor;
+  }
+
+  // An unresolved `anchor` id still renders overlay mode so the card never flashes inline.
+  #isAnchored(): boolean {
+    return !!this.#effectiveAnchor() || !!this.anchor;
   }
 
   /** Tracks the calendar section's height so a side-by-side slot list can match it. */
@@ -688,15 +780,10 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   public override render(): TemplateResult {
-    const anchored = !!(this.#anchorElement ?? this.anchor);
+    const anchor = this.#effectiveAnchor();
+    const anchored = this.#isAnchored();
     if (anchored && this._isPhone) {
-      // A popover can't fit beside the field on a phone — present the picker as a
-      // full-height bottom sheet that slides up, with backdrop/swipe-down dismiss.
-      // Use `inline-modal` (not `modal`): a native `showModal()` dialog makes everything
-      // outside its subtree inert, which silently disables the time-picker's dropdown popover
-      // (it renders at document.body, outside the sheet) so taps fall through and dismiss it.
-      // `inline-modal` keeps the scrim + aria-modal but uses `dialog.show()`, leaving the
-      // top-layer dropdown interactive.
+      // inline-modal, not modal: showModal() would make the body-level time dropdown inert.
       return html`
         <forge-bottom-sheet mode="inline-modal" fullscreen ?open=${this.open} ?persistent=${this.persistent} @forge-bottom-sheet-close=${this.#onLightDismiss}>
           ${this.#renderCard()}
@@ -711,8 +798,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
           anchor-accessibility="none"
           .placement=${this.placement}
           .persistent=${this.persistent}
-          .anchorElement=${this.#anchorElement}
-          anchor=${ifDefined(this.anchor || undefined)}
+          .anchorElement=${anchor}
           .open=${this.open}
           @forge-popover-beforetoggle=${this.#onPopoverBeforeToggle}
           @forge-popover-toggle=${this.#onPopoverToggle}>
@@ -723,8 +809,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return this.#renderCard();
   }
 
-  // Clicks inside the anchor's host (e.g. the text field around a linked field's inputs) aren't
-  // outside clicks, even though the anchor itself is just an alignment target beside the inputs.
+  // Presses inside the anchor's shadow host (e.g. a linked field's text field) aren't outside clicks.
   #onPopoverBeforeToggle = (event: CustomEvent<IPopoverToggleEventData>): void => {
     const host = this.#dismissExemptElement();
     if (event.detail.newState === 'closed' && host && this.#dismissPointerPath.includes(host)) {
@@ -733,7 +818,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   };
 
   #dismissExemptElement(): HTMLElement | null {
-    const anchor = this.#anchorElement;
+    const anchor = this.#effectiveAnchor();
     if (!anchor) {
       return null;
     }
@@ -774,7 +859,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
 
   #renderCard(): TemplateResult {
     const resolvedOrientation = this.#resolveOrientation();
-    const overlayMode = !!(this.#anchorElement ?? this.anchor);
+    const overlayMode = this.#isAnchored();
     const sheet = this._isPhone && overlayMode;
     const content = html`${this.#renderHeader()} ${this.#renderBody(resolvedOrientation)} ${this.#renderDateActions()} ${this.#renderFooter()}`;
     const classes = {
@@ -867,7 +952,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
             </forge-button>`
           : nothing}
         ${this.clearButton
-          ? html`<forge-button part="clear-button" ?disabled=${inert} @click=${this.#onClearClick}>
+          ? html`<forge-button part="clear-button" class="clear-button" ?disabled=${inert} @click=${this.#onClearClick}>
               <slot name="clear-button-text">${CALENDAR_CONSTANTS.strings.DEFAULT_CLEAR_BUTTON_TEXT}</slot>
             </forge-button>`
           : nothing}
@@ -925,7 +1010,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     const selectedId = this.#selectedPresetId();
     const inert = this.disabled || this.readonly;
     return html`
-      <div part="presets" class="presets" role="group" aria-label="Quick date ranges">
+      <div part="presets" class="presets" role="group" aria-label="Quick date ranges" @click=${this.#onPresetsClick}>
         ${PRESET_DEFS.map(p => {
           const selected = p.id === selectedId;
           return html`<forge-button
@@ -934,8 +1019,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
             class=${classMap({ preset: true, 'preset--selected': selected })}
             variant=${selected ? 'filled' : 'text'}
             aria-pressed=${selected ? 'true' : 'false'}
-            ?disabled=${inert}
-            @click=${() => this.#onPresetSelect(p.id)}>
+            .value=${p.id}
+            ?disabled=${inert}>
             ${p.label}
           </forge-button>`;
         })}
@@ -943,8 +1028,14 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     `;
   }
 
-  // The preset whose range matches the selected dates, so calendar picks and set values light it up too.
-  // The clicked preset wins when two presets cover the same range.
+  #onPresetsClick = (event: Event): void => {
+    const id = clickedButton(event)?.value as DateRangePresetId | undefined;
+    if (id) {
+      this.#onPresetSelect(id);
+    }
+  };
+
+  // The preset matching the selected dates; the clicked preset wins ties.
   #selectedPresetId(): DateRangePresetId | undefined {
     const from = this.#activeFromDate?.getTime();
     const to = this.#activeToDate?.getTime();
@@ -977,7 +1068,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     this.requestUpdate();
   }
 
-  // A complete date range falls back to min/max time when no time was chosen so the value can resolve.
+  // Lets a complete date range resolve before any time is chosen.
   #defaultMissingTimes(): void {
     const start = this.minTime || (this.allowSeconds ? '00:00:00' : '00:00');
     if (this.timeMode === 'range') {
@@ -988,7 +1079,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     }
   }
 
-  // Externally set values can fall outside the visible month, so navigate the calendar to them.
   #revealCalendarValue(): void {
     if (!this.#revealValueDate || !this.#activeFromDate) {
       return;
@@ -1008,7 +1098,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
           part="calendar"
           mode=${isDateRange ? 'range' : 'single'}
           ?allow-single-date-range=${isDateRange}
-          prevent-focus
+          ?prevent-focus=${!this._calendarFocusable}
           ?disabled=${this.disabled}
           ?readonly=${this.readonly}
           .showHeader=${this.showHeader}
@@ -1113,17 +1203,16 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         aria-label="Available times"
         aria-orientation="vertical"
         @keydown=${this.#onSlotListKeydown}
+        @click=${this.#onSlotListClick}
         ${focusGroup(this.#slotFocusGroup)}>
-        <div class="slot-list-inner" role="presentation">${list.map((slot, index) => this.#renderSlot(slot, disabledMap[index], labelFmt))}</div>
+        <div class="slot-list-inner">${list.map((slot, index) => this.#renderSlot(slot, disabledMap[index], labelFmt))}</div>
       </div>
     `;
   }
 
   #renderSlot(slot: ITimeSlot, slotIsDisabled: boolean, labelFmt: Intl.DateTimeFormat): TemplateResult {
     const selected = this.#activeTime === slot.value;
-    // Per the ARIA listbox pattern, an unavailable option stays perceivable and focusable
-    // (aria-disabled), so it is NOT natively disabled — only the whole-component disabled/readonly
-    // states remove the buttons from the tab order entirely.
+    // Unavailable options stay focusable via aria-disabled, per the listbox pattern.
     return html`
       <forge-button
         type="button"
@@ -1139,8 +1228,8 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
         aria-selected=${String(selected)}
         aria-disabled=${String(slotIsDisabled)}
         tabindex="-1"
-        ?disabled=${this.disabled || this.readonly}
-        @click=${() => this.#onSlotSelect(slot)}>
+        .value=${slot.value}
+        ?disabled=${this.disabled || this.readonly}>
         ${slot.label ?? this.#formatSlotLabel(slot.value, labelFmt)}
       </forge-button>
     `;
@@ -1192,11 +1281,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return !!dt && (this.#beforeMin(dt, this.min) || this.#afterMax(dt, this.max));
   }
 
-  /**
-   * Clamp for the embedded time-picker's lower bound: the `min` datetime's time-of-day when the
-   * endpoint falls on `min`'s calendar day, otherwise unclamped. `minTime`/`maxTime` govern slot
-   * generation only and intentionally do NOT constrain the free-entry time inputs.
-   */
+  /** `min`'s time-of-day when the endpoint is on `min`'s day; `minTime`/`maxTime` only drive slots. */
   #effectiveMinTime(endpointDate: Date | null): string | undefined {
     const min = this.#asDate(this.min);
     if (!min || !endpointDate || !isSameDate(min, endpointDate)) {
@@ -1205,7 +1290,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
     return timeFromDate(min, this.allowSeconds) ?? undefined;
   }
 
-  /** Clamp for the embedded time-picker's upper bound: the `max` datetime's time-of-day on `max`'s calendar day, otherwise unclamped. */
+  /** `max`'s time-of-day when the endpoint is on `max`'s day. */
   #effectiveMaxTime(endpointDate: Date | null): string | undefined {
     const max = this.#asDate(this.max);
     if (!max || !endpointDate || !isSameDate(max, endpointDate)) {
@@ -1277,6 +1362,14 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       this.#emitChange('time-to');
     }
     this.requestUpdate();
+  };
+
+  #onSlotListClick = (event: Event): void => {
+    const value = clickedButton(event)?.value;
+    const slot = value ? this.#computedSlots().find(candidate => candidate.value === value) : undefined;
+    if (slot) {
+      this.#onSlotSelect(slot);
+    }
   };
 
   #onSlotSelect(slot: ITimeSlot): void {
@@ -1396,8 +1489,6 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       return input;
     }
     if (typeof input === 'string' && input) {
-      // Parse via the shared helper so a date-only `min`/`max` string (e.g. "2026-06-29") is treated
-      // as local midnight, matching the local wall-clock values it's compared against.
       return parseMaybeDate(input);
     }
     return null;
@@ -1409,7 +1500,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #updateValidity(): void {
-    if (!this.required && !this.#hasValueConstraintViolation()) {
+    if (this.disabled || (!this.required && !this.#hasValueConstraintViolation())) {
       this.#internals.setValidity({});
       return;
     }
@@ -1494,9 +1585,9 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
       value: toPublicValue(this.#value, this.valueMode, this.allowSeconds),
       date: this.#activeFromDate,
       dateTo: this.dateMode === 'range' ? this.#activeToDate : null,
-      time: this.#isRangeValue() ? null : this.#activeTime,
-      from: this.#isRangeValue() ? this.#activeFrom : null,
-      to: this.#isRangeValue() ? this.#activeTo : null,
+      time: this.timeMode === 'range' ? null : this.#activeTime,
+      from: this.timeMode === 'range' ? this.#activeFrom : null,
+      to: this.timeMode === 'range' ? this.#activeTo : null,
       source,
       complete: this.#isComplete()
     };
@@ -1511,9 +1602,7 @@ export class DateTimePickerComponent extends BaseLitElement implements IDateTime
   }
 
   #announce(): void {
-    // An incomplete selection (e.g. a date picked before a time) resolves to a null value but is
-    // NOT a clear, so it must stay silent. Only announce a genuine clear when a value was previously
-    // announced; otherwise announce the complete selection.
+    // A null value is only a clear if a value was announced before; incomplete selections stay silent.
     if (this.#value == null) {
       if (this.#announcedValue) {
         this.#announcedValue = false;

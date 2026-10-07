@@ -5,6 +5,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { IconRegistry } from '../icon/index.js';
 import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import { toggleState } from '../core/utils/utils.js';
 import { createToggleElement } from '../date-picker/base/base-date-picker-utils.js';
 import { FIELD_CONSTANTS } from '../field/field-constants.js';
 import type { ITextFieldComponent } from '../text-field/text-field.js';
@@ -150,6 +151,13 @@ let errorTextId = 0;
  *
  * @slot - A `forge-text-field` containing the endpoint `<input>` element(s).
  *
+ * @state disabled - Applied when the field is disabled.
+ * @state readonly - Applied when the field is readonly.
+ * @state required - Applied when the field is required.
+ * @state invalid - Applied when the field is showing a validation error.
+ * @state open - Applied when the linked picker is open.
+ * @state range - Applied when the field captures a start/end range.
+ *
  * @attribute {string} [picker] - ID of the linked `forge-date-time-picker` in the same root.
  * @attribute {('single'|'range')} [date-mode='single'] - Whether the field captures a single date or a start/end date range.
  * @attribute {('single'|'range'|'slots')} [time-mode='single'] - Whether the field captures a single time, a same-day start/end time range, or a fixed time slot (booking-style).
@@ -159,7 +167,7 @@ let errorTextId = 0;
  * @attribute {boolean} [readonly=false] - Prevents editing while still allowing focus and form submission.
  * @attribute {boolean} [required=false] - Marks the required parts (see `required-parts`) as required for form validation.
  * @attribute {('both'|'date'|'time')} [required-parts='both'] - Which parts must be filled for the field to be valid when `required`.
- * @attribute {boolean} [open=false] - Reflects and controls whether the linked picker is open.
+ * @attribute {boolean} [open=false] - Controls whether the linked picker is open.
  * @attribute {boolean} [persistent=false] - Forwarded to the linked picker; keeps it open until explicitly dismissed instead of closing on outside interaction.
  * @attribute {string} [locale] - BCP 47 locale used for formatting the duration summary; defaults to the runtime locale.
  * @attribute {boolean} [use-24-hour-time=false] - Displays and parses time in 24-hour format instead of 12-hour with AM/PM.
@@ -190,37 +198,37 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DATE_TIME_FIELD_TAG_NAME;
 
   /** Whether the field captures a single date or a start/end date range. */
-  @property({ attribute: 'date-mode', reflect: true }) public dateMode: DateTimeFieldDateMode = 'single';
+  @property({ attribute: 'date-mode' }) public dateMode: DateTimeFieldDateMode = 'single';
   /** Whether the field captures a single time, a same-day start/end time range, or a fixed time slot (booking-style). */
-  @property({ attribute: 'time-mode', reflect: true }) public timeMode: TimeMode = 'single';
+  @property({ attribute: 'time-mode' }) public timeMode: TimeMode = 'single';
   /** Shape of the public `value`: a `Temporal.PlainDateTime` (default), a local ISO `datetime-local` string, or a native `Date`. */
-  @property({ attribute: 'value-mode', reflect: true }) public valueMode: DateTimePickerValueMode = 'temporal';
+  @property({ attribute: 'value-mode' }) public valueMode: DateTimePickerValueMode = 'temporal';
   /** Form field name used when submitting the owning form. */
   @property({ reflect: true }) public name = '';
   /** Disables the field, its text field, and its linked picker. */
-  @property({ type: Boolean, reflect: true }) public disabled = false;
+  @property({ type: Boolean }) public disabled = false;
   /** Prevents editing while still allowing focus and form submission. */
-  @property({ type: Boolean, reflect: true }) public readonly = false;
+  @property({ type: Boolean }) public readonly = false;
   /** Marks the required parts (see `requiredParts`) as required for form validation. */
-  @property({ type: Boolean, reflect: true }) public required = false;
+  @property({ type: Boolean }) public required = false;
   /** Which parts must be filled for the field to be valid when `required`. */
-  @property({ attribute: 'required-parts', reflect: true }) public requiredParts: DateTimeFieldRequiredParts = 'both';
-  /** Reflects and controls whether the linked picker is open. */
-  @property({ type: Boolean, reflect: true }) public open = false;
+  @property({ attribute: 'required-parts' }) public requiredParts: DateTimeFieldRequiredParts = 'both';
+  /** Controls whether the linked picker is open. */
+  @property({ type: Boolean }) public open = false;
   /** Forwarded to the linked picker; keeps it open until explicitly dismissed instead of closing on outside interaction. */
-  @property({ type: Boolean, reflect: true }) public persistent = false;
+  @property({ type: Boolean }) public persistent = false;
   /** BCP 47 locale used for formatting the duration summary; defaults to the runtime locale. */
-  @property({ reflect: true }) public locale: string | undefined;
+  @property() public locale: string | undefined;
   /** Displays and parses time in 24-hour format instead of 12-hour with AM/PM. */
-  @property({ type: Boolean, attribute: 'use-24-hour-time', reflect: true }) public use24HourTime = false;
+  @property({ type: Boolean, attribute: 'use-24-hour-time' }) public use24HourTime = false;
   /** Adds seconds to the time mask and value. */
-  @property({ type: Boolean, attribute: 'allow-seconds', reflect: true }) public allowSeconds = false;
+  @property({ type: Boolean, attribute: 'allow-seconds' }) public allowSeconds = false;
   /** Shows the format guide while the field is focused or holds text. An input `placeholder` (with a non-inset label) hides it until the user types. */
-  @property({ type: Boolean, attribute: 'show-mask', reflect: true }) public showMask = true;
+  @property({ type: Boolean, attribute: 'show-mask' }) public showMask = true;
   /** Forces the guide to always show when `showMask` is on, even if a `placeholder` is set. */
-  @property({ type: Boolean, attribute: 'persist-mask', reflect: true }) public persistMask = false;
+  @property({ type: Boolean, attribute: 'persist-mask' }) public persistMask = false;
   /** Shows the range duration in the text field's `support-text-end` slot unless the consumer provides one. */
-  @property({ type: Boolean, attribute: 'show-duration', reflect: true }) public showDuration = true;
+  @property({ type: Boolean, attribute: 'show-duration' }) public showDuration = true;
   /** Minimum selectable date/time; forwarded to the linked picker and used for validation. */
   @property({ attribute: 'min' }) public min: Date | string | null = null;
   /** Maximum selectable date/time; forwarded to the linked picker and used for validation. */
@@ -229,7 +237,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   @property({ attribute: 'popover-placement' }) public popoverPlacement: string = DATE_TIME_FIELD_CONSTANTS.defaultValues.POPOVER_PLACEMENT;
 
   /** ID of the linked `forge-date-time-picker` in the same root. */
-  @property({ reflect: true })
+  @property()
   public get picker(): string {
     return this.#pickerIdRef;
   }
@@ -313,7 +321,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   #errorTextEl: HTMLElement | null = null;
   #durationEl: HTMLElement | null = null;
 
-  // A date range with a single time shares the start time, matching the picker's normalization.
+  // Range + single time shares the start time, like the picker.
   #normalizeSharedTime(value: DateTimePickerValue): DateTimePickerValue {
     if (this.dateMode !== 'range' || this.timeMode !== 'single' || !isRange(value)) {
       return value;
@@ -329,7 +337,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   constructor() {
     super();
-    IconRegistry.define(tylIconInsertInvitation);
     this.#internals = this.attachInternals();
   }
 
@@ -394,8 +401,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   public override connectedCallback(): void {
     super.connectedCallback();
-    // Capture whether the author named the group before we sprout our own default name; only on the
-    // first connect, since a reconnect would otherwise mistake our own name for the author's.
+    // Only on first connect, before our own default name exists.
     if (!this.#groupNameResolved) {
       this.#groupNameResolved = true;
       this.#authorNamedGroup = this.hasAttribute('aria-label') || this.hasAttribute('aria-labelledby');
@@ -435,11 +441,10 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return;
     }
     this._focused = true;
-    // Reveal the guide immediately so it's present the moment the field gains focus.
     this.#applyMaskGuide();
   };
 
-  // Focus moving between inputs keeps the field focused; only clear once focus has left the component.
+  // Clear only once focus has left the component.
   #onFocusOut = (): void => {
     requestAnimationFrame(() => {
       if (!this.matches(':focus-within') && this._focused) {
@@ -462,7 +467,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       }
       if (changed.has('disabled')) {
         this.#pickerEl.disabled = this.disabled;
-        // Force-close directly: #setPickerOpen early-returns once the field is disabled.
+        // #setPickerOpen bails when disabled, so close directly.
         if (this.disabled && this._open) {
           this._open = false;
           this.open = false;
@@ -483,8 +488,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   public override updated(changed: PropertyValues<this>): void {
     this.#updateFormValueAndValidity();
-    // A framework can swap the referenced picker out (new element, same id) without this field
-    // disconnecting; re-resolve when the link went stale so the fresh picker gets anchored.
+    // A framework may swap the picker out under the same id.
     if (this.#pickerIdRef && this.#pickerEl && !this.#pickerEl.isConnected) {
       this.#resolvePickerLink();
     }
@@ -495,9 +499,17 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     this.#syncDecorations();
     this.#applyMaskGuide();
+    this.#syncStates();
   }
 
-  // ─── Structure (slotted text field + inputs) ─────────────────────────────
+  #syncStates(): void {
+    toggleState(this.#internals, 'disabled', this.disabled);
+    toggleState(this.#internals, 'readonly', this.readonly);
+    toggleState(this.#internals, 'required', this.required);
+    toggleState(this.#internals, 'invalid', this._invalid);
+    toggleState(this.#internals, 'open', this._open);
+    toggleState(this.#internals, 'range', this.#isRangeValue());
+  }
 
   #onSlotChange = (): void => {
     this.#syncStructure();
@@ -577,7 +589,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#writtenInputAttributes.delete(input);
   }
 
-  // Put back the consumer's value for every attribute the field wrote on an input it no longer manages.
   #restoreInputAttributes(input: HTMLInputElement): void {
     this.#reconcileAuthoredAttributes(input);
     const original = this.#originalInputAttributes.get(input);
@@ -593,8 +604,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     written?.clear();
   }
 
-  // An attribute that no longer holds what the field last wrote was changed by the consumer, so it's
-  // authored from now on and the field leaves it alone.
+  // An attribute changed since our last write is consumer-authored from then on.
   #reconcileAuthoredAttributes(input: HTMLInputElement): void {
     const original = this.#originalInputAttributes.get(input);
     const written = this.#writtenInputAttributes.get(input);
@@ -664,8 +674,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return this.#textField?.popoverTargetElement ?? this.#textField ?? this;
   }
 
-  // Keep the text field, inputs, and field-owned helpers (toggle, separator, error text, duration)
-  // in sync with the field's configuration and state.
   #syncDecorations(): void {
     const textField = this.#textField;
     if (!textField) {
@@ -689,8 +697,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#syncDuration();
   }
 
-  // Forward only the field's own state changes, so a consumer's initial `invalid`/`required`/`disabled`
-  // on the text field isn't reset on every sync.
+  // Forward only our own changes so consumer-set text field state isn't reset.
   #forwardTextFieldState(textField: ITextFieldComponent, prop: 'disabled' | 'required' | 'invalid', value: boolean): void {
     const last = this.#forwardedTextFieldState[prop];
     if (last === undefined ? value : last !== value) {
@@ -727,7 +734,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     const requiredHere = this.required && (kind === 'datetime' || (kind === 'date' ? this.requiredParts !== 'time' : this.requiredParts !== 'date'));
     write('aria-required', requiredHere ? 'true' : null);
-    // Like forge-date-picker, a picker-linked input is a combobox, which is what permits aria-expanded.
+    // A combobox role is what permits aria-expanded.
     const linked = this._pickerLinked;
     if (!authored('role')) {
       write('role', linked ? 'combobox' : null);
@@ -739,8 +746,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     write('aria-describedby', describedBy || null);
   }
 
-  // A single input is labelled by the text field's `<label>`; two inputs can't share it, so each gets
-  // a start/end name (the group carries the field label).
+  // Two inputs can't share the label, so each gets a start/end name.
   #endpointAriaLabel(kind: DateTimeFieldEndpointKind, index: number, count: number): string {
     if (count === 1) {
       return this.#labelText() ? '' : 'Date and time';
@@ -860,8 +866,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  // Name the role=group host from the text field's label so screen readers hear the composite
-  // control's purpose. Skips when the author supplied their own name.
   #updateGroupLabel(): void {
     if (this.#authorNamedGroup) {
       return;
@@ -869,9 +873,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     setDefaultAria(this, this.#internals, { ariaLabel: this.#labelText() || 'Date and time' });
   }
 
-  // ─── Mask guide ──────────────────────────────────────────────────────────
-
-  // An authored placeholder shows only for a non-inset label (an inset label rests as its own placeholder).
+  // An inset label acts as its own placeholder.
   #placeholderActive(): boolean {
     const authored = this.#endpointInputs().some(input => this.#isAuthoredAttribute(input, 'placeholder'));
     return authored && this.#textField?.labelPosition !== 'inset';
@@ -881,7 +883,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return this.showMask && this.persistMask;
   }
 
-  // The guide shows while engaged (focused or holding text), or always when persist-mask pins it.
   #guideVisible(): boolean {
     if (this.#guidePersists()) {
       return true;
@@ -896,7 +897,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
   }
 
   #applyMaskGuide(): void {
-    // Only toggle on an actual change: re-applying mid-typing fights imask's deferred caret update.
+    // Re-applying mid-typing fights imask's deferred caret update.
     const visible = this.#guideVisible();
     for (const entry of this.#masks.values()) {
       if (entry.guide !== visible) {
@@ -906,12 +907,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  // The range separator only makes sense between two visible segments; hide it while both rest empty.
   #hidesRangeSeparator(): boolean {
     return !this.#guideVisible() && !this.#hasSegmentText() && (this.#textField?.labelPosition === 'inset' || this.#placeholderActive());
   }
 
-  // "Text" means a real value or user-typed characters; the guide alone (`_`, separators, spaces) doesn't count.
+  // The mask guide alone doesn't count as text.
   #hasSegmentText(): boolean {
     if (this.#value != null) {
       return true;
@@ -922,8 +922,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     });
   }
 
-  // ─── Link resolution ─────────────────────────────────────────────────────
-
   #resolvePickerLink(): void {
     this.#detachPickerLink();
     if (!this.#pickerIdRef) {
@@ -931,7 +929,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     const el = this.#findPicker();
     if (!el) {
-      // The picker is often a later sibling that connects after this field; retry once the DOM settles.
+      // The picker may connect after this field.
       this.#schedulePickerLinkRetry();
       return;
     }
@@ -973,7 +971,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#pickerEl.addEventListener('forge-date-time-picker-change', this.#onPickerChange);
     this.#pickerEl.addEventListener('forge-date-time-picker-close', this.#onPickerClose);
     this._pickerLinked = true;
-    // Start a freshly-linked pair closed so a reconnected picker can't strand a stale open popover.
+    // Start closed so a reconnected picker can't strand an open popover.
     this._open = false;
     this.open = false;
     this.#pickerEl.open = false;
@@ -981,12 +979,11 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       if (!this.#pickerEl) {
         return;
       }
-      // Anchoring puts the picker in popover mode, aligned to the text field like other Forge pickers.
       this.#pickerEl.anchorElement = this.#popoverTarget();
       this.#pickerEl.placement = this.popoverPlacement;
       this.#pickerEl.persistent = this.persistent;
       this.#warnMismatch();
-      // A forwarded time-mode change resets the picker's value asynchronously, so push ours after it settles.
+      // A forwarded time-mode change resets the picker value async; push ours after.
       this.#syncPickerConfig();
       await this.#pickerEl.updateComplete;
       if (this.#pickerEl) {
@@ -1019,7 +1016,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
     this.#pickerEl.removeEventListener('forge-date-time-picker-change', this.#onPickerChange);
     this.#pickerEl.removeEventListener('forge-date-time-picker-close', this.#onPickerClose);
-    // Dismiss before unlinking so a re-pointed or removed field never strands an open picker.
+    // Close before unlinking so no picker is stranded open.
     this.#pickerEl.open = false;
     this.#pickerEl.anchorElement = null;
     this.#pickerEl = null;
@@ -1046,14 +1043,12 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  // ─── Picker event handlers ───────────────────────────────────────────────
-
   #onPickerChange = (event: Event): void => {
     if (this.disabled || this.readonly) {
       return;
     }
     const detail = (event as CustomEvent<IDateTimePickerChangeEventData>).detail;
-    // A mode-change is the picker resetting its own state after we forwarded config, not a user selection.
+    // mode-change is the picker resetting itself, not a user selection.
     if (detail.source === 'mode-change') {
       return;
     }
@@ -1104,17 +1099,28 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  // ─── Toggle / open ───────────────────────────────────────────────────────
-
   #onToggleClick = (event: Event): void => {
     event.stopPropagation();
     this.#setPickerOpen(!this._open);
   };
 
-  // Keep focus in the input when the toggle is pressed, like forge-date-picker.
+  // Keep focus in the input when the toggle is pressed.
   #onToggleMouseDown = (event: MouseEvent): void => {
     event.preventDefault();
   };
+
+  async #openAndFocusPicker(): Promise<void> {
+    const picker = this.#pickerEl;
+    this.#setPickerOpen(true);
+    if (!picker || !this._open) {
+      return;
+    }
+    await picker.updateComplete;
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    if (this._open && this.#pickerEl === picker) {
+      picker.focus();
+    }
+  }
 
   #setPickerOpen(open: boolean): void {
     if (this.disabled || this.readonly || !this.#pickerEl) {
@@ -1135,8 +1141,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     );
   }
 
-  // ─── Typed input ─────────────────────────────────────────────────────────
-
   #onInputBlur = (event: FocusEvent): void => {
     if (this.#masks.has(event.target as HTMLInputElement)) {
       this.#onTypedInput();
@@ -1145,7 +1149,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
 
   #onTypedKeydown = (event: KeyboardEvent): void => {
     const target = event.target as HTMLInputElement;
-    // An input the current mode doesn't use behaves like a plain input.
     if (!this.#masks.has(target)) {
       return;
     }
@@ -1165,11 +1168,9 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     if (event.key === 'Enter') {
       this.#onTypedInput();
     } else if (event.key === 'ArrowDown' && this._pickerLinked) {
-      // Matches forge-date-picker / forge-select: plain ArrowDown opens the linked picker.
       event.preventDefault();
-      this.#setPickerOpen(true);
+      void this.#openAndFocusPicker();
     } else if ((event.key === 'Backspace' || event.key === 'ArrowLeft') && !this.#hasNavModifier(event)) {
-      // Caret at the start of an input steps back to the end of the previous one.
       if (target.selectionStart === 0 && target.selectionEnd === 0) {
         const prev = this.#adjacentInput(target, -1);
         if (prev) {
@@ -1198,7 +1199,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return !this.disabled && !this.readonly;
   }
 
-  // Modified Backspace/Arrow keys are native word/line-jump shortcuts; don't hijack them.
+  // Modified keys are native word/line jumps.
   #hasNavModifier(event: KeyboardEvent): boolean {
     return event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
   }
@@ -1214,7 +1215,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     input.setSelectionRange(end, end);
   }
 
-  // Masks fire onChange for programmatic sets too; only react to input the user is typing.
+  // Masks also fire for programmatic sets; react only to typing.
   #onMaskChange(input: HTMLInputElement): void {
     if (this.#coercingSegments || !input.matches(':focus')) {
       return;
@@ -1287,7 +1288,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     return entry.kind === 'date' ? { date: text, time: '' } : { date: '', time: text };
   }
 
-  // The start and end date/time strings, filling a single-part end endpoint from the start endpoint.
+  // A single-part end endpoint borrows the missing part from the start.
   #endpointText(): IEndpointText {
     const [first, second] = this.#endpointInputs();
     const kinds = this.#endpointKinds();
@@ -1304,8 +1305,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     };
   }
 
-  // `commitEmpty` keeps the live per-keystroke path from downgrading a complete value to null
-  // mid-edit; blur/Enter/quick keys still commit a clear-out. Only the commit path coerces.
+  // Live typing (`commitEmpty` false) never clears the value or coerces.
   #onTypedInput = (commitEmpty = true): void => {
     this.#pickerPartial = false;
     if (commitEmpty) {
@@ -1350,8 +1350,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   };
 
-  // Normalizes loosely-typed parts to their canonical display before parsing. Writing back to a
-  // mask fires its accept handler, so guard the re-entrant #onTypedInput(false).
+  // Writing a mask re-fires its accept handler, hence the re-entrancy guard.
   #coerceTypedSegments(): void {
     if (this.#coercingSegments) {
       return;
@@ -1380,8 +1379,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       this.#coercingSegments = false;
     }
   }
-
-  // ─── Masks ────────────────────────────────────────────────────────────────
 
   #syncMasks(): void {
     const kinds = this.#endpointKinds();
@@ -1413,7 +1410,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#syncMaskDisplay();
   }
 
-  // `force` writes focused inputs too; picker selections happen while the input keeps focus.
+  // `force` also writes focused inputs, for picker selections.
   #syncMaskDisplay(force = false): void {
     const set = (input: HTMLInputElement | undefined, text: string): void => {
       const mask = input && this.#masks.get(input)?.mask;
@@ -1449,7 +1446,6 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     }
   }
 
-  // Shows an incomplete picker selection (e.g. a range start before its end) in the inputs.
   #syncPartialDisplay({ date, dateTo, time, from, to }: IDateTimePickerChangeEventData): void {
     const [first, second] = this.#endpointInputs();
     const kinds = this.#endpointKinds();
@@ -1485,25 +1481,26 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
     this.#masks.clear();
   }
 
-  // ─── Form value + validity ────────────────────────────────────────────────
-
   #updateFormValueAndValidity(): void {
     applyFormValue(this.#internals, this.name, this.#value);
     this.#updateValidity();
   }
 
   #updateValidity(): void {
+    if (this.disabled) {
+      this.#internals.setValidity({});
+      return;
+    }
     const flags: ValidityStateFlags = {};
     let message = '';
     let anchor: HTMLInputElement | undefined;
     const [first, second] = this.#endpointInputs();
     const kinds = this.#endpointKinds();
-    // Which input holds each part: a date-only or time-only end endpoint shares the other part with the start.
+    // A date-only or time-only end endpoint shares the other part with the start.
     const endDateInput = kinds[1] === 'time' ? first : (second ?? first);
     const endTimeInput = kinds[1] === 'date' ? first : (second ?? first);
     if (this.required) {
       const missingDate = this.requiredParts !== 'time' && (this.dateMode === 'range' ? !this.#hasFromDate || !this.#hasToDate : !this.#hasDate);
-      // Time presence follows the time axis: from/to exist only in time-mode=range.
       const missingTime = this.requiredParts !== 'date' && (this.timeMode === 'range' ? !this.#hasFrom || !this.#hasTo : !this.#hasTime);
       if (missingDate || missingTime) {
         flags.valueMissing = true;
@@ -1511,7 +1508,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
         anchor = missingDate ? (!this.#hasFromDate ? first : endDateInput) : this.timeMode === 'range' && this.#hasFrom ? endTimeInput : first;
       }
     }
-    // Typed content that doesn't resolve to a complete value is malformed input, like native datetime-local.
+    // Incomplete typed text is badInput, like native datetime-local.
     if (!flags.valueMissing && this.#value == null && !this.#pickerPartial && this.#hasSegmentText()) {
       flags.badInput = true;
       message ||= 'Please enter a complete date and time.';
@@ -1540,7 +1537,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       this.#internals.setValidity({});
       return;
     }
-    // setValidity throws for an anchor outside this element (e.g. an input a framework just swapped out).
+    // setValidity throws for an anchor outside this element.
     const connectedAnchor = [anchor, first].find(candidate => candidate && this.contains(candidate));
     this.#internals.setValidity(flags, message, connectedAnchor);
   }
@@ -1585,7 +1582,7 @@ export class DateTimeFieldComponent extends BaseLitElement implements IDateTimeF
       return Number.isNaN(input.getTime()) ? null : input;
     }
     if (typeof input === 'string' && input) {
-      // A date-only min/max string is local midnight, matching the local wall-clock values it's compared against.
+      // Date-only strings parse as local midnight.
       return parseMaybeDate(input);
     }
     return null;

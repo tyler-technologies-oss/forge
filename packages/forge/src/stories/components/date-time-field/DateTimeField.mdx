@@ -57,30 +57,11 @@ combined with it. If the slotted text field is missing an input for the current 
 ## Standalone (no picker)
 
 When no `picker` is linked, the field renders without a calendar toggle or popover — users type the date and time directly into the
-masked input(s). This is useful when you want masked, validated text entry without the overlay. On blur / <kbd>Enter</kbd>, loosely-typed
+masked input(s). This is useful when you want masked, validated text entry without the popover. On blur / <kbd>Enter</kbd>, loosely-typed
 entries are coerced like the picker: a two-digit year gains a century (`1/2/25` → `01/02/2025`), an hour-only time completes
 (`5` → `05:00 AM`), and out-of-range parts clamp (`02/30/2025` → `02/28/2025`).
 
 <Canvas of={DateTimeFieldStories.Standalone} />
-
-## Removed properties
-
-The field no longer renders its own field chrome, so these properties and attributes were removed. Set them on the slotted
-`forge-text-field` (or its `<input>`) instead:
-
-| Removed | Now set on |
-| --- | --- |
-| `label` | The text field's slotted `<label slot="label">` |
-| `placeholder` | The `<input>`'s `placeholder` attribute |
-| `labelPosition` / `label-position` | `forge-text-field`'s `label-position` |
-| `labelAlignment` / `label-alignment` | `forge-text-field`'s `label-alignment` |
-| `variant` | `forge-text-field`'s `variant` |
-| `density` | `forge-text-field`'s `density` |
-| `shape` | `forge-text-field`'s `shape` |
-| `theme` | `forge-text-field`'s `theme` |
-
-The `label`, `support-text`, and `support-text-end` slots, and all CSS parts, were removed from `forge-date-time-field` for the same
-reason — they belong to the slotted `forge-text-field` now.
 
 ## Elements the field manages for you
 
