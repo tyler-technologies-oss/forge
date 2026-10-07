@@ -1,10 +1,7 @@
 import { provide } from '@lit/context';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, LiveAnnouncer } from '@tylertech/forge-core';
-import { type AnyExtension, type Content, Editor as TipTapEditor } from '@tiptap/core';
+import { type Content, Editor as TipTapEditor } from '@tiptap/core';
 import { Node as ProseMirrorNode } from '@tiptap/pm/model';
-import { Document } from '@tiptap/extension-document';
-import { Text } from '@tiptap/extension-text';
-import { Paragraph } from '@tiptap/extension-paragraph';
 import CharacterCount from '@tiptap/extension-character-count';
 import { CharacterLimit, countCharacters } from './extensions/character-limit.js';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
@@ -25,6 +22,7 @@ import { IRichTextEditorFeature } from './features/rich-text-editor-feature.js';
 import { PasteHandler } from './extensions/paste-handler.js';
 import { MarkdownSerializer } from './extensions/markdown-serializer.js';
 import { sanitizeHTML, sanitizeJSON } from './extensions/sanitize-utils.js';
+import { BASE_EXTENSIONS, dedupeExtensions } from './extensions/feature-extensions.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -36,8 +34,6 @@ export const RICH_TEXT_CONTEXT_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-ri
 
 // Not imported from rich-text-editor.js, which imports this module.
 const WRAPPING_EDITOR_TAG_NAME = 'forge-rich-text-editor';
-
-const DEFAULT_EXTENSIONS: AnyExtension[] = [Document, Text, Paragraph];
 
 /**
  * @tag forge-rich-text-context
@@ -437,7 +433,6 @@ export class RichTextContextComponent extends LitElement {
       // Clear any previous initialization errors
       this._initializationError = null;
 
-      // Features can contain duplicate extensions. Make sure to filter out any duplicates
       const featureExtensions = Array.from(this.#featureInstances).flatMap(feature => feature.extensions);
 
       // CharacterCount supplies the word count. The character limit is enforced by CharacterLimit
@@ -452,9 +447,7 @@ export class RichTextContextComponent extends LitElement {
         allowPasteImages: this.allowPasteImages
       });
 
-      const extensions = [...DEFAULT_EXTENSIONS, characterCountExtension, characterLimitExtension, pasteHandlerExtension, ...featureExtensions].filter(
-        (ext, index, self) => self.findIndex(e => e.name === ext.name) === index
-      );
+      const extensions = dedupeExtensions([...BASE_EXTENSIONS, characterCountExtension, characterLimitExtension, pasteHandlerExtension, ...featureExtensions]);
 
       if (!this.#editorElement) {
         // Content component hasn't called setEditorElement yet — it will re-trigger init when ready.

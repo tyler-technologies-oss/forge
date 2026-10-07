@@ -8,6 +8,7 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { FEATURE_EXTENSIONS } from '../extensions/feature-extensions.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { DANGEROUS_PROTOCOLS } from '../extensions/sanitize-utils.js';
 import { VirtualElement } from '@tylertech/forge';
@@ -109,15 +110,7 @@ export class RteLinkComponent extends LitElement implements IRichTextEditorFeatu
   @property({ type: Boolean, attribute: 'auto-protocol' })
   public autoProtocol = true;
 
-  public readonly extensions = [
-    Link.configure({
-      openOnClick: false,
-      HTMLAttributes: {
-        target: '_blank',
-        rel: 'noopener noreferrer nofollow'
-      }
-    })
-  ];
+  public readonly extensions = FEATURE_EXTENSIONS.link;
 
   @state()
   @consume({ context: editorContext, subscribe: true })

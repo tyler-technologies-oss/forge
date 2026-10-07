@@ -1,6 +1,4 @@
 import { consume } from '@lit/context';
-import { Paragraph } from '@tiptap/extension-paragraph';
-import { TextAlign } from '@tiptap/extension-text-align';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconFormatAlignCenter, tylIconFormatAlignJustify, tylIconFormatAlignLeft, tylIconFormatAlignRight } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
@@ -8,6 +6,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { FEATURE_EXTENSIONS } from '../extensions/feature-extensions.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rte-tool-button.js';
@@ -87,11 +86,7 @@ export class RteAlignComponent extends LitElement implements IRichTextEditorFeat
   @property({ type: String, attribute: 'justify-label' })
   public justifyLabel = 'Justify';
 
-  public readonly extensions = [
-    TextAlign.configure({
-      types: ['heading', Paragraph.name]
-    })
-  ];
+  public readonly extensions = FEATURE_EXTENSIONS.align;
 
   @state()
   @consume({ context: editorContext, subscribe: true })
