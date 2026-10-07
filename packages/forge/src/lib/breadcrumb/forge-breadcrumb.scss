@@ -1,4 +1,7 @@
 @use '../core/styles/shape';
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../core/styles/typography';
 @use '../focus-indicator';
 @use './breadcrumb/core' as breadcrumb-core;
 @use './breadcrumb-item/core' as breadcrumb-item-core;
@@ -14,7 +17,7 @@
 
 .forge-breadcrumb {
   @include breadcrumb-core.host;
-  @include breadcrumb-core.base;
+  @include breadcrumb-core.list;
 }
 
 //
@@ -28,9 +31,20 @@
 .forge-breadcrumb-item {
   @include breadcrumb-item-core.host;
   @include breadcrumb-item-core.base;
+  @include typography.style(body1);
 
   > a {
-    @include breadcrumb-item-core.link;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-inline: #{spacing.variable(xxsmall)};
+    border-radius: #{shape.variable(small)};
+    color: #{theme.variable(primary)};
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     &:focus-visible {
       @include focus-indicator.keyframes;
@@ -39,12 +53,20 @@
     @include focus-indicator.standalone;
   }
 
+  > :not(a) {
+    padding-inline: #{spacing.variable(xxxsmall)};
+  }
+
   &--current {
-    @include breadcrumb-item-core.current;
+    color: #{theme.variable(text-high)};
 
     &::after {
       display: none;
     }
+  }
+
+  &--menu-item {
+    @include breadcrumb-item-core.menu-item;
   }
 }
 
@@ -64,11 +86,22 @@
     @include breadcrumb-overflow-menu-core.button;
 
     position: relative;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: #{shape.variable(small)};
+    background: none;
+    cursor: pointer;
 
     @include focus-indicator.standalone;
   }
 
   &__popover {
     @include breadcrumb-overflow-menu-core.popover;
+  }
+
+  &__list {
+    @include breadcrumb-overflow-menu-core.list;
   }
 }
