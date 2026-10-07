@@ -33,19 +33,21 @@ export const RICH_TEXT_FEATURES = [
 export type RichTextFeature = (typeof RICH_TEXT_FEATURES)[number];
 
 /**
+ * The features `forge-rte-standard-tools` renders, grouped as they appear between its dividers. The
+ * element renders from this list, so it is the single source for what standard tools contains.
+ */
+export const RICH_TEXT_STANDARD_FEATURE_GROUPS: readonly (readonly RichTextFeature[])[] = [
+  ['heading'],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['bullet-list', 'ordered-list'],
+  ['align'],
+  ['undo-redo']
+];
+
+/**
  * The features `forge-rte-standard-tools` composes.
  */
-export const RICH_TEXT_STANDARD_FEATURES: readonly RichTextFeature[] = [
-  'heading',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'bullet-list',
-  'ordered-list',
-  'align',
-  'undo-redo'
-];
+export const RICH_TEXT_STANDARD_FEATURES: readonly RichTextFeature[] = RICH_TEXT_STANDARD_FEATURE_GROUPS.flat();
 
 /**
  * Extensions every editor and renderer includes, whatever features are slotted.

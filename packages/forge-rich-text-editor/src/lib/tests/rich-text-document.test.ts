@@ -29,7 +29,7 @@ const createEditor = async (content: string, withLinkAndCode = false): Promise<R
         </forge-rich-text-editor>`,
     'forge-rich-text-editor'
   );
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await vi.waitUntil(() => el.isInitialized);
   return el;
 };
 
@@ -55,7 +55,7 @@ describe('toRichTextDocument', () => {
   it('should drop link and code marks when using the standard features', () => {
     const json = serialize(toRichTextDocument('<p><a href="https://example.com">link</a> <code>code</code></p>'));
 
-    expect(json).toContain('link');
+    expect(json).toContain('"text":"link code"');
     expect(json).not.toContain('"type":"link"');
     expect(json).not.toContain('"type":"code"');
   });
