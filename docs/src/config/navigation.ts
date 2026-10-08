@@ -185,6 +185,16 @@ export function buildNavigation(
       id: "reference",
       items: [
         {
+          id: "components",
+          label: "Components",
+          icon: "view_dashboard_outline",
+          children: components.map((c) => ({
+            id: `component-${c.id}`,
+            label: c.data.title,
+            href: `/components/${c.id}/usage/`,
+          })),
+        },
+        {
           id: "tokens",
           label: "Tokens",
           icon: "text_shadow",
@@ -240,16 +250,6 @@ export function buildNavigation(
               href: "/icons/library/",
             },
           ],
-        },
-        {
-          id: "components",
-          label: "Components",
-          icon: "view_dashboard_outline",
-          children: components.map((c) => ({
-            id: `component-${c.id}`,
-            label: c.data.title,
-            href: `/components/${c.id}/usage/`,
-          })),
         },
         {
           id: "blocks",
