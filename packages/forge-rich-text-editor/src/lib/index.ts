@@ -12,6 +12,7 @@ export * from './rich-text-content.js';
 export * from './rich-text-context.js';
 export * from './rich-text-toolbar.js';
 export * from './editor-context.js';
+export * from './rich-text-document.js';
 
 export function defineRichTextEditorComponent(): void {
   defineCustomElement(RichTextEditorComponent);

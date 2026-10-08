@@ -38,6 +38,13 @@ gets.
 `forge-rich-text-editor` takes `content` as an **HTML string or a ProseMirror document**, while
 `forge-rich-text-renderer` takes **only a document** — the shape the editor's `change` event emits.
 
+To give the renderer HTML, convert it first with `toRichTextDocument(html)`. It sanitizes the HTML
+and returns the document an editor with `forge-rte-standard-tools` would produce from it. Pass
+features to match a different editor, for example
+`toRichTextDocument(html, [...RICH_TEXT_STANDARD_FEATURES, 'link'])`. `RICH_TEXT_FEATURES` lists every
+feature name, and unknown names are skipped with a warning. It parses with `DOMParser`, so it needs
+a browser or a DOM shim such as jsdom or happy-dom.
+
 Document input is stricter than HTML input: ProseMirror rejects a mark it has no extension for and
 discards the whole document, whereas HTML parsing drops the unknown formatting and keeps the text.
 Slot the features providing the marks your content uses.

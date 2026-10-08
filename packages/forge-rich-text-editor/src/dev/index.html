@@ -4,6 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tyler Forge™ Rich Text Editor Dev</title>
+    <style>
+      .convert-result {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--forge-spacing-medium);
+        align-items: start;
+      }
+
+      .convert-html {
+        box-sizing: border-box;
+        width: 100%;
+        font-family: monospace;
+      }
+
+      .code-block {
+        max-height: 400px;
+        margin: 0;
+        padding: var(--forge-spacing-small) var(--forge-spacing-medium);
+        overflow: auto;
+        border: 1px solid var(--forge-theme-outline);
+        border-radius: var(--forge-shape-medium);
+        background: var(--forge-theme-surface-container-low);
+        font-size: 0.8125rem;
+      }
+    </style>
   </head>
   <body>
     <main>
@@ -44,6 +69,21 @@
           <forge-rte-standard-tools></forge-rte-standard-tools>
         </forge-rich-text-editor>
         <forge-rich-text-renderer id="padded-renderer" style="--forge-rich-text-renderer-padding: 4px 8px"></forge-rich-text-renderer>
+      </section>
+
+      <section>
+        <h2>HTML to document</h2>
+        <label>
+          HTML
+          <textarea id="convert-html" class="convert-html" rows="8"></textarea>
+        </label>
+        <fieldset id="convert-features">
+          <legend>Features</legend>
+        </fieldset>
+        <div class="convert-result">
+          <forge-rich-text-renderer id="convert-renderer" aria-label="Converted document"></forge-rich-text-renderer>
+          <pre id="convert-output" class="code-block"></pre>
+        </div>
       </section>
 
       <section>

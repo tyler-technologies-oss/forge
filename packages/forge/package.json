@@ -65,7 +65,7 @@
     "storybook": "pnpm run cem && storybook dev -p 6006",
     "build:storybook": "pnpm run cem && storybook build",
     "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\"",
-    "test": "vitest run --browser.headless",
+    "test": "vitest run --browser.headless && vitest run -c vitest.scripts.config.ts",
     "vitest": "vitest",
     "cdn-pack": "tar -czvhf cdn/deployment-assets.tar.gz -C cdn .",
     "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js",

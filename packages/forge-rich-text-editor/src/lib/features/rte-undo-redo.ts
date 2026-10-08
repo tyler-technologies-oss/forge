@@ -1,11 +1,11 @@
 import { consume } from '@lit/context';
 import { IconRegistry } from '@tylertech/forge';
-import { UndoRedo } from '@tiptap/extensions';
 import { tylIconRedo, tylIconUndo } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { FEATURE_EXTENSIONS } from '../extensions/feature-extensions.js';
 import { featureHostStyles } from './core/feature-styles.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
@@ -66,7 +66,7 @@ export class RteUndoRedoComponent extends LitElement implements IRichTextEditorF
   @property({ type: String, attribute: 'redo-label' })
   public redoLabel = 'Redo';
 
-  public readonly extensions = [UndoRedo];
+  public readonly extensions = FEATURE_EXTENSIONS['undo-redo'];
 
   @state()
   @consume({ context: editorContext, subscribe: true })
