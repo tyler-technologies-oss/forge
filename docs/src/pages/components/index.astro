@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageScaffold from '../../components/PageScaffold.astro';
-import { categories, sourceLabels, type Category, type Source } from '../../data/components';
+import ContentHeader from '../../components/ContentHeader.astro';
+import { categories, type Category } from '../../data/components';
+import { categoryIcons } from '../../data/component-categories';
 import { getCollection } from 'astro:content';
 
 const components = await getCollection('components');
@@ -16,32 +18,40 @@ const groupedByCategory = Object.keys(categories).reduce((acc, key) => {
 <BaseLayout title="Components">
 
   <PageScaffold>
-    <div slot="header" class="max-w-[1000px]">
-      <h1 class="text-heading5 mt-0 mb-xsmall">Components</h1>
-      <p class="text-body3 text-medium mt-0 mb-large">
-        Explore Forge's library of reusable UI components. Each component is designed to be accessible,
-        customizable, and consistent with the Forge design system.
-      </p>
-    </div>
+    <ContentHeader
+      slot="header"
+      title="Components"
+      description="Explore Forge's library of reusable UI components. Each component is designed to be accessible, customizable, and consistent with the Forge design system."
+    />
 
-    <div class="max-w-[1000px]">
+    <div class="max-w-[1000px] mt-large">
     {Object.entries(groupedByCategory).map(([key, categoryComponents]) => (
       categoryComponents.length > 0 && (
         <section class="mb-large">
-          <h2 class="text-heading4 mt-0 mb-small pb-xsmall border-b border-outline-low">{categories[key as Category]}</h2>
+          <h2 class="text-heading3 mt-0 mb-xxsmall pb-xsmall">{categories[key as Category]}</h2>
+          <forge-divider class="mb-large"></forge-divider>
           <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-small">
             {categoryComponents.map((component) => (
-              <a href={`${import.meta.env.BASE_URL}components/${component.id}/overview/`} class="component-card block no-underline text-inherit">
-                <forge-card class="h-full transition-shadow duration-short-4 ease-standard hover:shadow-4">
-                  <div class="p-small">
-                    <h3 class="text-heading3 mt-0 mb-xxsmall">{component.data.title}</h3>
-                    <p class="text-medium mt-0 mb-xsmall line-clamp-2">{component.data.description}</p>
-                    <forge-badge theme={component.data.source === 'core' ? 'info-secondary' : 'success'}>
-                      {sourceLabels[component.data.source as Source]}
-                    </forge-badge>
+              <forge-card class="h-full [--forge-card-padding:0]">
+                <forge-button-area>
+                  <a
+                    slot="button"
+                    href={`${import.meta.env.BASE_URL}components/${component.id}/usage/`}
+                    aria-labelledby={`${component.id}-heading`}></a>
+                  <div class="flex items-center gap-medium p-medium">
+                    <forge-avatar
+                      class="shrink-0 [--forge-avatar-background:var(--forge-theme-primary-container-low)] [--forge-avatar-color:var(--forge-theme-on-primary-container-low)] [--forge-avatar-shape:var(--forge-shape-medium)]"
+                      size="large">
+                      <forge-icon name={categoryIcons[key as Category]}></forge-icon>
+                    </forge-avatar>
+                    <div class="flex flex-col gap-xxxsmall min-w-0">
+                      <span id={`${component.id}-heading`} class="text-heading1">{component.data.title}</span>
+                      <span class="text-label2 text-on-surface-secondary line-clamp-2">{component.data.description}</span>
+                      <forge-tooltip>{component.data.description}</forge-tooltip>
+                    </div>
                   </div>
-                </forge-card>
-              </a>
+                </forge-button-area>
+              </forge-card>
             ))}
           </div>
         </section>
@@ -57,10 +67,3 @@ const groupedByCategory = Object.keys(categories).reduce((acc, key) => {
   </PageScaffold>
 </BaseLayout>
 
-<style>
-  /* hover:shadow-4 doesn't propagate to a child forge-card via Tailwind's peer/group,
-     so keep the parent-hover targeting rule in CSS. */
-  .component-card:hover forge-card {
-    box-shadow: var(--forge-elevation-4);
-  }
-</style>
