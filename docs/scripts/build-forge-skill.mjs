@@ -2,7 +2,7 @@
 /**
  * Builds the forge-design Agent Skill bundle (skill/forge-design/) straight
  * from the source MDX: strips the component docs (src/content/components)
- * and developer guide docs (src/content/guides/developing) down to the prose an LLM
+ * and developer guide docs (src/content/developing) down to the prose an LLM
  * actually wants — headings, usage copy, do/don't rules, and accessibility
  * guidance (when a component has an accessibility.mdx) — then packages the
  * result as references/ under a SKILL.md generated from
@@ -41,7 +41,7 @@ const BLOCKS_BASE_URL = "https://forge.tylerdev.io/blocks/v1";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const COMPONENTS_DIR = path.join(ROOT, "src/content/components");
-const DEVELOPMENT_DIR = path.join(ROOT, "src/content/guides/developing");
+const DEVELOPMENT_DIR = path.join(ROOT, "src/content/developing");
 const TEMPLATE_PATH = path.join(ROOT, "scripts/forge-skill-template/SKILL.md");
 
 const OUT_DIR = path.join(ROOT, "skill/forge-design");
@@ -221,7 +221,7 @@ function cellToInlineNodes(cellNode) {
 
 /**
  * Drops any column that's empty in every data row — the color/typography
- * swatch cells in src/content/guides/developing/tailwind.mdx render a `<div>` with no
+ * swatch cells in src/content/developing/tailwind.mdx render a `<div>` with no
  * text at all, purely decorative, so they carry zero information for a
  * text-only reader.
  */

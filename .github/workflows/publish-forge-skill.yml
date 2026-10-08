@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'docs/src/content/components/**'
-      - 'docs/src/content/guides/developing/**'
+      - 'docs/src/content/developing/**'
       - 'docs/scripts/build-forge-skill.mjs'
       - 'docs/scripts/forge-skill-template/**'
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
           name: Forge Design skill (latest)
           body: |
             Auto-published from `${{ github.sha }}` on push to `main`.
-            Generated from `docs/src/content/components/**` and `docs/src/content/guides/developing/**`
+            Generated from `docs/src/content/components/**` and `docs/src/content/developing/**`
             via `pnpm --filter forge-docs build:forge-skill`.
           make_latest: true
           files: forge-design-skill.zip

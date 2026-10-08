@@ -31,10 +31,10 @@ const accessibilityCollection = defineCollection({
   schema: z.object({}),
 });
 
-const guidesCollection = defineCollection({
+const pagesCollection = defineCollection({
   loader: glob({
-    pattern: '**/*.mdx',
-    base: './src/content/guides',
+    pattern: ['**/*.mdx', '!components/**'],
+    base: './src/content',
     generateId: ({ entry }) => entry.replace(/(\/index)?\.mdx$/, ''),
   }),
   schema: z.object({
@@ -44,7 +44,7 @@ const guidesCollection = defineCollection({
 });
 
 export const collections = {
-  guides: guidesCollection,
+  pages: pagesCollection,
   components: componentsCollection,
   accessibility: accessibilityCollection,
 };
