@@ -330,15 +330,7 @@ export function getComponentTagNames(): string[] {
 // Display Labels
 // ============================================================================
 
-export const categories = {
-  actions: "Actions",
-  forms: "Forms",
-  layout: "Layout",
-  navigation: "Navigation",
-  feedback: "Feedback",
-  "data-display": "Data Display",
-  utilities: "Utilities",
-} as const;
+export { categories, type Category } from "./component-categories";
 
 export const sourceLabels = {
   core: "Core",
@@ -352,6 +344,5 @@ export const statusLabels = {
   planned: "Planned",
 } as const;
 
-export type Category = keyof typeof categories;
 export type Source = keyof typeof sourceLabels;
 export type Status = keyof typeof statusLabels;

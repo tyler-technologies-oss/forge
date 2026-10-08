@@ -28,12 +28,16 @@ const openIconId = `${item.id}-open-icon`;
       <button type="button" id={triggerId}>
         {item.label}
       </button>
-      <forge-open-icon slot="end" id={openIconId} />
+      <forge-open-icon
+        slot="end"
+        id={openIconId}
+        class:list={{ "small-open-icon": indented }}
+      />
       <forge-expansion-panel
         slot="additional-content"
         trigger={triggerId}
         open-icon={openIconId}>
-        <forge-list indented navlist>
+        <forge-list indented navlist class:list={{ nested: indented }}>
           {item.children!.map((child) => (
             <Astro.self
               item={child}
@@ -63,5 +67,13 @@ const openIconId = `${item.id}-open-icon`;
 
   .custom-icon {
     @include small-icon;
+  }
+
+  .small-open-icon {
+    --forge-open-icon-size: 18px;
+  }
+
+  forge-list.nested > forge-list-item {
+    --forge-list-item-indent: calc(var(--forge-spacing-xlarge) * 2.075);
   }
 </style>

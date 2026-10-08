@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { categories, categoryIds } from "../data/component-categories";
 
 export interface NavItem {
   id: string;
@@ -188,11 +189,14 @@ export function buildNavigation(
           id: "components",
           label: "Components",
           icon: "view_dashboard_outline",
-          children: components.map((c) => ({
-            id: `component-${c.id}`,
-            label: c.data.title,
-            href: `/components/${c.id}/usage/`,
-          })),
+          children: [
+            {
+              id: "components-overview",
+              label: "All components",
+              href: "/components/",
+            },
+            ...buildComponentGroups(components),
+          ],
         },
         {
           id: "tokens",
@@ -279,4 +283,23 @@ export function buildNavigation(
       ],
     },
   ];
+}
+
+function buildComponentGroups(
+  components: CollectionEntry<"components">[],
+): NavItem[] {
+  return categoryIds
+    .map((category) => ({
+      id: `components-${category}`,
+      label: categories[category],
+      children: components
+        .filter((c) => c.data.category === category)
+        .sort((a, b) => a.data.title.localeCompare(b.data.title))
+        .map((c) => ({
+          id: `component-${c.id}`,
+          label: c.data.title,
+          href: `/components/${c.id}/usage/`,
+        })),
+    }))
+    .filter((group) => group.children.length > 0);
 }

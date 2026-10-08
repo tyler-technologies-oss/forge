@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { categoryIds } from './data/component-categories';
 
 const componentsCollection = defineCollection({
   loader: glob({
@@ -12,7 +13,7 @@ const componentsCollection = defineCollection({
     description: z.string(),
     status: z.enum(['stable', 'beta', 'deprecated', 'planned']).default('stable'),
     source: z.enum(['core', 'block']).default('core'),
-    category: z.enum(['actions', 'forms', 'layout', 'navigation', 'feedback', 'data-display', 'utilities']),
+    category: z.enum(categoryIds),
     storybookId: z.string().optional(),
     figmaUrl: z.string().url().optional(),
   }),
