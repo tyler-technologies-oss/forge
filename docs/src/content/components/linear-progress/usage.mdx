@@ -1,0 +1,75 @@
+---
+title: Linear Progress
+description: Linear progress indicators display progress by animating along a horizontal track, for both determinate and indeterminate waits.
+status: stable
+source: core
+category: feedback
+storybookId: components-linear-progress--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-linear-progress` communicates that a component is loading through `determinate`, `progress`, `buffer`, and `theme`. Reach for it at the bottom of a field, dropdown, or expansion panel; for a spinner that fits inside a smaller component like a button, list item, or card, use a <a href={`${import.meta.env.BASE_URL}components/circular-progress/usage/`}>circular progress</a> indicator instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Only show a progress indicator when the expected wait is more than a second.",
+      "Use determinate progress whenever the completion rate is actually known.",
+      "Pick one indicator style — linear or circular — for a given action, and use it consistently everywhere that action appears.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't mix linear and circular indicators for the same kind of activity in different parts of the app.",
+      "Don't fake a determinate value — use indeterminate when the actual completion rate is unknown.",
+      "Don't use a linear progress indicator for a full-page load — use a busy indicator instead.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+An indeterminate bar is the default — it animates continuously with no specific progress value.
+
+<Example
+  description="An indeterminate linear progress indicator."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/linear-progress/demo/demo.html"
+/>
+
+## Determinate
+
+Set `determinate` and `progress` (a value from `0` to `1`) when the actual completion percentage is known.
+
+<Example
+  description="A determinate indicator showing a specific completion percentage."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/linear-progress/determinate/determinate.html"
+/>
+
+## Buffer
+
+Set `buffer` (a value from `0` to `1`) alongside `progress` to show a second, lighter fill for content that's ready but not yet the active position — the pattern used by media scrubbers.
+
+<Example
+  description="A buffered indicator shows progress and a secondary buffered amount together."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/linear-progress/buffer/buffer.html"
+/>
+
+## Theme
+
+Set `theme` to match the indicator to its surrounding context.
+
+<Example
+  description="A themed linear progress indicator."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/linear-progress/theme/theme.html"
+/>
+

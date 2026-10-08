@@ -1,0 +1,20 @@
+## Keyboard interaction
+
+<table class="forge-data-table">
+  <thead>
+    <tr><th>Key</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Space / Arrow up / Arrow down (closed)</td><td>Opens the select. The arrow keys also highlight the first option.</td></tr>
+    <tr><td>Escape / Space (open)</td><td>Closes the select.</td></tr>
+    <tr><td>Tab / Enter</td><td>Selects the focused option and closes the select. If "Select all" is focused, toggles all options.</td></tr>
+    <tr><td>Arrow down / Arrow up</td><td>Highlights the next or previous option.</td></tr>
+    <tr><td>Home / End</td><td>Highlights the first or last option that isn't disabled.</td></tr>
+  </tbody>
+</table>
+
+In multiple-select mode, Enter toggles the focused option's selected state instead of closing the select.
+
+## Accessible label
+
+`forge-select` doesn't support `aria-label` or `aria-labelledby` — set the `label` property instead. This is a real footgun if you're used to labeling other elements directly with ARIA attributes.

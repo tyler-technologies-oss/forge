@@ -1,0 +1,77 @@
+---
+title: Menu
+description: Menus display a list of contextual actions or options in a popup, triggered from a button, icon, or list item.
+status: stable
+source: core
+category: navigation
+storybookId: components-menu--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-menu` wraps a trigger element and opens a dropdown of `options` — icon-and-label entries, optionally grouped, set as a JS property rather than an attribute — through `mode` (`click` or `cascade`), `placement`, and `dense`. Reserve it for a short list of contextual actions or unrelated options; for a field where a user picks one value from a fixed set, use a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> instead — the menu's own `selectedIndex`/`selectedValue` are deprecated for exactly that reason.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use icons consistently across a menu's options — either every option has one, or none does.",
+      "Group related options with a divider or a labeled section instead of one flat, mixed list.",
+      "Keep cascading submenus to one level deep so users don't lose track of where they are.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a menu to represent a form field's selection state — use a select instead.",
+      "Don't mix clearly unrelated actions into the same menu without a visual separator between them.",
+      "Don't rely on selectedIndex or selectedValue for persisted selection — both are deprecated in favor of forge-select-dropdown.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Wrap a trigger element — typically a button — in `forge-menu` and set its `options` property to populate the dropdown.
+
+<Example
+  description="A menu opened from a button trigger."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/menu/demo/demo.html"
+  height="200px"
+/>
+
+Add an icon to an option with `icon` (or `leadingIcon`/`trailingIcon` to be explicit about placement), plus a matching `leadingIconType`/`trailingIconType` set to `"component"` to render it as a real `forge-icon` element:
+
+```js
+const options = [
+  { label: "Edit", value: "edit", leadingIcon: "edit", leadingIconType: "component" },
+  { label: "Delete", value: "delete", leadingIcon: "delete", leadingIconType: "component" },
+];
+```
+
+## Grouped options
+
+Pass grouped entries in `options` to divide a longer list into labeled sections instead of one flat list.
+
+<Example
+  description="A menu with its options divided into labeled sections."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/menu/grouped/grouped.html"
+  height="400px"
+/>
+
+## Cascading
+
+Set `mode="cascade"` and nest a sub-options array on an option to open a submenu instead of selecting it immediately.
+
+<Example
+  description="A cascading menu opens a submenu instead of selecting immediately."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/menu/cascading/cascading.html"
+  height="350px"
+/>

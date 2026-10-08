@@ -1,0 +1,286 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Sidenav from "../components/Sidenav.astro";
+import { getCollection } from "astro:content";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  /**
+   * Drops the 960px content cap for pages that need the full body width
+   * (icon library, blocks gallery, etc). These pages don't render a TOC.
+   */
+  wide?: boolean;
+}
+
+const {
+  title,
+  description = "Forge Design System Documentation",
+  wide = false,
+} = Astro.props;
+
+const components = await getCollection("components");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Forge Design System</title>
+    <ClientRouter />
+
+    <!-- Forge font -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css"
+    />
+
+    <!-- Forge styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.forge.tylertech.com/v3/css/forge-core.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.forge.tylertech.com/v3/css/forge-dark.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@3.14.0/forge.css"
+    />
+
+    <!-- Theme initialization (prevent flash) -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("forge-docs-theme");
+        const system = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        const theme = stored || system;
+        document.documentElement.setAttribute("data-forge-theme", theme);
+        if (theme === "dark")
+          document.documentElement.classList.add("forge-dark");
+      })();
+    </script>
+
+    <!-- Register Forge components on client -->
+    <script>
+      import "../scripts/forge-components";
+      import { initTheme } from "../scripts/theme";
+      initTheme();
+
+      // Fade the body in once forge-scaffold/forge-card are upgraded, so we
+      // never flash unstyled/undefined custom elements. `customElements.get`
+      // is synchronous, so on SPA navigations (where both are already
+      // defined) this resolves before paint with no visible fade.
+      function markReadyWhenForgeDefined() {
+        if (customElements.get("forge-scaffold") && customElements.get("forge-card")) {
+          document.body.classList.add("ready");
+          return;
+        }
+
+        Promise.all([
+          customElements.whenDefined("forge-scaffold"),
+          customElements.whenDefined("forge-card"),
+        ]).then(() => document.body.classList.add("ready"));
+      }
+
+      markReadyWhenForgeDefined();
+      document.addEventListener("astro:after-swap", markReadyWhenForgeDefined);
+    </script>
+
+    <!-- Update sidenav state on SPA navigation -->
+    <script>
+      function getSidenav() {
+        return document.querySelector('[slot="left"][data-sidenav]');
+      }
+
+      function getSidenavScrollEl() {
+        return getSidenav()?.querySelector('[slot="body"]') ?? null;
+      }
+
+      // rebindExpansionPanels() below forces a reflow of the sidenav body
+      // (it has to, to fix stale trigger references), which resets its
+      // scrollTop on every SPA navigation. Save it before the swap and
+      // reapply it after that reflow has happened.
+      let sidenavScrollTop = 0;
+
+      document.addEventListener("astro:before-swap", () => {
+        const el = getSidenavScrollEl();
+        if (el) sidenavScrollTop = el.scrollTop;
+      });
+
+      function updateNavSelection() {
+        const sidenav = getSidenav();
+        if (!sidenav) return;
+
+        const currentPath = window.location.pathname;
+        const navItems = sidenav.querySelectorAll("forge-list-item");
+
+        navItems.forEach((item) => {
+          const hasExpansionPanel = item.querySelector("forge-expansion-panel");
+          if (hasExpansionPanel) {
+            item.removeAttribute("selected");
+            return;
+          }
+
+          const link = item.querySelector("a");
+          if (!link) return;
+          const href = link.getAttribute("href");
+          if (!href) return;
+
+          const isRootPath =
+            href === "/" ||
+            (href.endsWith("/") && href.split("/").filter(Boolean).length <= 1);
+          const isSelected = isRootPath
+            ? currentPath === href
+            : currentPath.startsWith(href);
+          item.toggleAttribute("selected", isSelected);
+        });
+      }
+
+      // The persisted sidenav gets moved in the DOM on SPA navigation, which
+      // breaks forge-expansion-panel's cached trigger reference. Re-set the
+      // `trigger` / `open-icon` attributes so the component re-resolves them.
+      function rebindExpansionPanels() {
+        const sidenav = getSidenav();
+        if (!sidenav) return;
+
+        const currentPath = window.location.pathname;
+        const panels = sidenav.querySelectorAll("forge-expansion-panel");
+
+        panels.forEach((panel) => {
+          const triggerId = panel.getAttribute("trigger");
+          const openIconId = panel.getAttribute("open-icon");
+          const hasActiveChild = Array.from(
+            panel.querySelectorAll("a[href]"),
+          ).some((link) => {
+            const href = link.getAttribute("href");
+            return !!href && currentPath.startsWith(href);
+          });
+
+          if (triggerId) panel.removeAttribute("trigger");
+          if (openIconId) panel.removeAttribute("open-icon");
+
+          requestAnimationFrame(() => {
+            if (triggerId) panel.setAttribute("trigger", triggerId);
+            if (openIconId) panel.setAttribute("open-icon", openIconId);
+            if (hasActiveChild) panel.setAttribute("open", "");
+          });
+        });
+      }
+
+      document.addEventListener("astro:page-load", () => {
+        updateNavSelection();
+        rebindExpansionPanels();
+
+        // Registered after rebindExpansionPanels' own rAF, so this runs
+        // once that reflow is done and the scrollTop reset has occurred.
+        requestAnimationFrame(() => {
+          const el = getSidenavScrollEl();
+          if (el) el.scrollTop = sidenavScrollTop;
+        });
+      });
+    </script>
+  </head>
+  <body
+    class="gradient-bg m-0 h-svh overflow-hidden text-high forge-typography opacity-0 transition-opacity duration-short-4 ease-standard [&.ready]:opacity-100">
+    <forge-scaffold>
+      <div
+        class="w-[250px] p-medium overflow-hidden"
+        slot="left"
+        data-sidenav
+        transition:persist>
+        <Sidenav components={components} />
+      </div>
+
+      <main class="py-small pe-small overflow-hidden flex gap-medium items-start" slot="body">
+        <forge-card
+          class:list={["body-card h-full min-w-0 flex-1", wide ? "max-w-wide" : "max-w-content"]}>
+          <div class="h-full">
+            <forge-scaffold>
+              <div slot="body" data-scroll-body>
+                <slot />
+              </div>
+            </forge-scaffold>
+          </div>
+        </forge-card>
+
+        {Astro.slots.has("aside") && (
+          <aside class="hidden xl:block flex-shrink-0 pt-large">
+            <slot name="aside" />
+          </aside>
+        )}
+      </main>
+    </forge-scaffold>
+
+    <style is:global>
+      /* Forge card CSS variables — not representable as Tailwind utilities. */
+      .body-card {
+        --forge-card-shape: 12px;
+        --forge-card-padding: var(--forge-spacing-large);
+        --forge-card-overflow: hidden;
+      }
+    </style>
+
+    <style lang="scss">
+      @use "@tylertech/forge/sass/typography" as forge-typography;
+
+      // `<a>` appears throughout slotted/child content (sidenav, MDX,
+      // breadcrumbs) rather than this component's own template, so :global()
+      // is required — same escape hatch Blockquote.astro uses for its
+      // slotted body content.
+      :global(a) {
+        @include forge-typography.anchor-base;
+
+        &:visited {
+          @include forge-typography.anchor-visited;
+        }
+
+        &:hover {
+          @include forge-typography.anchor-hover;
+        }
+
+        &:active {
+          @include forge-typography.anchor-active;
+        }
+      }
+    </style>
+
+    <style lang="scss">
+      // Thin scrollbar styling (no Tailwind equivalent for ::-webkit-scrollbar).
+      [data-scroll-body] {
+        scrollbar-width: thin;
+
+        // Bleed the scrollbar out into the card's padding instead of
+        // rendering it flush against the padded content.
+        margin-right: calc(-1 * var(--forge-spacing-large));
+        padding-right: var(--forge-spacing-large);
+
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(
+            --forge-theme-outline-variant,
+            rgba(0, 0, 0, 0.2)
+          );
+          border-radius: 2px;
+        }
+      }
+    </style>
+  </body>
+</html>

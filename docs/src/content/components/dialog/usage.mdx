@@ -1,0 +1,123 @@
+---
+title: Dialog
+description: Dialogs are modal windows that interrupt the user to convey critical information or request a decision.
+status: stable
+source: core
+category: feedback
+storybookId: components-dialog--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-dialog` shows modal (or non-modal) content through `open`, `mode`, `type`, `preset`, `placement`, `fullscreen`, and `persistent`, and typically composes with a `forge-scaffold`'s header/body/footer slots for structure. Use it sparingly, only for critical information or a decision that truly needs to block the rest of the app. For the common confirm/cancel prompt, reach for the pre-built `forge-confirmation-dialog` instead of hand-building one. For lower-priority feedback, use a <a href={`${import.meta.env.BASE_URL}components/toast/usage/`}>toast</a>, <a href={`${import.meta.env.BASE_URL}components/banner/usage/`}>banner</a>, or <a href={`${import.meta.env.BASE_URL}components/inline-message/usage/`}>inline message</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Reserve a dialog for critical information or a decision that truly needs to block the rest of the app.",
+      "Use a raised button for the confirming action and an outlined button for the dismissive one, with the confirming action on the right.",
+      "Disable the confirming action until every required field in the dialog is filled.",
+      "Confirm before discarding unsaved changes when a user tries to close a dialog containing form input.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't stack a dialog on top of another dialog.",
+      "Don't let a click outside the dialog close it when the dialog contains a form — that risks accidental data loss.",
+      "Don't place two raised buttons next to each other in a dialog's footer.",
+      "Don't use a vague action label like \"OK\" or \"Done\" — use a specific verb like \"Save\" or \"Send\".",
+    ]}
+  />
+</Rules>
+
+## Structure
+
+A dialog's content is typically a `forge-scaffold` with a `header` toolbar (title plus a close icon button), a `body` (the message or form), and a `footer` toolbar (actions) — pinning the header and footer so only the body scrolls.
+
+<Example
+  description="A dialog built from a scaffold's header, body, and footer slots."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/demo/demo.html"
+  height="400px"
+/>
+
+## Modes
+
+`mode` controls how a dialog sits relative to the rest of the page. `modal` (the default) renders above everything with a backdrop and makes the rest of the page inert. `nonmodal` renders in the normal page flow, above other content, with no backdrop and nothing made inert. `inline-modal` is the middle ground — a backdrop is shown, but unlike `modal`, the rest of the page is not made inert.
+
+## Prevent close
+
+Listen for `forge-dialog-before-close` and call `event.preventDefault()` to block a close — useful for validating input or waiting on an async save before letting the dialog close. This event only fires for light-dismiss actions (clicking the backdrop or pressing Escape), not for an explicit close triggered from your own button.
+
+```js
+dialogEl.addEventListener("forge-dialog-before-close", (event) => {
+  if (!formIsValid) {
+    event.preventDefault();
+  }
+});
+```
+
+## Confirmation dialog
+
+For the common confirm/cancel prompt, use the pre-built `forge-confirmation-dialog` instead of hand-building a scaffold — it handles the title, message, and button slots for you.
+
+<Example
+  description="A pre-built confirmation dialog handles the title, message, and button slots."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/confirmation-dialog/confirmation-dialog.html"
+  height="350px"
+/>
+
+## Presets
+
+<InlineMessage theme="info" title="Looking for Bottom Sheet?">
+  Bottom Sheet is now a Dialog preset rather than its own component — use `preset="bottom-sheet"` below instead.
+</InlineMessage>
+
+Set `preset` to `bottom-sheet`, `top-sheet`, `left-sheet`, or `right-sheet` to slide the dialog in from an edge instead of the default, centered `dialog` preset — common on mobile.
+
+<Example
+  title="Bottom sheet"
+  description="A dialog sliding in from the bottom of the screen."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/bottom-sheet/bottom-sheet.html"
+  height="500px"
+/>
+
+<Example
+  title="Top sheet"
+  description="A dialog sliding in from the top of the screen."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/top-sheet/top-sheet.html"
+  height="500px"
+/>
+
+<Example
+  title="Left sheet"
+  description="A dialog sliding in from the left edge of the screen."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/left-sheet/left-sheet.html"
+  height="500px"
+/>
+
+<Example
+  title="Right sheet"
+  description="A dialog sliding in from the right edge of the screen."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/right-sheet/right-sheet.html"
+  height="500px"
+/>
+
+## Fullscreen
+
+Set `fullscreen` (or let `fullscreenThreshold` trigger it automatically below a given viewport width) to expand the dialog to fill the screen — use it for a multi-step task, like a form paired with a <a href={`${import.meta.env.BASE_URL}components/stepper/usage/`}>stepper</a>, and reserve it for mobile.
+
+<Example
+  description="A fullscreen dialog fills the entire viewport."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/fullscreen/fullscreen.html"
+  height="600px"
+/>

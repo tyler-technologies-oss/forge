@@ -1,0 +1,71 @@
+---
+/**
+ * TokenTable - Renders the tokens of a design token category from design-tokens.json.
+ *
+ * Adds a Description column when any token in the category has a description, and a
+ * Preview column for categories that have a visual representation. With `fixedColumns`, the
+ * table uses the same fixed column widths as ThemeColorTokens so it lines up with those tables.
+ */
+import { getTokenCategory } from "../../data/design-tokens";
+
+interface Props {
+  category: string;
+  fixedColumns?: boolean;
+}
+
+const { category, fixedColumns = false } = Astro.props;
+const { tokens } = getTokenCategory(category);
+const hasDescriptions = tokens.some((t) => t.description);
+
+const previews: Record<string, (name: string) => { class: string; style: string }> = {
+  color: (name) => ({
+    class: "w-8 h-8 rounded-md",
+    style: `background-color: var(--forge-theme-on-surface); opacity: var(${name})`,
+  }),
+  spacing: (name) => ({
+    class:
+      "box-content h-3 border-x border-current text-primary bg-[linear-gradient(currentColor,currentColor)] bg-size-[100%_1px] bg-center bg-no-repeat",
+    style: `width: var(${name})`,
+  }),
+  shape: (name) => ({
+    class: name.endsWith("-full") ? "w-[72px] h-12 bg-primary" : "w-12 h-12 bg-primary",
+    style: `border-radius: var(${name})`,
+  }),
+  elevation: (name) => ({
+    class: "w-12 h-12 m-medium rounded-md bg-surface-container-minimum",
+    style: `box-shadow: var(${name})`,
+  }),
+};
+const preview = previews[category];
+---
+
+<table class:list={["forge-data-table", fixedColumns && "table-fixed w-full"]}>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Value</th>
+      {hasDescriptions && <th>Description</th>}
+      {preview && <th class:list={[fixedColumns && "w-32"]}>Preview</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      tokens.map((token) => (
+        <tr>
+          <td>
+            <code>{token.name}</code>
+          </td>
+          <td>
+            <code>{token.value}</code>
+          </td>
+          {hasDescriptions && <td>{token.description}</td>}
+          {preview && (
+            <td>
+              <div {...preview(token.name)} />
+            </td>
+          )}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

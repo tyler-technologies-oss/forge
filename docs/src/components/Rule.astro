@@ -1,0 +1,125 @@
+---
+/**
+ * Rule — a themed Do/Don't card for documentation pages.
+ *
+ * Renders as a <forge-structured-card> tinted by variant (success for "do",
+ * error for "don't"). The icon lives in the card's `before-title` slot so it
+ * naturally aligns with the title text, and everything else lives in `body`.
+ *
+ * Author usage — pass the bullet list as a `rules` prop; designers only
+ * write strings, no <ul>/<li> markup required:
+ *
+ *   <Rules>
+ *     <Rule
+ *       variant="do"
+ *       rules={[
+ *         "Use sentence case (\"Start new\").",
+ *         "Use short, actionable verbs.",
+ *       ]}
+ *     >
+ *       <div slot="preview">…demo markup…</div>
+ *     </Rule>
+ *     <Rule variant="dont" rules={[...]}>…</Rule>
+ *   </Rules>
+ *
+ * `title` defaults to "Do" / "Don't" based on the variant and is overridable.
+ * The default slot is available for any extra content (paragraph, callout)
+ * that should appear beneath the rule list.
+ */
+interface Props {
+  variant: "do" | "dont";
+  title?: string;
+  rules?: string[];
+}
+
+const { variant, title, rules } = Astro.props;
+
+const isDo = variant === "do";
+const heading = title ?? (isDo ? "Do" : "Don't");
+const iconName = isDo ? "check_circle" : "close_circle";
+const cardClass = isDo
+  ? "rule-card rule-card--do"
+  : "rule-card rule-card--dont";
+const iconClass = isDo ? "text-success" : "text-error";
+---
+
+<forge-structured-card heading-level="3" class={cardClass}>
+  <div slot="title" class="flex items-center gap-medium">
+    <forge-icon
+      name={iconName}
+      class:list={["flex leading-none", iconClass]}
+      external>
+    </forge-icon>
+    <span>{heading}</span>
+  </div>
+
+  <div slot="body" class="rule-body flex flex-col gap-medium">
+    {
+      Astro.slots.has("preview") && (
+        <div class="flex flex-wrap items-center justify-start gap-small rounded-md">
+          <slot name="preview" />
+        </div>
+      )
+    }
+
+    {
+      rules && rules.length > 0 && (
+        <forge-list noninteractive dense wrap>
+          {rules.map((rule) => (
+            <forge-list-item>{rule}</forge-list-item>
+          ))}
+        </forge-list>
+      )
+    }
+
+    <slot />
+  </div>
+</forge-structured-card>
+
+<style>
+  /*
+   * Astro scoped styles compile in isolation; `@reference` lets `@apply` see
+   * the project's utility classes (Tailwind + forge-tailwind). Every value
+   * routes through a Forge token — no ad-hoc colors.
+   */
+  @reference "../styles/global.css";
+
+  /*
+   * Themed card look — bind --forge-card-background to a semantic
+   * minimum-container tint so the whole card (header + body) reads as
+   * success / error without wrapping in an extra element.
+   */
+  .rule-card--do {
+    --forge-card-background: var(--forge-theme-success-container-minimum);
+  }
+
+  .rule-card--dont {
+    --forge-card-background: var(--forge-theme-error-container-minimum);
+  }
+
+  /*
+   * Preview area sits inside the tinted card — step one shade up on the same
+   * container scale so it reads as a contained sample without breaking the
+   * card's semantic color. Matches Forge's container hierarchy
+   * (minimum → low → base → high).
+   */
+  .rule-card--do .rule-preview {
+    @apply bg-success-container-low;
+  }
+
+  .rule-card--dont .rule-preview {
+    @apply bg-error-container-low;
+  }
+
+  /*
+   * Light left inset on the rule list for readability inside the tinted card.
+   * forge-list handles row height, dividers, and typography.
+   */
+  .rule-body :global(forge-list) {
+    --forge-list-item-padding-inline: var(--forge-spacing-small);
+  }
+
+  .rule-body :global(p:last-child) {
+    @apply mb-0;
+  }
+</style>

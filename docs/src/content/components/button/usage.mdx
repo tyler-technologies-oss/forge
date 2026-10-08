@@ -1,0 +1,96 @@
+---
+title: Button
+description: Buttons allow users to take actions and make choices with a single tap.
+status: stable
+source: core
+category: actions
+storybookId: components-button--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-button` handles every level of action emphasis through variant, size, and theme, plus icons, anchor navigation, loading, and disabled states. Pick the variant that matches an action's importance, reserve raised for the one primary action per view, and let theme, icon, and state carry the rest.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      'Use sentence case ("Start new").',
+      'Use short, actionable verbs ("Submit", "Save", "Delete").',
+      "Use the primary theme color.",
+      "One raised button per group.",
+      "Space adjacent buttons with --forge-spacing-medium (--forge-spacing-xsmall in dense layouts).",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use more than one raised button per page or dialog.",
+      "Don't put two raised buttons next to each other.",
+      "Don't use success or warning colors — use primary.",
+      'Don\'t pair overlapping actions ("Start over" + "Cancel").',
+    ]}
+  />
+</Rules>
+
+## Variants
+
+Pick one variant per action, based on emphasis. **Text** is for tertiary actions like cancel or dismiss, **outlined** and **tonal** carry secondary actions, and **raised** is the page's primary call to action — never more than one per page or dialog.
+
+<Example
+  description="The four button variants, ordered from lowest to highest emphasis."
+  class="border-0"
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/variants/variants.html"
+/>
+
+## Theme
+
+Buttons default to the primary theme. Use `theme="error"` for destructive confirmations. Success and warning themes exist but should be reserved for status-conveying actions inside toolbars or lists — never for the primary submit on a form.
+
+<Example
+  description="Primary is the default. Reserve error for destructive actions; the remaining themes exist but should be used sparingly."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/themed/themed.html"
+/>
+
+## As a link
+
+Wrap an `<a>` in a `forge-button` to get a navigation link styled as a button. Use this sparingly — buttons imply action, links imply navigation. If the action is "go somewhere", prefer a plain link.
+
+<Example
+  description="A button that navigates. Note the anchor child."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/anchor/anchor.html"
+/>
+
+## With an icon
+
+Wrap an `<forge-icon>` in a `forge-button` to add an icon to the button. Icons can be placed at the start or end of the button label to reinforce the action.
+
+<Example
+  description="Icons go in the start slot for actions, end slot for directional cues."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/with-icon/with-icon.html"
+/>
+
+## Loading
+
+Forge doesn't ship a built-in loading state on `forge-button`. To indicate a pending action, swap in a `forge-circular-progress` alongside the label.
+
+<Example
+  description="A spinner in the end slot conveys a pending action."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/with-circular-progress/with-circular-progress.html"
+/>
+
+## Disabled
+
+Set `disabled` to remove a button from the tab order and prevent interaction — every variant supports it.
+
+<Example
+  description="Every variant supports disabled."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/disabled/disabled.html"
+/>

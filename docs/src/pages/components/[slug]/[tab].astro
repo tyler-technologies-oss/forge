@@ -1,0 +1,161 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ComponentPageLayout from "../../../components/ComponentPageLayout.astro";
+import ApiReference from "../../../components/ApiReference.astro";
+import StorybookEmbed from "../../../components/StorybookEmbed.astro";
+import ComingSoon from "../../../components/docs/ComingSoon.astro";
+import TableOfContents from "../../../components/docs/TableOfContents.svelte";
+import { getComponentApi, statusLabels } from "../../../data/components";
+import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
+
+type TabId = "usage" | "api" | "playground" | "accessibility";
+
+export async function getStaticPaths() {
+  const components = await getCollection("components");
+
+  return components.flatMap((component) => {
+    const tabs: TabId[] = component.data.storybookId
+      ? ["usage", "api", "playground", "accessibility"]
+      : ["usage", "api", "accessibility"];
+
+    return tabs.map((tab) => ({
+      params: { slug: component.id, tab },
+      props: { component, currentTab: tab },
+    }));
+  });
+}
+
+interface Props {
+  component: CollectionEntry<"components">;
+  currentTab: TabId;
+}
+
+const { component, currentTab } = Astro.props;
+const { title, description, status, source, storybookId } = component.data;
+
+const api = getComponentApi(component.id);
+const { Content: MdxContent } = await render(component);
+
+const accessibilityEntry = await getEntry("accessibility", component.id);
+const AccessibilityContent = accessibilityEntry
+  ? (await render(accessibilityEntry)).Content
+  : undefined;
+
+function formatTabLabel(tab: string): string {
+  return tab.charAt(0).toUpperCase() + tab.slice(1);
+}
+---
+
+<BaseLayout
+  title={`${title} - ${formatTabLabel(currentTab)}`}
+  description={description}
+  wide={currentTab === "playground"}>
+  <div slot="aside" class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
+    <TableOfContents client:load contentSelector="[data-tab='usage'] .mdx-content" />
+  </div>
+
+  <div slot="aside" class="tab-panel" data-tab="api" class:list={[{ active: currentTab === "api" }]}>
+    <TableOfContents
+      client:load
+      contentSelector=".api-content"
+      selector="[slot='title']"
+      levels={[3]}
+    />
+  </div>
+
+  <div slot="aside" class="tab-panel" data-tab="accessibility" class:list={[{ active: currentTab === "accessibility" }]}>
+    <TableOfContents client:load contentSelector="[data-tab='accessibility'] .mdx-content" />
+  </div>
+
+  <ComponentPageLayout
+    title={title}
+    description={description}
+    showBadge={status !== "stable"}
+    badgeText={statusLabels[status]}
+    badgeTheme={status === "deprecated" ? "error" : "warning"}
+    currentTab={currentTab}
+    slug={component.id}
+    storybookId={storybookId}>
+
+    <div slot="content" class="tab-panels relative">
+      <div class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
+        <article class="mdx-content text-high">
+          <MdxContent />
+        </article>
+      </div>
+
+      <div class="tab-panel" data-tab="api" class:list={[{ active: currentTab === "api" }]}>
+        {api ? (
+          <ApiReference api={api} source={source} />
+        ) : (
+          <ComingSoon icon="code" label="API" />
+        )}
+      </div>
+
+      {storybookId && (
+        <div class="tab-panel" data-tab="playground" class:list={[{ active: currentTab === "playground" }]}>
+          <StorybookEmbed
+            storyId={storybookId}
+            height="500px"
+            title={`${title} playground`}
+          />
+        </div>
+      )}
+
+      <div class="tab-panel" data-tab="accessibility" class:list={[{ active: currentTab === "accessibility" }]}>
+        {AccessibilityContent ? (
+          <article class="mdx-content text-high">
+            <AccessibilityContent />
+          </article>
+        ) : (
+          <ComingSoon icon="accessibility" label="Accessibility" />
+        )}
+      </div>
+    </div>
+  </ComponentPageLayout>
+</BaseLayout>
+
+<style>
+  /*
+   * Astro scoped <style> blocks compile in isolation, so Tailwind's
+   * `@apply` can't see project utilities (from tailwindcss/utilities.css
+   * or @tylertech/forge-tailwind) unless the sheet is `@reference`d.
+   * Everything below uses only the utilities exposed via that import.
+   */
+  @reference "../../../styles/global.css";
+
+  /*
+   * Tab-panel visibility is toggled at runtime by JS (TabbedPageLayout) via
+   * the `.active` class. Runtime-toggled state has no MDX class hook, so a
+   * two-line CSS rule is the correct escape hatch per CLAUDE.md.
+   */
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  /*
+   * MDX-rendered content has no per-element class hook, so the *selectors*
+   * below use tag-level `:global(...)` scoped inside `.mdx-content`. Every
+   * declared style comes from a `@apply` of forge-tailwind utility classes —
+   * no raw values, no custom sizes, no ad-hoc colors. Per CLAUDE.md,
+   * `:global()` is the sanctioned escape hatch for styling markup that
+   * carries no class hooks. The styles themselves stay on-token.
+   *
+   * Heading/paragraph/list type scale lives globally in global.css (shared
+   * with ContentPageLayout's `.content-body`) — only what's specific to this
+   * tab layout stays here.
+   */
+  .mdx-content :global(li strong) {
+    @apply text-high;
+  }
+
+  /* Cards should visually own their inner spacing; final child gets no bottom margin. */
+  .mdx-content :global(forge-card ul:last-child),
+  .mdx-content :global(forge-card p:last-child) {
+    @apply mb-0;
+  }
+</style>

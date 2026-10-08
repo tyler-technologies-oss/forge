@@ -1,0 +1,68 @@
+---
+title: Timestamp
+description: Timestamps display a formatted, localized date, time, or duration value using the native time element.
+status: stable
+source: core
+category: data-display
+storybookId: components-timestamp--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-timestamp` renders a `<time>` element from a `datetime` value, formatted through `format` (a CLDR date/time pattern), `locale`, and `separator`. Set `datetime` to a `Date`, a date-convertible string, or any value the native `<time>` element's `datetime` attribute accepts; that value drives both the accessible meaning and, for full dates, the automatic formatting. A dateless time, timezone offset, or duration value is used as-is for accessibility but isn't auto-formatted — pass custom content in the default slot for those cases. Use it anywhere a date or time needs consistent, localized formatting, including inside a <a href={`${import.meta.env.BASE_URL}components/timeline/usage/`}>timeline</a> item.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Always set datetime to the underlying date/time value, even when the visible format only shows part of it.",
+      "Use a CLDR format string in format rather than pre-formatting the value yourself.",
+      "Set locale explicitly when a timestamp shouldn't follow the user's browser locale.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't rely on automatic formatting for a dateless time, timezone offset, or duration — supply custom content in the default slot instead.",
+      "Don't hardcode a display string when the value is a real date — let format handle it so it stays localized.",
+    ]}
+  />
+</Rules>
+
+## Formatting
+
+Set `format` to any valid CLDR date/time pattern to control how the timestamp displays.
+
+```html
+<!-- Hour and minute -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="HH:mm"></forge-timestamp>
+
+<!-- Day and month -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="MMMM dd"></forge-timestamp>
+
+<!-- With additional text -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="'Today' • MMMM dd, yyyy"></forge-timestamp>
+```
+
+## Locale
+
+Set `locale` to format the timestamp for a specific locale instead of following the user's browser locale.
+
+```html
+<forge-timestamp datetime="2024-03-15T14:30:00" locale="fr-FR"></forge-timestamp>
+```
+
+## Separators
+
+Set `separator` to `before` or `after` to place a dot next to the timestamp, visually separating it from adjacent inline content. The default is `none`.
+
+<Example description="A timestamp with a leading separator dot, next to other inline content.">
+  <span>Updated <forge-timestamp datetime="2024-03-15T14:30:00" format="MMMM dd" separator="before"></forge-timestamp></span>
+</Example>

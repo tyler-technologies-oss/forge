@@ -1,0 +1,223 @@
+/* Step 1: Define your Tailwind layers */
+@layer theme, base, components, utilities;
+
+/* Step 2: Import the theme (variables) and utilities, skipping preflight */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Step 3: Import the Forge Tailwind theme -  */
+@import "@tylertech/forge-tailwind";
+
+/* Forge table CSS classes (.forge-data-table styles plain <table> markup on-token). */
+@import "@tylertech/forge/dist/table/forge-table.css";
+
+/* Rebind Tailwind's `dark:` variant to Forge's theme attribute so
+   `class="dark:text-high"` reacts to the app's theme toggle instead of
+   the OS-level `prefers-color-scheme`. */
+@custom-variant dark (&:where(html[data-forge-theme='dark'] *));
+
+/*
+ * Content caps for BaseLayout's page templates. Extends Tailwind's
+ * `--container-*` scale (the `max-w-*` namespace) so both are usable as
+ * utility classes: `max-w-content` (default docs width) and `max-w-wide`
+ * (TOC-less, wider pages — icon library, blocks gallery, etc).
+ */
+@theme {
+  --container-content: 1024px;
+  --container-wide: 1920px; 
+}
+
+/*
+ * Base-layer typography defaults.
+ *
+ * Every <p> in the site inherits Forge's body1 scale by default. Explicit
+ * utilities like `text-body2` or `text-body3` still win — the `utilities`
+ * layer is ordered above `base`, so a class on the paragraph overrides this.
+ */
+@layer base {
+  p,
+  li {
+    @apply text-body1;
+  }
+}
+
+/*
+ * MDX content typography hierarchy.
+ *
+ * `.content-body` (ContentPageLayout, non-component docs) and `.mdx-content`
+ * (component-doc tabs) both render raw MDX headings with no class hook, so
+ * this is the single global rule set both layouts share — one place to keep
+ * heading size/weight monotonically decreasing from h1 to h6.
+ *
+ * `text-heading6` (28px) is the largest style used here, matching the
+ * page-title `<h1>` in ContentHeader.astro, so an in-content `<h1>` never
+ * outranks the page's own title. Everything else scales down from there.
+ * Once the heading scale bottoms out at `text-heading3`, h5/h6 fall
+ * back to the (unbolded) subheading scale rather than continuing into
+ * heading2/heading1, since those are the same size as neighboring steps and
+ * subheading1/2 are the smallest steps left below h4.
+ *
+ * Body copy (`p`/`li`) uses `text-body2` (16px) here — one step up from the
+ * site-wide `text-body1` (14px) default set below — for a more readable
+ * measure in long-form docs prose.
+ */
+@layer base {
+  .content-body h1,
+  .mdx-content h1 {
+    @apply text-heading6 mt-0 mb-medium;
+  }
+
+  .content-body h2,
+  .mdx-content h2 {
+    @apply text-heading5 mt-xxxlarge mb-medium border-t border-outline pt-large;
+  }
+
+  .content-body h2:first-child,
+  .mdx-content h2:first-child {
+    @apply mt-0;
+  }
+
+  .mdx-content h2:first-child {
+    @apply border-t-0 pt-0;
+  }
+
+  .content-body h3,
+  .mdx-content h3 {
+    @apply text-heading4 mt-xlarge mb-small;
+  }
+
+  .content-body h4,
+  .mdx-content h4 {
+    @apply text-heading3 mt-large mb-small;
+  }
+
+  .content-body h5,
+  .mdx-content h5 {
+    @apply text-subheading2 mt-medium mb-xsmall;
+  }
+
+  .content-body h6,
+  .mdx-content h6 {
+    @apply text-subheading1 mt-small mb-xsmall;
+  }
+
+  .content-body p,
+  .mdx-content p {
+    @apply text-body2 mt-medium mb-medium leading-8;
+  }
+
+  .content-body li,
+  .mdx-content li {
+    @apply mb-small;
+  }
+
+  /*
+   * Inline code spans (single-backtick markdown), scoped to text-bearing
+   * tags so this never matches the `<code>` Shiki nests inside
+   * `pre.astro-code` fenced blocks — those keep their own baked-in colors.
+   */
+  .content-body :where(h1, h2, h3, h4, h5, h6, p, li) code,
+  .mdx-content :where(h1, h2, h3, h4, h5, h6, p, li) code {
+    @apply font-mono text-label3 text-primary bg-surface-dim rounded-sm px-xsmall py-xxsmall;
+  }
+
+  .forge-data-table {
+    @apply [--forge-table-theme-row-hover-background:transparent];
+  }
+
+  .forge-data-table code {
+    @apply text-xs;
+  }
+}
+
+/*
+ * Project-specific component classes.
+ *
+ * Small conveniences on top of Tailwind + Forge that make it easier to write
+ * prototype markup without dropping into `<style>` blocks or long chains of
+ * arbitrary utilities. All three "categories" below are safe to extend — add
+ * new classes when a pattern appears in more than one place.
+ *
+ *   1. Design-token bridges (`.striped-box`, `.gradient-bg`) — reusable visual
+ *      motifs built from Forge tokens.
+ *   2. Grid safety (`.grid > *`) — prevents the classic min-content overflow
+ *      that Tailwind's grid utilities don't handle by default.
+ *   3. Forge shortcuts (`forge-card.p-*`, `forge-card.tonal-card`) — bind
+ *      Tailwind-style class names to the CSS custom properties Forge
+ *      components read, so a designer can write `<forge-card class="p-large">`
+ *      and it Just Works instead of typing the `--forge-card-padding` var.
+ */
+@layer components {
+  .striped-box {
+    @apply rounded-lg p-4 border text-lowest bg-[size:8px_8px] bg-top-left bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,transparent_0,transparent_50%)];
+  }
+
+  .gradient-bg {
+    @apply bg-linear-to-b from-(--forge-theme-primary-container-minimum) to-(--forge-theme-primary-container);
+  }
+
+  /* Tailwind's grid children can blow out on min-content — force them to shrink. */
+  .grid > * {
+    @apply min-h-0 min-w-0;
+  }
+
+  .tonal-card {
+    @apply bg-surface-dim p-medium rounded-lg;
+  }
+
+  .tonal-card-p-0 {
+    @apply bg-surface-dim p-0 rounded-lg;
+  }
+
+  forge-badge.square-badge {
+    --forge-badge-shape: var(--forge-shape-small);
+  }
+
+  forge-card.p-0 {
+    --forge-card-padding: 0;
+    --forge-card-overflow: hidden;
+  }
+
+  /*
+   * Toolbar background utilities — bind Tailwind-style class names to the
+   * `--forge-toolbar-background` token so callers can write
+   * `<forge-toolbar class="bg-primary-container-minimum">` and get an
+   * on-token subtle blue tint.
+   */
+  forge-toolbar.bg-primary-container-minimum {
+    --forge-toolbar-background: var(--forge-theme-primary-container-minimum);
+  }
+  forge-toolbar.bg-primary-container-low {
+    --forge-toolbar-background: var(--forge-theme-primary-container-low);
+  }
+  forge-toolbar.bg-primary-container {
+    --forge-toolbar-background: var(--forge-theme-primary-container);
+  }
+
+  /*
+   * Responsive card grids used across component-doc MDX pages. Each grid
+   * fills rows with as many columns as fit, with a sensible minimum width
+   * per card. All spacing pulls from forge-tailwind tokens.
+   */
+  .two-col {
+    @apply grid gap-medium mb-6 grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
+  }
+
+  .type-grid {
+    @apply grid gap-medium mb-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))];
+  }
+
+  .guidance-grid {
+    @apply grid gap-medium mb-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))];
+  }
+
+  /*
+   * Shared base for every rendered code block — both plain markdown ``` fences
+   * and the <Code> component compile to this same <pre class="astro-code">.
+   * Shiki bakes background-color/color/overflow-x on as inline styles per
+   * theme, so only layout properties (not colors) can be overridden here.
+   */
+  pre.astro-code {
+    @apply mt-0 mb-large p-medium rounded-lg text-label2;
+  }
+}

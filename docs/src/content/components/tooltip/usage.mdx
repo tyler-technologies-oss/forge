@@ -1,0 +1,96 @@
+---
+title: Tooltip
+description: Tooltips display a short text label for an element when the user hovers, focuses, or long-presses it.
+status: stable
+source: core
+category: feedback
+storybookId: components-tooltip--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-tooltip` anchors a short text label to another element via `anchor` (an id reference), and reveals it through `triggerType` — `hover` (the default), `focus`, or `longpress` — plus `placement` and `flip` for positioning. Reserve it for a word or short phrase clarifying an element's purpose — it's essential for an <a href={`${import.meta.env.BASE_URL}components/icon-button/usage/`}>icon button</a> with no visible label. For anything longer than a few words, use an inline message or dialog instead of overloading a tooltip.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Always pair an icon-only control, like an icon button, with a tooltip describing its action.",
+      "Keep tooltip text to a few words — a label or short phrase, not a sentence.",
+      "Pair hover with focus or longpress in triggerType so the tooltip is reachable without a mouse.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't restate text that's already visible next to the anchor.",
+      "Don't put rich content, images, or interactive controls inside a tooltip.",
+      "Don't rely on a tooltip alone to convey information essential to completing a task on mobile.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Set `anchor` to the id of the element the tooltip describes.
+
+<Example
+  description="A tooltip anchored to a button by id."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tooltip/demo/demo.html"
+/>
+
+## Placement
+
+Set `placement` to move the tooltip above its anchor instead of the default right.
+
+<Example
+  description="A tooltip placed above its anchor instead of the default right."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tooltip/placement/placement.html"
+/>
+
+## Trigger type
+
+Set `triggerType` to `focus` to open the tooltip on focus instead of hover — pair the two so the tooltip is reachable without a mouse.
+
+<Example
+  description="A tooltip that opens on focus instead of hover."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tooltip/trigger-type/trigger-type.html"
+/>
+
+## Type
+
+Set `type` to `presentation` (the default), `label`, or `description` to control the tooltip's accessibility association with its anchor.
+
+<Example
+  description="A presentation tooltip (default) carries no accessibility association with its anchor."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tooltip/type/type.html"
+/>
+
+## Anchor gotchas
+
+<InlineMessage theme="warning" title="Slotted anchors need a matching slot">
+  If the anchor element is placed in a slot (e.g. an icon button slotted into an app bar), the tooltip needs the same `slot` attribute — otherwise it may not render at all.
+
+  ```html
+  <forge-app-bar>
+    <forge-icon-button slot="end" id="my-button">
+      <forge-icon name="forge_logo"></forge-icon>
+    </forge-icon-button>
+
+    <forge-tooltip slot="end" type="label" anchor="my-button">This is a tooltip</forge-tooltip>
+  </forge-app-bar>
+  ```
+</InlineMessage>
+
+Without an explicit anchor, the tooltip resolves its target in this order: the element matching `anchor`'s id, then `anchorElement` if set, then its previous DOM sibling, then its parent element. That's unpredictable in a dynamic context — a list of items, or anything rendered asynchronously — so set `anchor` or `anchorElement` explicitly whenever the tooltip isn't a fixed, static sibling of what it describes.
+
+Despite rendering in the browser's top layer, the tooltip element itself still lives inline in the DOM, which means it can inherit CSS custom properties from its ancestors and pick up unintended style bleed. If that happens, set `anchor` or `anchorElement` to move the tooltip to a different point in the DOM, detached from the ancestor setting the variable.
+

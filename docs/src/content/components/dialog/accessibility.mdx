@@ -1,0 +1,11 @@
+## Labeling
+
+You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog>` — the native `<dialog>` element underneath it lives across a shadow boundary those attributes can't reach. Set the `label` and `description` attributes instead; the dialog wires up the equivalent ARIA relationships for you and announces them correctly when it opens.
+
+## Keyboard interaction
+
+Keyboard navigation needs to behave the way it looks — a modal dialog makes the rest of the page inert, so interactive content outside it shouldn't be reachable while it's open. If there's a mouse-only way to close the dialog, make sure there's a keyboard equivalent too. When the dialog closes, return focus to a logical element on the page rather than losing it.
+
+## Screen reader behavior
+
+The dialog automatically applies `role="dialog"` and `aria-modal="true"` for you.

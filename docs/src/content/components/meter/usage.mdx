@@ -1,0 +1,65 @@
+---
+title: Meter
+description: Meters display a scalar value within a known range, using color to signal whether it's optimal, suboptimal, or least optimal.
+status: stable
+source: core
+category: data-display
+storybookId: components-meter--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-meter` shows a scalar value within a `min`/`max` range through `value`, `tickmarks`, and an optional `low`/`high`/`optimum` split that colors the track green, yellow, or red depending on where `value` falls. Reach for a meter when the value is a relatively static data point, like a storage quota or a satisfaction score — for a task's busy or in-progress state, use <a href={`${import.meta.env.BASE_URL}components/linear-progress/usage/`}>linear progress</a> instead; despite the visual similarity, the two represent fundamentally different things.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Always give a meter an accessible label, either via a label element association or aria-label/aria-labelledby.",
+      "Set optimum so the meter's color reflects whether the current value is actually good, not just its raw position in the range.",
+      "Pair a grouped meter with a key labeling each meter's color and value.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a meter to represent a task's busy or loading state — use linear progress instead.",
+      "Don't segment a meter (low/high) and group it at the same time — grouped meters can't be segmented.",
+      "Don't rely on color alone to convey a segmented meter's optimal/suboptimal/least-optimal state.",
+    ]}
+  />
+</Rules>
+
+## Segmented
+
+Set `low` and `high` to divide the track into three regions — below `low`, between `low` and `high`, and above `high` — colored green, yellow, or red depending on which region `optimum` falls in relative to `value`. `low` must be greater than or equal to `min` and less than `high`; `high` must be less than or equal to `max` and greater than `low`.
+
+<Example
+  description="A segmented meter, colored by how close its value is to the optimum region."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/meter/segmented/segmented.html"
+/>
+
+## Tickmarks
+
+Set `tickmarks` to show evenly spaced marks along the track; control how many with the `--forge-meter-tickmarks` token.
+
+<Example
+  description="A meter with tickmarks along its track."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/meter/tickmarks/tickmarks.html"
+/>
+
+## Grouped
+
+Wrap same-range meters in `forge-meter-group` to lay them out together on a single shared track — useful for parts of a whole. Grouped meters can't be segmented, and every meter in the group must share the same `min`/`max`. Pair a grouped meter with a <a href={`${import.meta.env.BASE_URL}components/key/usage/`}>key</a> labeling each meter's color and, optionally, its value.
+
+<Example
+  description="Several related meters grouped on one shared track."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/meter/grouped/grouped.html"
+/>

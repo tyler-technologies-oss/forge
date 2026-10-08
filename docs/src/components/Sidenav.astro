@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { buildNavigation } from "../config/navigation";
+import NavItem from "./NavItem.astro";
+
+interface Props {
+  components: CollectionEntry<"components">[];
+}
+
+const { components } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+// Build navigation from config
+const navigation = buildNavigation(components);
+---
+
+<forge-scaffold>
+  <forge-toolbar no-border slot="header">
+    <a
+      slot="start"
+      href={baseUrl}
+      aria-label="Forge Design System home"
+      class="flex h-full">
+      <img
+        src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
+        class="block h-full max-h-[100px] max-w-[150px]"
+      />
+    </a>
+    <div slot="end">
+      <forge-icon name="palette_swatch_variant" theme="primary"></forge-icon>
+    </div>
+  </forge-toolbar>
+  <div slot="body">
+    <div class="px-2 mt-medium mb-small">
+      <forge-text-field density="small">
+        <forge-icon slot="start" name="search"></forge-icon>
+        <input type="text" placeholder="Search..." aria-label="Search" />
+      </forge-text-field>
+    </div>
+    {
+      navigation.map((section, index) => (
+        <>
+          {index > 0 && <forge-divider class="my-xxxsmall" />}
+          <forge-list navlist>
+            {section.items.map((item) => (
+              <NavItem item={item} baseUrl={baseUrl} />
+            ))}
+          </forge-list>
+        </>
+      ))
+    }
+  </div>
+</forge-scaffold>
+
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  // Thin scrollbar styling (no Tailwind equivalent for ::-webkit-scrollbar).
+  [slot="body"] {
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--forge-theme-outline-variant, rgba(0, 0, 0, 0.2));
+      border-radius: 2px;
+    }
+  }
+
+  // Forge component CSS variables — not representable as Tailwind utilities.
+  forge-toolbar {
+    --forge-toolbar-background: transparent;
+    --forge-toolbar-padding-inline: 0;
+    flex-shrink: 0;
+  }
+
+  forge-list {
+    @include nav-list-item();
+  }
+</style>

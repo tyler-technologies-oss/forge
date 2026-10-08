@@ -1,0 +1,87 @@
+---
+title: Autocomplete
+description: Autocomplete components provide real-time typeahead suggestions as users type in a text field.
+status: stable
+source: core
+category: forms
+storybookId: components-autocomplete--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-autocomplete` wraps a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> and filters a list of options as the user types, through `mode`, `multiple`, `debounce`, and `emptyMessage`. Use it when a dropdown has too many options to scan comfortably; for a short, finite list, a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> is simpler and doesn't require typing.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use autocomplete when a dropdown has more options than a user can scan at a glance.",
+      "Debounce keystrokes so filtering doesn't run on every character against a large data set.",
+      "Set a clear empty-message so a no-results state doesn't look broken.",
+      "Provide placeholder or hint text describing what the field searches.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use autocomplete for a short, finite list of options — use a select instead.",
+      "Don't leave the field without hint text; a blank autocomplete is ambiguous.",
+      "Don't overload the suggestion list with extra information — keep each option lightweight.",
+    ]}
+  />
+</Rules>
+
+## Modes
+
+`mode` has two values: `default` (the common case) manages selection state for you as a form control. `stateless` doesn't track a selection at all — use it when you just want the typing/filtering behavior and intend to handle selection yourself.
+
+## Initial value
+
+Pre-populating a bound value on load needs the matching option available to show its label, not just the raw value. Either pass the full `IOption` object (`value` and `label`) to the `value` property directly, or return it from the `filter` callback's second parameter — the autocomplete calls the callback with that parameter specifically when it can't find a matching option already in its current list, so you can fetch it from wherever the rest of your options come from.
+
+## Basic filtering
+
+Wrap a `forge-text-field` (typically with `popover-icon` and `show-clear`) in a `forge-autocomplete` to filter its dropdown options as the user types.
+
+<Example
+  description="A text field filters its dropdown options as the user types."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/autocomplete/demo/demo.html"
+  height="350px"
+/>
+
+## Infinite scroll
+
+Set `observe-scroll` to fire `forge-autocomplete-scrolled-bottom` as the user nears the bottom of the dropdown, so more options can be appended with `appendOptions()` instead of loading the entire set up front.
+
+<Example
+  description="observe-scroll fires an event near the bottom of the dropdown to load more options."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/autocomplete/infinite-scroll/infinite-scroll.html"
+  height="350px"
+/>
+
+## Multi-select
+
+Set `multiple` to let a user select more than one option instead of replacing the previous selection.
+
+<Example
+  description="Multiple lets a user select more than one option."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/autocomplete/multi-select/multi-select.html"
+  height="350px"
+/>
+
+## Empty state
+
+Set `emptyMessage` to show custom text in the dropdown when no options match the current filter.
+
+<Example
+  description="An empty-message shows when no options match the filter. Search for something not in the list to see the empty state"
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/autocomplete/empty-state/empty-state.html"
+  height="350px"
+/>

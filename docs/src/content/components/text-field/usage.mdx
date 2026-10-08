@@ -1,0 +1,110 @@
+---
+title: Text Field
+description: An input field used to capture user text input, with an optional label, helper text, and validation state.
+status: stable
+source: core
+category: forms
+storybookId: components-text-field--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+## Usage
+
+`forge-text-field` wraps a child `<input>` or `<textarea>` and an optional `<label>`, handling layout and state through `variant`, `theme`, `shape`, `density`, `label-position`, `invalid`, `required`, `optional`, and `disabled`. For a fixed set of choices, reach for a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> or <a href={`${import.meta.env.BASE_URL}components/autocomplete/usage/`}>autocomplete</a> instead; for freeform, removable entries like tags or recipients, use a <a href={`${import.meta.env.BASE_URL}components/chip-field/usage/`}>chip field</a>.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Always show a visible label — don't rely on placeholder text alone.",
+      "Put extra guidance in helper text below the field instead of placeholder text.",
+      "Write error text as an actionable fix, and validate once the user leaves the field, not on every keystroke.",
+      "Match a field's width to its expected input length.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use placeholder text as a substitute for a label — it disappears the moment the user types.",
+      "Don't show error text and helper text in the same space — the error replaces the helper text, it doesn't stack with it.",
+      "Don't disable a field just to display a fixed value — use a label-value pair instead.",
+    ]}
+  />
+</Rules>
+
+## Variant
+
+Set `variant` to `outlined` (the default), `plain`, `tonal`, `filled`, or `raised` to match the field to its surrounding context.
+
+<Example
+  description="All five field variants."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/variant/variant.html"
+/>
+
+## Label position
+
+Set `label-position` to control where the label sits relative to the input: `inset` (the default) floats it inside the field, `block-start` places it above, and `inline-start` places it beside the field.
+
+<Example
+  description="Label positioned above the field."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/label-above/label-above.html"
+/>
+
+<Example
+  description="Label positioned inline, beside the field."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/label-inline/label-inline.html"
+/>
+
+## Helper text and validation
+
+Slot support text in the `helper-text` slot, set `required` for a required field, and set `invalid` to swap in error text describing the fix.
+
+<InlineMessage theme="warning" title="Set required on both elements">
+  `required` on `forge-text-field` only shows the required-field indicator — it's presentational. Native form validation and accessibility come from `required` on the nested `<input>`. Set both, or validation silently breaks.
+
+  ```html
+  <forge-text-field required>
+    <input required />
+  </forge-text-field>
+  ```
+</InlineMessage>
+
+<Example
+  description="Helper text, a required field, and an invalid field with error text."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/helper-text-and-validation/helper-text-and-validation.html"
+/>
+
+## Multiline
+
+Slot a `<textarea>` instead of an `<input>` for longer, multi-line responses. Prefer it over letting a single-line input grow, and size it to fit within mobile screen heights.
+
+<Example
+  description="A textarea slotted in place of an input."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/textarea/textarea.html"
+/>
+
+## Clear button
+
+Set `show-clear` to add a button that clears the field's value, appearing once the field has a value.
+
+<Example
+  description="A clear button appears once the field has a value."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/clear-button/clear-button.html"
+/>
+
+## Disabled and readonly
+
+Set `disabled` to exclude the field from the form.
+
+<Example
+  description="A disabled field."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/disabled-and-readonly/disabled-and-readonly.html"
+/>
+

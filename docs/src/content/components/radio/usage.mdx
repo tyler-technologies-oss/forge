@@ -1,0 +1,94 @@
+---
+title: Radio
+description: The Forge Radio component is used to create a form input where only one out of a set of values should be selected.
+status: stable
+source: core
+category: forms
+storybookId: components-radio--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-radio` lets a user select a single option from a visible set; group related radios so only one can be checked at a time, either informally by sharing a `name` or formally inside a `forge-radio-group`. It's one of three selection controls — reach for a <a href={`${import.meta.env.BASE_URL}components/checkbox/usage/`}>checkbox</a> when more than one option can be selected, or a <a href={`${import.meta.env.BASE_URL}components/switch/usage/`}>switch</a> to turn a single item on or off. When screen space is tight or the set is long, a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> compacts the same choice into a closed control.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use radios when the user needs to compare all available options at a glance.",
+      "Order options logically — alphabetical, numeric, or chronological.",
+      "Start each option with a capital letter and use sentence case.",
+      "Group related radios in a forge-radio-group with a legend describing the choice.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use radios for a large set of options — use a select instead.",
+      "Don't use a radio group when more than one option can be selected — use checkboxes instead.",
+      "Don't use a single radio for a single yes/no choice — use a checkbox instead.",
+    ]}
+  />
+</Rules>
+
+## Grouped options
+
+Wrap related radios in a `forge-radio-group` (with a `forge-label legend` describing the choice) so they're announced as a set and can be disabled together.
+
+<Example
+  description="Radios grouped inside a forge-radio-group with a shared legend."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/radio/radio-group/demo/demo.html"
+/>
+
+## Grouping without forge-radio-group
+
+`forge-radio-group` isn't required — radios sharing a `name` already form an implicit group:
+
+```html
+<forge-radio name="default">Option 1</forge-radio>
+<forge-radio name="default">Option 2</forge-radio>
+```
+
+For a custom layout that still needs to be interpreted as a group, set `role="radiogroup"` on a plain ancestor element instead:
+
+```html
+<div role="radiogroup" aria-label="Choose an option">
+  <forge-radio name="default">Option 1</forge-radio>
+  <forge-radio name="default">Option 2</forge-radio>
+</div>
+```
+
+## Label position
+
+Set `label-position` to `start` to place the label before the radio instead of after it.
+
+<Example
+  description="Label position set to start."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/radio/label-position/label-position.html"
+/>
+
+## Disabled and read-only
+
+`disabled` radios can't be focused; `readonly` radios can be focused but not changed.
+
+<Example
+  description="Disabled radios (left) can't be focused; read-only radios (right) can be focused but not changed."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/radio/disabled-and-readonly/disabled-and-readonly.html"
+/>
+
+## Dense
+
+Set `dense` to reduce the radio's size and spacing.
+
+<Example
+  description="Dense reduces the radio's size and spacing."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/radio/dense/dense.html"
+/>
+

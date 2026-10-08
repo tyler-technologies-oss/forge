@@ -1,0 +1,77 @@
+---
+title: Floating Action Button
+description: Floating action buttons represent the single most important action on a page, positioned above other content to draw attention to it.
+status: stable
+source: core
+category: actions
+storybookId: components-floating-action-button--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-fab` represents a page's single most important action through `theme`, `density`, and `elevation`. Use the default slot alone for an icon-only FAB, or add the `label` slot for an extended FAB with a text label. Reserve it for pages that truly have one primary action; when several actions are equally likely, reach for a <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>button</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a FAB only when a page has one clear primary action.",
+      "Place the icon before the label in an extended FAB.",
+      "Reserve elevation=\"lowered\" for a FAB that already sits on a raised surface, like a card.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't display more than one FAB on a page.",
+      "Don't use a FAB for a minor or destructive action, like archiving or showing an error.",
+      "Don't position a FAB where it obscures important content or controls.",
+    ]}
+  />
+</Rules>
+
+## Positioning
+
+`forge-fab` doesn't position itself — fix it to a corner of the viewport (or a scroll container) yourself, typically with `position: fixed` and a spacing token for the offset:
+
+```css
+.bottom-right {
+  position: fixed;
+  bottom: var(--forge-spacing-medium);
+  right: var(--forge-spacing-medium);
+}
+```
+
+## Density
+
+Set `density` to `small`, `medium` (the default), or `large` to match the FAB's surrounding context.
+
+<Example
+  description="Small, medium (default), and large density."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/floating-action-button/density/density.html"
+/>
+
+## Extended
+
+Add a `label` slot for an extended FAB with a text label — use it for actions that don't have a familiar icon.
+
+<Example
+  description="An icon paired with a label slot switches the FAB into its extended form."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/floating-action-button/extended/extended.html"
+/>
+
+## As a link
+
+Wrap an `<a>` in the default slot to get a navigating FAB instead of one that fires a click action.
+
+<Example
+  description="A FAB wrapping an anchor for navigation."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/floating-action-button/with-anchor/with-anchor.html"
+/>

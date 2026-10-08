@@ -1,0 +1,56 @@
+---
+title: Divider
+description: A thin line that visually separates groups of related content, horizontally or vertically.
+status: stable
+source: core
+category: layout
+storybookId: components-divider--demo
+---
+
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+## Usage
+
+`forge-divider` draws a thin separating line through a single `vertical` attribute — horizontal by default. Reach for it when content is complex enough that a visible line reads more clearly than whitespace alone; for simpler groupings, like a few related form fields, prefer spacing over a divider.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a divider when content is complex enough that a visible separator reads more clearly than whitespace.",
+      "Prefer whitespace over a divider for simpler groupings, like a handful of related form fields.",
+      "Use a vertical divider inside a toolbar to separate clusters of icons or actions.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't add a divider between every single element — reserve it for real section boundaries.",
+      "Don't use a divider as a substitute for consistent spacing throughout a layout.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A horizontal line is the default — use it to separate stacked content.
+
+<Example
+  description="A horizontal divider separating stacked content."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/divider/demo/demo.html"
+/>
+
+## Vertical
+
+Set `vertical` for a divider that separates inline items side by side instead of stacked ones.
+
+<Example
+  description="A vertical divider separating two inline items."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/divider/vertical/vertical.html"
+/>
+

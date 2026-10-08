@@ -1,0 +1,48 @@
+---
+/**
+ * PageScaffold - Pins a page's header (and tabs, if present) in place while
+ * the body content underneath scrolls independently, via forge-scaffold's
+ * header/body grid areas.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<article class:list={["h-full", className]}>
+  <forge-scaffold class="h-full">
+    <div slot="header">
+      <slot name="header" />
+    </div>
+    <div slot="body" data-page-scroll-body>
+      <slot />
+    </div>
+  </forge-scaffold>
+</article>
+
+<style lang="scss">
+  // Thin scrollbar styling (no Tailwind equivalent for ::-webkit-scrollbar).
+  [data-page-scroll-body] {
+    scrollbar-width: thin;
+
+    // Bleed the scrollbar out into the card's padding instead of
+    // rendering it inset within the padded content.
+    margin-right: calc(-1 * var(--forge-spacing-large));
+    padding-right: var(--forge-spacing-large);
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--forge-theme-outline-variant, rgba(0, 0, 0, 0.2));
+      border-radius: 2px;
+    }
+  }
+</style>
