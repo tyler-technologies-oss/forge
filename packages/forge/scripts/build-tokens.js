@@ -3,8 +3,7 @@ import { writeFile } from 'fs/promises';
 import { resolve } from 'path';
 
 const TOKENS_ENTRY = 'src/lib/forge-tokens.scss';
-const THEME_LIGHT_ENTRY = 'scripts/tokens/theme-light.scss';
-const THEME_DARK_ENTRY = 'scripts/tokens/theme-dark.scss';
+const STYLES_PATH = 'src/lib/core/styles';
 const SCHEMA_VERSION = '1.1.0';
 const CUSTOM_PROPERTY_PATTERN = /(--forge-([a-z0-9]+)-[a-z0-9-]+):\s*([^;]+);/g;
 
@@ -19,6 +18,8 @@ const CATEGORY_BY_PREFIX = {
 };
 
 const THEME_TOKEN_PREFIX = '--forge-theme-';
+const THEME_LIGHT_SOURCE = `@use 'theme'; :root { @include theme.properties; }`;
+const THEME_DARK_SOURCE = `@use 'theme'; :root { @include theme.properties-dark; }`;
 const THEME_ROLES = ['brand', 'primary', 'secondary', 'tertiary', 'surface', 'text', 'success', 'error', 'warning', 'info', 'outline'];
 
 /**
@@ -33,22 +34,29 @@ export function getThemeCategory(name) {
   return THEME_ROLES.includes(role) ? role : undefined;
 }
 
-function compileCustomProperties(entry) {
-  const { css } = sass.compile(resolve(entry), { style: 'expanded', quietDeps: true });
+function parseCustomProperties(css) {
   return [...css.matchAll(CUSTOM_PROPERTY_PATTERN)].map(([, name, prefix, value]) => ({ name, prefix, value: value.trim() }));
+}
+
+function compileCustomProperties(entry) {
+  return parseCustomProperties(sass.compile(resolve(entry), { style: 'expanded', quietDeps: true }).css);
+}
+
+function compileThemeCustomProperties(source) {
+  const { css } = sass.compileString(source, { loadPaths: [resolve(STYLES_PATH)], style: 'expanded', quietDeps: true });
+  return parseCustomProperties(css);
 }
 
 /**
  * Compiles the light and dark themes and extracts each `--forge-theme-*` custom property with both resolved values.
  *
- * @param {{ light?: string; dark?: string }} [entries] The Sass entry points that emit the light and dark theme properties.
  * @returns {{ category: string; name: string; value: string; values: { light: string; dark: string } }[]} The tokens, in declaration order.
  */
-export function extractThemeTokens({ light = THEME_LIGHT_ENTRY, dark = THEME_DARK_ENTRY } = {}) {
-  const darkValues = new Map(compileCustomProperties(dark).map(({ name, value }) => [name, value]));
+export function extractThemeTokens() {
+  const darkValues = new Map(compileThemeCustomProperties(THEME_DARK_SOURCE).map(({ name, value }) => [name, value]));
   const tokens = [];
 
-  for (const { name, prefix, value } of compileCustomProperties(light)) {
+  for (const { name, prefix, value } of compileThemeCustomProperties(THEME_LIGHT_SOURCE)) {
     const category = prefix === 'theme' ? getThemeCategory(name) : undefined;
     if (category) {
       tokens.push({ category, name, value, values: { light: value, dark: darkValues.get(name) ?? value } });
