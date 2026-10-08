@@ -224,8 +224,8 @@ importers:
         specifier: 'catalog:'
         version: 13.0.6
       handlebars:
-        specifier: ^4.7.8
-        version: 4.7.8
+        specifier: ^4.7.10
+        version: 4.7.10
       playwright:
         specifier: 'catalog:'
         version: 1.59.0
@@ -588,8 +588,8 @@ importers:
         specifier: ^1.31.0
         version: 1.31.0(zod@4.1.13)
       handlebars:
-        specifier: ^4.7.8
-        version: 4.7.8
+        specifier: ^4.7.10
+        version: 4.7.10
       js-levenshtein-esm:
         specifier: ^2.0.0
         version: 2.0.0
@@ -5793,8 +5793,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  handlebars@4.7.8:
-    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
+  handlebars@4.7.10:
+    resolution: {integrity: sha512-P5VJMVM7qgBn6vjXMw8WG9uVI+ncf2pi72j4de4yz5ZULLj2RGqLYaKOYGsgyrViQ0tePOVlN1tDCCXXtFqXKg==}
     engines: {node: '>=0.4.7'}
     hasBin: true
 
@@ -13445,7 +13445,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  handlebars@4.7.8:
+  handlebars@4.7.10:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
@@ -14580,7 +14580,7 @@ snapshots:
       '@types/picomatch': 4.0.2
       change-case: 5.4.4
       dlv: 1.1.3
-      handlebars: 4.7.8
+      handlebars: 4.7.10
       inquirer: 9.3.8(@types/node@25.5.0)
       isbinaryfile: 5.0.7
       resolve: 1.22.11
