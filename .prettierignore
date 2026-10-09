@@ -18,4 +18,5 @@ packages/forge/templates/
 CONTRIBUTING.md
 CHANGELOG.md
 **/README.md
+STYLEGUIDE.md
 .gitignore
