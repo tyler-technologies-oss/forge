@@ -36,6 +36,10 @@
   animation-fill-mode: forwards;
 }
 
+@function arrow-inset($offset: null) {
+  @return if($offset, calc(#{token(border-width)} + #{$offset}), token(border-width));
+}
+
 @mixin arrow {
   position: absolute;
   contain: strict;
@@ -51,28 +55,28 @@
   clip-path: #{token(arrow-clip-path, custom)};
 }
 
-@mixin arrow-placement-top {
+@mixin arrow-placement-top($offset: null) {
   @include override(arrow-rotation, arrow-top-rotation);
 
-  margin-block-end: #{token(border-width)};
+  margin-block-end: arrow-inset($offset);
 }
 
-@mixin arrow-placement-right {
+@mixin arrow-placement-right($offset: null) {
   @include override(arrow-rotation, arrow-right-rotation);
 
-  margin-inline-start: #{token(border-width)};
+  margin-inline-start: arrow-inset($offset);
 }
 
-@mixin arrow-placement-bottom {
+@mixin arrow-placement-bottom($offset: null) {
   @include override(arrow-rotation, arrow-bottom-rotation);
 
-  margin-block-start: #{token(border-width)};
+  margin-block-start: arrow-inset($offset);
 }
 
-@mixin arrow-placement-left {
+@mixin arrow-placement-left($offset: null) {
   @include override(arrow-rotation, arrow-left-rotation);
 
-  margin-inline-end: #{token(border-width)};
+  margin-inline-end: arrow-inset($offset);
 }
 
 @mixin visually-hidden {

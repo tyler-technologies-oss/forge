@@ -1,5 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html, nothing } from 'lit-html';
+import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { OVERLAY_PLACEMENT_OPTIONS, OVERLAY_FLIP_OPTIONS, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { TOOLTIP_CONSTANTS } from '@tylertech/forge/tooltip';
@@ -8,6 +9,8 @@ import '@tylertech/forge/button';
 import '@tylertech/forge/tooltip';
 
 const component = 'forge-tooltip';
+
+const CSS_ONLY_PLACEMENTS = ['right', 'top', 'bottom', 'left'] as const;
 
 const meta = {
   title: 'Components/Tooltip',
@@ -65,3 +68,30 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const CSSOnly: Story = {
+  parameters: {
+    controls: { disable: false, exclude: ['open', 'type', 'delay', 'offset', 'flip', 'triggerType', 'fallbackPlacements'] }
+  },
+  argTypes: {
+    placement: { control: 'select', options: CSS_ONLY_PLACEMENTS },
+    text: { control: 'text' }
+  },
+  args: {
+    placement: 'right',
+    text: 'CSS-only tooltip'
+  },
+  render: ({ placement, text, ...args }) => {
+    const cssVarArgs = getCssVariableArgs(args);
+    const style = cssVarArgs ? styleMap(cssVarArgs) : nothing;
+    const classes = {
+      'forge-tooltip': true,
+      [`forge-tooltip--${placement}`]: placement !== 'right'
+    };
+    return html`
+      <span class=${classMap(classes)} data-text=${text} tabindex="0" style=${style}>
+        <span style="text-decoration: underline dotted;">Hover or focus me</span>
+      </span>
+    `;
+  }
+};
