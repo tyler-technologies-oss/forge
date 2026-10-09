@@ -1,0 +1,64 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb-item {
+  @include core.tokens;
+}
+
+.forge-breadcrumb-item {
+  @include core.base;
+}
+
+.button {
+  @include core.button;
+}
+
+.icon-button {
+  @include core.icon-button;
+}
+.menu-item {
+  @include core.menu-item;
+}
+
+.list-item {
+  @include core.list-item;
+}
+
+.start {
+  @include core.start;
+}
+
+.text {
+  @include core.text;
+}
+
+.text-icon {
+  @include core.text-icon;
+}
+
+.visually-hidden {
+  @include core.visually-hidden;
+}
+
+.current {
+  @include core.current;
+
+  &::after {
+    display: none;
+  }
+}
