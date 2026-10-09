@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use '../../../utils';
+@use '../../../theme';
+
+$tokens: (
+  background: utils.module-val(modal-drawer, background, theme.variable(surface-elevated))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

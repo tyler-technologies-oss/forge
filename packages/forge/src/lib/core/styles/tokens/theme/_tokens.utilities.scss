@@ -1,18 +1,19 @@
 @use 'sass:map';
-@use '../color-palette';
+@use '../color-palette/radix-color-palette' as color-palette;
+@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
 
 // Light
 $tokens: (
-  outline-high: color-palette.$grey-900,
-  outline-medium: color-palette.$grey-600,
-  outline-low: color-palette.$grey-500,
-  outline: color-palette.$grey-300
+  outline-low: color-palette.$slate-a6,
+  outline: color-palette.$slate-a8,
+  outline-medium: color-palette.$slate-a10,
+  outline-high: color-palette.$slate-a12
 );
 
 // Dark
 $tokens-dark: (
-  outline-high: #e4e4e4,
-  outline-medium: color-palette.$grey-500,
-  outline-low: color-palette.$grey-600,
-  outline: color-palette.$grey-800
+  outline-low: color-palette-dark.$slate-a6,
+  outline: color-palette-dark.$slate-a8,
+  outline-medium: color-palette-dark.$slate-a10,
+  outline-high: color-palette-dark.$slate-a12
 );

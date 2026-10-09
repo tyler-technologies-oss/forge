@@ -7,8 +7,8 @@
 @use '../../utils';
 
 $tokens: (
-  background: utils.module-val(badge, background, theme.variable(secondary)),
-  color: utils.module-val(badge, color, theme.variable(on-secondary)),
+  background: utils.module-val(badge, background, theme.variable(surface-container)),
+  color: utils.module-val(badge, color, theme.variable(on-surface-container)),
   shape: utils.module-val(badge, shape, shape.variable(full)),
   height: utils.module-val(badge, height, 20px),
   min-width: utils.module-val(badge, min-width, 0),
@@ -19,7 +19,7 @@ $tokens: (
   border-style: utils.module-val(badge, border-style, none),
   border-color: utils.module-ref(badge, border-color, color),
   gap: utils.module-val(badge, gap, spacing.variable(xxsmall)),
-  font-weight: utils.module-val(badge, font-weight, bold),
+  font-weight: utils.module-val(badge, font-weight, 500),
   // Dot
   dot-size: utils.module-val(badge, dot-size, 8px),
   dot-height: utils.module-ref(badge, dot-height, dot-size),

@@ -1,4 +1,5 @@
 @use './core' as *;
+@use '../core/styles/theme';
 
 //
 // Host
@@ -6,6 +7,12 @@
 
 :host {
   @include host;
+
+  @include theme.provide(
+    (
+      surface-elevated-translucent: theme.variable(surface-bright)
+    )
+  );
 }
 
 :host([hidden]) {
