@@ -28,16 +28,6 @@
     &.closed {
       @include closed;
     }
-
-    &.closing {
-      &.right {
-        transform: translateX(100%);
-      }
-    }
-  }
-
-  &.right {
-    @include right;
   }
 
   &.display-none {
@@ -50,5 +40,21 @@
 
   &.closed {
     display: none;
+  }
+}
+
+//
+// Right
+//
+
+:host(:state(right)) {
+  .forge-drawer {
+    @include right;
+
+    &.modal {
+      &.closing {
+        transform: translateX(100%);
+      }
+    }
   }
 }

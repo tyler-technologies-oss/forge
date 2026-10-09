@@ -1,22 +1,14 @@
-import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { TemplateResult, html, unsafeCSS } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
+import { BaseDrawerComponent, IBaseDrawerComponent } from '../base/base-drawer.js';
 import { DRAWER_CONSTANTS } from './drawer-constants.js';
-import { BaseDrawerAdapter, BaseDrawerComponent, BaseDrawerCore, IBaseDrawerComponent } from '../base/index.js';
 
-import template from './drawer.html';
 import styles from './drawer.scss';
 
+/** @deprecated - This will be removed in the future. Please switch to using DrawerComponent. */
 export interface IDrawerComponent extends IBaseDrawerComponent {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-drawer': IDrawerComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-drawer-after-open': CustomEvent<void>;
-    'forge-drawer-after-close': CustomEvent<void>;
-  }
-}
 
 /**
  * @tag forge-drawer
@@ -44,15 +36,33 @@ declare global {
  * @cssclass forge-drawer--closing - Triggers the drawer dismiss animation.
  * @cssclass forge-drawer--closed - Applied when the drawer is dismissed.
  */
-@customElement({
-  name: DRAWER_CONSTANTS.elementName
-})
-export class DrawerComponent extends BaseDrawerComponent<BaseDrawerCore> implements IDrawerComponent {
-  protected _core: BaseDrawerCore;
+@customElement(DRAWER_CONSTANTS.elementName)
+export class DrawerComponent extends BaseDrawerComponent implements IDrawerComponent {
+  public static styles = unsafeCSS(styles);
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new BaseDrawerCore(new BaseDrawerAdapter(this));
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = DRAWER_CONSTANTS.elementName;
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-drawer" part="root" ${ref(this._drawerElement)}>
+        <slot name="header"></slot>
+        <div class="content" part="content">
+          <slot></slot>
+        </div>
+        <slot name="footer"></slot>
+      </div>
+    `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-drawer': IDrawerComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-drawer-after-open': CustomEvent<void>;
+    'forge-drawer-after-close': CustomEvent<void>;
   }
 }
