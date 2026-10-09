@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
 import { renderFixture } from '../../testing/fixture.js';
 import type { RichTextEditorComponent } from '../rich-text-editor.js';
+import type { RichTextContentComponent } from '../rich-text-content.js';
 import type { RichTextDocument } from '../editor-context.js';
 import '../rich-text-editor.js';
 import '../features/rte-bold.js';
@@ -137,6 +139,28 @@ describe('RichTextEditor content formats', () => {
     await setContent(bare, '<p>plain <strong>and bold</strong></p>');
 
     expect(bare.toHTML()).toContain('plain');
+  });
+
+  describe('setting the document the editor already holds', () => {
+    const focusEditable = (el: RichTextEditorComponent): void => {
+      const content = el.shadowRoot!.querySelector('forge-rich-text-content') as RichTextContentComponent;
+      (content.shadowRoot!.querySelector('.ProseMirror') as HTMLElement).focus();
+    };
+
+    it('should keep the cursor in place when each change is passed back as content', async () => {
+      const el = await createEditor();
+      el.addEventListener('change', event => {
+        el.content = (event as CustomEvent).detail.json;
+      });
+      focusEditable(el);
+
+      await userEvent.keyboard('Hello world');
+      await userEvent.keyboard('{ArrowLeft>5/}');
+      await userEvent.keyboard('big ');
+      await el.updateComplete;
+
+      expect(el.toHTML()).toBe('<p>Hello big world</p>');
+    });
   });
 
   describe('reporting rejected documents', () => {
