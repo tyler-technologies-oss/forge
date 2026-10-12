@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "node scripts/sync-local-blocks.mjs && astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-forge-skill.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test scripts/*.test.mjs",

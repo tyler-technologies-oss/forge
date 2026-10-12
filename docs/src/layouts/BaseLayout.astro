@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import FoundryChatbot from "../components/FoundryChatbot.astro";
 import Sidenav from "../components/Sidenav.astro";
 import { getCollection } from "astro:content";
 import "../styles/global.css";
@@ -221,6 +222,8 @@ const components = await getCollection("components");
         )}
       </main>
     </forge-scaffold>
+
+    <FoundryChatbot />
 
     <style is:global>
       /* Forge card CSS variables — not representable as Tailwind utilities. */

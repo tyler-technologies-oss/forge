@@ -16,6 +16,9 @@
    the OS-level `prefers-color-scheme`. */
 @custom-variant dark (&:where(html[data-forge-theme='dark'] *));
 
+/* Styles a custom element before its definition loads, e.g. `undefined:hidden`. */
+@custom-variant undefined (&:not(:defined));
+
 /*
  * Content caps for BaseLayout's page templates. Extends Tailwind's
  * `--container-*` scale (the `max-w-*` namespace) so both are usable as

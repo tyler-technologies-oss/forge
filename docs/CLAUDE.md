@@ -7,7 +7,7 @@ Astro documentation site for Tyler Forge (`forge-docs`, private). Root conventio
 Run from the monorepo root or with `pnpm --filter forge-docs <script>`:
 
 - `pnpm dev:docs` - Start the Astro dev server (builds workspace dependencies first)
-- `pnpm --filter forge-docs build` - Build the static site to `docs/dist`
+- `pnpm --filter forge-docs build` - Build the static site to `docs/dist`, then the Forge Design skill bundle to `docs/skill`
 - `pnpm --filter forge-docs test` - Test the skill build script
 - `pnpm --filter forge-docs build:forge-skill` - Generate the Forge Design skill bundle to `docs/skill`
 

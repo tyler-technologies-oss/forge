@@ -24,8 +24,8 @@
  * scanning raw text for tag spans, so indentation and fenced code samples
  * (which contain their own `import` lines) can't confuse the cleanup.
  *
- * Run with `pnpm build:forge-skill [-- --strict]`. Not wired into `astro build`; run it
- * whenever the MDX docs change.
+ * Runs as part of `pnpm build` (after `astro build`), or on its own with
+ * `pnpm build:forge-skill [-- --strict]`.
  */
 import { readFile, writeFile, mkdir, readdir, access } from "node:fs/promises";
 import path from "node:path";
