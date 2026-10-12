@@ -56,6 +56,19 @@ html[data-forge-theme='dark'] {
 }
 ```
 
+## Avatar Styling
+
+The `<forge-user-profile>` renders a `<forge-avatar>` in both the button and the popover. The avatar CSS custom properties
+`--forge-avatar-background` and `--forge-avatar-color` are applied to both avatars when set on the `<forge-user-profile>` element
+(or any ancestor). When they are not set, the popover avatar uses its own default colors.
+
+```css
+forge-user-profile {
+  --forge-avatar-background: #6a1b9a;
+  --forge-avatar-color: #fff;
+}
+```
+
 ## API
 
 <CustomArgTypes />
