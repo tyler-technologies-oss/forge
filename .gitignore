@@ -5,7 +5,6 @@
 .pnpm-store/
 node_modules/
 dist/
-docs/
 *.tgz
 *storybook.log
 storybook-static/
