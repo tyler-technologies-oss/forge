@@ -483,6 +483,58 @@ describe('AppLauncher', () => {
     });
   });
 
+  describe('Toggle event', () => {
+    it('should dispatch forge-app-launcher-toggle with open state when opened', async () => {
+      stubMatchMedia(false);
+      const harness = await createFixture();
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-app-launcher-toggle', listener);
+
+      harness.element.open = true;
+      await harness.element.updateComplete;
+
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener.mock.calls[0][0].detail).toEqual({ newState: 'open' });
+    });
+
+    it('should dispatch forge-app-launcher-toggle with closed state when closed', async () => {
+      stubMatchMedia(false);
+      const harness = await createFixture({ open: true });
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-app-launcher-toggle', listener);
+
+      harness.element.open = false;
+      await harness.element.updateComplete;
+
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener.mock.calls[0][0].detail).toEqual({ newState: 'closed' });
+    });
+
+    it('should not dispatch forge-app-launcher-toggle on initial render when closed', async () => {
+      stubMatchMedia(false);
+      const listener = vi.fn();
+      document.addEventListener('forge-app-launcher-toggle', listener);
+
+      await createFixture();
+
+      document.removeEventListener('forge-app-launcher-toggle', listener);
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should dispatch a composed event when the popover opens', async () => {
+      stubMatchMedia(false);
+      const harness = await createFixture();
+      const listener = vi.fn();
+      document.addEventListener('forge-app-launcher-toggle', listener);
+
+      harness.popover?.dispatchEvent(new CustomEvent('forge-popover-toggle', { detail: { newState: 'open' }, bubbles: true }));
+      await harness.element.updateComplete;
+
+      document.removeEventListener('forge-app-launcher-toggle', listener);
+      expect(listener).toHaveBeenCalledOnce();
+    });
+  });
+
   describe('Dialog events', () => {
     it('should handle forge-dialog-close event and reset state', async () => {
       stubMatchMedia(true);

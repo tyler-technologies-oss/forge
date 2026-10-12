@@ -18,7 +18,7 @@ import { IPopoverToggleEventData, PopoverComponent } from '../popover/index.js';
 import { SkeletonComponent } from '../skeleton/index.js';
 import { TextFieldComponent } from '../text-field/index.js';
 import { ToolbarComponent } from '../toolbar/index.js';
-import { AppLauncherOption, AppLauncherView } from './app-launcher-constants.js';
+import { AppLauncherOption, AppLauncherToggleEventData, AppLauncherView } from './app-launcher-constants.js';
 
 import '../avatar/avatar.js';
 import '../button/button.js';
@@ -49,6 +49,10 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-app-launcher': IAppLauncherComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-app-launcher-toggle': CustomEvent<AppLauncherToggleEventData>;
+  }
 }
 
 export const APP_LAUNCHER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-app-launcher';
@@ -73,6 +77,8 @@ export const APP_LAUNCHER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-app-lau
  * @dependency forge-skeleton
  * @dependency forge-text-field
  * @dependency forge-toolbar
+ *
+ * @event {CustomEvent<AppLauncherToggleEventData>} forge-app-launcher-toggle - Fired when the app launcher opens or closes.
  *
  * @slot header-title - Title text for the app launcher header
  * @slot related-apps-title - Title text for the related apps section
@@ -216,6 +222,16 @@ export class AppLauncherComponent extends BaseLitElement implements IAppLauncher
         this._appView = 'related';
       }
     }
+  }
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    if (!changedProperties.has('open')) {
+      return;
+    }
+    if (!this.open && changedProperties.get('open') === undefined) {
+      return;
+    }
+    this.#emitToggle(this.open ? 'open' : 'closed');
   }
 
   public render(): TemplateResult {
@@ -445,6 +461,17 @@ export class AppLauncherComponent extends BaseLitElement implements IAppLauncher
         <a href="${app.uri}" target="${app.target || '_blank'}">${app.label}</a>
       </forge-list-item>
     `;
+  }
+
+  #emitToggle(newState: AppLauncherToggleEventData['newState']): void {
+    this.dispatchEvent(
+      new CustomEvent<AppLauncherToggleEventData>('forge-app-launcher-toggle', {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        detail: { newState }
+      })
+    );
   }
 
   #setupMediaQuery(): void {

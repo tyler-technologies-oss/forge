@@ -113,6 +113,32 @@ A skeleton loading state that displays automatically when no application data is
 - Displays skeleton placeholders to provide visual feedback during data loading
 - Automatically transitions to the appropriate view when app data is provided
 
+## Lazy Loading Apps
+
+The `forge-app-launcher-toggle` event is dispatched whenever the launcher opens or closes, regardless of whether it was triggered by the user or by setting the `open` property. The event detail contains the `newState` (`'open'` or `'closed'`).
+
+This allows you to defer fetching the app list until the launcher is first opened. While `relatedApps` and `allApps` are both empty, the launcher displays its [loading view](#loading-view).
+
+```html
+<forge-app-bar theme-mode="scoped">
+  <forge-app-launcher slot="end" id="app-launcher"></forge-app-launcher>
+</forge-app-bar>
+
+<script>
+  const appLauncher = document.querySelector('#app-launcher');
+  let hasRequestedApps = false;
+
+  appLauncher.addEventListener('forge-app-launcher-toggle', async evt => {
+    if (evt.detail.newState !== 'open' || hasRequestedApps) {
+      return;
+    }
+
+    hasRequestedApps = true;
+    appLauncher.allApps = await fetchApps();
+  });
+</script>
+```
+
 ## Custom Links
 
 The component supports custom links through the `<forge-app-launcher-link>` utility component, which provides accessible and visually consistent links within the launcher. Custom links appear in a separate section and are ideal for documentation, FAQ pages, or other supplementary resources.
