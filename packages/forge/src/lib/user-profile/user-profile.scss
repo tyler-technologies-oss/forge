@@ -9,6 +9,9 @@
 
 :host {
   display: contents;
+
+  --_popover-avatar-background: var(--forge-avatar-background, #{theme.variable(secondary-container-low)});
+  --_popover-avatar-color: var(--forge-avatar-color, #{theme.variable(on-secondary-container-low)});
 }
 
 //
@@ -34,8 +37,8 @@
 .popover-avatar {
   --forge-avatar-size: 56px;
   --forge-avatar-shape: #{shape.variable(extra-large)};
-  --forge-avatar-background: #{theme.variable(secondary-container-low)};
-  --forge-avatar-color: #{theme.variable(on-secondary-container-low)};
+  --forge-avatar-background: var(--_popover-avatar-background);
+  --forge-avatar-color: var(--_popover-avatar-color);
 
   &::part(root) {
     font-size: calc(var(--forge-avatar-size) * 0.4);
