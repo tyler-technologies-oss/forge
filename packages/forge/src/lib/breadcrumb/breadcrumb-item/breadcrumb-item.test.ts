@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { BreadcrumbItemComponent } from './breadcrumb-item.js';
@@ -234,6 +235,100 @@ describe('Breadcrumb Item', () => {
       `);
 
       expect(root.querySelector('forge-icon')).toBeNull();
+    });
+  });
+
+  describe('with child items', () => {
+    const childTemplate = html`
+      <forge-breadcrumb aria-label="Breadcrumb">
+        <forge-breadcrumb-item href="#ignored">
+          Section
+          <forge-breadcrumb-item slot="children" href="#one">One</forge-breadcrumb-item>
+          <forge-breadcrumb-item slot="children" href="#two">Two</forge-breadcrumb-item>
+        </forge-breadcrumb-item>
+      </forge-breadcrumb>
+    `;
+
+    it('should render a menu button instead of a link when child items are slotted', async () => {
+      const screen = render(childTemplate);
+      const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+      await el.updateComplete;
+
+      expect(el.shadowRoot?.querySelector('forge-button a')).toBeNull();
+      await expect.element(screen.getByRole('button', { name: 'Section' })).toBeInTheDocument();
+    });
+
+    it('should open a popover with the child items when the button is clicked', async () => {
+      const screen = render(childTemplate);
+      const button = screen.getByRole('button', { name: 'Section' });
+
+      await button.click();
+
+      await expect.element(button).toHaveAttribute('aria-expanded', 'true');
+      await expect.element(screen.getByRole('link', { name: 'One' })).toBeVisible();
+      await expect.element(screen.getByRole('link', { name: 'Two' })).toBeVisible();
+    });
+
+    it('should close the popover when a child link is activated', async () => {
+      const screen = render(childTemplate);
+      const button = screen.getByRole('button', { name: 'Section' });
+
+      await button.click();
+      (screen.getByRole('link', { name: 'One' }).element() as HTMLAnchorElement).focus();
+      await userEvent.keyboard('{Enter}');
+
+      await expect.element(button).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('should render child items as menu items', async () => {
+      const screen = render(childTemplate);
+      const child = screen.container.querySelector('forge-breadcrumb-item[slot="children"]') as BreadcrumbItemComponent;
+      await child.updateComplete;
+
+      expect(child.shadowRoot?.querySelector('forge-list-item a[href="#one"]')).not.toBeNull();
+      expect(child.shadowRoot?.querySelector('.forge-breadcrumb-item')?.classList.contains('menu-item')).toBe(true);
+    });
+
+    it('should render a menu button when child items are slotted and href is not set', async () => {
+      const screen = render(html`
+        <forge-breadcrumb-item>
+          Section
+          <forge-breadcrumb-item slot="children" href="#one">One</forge-breadcrumb-item>
+        </forge-breadcrumb-item>
+      `);
+
+      await expect.element(screen.getByRole('button', { name: 'Section' })).toBeInTheDocument();
+    });
+
+    it('should render a home icon button that toggles the menu when home is set', async () => {
+      const screen = render(html`
+        <forge-breadcrumb-item home href="#">
+          Home
+          <forge-breadcrumb-item slot="children" href="#one">One</forge-breadcrumb-item>
+        </forge-breadcrumb-item>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+      await el.updateComplete;
+
+      expect(el.shadowRoot?.querySelector('forge-icon-button forge-icon[name="home"]')).not.toBeNull();
+      expect(el.shadowRoot?.querySelector('a')).toBeNull();
+    });
+
+    it('should render a link again when child items are removed', async () => {
+      const screen = render(childTemplate);
+      const el = screen.container.querySelector('forge-breadcrumb-item') as BreadcrumbItemComponent;
+      await el.updateComplete;
+
+      el.querySelectorAll('[slot="children"]').forEach(child => child.remove());
+
+      await vi.waitFor(() => expect(el.shadowRoot?.querySelector('forge-button a[href="#ignored"]')).not.toBeNull());
+    });
+
+    it('should be accessible', async () => {
+      const screen = render(childTemplate);
+      const el = screen.container.querySelector('forge-breadcrumb') as HTMLElement;
+
+      await expect(el).toBeAccessible();
     });
   });
 

@@ -61,6 +61,8 @@ describe('Breadcrumb', () => {
   describe('scroll buttons', () => {
     const ITEM_COUNT = 12;
 
+    const isDisabled = (button: IconButtonComponent | null): boolean | undefined => button?.hasAttribute('aria-disabled');
+
     const renderBreadcrumb = async (width: string, scrollButtons = true): Promise<BreadcrumbFixture> => {
       const screen = render(html`
         <div style="width: ${width}">
@@ -75,7 +77,7 @@ describe('Breadcrumb', () => {
       await vi.waitFor(() => expect(el.shadowRoot?.querySelector('.forge-breadcrumb')).not.toBeNull());
       return {
         el,
-        list: el.shadowRoot?.querySelector('.forge-breadcrumb') as HTMLElement,
+        list: el.shadowRoot?.querySelector('.list') as HTMLElement,
         previous: () => el.shadowRoot?.querySelector<IconButtonComponent>('.scroll-button-previous') ?? null,
         next: () => el.shadowRoot?.querySelector<IconButtonComponent>('.scroll-button-next') ?? null
       };
@@ -108,19 +110,19 @@ describe('Breadcrumb', () => {
       const { list, next } = await renderBreadcrumb('300px');
 
       await vi.waitFor(() => expect(list.scrollLeft).toBeGreaterThan(0));
-      await vi.waitFor(() => expect(next()?.disabled).toBe(true));
+      await vi.waitFor(() => expect(isDisabled(next())).toBe(true));
     });
 
     it('should enable the previous button and disable the next button when scrolled to the end', async () => {
       const { previous, next } = await renderBreadcrumb('300px');
 
-      await vi.waitFor(() => expect(previous()?.disabled).toBe(false));
-      expect(next()?.disabled).toBe(true);
+      await vi.waitFor(() => expect(isDisabled(previous())).toBe(false));
+      expect(isDisabled(next())).toBe(true);
     });
 
     it('should scroll backward when the previous button is clicked', async () => {
       const { list, previous } = await renderBreadcrumb('300px');
-      await vi.waitFor(() => expect(previous()?.disabled).toBe(false));
+      await vi.waitFor(() => expect(isDisabled(previous())).toBe(false));
       const initialScrollLeft = list.scrollLeft;
 
       previous()?.click();
@@ -130,9 +132,9 @@ describe('Breadcrumb', () => {
 
     it('should scroll forward when the next button is clicked', async () => {
       const { list, previous, next } = await renderBreadcrumb('300px');
-      await vi.waitFor(() => expect(previous()?.disabled).toBe(false));
+      await vi.waitFor(() => expect(isDisabled(previous())).toBe(false));
       list.scrollTo({ behavior: 'instant', left: 0 });
-      await vi.waitFor(() => expect(next()?.disabled).toBe(false));
+      await vi.waitFor(() => expect(isDisabled(next())).toBe(false));
 
       next()?.click();
 

@@ -21,6 +21,21 @@ breadcrumb items after it.
 
 <Canvas of={BreadcrumbStories.OverflowMenu} />
 
+## Child items
+
+An item can have child items. Slot `forge-breadcrumb-item` elements into the `children` slot of a
+breadcrumb item to display sibling pages in a popover menu. When child items are slotted, the
+item's button toggles the menu instead of navigating, and its `href` is ignored.
+
+Use child items when a level of the hierarchy has related pages the user may want to jump to directly,
+such as the other pages within a section. Child items are displayed in the same style as items in the
+overflow menu, and the menu closes when a link is selected or focus moves out of it.
+
+Child items are only supported one level deep. A child item that has its own `children` slotted
+is still displayed as a regular menu item.
+
+<Canvas of={BreadcrumbStories.ChildItems} />
+
 ## Scroll buttons
 
 Set the `scroll-buttons` attribute to keep the breadcrumb items on a single line instead of wrapping. When
@@ -50,7 +65,7 @@ or is unclear. When the current page is included, it must be the last item in th
 ## Icons
 
 Use the `start` slot to place an icon (or other content) before an item's text. The slot is supported by
-items in the breadcrumb and within the overflow menu.
+items in the breadcrumb, within the overflow menu, and within an item's child items.
 
 <Canvas of={BreadcrumbStories.WithIcons} />
 
@@ -75,5 +90,7 @@ hierarchy that don't have a page of their own.
   buttons labeled by their tooltips. A button is marked `aria-disabled` when there is nothing further to
   scroll to in that direction.
 - Place content in the overflow menu's `tooltip` slot to provide an accessible name for the overflow button.
+- When child items are slotted, the item's button toggles the menu and exposes its state with
+  `aria-expanded`. Include the item's text so the button has an accessible name.
 - Slot text into a `home` item to provide an accessible name for the home icon other than the default
   "Home".

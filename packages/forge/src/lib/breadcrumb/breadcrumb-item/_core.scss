@@ -32,13 +32,22 @@
     (
       color: #{theme.variable('primary')},
       min-width: 0,
-      padding: 0 #{spacing.variable('xxsmall')}
+      padding: 0 #{spacing.variable('xxsmall')},
+      spacing: 0
     )
   );
 
   &::part(root) {
     @include typography.style(body1);
   }
+}
+
+@mixin menu-button {
+  @include button.provide-theme(
+    (
+      text-padding-inline: #{spacing.variable('xxsmall')} 0
+    )
+  );
 }
 
 @mixin menu-item {
@@ -88,4 +97,8 @@
 
 @mixin current {
   color: #{theme.variable('text-high')};
+}
+
+@mixin list {
+  @include item-shared.list;
 }

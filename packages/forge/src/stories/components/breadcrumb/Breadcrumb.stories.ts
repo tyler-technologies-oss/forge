@@ -53,6 +53,21 @@ export const OverflowMenu: Story = {
   `
 };
 
+export const ChildItems: Story = {
+  render: () => html`
+    <forge-breadcrumb aria-label="Breadcrumb">
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
+      <forge-breadcrumb-item>
+        Section
+        <forge-breadcrumb-item slot="children" href="#">Subsection one</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Subsection two</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Subsection three</forge-breadcrumb-item>
+      </forge-breadcrumb-item>
+      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+    </forge-breadcrumb>
+  `
+};
+
 export const WithIcons: Story = {
   render: () => {
     IconRegistry.define(tylIconFolder);

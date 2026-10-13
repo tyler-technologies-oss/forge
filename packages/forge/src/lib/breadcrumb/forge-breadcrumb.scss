@@ -97,10 +97,6 @@
     @include focus-indicator.standalone;
   }
 
-  &__popover {
-    @include breadcrumb-overflow-menu-core.popover;
-  }
-
   &__list {
     @include breadcrumb-overflow-menu-core.list;
   }

@@ -21,6 +21,20 @@
   </div>
 
   <div>
+    <h3 class="forge-typography--heading2">Child items</h3>
+    <forge-breadcrumb aria-label="Breadcrumb with child items">
+      <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
+      <forge-breadcrumb-item>
+        Section
+        <forge-breadcrumb-item slot="children" href="#">Subsection one</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Subsection two</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Subsection three</forge-breadcrumb-item>
+      </forge-breadcrumb-item>
+      <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+    </forge-breadcrumb>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">With icons</h3>
     <forge-breadcrumb aria-label="Breadcrumb with icons">
       <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>

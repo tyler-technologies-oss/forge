@@ -7,6 +7,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { IconRegistry } from '../../icon/index.js';
+import { BreadcrumbMenuController } from '../breadcrumb-menu.js';
 
 import '../../button/button.js';
 import '../../icon-button/icon-button.js';
@@ -31,10 +32,14 @@ export const BREADCRUMB_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-brea
  * @slot - The default slot for the item's content. When `home` is set on a linked item, this is the
  * tooltip label for the home icon button.
  * @slot start - Content placed before the item's main content.
+ * @slot children - Child breadcrumb items. When set, the item's button toggles a popover menu containing
+ * these items and `href` is ignored.
  *
  * @csspart root - The root element.
- * @csspart button - The button or icon button wrapping the anchor. Not rendered when `current` is
- * set, `href` is not set, or the item is inside an overflow menu.
+ * @csspart button - The button or icon button wrapping the anchor, or toggling the menu when child
+ * items are slotted. Not rendered when the item is inside a menu, or when no child items are slotted
+ * and either `current` is set or `href` is not set.
+ * @csspart popover - The popover element. Only rendered when child items are slotted.
  */
 export class BreadcrumbItemComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
@@ -67,7 +72,10 @@ export class BreadcrumbItemComponent extends BaseLitElement {
   @property({ type: Boolean }) public home = false;
 
   @state() private _isMenuItem = false;
+  @state() private _hasChildItems = false;
 
+  private readonly _menu = new BreadcrumbMenuController(this);
+  private readonly _childObserver = new MutationObserver(() => this.#detectChildItems());
   private _internals: ElementInternals;
 
   constructor() {
@@ -81,6 +89,13 @@ export class BreadcrumbItemComponent extends BaseLitElement {
       role: 'listitem'
     });
     this.#detectMenuItem();
+    this.#detectChildItems();
+    this._childObserver.observe(this, { childList: true });
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._childObserver.disconnect();
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {
@@ -104,6 +119,8 @@ export class BreadcrumbItemComponent extends BaseLitElement {
           ${isText ? html`<span class="text"><slot></slot></span>` : html`<a href=${ifDefined(this.href)}><slot></slot></a>`}
         </forge-list-item>
       `;
+    } else if (this._hasChildItems) {
+      content = this.#renderMenuTrigger();
     } else if (isText) {
       content = html`
         ${this.home
@@ -140,8 +157,33 @@ export class BreadcrumbItemComponent extends BaseLitElement {
     return html`<div part="root" class="${classMap({ 'forge-breadcrumb-item': true, current: this.current, 'menu-item': this._isMenuItem })}">${content}</div>`;
   }
 
+  #renderMenuTrigger(): TemplateResult {
+    return html`
+      ${this.home
+        ? html`
+            <forge-icon-button part="button" class="icon-button" id="button" type="button" dense shape="squared" popover-icon>
+              <forge-icon name="home"></forge-icon>
+            </forge-icon-button>
+            <forge-tooltip anchor="button" type="label" placement="bottom"><slot>Home</slot></forge-tooltip>
+          `
+        : html`
+            <div class="start">
+              <slot name="start"></slot>
+            </div>
+            <forge-button part="button" class="button menu-button" id="button" type="button" dense popover-icon>
+              <slot></slot>
+            </forge-button>
+          `}
+      ${this._menu.renderPopover('button', 'children')}
+    `;
+  }
+
   #detectMenuItem(): void {
-    this._isMenuItem = !!this.closest('forge-breadcrumb-overflow-menu');
+    this._isMenuItem = !!this.parentElement?.closest('forge-breadcrumb-overflow-menu, forge-breadcrumb-item');
+  }
+
+  #detectChildItems(): void {
+    this._hasChildItems = !!this.querySelector(':scope > [slot="children"]');
   }
 }
 

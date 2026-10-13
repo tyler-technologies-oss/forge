@@ -1,4 +1,6 @@
+@use '../core/styles/spacing';
 @use '../core/styles/theme';
+@use '../list/list';
 @use './token-utils' as *;
 
 @mixin host {
@@ -15,4 +17,10 @@
     color: #{theme.variable(text-medium)};
     padding-inline: #{token(separator-padding)};
   }
+}
+
+@mixin list {
+  @include list.tokens;
+  @include list.base;
+  @include list.inner;
 }
