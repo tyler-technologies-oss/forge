@@ -1,0 +1,26 @@
+@use '../core/styles/spacing';
+@use '../core/styles/theme';
+@use '../list/list';
+@use './token-utils' as *;
+
+@mixin host {
+  display: inline-block;
+}
+
+@mixin base() {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  &::after {
+    content: #{token(separator-content)} / '';
+    color: #{theme.variable(text-medium)};
+    padding-inline: #{token(separator-padding)};
+  }
+}
+
+@mixin list {
+  @include list.tokens;
+  @include list.base;
+  @include list.inner;
+}
