@@ -13,12 +13,18 @@ const projectRoot = join(__dirname, '..');
 const PACKAGES = [
   {
     name: '@tylertech/forge',
+    sourceName: 'custom-elements.json',
     outputName: '@tylertech-forge-custom-elements.json'
+  },
+  {
+    name: '@tylertech/forge',
+    sourceName: 'design-tokens.json',
+    outputName: '@tylertech-forge-design-tokens.json'
   }
 ];
 
 /**
- * Bundle custom-elements.json files from Tyler Tech devDependencies
+ * Bundle manifest files (custom-elements.json and design-tokens.json) from Tyler Tech devDependencies
  */
 async function bundleManifests() {
   // Create output directory
@@ -33,7 +39,7 @@ async function bundleManifests() {
   // Copy and rename manifest files
   for (const pkg of PACKAGES) {
     try {
-      const manifestPath = join(projectRoot, 'node_modules', pkg.name, 'custom-elements.json');
+      const manifestPath = join(projectRoot, 'node_modules', pkg.name, pkg.sourceName);
 
       let manifestContent;
       try {
@@ -42,7 +48,7 @@ async function bundleManifests() {
         if (error.code !== 'ENOENT') {
           throw error;
         }
-        console.warn(`Warning: ${pkg.name} custom-elements.json not found, skipping...`);
+        console.warn(`Warning: ${pkg.name} ${pkg.sourceName} not found, skipping...`);
         continue;
       }
 
