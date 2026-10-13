@@ -1,0 +1,24 @@
+import{u as s,j as e,M as n,T as p,C as o}from"./blocks-e35P3r67.js";import{C as m}from"./CustomArgTypes-JeO1OGAk.js";import{C as a,D as l,W as d}from"./ChipField.stories-CjG3kpMw.js";import"./preload-helper-PPVm8Dsz.js";import"./index-BGWckBsj.js";import"./iframe-DTNkYg14.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-YYNEckME.js";import"./style-map-Du2bhPVa.js";import"./directive-CwRn8Fwj.js";import"./ref-CN_GxdGN.js";import"./async-directive-Do6IwpDJ.js";import"./service-adapter-8tADcN_b.js";import"./autocomplete-Cuq3TQUr.js";import"./custom-element-DR9AFpIK.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./core-property-Co8uF8PW.js";import"./dom-utils-BDbRr6KM.js";import"./tyler-icons-Bg2kTxF-.js";import"./divider-kzdg1MSU.js";import"./property-BFC7In8L.js";import"./base-lit-element-C2_dUztB.js";import"./utils-C31il88P.js";import"./key-action-lsAysfb-.js";import"./index-BHXiN6PC.js";import"./constants-ffvdo6x3.js";import"./create-context-BxR5I8pu.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./icon-DVhmv0eN.js";import"./linear-progress-BuMeIIdZ.js";import"./base-component-BFu9bkgC.js";import"./with-element-internals-CFYP_epH.js";import"./a11y-utils-DssnAab5.js";import"./base-adapter-DOky_or5.js";import"./list-BdMAL8iF.js";import"./list-item-6yDHUfH_.js";import"./event-utils-zQ4FLDwK.js";import"./state-layer-gtlkuVuf.js";import"./focus-indicator-3EiKPbSh.js";import"./floating-ui.dom-DaMtbvS2.js";import"./list-dropdown-aware-core-D5mZ-pbv.js";import"./list-dropdown-B1rg6-nT.js";import"./event-utils-C1SDeUaq.js";import"./popover-CY5Ry9Cs.js";import"./overlay-iZgM2dxp.js";import"./with-longpress-listener-D4ROnnkg.js";import"./dismissible-stack-DyoP5jNB.js";import"./skeleton-BaOIlBwe.js";import"./a11y-BxM9_46k.js";import"./scroll-axis-observer-DmuibK9q.js";import"./text-field-Be6g3VTz.js";import"./base-field-Cdf0dwgO.js";import"./label-DjcObiwP.js";import"./button-constants-DRqTH6Pv.js";import"./button-toggle-group-constants-CvfmN-z8.js";import"./checkbox-constants-BJ3elUIK.js";import"./icon-button-constants-JHHxiN9v.js";import"./switch-constants-BZVST_qJ.js";import"./with-label-aware-B4Q13qtt.js";import"./icon-button-CUU1GWio.js";import"./class-map-4zklA2By.js";import"./base-button-Dz3JdmEp.js";import"./state-DgfyFXRD.js";import"./query-CtiAP21w.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./tooltip-Bgv5ULhC.js";import"./object-utils-CUPteeNI.js";import"./chip-set-Dl0Xf43W.js";function r(t){const i={code:"code",h2:"h2",li:"li",p:"p",ul:"ul",...s(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(n,{of:a}),`
+`,e.jsx(p,{}),`
+`,e.jsx(i.p,{children:"Chip fields are a specialized variant of text field that allows users to input multiple values in a single field and represent them as chips."}),`
+`,e.jsx(o,{of:l}),`
+`,e.jsx(i.h2,{id:"deprecation-notice",children:"Deprecation Notice"}),`
+`,e.jsxs(i.p,{children:["The ",e.jsx(i.code,{children:"<forge-chip-field>"})," component is deprecated and will be removed in a future release. Existing components such as ",e.jsx(i.code,{children:"<forge-text-field>"}),` and
+`,e.jsx(i.code,{children:"<forge-select>"})," will be able to be used to create similar functionality which removes the current need for this specialized component."]}),`
+`,e.jsx(i.h2,{id:"with-autocomplete",children:"With Autocomplete"}),`
+`,e.jsx(i.p,{children:"It is common to use an autocomplete component with a chip field to provide suggestions to the user as they type."}),`
+`,e.jsx(o,{of:d}),`
+`,e.jsx(i.h2,{id:"api",children:"API"}),`
+`,e.jsx(m,{}),`
+`,e.jsx(i.h2,{id:"accessibility",children:"Accessibility"}),`
+`,e.jsxs(i.ul,{children:[`
+`,e.jsxs(i.li,{children:["Add an ",e.jsx(i.code,{children:"id"})," to your ",e.jsx(i.code,{children:"<input>"})," element and bind it to your ",e.jsx(i.code,{children:"<label>"})," element using the for attribute on the ",e.jsx(i.code,{children:"<label>"}),"."]}),`
+`,e.jsxs(i.li,{children:["Ensure that the chips that are added to the field have descriptive ",e.jsx(i.code,{children:"aria-label"})," or ",e.jsx(i.code,{children:"aria-labelledby"})," attributes."]}),`
+`,e.jsxs(i.li,{children:["Make sure that the member chips that are added can be accessed via the keyboard left and right arrows.",`
+`,e.jsxs(i.ul,{children:[`
+`,e.jsx(i.li,{children:"There should be a distinct visual cue that indicates which chip is focused"}),`
+`]}),`
+`]}),`
+`,e.jsx(i.li,{children:"Similarly, make sure that when a chip is focused using the arrow keys, that the backspace and delete keys do remove them."}),`
+`,e.jsx(i.li,{children:"Ensure that when disabled, the entire field as well as the member chips all appear visually and interactively disabled."}),`
+`]})]})}function Ee(t={}){const{wrapper:i}={...s(),...t.components};return i?e.jsx(i,{...t,children:e.jsx(r,{...t})}):r(t)}export{Ee as default};
