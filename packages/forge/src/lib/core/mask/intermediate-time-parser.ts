@@ -1,4 +1,4 @@
-import { InputMask, type FactoryArg } from 'imask';
+import type { IMaskView } from './mask-view.js';
 import { TimeSegmentParser, TimeSegmentType } from './time-segment-parser.js';
 
 export const SEGMENT_CURSOR_POSITION = {
@@ -17,7 +17,7 @@ export class IntermediateTimeParser {
 
   constructor(
     private _char: string,
-    private _mask: InputMask<FactoryArg>
+    private _mask: IMaskView
   ) {
     this._segmentParser = new TimeSegmentParser(this._mask.value);
   }
@@ -105,8 +105,9 @@ export class IntermediateTimeParser {
     return Number(this._segmentParser.seconds);
   }
 
+  // The eager-pad leaves the cursor at 2 (`hours-end`), so accept 2 as well as 3.
   public get canOverwriteHoursChar(): boolean {
-    return this._mask.cursorPos === 3 && !!this._segmentParser.hours.length && this.hoursSegmentNum < 3;
+    return [2, 3].includes(this._mask.cursorPos) && !!this._segmentParser.hours.length && this.hoursSegmentNum < 3;
   }
 
   public get canOverwriteMinutesChar(): boolean {
