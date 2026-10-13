@@ -54,6 +54,11 @@ Tiptap alone only logs a warning an application cannot react to.
   opt-in.
 - `src/lib/extensions/` — Tiptap extensions and helpers that are not feature elements:
   `character-limit.ts`, `paste-handler.ts`, `markdown-serializer.ts` and `sanitize-utils.ts`.
+  `feature-extensions.ts` holds every feature's extensions and the standard-tools feature list.
+  Feature elements, the renderer and `toRichTextDocument` all read from it, so **change a feature's
+  extension config there, not in the feature element.**
+- `src/lib/rich-text-document.ts` — `toRichTextDocument(html, features?)`, the public HTML to
+  document converter.
 - `src/testing/` — `renderFixture` and the axe helpers. Not published.
 - `src/dev/` — a scratch page on **localhost:3460** that imports the built `esm/` rather than
   source, so it exercises the artifact a consumer gets. Not published.

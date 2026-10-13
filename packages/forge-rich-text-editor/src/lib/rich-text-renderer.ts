@@ -1,22 +1,12 @@
 import { type AnyExtension, Editor as TipTapEditor } from '@tiptap/core';
 import type { RichTextDocument } from './editor-context.js';
-import { Document } from '@tiptap/extension-document';
-import { Paragraph } from '@tiptap/extension-paragraph';
-import { Text } from '@tiptap/extension-text';
-import TextAlign from '@tiptap/extension-text-align';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
-import Underline from '@tiptap/extension-underline';
-import Strike from '@tiptap/extension-strike';
-import Code from '@tiptap/extension-code';
-import { BulletList, ListItem, OrderedList } from '@tiptap/extension-list';
 import Link from '@tiptap/extension-link';
-import Heading from '@tiptap/extension-heading';
 import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import styles from './rich-text-renderer.scss';
 import { sanitizeJSON } from './extensions/sanitize-utils.js';
+import { getFeatureExtensions, type RichTextFeature } from './extensions/feature-extensions.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 
 /**
@@ -38,31 +28,12 @@ declare global {
 
 export const RICH_TEXT_RENDERER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rich-text-renderer';
 
-// Default extensions for the renderer - matches all editor features
-const DEFAULT_EXTENSIONS: AnyExtension[] = [
-  Document,
-  Paragraph,
-  Text,
-  Bold,
-  Italic,
-  Underline,
-  Strike,
-  Code,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Heading.configure({ levels: [1, 2, 3] }),
-  Link.configure({
-    openOnClick: true,
-    HTMLAttributes: {
-      target: '_blank',
-      rel: 'noopener noreferrer nofollow'
-    }
-  }),
-  TextAlign.configure({
-    types: ['heading', 'paragraph']
-  })
-];
+const RENDERER_FEATURES: RichTextFeature[] = ['bold', 'italic', 'underline', 'strike', 'code', 'bullet-list', 'ordered-list', 'heading', 'link', 'align'];
+
+// Every feature that affects display, with links clickable since there is no editing to get in the way.
+const RENDERER_EXTENSIONS: AnyExtension[] = getFeatureExtensions(RENDERER_FEATURES).map(ext =>
+  ext.name === Link.name ? (ext as typeof Link).configure({ openOnClick: true }) : ext
+);
 
 /**
  * @tag forge-rich-text-renderer
@@ -136,7 +107,7 @@ export class RichTextRendererComponent extends LitElement {
         const initialContent = this.content ? this.#sanitizeContent(this.content) : undefined;
         this._editor = new TipTapEditor({
           element: this._contentElement,
-          extensions: DEFAULT_EXTENSIONS,
+          extensions: RENDERER_EXTENSIONS,
           editable: false,
           // ProseMirror marks its element `role="textbox"` even when it is not editable, which left
           // the renderer advertising an unnamed text input - axe reports it as

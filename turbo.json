@@ -5,7 +5,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "esm/**", "custom-elements.json"],
+      "outputs": ["dist/**", "esm/**", "custom-elements.json", "design-tokens.json"],
       "env": ["BASE_HREF"],
       "cache": false
     },

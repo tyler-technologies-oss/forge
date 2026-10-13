@@ -1,5 +1,4 @@
 import { consume } from '@lit/context';
-import { Heading } from '@tiptap/extension-heading';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconFormatHeader1, tylIconFormatHeader2, tylIconFormatHeader3 } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
@@ -7,6 +6,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { FEATURE_EXTENSIONS } from '../extensions/feature-extensions.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rte-tool-button.js';
@@ -76,11 +76,7 @@ export class RteHeadingComponent extends LitElement implements IRichTextEditorFe
   @property({ type: String, attribute: 'h3-label' })
   public h3Label = 'Heading 3';
 
-  public readonly extensions = [
-    Heading.configure({
-      levels: [1, 2, 3]
-    })
-  ];
+  public readonly extensions = FEATURE_EXTENSIONS.heading;
 
   @state()
   @consume({ context: editorContext, subscribe: true })
