@@ -58,10 +58,10 @@ export const ChildItems: Story = {
     <forge-breadcrumb aria-label="Breadcrumb">
       <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
       <forge-breadcrumb-item>
-        Section
-        <forge-breadcrumb-item slot="children" href="#">Subsection one</forge-breadcrumb-item>
-        <forge-breadcrumb-item slot="children" href="#">Subsection two</forge-breadcrumb-item>
-        <forge-breadcrumb-item slot="children" href="#">Subsection three</forge-breadcrumb-item>
+        Section one
+        <forge-breadcrumb-item slot="children" href="#">Section one</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Section two</forge-breadcrumb-item>
+        <forge-breadcrumb-item slot="children" href="#">Section three</forge-breadcrumb-item>
       </forge-breadcrumb-item>
       <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
     </forge-breadcrumb>
