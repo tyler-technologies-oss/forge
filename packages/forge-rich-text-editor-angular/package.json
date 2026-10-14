@@ -63,7 +63,6 @@
     "rxjs": "^7.8.2",
     "sass": "catalog:",
     "typescript": "~5.9.3",
-    "vite": "catalog:",
     "vitest": "^3.2.4",
     "zone.js": "~0.15.1"
   },
