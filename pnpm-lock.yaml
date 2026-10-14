@@ -174,6 +174,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^20.5.0
         version: 20.5.0
+      '@inquirer/prompts':
+        specifier: 7.8.2
+        version: 7.8.2(@types/node@25.5.0)
       '@types/node':
         specifier: 'catalog:'
         version: 25.5.0
@@ -11961,9 +11964,9 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      vitest: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
     optionalDependencies:
-      '@vitest/browser': 4.1.11(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.1.11)
+      '@vitest/browser': 4.1.11(vite@7.3.6(@types/node@25.5.0)(jiti@2.6.1)(less@4.9.0)(lightningcss@1.32.0)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.1.11)
 
   '@vitest/expect@3.2.4':
     dependencies:
