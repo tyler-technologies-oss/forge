@@ -1,18 +1,21 @@
-import { Tool } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolResult, Tool } from '@modelcontextprotocol/sdk/types.js';
 import { BaseToolHandler, ToolInput } from '../tool-handler.js';
-import { getResourceManager } from '../../resources/index.js';
+import { getDesignTokensService } from '../../services/design-tokens-service.js';
+import { DesignTokensResource } from '../../resources/design-tokens/design-tokens-resource.js';
 
 export interface DesignTokensInput extends ToolInput {
   category?: string;
+  query?: string;
 }
 
 export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
-  private _resourceManager = getResourceManager();
+  private readonly _designTokensService = getDesignTokensService();
+  private readonly _designTokensResource = new DesignTokensResource();
 
   constructor() {
     super(
       'get_design_tokens',
-      'Get Tyler Forge design tokens for consistent styling. Access color palettes, spacing scales, typography, animation, and other design system values.'
+      'Get Tyler Forge design tokens (CSS custom properties) for consistent styling. With no arguments, returns an overview of all token categories. Use `category` to list every token in a category, `query` to search token names, descriptions, and values, or both to search within a category. Theme color tokens include light and dark values.'
     );
   }
 
@@ -25,8 +28,13 @@ export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
         properties: {
           category: {
             type: 'string',
-            enum: ['color', 'spacing', 'typography', 'animation', 'border', 'elevation', 'layering', 'shape', 'all'],
-            description: 'Optional: specific design token category (default: all categories overview)'
+            description:
+              'Optional: token category name as listed in the overview (e.g. "spacing", "primary", "surface", "text", "elevation", "shape", "animation")'
+          },
+          query: {
+            type: 'string',
+            description:
+              'Optional: search terms; a token matches when every term appears in its category, name, description, or value (e.g. "error container", "dialog")'
           }
         },
         required: []
@@ -34,26 +42,21 @@ export class DesignTokensTool extends BaseToolHandler<DesignTokensInput> {
     };
   }
 
-  public async execute(args: DesignTokensInput): Promise<import('@modelcontextprotocol/sdk/types.js').CallToolResult> {
-    const { category } = args;
-
-    await this._resourceManager.initialize();
-
-    let content = '';
-
-    // Read the appropriate resource based on category
-    if (category && category !== 'all') {
-      const resourceUri = `forge://design-tokens/${category}`;
-      try {
-        content = await this._resourceManager.readResource(resourceUri);
-      } catch (_error) {
-        content = `# ${category.charAt(0).toUpperCase() + category.slice(1)} Design Tokens\n\nError loading design tokens for category "${category}". Please check that the category is valid.`;
-      }
-    } else {
-      // Default to the main design tokens overview
-      content = await this._resourceManager.readResource('forge://design-tokens');
+  public async execute({ category, query }: DesignTokensInput): Promise<CallToolResult> {
+    const trimmedQuery = query?.trim();
+    if (!category && !trimmedQuery) {
+      const categories = await this._designTokensService.getCategories();
+      return this._createTextResponse(await this._designTokensResource.getOverview(categories));
     }
 
-    return this._createTextResponse(content);
+    const matches = await this._designTokensService.search({ category, query: trimmedQuery });
+    if (!matches.length) {
+      const scope = category ? ` in category "${category}"` : '';
+      return this._createTextResponse(
+        `No design tokens found matching "${trimmedQuery}"${scope}. Call \`get_design_tokens\` with no arguments to see all categories.`
+      );
+    }
+
+    return this._createTextResponse(await this._designTokensResource.getCategories(matches, trimmedQuery));
   }
 }

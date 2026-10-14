@@ -58,4 +58,4 @@ This instructs the `<forge-icon>` component to fetch the icon data from the CDN 
 - **Icon component:** Use `get_component_docs` with `component=forge-icon` for complete `<forge-icon>` API
 - **Framework setup:** Use `setup_framework` for framework-specific icon integration patterns
 - **Installation:** Use `get_usage_guide` with `type=installation` for Tyler Forge and icon setup instructions
-- **Styling:** Use `get_design_tokens` with `category=color` for icon color tokens and theming
+- **Styling:** Use `get_design_tokens` with `query=icon` for icon color tokens and theming

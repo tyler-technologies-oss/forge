@@ -2,8 +2,8 @@ import { readTemplateResource } from './base/base-template-resource.js';
 
 /**
  * A Forge resource backed by a single static markdown template, with no
- * per-request computation (installation guides, framework guides, design
- * tokens, icons). Dynamic resources (individual components) are handled
+ * per-request computation (installation guides, framework guides, typography,
+ * icons). Dynamic resources (individual components, design tokens) are handled
  * separately by ResourceManager.
  */
 export interface StaticResourceDefinition {
@@ -61,54 +61,6 @@ export const STATIC_RESOURCES: StaticResourceDefinition[] = [
     name: 'Tyler Forge Icons',
     description: 'Complete guide to installing and using Tyler Forge icons in your application',
     templatePath: 'icons/icons.md'
-  },
-  {
-    uri: 'forge://design-tokens',
-    name: 'Tyler Forge Design Tokens',
-    description: 'Comprehensive Tyler Forge design tokens including colors, spacing, typography, animation, borders, elevation, layering, and shapes',
-    templatePath: 'design-tokens/design-tokens.md'
-  },
-  {
-    uri: 'forge://design-tokens/color',
-    name: 'Tyler Forge Color Design Tokens',
-    description: 'Tyler Forge Design system color tokens, usage guidelines, and accessibility considerations',
-    templatePath: 'design-tokens/color.md'
-  },
-  {
-    uri: 'forge://design-tokens/spacing',
-    name: 'Tyler Forge Spacing Design Tokens',
-    description: 'Tyler Forge Design system spacing tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/spacing.md'
-  },
-  {
-    uri: 'forge://design-tokens/animation',
-    name: 'Tyler Forge Animation Design Tokens',
-    description: 'Tyler Forge Design system animation tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/animation.md'
-  },
-  {
-    uri: 'forge://design-tokens/border',
-    name: 'Tyler Forge Border Design Tokens',
-    description: 'Tyler Forge Design system border tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/border.md'
-  },
-  {
-    uri: 'forge://design-tokens/elevation',
-    name: 'Tyler Forge Elevation Design Tokens',
-    description: 'Tyler Forge Design system elevation tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/elevation.md'
-  },
-  {
-    uri: 'forge://design-tokens/layering',
-    name: 'Tyler Forge Layering Design Tokens',
-    description: 'Tyler Forge Design system layering tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/layering.md'
-  },
-  {
-    uri: 'forge://design-tokens/shape',
-    name: 'Tyler Forge Shape Design Tokens',
-    description: 'Tyler Forge Design system shape tokens, usage guidelines, and best practices',
-    templatePath: 'design-tokens/shape.md'
   },
   {
     uri: 'forge://design-tokens/typography',

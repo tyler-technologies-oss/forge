@@ -1,7 +1,9 @@
-import { ForgeResource } from '../types/index.js';
+import { DesignTokenCategory, ForgeResource } from '../types/index.js';
 import { getCEMLoader } from '../services/cem-loader.js';
 import { ComponentDocsResource } from './components/component-docs-resource.js';
 import { ComponentsBriefResource } from './components/components-brief-resource.js';
+import { DESIGN_TOKENS_URI, DesignTokensResource, getDesignTokenCategoryUri } from './design-tokens/design-tokens-resource.js';
+import { getDesignTokensService } from '../services/design-tokens-service.js';
 import { STATIC_RESOURCES, readStaticResource } from './static-resources.js';
 
 const RESOURCE_SCHEME = 'forge://';
@@ -17,6 +19,8 @@ export class ResourceManager {
   private _cemLoader = getCEMLoader();
   private _elementDocumentation = new ComponentDocsResource();
   private _componentsBrief = new ComponentsBriefResource();
+  private _designTokensService = getDesignTokensService();
+  private _designTokens = new DesignTokensResource();
 
   /**
    * Initialize the resource manager by loading CEM data
@@ -51,8 +55,10 @@ export class ResourceManager {
       mimeType: 'text/markdown'
     });
 
+    resources.push(...(await this._listDesignTokenResources()));
+
     // Add the static, template-backed resources (installation, usage,
-    // frameworks, icons, design tokens)
+    // frameworks, icons, typography)
     resources.push(
       ...STATIC_RESOURCES.map(definition => ({
         uri: definition.uri,
@@ -98,6 +104,15 @@ export class ResourceManager {
       return await readStaticResource(uri);
     }
 
+    if (uri === DESIGN_TOKENS_URI) {
+      return this._designTokens.getOverview(await this._designTokensService.getCategories());
+    }
+
+    const designTokenCategory = await this._findDesignTokenCategory(uri);
+    if (designTokenCategory) {
+      return this._designTokens.getCategories([designTokenCategory]);
+    }
+
     // Handle component resources ex. 'forge://component/forge-button'
     const componentMatch = uri.match(/^forge:\/\/component\/([^/]+)(?:\/(.+))?$/);
 
@@ -134,6 +149,29 @@ export class ResourceManager {
   public extractComponentName(uri: string): string | null {
     const match = uri.match(/^forge:\/\/component\/(.+)$/);
     return match ? match[1] : null;
+  }
+
+  private async _listDesignTokenResources(): Promise<ForgeResource[]> {
+    const categories = await this._designTokensService.getCategories();
+    return [
+      {
+        uri: DESIGN_TOKENS_URI,
+        name: 'Tyler Forge Design Tokens',
+        description: `Overview of Tyler Forge design tokens and their categories: ${categories.map(({ name }) => name).join(', ')}`,
+        mimeType: 'text/markdown'
+      },
+      ...categories.map(({ name, description }) => ({
+        uri: getDesignTokenCategoryUri(name),
+        name: `Tyler Forge ${name} Design Tokens`,
+        description: description ?? `Tyler Forge ${name} design tokens`,
+        mimeType: 'text/markdown'
+      }))
+    ];
+  }
+
+  private async _findDesignTokenCategory(uri: string): Promise<DesignTokenCategory | undefined> {
+    const categories = await this._designTokensService.getCategories();
+    return categories.find(({ name }) => getDesignTokenCategoryUri(name) === uri);
   }
 
   /**

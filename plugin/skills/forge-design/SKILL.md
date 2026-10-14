@@ -133,7 +133,8 @@ Reference files that DO exist (load only when relevant to the current turn):
 - `validate_component_api` — post-generation API check. **Call for every Forge component before finalizing.**
 - `find_components` / `list_components` — component discovery.
 - `find_icons` — Tyler Icons search.
-- `get_design_tokens` — color, spacing, typography, elevation, shape tokens.
+- `get_design_tokens` — design tokens by `category` or `query` (theme colors, spacing, elevation, shape, and more).
+- `validate_tokens` — post-generation check that every `--forge-*` token in generated CSS exists.
 - `setup_framework` / `setup_typography` / `setup_icons` — project setup.
 - `get_usage_guide` — installation and usage patterns.
 

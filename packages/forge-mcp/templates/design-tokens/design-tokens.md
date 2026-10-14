@@ -40,9 +40,19 @@ If you would like to instead only include specific design tokens, you can includ
 @use '@tylertech/forge/dist/forge-tokens';
 ```
 
+Apply a token with `var()`, for example `padding: var(--forge-spacing-medium);`.
+
+## Categories
+
+| Category | Tokens | Description |
+|----------|--------|-------------|
+{{#each categories}}| `{{{name}}}` | {{tokenCount}} | {{{description}}} |
+{{/each}}
+
 ---
 
 > 💡 **Related Resources:**
-> - Specific token categories? Use `get_design_tokens` with category options: `color`, `spacing`, `typography`, `animation`, `border`, `elevation`, `layering`, `shape`
-> - Component implementations? Try `list_components` to see which components use these tokens
-> - Typography guidance? Check `setup_typography` for font usage with design tokens
+> - Tokens in a category? Use `get_design_tokens` with `category` set to one of the categories above
+> - Looking for a specific token? Use `get_design_tokens` with `query` (e.g. `query: "error container"`)
+> - Checking tokens in generated CSS? Use `validate_tokens`
+> - Typography guidance? Check `setup_typography` for font usage and typography classes

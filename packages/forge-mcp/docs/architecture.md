@@ -32,11 +32,11 @@ flowchart TB
         PH["PromptsHandler"]
         REG["ToolRegistry<br/>+ ToolCallCache"]
 
-        subgraph TOOLS["14 registered tools"]
+        subgraph TOOLS["15 registered tools"]
             T_PLAN["generate_ui_plan<br/>validate_ui_plan"]
             T_BLOCKS["get_forge_blocks"]
             T_COMP["get_component_docs<br/>list_components<br/>find_components<br/>validate_component_api"]
-            T_DS["get_design_tokens<br/>find_icons<br/>setup_typography<br/>setup_icons"]
+            T_DS["get_design_tokens<br/>validate_tokens<br/>find_icons<br/>setup_typography<br/>setup_icons"]
             T_SETUP["setup_framework<br/>get_usage_guide<br/>get_version_migration_guide"]
         end
 
@@ -44,6 +44,7 @@ flowchart TB
             CEM["CEMLoader<br/>(custom-elements.json)"]
             BLOCKSVC["BlocksManifestService<br/>BundledManifestLoader"]
             APIVAL["ApiValidationService"]
+            TOKENSVC["DesignTokensService<br/>(design-tokens.json)"]
             ICONSVC["IconSearchService"]
             TEMPLATE["HandlebarsTemplateEngine"]
             DISCOVERY["ProjectDiscovery<br/>PackageDiscovery"]
@@ -72,6 +73,8 @@ flowchart TB
     T_COMP --> CEM
     T_COMP --> APIVAL
     T_DS --> ICONSVC
+    T_DS --> TOKENSVC
+    RESOURCES --> TOKENSVC
     T_SETUP --> DISCOVERY
 
     TOOLS --> TEMPLATE

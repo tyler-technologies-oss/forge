@@ -142,7 +142,7 @@
 5. **Accessibility:** Ensure sufficient color contrast and readable font sizes
 
 **INTEGRATION:** Framework and design resources:
-- **Design tokens:** Use `get_design_tokens color` for text color tokens and theming
+- **Design tokens:** Use `get_design_tokens` with `category=text` for text color tokens and theming
 - **Components:** Use `list_components` or `find_components` to find typography-enabled components
 - **Installation:** Use `get_usage_guide` with `type=installation` for Tyler Forge typography setup instructions
 - **Complete reference:** Use `get_design_tokens` for comprehensive design system token guide

@@ -212,7 +212,8 @@ validate_ui_plan(plan: { ... })
 | `generate_ui_plan` | Get the plan template/schema for composition-scale UI (regions, typography roles, icons) |
 | `validate_ui_plan` | Validate a composed UI plan before any markup is written |
 | `validate_component_api` | Validate component API usage in generated code |
-| `get_design_tokens` | Get design tokens (colors, spacing, typography, etc.) |
+| `get_design_tokens` | Get design tokens by category or search query (colors, spacing, elevation, etc.) |
+| `validate_tokens` | Validate design token usage in generated CSS |
 | `setup_typography` | Typography setup and usage guidelines |
 | `setup_icons` | Icon system installation and usage |
 | `find_icons` | Search icons by name or keywords |
@@ -229,8 +230,9 @@ validate_ui_plan(plan: { ... })
 | `forge://installation` | Installation guide |
 | `forge://usage` | Usage guide |
 | `forge://framework/{name}` | Framework guides (angular, react, vue, svelte, lit) |
-| `forge://design-tokens` | All design tokens |
-| `forge://design-tokens/{category}` | Token categories (color, spacing, typography, animation, border, elevation, shape, layering) |
+| `forge://design-tokens` | Design tokens overview and categories |
+| `forge://design-tokens/{category}` | Tokens in a category (e.g. spacing, primary, surface, text, elevation, shape) |
+| `forge://design-tokens/typography` | Typography guide |
 | `forge://icons` | Icons guide |
 
 ### Prompts

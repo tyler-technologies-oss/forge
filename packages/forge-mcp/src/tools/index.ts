@@ -17,6 +17,7 @@ export * from './migrate/index.js';
 
 // Design system tools
 export * from './design-system/get-design-tokens-tool.js';
+export * from './design-system/validate-tokens-tool.js';
 export * from './design-system/setup-typography-tool.js';
 export * from './design-system/setup-icons-tool.js';
 export * from './design-system/find-icons-tool.js';
@@ -38,6 +39,7 @@ import { ValidateComponentApiTool } from './components/validate-component-api-to
 
 // Design system tools
 import { DesignTokensTool } from './design-system/get-design-tokens-tool.js';
+import { ValidateTokensTool } from './design-system/validate-tokens-tool.js';
 import { TypographySetupTool } from './design-system/setup-typography-tool.js';
 import { IconsGuideTool } from './design-system/setup-icons-tool.js';
 import { FindIconsTool } from './design-system/find-icons-tool.js';
@@ -70,6 +72,7 @@ export function createToolRegistry(): ToolRegistry {
 
   // Register design system tools
   registry.register(new DesignTokensTool());
+  registry.register(new ValidateTokensTool());
   registry.register(new TypographySetupTool());
   registry.register(new IconsGuideTool());
   registry.register(new FindIconsTool());
