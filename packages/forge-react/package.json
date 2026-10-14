@@ -51,7 +51,7 @@
     "@types/react": "^17.0.91",
     "@types/react-dom": "^17.0.26",
     "@types/react-router-dom": "^5.3.3",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.1.2",
     "@vitest/browser": "^4.1.11",
     "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
@@ -64,7 +64,6 @@
     "sass": "catalog:",
     "typescript": "~5.9.3",
     "vite": "catalog:",
-    "vite-tsconfig-paths": "catalog:",
     "vitest": "^4.1.11"
   },
   "lint-staged": {
