@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import remarkGfm from 'remark-gfm';
 
 import svelte from '@astrojs/svelte';
 
@@ -8,7 +9,12 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx(), svelte()],
+  integrations: [
+    // Astro 6 leaves the deprecated `markdown.gfm` undefined, which @astrojs/mdx treats as disabled.
+    // Register remark-gfm explicitly so MDX pipe tables (rendered via Table.astro) are parsed.
+    mdx({ remarkPlugins: [remarkGfm] }),
+    svelte(),
+  ],
   site: 'https://crispy-doodle-rwrz2ny.pages.github.io',
   base: '/',
   trailingSlash: 'always',

@@ -1,5 +1,6 @@
 ---
 import ContentPageLayout from "../layouts/ContentPageLayout.astro";
+import { mdxComponents } from "../components/docs/mdx-components";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -16,5 +17,5 @@ const { Content } = await render(page);
 ---
 
 <ContentPageLayout frontmatter={page.data}>
-  <Content />
+  <Content components={mdxComponents} />
 </ContentPageLayout>

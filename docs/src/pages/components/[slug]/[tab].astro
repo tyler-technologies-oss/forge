@@ -4,6 +4,7 @@ import ComponentPageLayout from "../../../components/ComponentPageLayout.astro";
 import ApiReference from "../../../components/ApiReference.astro";
 import StorybookEmbed from "../../../components/StorybookEmbed.astro";
 import ComingSoon from "../../../components/docs/ComingSoon.astro";
+import { mdxComponents } from "../../../components/docs/mdx-components";
 import TableOfContents from "../../../components/docs/TableOfContents.svelte";
 import { getComponentApi, statusLabels } from "../../../data/components";
 import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
@@ -80,7 +81,7 @@ function formatTabLabel(tab: string): string {
     <div slot="content" class="tab-panels relative">
       <div class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
         <article class="mdx-content text-high">
-          <MdxContent />
+          <MdxContent components={mdxComponents} />
         </article>
       </div>
 
@@ -105,7 +106,7 @@ function formatTabLabel(tab: string): string {
       <div class="tab-panel" data-tab="accessibility" class:list={[{ active: currentTab === "accessibility" }]}>
         {AccessibilityContent ? (
           <article class="mdx-content text-high">
-            <AccessibilityContent />
+            <AccessibilityContent components={mdxComponents} />
           </article>
         ) : (
           <ComingSoon icon="accessibility" label="Accessibility" />

@@ -102,7 +102,7 @@
     <forge-list dense navlist>
       {#each headings as heading (heading.id)}
         <forge-list-item
-          selected={activeId === heading.id}
+          selected={activeId === heading.id || undefined}
           style={heading.level > minLevel
             ? "--forge-list-item-padding: 0 24px;"
             : undefined}
