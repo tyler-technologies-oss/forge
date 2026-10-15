@@ -10,3 +10,4 @@ dist/
 storybook-static/
 blocks/manifest.json
 .heroku-deploy/
+/docs/
