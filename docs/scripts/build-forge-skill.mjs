@@ -357,7 +357,7 @@ function transformChildren(children, ctx) {
         out.push(...unwrapInlineMessage(child));
         continue;
       }
-      if (child.name === "Blockquote") {
+      if (child.name === "Blockquote" || child.name === "TableGroup") {
         out.push(...child.children);
         continue;
       }

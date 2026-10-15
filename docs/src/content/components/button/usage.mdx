@@ -10,10 +10,11 @@ storybookId: components-button--demo
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+import TableGroup from "../../../components/docs/TableGroup.astro";
 
 ## Usage
 
-`forge-button` handles every level of action emphasis through variant, size, and theme, plus icons, anchor navigation, loading, and disabled states. Pick the variant that matches an action's importance, reserve raised for the one primary action per view, and let theme, icon, and state carry the rest.
+`forge-button` handles every level of action emphasis through variant, size, and theme, plus icons, anchor navigation, loading, and disabled states. Pick the variant that matches an action's importance, reserve `filled` for the one primary action per view, and let theme, icon, and state carry the rest.
 
 ## Rules
 
@@ -24,7 +25,7 @@ import Rule from "../../../components/Rule.astro";
       'Use sentence case ("Start new").',
       'Use short, actionable verbs ("Submit", "Save", "Delete").',
       "Use the primary theme color.",
-      "One raised button per group.",
+      "One filled button per group, placed at the end (right).",
       "Space adjacent buttons with --forge-spacing-medium (--forge-spacing-xsmall in dense layouts).",
     ]}
   />
@@ -32,8 +33,8 @@ import Rule from "../../../components/Rule.astro";
   <Rule
     variant="dont"
     rules={[
-      "Don't use more than one raised button per page or dialog.",
-      "Don't put two raised buttons next to each other.",
+      "Don't use more than one filled button per page or dialog.",
+      "Don't put two filled buttons next to each other.",
       "Don't use success or warning colors — use primary.",
       'Don\'t pair overlapping actions ("Start over" + "Cancel").',
     ]}
@@ -42,7 +43,7 @@ import Rule from "../../../components/Rule.astro";
 
 ## Variants
 
-Pick one variant per action, based on emphasis. **Text** is for tertiary actions like cancel or dismiss, **outlined** and **tonal** carry secondary actions, and **raised** is the page's primary call to action — never more than one per page or dialog.
+Pick one variant per action, based on its level. **Filled** is the primary action — never more than one per page or dialog. **Tonal** is for secondary actions, and **text** is for tertiary actions like dismiss or skip. **Outlined** and **raised** are available but aren't part of this hierarchy; see [Grouping](#grouping) for how to combine levels.
 
 <Example
   description="The four button variants, ordered from lowest to highest emphasis."
@@ -58,6 +59,38 @@ Buttons default to the primary theme. Use `theme="error"` for destructive confir
   description="Primary is the default. Reserve error for destructive actions; the remaining themes exist but should be used sparingly."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/button/themed/themed.html"
 />
+
+## Grouping
+
+Buttons in a group follow an action hierarchy. Give each action a level, then use the matching variant:
+
+- **Primary** uses `filled`. This is the single main action. Use at most one per page or dialog.
+- **Secondary** uses `tonal`. This is an alternative to the primary action.
+- **Tertiary** uses `text`. This is a low-emphasis action.
+
+Order buttons by level from right to left: primary at the end (right), secondary to its left, and tertiary leftmost. Space buttons with `--forge-spacing-medium` (16px). For a destructive action, keep its level and add `theme="error"`. Groups have at most 3 buttons; move any extra actions into a `forge-menu`.
+
+<TableGroup widths={["35%", "35%"]}>
+
+### Action levels
+
+| Level     | Variant  | Position        |
+| --------- | -------- | --------------- |
+| Primary   | `filled` | Rightmost (end) |
+| Secondary | `tonal`  | Left of primary |
+| Tertiary  | `text`   | Leftmost        |
+
+### Combinations
+
+| Actions                        | Layout (left to right)              | Example                    |
+| ------------------------------ | ----------------------------------- | -------------------------- |
+| Primary + secondary (default)  | `tonal`, `filled`                   | Cancel, Save               |
+| Primary + tertiary             | `text`, `filled`                    | Skip, Continue             |
+| Primary + secondary + tertiary | `text`, `tonal`, `filled`           | Cancel, Save draft, Submit |
+| Secondary + tertiary           | `text`, `tonal`                     | Dismiss, View details      |
+| Destructive primary            | `tonal`, `filled` + `theme="error"` | Cancel, Delete             |
+
+</TableGroup>
 
 ## As a link
 
