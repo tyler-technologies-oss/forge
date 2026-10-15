@@ -1,4 +1,4 @@
-import type { AppLauncherOption, AppLauncherToggleEventData, IAppLauncherComponent } from '@tylertech/forge/app-launcher';
+import type { AppLauncherOption, IAppLauncherComponent } from '@tylertech/forge/app-launcher';
 
 const FETCH_DELAY_MS = 2000;
 
@@ -16,8 +16,8 @@ const fetchApps = (): Promise<AppLauncherOption[]> => new Promise(resolve => set
 const appLauncher = document.querySelector<IAppLauncherComponent>('forge-app-launcher');
 let hasRequestedApps = false;
 
-appLauncher?.addEventListener('forge-app-launcher-toggle', async (evt: CustomEvent<AppLauncherToggleEventData>) => {
-  if (evt.detail.newState !== 'open' || hasRequestedApps) {
+appLauncher?.addEventListener('toggle', async () => {
+  if (!appLauncher.open || hasRequestedApps) {
     return;
   }
 

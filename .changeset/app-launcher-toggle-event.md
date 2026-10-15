@@ -2,4 +2,4 @@
 '@tylertech/forge': minor
 ---
 
-feat(app-launcher): add `forge-app-launcher-toggle` event that fires when the app launcher opens or closes
+feat(app-launcher): dispatch a standard `toggle` event (`ToggleEvent`) when the app launcher opens or closes

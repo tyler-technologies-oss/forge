@@ -484,54 +484,62 @@ describe('AppLauncher', () => {
   });
 
   describe('Toggle event', () => {
-    it('should dispatch forge-app-launcher-toggle with open state when opened', async () => {
+    it('should dispatch a toggle event with open state when opened', async () => {
       stubMatchMedia(false);
       const harness = await createFixture();
       const listener = vi.fn();
-      harness.element.addEventListener('forge-app-launcher-toggle', listener);
+      harness.element.addEventListener('toggle', listener);
 
       harness.element.open = true;
       await harness.element.updateComplete;
 
       expect(listener).toHaveBeenCalledOnce();
-      expect(listener.mock.calls[0][0].detail).toEqual({ newState: 'open' });
+      const evt = listener.mock.calls[0][0] as ToggleEvent;
+      expect(evt).toBeInstanceOf(ToggleEvent);
+      expect(evt.oldState).toBe('closed');
+      expect(evt.newState).toBe('open');
+      expect((evt.target as IAppLauncherComponent).open).toBe(true);
     });
 
-    it('should dispatch forge-app-launcher-toggle with closed state when closed', async () => {
+    it('should dispatch a toggle event with closed state when closed', async () => {
       stubMatchMedia(false);
       const harness = await createFixture({ open: true });
       const listener = vi.fn();
-      harness.element.addEventListener('forge-app-launcher-toggle', listener);
+      harness.element.addEventListener('toggle', listener);
 
       harness.element.open = false;
       await harness.element.updateComplete;
 
       expect(listener).toHaveBeenCalledOnce();
-      expect(listener.mock.calls[0][0].detail).toEqual({ newState: 'closed' });
+      const evt = listener.mock.calls[0][0] as ToggleEvent;
+      expect(evt.oldState).toBe('open');
+      expect(evt.newState).toBe('closed');
+      expect((evt.target as IAppLauncherComponent).open).toBe(false);
     });
 
-    it('should not dispatch forge-app-launcher-toggle on initial render when closed', async () => {
+    it('should not dispatch a toggle event on initial render when closed', async () => {
       stubMatchMedia(false);
       const listener = vi.fn();
-      document.addEventListener('forge-app-launcher-toggle', listener);
+      document.addEventListener('toggle', listener);
 
       await createFixture();
 
-      document.removeEventListener('forge-app-launcher-toggle', listener);
+      document.removeEventListener('toggle', listener);
       expect(listener).not.toHaveBeenCalled();
     });
 
-    it('should dispatch a composed event when the popover opens', async () => {
+    it('should dispatch a composed toggle event when the popover opens', async () => {
       stubMatchMedia(false);
       const harness = await createFixture();
       const listener = vi.fn();
-      document.addEventListener('forge-app-launcher-toggle', listener);
+      document.addEventListener('toggle', listener);
 
       harness.popover?.dispatchEvent(new CustomEvent('forge-popover-toggle', { detail: { newState: 'open' }, bubbles: true }));
       await harness.element.updateComplete;
 
-      document.removeEventListener('forge-app-launcher-toggle', listener);
+      document.removeEventListener('toggle', listener);
       expect(listener).toHaveBeenCalledOnce();
+      expect(listener.mock.calls[0][0].target).toBe(harness.element);
     });
   });
 

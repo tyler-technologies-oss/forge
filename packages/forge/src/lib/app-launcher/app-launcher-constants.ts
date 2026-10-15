@@ -15,8 +15,3 @@ export interface AppLauncherOption {
 }
 
 export type AppLauncherView = 'related' | 'all' | 'loading';
-
-export interface AppLauncherToggleEventData {
-  /** The state the app launcher changed to. */
-  newState: 'open' | 'closed';
-}

@@ -115,7 +115,7 @@ A skeleton loading state that displays automatically when no application data is
 
 ## Lazy Loading Apps
 
-The `forge-app-launcher-toggle` event is dispatched whenever the launcher opens or closes, regardless of whether it was triggered by the user or by setting the `open` property. The event detail contains the `newState` (`'open'` or `'closed'`).
+A standard [`ToggleEvent`](https://developer.mozilla.org/en-US/docs/Web/API/ToggleEvent) named `toggle` is dispatched whenever the launcher opens or closes, regardless of whether it was triggered by the user or by setting the `open` property. Read the current state from the `open` property on the event target, or from the event's `oldState` and `newState` (`'open'` or `'closed'`).
 
 This allows you to defer fetching the app list until the launcher is first opened. While `relatedApps` and `allApps` are both empty, the launcher displays its [loading view](#loading-view).
 
@@ -128,8 +128,8 @@ This allows you to defer fetching the app list until the launcher is first opene
   const appLauncher = document.querySelector('#app-launcher');
   let hasRequestedApps = false;
 
-  appLauncher.addEventListener('forge-app-launcher-toggle', async evt => {
-    if (evt.detail.newState !== 'open' || hasRequestedApps) {
+  appLauncher.addEventListener('toggle', async () => {
+    if (!appLauncher.open || hasRequestedApps) {
       return;
     }
 
