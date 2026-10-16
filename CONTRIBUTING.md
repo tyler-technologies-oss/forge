@@ -16,6 +16,7 @@ Tyler Forge is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspa
 | [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 | [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
 | [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
+| [@tylertech/forge-upgrade](./packages/forge-upgrade) | CLI for automating Forge upgrades and migrations |
 
 ## Requirements
 
@@ -52,6 +53,7 @@ pnpm run --filter @tylertech/forge-core <command>
 pnpm run --filter @tylertech/forge-react <command>
 pnpm run --filter @tylertech/forge-angular <command>
 pnpm run --filter @tylertech/forge-schematics <command>
+pnpm run --filter @tylertech/forge-upgrade <command>
 ```
 
 **Running tests for a specific path (relative to the package root):**
