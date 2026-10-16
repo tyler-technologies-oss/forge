@@ -1,0 +1,16 @@
+{
+  "name": "Forge 3.0",
+  "operations": [
+    {
+      "files": "**/*.{ts,js,tsx,jsx,scss,css,less,html,mdx,md,aspx,erb,rb}",
+      "patterns": [
+        { "from": "forge-button", "to": "forge-deprecated-button" },
+        { "from": "forge-icon-button", "to": "forge-deprecated-icon-button" },
+        { "from": "defineButtonComponent", "to": "defineDeprecatedButtonComponent" },
+        { "from": "defineIconButtonComponent", "to": "defineDeprecatedIconButtonComponent" },
+        { "from": "ButtonComponentDelegate", "to": "DeprecatedButtonComponentDelegate" },
+        { "from": "IconButtonComponentDelegate", "to": "DeprecatedIconButtonComponentDelegate" }
+      ]
+    }
+  ]
+}

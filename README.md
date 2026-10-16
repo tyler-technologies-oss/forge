@@ -17,6 +17,7 @@ This repository is a monorepo that contains the following packages:
 | [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 | [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
 | [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
+| [@tylertech/forge-upgrade](./packages/forge-upgrade) | CLI for automating Forge upgrades and migrations |
 
 ## Development
 
