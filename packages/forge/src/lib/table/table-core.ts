@@ -963,6 +963,12 @@ export class TableCore implements ITableCore {
     const rowElement = composedPath.find(el => el.tagName === 'TR') as HTMLTableRowElement;
     const thElement = composedPath.find(el => el.tagName === 'TH') as HTMLTableCellElement;
     const cellIndex = Array.from(rowElement.cells).findIndex(c => c === thElement);
+
+    // Ignore interactions with elements that opted out of sorting (e.g. controls within a header template)
+    if (this._isIgnoredHeadCellEvent(composedPath, thElement)) {
+      return;
+    }
+
     this._headCellMouseDownIndex = cellIndex;
 
     if (target !== thElement && target.classList.contains(TABLE_CONSTANTS.classes.TABLE_RESIZE_HANDLE)) {
@@ -978,6 +984,12 @@ export class TableCore implements ITableCore {
     }
 
     this._adapter.addDocumentListener('mouseup', this._documentMouseUpListener);
+  }
+
+  private _isIgnoredHeadCellEvent(composedPath: EventTarget[], thElement: HTMLTableCellElement): boolean {
+    const { IGNORE, IGNORE_ALT } = TABLE_CONSTANTS.attributes;
+    const cellPath = composedPath.slice(0, composedPath.indexOf(thElement));
+    return cellPath.some(el => (el as Element).nodeType === 1 && ((el as Element).hasAttribute(IGNORE) || (el as Element).hasAttribute(IGNORE_ALT)));
   }
 
   private _onMouseMove(evt: MouseEvent): void {
