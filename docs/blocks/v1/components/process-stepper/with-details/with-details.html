@@ -1,0 +1,58 @@
+<!--
+  @block Process Stepper — With Details
+  @type component
+  @description Vertical process stepper with label-values, read-only checkboxes, and an action button in step detail slots.
+  @tags process-stepper, with-details, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Process Stepper — With Details</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-process-stepper>
+  <forge-process-step state="completed">
+    Application received
+    <forge-label-value slot="detail" inline class="block">
+      <span slot="label">Received</span>
+      <span slot="value">Jul 17, 2026</span>
+    </forge-label-value>
+    <forge-label-value slot="detail" inline class="block">
+      <span slot="label">Received by</span>
+      <span slot="value">J. Rivera</span>
+    </forge-label-value>
+  </forge-process-step>
+  <forge-process-step state="completed">
+    Fees paid
+    <forge-checkbox slot="detail" readonly class="block">Subtask one</forge-checkbox>
+    <forge-checkbox slot="detail" readonly class="block">Subtask two</forge-checkbox>
+    <forge-checkbox slot="detail" readonly class="block">Subtask three</forge-checkbox>
+  </forge-process-step>
+  <forge-process-step state="completed">
+    Internal review
+    <forge-button slot="detail" variant="outlined">Review</forge-button>
+  </forge-process-step>
+  <forge-process-step state="current">Documents approved</forge-process-step>
+  <forge-process-step>Record issued</forge-process-step>
+</forge-process-stepper>
+  </body>
+</html>
