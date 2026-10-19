@@ -1,0 +1,79 @@
+{
+  "animation": {
+    "duration": {
+      "$type": "duration",
+      "short1": {
+        "$value": "50ms"
+      },
+      "short2": {
+        "$value": "100ms"
+      },
+      "short3": {
+        "$value": "150ms"
+      },
+      "short4": {
+        "$value": "200ms"
+      },
+      "medium1": {
+        "$value": "250ms"
+      },
+      "medium2": {
+        "$value": "300ms"
+      },
+      "medium3": {
+        "$value": "350ms"
+      },
+      "medium4": {
+        "$value": "400ms"
+      },
+      "long1": {
+        "$value": "450ms"
+      },
+      "long2": {
+        "$value": "500ms"
+      },
+      "long3": {
+        "$value": "550ms"
+      },
+      "long4": {
+        "$value": "600ms"
+      },
+      "extra-long1": {
+        "$value": "700ms"
+      },
+      "extra-long2": {
+        "$value": "800ms"
+      },
+      "extra-long3": {
+        "$value": "900ms"
+      },
+      "extra-long4": {
+        "$value": "1000ms"
+      }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "linear": {
+        "$value": [0, 0, 1, 1]
+      },
+      "standard": {
+        "$value": [0.2, 0, 0, 1]
+      },
+      "accelerate": {
+        "$value": [0.3, 0, 1, 1]
+      },
+      "decelerate": {
+        "$value": [0, 0, 0, 1]
+      },
+      "emphasized": {
+        "$value": [0.2, 0, 0, 1]
+      },
+      "emphasized-accelerate": {
+        "$value": [0.3, 0, 0.8, 0.15]
+      },
+      "emphasized-decelerate": {
+        "$value": [0.05, 0.7, 0.1, 1]
+      }
+    }
+  }
+}

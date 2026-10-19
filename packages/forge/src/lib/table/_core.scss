@@ -1,9 +1,9 @@
-@use '../core/styles/border';
-@use '../core/styles/elevation';
-@use '../core/styles/spacing';
-@use '../core/styles/theme';
-@use '../core/styles/typography';
-@use '../core/styles/animation';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/animation';
 @use '../focus-indicator';
 @use './variables';
 

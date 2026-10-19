@@ -1,0 +1,84 @@
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:string';
+@use '../config';
+@use '../utils';
+@use '../tokens/typography' as raw;
+@use './core';
+
+$module: 'typography';
+
+// Some styles share their scale custom properties with other styles in the same family.
+// For example, all body styles are scaled together with `--forge-typography-body-font-size-scale`.
+$_shared-scale-groups: (body, label);
+$_style-scale-groups: (
+  kbd: label
+);
+
+@function _scale-group($style) {
+  @if map.has-key($_style-scale-groups, $style) {
+    @return map.get($_style-scale-groups, $style);
+  }
+  @each $group in $_shared-scale-groups {
+    @if string.index($style, $group) == 1 {
+      @return $group;
+    }
+  }
+  @return $style;
+}
+
+///
+/// Creates a style value that is relative to the base font size for the given property.
+///
+/// This allows for typography styles to be scaled relative to the root font size, or
+/// relative to a specific CSS custom property if optionally applied. This is useful
+/// when embedding Forge in an application that adjusts the root `font-size` to something
+/// other than `16px` (browser default).
+///
+@function _relative($style, $property, $scale) {
+  $var-name: '--#{config.$prefix}-#{$module}-#{_scale-group($style)}-#{$property}-scale';
+  @return calc(#{core.get(font-size)} * var(#{$var-name}, #{$scale}));
+}
+
+@function _style($style, $raw-style) {
+  $line-height: map.get($raw-style, line-height);
+  @if meta.type-of($line-height) == number {
+    $line-height: _relative($style, line-height, $line-height);
+  }
+
+  @return (
+    font-family: utils.create-var(typography, font-family, map.get($raw-style, font-family)),
+    font-size: _relative($style, font-size, map.get($raw-style, font-size)),
+    font-weight: map.get($raw-style, font-weight),
+    line-height: $line-height,
+    letter-spacing: map.get($raw-style, letter-spacing),
+    text-transform: map.get($raw-style, text-transform),
+    text-decoration: map.get($raw-style, text-decoration)
+  );
+}
+
+$tokens: ();
+@each $style, $raw-style in raw.$styles {
+  $tokens: map.set($tokens, $style, _style($style, $raw-style));
+}
+
+///
+/// Retrieves a typography style token value.
+///
+/// @param {String} $style - The typography style.
+/// @param {String} $token - The token within the provided style.
+/// @return {String} - The value of the style token.
+///
+@function get($style, $token) {
+  $style-tokens: map.get($tokens, $style);
+
+  @if not $style-tokens {
+    @error 'Invalid typography style: "#{$style}"';
+  }
+
+  @if not map.get($style-tokens, $token) {
+    @error 'Invalid typography token for style "#{$style}" using token "#{$token}"';
+  }
+
+  @return map.get($style-tokens, $token);
+}

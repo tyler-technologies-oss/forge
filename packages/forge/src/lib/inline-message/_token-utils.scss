@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/inline-message/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: inline-message;
 $_tokens: tokens.$tokens;

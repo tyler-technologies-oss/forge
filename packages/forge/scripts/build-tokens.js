@@ -4,6 +4,7 @@ import { resolve } from 'path';
 
 const TOKENS_ENTRY = 'src/lib/forge-tokens.scss';
 const STYLES_PATH = 'src/lib/core/styles';
+const NODE_MODULES_PATH = 'node_modules';
 const SCHEMA_VERSION = '1.1.0';
 const CUSTOM_PROPERTY_PATTERN = /(--forge-([a-z0-9]+)-[a-z0-9-]+):\s*([^;]+);/g;
 
@@ -18,8 +19,8 @@ const CATEGORY_BY_PREFIX = {
 };
 
 const THEME_TOKEN_PREFIX = '--forge-theme-';
-const THEME_LIGHT_SOURCE = `@use 'theme'; :root { @include theme.properties; }`;
-const THEME_DARK_SOURCE = `@use 'theme'; :root { @include theme.properties-dark; }`;
+const THEME_LIGHT_SOURCE = `@use '@tylertech/forge-tokens/sass/theme'; :root { @include theme.properties; }`;
+const THEME_DARK_SOURCE = `@use '@tylertech/forge-tokens/sass/theme'; :root { @include theme.properties-dark; }`;
 const THEME_ROLES = ['brand', 'primary', 'secondary', 'tertiary', 'surface', 'text', 'success', 'error', 'warning', 'info', 'outline'];
 
 /**
@@ -39,11 +40,11 @@ function parseCustomProperties(css) {
 }
 
 function compileCustomProperties(entry) {
-  return parseCustomProperties(sass.compile(resolve(entry), { style: 'expanded', quietDeps: true }).css);
+  return parseCustomProperties(sass.compile(resolve(entry), { style: 'expanded', loadPaths: [resolve(NODE_MODULES_PATH)], quietDeps: true }).css);
 }
 
 function compileThemeCustomProperties(source) {
-  const { css } = sass.compileString(source, { loadPaths: [resolve(STYLES_PATH)], style: 'expanded', quietDeps: true });
+  const { css } = sass.compileString(source, { loadPaths: [resolve(STYLES_PATH), resolve(NODE_MODULES_PATH)], style: 'expanded', quietDeps: true });
   return parseCustomProperties(css);
 }
 
