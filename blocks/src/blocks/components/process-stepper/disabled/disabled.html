@@ -1,0 +1,12 @@
+<!--
+  @block Process Stepper — Disabled
+  @type component
+  @description Horizontal process stepper with upcoming steps disabled to prevent interaction.
+  @tags process-stepper, disabled, storybook, component-example
+-->
+<forge-process-stepper orientation="horizontal">
+  <forge-process-step state="completed">Cart</forge-process-step>
+  <forge-process-step state="current">Shipping</forge-process-step>
+  <forge-process-step disabled>Payment</forge-process-step>
+  <forge-process-step disabled>Review</forge-process-step>
+</forge-process-stepper>
