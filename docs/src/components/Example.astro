@@ -17,6 +17,7 @@
  * appear verbatim in the snippet. If a demo needs a hand-tuned snippet, pass
  * one via the `code` prop instead.
  */
+import { CODE_THEMES } from "../config/code-themes";
 import type { CodeLanguage } from "astro";
 import { Code } from "astro:components";
 import { getBlockHtml, getBlockSourceJsUrl } from "../data/blocks";
@@ -248,7 +249,7 @@ if (!code && !blockUrl && Astro.slots.has("default")) {
         data-code={code}>
         <forge-icon name="content_copy"></forge-icon>
       </forge-icon-button>
-      <Code code={code} lang={lang} theme="one-light" />
+      <Code code={code} lang={lang} themes={CODE_THEMES} />
     </div>
   </forge-card>
 </section>

@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import svelte from '@astrojs/svelte';
 
 import tailwindcss from '@tailwindcss/vite';
+import { CODE_THEMES } from './src/config/code-themes.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
     // Astro 6 leaves the deprecated `markdown.gfm` undefined, which @astrojs/mdx treats as disabled.
     // Register remark-gfm explicitly so MDX pipe tables (rendered via Table.astro) are parsed.
     mdx({ remarkPlugins: [remarkGfm] }),
-    svelte(),
+    svelte()
   ],
   site: 'https://crispy-doodle-rwrz2ny.pages.github.io',
   base: '/',
@@ -23,14 +24,14 @@ export default defineConfig({
   // fenced code blocks and component-rendered snippets look consistent.
   markdown: {
     shikiConfig: {
-      theme: 'one-light',
-    },
+      themes: CODE_THEMES
+    }
   },
 
   // Build configuration
   build: {
     // Inline stylesheets for performance
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'auto'
   },
 
   // Vite configuration for Forge web components
@@ -38,21 +39,21 @@ export default defineConfig({
     resolve: {
       // Forge's "development" export condition points at TypeScript sources that import .html templates,
       // which Vite's esbuild dependency scan can't load. Resolve the built output instead.
-      conditions: ['module', 'browser'],
+      conditions: ['module', 'browser']
     },
 
     ssr: {
       // Externalize Forge packages during SSR since they're client-side only
       noExternal: [],
       resolve: {
-        conditions: ['module', 'node'],
-      },
+        conditions: ['module', 'node']
+      }
     },
 
     optimizeDeps: {
       // Pages import Forge via subpaths (e.g. `@tylertech/forge/button`). Pre-bundling the package root would create
       // a second copy of every component and re-register custom elements, so serve Forge as plain ESM instead.
-      exclude: ['@tylertech/forge'],
+      exclude: ['@tylertech/forge']
     },
 
     css: {
@@ -62,11 +63,11 @@ export default defineConfig({
           // `@use "@tylertech/forge/sass/..."` specifiers fail Node-style
           // package resolution. Load paths bypass that — Sass just searches
           // these directories on disk instead of resolving through "exports".
-          loadPaths: ['node_modules'],
-        },
-      },
+          loadPaths: ['node_modules']
+        }
+      }
     },
 
-    plugins: [tailwindcss()],
-  },
+    plugins: [tailwindcss()]
+  }
 });

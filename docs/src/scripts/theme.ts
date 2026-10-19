@@ -1,43 +1,43 @@
-type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark';
 
 const STORAGE_KEY = 'forge-docs-theme';
+const THEME_ATTRIBUTE = 'data-forge-theme';
+const DARK_QUERY = '(prefers-color-scheme: dark)';
 
-function getSystemTheme(): Theme {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
+const getSystemTheme = (): Theme => (window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light');
 
-function getStoredTheme(): Theme | null {
+const getStoredTheme = (): Theme | null => {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored === 'light' || stored === 'dark' ? stored : null;
-}
+};
 
-function applyTheme(theme: Theme) {
-  document.documentElement.setAttribute('data-forge-theme', theme);
-  document.documentElement.classList.toggle('forge-dark', theme === 'dark');
-}
+const applyTheme = (theme: Theme, root: HTMLElement = document.documentElement): void => {
+  root.setAttribute(THEME_ATTRIBUTE, theme);
+};
 
-export function initTheme() {
-  const theme = getStoredTheme() ?? getSystemTheme();
-  applyTheme(theme);
+export const getCurrentTheme = (): Theme => (document.documentElement.getAttribute(THEME_ATTRIBUTE) === 'dark' ? 'dark' : 'light');
 
-  // Listen for system preference changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!getStoredTheme()) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
-  });
-}
-
-export function setTheme(theme: Theme) {
+export const setTheme = (theme: Theme): void => {
   localStorage.setItem(STORAGE_KEY, theme);
   applyTheme(theme);
-}
+};
 
-export function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-forge-theme') as Theme || 'light';
-  setTheme(current === 'light' ? 'dark' : 'light');
-}
+export const toggleTheme = (): void => {
+  setTheme(getCurrentTheme() === 'light' ? 'dark' : 'light');
+};
 
-export function getCurrentTheme(): Theme {
-  return (document.documentElement.getAttribute('data-forge-theme') as Theme) || 'light';
-}
+export const initTheme = (): void => {
+  applyTheme(getStoredTheme() ?? getSystemTheme());
+
+  window.matchMedia(DARK_QUERY).addEventListener('change', ({ matches }) => {
+    if (!getStoredTheme()) {
+      applyTheme(matches ? 'dark' : 'light');
+    }
+  });
+
+  // ClientRouter replaces the <html> attributes with the incoming page's on SPA navigation,
+  // so carry the active theme over before the new document is swapped in.
+  document.addEventListener('astro:before-swap', ({ newDocument }) => {
+    applyTheme(getCurrentTheme(), newDocument.documentElement);
+  });
+};

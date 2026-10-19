@@ -27,9 +27,10 @@ const navigation = buildNavigation(components);
         class="block h-full max-h-[100px] max-w-[150px]"
       />
     </a>
-    <div slot="end">
-      <forge-icon name="palette_swatch_variant" theme="primary"></forge-icon>
-    </div>
+    <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
+      <forge-icon name="brightness_3"></forge-icon>
+      <forge-icon slot="on" name="brightness_7"></forge-icon>
+    </forge-icon-button>
   </forge-toolbar>
   <div slot="body">
     <div class="px-2 mt-medium mb-small">
@@ -52,6 +53,30 @@ const navigation = buildNavigation(components);
     }
   </div>
 </forge-scaffold>
+
+<script>
+  import type { IconButtonComponent } from "@tylertech/forge/icon-button";
+  import { getCurrentTheme, setTheme } from "../scripts/theme";
+
+  const button = document.querySelector<IconButtonComponent>("[data-theme-toggle]");
+
+  const syncThemeToggle = (): void => {
+    if (button) {
+      button.pressed = getCurrentTheme() === "dark";
+    }
+  };
+
+  // The sidenav is `transition:persist`ed, so this only needs binding once. Observing the
+  // attribute keeps the button in sync with theme changes made elsewhere (OS preference, block viewer).
+  button?.addEventListener("forge-icon-button-toggle", ({ detail }) => {
+    setTheme(detail ? "dark" : "light");
+  });
+  new MutationObserver(syncThemeToggle).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-forge-theme"],
+  });
+  syncThemeToggle();
+</script>
 
 <style lang="scss">
   @use "../styles/mixins" as *;

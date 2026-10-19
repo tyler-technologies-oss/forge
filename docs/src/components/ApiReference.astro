@@ -7,6 +7,7 @@
  * merged into a single row so authors see the JS name and the HTML attribute
  * side by side.
  */
+import { CODE_THEMES } from "../config/code-themes";
 import type {
   ComponentApi,
   ComponentPropAttr,
@@ -218,7 +219,7 @@ function sectionId(sectionTitle: string): string {
 
   {
     importSnippet && (
-      <Code code={importSnippet} lang="ts" theme="one-light" class="p-medium" />
+      <Code code={importSnippet} lang="ts" themes={CODE_THEMES} class="p-medium" />
     )
   }
 

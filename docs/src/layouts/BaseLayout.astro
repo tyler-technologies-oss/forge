@@ -4,6 +4,7 @@ import FoundryChatbot from "../components/FoundryChatbot.astro";
 import Sidenav from "../components/Sidenav.astro";
 import { getCollection } from "astro:content";
 import "../styles/global.css";
+import "../styles/dark-theme.scss";
 
 interface Props {
   title: string;
@@ -47,14 +48,6 @@ const components = await getCollection("components");
     />
     <link
       rel="stylesheet"
-      href="https://cdn.forge.tylertech.com/v3/css/forge-dark.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdn.forge.tylertech.com/v1/libs/@tylertech/forge@3.14.0/forge.css"
     />
 
@@ -65,10 +58,7 @@ const components = await getCollection("components");
         const system = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
-        const theme = stored || system;
-        document.documentElement.setAttribute("data-forge-theme", theme);
-        if (theme === "dark")
-          document.documentElement.classList.add("forge-dark");
+        document.documentElement.setAttribute("data-forge-theme", stored || system);
       })();
     </script>
 
