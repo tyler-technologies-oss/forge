@@ -8,3 +8,6 @@ export const FOCUS_INDICATOR_CONSTANTS = {
 };
 
 export type FocusIndicatorFocusMode = 'focus' | 'focusin';
+
+/** Relative positions along each axis used to sample whether the anchor is visible. Center first for an early exit. */
+export const FOCUS_INDICATOR_SAMPLE_RATIOS = [0.5, 0.1, 0.9];
