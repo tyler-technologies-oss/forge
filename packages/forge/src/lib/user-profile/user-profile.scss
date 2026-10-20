@@ -3,6 +3,8 @@
 @use '../core/styles/theme';
 @use '../core/styles/typography';
 
+/* stylelint-disable custom-property-pattern */
+
 //
 // Host
 //
@@ -65,3 +67,5 @@
 .sign-out-button {
   --forge-button-color: #{theme.variable(text-high)};
 }
+
+/* stylelint-enable custom-property-pattern */
