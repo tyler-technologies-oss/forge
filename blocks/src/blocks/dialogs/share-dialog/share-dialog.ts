@@ -6,7 +6,6 @@ IconRegistry.define([tylIconArrowDropDown, tylIconBusiness, tylIconClose, tylIco
 
 type AccessLevel = 'owner' | 'editor' | 'viewer';
 type VisibilityKey = 'restricted' | 'organization';
-type ToastTheme = 'success' | 'danger';
 
 interface IPerson {
   id: string;
@@ -36,11 +35,6 @@ const REMOVE_OPTION_VALUE = 'remove-user';
 const REMOVE_OPTION_CLASS = 'text-error';
 
 const MESSAGES = {
-  memberAdded: `User has been added to the ${RESOURCE_NOUN}`,
-  memberRemoved: `User has been removed from the ${RESOURCE_NOUN}`,
-  accessUpdated: `The user's access to this ${RESOURCE_NOUN} has been updated`,
-  visibilityUpdated: 'Visibility updated',
-  linkCopied: 'Link copied to clipboard',
   inviteHint: 'Add by email address',
   onlyOwner: `A ${RESOURCE_NOUN} must always have at least one owner`
 };
@@ -55,8 +49,8 @@ const ACCESS_LEVEL_ORDER: Record<AccessLevel, number> = { owner: 0, editor: 1, v
 const GRANTABLE_ACCESS_LEVELS: AccessLevel[] = ['editor', 'viewer', 'owner'];
 
 const VISIBILITY_OPTIONS: Record<VisibilityKey, IVisibilityOption> = {
-  restricted: { label: 'Restricted', description: 'Only people explicitly added can open', icon: 'lock_outline' },
-  organization: { label: `Anyone at ${ORGANIZATION_NAME}`, description: `Anyone in the ${ORGANIZATION_NAME} domain can view`, icon: 'business' }
+  restricted: { label: 'Restricted', description: 'Only people specifically added can open', icon: 'lock_outline' },
+  organization: { label: `Anyone at ${ORGANIZATION_NAME}`, description: `Anyone in the ${ORGANIZATION_NAME} organization can view`, icon: 'business' }
 };
 
 const DIRECTORY: IPerson[] = [
@@ -92,7 +86,6 @@ const visibilityIcon = byId('visibility-icon');
 const visibilityOptionsList = byId('visibility-options');
 const visibilityPopover = byId<IPopoverComponent & HTMLElement>('visibility-popover');
 const copyLinkButton = byId('copy-link-btn');
-const toast = byId<HTMLElement & { open: boolean; theme: string }>('share-toast');
 
 const createElement = <K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -116,21 +109,9 @@ const createElement = <K extends keyof HTMLElementTagNameMap>(
 
 const getDisplayName = ({ name, email }: IPerson): string => name || email;
 
-const getInitials = ({ name, email }: IPerson): string =>
-  (name
-    ? name
-        .split(' ')
-        .map(part => part[0])
-        .join('')
-    : email
-  )
-    .slice(0, 2)
-    .toUpperCase();
-
-const showToast = (message: string, theme: ToastTheme = 'success'): void => {
-  toast.textContent = message;
-  toast.theme = theme;
-  toast.open = true;
+const getAvatarText = ({ name, email }: IPerson): string => {
+  const parts = name?.trim().split(/\s+/) ?? [];
+  return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1]}` : name || email;
 };
 
 const accessLevelOptions = (selected: AccessLevel): IMenuOption[] =>
@@ -145,7 +126,7 @@ const createPersonItem = (person: IPerson, ...primary: Node[]): HTMLElement =>
   createElement(
     'forge-list-item' as 'div',
     {},
-    createElement('forge-avatar' as 'div', { slot: 'start', attributes: { text: getInitials(person) } }),
+    createElement('forge-avatar' as 'div', { slot: 'start', attributes: { text: getAvatarText(person) } }),
     ...primary,
     createElement('span', { slot: 'secondary-text', className: 'text-medium', text: person.name ? person.email : '' })
   );
@@ -154,7 +135,7 @@ const createReadOnlyAccess = (member: IMember, tooltipText?: string): HTMLElemen
   const labelId = `access-label-${member.id}`;
   const label = createElement('span', {
     slot: 'end',
-    className: 'text-body1 text-medium',
+    className: 'text-body1 text-medium mr-small',
     text: ACCESS_LEVEL_LABELS[member.accessLevel],
     attributes: tooltipText ? { id: labelId, tabindex: '0' } : {}
   });
@@ -185,10 +166,8 @@ const createAccessMenu = (member: IMember): IMenuComponent => {
     const { value } = (event as CustomEvent<IMenuSelectEventData<string>>).detail;
     if (value === REMOVE_OPTION_VALUE) {
       members = members.filter(({ id }) => id !== member.id);
-      showToast(MESSAGES.memberRemoved);
     } else if (value !== member.accessLevel) {
       members = members.map(existing => (existing.id === member.id ? { ...existing, accessLevel: value as AccessLevel } : existing));
-      showToast(MESSAGES.accessUpdated);
     }
     renderMembers();
   });
@@ -283,7 +262,6 @@ const addMember = (personId: string): void => {
   addMemberInput.value = '';
   setSearchResultsOpen(false);
   renderMembers();
-  showToast(MESSAGES.memberAdded);
 };
 
 const createVisibilityOption = (key: VisibilityKey, { label, description, icon }: IVisibilityOption): HTMLElement => {
@@ -312,12 +290,7 @@ const initializeLabels = (): void => {
 };
 
 const copyLink = async (): Promise<void> => {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    showToast(MESSAGES.linkCopied);
-  } catch (error) {
-    showToast(`Failed to copy link: ${error instanceof Error ? error.message : String(error)}`, 'danger');
-  }
+  await navigator.clipboard.writeText(window.location.href);
 };
 
 byId('open-share-dialog-btn').addEventListener('click', () => (shareDialog.open = true));
@@ -350,7 +323,6 @@ visibilityOptionsList.addEventListener('forge-list-item-select', (event: Event) 
   visibilityPopover.open = false;
   if (key !== visibility) {
     setVisibility(key);
-    showToast(MESSAGES.visibilityUpdated);
   }
 });
 
