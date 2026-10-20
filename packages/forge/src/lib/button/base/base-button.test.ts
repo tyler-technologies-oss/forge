@@ -253,6 +253,51 @@ describe('BaseButton', () => {
     expect(focusIndicator).toBeTruthy();
   });
 
+  it('should sync disabled attribute and state synchronously when disabled property changes', async () => {
+    const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
+    const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
+    el.disabled = true;
+
+    expect(el.hasAttribute('disabled')).toBe(true);
+    expect(el.matches('[disabled]')).toBe(true);
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+    expect(el.hasAttribute('tabindex')).toBe(false);
+
+    await el.updateComplete;
+
+    expect(el.hasAttribute('disabled')).toBe(true);
+
+    el.disabled = false;
+
+    expect(el.hasAttribute('disabled')).toBe(false);
+    expect(el.matches('[disabled]')).toBe(false);
+    expect(el.hasAttribute('aria-disabled')).toBe(false);
+    expect(el.getAttribute('tabindex')).toBe('0');
+
+    await el.updateComplete;
+
+    expect(el.hasAttribute('disabled')).toBe(false);
+    expect(el.disabled).toBe(false);
+  });
+
+  it('should update disabled property when disabled attribute changes', async () => {
+    const screen = render(html`<forge-test-base-button>Button</forge-test-base-button>`);
+    const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
+    el.setAttribute('disabled', '');
+
+    expect(el.disabled).toBe(true);
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+
+    el.removeAttribute('disabled');
+
+    expect(el.disabled).toBe(false);
+    expect(el.hasAttribute('aria-disabled')).toBe(false);
+  });
+
   it('should not disable when <a> is specified', async () => {
     const screen = render(html`<forge-test-base-button disabled><a href="javascript: void(0);">Button</a></forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
