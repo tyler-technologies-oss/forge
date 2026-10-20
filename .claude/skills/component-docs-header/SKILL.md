@@ -21,21 +21,22 @@ import ComponentHeader from '../../../components/ComponentHeader.astro';
 ## Usage
 ```
 
+The frame height is fixed at 288px (not configurable) so all headers match.
+
 ## Props (`docs/src/components/ComponentHeader.astro`)
 
-| Prop          | Default    | Purpose                                                                                          |
-| ------------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| `fit`         | `"center"` | `"center"` centers the demo both ways; `"cover"` fills the frame and clips overflow              |
-| `height`      | `"12rem"`  | Frame height                                                                                     |
-| `zoom`        | `1`        | Above 1 magnifies a region (anchored at `origin`); below 1 shrinks to show more, top-left        |
-| `origin`      | `"center"` | CSS `transform-origin` for `zoom` > 1 in cover mode (e.g. `"top left"`)                          |
-| `inset`       | none       | Cover mode only: CSS inset shorthand; shows the frame background around a rounded, bordered demo |
-| `interactive` | `true`     | Pass `{false}` to make the demo `inert`                                                          |
+| Prop          | Default    | Purpose                                                                                                                   |
+| ------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `fit`         | `"center"` | `"center"` centers the demo both ways; `"cover"` fills the frame and clips overflow                                       |
+| `zoom`        | `1`        | Above 1 magnifies a region (anchored at `origin`); below 1 shrinks to show more, top-left                                 |
+| `origin`      | `"center"` | CSS `transform-origin` for `zoom` > 1 in cover mode (e.g. `"top left"`)                                                   |
+| `inset`       | `"32px"`   | Cover mode only: CSS inset shorthand (`"0"` for edge to edge); shows the frame background around a rounded, bordered demo |
+| `interactive` | `true`     | Pass `{false}` to make the demo `inert`                                                                                   |
 
 ## Choosing a style
 
-- **Small components** (button, badge, chip, switch): `fit="center"` with 1–3 variants side by side. Use the default height unless the component is tall.
-- **Large components** (app layout, scaffold, table, drawer): `fit="cover"` with `inset="2rem"`, a taller `height` (~`18rem`), and `zoom` below 1 to show the overall shape, or above 1 with `origin` to spotlight one region. It is an abstract but real representation; never show the whole thing.
+- **Small components** (button, badge, chip, switch): `fit="center"` with 1–3 variants side by side.
+- **Large components** (app layout, scaffold, table, drawer): `fit="cover"` (inset 32px by default), and `zoom` below 1 to show the overall shape, or above 1 with `origin` to spotlight one region. It is an abstract but real representation; never show the whole thing.
 - Overlay components (dialog, menu, popover): show a closed trigger or a static, non-overlay representation. Don't open a modal on page load.
 
 ## Rules

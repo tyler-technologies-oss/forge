@@ -2,6 +2,8 @@
 /**
  * ComponentHeader — a live, clipped demo shown at the top of a component page.
  *
+ * The frame is a fixed 288px tall so every component page header matches.
+ *
  * `fit="center"` centers the slotted demo horizontally and vertically.
  * `fit="cover"` makes the demo fill the whole frame and clips the overflow,
  * for large components (app layout, scaffold) where only a part is shown.
@@ -10,15 +12,15 @@
  * anchored at `origin` (any CSS transform-origin, e.g. "top left"). Below 1
  * it shrinks the demo to show more of it, anchored top left. Cover mode
  * always fills the frame. `inset` (cover mode only) pulls the demo in from the
- * frame edges, accepting CSS inset shorthand (e.g. "2rem" or "2rem 2rem 0"),
- * so the frame's background shows around a rounded, elevated demo.
+ * frame edges, accepting CSS inset shorthand (default "32px"; e.g. "32px 32px 0"),
+ * so the frame's background shows around a rounded, bordered demo. Pass
+ * "0" for an edge-to-edge demo.
  *
  * The demo is interactive by default; pass `interactive={false}` to make it
  * `inert` for a purely decorative visual.
  */
 interface Props {
   fit?: "center" | "cover";
-  height?: string;
   zoom?: number;
   origin?: string;
   inset?: string;
@@ -27,10 +29,9 @@ interface Props {
 
 const {
   fit = "center",
-  height = "12rem",
   zoom = 1,
   origin = "center",
-  inset,
+  inset = "32px",
   interactive = false,
 } = Astro.props;
 
@@ -45,14 +46,13 @@ const coverStyle = [
 ---
 
 <div
-  class="tonal-card-p-0 relative overflow-hidden mb-large"
-  style={`height: ${height}`}
+  class="tonal-card-p-0 relative overflow-hidden mb-large h-[288px]"
   inert={!interactive}>
   {
     fit === "cover" ? (
       <div
-        class={inset ? "absolute overflow-hidden rounded-lg border border-outline" : "absolute inset-0 overflow-hidden"}
-        style={inset ? `inset: ${inset}` : undefined}>
+        class={inset === "0" ? "absolute overflow-hidden" : "absolute overflow-hidden rounded-lg border border-outline"}
+        style={`inset: ${inset}`}>
         <div style={coverStyle}>
           <slot />
         </div>
