@@ -39,6 +39,8 @@ import { ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
 import { FormFieldComponentDelegate, IFormFieldComponentDelegate } from '../core/delegates/form-field-component-delegate.js';
 import { BaseComponentDelegate, IBaseComponentDelegate } from '../core/index.js';
 
+let headerLabelId = 0;
+
 function isTemplateResultObject(val: any): val is ITableTemplateBuilderResult {
   return val && typeof val === 'object' && 'content' in val;
 }
@@ -200,6 +202,21 @@ export class TableUtils {
   }
 
   /**
+   * Creates the button used to sort a column, including its focus indicator and keyboard listener.
+   */
+  private static _createSortButton(keydownListener: EventListener): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.type = 'button';
+
+    const focusIndicator = document.createElement('forge-focus-indicator');
+    focusIndicator.inward = true;
+    button.appendChild(focusIndicator);
+
+    button.addEventListener('keydown', keydownListener);
+    return button;
+  }
+
+  /**
    * Creates a `forge-tooltip` for multi sort column headers
    */
   private static _createMultisortTooltip(): ITooltipComponent {
@@ -236,25 +253,27 @@ export class TableUtils {
       addClass([TABLE_CONSTANTS.classes.TABLE_CELL, TABLE_CONSTANTS.classes.TABLE_HEAD_CELL], th);
 
       // We wrap the header text in a div for ease of alignment
+      // A sortable column with a header template can contain interactive content, which must not be nested within a button
+      const useSortOverlay = !!columnConfig.sortable && typeof columnConfig.headerTemplate === 'function';
       let cellContainer: HTMLElement;
-      if (columnConfig.sortable) {
-        cellContainer = document.createElement('button');
-        (cellContainer as HTMLButtonElement).type = 'button';
-
-        const focusIndicator = document.createElement('forge-focus-indicator');
-        focusIndicator.inward = true;
-        cellContainer.appendChild(focusIndicator);
-
-        cellContainer.addEventListener('keydown', tableConfiguration.sortableHeadCellKeydownListener);
+      let sortOverlayButton: HTMLButtonElement | undefined;
+      if (columnConfig.sortable && !useSortOverlay) {
+        cellContainer = TableUtils._createSortButton(tableConfiguration.sortableHeadCellKeydownListener);
       } else {
         cellContainer = document.createElement('div');
       }
       cellContainer.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_CONTAINER);
 
+      if (useSortOverlay) {
+        sortOverlayButton = TableUtils._createSortButton(tableConfiguration.sortableHeadCellKeydownListener);
+        sortOverlayButton.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_BUTTON);
+        cellContainer.appendChild(sortOverlayButton);
+      }
+
       // Add tooltip for multisort
       if (tableConfiguration.multiColumnSort) {
         const tooltip = TableUtils._createMultisortTooltip();
-        cellContainer.appendChild(tooltip);
+        (sortOverlayButton ?? cellContainer).appendChild(tooltip);
       }
 
       // Set the cell alignment from config
@@ -319,6 +338,9 @@ export class TableUtils {
       }
 
       if (typeof columnConfig.headerTemplate === 'function') {
+        if (sortOverlayButton && columnConfig.header && typeof columnConfig.header === 'string') {
+          sortOverlayButton.setAttribute('aria-label', columnConfig.header.trim());
+        }
         Promise.resolve(columnConfig.headerTemplate(i, cellContainer, columnConfig)).then(element => {
           if (element) {
             const node = document.createElement('div');
@@ -330,13 +352,18 @@ export class TableUtils {
             }
             node.setAttribute(TABLE_CONSTANTS.attributes.CUSTOM_CELL_TEMPLATE, '');
             TableUtils._prepend(node, cellContainer);
+            if (sortOverlayButton) {
+              sortOverlayButton.removeAttribute('aria-label');
+              node.id = `${TABLE_CONSTANTS.classes.TABLE_HEAD_CELL}-label-${headerLabelId++}`;
+              sortOverlayButton.setAttribute('aria-labelledby', node.id);
+            }
           }
         });
       } else {
         const span = document.createElement('span');
         span.classList.add(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_TEXT);
         span.textContent = columnConfig.header && typeof columnConfig.header === 'string' ? columnConfig.header.trim() : '';
-        if (span.textContent.trim().length === 0) {
+        if (span.textContent.trim().length === 0 && !columnConfig.sortable) {
           th.setAttribute('aria-hidden', 'true');
         }
         TableUtils._prepend(span, cellContainer);
