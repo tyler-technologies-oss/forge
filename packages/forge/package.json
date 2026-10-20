@@ -79,6 +79,7 @@
     "@floating-ui/dom": "catalog:",
     "@lit/context": "catalog:",
     "@tylertech/forge-core": "workspace:",
+    "@tylertech/forge-tokens": "workspace:",
     "@tylertech/tyler-icons": "catalog:",
     "imask": "^7.6.1",
     "lit": "catalog:",

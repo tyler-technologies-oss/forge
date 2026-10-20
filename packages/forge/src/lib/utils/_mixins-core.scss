@@ -1,5 +1,5 @@
 /* stylelint-disable unit-allowed-list */
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 @mixin body-base {
   background-color: #{theme.variable(surface-dim)};

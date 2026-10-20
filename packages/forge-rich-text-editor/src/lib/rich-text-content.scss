@@ -1,5 +1,5 @@
 @use './core' as rte-core;
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
 
 @include rte-core.prosemirror-base;
 

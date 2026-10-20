@@ -43,7 +43,7 @@ export const scssLoaderPlugin = {
   name: 'scss-loader',
   setup(build) {
     build.onLoad({ filter: /\.scss$/ }, async args => {
-      const result = sass.compile(args.path, { style: 'compressed' });
+      const result = sass.compile(args.path, { style: 'compressed', loadPaths: ['node_modules'] });
       return {
         contents: `export default ${JSON.stringify(result.css)};`,
         loader: 'js'

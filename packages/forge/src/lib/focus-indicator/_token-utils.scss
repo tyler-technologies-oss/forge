@@ -1,6 +1,6 @@
-@use '../core/styles/utils';
+@use '@tylertech/forge-tokens/sass/utils';
 @use '../core/styles/tokens/focus-indicator/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: focus-indicator;
 $_tokens: tokens.$tokens;
