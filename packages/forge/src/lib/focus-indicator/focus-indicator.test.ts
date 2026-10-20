@@ -272,6 +272,46 @@ describe('FocusIndicator', () => {
       expect(focusIndicator.circular).toBe(true);
       expect(indicatorElement?.hasAttribute('circular')).toBe(true);
     });
+
+    it('should not be obscured when the target is visible', async () => {
+      const { detachedButton, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(indicatorElement.hasAttribute('obscured')).toBe(false);
+      expect(getComputedStyle(indicatorElement).visibility).toBe('visible');
+    });
+
+    it('should hide when the target is completely covered by another element', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      const { left, top, width, height } = button.getBoundingClientRect();
+      const cover = document.createElement('div');
+      cover.style.cssText = `position:fixed;left:${left - 10}px;top:${top - 10}px;width:${width + 20}px;height:${height + 20}px;background:red;`;
+      document.body.append(cover);
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement.hasAttribute('obscured')).toBe(true);
+      expect(getComputedStyle(indicatorElement).visibility).toBe('hidden');
+
+      cover.remove();
+    });
+
+    it('should hide when the target is scrolled out of view', async () => {
+      const { detachedButton, button, focusIndicator } = await createFixture();
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      button.style.cssText = 'position:fixed;top:-500px;left:0;';
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(indicatorElement.hasAttribute('obscured')).toBe(true);
+    });
   });
 });
 

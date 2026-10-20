@@ -25,6 +25,10 @@
   &:popover-open {
     @include active;
   }
+
+  &[obscured] {
+    visibility: hidden;
+  }
 }
 
 .focus-indicator:not([inward]) {
