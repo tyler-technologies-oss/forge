@@ -1,0 +1,68 @@
+---
+/**
+ * ComponentHeader — a live, clipped demo shown at the top of a component page.
+ *
+ * `fit="center"` centers the slotted demo horizontally and vertically.
+ * `fit="cover"` makes the demo fill the whole frame and clips the overflow,
+ * for large components (app layout, scaffold) where only a part is shown.
+ *
+ * `zoom` scales the demo inside the frame. Above 1 it magnifies a region,
+ * anchored at `origin` (any CSS transform-origin, e.g. "top left"). Below 1
+ * it shrinks the demo to show more of it, anchored top left. Cover mode
+ * always fills the frame. `inset` (cover mode only) pulls the demo in from the
+ * frame edges, accepting CSS inset shorthand (e.g. "2rem" or "2rem 2rem 0"),
+ * so the frame's background shows around a rounded, elevated demo.
+ *
+ * The demo is interactive by default; pass `interactive={false}` to make it
+ * `inert` for a purely decorative visual.
+ */
+interface Props {
+  fit?: "center" | "cover";
+  height?: string;
+  zoom?: number;
+  origin?: string;
+  inset?: string;
+  interactive?: boolean;
+}
+
+const {
+  fit = "center",
+  height = "12rem",
+  zoom = 1,
+  origin = "center",
+  inset,
+  interactive = false,
+} = Astro.props;
+
+const shrink = zoom < 1;
+const size = `${100 / Math.max(zoom, Number.EPSILON)}%`;
+const coverStyle = [
+  `width: ${shrink ? size : "100%"}`,
+  `height: ${shrink ? size : "100%"}`,
+  `transform: scale(${zoom})`,
+  `transform-origin: ${shrink ? "top left" : origin}`,
+].join("; ");
+---
+
+<div
+  class="tonal-card-p-0 relative overflow-hidden mb-large"
+  style={`height: ${height}`}
+  inert={!interactive}>
+  {
+    fit === "cover" ? (
+      <div
+        class={inset ? "absolute overflow-hidden rounded-lg border border-outline" : "absolute inset-0 overflow-hidden"}
+        style={inset ? `inset: ${inset}` : undefined}>
+        <div style={coverStyle}>
+          <slot />
+        </div>
+      </div>
+    ) : (
+      <div
+        class="flex size-full items-center justify-center gap-medium"
+        style={zoom === 1 ? undefined : `zoom: ${zoom}`}>
+        <slot />
+      </div>
+    )
+  }
+</div>
