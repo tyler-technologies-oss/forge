@@ -7,9 +7,19 @@ category: layout
 storybookId: components-expansion-panel--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <div class="w-96">
+    <forge-expansion-panel open>
+      <button slot="header" type="button" aria-controls="panel-content" aria-expanded="true">Panel header</button>
+      <div id="panel-content" role="group" class="p-medium">Expansion panels reveal and hide supporting content.</div>
+    </forge-expansion-panel>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

@@ -7,9 +7,17 @@ category: forms
 storybookId: components-radio--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <div class="flex flex-col">
+    <forge-radio name="demo" value="1" checked>Option one</forge-radio>
+    <forge-radio name="demo" value="2">Option two</forge-radio>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

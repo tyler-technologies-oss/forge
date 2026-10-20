@@ -6,9 +6,16 @@ category: feedback
 storybookId: components-busy-indicator--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <div class="relative h-48 w-96 rounded-lg border border-outline">
+    <forge-busy-indicator open mode="inline" title-text="Loading" message="Please wait while we load your data..."></forge-busy-indicator>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

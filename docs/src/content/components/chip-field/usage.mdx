@@ -7,10 +7,20 @@ category: forms
 storybookId: components-chip-field--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<ComponentHeader>
+  <forge-chip-field class="w-320px">
+    <label slot="label" for="chip-field-header-input">Tags</label>
+    <input type="text" id="chip-field-header-input" />
+    <forge-chip slot="member" type="field" value="design">Design</forge-chip>
+    <forge-chip slot="member" type="field" value="research">Research</forge-chip>
+  </forge-chip-field>
+</ComponentHeader>
 
 ## Usage
 

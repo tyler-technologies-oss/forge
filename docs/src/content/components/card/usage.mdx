@@ -7,9 +7,17 @@ category: layout
 storybookId: components-card--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-card class="w-[450px]">
+    <div class="forge-typography--heading4">Card title</div>
+    <p class="forge-typography--body2">Cards group related content and actions.</p>
+  </forge-card>
+</ComponentHeader>
 
 ## Usage
 

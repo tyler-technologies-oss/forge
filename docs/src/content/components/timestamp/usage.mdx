@@ -7,9 +7,14 @@ category: data-display
 storybookId: components-timestamp--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-timestamp datetime="2025-01-15T14:30:00" format="MMM d, yyyy h:mm a"></forge-timestamp>
+</ComponentHeader>
 
 ## Usage
 

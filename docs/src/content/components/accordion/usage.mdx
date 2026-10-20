@@ -7,9 +7,38 @@ category: layout
 storybookId: components-accordion--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-accordion class="w-96">
+    <forge-expansion-panel open>
+      <div slot="header" class="flex justify-between items-center">
+        Account
+        <forge-open-icon orientation="vertical" rotation="full"></forge-open-icon>
+      </div>
+      <div class="p-medium">Manage your profile and sign-in details.</div>
+    </forge-expansion-panel>
+    <forge-divider></forge-divider>
+    <forge-expansion-panel>
+      <div slot="header" class="flex justify-between items-center">
+        Notifications
+        <forge-open-icon orientation="vertical" rotation="full"></forge-open-icon>
+      </div>
+      <div class="p-medium">Choose how you want to be notified.</div>
+    </forge-expansion-panel>
+    <forge-divider></forge-divider>
+    <forge-expansion-panel>
+      <div slot="header" class="flex justify-between items-center">
+        Privacy
+        <forge-open-icon orientation="vertical" rotation="full"></forge-open-icon>
+      </div>
+      <div class="p-medium">Control who can see your activity.</div>
+    </forge-expansion-panel>
+  </forge-accordion>
+</ComponentHeader>
 
 ## Usage
 

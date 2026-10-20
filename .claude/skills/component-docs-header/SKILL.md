@@ -21,7 +21,7 @@ import ComponentHeader from '../../../components/ComponentHeader.astro';
 ## Usage
 ```
 
-The frame height is fixed at 288px (not configurable) so all headers match.
+The frame is at least 200px tall and grows to fit the demo. Cover mode with `zoom` other than 1 uses a fixed frame (200px, or the `height` prop).
 
 ## Props (`docs/src/components/ComponentHeader.astro`)
 
@@ -30,6 +30,7 @@ The frame height is fixed at 288px (not configurable) so all headers match.
 | `fit`         | `"center"` | `"center"` centers the demo both ways; `"cover"` fills the frame and clips overflow                                       |
 | `zoom`        | `1`        | Above 1 magnifies a region (anchored at `origin`); below 1 shrinks to show more, top-left                                 |
 | `origin`      | `"center"` | CSS `transform-origin` for `zoom` > 1 in cover mode (e.g. `"top left"`)                                                   |
+| `height`      | `"200px"` | Frame height for cover mode with `zoom` other than 1 (transformed demos can't grow the frame)                            |
 | `inset`       | `"32px"`   | Cover mode only: CSS inset shorthand (`"0"` for edge to edge); shows the frame background around a rounded, bordered demo |
 | `interactive` | `true`     | Pass `{false}` to make the demo `inert`                                                                                   |
 

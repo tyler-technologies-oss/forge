@@ -7,10 +7,19 @@ category: layout
 storybookId: components-stack--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<ComponentHeader>
+  <forge-stack gap="16">
+    <forge-badge>One</forge-badge>
+    <forge-badge>Two</forge-badge>
+    <forge-badge>Three</forge-badge>
+  </forge-stack>
+</ComponentHeader>
 
 ## Usage
 

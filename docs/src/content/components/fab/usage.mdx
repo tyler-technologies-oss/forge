@@ -7,9 +7,20 @@ category: actions
 storybookId: components-floating-action-button--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-fab aria-label="Add">
+    <forge-icon name="add"></forge-icon>
+  </forge-fab>
+  <forge-fab>
+    <forge-icon slot="start" name="add"></forge-icon>
+    <span slot="label">Create</span>
+  </forge-fab>
+</ComponentHeader>
 
 ## Usage
 

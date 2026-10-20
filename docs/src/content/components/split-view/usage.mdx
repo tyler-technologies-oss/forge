@@ -7,9 +7,21 @@ category: layout
 storybookId: components-split-view--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader fit="cover">
+  <forge-split-view class="h-48">
+    <forge-split-view-panel size="200" accessible-label="Panel one">
+      <div class="p-medium">Panel one</div>
+    </forge-split-view-panel>
+    <forge-split-view-panel size="200" resizable="start" accessible-label="Panel two">
+      <div class="p-medium">Panel two</div>
+    </forge-split-view-panel>
+  </forge-split-view>
+</ComponentHeader>
 
 ## Usage
 

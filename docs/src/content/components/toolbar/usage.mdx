@@ -7,9 +7,20 @@ category: layout
 storybookId: components-toolbar--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <div class="w-96">
+    <forge-toolbar>
+      <h2 slot="start" class="text-heading3 m-0 p-0">Toolbar</h2>
+      <forge-icon-button slot="end" aria-label="Search"><forge-icon name="search"></forge-icon></forge-icon-button>
+      <forge-icon-button slot="end" aria-label="More"><forge-icon name="more_vert"></forge-icon></forge-icon-button>
+    </forge-toolbar>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

@@ -7,9 +7,22 @@ category: forms
 storybookId: components-date-picker--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-date-picker class="w-64">
+    <forge-text-field>
+      <label for="date-picker-header-input" slot="label">Date</label>
+      <input type="text" id="date-picker-header-input" value="01/15/2025" />
+      <forge-icon-button aria-label="Toggle calendar" slot="end" density="medium">
+        <forge-icon name="insert_invitation"></forge-icon>
+      </forge-icon-button>
+    </forge-text-field>
+  </forge-date-picker>
+</ComponentHeader>
 
 ## Usage
 

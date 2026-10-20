@@ -7,10 +7,23 @@ category: navigation
 storybookId: components-app-bar--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<ComponentHeader fit="cover" inset="0">
+  <forge-app-bar title-text="My Application">
+    <forge-icon slot="logo" name="home"></forge-icon>
+    <forge-icon-button slot="end" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button slot="end" aria-label="Settings" theme="app-bar">
+      <forge-icon name="settings"></forge-icon>
+    </forge-icon-button>
+  </forge-app-bar>
+</ComponentHeader>
 
 ## Usage
 

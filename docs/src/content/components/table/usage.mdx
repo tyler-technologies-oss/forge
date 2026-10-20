@@ -7,9 +7,39 @@ category: data-display
 storybookId: components-table--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader fit="cover">
+  <table class="forge-data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ada Lovelace</td>
+        <td>Engineer</td>
+        <td>Active</td>
+      </tr>
+      <tr>
+        <td>Grace Hopper</td>
+        <td>Admiral</td>
+        <td>Active</td>
+      </tr>
+      <tr>
+        <td>Alan Turing</td>
+        <td>Researcher</td>
+        <td>Away</td>
+      </tr>
+    </tbody>
+  </table>
+</ComponentHeader>
 
 ## Usage
 

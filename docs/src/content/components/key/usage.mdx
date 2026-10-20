@@ -7,9 +7,27 @@ category: data-display
 storybookId: components-key--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-key>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-primary)]">
+      <span>Black Guillemot</span>
+      <span slot="value">25%</span>
+    </forge-key-item>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-success)]">
+      <span>Great Shearwater</span>
+      <span slot="value">50%</span>
+    </forge-key-item>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-warning)]">
+      <span>Mealy Redpoll</span>
+      <span slot="value">75%</span>
+    </forge-key-item>
+  </forge-key>
+</ComponentHeader>
 
 ## Usage
 

@@ -7,9 +7,18 @@ category: navigation
 storybookId: components-tabs--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-tab-bar active-tab="0">
+    <forge-tab selected>Overview</forge-tab>
+    <forge-tab>Activity</forge-tab>
+    <forge-tab>Settings</forge-tab>
+  </forge-tab-bar>
+</ComponentHeader>
 
 ## Usage
 

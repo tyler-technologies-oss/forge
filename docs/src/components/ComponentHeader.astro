@@ -2,7 +2,10 @@
 /**
  * ComponentHeader — a live, clipped demo shown at the top of a component page.
  *
- * The frame is a fixed 288px tall so every component page header matches.
+ * The frame is at least 200px tall so every component page header matches, and
+ * grows to fit the demo when it is taller. Cover mode with `zoom` other than 1
+ * scales the demo with a transform, so it keeps a fixed frame instead, 200px
+ * by default; pass `height` (any CSS length, e.g. "280px") to change it.
  *
  * `fit="center"` centers the slotted demo horizontally and vertically.
  * `fit="cover"` makes the demo fill the whole frame and clips the overflow,
@@ -24,6 +27,7 @@ interface Props {
   zoom?: number;
   origin?: string;
   inset?: string;
+  height?: string;
   interactive?: boolean;
 }
 
@@ -32,9 +36,11 @@ const {
   zoom = 1,
   origin = "center",
   inset = "32px",
-  interactive = false,
+  height = "200px",
+  interactive = true,
 } = Astro.props;
 
+const flows = fit === "center" || zoom === 1;
 const shrink = zoom < 1;
 const size = `${100 / Math.max(zoom, Number.EPSILON)}%`;
 const coverStyle = [
@@ -46,20 +52,33 @@ const coverStyle = [
 ---
 
 <div
-  class="tonal-card-p-0 relative overflow-hidden mb-large h-[288px]"
+  class:list={[
+    "tonal-card-p-0 relative overflow-hidden mb-large",
+    flows ? "grid min-h-[200px]" : "",
+  ]}
+  style={flows ? undefined : `height: ${height}`}
   inert={!interactive}>
   {
     fit === "cover" ? (
-      <div
-        class={inset === "0" ? "absolute overflow-hidden" : "absolute overflow-hidden rounded-lg border border-outline"}
-        style={`inset: ${inset}`}>
-        <div style={coverStyle}>
-          <slot />
+      flows ? (
+        <div class="grid" style={`padding: ${inset}`}>
+          <div
+            class={inset === "0" ? "overflow-hidden" : "overflow-hidden rounded-lg border border-outline"}>
+            <slot />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          class={inset === "0" ? "absolute overflow-hidden" : "absolute overflow-hidden rounded-lg border border-outline"}
+          style={`inset: ${inset}`}>
+          <div style={coverStyle}>
+            <slot />
+          </div>
+        </div>
+      )
     ) : (
       <div
-        class="flex size-full items-center justify-center gap-medium"
+        class="flex min-h-[200px] items-center justify-center gap-medium p-large"
         style={zoom === 1 ? undefined : `zoom: ${zoom}`}>
         <slot />
       </div>

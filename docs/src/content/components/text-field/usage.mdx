@@ -7,10 +7,20 @@ category: forms
 storybookId: components-text-field--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<ComponentHeader>
+  <div class="w-64">
+    <forge-text-field>
+      <input id="header-name" type="text" value="Ada Lovelace" />
+      <label for="header-name" slot="label">Name</label>
+    </forge-text-field>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

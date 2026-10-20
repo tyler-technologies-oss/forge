@@ -7,9 +7,25 @@ category: actions
 storybookId: components-button-area--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-card class="p-0 w-80 max-w-full">
+    <forge-button-area>
+      <button slot="button" type="button" aria-labelledby="button-area-heading"></button>
+      <div class="flex items-center gap-xsmall p-medium">
+        <div class="me-auto">
+          <div id="button-area-heading">Account settings</div>
+          <div>Manage your profile</div>
+        </div>
+        <forge-icon name="arrow_forward"></forge-icon>
+      </div>
+    </forge-button-area>
+  </forge-card>
+</ComponentHeader>
 
 ## Usage
 

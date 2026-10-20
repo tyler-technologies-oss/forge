@@ -7,6 +7,7 @@ category: data-display
 storybookId: components-tree--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
@@ -15,6 +16,22 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 <InlineMessage theme="warning" title="Experimental">
   Tree is an experimental component in developer preview — its API and implementation may change in future versions, and there may be unresolved bugs. Use it with that in mind, and be prepared to update your code as it evolves.
 </InlineMessage>
+
+<ComponentHeader>
+  <div class="w-64">
+    <forge-tree>
+      <forge-tree-item open>
+        <span>Projects</span>
+        <forge-tree-item slot="children"><span>Alpha</span></forge-tree-item>
+        <forge-tree-item slot="children"><span>Beta</span></forge-tree-item>
+      </forge-tree-item>
+      <forge-tree-item>
+        <span>Archive</span>
+        <forge-tree-item slot="children"><span>2024</span></forge-tree-item>
+      </forge-tree-item>
+    </forge-tree>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

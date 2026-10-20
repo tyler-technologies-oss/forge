@@ -7,9 +7,20 @@ category: forms
 storybookId: components-select--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <div class="w-64">
+    <forge-select label="Fruit" value="apple">
+      <forge-option value="apple">Apple</forge-option>
+      <forge-option value="banana">Banana</forge-option>
+      <forge-option value="cherry">Cherry</forge-option>
+    </forge-select>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

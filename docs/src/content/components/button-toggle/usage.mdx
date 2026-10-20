@@ -7,9 +7,18 @@ category: forms
 storybookId: components-button-toggle--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-button-toggle-group value="day">
+    <forge-button-toggle value="day">Day</forge-button-toggle>
+    <forge-button-toggle value="week">Week</forge-button-toggle>
+    <forge-button-toggle value="month">Month</forge-button-toggle>
+  </forge-button-toggle-group>
+</ComponentHeader>
 
 ## Usage
 

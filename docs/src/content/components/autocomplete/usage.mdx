@@ -7,9 +7,19 @@ category: forms
 storybookId: components-autocomplete--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-autocomplete class="w-64">
+    <forge-text-field show-clear popover-icon>
+      <input type="text" id="state" autocomplete="off" role="combobox" aria-live="polite" aria-atomic="true" aria-haspopup="true" aria-expanded="false" aria-autocomplete="list" aria-controls="forge-aria-controls-placeholder" value="Alabama" />
+      <label for="state" aria-label="Choose state" slot="label">Choose state</label>
+    </forge-text-field>
+  </forge-autocomplete>
+</ComponentHeader>
 
 ## Usage
 

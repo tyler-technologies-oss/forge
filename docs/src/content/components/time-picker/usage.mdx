@@ -7,10 +7,25 @@ category: forms
 storybookId: components-time-picker--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+
+<ComponentHeader>
+  <div class="w-64">
+    <forge-time-picker>
+      <forge-text-field>
+        <input id="header-time" type="text" value="2:30 PM" autocomplete="off" />
+        <label for="header-time" slot="label">Time</label>
+        <forge-icon-button slot="trailing" density="medium" aria-label="Toggle time dropdown">
+          <forge-icon name="clock_outline"></forge-icon>
+        </forge-icon-button>
+      </forge-text-field>
+    </forge-time-picker>
+  </div>
+</ComponentHeader>
 
 ## Usage
 

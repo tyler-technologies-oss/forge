@@ -7,9 +7,22 @@ category: actions
 storybookId: components-icon-button--demo
 ---
 
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-icon-button aria-label="Favorite">
+    <forge-icon name="favorite"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Search">
+    <forge-icon name="search"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Settings">
+    <forge-icon name="settings"></forge-icon>
+  </forge-icon-button>
+</ComponentHeader>
 
 ## Usage
 
