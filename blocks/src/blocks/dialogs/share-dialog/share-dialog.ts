@@ -293,10 +293,29 @@ const copyLink = async (): Promise<void> => {
   await navigator.clipboard.writeText(window.location.href);
 };
 
+let appliedMembers = members;
+let appliedVisibility = visibility;
+
+const applyChanges = (): void => {
+  appliedMembers = members;
+  appliedVisibility = visibility;
+  shareDialog.open = false;
+};
+
+const cancelChanges = (): void => {
+  members = appliedMembers;
+  setVisibility(appliedVisibility);
+  addMemberInput.value = '';
+  setSearchResultsOpen(false);
+  renderMembers();
+  shareDialog.open = false;
+};
+
 byId('open-share-dialog-btn').addEventListener('click', () => (shareDialog.open = true));
-byId('close-share-dialog-btn').addEventListener('click', () => (shareDialog.open = false));
-byId('done-share-dialog-btn').addEventListener('click', () => (shareDialog.open = false));
-shareDialog.addEventListener('forge-dialog-close', () => (shareDialog.open = false));
+byId('close-share-dialog-btn').addEventListener('click', cancelChanges);
+byId('cancel-share-dialog-btn').addEventListener('click', cancelChanges);
+byId('apply-share-dialog-btn').addEventListener('click', applyChanges);
+shareDialog.addEventListener('forge-dialog-close', cancelChanges);
 
 addMemberInput.addEventListener('input', renderSearchResults);
 addMemberInput.addEventListener('keydown', ({ key }) => {
