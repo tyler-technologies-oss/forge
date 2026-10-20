@@ -1,1 +1,1 @@
-import{m as a,as as e}from"../../../chunks/icon-BkCuFoVa.js";a.define([e]);
+import{Dt as e,i as t}from"../../../chunks/icon-BewxBTUR.js";t.define([e]);

@@ -1,1 +1,1 @@
-import{m as o,$ as t}from"../../../../chunks/icon-BkCuFoVa.js";o.define([t]);const l=[{label:"Help",value:"help"}],e=document.querySelector("forge-app-bar-help-button");e&&(e.options=l);
+import{i as e,rn as t}from"../../../../chunks/icon-BewxBTUR.js";e.define([t]);var n=[{label:`Help`,value:`help`}],r=document.querySelector(`forge-app-bar-help-button`);r&&(r.options=n);

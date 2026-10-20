@@ -1,1 +1,1 @@
-function o(t){const e={type:"forge-block-height-change",height:t};window.parent.postMessage(e,"*")}window.self!==window.top&&new ResizeObserver(([e])=>{o(Math.ceil(e.target.getBoundingClientRect().height))}).observe(document.body);
+function e(e){let t={type:`forge-block-height-change`,height:e};window.parent.postMessage(t,`*`)}window.self!==window.top&&new ResizeObserver(([t])=>{e(Math.ceil(t.target.getBoundingClientRect().height))}).observe(document.body);
