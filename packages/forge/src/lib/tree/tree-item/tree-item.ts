@@ -33,6 +33,11 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
 export class TreeItemComponent extends LitElement {
   public static styles = unsafeCSS(styles);
 
+  static {
+    // Oxc drops symbol keys on decorated class fields, so this can't use the `@property` decorator
+    this.createProperty(indeterminate, { attribute: false });
+  }
+
   /**
    * The value of the tree item.
    * @default undefined
@@ -81,7 +86,7 @@ export class TreeItemComponent extends LitElement {
    * @ignore
    * @default false
    */
-  @property({ attribute: false }) public [indeterminate] = false;
+  public [indeterminate] = false;
 
   /**
    * The depth of the tree item within the tree's hierarchy.
