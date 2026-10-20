@@ -1,8 +1,8 @@
 <!--
   @block Dialog — Share
   @type pattern
-  @description Modal share dialog for managing who can open a resource: search-and-add people with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, a copy-link action, and toast feedback.
-  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, menu, list, avatar, toast, copy-link, visibility
+  @description Modal share dialog for managing who can open a resource: search-and-add people with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, a copy-link action.
+  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, menu, list, avatar, copy-link, visibility
 -->
 
 <div class="flex justify-center items-center min-h-screen">
@@ -12,11 +12,11 @@
   </forge-button>
 </div>
 
-<forge-dialog id="share-dialog" class="[--forge-dialog-width:34rem]" aria-labelledby="share-dialog-title">
-  <forge-scaffold class="h-auto">
+<forge-dialog id="share-dialog" class="[--forge-dialog-width:34rem] [--forge-avatar-size:2rem]" aria-labelledby="share-dialog-title">
+  <forge-scaffold>
     <forge-toolbar slot="header" auto-height>
       <div slot="start" class="py-small">
-        <h2 id="share-dialog-title" class="text-heading4 m-0"></h2>
+        <h2 id="share-dialog-title" class="text-heading3 m-0"></h2>
         <span id="share-dialog-subtitle" class="text-body1 text-medium"></span>
       </div>
       <forge-icon-button slot="end" id="close-share-dialog-btn" aria-label="Close share dialog">
@@ -26,9 +26,9 @@
 
     <div
       slot="body"
-      class="py-medium px-large flex flex-col gap-medium [--forge-list-item-gap:var(--forge-spacing-small)] [--forge-avatar-background:var(--forge-theme-primary)] [--forge-avatar-color:var(--forge-theme-on-primary)]">
+      class="p-medium flex flex-col gap-medium">
       <forge-text-field id="add-member-field">
-        <forge-icon slot="leading" name="person_add_alt"></forge-icon>
+        <forge-icon class="text-medium" slot="leading" name="person_add_alt"></forge-icon>
         <input
           id="add-member-input"
           type="text"
@@ -49,7 +49,6 @@
       <forge-popover
         id="add-member-results"
         anchor="add-member-field"
-        class="[--forge-popover-width:anchor-size(width)] [--forge-popover-min-width:20rem]"
         preset="dropdown"
         trigger-type="manual"
         placement="bottom-start">
@@ -58,29 +57,28 @@
 
       <section class="flex flex-col" aria-labelledby="people-with-access-label">
         <span id="people-with-access-label" class="text-overline text-medium">People with access</span>
-        <forge-list id="member-list" two-line class="[--forge-list-item-padding:0_var(--forge-spacing-xxsmall)]"></forge-list>
+        <forge-list id="member-list" two-line class="[--forge-list-item-padding:0] [--forge-list-item-gap:var(--forge-spacing-medium)]"></forge-list>
       </section>
 
       <section
-        class="flex flex-col [--forge-avatar-background:var(--forge-theme-surface-container-minimum)] [--forge-icon-color:var(--forge-theme-text-medium)]"
+        class="flex flex-col [--forge-avatar-background:var(--forge-theme-surface-container-minimum)] [--forge-icon-color:var(--forge-theme-text-medium)] [--forge-icon-size:1rem]"
         aria-labelledby="general-access-label">
         <span id="general-access-label" class="text-overline text-medium">General access</span>
-        <forge-list two-line class="[--forge-list-item-padding:0_var(--forge-spacing-xxsmall)]">
-          <forge-list-item>
+        <forge-list two-line class="[--forge-list-item-padding:0] [--forge-list-item-gap:var(--forge-spacing-small)]">
+          <forge-list-item class="" id="visibility-list-item" aria-haspopup="listbox" aria-expanded="false" aria-controls="visibility-options">
             <forge-avatar slot="start">
               <forge-icon id="visibility-icon"></forge-icon>
             </forge-avatar>
-            <forge-button id="visibility-trigger" variant="text" class="[--forge-button-text-padding-inline:0]">
+            <forge-button id="visibility-trigger" variant="text"">
               <span id="visibility-label"></span>
               <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
             </forge-button>
-            <span id="visibility-description" slot="secondary-text" class="text-medium"></span>
+            <span id="visibility-description" slot="secondary-text" class="ml-xsmall text-medium"></span>
           </forge-list-item>
         </forge-list>
         <forge-popover
           id="visibility-popover"
           anchor="visibility-trigger"
-          class="[--forge-popover-width:anchor-size(width)] [--forge-popover-min-width:20rem]"
           preset="dropdown"
           trigger-type="manual"
           placement="bottom-start">
@@ -89,14 +87,12 @@
       </section>
     </div>
 
-    <forge-toolbar slot="footer" inverted auto-height>
-      <forge-button id="copy-link-btn" slot="start" variant="text" class="my-small">
+    <forge-toolbar slot="footer" inverted>
+      <forge-button id="copy-link-btn" slot="start" variant="text">
         <forge-icon slot="start" name="link"></forge-icon>
         Copy link
       </forge-button>
-      <forge-button id="done-share-dialog-btn" slot="end" variant="filled" class="my-small">Done</forge-button>
+      <forge-button id="done-share-dialog-btn" slot="end" variant="filled">Done</forge-button>
     </forge-toolbar>
   </forge-scaffold>
 </forge-dialog>
-
-<forge-toast id="share-toast" placement="top" duration="5000" dismissible></forge-toast>
