@@ -23,7 +23,7 @@
     "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
     "glob": "catalog:",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.10",
     "playwright": "catalog:",
     "rimraf": "catalog:",
     "sass": "catalog:",
