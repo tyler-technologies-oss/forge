@@ -171,6 +171,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^20.5.0
         version: 20.5.0
+      '@inquirer/prompts':
+        specifier: 7.8.2
+        version: 7.8.2(@types/node@25.5.0)
       '@types/node':
         specifier: 'catalog:'
         version: 25.5.0
