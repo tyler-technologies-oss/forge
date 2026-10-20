@@ -72,6 +72,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 - `packages/forge-rich-text-editor-angular` - Angular adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-adapter-codegen` - Shared adapter code generation, private to this repo (see its CLAUDE.md)
 - `packages/forge-mcp` - MCP server for Forge (see its CLAUDE.md)
+- `packages/forge-upgrade` - CLI that automates Forge upgrades via find/replace and codemods (see its CLAUDE.md)
 
 Outside `packages/` (private, not published to npm):
 
