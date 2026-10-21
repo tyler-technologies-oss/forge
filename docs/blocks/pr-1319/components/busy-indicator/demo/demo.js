@@ -1,0 +1,1 @@
+var e=document.querySelector(`forge-button`),t=document.querySelector(`forge-busy-indicator`);e?.addEventListener(`click`,()=>{t&&(t.open=!0,setTimeout(()=>{t.open=!1},3e3))});

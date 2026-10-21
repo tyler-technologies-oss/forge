@@ -1,0 +1,1 @@
+import{Jn as e,Nt as t,Tn as n,cn as r,i}from"../../../chunks/icon-CV4NQqAk.js";i.define([t,r,n,e]);var a=document.getElementById(`menu-button`),o=document.getElementById(`drawer`);a?.addEventListener(`click`,()=>{o.open=!o.open});

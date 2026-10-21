@@ -1,0 +1,1 @@
+var e=document.querySelector(`forge-button`),t=document.querySelector(`forge-confirmation-dialog`);e?.addEventListener(`click`,()=>{t&&(t.open=!0)});

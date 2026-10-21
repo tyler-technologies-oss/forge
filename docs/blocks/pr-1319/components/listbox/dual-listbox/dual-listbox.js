@@ -1,0 +1,1 @@
+document.addEventListener(`forge-listbox-drop`,(e=>{let t=e.target,n=e.detail.group??t,{option:r,index:i}=e.detail,a=n.children[i];a!==r&&(r.parentElement?.removeChild(r),n.insertBefore(r,a))}));

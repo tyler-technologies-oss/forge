@@ -1,0 +1,1 @@
+import{i as e,rn as t}from"../../../../chunks/icon-CV4NQqAk.js";e.define([t]);var n=[{label:`Help`,value:`help`}],r=document.querySelector(`forge-app-bar-help-button`);r&&(r.options=n);

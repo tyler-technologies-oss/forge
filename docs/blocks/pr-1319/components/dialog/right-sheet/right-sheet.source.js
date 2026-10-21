@@ -1,0 +1,11 @@
+import { IconRegistry } from "@tylertech/forge/icon";
+import { tylIconClose } from "@tylertech/tyler-icons";
+IconRegistry.define([tylIconClose]);
+const openButton = document.getElementById("open-dialog-button-right-sheet");
+const dialog = document.getElementById("dialog-right-sheet");
+const closeIconButton = document.getElementById("close-dialog-icon-button-right-sheet");
+const closeButton = document.getElementById("close-dialog-button-right-sheet");
+openButton?.addEventListener("click", () => dialog.open = true);
+closeIconButton?.addEventListener("click", () => dialog.open = false);
+closeButton?.addEventListener("click", () => dialog.open = false);
+dialog?.addEventListener("forge-dialog-close", () => dialog.open = false);

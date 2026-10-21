@@ -1,0 +1,1 @@
+var e=document.getElementById(`my-button`),t=document.querySelector(`.forge-expansion-panel`);e?.addEventListener(`click`,()=>{if(!t)return;let n=!t.classList.contains(`forge-expansion-panel--open`);e.setAttribute(`aria-expanded`,String(n)),t.classList.toggle(`forge-expansion-panel--open`,n)});
