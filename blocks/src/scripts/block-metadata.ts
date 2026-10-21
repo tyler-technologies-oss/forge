@@ -1,12 +1,12 @@
 /**
  * Block metadata parsing utilities.
- * Extracts @block, @type, @description, and @tags annotations from HTML comment headers.
+ * Extracts @block, @type, @description, @tags, and @screenshot-* annotations from HTML comment headers.
  */
 
 import path from 'node:path';
-import { BLOCK_TYPES, DEFAULT_BLOCK_TYPE, type BlockMetadata, type BlockType } from './types.js';
+import { BLOCK_TYPES, DEFAULT_BLOCK_TYPE, type BlockMetadata, type BlockType, type ScreenshotOptions } from './types.js';
 
-export type { Block, BlockMetadata, BlockType } from './types.js';
+export type { Block, BlockMetadata, BlockType, ScreenshotOptions } from './types.js';
 
 /** Regex matching the metadata comment as a whole. Individual annotations are parsed independently so order is not significant. */
 export const METADATA_REGEX = /<!--([\s\S]*?)-->/;
@@ -41,6 +41,21 @@ export function parseBlockMetadata(content: string, filePath: string): BlockMeta
   const type = normalizeBlockType(typeMatch?.[1]?.trim());
 
   return { name, description, tags, type };
+}
+
+/**
+ * Parses screenshot interaction options from the metadata comment.
+ * Kept separate from block metadata so these values stay out of the manifest.
+ */
+export function parseScreenshotOptions(content: string): ScreenshotOptions {
+  const body = content.match(METADATA_REGEX)?.[1];
+  if (!body) {
+    return {};
+  }
+
+  const click = body.match(ANNOTATION_REGEX('screenshot-click'))?.[1]?.trim() || undefined;
+  const wait = body.match(ANNOTATION_REGEX('screenshot-wait'))?.[1]?.trim() || undefined;
+  return { click, wait };
 }
 
 /** Returns a valid BlockType, falling back to the default if the input is missing or invalid. */
