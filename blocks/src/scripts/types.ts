@@ -18,6 +18,14 @@ export interface BlockMetadata {
   type: BlockType;
 }
 
+/** Screenshot interaction options from @screenshot-click and @screenshot-wait annotations */
+export interface ScreenshotOptions {
+  /** Selector for the element to click before capturing (e.g. a dialog trigger) */
+  click?: string;
+  /** Selector for the element to wait for after clicking, defaults to an open dialog */
+  wait?: string;
+}
+
 /** Complete block representation including file path information */
 export interface Block extends BlockMetadata {
   id: string;
