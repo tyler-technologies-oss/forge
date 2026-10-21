@@ -8,8 +8,8 @@
   <forge-button id="open-dialog-button-bottom-sheet" variant="raised">Open dialog</forge-button>
   <forge-dialog id="dialog-bottom-sheet" label="Title text" description="Lorem ipsum dolor sit amet consectetur adipisicing elit." preset="bottom-sheet">
     <forge-scaffold class="h-auto [--forge-scaffold-width:500px]">
-      <forge-toolbar slot="header" no-divider>
-        <h2 class="forge-typography--heading4 m-0" slot="start">Title text</h2>
+      <forge-toolbar slot="header">
+        <h1 class="forge-typography--heading4 m-0" slot="start">Title text</h1>
         <forge-icon-button id="close-dialog-icon-button-bottom-sheet" slot="end" aria-label="Close dialog">
           <forge-icon name="close">
           </forge-icon>
@@ -19,7 +19,7 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sed pariatur error repellendus eos! Quas, optio esse ad illum quis blanditiis rerum quia.
         Corrupti, ad hic velit praesentium voluptatum dolores?
       </p>
-      <forge-toolbar slot="footer" no-divider>
+      <forge-toolbar slot="footer" inverted>
         <forge-button id="close-dialog-button-bottom-sheet" slot="end" variant="raised">Close</forge-button>
       </forge-toolbar>
     </forge-scaffold>
