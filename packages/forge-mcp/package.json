@@ -44,7 +44,7 @@
     "templates"
   ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.31.0",
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "handlebars": "^4.7.10",
     "js-levenshtein-esm": "^2.0.0"
   },
