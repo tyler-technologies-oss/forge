@@ -88,6 +88,13 @@ Every block must start with metadata comments:
 -->
 ```
 
+For overlays that only appear after a click (e.g. dialogs), add optional screenshot annotations so the generated screenshot shows the overlay open:
+
+- `@screenshot-click <selector>` - element to click before capturing (e.g. `#open-dialog-btn`)
+- `@screenshot-wait <selector>` - element to wait for after clicking (defaults to `forge-dialog[open], dialog[open]`)
+
+If the click doesn't open anything, a warning is logged and a plain screenshot is captured instead.
+
 ### 3. Add block content
 
 Write your HTML using Forge components. The base template (`src/includes/base.html`) automatically provides:
