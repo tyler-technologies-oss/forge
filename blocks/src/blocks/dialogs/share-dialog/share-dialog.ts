@@ -1,11 +1,13 @@
-import type { IDialogComponent, IListItemSelectEventData, IMenuComponent, IMenuOption, IMenuSelectEventData, IPopoverComponent } from '@tylertech/forge';
+import type { IAutocompleteComponent, IAutocompleteOption, IAutocompleteSelectEventData } from '@tylertech/forge/autocomplete';
+import type { IDialogComponent } from '@tylertech/forge/dialog';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconArrowDropDown, tylIconBusiness, tylIconClose, tylIconLink, tylIconLockOutline, tylIconPersonAddAlt } from '@tylertech/tyler-icons';
+import type { IMenuComponent, IMenuOption, IMenuSelectEventData } from '@tylertech/forge/menu';
+import { tylIconArrowDropDown, tylIconBusiness, tylIconLink, tylIconLockOutline, tylIconPersonAddAlt } from '@tylertech/tyler-icons';
 
-IconRegistry.define([tylIconArrowDropDown, tylIconBusiness, tylIconClose, tylIconLink, tylIconLockOutline, tylIconPersonAddAlt]);
+IconRegistry.define([tylIconArrowDropDown, tylIconBusiness, tylIconLink, tylIconLockOutline, tylIconPersonAddAlt]);
 
 type AccessLevel = 'owner' | 'editor' | 'viewer';
-type VisibilityKey = 'restricted' | 'organization';
+type Visibility = 'restricted' | 'organization';
 
 interface IPerson {
   id: string;
@@ -17,41 +19,34 @@ interface IMember extends IPerson {
   accessLevel: AccessLevel;
 }
 
-interface IVisibilityOption {
-  label: string;
-  description: string;
-  icon: string;
-}
-
-const RESOURCE_NAME = 'Quarterly report';
-const RESOURCE_NOUN = 'report';
-const ORGANIZATION_NAME = 'Acme Corp';
-
-const MINIMUM_SEARCH_LENGTH = 2;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const EMAIL_ID_PREFIX = 'email:';
 const CURRENT_USER_ID = 'u1';
-const REMOVE_OPTION_VALUE = 'remove-user';
-const REMOVE_OPTION_CLASS = 'text-error';
-
-const MESSAGES = {
-  inviteHint: 'Add by email address',
-  onlyOwner: `A ${RESOURCE_NOUN} must always have at least one owner`
-};
+const REMOVE_VALUE = 'remove';
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MINIMUM_SEARCH_LENGTH = 2;
 
 const ACCESS_LEVEL_LABELS: Record<AccessLevel, string> = {
   owner: 'Owner',
   editor: 'Can edit',
   viewer: 'Can view'
 };
+const ACCESS_LEVEL_ORDER: AccessLevel[] = ['owner', 'editor', 'viewer'];
 
-const ACCESS_LEVEL_ORDER: Record<AccessLevel, number> = { owner: 0, editor: 1, viewer: 2 };
-const GRANTABLE_ACCESS_LEVELS: AccessLevel[] = ['editor', 'viewer', 'owner'];
-
-const VISIBILITY_OPTIONS: Record<VisibilityKey, IVisibilityOption> = {
-  restricted: { label: 'Restricted', description: 'Only people specifically added can open', icon: 'lock_outline' },
-  organization: { label: `Anyone at ${ORGANIZATION_NAME}`, description: `Anyone in the ${ORGANIZATION_NAME} organization can view`, icon: 'business' }
-};
+const VISIBILITY_OPTIONS: IMenuOption<Visibility>[] = [
+  {
+    value: 'restricted',
+    label: 'Restricted',
+    secondaryLabel: 'Only people specifically added can open',
+    leadingIcon: 'lock_outline',
+    leadingIconType: 'component'
+  },
+  {
+    value: 'organization',
+    label: 'Anyone at Acme Corp',
+    secondaryLabel: 'Anyone in the Acme Corp organization can view',
+    leadingIcon: 'business',
+    leadingIconType: 'component'
+  }
+];
 
 const DIRECTORY: IPerson[] = [
   { id: 'u1', name: 'Jordan Rivera', email: 'jordan.rivera@acme.example' },
@@ -67,294 +62,178 @@ let members: IMember[] = [
   { ...DIRECTORY[1], accessLevel: 'editor' },
   { ...DIRECTORY[2], accessLevel: 'viewer' }
 ];
+let visibility: Visibility = 'restricted';
 let newMemberAccessLevel: AccessLevel = 'editor';
-let visibility: VisibilityKey = 'restricted';
+let appliedMembers: IMember[] = members;
+let appliedVisibility: Visibility = visibility;
 
-const byId = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
+const dialog = document.getElementById('share-dialog') as IDialogComponent;
+const autocomplete = document.getElementById('add-member-autocomplete') as IAutocompleteComponent;
+const addMemberInput = document.getElementById('add-member-input') as HTMLInputElement;
+const newMemberAccessMenu = document.getElementById('new-member-access-menu') as IMenuComponent;
+const newMemberAccessLabel = document.getElementById('new-member-access-label') as HTMLElement;
+const memberList = document.getElementById('member-list') as HTMLElement;
+const memberTemplate = document.getElementById('member-item-template') as HTMLTemplateElement;
+const visibilityMenu = document.getElementById('visibility-menu') as IMenuComponent;
+const visibilityIcon = document.getElementById('visibility-icon') as HTMLElement;
+const visibilityLabel = document.getElementById('visibility-label') as HTMLElement;
+const visibilityDescription = document.getElementById('visibility-description') as HTMLElement;
+const copyLinkBtn = document.getElementById('copy-link-btn') as HTMLElement;
 
-const shareDialog = byId<IDialogComponent & HTMLElement>('share-dialog');
-const addMemberInput = byId<HTMLInputElement>('add-member-input');
-const addMemberResults = byId<IPopoverComponent & HTMLElement>('add-member-results');
-const addMemberResultsList = byId('add-member-results-list');
-const newMemberAccessMenu = byId<IMenuComponent & HTMLElement>('new-member-access-menu');
-const newMemberAccessLabel = byId('new-member-access-label');
-const memberList = byId('member-list');
-const visibilityTrigger = byId('visibility-trigger');
-const visibilityLabel = byId('visibility-label');
-const visibilityDescription = byId('visibility-description');
-const visibilityIcon = byId('visibility-icon');
-const visibilityOptionsList = byId('visibility-options');
-const visibilityPopover = byId<IPopoverComponent & HTMLElement>('visibility-popover');
-const copyLinkButton = byId('copy-link-btn');
+const accessLevelOptions = (selected: AccessLevel): IMenuOption<string>[] =>
+  ACCESS_LEVEL_ORDER.map(level => ({ value: level, label: ACCESS_LEVEL_LABELS[level], selected: level === selected }));
 
-const createElement = <K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  { text, className, slot, attributes }: { text?: string; className?: string; slot?: string; attributes?: Record<string, string> } = {},
-  ...children: Node[]
-): HTMLElementTagNameMap[K] => {
-  const element = document.createElement(tag);
-  if (text !== undefined) {
-    element.textContent = text;
-  }
-  if (className) {
-    element.className = className;
-  }
-  if (slot) {
-    element.slot = slot;
-  }
-  Object.entries(attributes ?? {}).forEach(([name, value]) => element.setAttribute(name, value));
-  element.append(...children);
-  return element;
-};
-
-const getDisplayName = ({ name, email }: IPerson): string => name || email;
-
-const getAvatarText = ({ name, email }: IPerson): string => {
-  const parts = name?.trim().split(/\s+/) ?? [];
-  return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1]}` : name || email;
-};
-
-const accessLevelOptions = (selected: AccessLevel): IMenuOption[] =>
-  GRANTABLE_ACCESS_LEVELS.map(level => ({ value: level, label: ACCESS_LEVEL_LABELS[level], selected: level === selected }));
-
-const renderNewMemberAccessMenu = (): void => {
-  newMemberAccessMenu.options = accessLevelOptions(newMemberAccessLevel);
-  newMemberAccessLabel.textContent = ACCESS_LEVEL_LABELS[newMemberAccessLevel];
-};
-
-const createPersonItem = (person: IPerson, ...primary: Node[]): HTMLElement =>
-  createElement(
-    'forge-list-item' as 'div',
-    {},
-    createElement('forge-avatar' as 'div', { slot: 'start', attributes: { text: getAvatarText(person) } }),
-    ...primary,
-    createElement('span', { slot: 'secondary-text', className: 'text-medium', text: person.name ? person.email : '' })
-  );
-
-const createReadOnlyAccess = (member: IMember, tooltipText?: string): HTMLElement[] => {
-  const labelId = `access-label-${member.id}`;
-  const label = createElement('span', {
-    slot: 'end',
-    className: 'text-body1 text-medium mr-small',
-    text: ACCESS_LEVEL_LABELS[member.accessLevel],
-    attributes: tooltipText ? { id: labelId, tabindex: '0' } : {}
-  });
-  if (!tooltipText) {
-    return [label];
-  }
-
-  return [label, createElement('forge-tooltip' as 'div', { text: tooltipText, attributes: { anchor: labelId, delay: '0' } })];
-};
-
-const createAccessMenu = (member: IMember): IMenuComponent => {
-  const menu = createElement(
-    'forge-menu' as 'div',
-    { slot: 'end' },
-    createElement(
-      'forge-button' as 'div',
-      { attributes: { variant: 'text', 'aria-label': `Change access for ${getDisplayName(member)}` } },
-      document.createTextNode(ACCESS_LEVEL_LABELS[member.accessLevel]),
-      createElement('forge-icon' as 'div', { slot: 'end', attributes: { name: 'arrow_drop_down' } })
-    )
-  ) as unknown as IMenuComponent & HTMLElement;
+const createAccessMenu = (member: IMember): HTMLElement => {
+  const menu = document.createElement('forge-menu');
+  menu.persistSelection = true;
   menu.options = [
     ...accessLevelOptions(member.accessLevel),
-    { value: 'access-level-divider', label: '', divider: true },
-    { value: REMOVE_OPTION_VALUE, label: 'Remove user', optionClass: REMOVE_OPTION_CLASS }
+    { value: 'divider', label: '', divider: true },
+    { value: REMOVE_VALUE, label: 'Remove user', optionClass: 'text-error' }
   ];
-  menu.addEventListener('forge-menu-select', (event: Event) => {
-    const { value } = (event as CustomEvent<IMenuSelectEventData<string>>).detail;
-    if (value === REMOVE_OPTION_VALUE) {
-      members = members.filter(({ id }) => id !== member.id);
-    } else if (value !== member.accessLevel) {
-      members = members.map(existing => (existing.id === member.id ? { ...existing, accessLevel: value as AccessLevel } : existing));
-    }
+
+  const button = document.createElement('forge-button');
+  button.variant = 'text';
+  button.setAttribute('aria-label', `Change access for ${member.name ?? member.email}`);
+  button.append(ACCESS_LEVEL_LABELS[member.accessLevel]);
+
+  const icon = document.createElement('forge-icon');
+  icon.slot = 'end';
+  icon.name = 'arrow_drop_down';
+  button.append(icon);
+  menu.append(button);
+
+  menu.addEventListener('forge-menu-select', ({ detail }: CustomEvent<IMenuSelectEventData<string>>) => {
+    members =
+      detail.value === REMOVE_VALUE
+        ? members.filter(({ id }) => id !== member.id)
+        : members.map(existing => (existing.id === member.id ? { ...existing, accessLevel: detail.value as AccessLevel } : existing));
     renderMembers();
   });
   return menu;
 };
 
-const createMemberItem = (member: IMember, ownerCount: number): HTMLElement => {
-  const isCurrentUser = member.id === CURRENT_USER_ID;
-  const isOnlyOwner = ownerCount === 1 && member.accessLevel === 'owner';
-  const badge = createElement('forge-badge' as 'div', {
-    className: 'inline-flex align-middle ml-xsmall',
-    text: 'you',
-    attributes: { theme: 'info-secondary' }
-  });
-  const item = createPersonItem(member, document.createTextNode(getDisplayName(member)), ...(isCurrentUser ? [badge] : []));
+const createReadOnlyAccess = (member: IMember, tooltipText?: string): HTMLElement => {
+  const label = document.createElement('span');
+  label.className = 'text-body1 text-medium px-small';
+  label.textContent = ACCESS_LEVEL_LABELS[member.accessLevel];
+  if (!tooltipText) {
+    return label;
+  }
 
+  label.tabIndex = 0;
+  const wrapper = document.createElement('span');
+  const tooltip = document.createElement('forge-tooltip');
+  tooltip.textContent = tooltipText;
+  wrapper.append(label, tooltip);
+  return wrapper;
+};
+
+const createMemberItem = (member: IMember, ownerCount: number): DocumentFragment => {
+  const item = document.importNode(memberTemplate.content, true);
+  const isCurrentUser = member.id === CURRENT_USER_ID;
+  const isOnlyOwner = member.accessLevel === 'owner' && ownerCount === 1;
+
+  (item.querySelector('[data-avatar]') as HTMLElement).setAttribute('text', member.name ?? member.email);
+  (item.querySelector('[data-name]') as HTMLElement).textContent = member.name ?? member.email;
+  (item.querySelector('[data-email]') as HTMLElement).textContent = member.name ? member.email : '';
+  (item.querySelector('[data-you-badge]') as HTMLElement).hidden = !isCurrentUser;
+
+  const access = item.querySelector('[data-access]') as HTMLElement;
   if (isCurrentUser) {
-    item.append(...createReadOnlyAccess(member));
+    access.append(createReadOnlyAccess(member));
   } else if (isOnlyOwner) {
-    item.append(...createReadOnlyAccess(member, MESSAGES.onlyOwner));
+    access.append(createReadOnlyAccess(member, 'A report must always have at least one owner'));
   } else {
-    item.append(createAccessMenu(member));
+    access.append(createAccessMenu(member));
   }
   return item;
 };
 
 const renderMembers = (): void => {
-  const sorted = [...members].sort((a, b) => ACCESS_LEVEL_ORDER[a.accessLevel] - ACCESS_LEVEL_ORDER[b.accessLevel]);
-  const ownerCount = sorted.filter(({ accessLevel }) => accessLevel === 'owner').length;
-  memberList.replaceChildren(...sorted.map(member => createMemberItem(member, ownerCount)));
+  const ownerCount = members.filter(({ accessLevel }) => accessLevel === 'owner').length;
+  memberList.replaceChildren(...members.map(member => createMemberItem(member, ownerCount)));
 };
 
-const setSearchResultsOpen = (open: boolean): void => {
-  addMemberResults.open = open;
-  addMemberInput.setAttribute('aria-expanded', String(open));
+const setNewMemberAccessLevel = (level: AccessLevel): void => {
+  newMemberAccessLevel = level;
+  newMemberAccessLabel.textContent = ACCESS_LEVEL_LABELS[level];
+  newMemberAccessMenu.options = accessLevelOptions(level);
 };
 
-const createResultItem = (person: IPerson): HTMLElement => {
-  const item = createPersonItem(person, createElement('button', { text: getDisplayName(person), attributes: { type: 'button' } }));
-  return Object.assign(item, { value: person.id });
+const setVisibility = (value: Visibility): void => {
+  visibility = value;
+  const option = VISIBILITY_OPTIONS.find(o => o.value === value) as IMenuOption<Visibility>;
+  visibilityIcon.setAttribute('name', option.leadingIcon as string);
+  visibilityLabel.textContent = option.label;
+  visibilityDescription.textContent = option.secondaryLabel as string;
+  visibilityMenu.options = VISIBILITY_OPTIONS.map(o => ({ ...o, selected: o.value === value }));
 };
 
-const createInviteItem = (email: string): HTMLElement =>
-  Object.assign(
-    createElement(
-      'forge-list-item' as 'div',
-      {},
-      createElement('forge-avatar' as 'div', { slot: 'start' }, createElement('forge-icon' as 'div', { attributes: { name: 'person_add_alt' } })),
-      createElement('button', { text: `Add ${email}`, attributes: { type: 'button' } }),
-      createElement('span', { slot: 'secondary-text', className: 'text-medium', text: MESSAGES.inviteHint })
-    ),
-    { value: `${EMAIL_ID_PREFIX}${email}` }
-  );
-
-const renderSearchResults = (): void => {
-  const rawQuery = addMemberInput.value.trim();
-  const query = rawQuery.toLowerCase();
+autocomplete.filter = (filterText: string): IAutocompleteOption<string>[] => {
+  const query = filterText.trim().toLowerCase();
   if (query.length < MINIMUM_SEARCH_LENGTH) {
-    setSearchResultsOpen(false);
-    return;
+    return [];
   }
 
   const memberIds = new Set(members.map(({ id }) => id));
-  const matches = DIRECTORY.filter(
-    person => !memberIds.has(person.id) && (person.name?.toLowerCase().includes(query) || person.email.toLowerCase().includes(query))
-  );
+  const matches: IAutocompleteOption<string>[] = DIRECTORY.filter(
+    ({ id, name, email }) => !memberIds.has(id) && (name?.toLowerCase().includes(query) || email.toLowerCase().includes(query))
+  ).map(({ id, name, email }) => ({ value: id, label: name ?? email, secondaryLabel: email }));
+
   const isKnownEmail = [...DIRECTORY, ...members].some(({ email }) => email.toLowerCase() === query);
-  const canInvite = EMAIL_PATTERN.test(rawQuery) && !isKnownEmail;
-
-  const items = matches.map(createResultItem);
-  if (canInvite) {
-    items.push(createInviteItem(rawQuery));
+  if (EMAIL_PATTERN.test(filterText.trim()) && !isKnownEmail) {
+    matches.push({ value: filterText.trim(), label: `Add ${filterText.trim()}`, secondaryLabel: 'Add by email address' });
   }
-  if (!items.length) {
-    items.push(createElement('forge-list-item' as 'div', { text: 'No users found', attributes: { noninteractive: '' } }));
-  }
-
-  addMemberResultsList.replaceChildren(...items);
-  setSearchResultsOpen(true);
+  return matches;
 };
 
-const resolvePerson = (personId: string): IPerson | undefined =>
-  personId.startsWith(EMAIL_ID_PREFIX) ? { id: personId, email: personId.slice(EMAIL_ID_PREFIX.length) } : DIRECTORY.find(({ id }) => id === personId);
-
-const addMember = (personId: string): void => {
-  const person = resolvePerson(personId);
-  if (!person) {
-    return;
-  }
-
+autocomplete.addEventListener('forge-autocomplete-select', ({ detail }: CustomEvent<IAutocompleteSelectEventData<string>>) => {
+  const person = DIRECTORY.find(({ id }) => id === detail.value) ?? { id: detail.value, email: detail.value };
   members = [...members, { ...person, accessLevel: newMemberAccessLevel }];
   addMemberInput.value = '';
-  setSearchResultsOpen(false);
   renderMembers();
-};
+});
 
-const createVisibilityOption = (key: VisibilityKey, { label, description, icon }: IVisibilityOption): HTMLElement => {
-  const item = createElement(
-    'forge-list-item' as 'div',
-    {},
-    createElement('forge-avatar' as 'div', { slot: 'start' }, createElement('forge-icon' as 'div', { attributes: { name: icon } })),
-    createElement('button', { text: label, attributes: { type: 'button' } }),
-    createElement('span', { slot: 'secondary-text', className: 'text-medium', text: description })
-  );
-  return Object.assign(item, { value: key });
-};
+newMemberAccessMenu.addEventListener('forge-menu-select', ({ detail }: CustomEvent<IMenuSelectEventData<AccessLevel>>) => {
+  setNewMemberAccessLevel(detail.value as AccessLevel);
+});
 
-const setVisibility = (next: VisibilityKey): void => {
-  visibility = next;
-  const { label, description, icon } = VISIBILITY_OPTIONS[next];
-  visibilityLabel.textContent = label;
-  visibilityDescription.textContent = description;
-  visibilityIcon.setAttribute('name', icon);
-};
+visibilityMenu.addEventListener('forge-menu-select', ({ detail }: CustomEvent<IMenuSelectEventData<Visibility>>) => {
+  setVisibility(detail.value as Visibility);
+});
 
-const initializeLabels = (): void => {
-  byId('share-dialog-title').textContent = `Share "${RESOURCE_NAME}"`;
-  byId('share-dialog-subtitle').textContent = `Manage who has access to this ${RESOURCE_NOUN}`;
-  visibilityTrigger.setAttribute('aria-label', `Change who can access this ${RESOURCE_NOUN}`);
-};
+copyLinkBtn.addEventListener('click', async () => {
+  await navigator.clipboard?.writeText(window.location.href);
+});
 
-const copyLink = async (): Promise<void> => {
-  await navigator.clipboard.writeText(window.location.href);
-};
-
-let appliedMembers = members;
-let appliedVisibility = visibility;
-
-const applyChanges = (): void => {
-  appliedMembers = members;
-  appliedVisibility = visibility;
-  shareDialog.open = false;
-};
-
-const cancelChanges = (): void => {
+const resetChanges = (): void => {
   members = appliedMembers;
   setVisibility(appliedVisibility);
   addMemberInput.value = '';
-  setSearchResultsOpen(false);
   renderMembers();
-  shareDialog.open = false;
 };
 
-byId('open-share-dialog-btn').addEventListener('click', () => (shareDialog.open = true));
-byId('close-share-dialog-btn').addEventListener('click', cancelChanges);
-byId('cancel-share-dialog-btn').addEventListener('click', cancelChanges);
-byId('apply-share-dialog-btn').addEventListener('click', applyChanges);
-shareDialog.addEventListener('forge-dialog-close', cancelChanges);
-
-addMemberInput.addEventListener('input', renderSearchResults);
-addMemberInput.addEventListener('keydown', ({ key }) => {
-  if (key === 'Escape' && addMemberResults.open) {
-    setSearchResultsOpen(false);
-  }
-});
-addMemberInput.addEventListener('blur', ({ relatedTarget }) => {
-  if (!(relatedTarget instanceof Node) || !addMemberResults.contains(relatedTarget)) {
-    setSearchResultsOpen(false);
-  }
-});
-addMemberResultsList.addEventListener('forge-list-item-select', (event: Event) => {
-  addMember((event as CustomEvent<IListItemSelectEventData<string>>).detail.value);
-});
-newMemberAccessMenu.addEventListener('forge-menu-select', (event: Event) => {
-  newMemberAccessLevel = (event as CustomEvent<IMenuSelectEventData<AccessLevel>>).detail.value!;
-  renderNewMemberAccessMenu();
+document.getElementById('open-share-dialog-btn')?.addEventListener('click', () => {
+  dialog.open = true;
 });
 
-visibilityTrigger.addEventListener('click', () => (visibilityPopover.open = !visibilityPopover.open));
-visibilityOptionsList.addEventListener('forge-list-item-select', (event: Event) => {
-  const key = (event as CustomEvent<IListItemSelectEventData<VisibilityKey>>).detail.value;
-  visibilityPopover.open = false;
-  if (key !== visibility) {
-    setVisibility(key);
-  }
+document.getElementById('close-dialog-btn')?.addEventListener('click', () => {
+  dialog.open = false;
 });
 
-if (typeof navigator !== 'undefined' && Boolean(navigator.clipboard?.writeText)) {
-  copyLinkButton.addEventListener('click', copyLink);
-} else {
-  copyLinkButton.hidden = true;
-}
+document.getElementById('cancel-btn')?.addEventListener('click', () => {
+  dialog.open = false;
+});
 
-initializeLabels();
-visibilityOptionsList.replaceChildren(
-  ...(Object.entries(VISIBILITY_OPTIONS) as [VisibilityKey, IVisibilityOption][]).map(([key, option]) => createVisibilityOption(key, option))
-);
-renderNewMemberAccessMenu();
-renderMembers();
+document.getElementById('apply-btn')?.addEventListener('click', () => {
+  appliedMembers = members;
+  appliedVisibility = visibility;
+  dialog.open = false;
+});
+
+dialog.addEventListener('forge-dialog-close', resetChanges);
+
+setNewMemberAccessLevel(newMemberAccessLevel);
 setVisibility(visibility);
+renderMembers();

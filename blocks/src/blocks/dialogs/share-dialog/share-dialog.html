@@ -1,8 +1,8 @@
 <!--
   @block Dialog — Share
   @type pattern
-  @description Modal share dialog for managing who can open a resource: search-and-add people with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, a copy-link action.
-  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, menu, list, avatar, copy-link, visibility
+  @description Modal share dialog for managing who can open a resource: search-and-add people with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, and a copy-link action.
+  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, autocomplete, menu, list, avatar, copy-link, visibility
 -->
 
 <div class="flex justify-center items-center min-h-screen">
@@ -12,78 +12,52 @@
   </forge-button>
 </div>
 
-<forge-dialog id="share-dialog" class="[--forge-dialog-width:34rem] [--forge-avatar-size:2rem]" aria-labelledby="share-dialog-title">
-  <forge-scaffold>
-    <forge-toolbar slot="header" auto-height>
-      <div slot="start" class="py-small">
-        <h2 id="share-dialog-title" class="text-heading3 m-0"></h2>
-        <span id="share-dialog-subtitle" class="text-body1 text-medium"></span>
+<forge-dialog id="share-dialog" persistent aria-labelledby="share-dialog-title" aria-describedby="share-dialog-subtitle">
+  <forge-scaffold class="h-auto w-[95vw] max-w-[544px]">
+    <forge-toolbar slot="header">
+      <div slot="start">
+        <h2 id="share-dialog-title" class="text-heading3">Share "Quarterly report"</h2>
       </div>
-      <forge-icon-button slot="end" id="close-share-dialog-btn" aria-label="Close share dialog">
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
     </forge-toolbar>
 
-    <div
-      slot="body"
-      class="p-medium flex flex-col gap-medium">
-      <forge-text-field id="add-member-field">
-        <forge-icon class="text-medium" slot="leading" name="person_add_alt"></forge-icon>
-        <input
-          id="add-member-input"
-          type="text"
-          role="combobox"
-          aria-label="Add people by name or email"
-          aria-autocomplete="list"
-          aria-haspopup="listbox"
-          aria-expanded="false"
-          aria-controls="add-member-results-list"
-          autocomplete="off" />
-        <forge-menu id="new-member-access-menu" slot="trailing">
-          <forge-button id="new-member-access-trigger" variant="text" aria-label="Access level for people you add">
-            <span id="new-member-access-label">Can edit</span>
-            <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
-          </forge-button>
-        </forge-menu>
-      </forge-text-field>
-      <forge-popover
-        id="add-member-results"
-        anchor="add-member-field"
-        preset="dropdown"
-        trigger-type="manual"
-        placement="bottom-start">
-        <forge-list id="add-member-results-list" role="listbox" two-line></forge-list>
-      </forge-popover>
-
-      <section class="flex flex-col" aria-labelledby="people-with-access-label">
-        <span id="people-with-access-label" class="text-overline text-medium">People with access</span>
-        <forge-list id="member-list" two-line class="[--forge-list-item-padding:0] [--forge-list-item-gap:var(--forge-spacing-medium)]"></forge-list>
-      </section>
-
-      <section
-        class="flex flex-col [--forge-avatar-background:var(--forge-theme-surface-container-minimum)] [--forge-icon-color:var(--forge-theme-text-medium)] [--forge-icon-size:1rem]"
-        aria-labelledby="general-access-label">
-        <span id="general-access-label" class="text-overline text-medium">General access</span>
-        <forge-list two-line class="[--forge-list-item-padding:0] [--forge-list-item-gap:var(--forge-spacing-small)]">
-          <forge-list-item class="" id="visibility-list-item" aria-haspopup="listbox" aria-expanded="false" aria-controls="visibility-options">
-            <forge-avatar slot="start">
-              <forge-icon id="visibility-icon"></forge-icon>
-            </forge-avatar>
-            <forge-button id="visibility-trigger" variant="text"">
-              <span id="visibility-label"></span>
+    <div slot="body" class="p-medium flex flex-col gap-medium">
+      <forge-autocomplete id="add-member-autocomplete" mode="stateless" filter-on-focus="false">
+        <forge-text-field>
+          <forge-icon slot="start" name="person_add_alt"></forge-icon>
+          <input type="text" id="add-member-input" aria-label="Add people by name or email" />
+          <forge-menu id="new-member-access-menu" slot="end" persist-selection>
+            <forge-button variant="text" aria-label="Access level for people you add">
+              <span id="new-member-access-label">Can edit</span>
               <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
             </forge-button>
-            <span id="visibility-description" slot="secondary-text" class="ml-xsmall text-medium"></span>
+          </forge-menu>
+        </forge-text-field>
+      </forge-autocomplete>
+
+      <section class="flex flex-col" aria-labelledby="people-with-access-label">
+        <h3 id="people-with-access-label" class="text-label2 text-medium m-0">People with access</h3>
+        <forge-list id="member-list"></forge-list>
+      </section>
+
+      <section class="flex flex-col" aria-labelledby="general-access-label">
+        <h3 id="general-access-label" class="text-label2 text-medium m-0">General access</h3>
+        <forge-list>
+          <forge-list-item noninteractive two-line class="[&::part(text-container)]:overflow-visible">
+            <forge-avatar slot="start">
+              <forge-icon id="visibility-icon" name="lock_outline"></forge-icon>
+            </forge-avatar>
+            <forge-menu id="visibility-menu" persist-selection>
+              <forge-button variant="text" aria-label="Change who can access this report" class="-ml-xsmall">
+                <span id="visibility-label">Restricted</span>
+                <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
+              </forge-button>
+            </forge-menu>
+            <span id="visibility-description" slot="secondary-text">Only people specifically added can open</span>
           </forge-list-item>
         </forge-list>
-        <forge-popover
-          id="visibility-popover"
-          anchor="visibility-trigger"
-          preset="dropdown"
-          trigger-type="manual"
-          placement="bottom-start">
-          <forge-list id="visibility-options" two-line></forge-list>
-        </forge-popover>
       </section>
     </div>
 
@@ -92,8 +66,22 @@
         <forge-icon slot="start" name="link"></forge-icon>
         Copy link
       </forge-button>
-      <forge-button id="cancel-share-dialog-btn" class="mr-small" slot="end" variant="text">Cancel</forge-button>
-      <forge-button id="apply-share-dialog-btn" slot="end" variant="filled">Apply</forge-button>
+      <div class="flex items-center gap-medium" slot="end">
+        <forge-button id="cancel-btn">Cancel</forge-button>
+        <forge-button id="apply-btn" variant="filled">Apply</forge-button>
+      </div>
     </forge-toolbar>
   </forge-scaffold>
 </forge-dialog>
+
+<template id="member-item-template">
+  <forge-list-item noninteractive two-line>
+    <forge-avatar slot="start" data-avatar></forge-avatar>
+    <span class="flex items-center gap-xsmall">
+      <span data-name></span>
+      <forge-badge theme="info-secondary" data-you-badge hidden>you</forge-badge>
+    </span>
+    <span slot="secondary-text" data-email></span>
+    <div slot="end" data-access></div>
+  </forge-list-item>
+</template>
