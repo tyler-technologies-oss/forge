@@ -36,6 +36,7 @@ Every block HTML file starts with a comment; `pnpm generate-manifest` (run from 
 - `@type` is one of `component`, `pattern`, `template` (default `pattern` if omitted — always set it explicitly). Simple single-component usage examples under `components/` are `component`. Full-page shells under `application-layout/` are `template`. Multi-component compositions (a toolbar pattern, a card layout) are `pattern`.
 - Name format for component variants: `"<Component Display Name> — <Variant Display Name>"` (em dash, e.g. `Busy Indicator — Inline`).
 - Tags convention for simple component blocks: `<component-name>, <variant>, storybook, component-example`.
+- Overlay blocks whose main content only appears after a click (dialogs, etc.) add `@screenshot-click <selector>` (usually the trigger's `#id`). The screenshot script clicks it with reduced motion enabled, waits for `forge-dialog[open], dialog[open]` (or `@screenshot-wait <selector>` for other overlays), then captures. Never hardcode `open` in the markup just for the screenshot.
 
 ## Converting story markup to block markup
 
@@ -105,6 +106,6 @@ pnpm generate-screenshots --filter "<component-name>" --force   # captures .webp
 
 Then:
 
-- Read the generated `.webp` back (`Read` tool supports images) and visually confirm it matches intent — a closed/inert trigger-only screenshot is expected for pure open/close overlays unless you scripted the open state directly into the markup (like the `inline` busy-indicator variant does with the `open` attribute).
+- Read the generated `.webp` back (`Read` tool supports images) and visually confirm it matches intent. Overlay blocks should show the overlay open; if you see only the trigger, add or fix `@screenshot-click` (the run logs a `⚠` warning when the click doesn't open anything).
 - `npx prettier --check blocks/src/blocks/components/<component-name>` from repo root (blocks HTML/TS files are covered by the root Prettier config; there is no separate lint script for `blocks/`).
 - Spot-check `blocks/manifest.json` for the new entries: correct `category`, `componentsUsed` list, and `screenshot` path.
