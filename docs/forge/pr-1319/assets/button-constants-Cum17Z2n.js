@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{n as t,p as n}from"./constants-jVWZdget.js";var r,i,a,o;function s(){return(s=e((()=>{n(),r=`${t}button`,i={VARIANT:`variant`,PILL:`pill`,THEME:`theme`,FULL_WIDTH:`full-width`},a={...i},o={elementName:r,observedAttributes:i,attributes:a}})))()}export{s as n,o as t};

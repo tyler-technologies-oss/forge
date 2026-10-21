@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";var t,n,r;function i(){return(i=e((()=>{t={title:`Components/View All`,tags:[`hidden`],id:`view-all-components`},n={},n.parameters={...n.parameters,docs:{...n.parameters?.docs,source:{originalSource:`{}`,...n.parameters?.docs?.source}}},r=[`Placeholder`]})))()}i();export{n as Placeholder,r as __namedExportsOrder,t as default};
