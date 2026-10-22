@@ -1,0 +1,19 @@
+import{u as i,j as t,M as n,T as s,C as h}from"./blocks-CuBeYtR6.js";import{C as c}from"./CustomArgTypes-B50iPHPX.js";import{C as l,D as d}from"./ColorPicker.stories-3G0aGYfd.js";import"./preload-helper-PPVm8Dsz.js";import"./index-D7OZGsWw.js";import"./iframe-B2G4zKPj.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-2_OYILP2.js";import"./service-adapter-8tADcN_b.js";import"./color-picker-BBvykwO2.js";import"./custom-element-DR9AFpIK.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./core-property-Co8uF8PW.js";import"./tyler-icons-6f2n3B-C.js";import"./base-component-BFu9bkgC.js";import"./icon-CzY8gUKj.js";import"./property-SPSYPiJ5.js";import"./base-lit-element-jhkq3ECX.js";import"./async-directive-BP2vb57q.js";import"./directive-CwRn8Fwj.js";import"./constants-ffvdo6x3.js";import"./create-context-BxR5I8pu.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./icon-button-Dd9p4EqL.js";import"./class-map-BsyfRX0P.js";import"./base-button-DTSPJNju.js";import"./state-D0NMu0LN.js";import"./query-CtiAP21w.js";import"./base-DVmwUFg0.js";import"./query-assigned-elements-43hYArgI.js";import"./a11y-utils-D_hXjxHZ.js";import"./dom-utils-DExKgbbf.js";import"./utils-srtmqB2N.js";import"./focus-indicator-bDn075UK.js";import"./floating-ui.dom-DaMtbvS2.js";import"./state-layer-oVncPkRT.js";import"./base-adapter-CG4WlmkL.js";import"./icon-button-constants-JHHxiN9v.js";import"./tooltip-DdRl_dqo.js";import"./overlay-DWH89yjz.js";import"./key-action-lsAysfb-.js";import"./index-BHXiN6PC.js";import"./with-longpress-listener-D4ROnnkg.js";import"./dismissible-stack-j9Qzt-d1.js";import"./with-element-internals-DChZslLI.js";function e(r){const o={code:"code",h2:"h2",li:"li",p:"p",table:"table",tbody:"tbody",td:"td",th:"th",thead:"thead",tr:"tr",ul:"ul",...i(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:l}),`
+`,t.jsx(s,{}),`
+`,t.jsx(o.p,{children:"The color picker component allows users to select a color from a canvas as well as adjust the color's hue, saturation, lightness, and opacity."}),`
+`,t.jsx(o.p,{children:'This component can be used inline on the page, or within a popover, but there is not currently an associated "field" component for this.'}),`
+`,t.jsx(h,{of:d}),`
+`,t.jsx(o.h2,{id:"api",children:"API"}),`
+`,t.jsx(c,{}),`
+`,t.jsx(o.h2,{id:"keyboard-shortcuts",children:"Keyboard Shortcuts"}),`
+`,t.jsxs(o.table,{children:[t.jsx(o.thead,{children:t.jsxs(o.tr,{children:[t.jsx(o.th,{children:"Name"}),t.jsx(o.th,{children:"Description"})]})}),t.jsxs(o.tbody,{children:[t.jsxs(o.tr,{children:[t.jsx(o.td,{children:t.jsx(o.code,{children:"arrow up"})}),t.jsx(o.td,{children:"Moves the thumb position up."})]}),t.jsxs(o.tr,{children:[t.jsx(o.td,{children:t.jsx(o.code,{children:"arrow down"})}),t.jsx(o.td,{children:"Moves the thumb position down."})]}),t.jsxs(o.tr,{children:[t.jsx(o.td,{children:t.jsx(o.code,{children:"arrow left"})}),t.jsx(o.td,{children:"Moves the thumb position left."})]}),t.jsxs(o.tr,{children:[t.jsx(o.td,{children:t.jsx(o.code,{children:"arrow right"})}),t.jsx(o.td,{children:"Moves the thumb position right."})]})]})]}),`
+`,t.jsx(o.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsxs(o.li,{children:["Verify that you can tab to the hex input field and the “change color format” button.",`
+`,t.jsxs(o.ul,{children:[`
+`,t.jsx(o.li,{children:"Change the color format to RGBA and HSVA and ensure those input fields are accessible by keyboard."}),`
+`,t.jsx(o.li,{children:"Ensure that there is a visual cue when any of the color value input fields are focused."}),`
+`]}),`
+`]}),`
+`,t.jsx(o.li,{children:'Verify that pressing the space bar or enter key while focusing on the "change color format" button will cycle through the color input formats.'}),`
+`]})]})}function it(r={}){const{wrapper:o}={...i(),...r.components};return o?t.jsx(o,{...r,children:t.jsx(e,{...r})}):e(r)}export{it as default};
