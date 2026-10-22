@@ -1,0 +1,106 @@
+@use '@tylertech/forge-tokens/sass/border';
+
+$fields: ':is(forge-field, forge-text-field, forge-select, forge-chip-field)';
+$wrappers: ':is(forge-autocomplete, forge-date-picker, forge-date-range-picker, forge-time-picker)';
+$targets: '#{$fields}.forge-ai, #{$wrappers}.forge-ai > #{$fields}';
+
+@function ai-gradient($start, $end) {
+  @return radial-gradient(100% 100% at 50% 0%, $start 8%, $end 100%);
+}
+
+$surface: var(--forge-theme-surface, #fff);
+$surface-mix: 85%;
+// TODO: Replace hardcoded gradient colors with Radix color tokens
+$gradient-start: var(--forge-ai-gradient-start, #e9c2ec);
+$gradient-end: var(--forge-ai-gradient-end, #cbcdff);
+$gradient: ai-gradient($gradient-start, $gradient-end);
+$border-tint: #000830;
+$border-tint-mix: 27.5%;
+$border-gradient: ai-gradient(
+  color-mix(in srgb, $border-tint $border-tint-mix, #{$gradient-start}),
+  color-mix(in srgb, $border-tint $border-tint-mix, #{$gradient-end})
+);
+$border-color: color-mix(in srgb, $border-tint $border-tint-mix, color-mix(in srgb, #{$gradient-start}, #{$gradient-end}));
+$background-start: color-mix(in srgb, $surface $surface-mix, #{$gradient-start});
+$background-end: color-mix(in srgb, $surface $surface-mix, #{$gradient-end});
+$background-label: color-mix(in srgb, #{$background-start}, #{$background-end} 25%);
+$background: var(--forge-ai-background, #{ai-gradient($background-start, $background-end)});
+$border-width: var(--forge-ai-border-width, #{border.variable(thin)});
+$glow-width: var(--forge-ai-glow-width, #{border.variable(thick)});
+// stylelint-disable-next-line custom-property-pattern
+$field-shape: var(--_field-shape, 0px);
+
+// Gradients can't be applied to an outline or box-shadow, so draw rings on pseudo-elements and mask out everything but the ring
+@mixin ring($inset, $width, $radius, $background) {
+  content: '';
+  position: absolute;
+  inset: $inset;
+  padding: $width;
+  border-radius: $radius;
+  background: $background;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+@layer forge-ai {
+  #{$targets} {
+    --forge-ai-background-resolved: #{$background};
+    --forge-field-background: var(--forge-ai-background-resolved);
+    --forge-field-tonal-background: var(--forge-ai-background-resolved);
+    --forge-field-tonal-background-hover: var(--forge-ai-background-resolved);
+    --forge-field-filled-background: var(--forge-ai-background-resolved);
+    --forge-field-multiline-inset-label-background: #{$background-label};
+    --forge-field-multiline-inset-label-background-hover: #{$background-label};
+    --forge-field-multiline-inset-label-tonal-background: #{$background-label};
+    --forge-field-multiline-inset-label-tonal-background-hover: #{$background-label};
+
+    &:not([variant='plain'], [invalid]) {
+      --forge-field-outline-color: transparent;
+      --forge-field-outline-color-hover: transparent;
+
+      &::part(outline)::before {
+        @include ring(0, #{$border-width}, inherit, #{$border-gradient});
+      }
+
+      &::part(outline)::after {
+        @include ring(calc(#{$glow-width} * -1), #{$glow-width}, calc(#{$field-shape} + #{$glow-width}), #{$gradient});
+      }
+    }
+
+    &[variant='plain']:not([invalid])::part(outline)::before {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      block-size: #{$border-width};
+      background: #{$border-gradient};
+    }
+  }
+  forge-checkbox.forge-ai {
+    --forge-checkbox-primary-color: #{$border-color};
+    --forge-checkbox-unchecked-border-color: #{$border-color};
+    --forge-checkbox-checked-background: #{$border-gradient};
+    --forge-checkbox-checked-border-color: #{$border-color};
+    --forge-checkbox-icon-color: #{$surface};
+  }
+
+  :is(forge-radio, forge-radio-group).forge-ai {
+    --forge-radio-primary-color: #{$border-color};
+    --forge-radio-unchecked-border-color: #{$border-color};
+    --forge-radio-mark-color: #{$border-gradient};
+  }
+
+  forge-switch.forge-ai {
+    --forge-switch-track-on-color: #{$border-color};
+    --forge-switch-track-off-border-color: #{$border-color};
+    --forge-switch-handle-on-color: #{$border-tint};
+    --forge-switch-handle-off-color: #{$border-color};
+    --forge-switch-icon-on-color: #{$surface};
+    --forge-switch-icon-off-color: #{$surface};
+
+    &[checked]::part(track) {
+      background-image: #{$border-gradient};
+    }
+  }
+}
