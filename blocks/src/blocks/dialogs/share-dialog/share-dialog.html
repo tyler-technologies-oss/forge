@@ -1,7 +1,7 @@
 <!--
   @block Dialog — Share
   @type pattern
-  @description Modal share dialog for managing who can open a resource: search-and-add people with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, and a copy-link action.
+  @description Modal share dialog for managing who can open a resource: search-and-add people or groups (static teams or dynamic role-based) with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, and a copy-link action.
   @tags dialog, modal, share, sharing, permissions, access, members, people-picker, autocomplete, menu, list, avatar, copy-link, visibility
 -->
 
@@ -27,7 +27,7 @@
       <forge-autocomplete id="add-member-autocomplete" mode="stateless" filter-on-focus="false">
         <forge-text-field>
           <forge-icon slot="start" name="person_add_alt"></forge-icon>
-          <input type="text" id="add-member-input" aria-label="Add people by name or email" />
+          <input type="text" id="add-member-input" aria-label="Add people or groups by name or email" />
           <forge-menu id="new-member-access-menu" slot="end" persist-selection>
             <forge-button variant="text" aria-label="Access level for people you add">
               <span id="new-member-access-label">Can edit</span>
