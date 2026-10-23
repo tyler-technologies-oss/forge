@@ -71,9 +71,9 @@ The styles are purely visual. Component behavior, attributes, and accessibility 
 | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | `forge-field`, `forge-text-field`, `forge-select`, `forge-chip-field`            | The component                                                           | Gradient outline, glow, and background                               |
 | `forge-autocomplete`, `forge-date-picker`, `forge-date-range-picker`, `forge-time-picker` | The picker, which styles the field nested directly inside of it | Gradient outline, glow, and background of the nested field           |
-| `forge-checkbox`                                                                 | The component                                                           | Gradient checked state                                               |
-| `forge-radio`, `forge-radio-group`                                               | Each radio, or the group to style every radio within it                 | Gradient selected state                                              |
-| `forge-switch`                                                                   | The component                                                           | Gradient track when on                                               |
+| `forge-checkbox`                                                                 | The component                                                           | Gradient checked state and glow                                      |
+| `forge-radio`, `forge-radio-group`                                               | Each radio, or the group to style every radio within it                 | Gradient selected state and glow                                     |
+| `forge-switch`                                                                   | The component                                                           | Gradient track when on, and glow                                     |
 
 ### Fields
 
@@ -116,6 +116,10 @@ The autocomplete and date and time pickers wrap a `forge-text-field`. Add the cl
 
 <Canvas of={AIStylesStories.Controls} />
 
+The checkbox, radio, and switch get the same soft glow as fields. Their gradient is tinted toward `--forge-theme-on-surface`, so with the default gradient colors the
+borders, fills, and handles keep at least a 3:1 contrast ratio against `--forge-theme-surface` in both light and dark themes. If you customize the gradient colors,
+check that your colors still meet that ratio.
+
 ## Customization
 
 The gradient colors and field dimensions are controlled by CSS custom properties. Set them on a `forge-ai` component, or on any ancestor to change several at once.
@@ -126,7 +130,7 @@ The gradient colors and field dimensions are controlled by CSS custom properties
 | `--forge-ai-gradient-end`    | `#cbcdff`                                              | The last color of the gradient. Used by every supported component.                          |
 | `--forge-ai-background`      | The gradient colors blended with `--forge-theme-surface` | The background of fields. Accepts any CSS `background` value, such as a gradient or color. |
 | `--forge-ai-border-width`    | `var(--forge-border-thin)`                             | The width of a field's gradient outline, or the plain variant's underline.                  |
-| `--forge-ai-glow-width`      | `var(--forge-border-thick)`                            | The width of the glow around a field's outline.                                             |
+| `--forge-ai-glow-width`      | `var(--forge-border-medium)`                           | The width of the glow around a field's outline, or around a checkbox, radio, or switch.     |
 
 ```css
 .my-ai-section {
