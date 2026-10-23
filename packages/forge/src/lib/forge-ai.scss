@@ -1,0 +1,147 @@
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/shape';
+
+$fields: ':is(forge-field, forge-text-field, forge-select, forge-chip-field)';
+$wrappers: ':is(forge-autocomplete, forge-date-picker, forge-date-range-picker, forge-time-picker)';
+$targets: '#{$fields}.forge-ai, #{$wrappers}.forge-ai > #{$fields}';
+
+@function ai-gradient($start, $end) {
+  @return radial-gradient(100% 100% at 50% 0%, $start 8%, $end 100%);
+}
+
+$surface: var(--forge-theme-surface, #fff);
+$surface-mix: 85%;
+// TODO: Replace hardcoded gradient colors with Radix color tokens
+$gradient-start: var(--forge-ai-gradient-start, #e9c2ec);
+$gradient-end: var(--forge-ai-gradient-end, #cbcdff);
+$gradient: ai-gradient($gradient-start, $gradient-end);
+$border-tint: #000830;
+$border-tint-mix: 27.5%;
+$border-gradient: ai-gradient(
+  color-mix(in srgb, $border-tint $border-tint-mix, #{$gradient-start}),
+  color-mix(in srgb, $border-tint $border-tint-mix, #{$gradient-end})
+);
+$border-color: color-mix(in srgb, $border-tint $border-tint-mix, color-mix(in srgb, #{$gradient-start}, #{$gradient-end}));
+// Controls are tinted toward the theme's on-surface color so they keep at least 3:1 contrast against --forge-theme-surface in light and dark themes
+$control-tint: var(--forge-theme-on-surface, #000);
+$control-tint-mix: 45%;
+$control-gradient: ai-gradient(
+  color-mix(in srgb, $control-tint $control-tint-mix, #{$gradient-start}),
+  color-mix(in srgb, $control-tint $control-tint-mix, #{$gradient-end})
+);
+$control-color: color-mix(in srgb, $control-tint $control-tint-mix, color-mix(in srgb, #{$gradient-start}, #{$gradient-end}));
+// Separates the on-position thumb from the track, which shares its color
+$thumb-ring:
+  0 0 0 #{border.variable(medium)} #{$surface},
+  var(--forge-switch-handle-elevation, #{elevation.value(1)});
+$background-start: color-mix(in srgb, $surface $surface-mix, #{$gradient-start});
+$background-end: color-mix(in srgb, $surface $surface-mix, #{$gradient-end});
+$background-label: color-mix(in srgb, #{$background-start}, #{$background-end} 25%);
+$background: var(--forge-ai-background, #{ai-gradient($background-start, $background-end)});
+$border-width: var(--forge-ai-border-width, #{border.variable(thin)});
+$glow-width: var(--forge-ai-glow-width, #{border.variable(medium)});
+// stylelint-disable-next-line custom-property-pattern
+$field-shape: var(--_field-shape, 0px);
+
+// Gradients can't be applied to an outline or box-shadow, so draw rings on pseudo-elements and mask out everything but the ring
+@mixin ring($inset, $width, $radius, $background) {
+  content: '';
+  position: absolute;
+  inset: $inset;
+  padding: $width;
+  border-radius: $radius;
+  background: $background;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+// Draws the glow around the outer edge of a control's border
+@mixin glow($border-width, $shape) {
+  @include ring(calc((#{$glow-width} + #{$border-width}) * -1), #{$glow-width}, calc(#{$shape} + #{$glow-width}), #{$gradient});
+}
+
+@layer forge-ai {
+  #{$targets} {
+    --forge-ai-background-resolved: #{$background};
+    --forge-field-background: var(--forge-ai-background-resolved);
+    --forge-field-tonal-background: var(--forge-ai-background-resolved);
+    --forge-field-tonal-background-hover: var(--forge-ai-background-resolved);
+    --forge-field-filled-background: var(--forge-ai-background-resolved);
+    --forge-field-multiline-inset-label-background: #{$background-label};
+    --forge-field-multiline-inset-label-background-hover: #{$background-label};
+    --forge-field-multiline-inset-label-tonal-background: #{$background-label};
+    --forge-field-multiline-inset-label-tonal-background-hover: #{$background-label};
+
+    &:not([variant='plain'], [invalid]) {
+      --forge-field-outline-color: transparent;
+      --forge-field-outline-color-hover: transparent;
+
+      &::part(outline)::before {
+        @include ring(0, #{$border-width}, inherit, #{$border-gradient});
+      }
+
+      &::part(outline)::after {
+        @include ring(calc(#{$glow-width} * -1), #{$glow-width}, calc(#{$field-shape} + #{$glow-width}), #{$gradient});
+      }
+    }
+
+    &[variant='plain']:not([invalid])::part(outline)::before {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      block-size: #{$border-width};
+      background: #{$border-gradient};
+    }
+  }
+  forge-checkbox.forge-ai {
+    --forge-checkbox-primary-color: #{$control-color};
+    --forge-checkbox-unchecked-border-color: #{$control-color};
+    --forge-checkbox-checked-background: #{$control-gradient};
+    --forge-checkbox-checked-border-color: #{$control-color};
+    --forge-checkbox-icon-color: #{$surface};
+
+    &::part(background)::before {
+      @include glow(var(--forge-checkbox-border-width, #{border.variable(medium)}), var(--forge-checkbox-shape, #{shape.variable(small)}));
+    }
+  }
+
+  :is(forge-radio, forge-radio-group).forge-ai {
+    --forge-radio-primary-color: #{$control-color};
+    --forge-radio-unchecked-border-color: #{$control-color};
+    --forge-radio-mark-color: #{$control-gradient};
+  }
+
+  :is(forge-radio.forge-ai, forge-radio-group.forge-ai forge-radio)::part(background) {
+    overflow: visible;
+  }
+
+  :is(forge-radio.forge-ai, forge-radio-group.forge-ai forge-radio)::part(background)::before {
+    @include glow(var(--forge-radio-border-width, #{border.variable(medium)}), var(--forge-radio-shape, #{shape.variable(round)}));
+  }
+
+  forge-switch.forge-ai {
+    --forge-switch-track-on-color: #{$control-color};
+    --forge-switch-track-off-border-color: #{$control-color};
+    --forge-switch-handle-on-color: #{$control-color};
+    --forge-switch-handle-on-elevation: #{$thumb-ring};
+    --forge-switch-handle-active-on-elevation: #{$thumb-ring};
+    --forge-switch-handle-off-color: #{$control-color};
+    --forge-switch-icon-on-color: #{$surface};
+    --forge-switch-icon-off-color: #{$surface};
+
+    &::part(track) {
+      position: relative;
+    }
+
+    &[checked]::part(track) {
+      background-image: #{$control-gradient};
+    }
+
+    &::part(track)::before {
+      @include glow(var(--forge-switch-track-border-width, 0px), var(--forge-switch-track-shape, #{shape.variable(full)}));
+    }
+  }
+}
