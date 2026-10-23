@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getCurrentTheme, setTheme } from "../scripts/theme";
   import { getBlockSourceJsUrl } from "../data/blocks";
   import hljs from "highlight.js/lib/core";
   import xml from "highlight.js/lib/languages/xml";
@@ -40,24 +39,6 @@
   let sourceLoading: boolean = $state(false);
   let copied: boolean = $state(false);
   let currentTheme: "light" | "dark" = $state("light");
-
-  // Initialize theme on mount
-  $effect(() => {
-    currentTheme = getCurrentTheme();
-
-    // Listen for theme changes via attribute mutation
-    const observer = new MutationObserver(() => {
-      currentTheme = getCurrentTheme();
-      sendThemeToIframe(currentTheme);
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-forge-theme"],
-    });
-
-    return () => observer.disconnect();
-  });
 
   function sendThemeToIframe(theme: "light" | "dark") {
     iframeElement?.contentWindow?.postMessage(
@@ -129,8 +110,8 @@
   });
 
   function toggleTheme() {
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    setTheme(newTheme);
+    currentTheme = currentTheme === "light" ? "dark" : "light";
+    sendThemeToIframe(currentTheme);
   }
 
   function reloadIframe() {
