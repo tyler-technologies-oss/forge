@@ -1,0 +1,134 @@
+<div class="vert">
+  <h3 style="margin: 0;">Linked to a picker</h3>
+  <forge-date-time-field id="demo-date-time-field" picker="demo-date-time-picker" name="appointment">
+    <forge-text-field id="demo-text-field">
+      <label slot="label">Appointment</label>
+      <input type="text" />
+      <span slot="support-text">Pick when your appointment should start.</span>
+    </forge-text-field>
+  </forge-date-time-field>
+  <forge-date-time-picker id="demo-date-time-picker" time-mode="single"></forge-date-time-picker>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value</span>
+    <pre slot="value" id="demo-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+
+  <forge-button variant="raised" id="demo-validate">Report validity</forge-button>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Standalone — no picker</h3>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    With no <code>picker</code> attribute the field has no calendar toggle or popover — users type the date and time
+    directly into the masked input.
+  </p>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    Quick keys while an input is focused: <kbd>n</kbd> = now, <kbd>t</kbd> = today. On blur / <kbd>Enter</kbd>
+    loosely-typed entries are coerced like the picker: a two-digit year gains a century
+    (<code>1/2/25</code> → <code>01/02/2025</code>), an hour-only time completes (<code>5</code> →
+    <code>05:00&nbsp;AM</code>), and out-of-range parts clamp (<code>02/30/2025</code> → <code>02/28/2025</code>).
+  </p>
+  <forge-date-time-field id="demo-standalone-field" name="standalone">
+    <forge-text-field id="demo-standalone-text-field">
+      <label slot="label">Standalone (no picker)</label>
+      <input type="text" />
+      <span slot="support-text">No picker linked — type directly into the masked input.</span>
+    </forge-text-field>
+  </forge-date-time-field>
+
+  <forge-label-value>
+    <span slot="label">Complete</span>
+    <span slot="value" id="demo-standalone-complete">false</span>
+  </forge-label-value>
+
+  <forge-label-value>
+    <span slot="label">Value</span>
+    <pre slot="value" id="demo-standalone-value" style="margin: 0; font-family: monospace;">null</pre>
+  </forge-label-value>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Ranges — one input per endpoint</h3>
+  <p style="margin: 0; max-width: 44ch; color: var(--forge-theme-text-medium, #5f6368);">
+    Range modes take two inputs. The end input holds only the part that differs from the start: an end time for a
+    same-day time range, an end date for a date range with one shared time.
+  </p>
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 640px;">
+    <forge-date-time-field date-mode="range" time-mode="range" persist-mask>
+      <forge-text-field>
+        <label slot="label">Event window</label>
+        <input type="text" />
+        <input type="text" />
+      </forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field time-mode="range" persist-mask>
+      <forge-text-field>
+        <label slot="label">Same-day time range</label>
+        <input type="text" />
+        <input type="text" />
+      </forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field date-mode="range" persist-mask>
+      <forge-text-field>
+        <label slot="label">Date range, shared time</label>
+        <input type="text" />
+        <input type="text" />
+      </forge-text-field>
+    </forge-date-time-field>
+  </div>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Label positions &amp; variants (set on the text field)</h3>
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+    <forge-date-time-field>
+      <forge-text-field label-position="inset"><label slot="label">Inset (default)</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field>
+      <forge-text-field label-position="block-start"><label slot="label">Block start</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field>
+      <forge-text-field label-position="inline-start"><label slot="label">Inline start</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field>
+      <forge-text-field variant="tonal"><label slot="label">Tonal variant</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field>
+      <forge-text-field variant="filled"><label slot="label">Filled variant</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+  </div>
+
+  <hr style="width: 100%; border: none; border-top: 1px solid var(--forge-theme-outline, #dadce0); margin: 8px 0;" />
+
+  <h3 style="margin: 0;">Placeholder &amp; show-mask</h3>
+  <p style="margin: 0; max-width: 46ch; color: var(--forge-theme-text-medium, #5f6368);">
+    At rest the label / placeholder shows; the format guide appears on focus (<code>show-mask</code>
+    on, the default) — <strong>click into each field</strong> to see it. <code>persist-mask</code> pins the guide
+    on even at rest. With <code>show-mask</code> off the guide never auto-shows.
+  </p>
+  <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+    <forge-date-time-field>
+      <forge-text-field><label slot="label">Inset label (rests, focus for guide)</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field>
+      <forge-text-field label-position="block-start">
+        <label slot="label">Placeholder (non-inset)</label>
+        <input type="text" placeholder="Select date and time" />
+      </forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field persist-mask>
+      <forge-text-field label-position="block-start"><label slot="label">Persist mask (guide pinned)</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+    <forge-date-time-field id="demo-format-hints">
+      <forge-text-field label-position="block-start"><label slot="label">show-mask off (hints only)</label><input type="text" /></forge-text-field>
+    </forge-date-time-field>
+  </div>
+</div>
+
+<script type="module" src="date-time-field.ts"></script>
