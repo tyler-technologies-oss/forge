@@ -1,0 +1,11 @@
+import{u as i,j as t,M as n,T as s,C as p}from"./blocks-o3aE32Cc.js";import{C as a}from"./CustomArgTypes-Dh-zw8TI.js";import{T as m,D as d}from"./Tree.stories-iCjPUNb5.js";import"./preload-helper-PPVm8Dsz.js";import"./index-DCOfJTyw.js";import"./iframe-BJl9WzyY.js";import"./_commonjsHelpers-CqkleIqs.js";import"./utils-BIy79ypG.js";import"./service-adapter-8tADcN_b.js";import"./tree-item-BX7C-6AO.js";import"./consume-DtITIqjN.js";import"./component-utils-vOrACU0E.js";import"./utils-B9Oh4ZKp.js";import"./tyler-icons-6f2n3B-C.js";import"./property-cnzUGw6c.js";import"./state-DPSRFZRB.js";import"./query-assigned-nodes-D8SsSM9e.js";import"./base-DVmwUFg0.js";import"./class-map-Bqw-tANk.js";import"./directive-CwRn8Fwj.js";import"./style-map-BOTmrNYG.js";import"./a11y-utils-D_hXjxHZ.js";import"./dom-utils-DExKgbbf.js";import"./feature-detection-xOGaFvRv.js";import"./platform-C5RrLkNt.js";import"./utils-srtmqB2N.js";import"./icon-4j55E3iS.js";import"./base-lit-element-PWcytbnJ.js";import"./async-directive-B9HypnBE.js";import"./constants-ffvdo6x3.js";import"./create-context-BxR5I8pu.js";import"./provide-CZDhzwTe.js";import"./key-action-lsAysfb-.js";import"./open-icon-BB41ut13.js";function o(r){const e={a:"a",h2:"h2",p:"p",strong:"strong",...i(),...r.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:m}),`
+`,t.jsx(s,{}),`
+`,t.jsxs(e.p,{children:["🚧 ",t.jsx(e.strong,{children:"Experimental"})," 🚧"]}),`
+`,t.jsx(e.p,{children:`The Tree component is an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
+and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed.`}),`
+`,t.jsx(e.p,{children:"Trees are interactive lists that allow users to navigate through hierarchical data."}),`
+`,t.jsx(p,{of:d}),`
+`,t.jsx(e.h2,{id:"api",children:"API"}),`
+`,t.jsx(a,{}),`
+`,t.jsx(e.h2,{id:"accessibility",children:"Accessibility"}),`
+`,t.jsxs(e.p,{children:["Implements keyboard shortcuts and ARIA roles, states, and properties defined in the ",t.jsx(e.a,{href:"https://www.w3.org/WAI/ARIA/apg/patterns/treeview/",rel:"nofollow",children:"WAI-ARIA Tree View pattern"}),"."]})]})}function H(r={}){const{wrapper:e}={...i(),...r.components};return e?t.jsx(e,{...r,children:t.jsx(o,{...r})}):o(r)}export{H as default};
