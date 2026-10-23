@@ -1,8 +1,9 @@
 <!--
   @block Dialog — Share
   @type pattern
-  @description Modal share dialog for managing who can open a resource: search-and-add people or groups (static teams or dynamic role-based) with an access level, a list of current members with per-person access menus (change level or remove), a general access setting, and a copy-link action.
-  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, autocomplete, menu, list, avatar, copy-link, visibility
+  @description Modal share dialog for managing who can access a resource (document, report, project, folder). Use when users need to grant or revoke access, set per-person permission levels, and control general visibility from a single place. Includes search-and-add for individual people (or an email invite) and groups (static teams or dynamic role-based, such as admins), each added with an access level; a list of current members with per-member access menus (change level or remove) and a protected last owner; a general access setting (restricted or organization-wide); and a copy-link action. Changes are staged and only committed on Apply, and Cancel reverts them.
+  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, groups, teams, roles, autocomplete, menu, list, avatar, copy-link, visibility, invite
+  @screenshot-click #open-share-dialog-btn
 -->
 
 <div class="flex justify-center items-center min-h-screen">
