@@ -1,5 +1,27 @@
 # @tylertech/forge
 
+## 3.23.0
+
+### Features
+
+- d1c657b: **breadcrumb**: add `forge-breadcrumb`, `forge-breadcrumb-item`, and `forge-breadcrumb-overflow-menu` components
+- d24ac99: **app-launcher**: dispatch a standard `toggle` event (`ToggleEvent`) when the app launcher opens or closes
+- 2340db2: Add `description` to each category and token in `design-tokens.json`.
+
+### Bug Fixes
+
+- 41ab86d: **button**: sync the `disabled` attribute with the `disabled` property synchronously
+- ca4f1c7: **focus-indicator**: hide focus indicator when anchor element is completely obscured
+- 61832ae: **table**: reposition the sort button as a sibling of header template content to prevent interactive content being included among presentational children
+- cdc8be2: **user-profile**: propagate `--forge-avatar-background` and `--forge-avatar-color` to the popover avatar
+
+## 3.22.0
+
+### Minor Changes
+
+- d894f4e: Added a `design-tokens.json` file to the package containing the global spacing, animation, border, elevation, shape, layering, and color emphasis tokens with their resolved values.
+- 8cbb441: **design-tokens**: added the `--forge-theme-*` theme tokens to `design-tokens.json`, grouped by role (`brand`, `primary`, `secondary`, `tertiary`, `surface`, `text`, `success`, `error`, `warning`, `info`, `outline`). Theme tokens include a `values` object with resolved `light` and `dark` values. Schema version is now `1.1.0`.
+
 ## 3.21.0
 
 ### Minor Changes

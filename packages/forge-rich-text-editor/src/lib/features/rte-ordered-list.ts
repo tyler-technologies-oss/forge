@@ -1,5 +1,5 @@
 import { consume } from '@lit/context';
-import { ListItem, OrderedList } from '@tiptap/extension-list';
+import { OrderedList } from '@tiptap/extension-list';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconFormatListNumbered } from '@tylertech/tyler-icons';
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
@@ -7,6 +7,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { editorContext, EditorContext } from '../editor-context.js';
 import { IRichTextEditorFeature } from './rich-text-editor-feature.js';
+import { FEATURE_EXTENSIONS } from '../extensions/feature-extensions.js';
 import { featureHostStyles } from './core/feature-styles.js';
 
 import './core/rte-tool-button.js';
@@ -57,7 +58,7 @@ export class RteOrderedListComponent extends LitElement implements IRichTextEdit
   @property({ type: String })
   public label = 'Ordered List';
 
-  public readonly extensions = [OrderedList, ListItem];
+  public readonly extensions = FEATURE_EXTENSIONS['ordered-list'];
 
   @state()
   @consume({ context: editorContext, subscribe: true })

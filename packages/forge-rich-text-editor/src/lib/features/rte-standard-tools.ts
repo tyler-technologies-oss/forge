@@ -1,7 +1,9 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { LitElement, TemplateResult } from 'lit';
+import { html, unsafeStatic } from 'lit/static-html.js';
 import { customElement } from 'lit/decorators.js';
 import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { featureHostStyles } from './core/feature-styles.js';
+import { RICH_TEXT_STANDARD_FEATURE_GROUPS, type RichTextFeature } from '../extensions/feature-extensions.js';
 
 import './rte-bold.js';
 import './rte-italic.js';
@@ -21,6 +23,11 @@ declare global {
 }
 
 export const RTE_STANDARD_TOOLS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-rte-standard-tools';
+
+const renderFeature = (feature: RichTextFeature): TemplateResult => {
+  const tag = unsafeStatic(`forge-rte-${feature}`);
+  return html`<${tag}></${tag}>`;
+};
 
 /**
  * @tag forge-rte-standard-tools
@@ -58,20 +65,8 @@ export class RteStandardToolsComponent extends LitElement {
   public static override styles = featureHostStyles;
 
   public override render(): TemplateResult {
-    return html`
-      <forge-rte-heading></forge-rte-heading>
-      <forge-rte-divider></forge-rte-divider>
-      <forge-rte-bold></forge-rte-bold>
-      <forge-rte-italic></forge-rte-italic>
-      <forge-rte-underline></forge-rte-underline>
-      <forge-rte-strike></forge-rte-strike>
-      <forge-rte-divider></forge-rte-divider>
-      <forge-rte-bullet-list></forge-rte-bullet-list>
-      <forge-rte-ordered-list></forge-rte-ordered-list>
-      <forge-rte-divider></forge-rte-divider>
-      <forge-rte-align></forge-rte-align>
-      <forge-rte-divider></forge-rte-divider>
-      <forge-rte-undo-redo></forge-rte-undo-redo>
-    `;
+    return html`${RICH_TEXT_STANDARD_FEATURE_GROUPS.map(
+      (group, index) => html`${index ? html`<forge-rte-divider></forge-rte-divider>` : ''}${group.map(renderFeature)}`
+    )}`;
   }
 }
