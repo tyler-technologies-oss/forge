@@ -1,0 +1,14 @@
+## Keyboard interaction
+
+`forge-stepper` uses a single tab stop. Tab moves focus to the selected step, and the arrow keys move between steps.
+
+| Key                      | Action                                                        |
+| ------------------------ | ------------------------------------------------------------- |
+| Arrow left / Arrow right | Moves focus to the previous or next step (horizontal layout). |
+| Arrow up / Arrow down    | Moves focus to the previous or next step (vertical layout).   |
+| Home / End               | Moves focus to the first or last step.                        |
+| Enter / Space            | Selects the focused step.                                     |
+
+## ARIA
+
+`forge-stepper` has `role="tablist"` and each `forge-step` has `role="tab"`. `aria-selected` reflects the currently selected step, not whether a step is completed, and is managed automatically. Disabled steps get `aria-disabled`. Completed, error, and editable states are visual only, so describe them in the step's label or supporting text if users need to know about them.

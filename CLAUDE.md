@@ -77,6 +77,7 @@ Outside `packages/` (private, not published to npm):
 
 - `blocks` - Pre-built HTML block templates (see Blocks below)
 - `plugin` - Claude Code plugin for Forge: skills, hooks, and MCP registration (see its CLAUDE.md)
+- `docs` - Astro documentation site, `forge-docs` (see its CLAUDE.md)
 
 ## Blocks
 

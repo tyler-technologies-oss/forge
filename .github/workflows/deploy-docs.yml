@@ -1,0 +1,49 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'packages/forge/**'
+      - 'packages/forge-tailwind/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: true
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build docs
+        run: pnpm turbo run build --filter=forge-docs...
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: ${{ vars.DOCS_PAGES_REPOSITORY }}
+          ssh-key: ${{ secrets.DOCS_DEPLOY_KEY }}
+          branch: gh-pages
+          folder: docs/dist
+          single-commit: true
+          clean: true

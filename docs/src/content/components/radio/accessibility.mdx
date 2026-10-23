@@ -1,0 +1,11 @@
+## Keyboard reachability
+
+Ensure every radio is reachable by the tab key and can be selected with the keyboard, not just a pointer.
+
+## Group labeling
+
+Radios need to be interpreted as a group by assistive technology, and the group itself needs an accessible name — whichever grouping method you use:
+
+- Grouping by a shared `name` attribute alone doesn't provide a group label on its own — pair it with one of the two options below.
+- A plain ancestor element with `role="radiogroup"` needs an `aria-label` describing the group's purpose.
+- `<forge-radio-group>` needs a `<forge-label legend>` (or equivalent) to provide that label.

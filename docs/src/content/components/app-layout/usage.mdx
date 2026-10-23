@@ -1,0 +1,85 @@
+---
+title: App Layout
+description: The app layout provides a complete application shell with an app bar, responsive navigation drawer, and a body area for page content.
+status: stable
+source: core
+category: layout
+---
+
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader fit="cover" zoom={0.6} interactive={false} height="320px">
+  <forge-app-layout app-title="My Application" app-title-href="#">
+    <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+    <div slot="app-bar-end" class="flex items-center gap-xsmall">
+      <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+        <forge-icon name="notifications"></forge-icon>
+      </forge-icon-button>
+    </div>
+    <forge-list slot="navigation" navlist>
+      <forge-list-item selected>
+        <forge-icon slot="start" name="dashboard"></forge-icon>
+        <a href="#">Dashboard</a>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="folder"></forge-icon>
+        <a href="#">Projects</a>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="person"></forge-icon>
+        <a href="#">Users</a>
+      </forge-list-item>
+      <forge-divider></forge-divider>
+      <forge-list-item>
+        <forge-icon slot="start" name="settings"></forge-icon>
+        <a href="#">Settings</a>
+      </forge-list-item>
+      <forge-list-item>
+        <forge-icon slot="start" name="help"></forge-icon>
+        <a href="#">Help</a>
+      </forge-list-item>
+    </forge-list>
+    <main slot="body" class="p-medium grid bg-surface-dim">
+      <div class="striped-box"></div>
+    </main>
+  </forge-app-layout>
+</ComponentHeader>
+
+## Usage
+
+`forge-app-layout` scaffolds an entire application: an <a href={`${import.meta.env.BASE_URL}components/app-bar/usage/`}>app bar</a> with logo, title, and actions; a navigation <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a> that sits beside the body on large screens and becomes a modal drawer on small ones; and a body area with optional header, footer, and side panels. Start every Forge app with it, put page content in the `body` slot, and let the layout handle responsiveness.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use the app layout as the outermost structure for a full application page.",
+      "Put navigation in the `navigation` slot so it adapts to screen size.",
+      "Treat the app title as the page's h1 and start content headings at h2.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't nest an app layout inside another app layout or a scaffold.",
+      "Don't build a separate app bar and drawer by hand when the layout already provides them.",
+      "Don't place primary page content in the side slots — those are for supplementary panels.",
+    ]}
+  />
+</Rules>
+
+## Basic layout
+
+An app bar with a logo, title, and actions, a navigation list, and a body with a header toolbar and footer.
+
+<Example
+  description="A standard application shell."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/application-layout/basic/basic.html"
+  height="480px"
+/>
