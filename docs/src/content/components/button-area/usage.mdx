@@ -27,6 +27,9 @@ import Rule from "../../../components/Rule.astro";
   </forge-card>
 </ComponentHeader>
 
+## Overview
+The button area is a container element for an interactive "area" of the page. It's common to make larger sections of the page (such as individual cards) interactive and respond to user pointer events. The button area provides an accessible way to do this.
+
 ## Usage
 
 `forge-button-area` wraps a region of content and connects it to a real `<button>` or `<a>` in its `button` slot (or an existing one elsewhere via `target`/`targetElement`), through `disabled`, so the whole region acts as one clickable control while keeping accessible, keyboard-operable semantics. Clicking anywhere in the area dispatches a `click` event on the connected button. Use it for card-style regions — a whole card that navigates or selects — rather than for a single, already-obvious control like a plain button.

@@ -24,6 +24,9 @@ import Rule from "../../../components/Rule.astro";
   </forge-icon-button>
 </ComponentHeader>
 
+## Overview
+Icon buttons communicate actions using visual icons instead of text labels. They pair with tooltips which show the action name for clarity and should be placed close to the content they act on. Icon buttons are ideal for saving space while maintaining functionality.
+
 ## Usage
 
 `forge-icon-button` handles action emphasis through `variant`, `theme`, `shape`, and `density`, plus toggle, anchor, and badge support. Since there's no visible label, always set an accessible name with `aria-label` and pair the button with a <a href={`${import.meta.env.BASE_URL}components/tooltip/usage/`}>tooltip</a> so its action is clear on hover or focus. Reach for a text <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>button</a> instead when the action isn't widely recognizable from an icon alone.
@@ -43,6 +46,8 @@ import Rule from "../../../components/Rule.astro";
   <Rule
     variant="dont"
     rules={[
+      "Don't use when the icon meaning might be ambiguous to users.",
+      "Don't use when actions require a detailed explanation that can't be conveyed through a simple icon and tooltip.",
       "Don't use an icon button for a domain-specific or unfamiliar action — use a text button instead.",
       "Don't mix icon buttons and text buttons within the same group or table row.",
     ]}
