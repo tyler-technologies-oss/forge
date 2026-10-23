@@ -19,6 +19,9 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+Radio buttons are selection controls that allow users to select exactly one option from a set of mutually exclusive choices. They appear as small circles that display a filled dot when selected. When a user selects a radio button, any previously selected option in the same group is automatically deselected, ensuring only one choice remains active at a time.
+
 ## Usage
 
 `forge-radio` lets a user select a single option from a visible set; group related radios so only one can be checked at a time, either informally by sharing a `name` or formally inside a `forge-radio-group`. It's one of three selection controls — reach for a <a href={`${import.meta.env.BASE_URL}components/checkbox/usage/`}>checkbox</a> when more than one option can be selected, or a <a href={`${import.meta.env.BASE_URL}components/switch/usage/`}>switch</a> to turn a single item on or off. When screen space is tight or the set is long, a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> compacts the same choice into a closed control.

@@ -18,6 +18,9 @@ import Rule from "../../../components/Rule.astro";
   <forge-checkbox indeterminate>Mixed</forge-checkbox>
 </ComponentHeader>
 
+## Overview
+Checkboxes are selection controls that allow users to select multiple options from a set. They appear as small squares that display a checkmark when selected. Checkboxes are independent of each other, meaning selecting one does not affect the others in the same group.
+
 ## Usage
 
 `forge-checkbox` selects one or more independent options through `checked` and `indeterminate`, participates natively in form submission and validation (`required`, `readonly`, `name`), and supports `dense` and `label-position`. Use a checkbox when a user can pick any number of options from a list; use a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio button</a> instead when exactly one option in a set must be chosen, or a <a href={`${import.meta.env.BASE_URL}components/switch/usage/`}>switch</a> instead to toggle a single setting on or off.

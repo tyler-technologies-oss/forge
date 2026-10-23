@@ -26,6 +26,11 @@ import Rule from "../../../components/Rule.astro";
   </forge-date-range-picker>
 </ComponentHeader>
 
+## Overview
+The date range picker allows users to select a start and end date to define a continuous date range. It combines text input fields with a calendar, giving users the flexibility to either manually type familiar dates or visually select date ranges from a calendar view.
+
+The component automatically handles date formatting and validation for manual entries while ensuring the end date cannot be earlier than the start date.
+
 ## Usage
 
 `forge-date-range-picker` wraps a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> with two inputs — "from" and "to" — and adds a calendar popup for picking both ends of a range, through `from`, `to`, `min`, `max`, `disabledDates`, `disabledDaysOfWeek`, `masked`, `showToday`, and `showClear`. Use it whenever a user is entering a span of dates, like time off or a project's start and end; for a single date, use a <a href={`${import.meta.env.BASE_URL}components/date-picker/usage/`}>date picker</a> instead.

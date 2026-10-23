@@ -24,6 +24,9 @@ import Rule from "../../../components/Rule.astro";
   </forge-date-picker>
 </ComponentHeader>
 
+## Overview
+Date pickers allow users to select dates through multiple input methods. They combine a text input field with a calendar dropdown, giving users the flexibility to either manually type familiar dates or visually select dates from a calendar view. The component automatically handles date formatting and validation for manual entries, making it versatile for both quick familiar date entry and visual date selection.
+
 ## Usage
 
 `forge-date-picker` wraps a child <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> and adds a calendar dropdown, through `min`/`max`/`disabledDates`/`disabledDaysOfWeek`, `masked`/`maskFormat`/`showMaskFormat`, `dateFormat`, `shortcuts`, `showToday`, and `showClear`. Use it for a single, specific date; for a start and end date together, use a date range picker instead, and for a time instead of a date, use a <a href={`${import.meta.env.BASE_URL}components/time-picker/usage/`}>time picker</a>.

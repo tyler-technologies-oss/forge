@@ -20,6 +20,11 @@ import Rule from "../../../components/Rule.astro";
   </forge-button-toggle-group>
 </ComponentHeader>
 
+## Overview
+Button toggle is a selection component that groups related options into a unified control, allowing users to choose one option from a set of alternatives. It functions similarly to radio buttons but with a more prominent visual treatment that emphasizes the available choices and current selection state.  
+
+Button toggles are commonly used for switching between different views of the same information or selecting from a small set of related options where the choices need to be immediately visible and easily comparable.
+
 ## Usage
 
 `forge-button-toggle-group` groups `forge-button-toggle` children into one bordered control, enforcing a single selection by default or several when `multiple` is set, through `outlined`, `vertical`, `stretch`, `dense`, and `theme` — plus native form participation via `name` and `required`. Use it for a small, always-visible set of options; reach for a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio group</a> when each option needs a fully written-out label, or a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> instead once there are more than a handful of options.

@@ -23,6 +23,10 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+File pickers enable users to upload single or multiple files through drag-and-drop interaction or traditional file browser selection. This component provides flexible upload options with clear visual feedback and file management capabilities, making it suitable for both standalone use and integration within forms. Once files are selected, they display as a list or grid of thumbnails, providing visual confirmation of the uploaded content.
+
 ## Usage
 
 `forge-file-picker` combines a drag-and-drop target with a slotted trigger <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>button</a>, controlled through `accept`, `max-size`, `capture`, `multiple`, `disabled`, `compact`, and `borderless`. The component only handles the picking gesture; render uploaded files yourself afterward, typically as a list with a progress indicator per file while it uploads.
