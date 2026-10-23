@@ -16,7 +16,7 @@ export default defineConfig({
     mdx({ remarkPlugins: [remarkGfm] }),
     svelte()
   ],
-  site: 'https://crispy-doodle-rwrz2ny.pages.github.io',
+  site: 'https://tylerforge.design',
   base: '/',
   trailingSlash: 'always',
 
