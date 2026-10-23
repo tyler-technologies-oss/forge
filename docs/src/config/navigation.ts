@@ -60,6 +60,11 @@ export function buildNavigation(
               href: "/designing/spacing/",
             },
             {
+              id: "design-layout",
+              label: "Layout",
+              href: "/designing/layout/",
+            },
+            {
               id: "design-iconography",
               label: "Iconography",
               href: "/designing/iconography/",

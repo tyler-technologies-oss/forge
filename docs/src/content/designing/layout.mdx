@@ -1,0 +1,289 @@
+---
+title: Layout
+description: The anatomy, dimensions, and page patterns of a Forge application, for designers building screens by hand.
+---
+
+import Example from "../../components/Example.astro";
+import AnatomyDemo from "../../components/docs/AnatomyDemo.astro";
+import AnatomyMarker from "../../components/docs/AnatomyMarker.astro";
+import InlineMessage from "../../components/docs/InlineMessage.astro";
+import Rules from "../../components/Rules.astro";
+import Rule from "../../components/Rule.astro";
+
+Almost every Forge application is built on [`forge-app-layout`](/components/app-layout/usage/), a shell that provides the app bar, navigation, and content regions and handles responsive behavior. Developers don't build that structure themselves. They drop content into its slots.
+
+So the most useful thing a designer can do is **design inside the shell**. Start every screen from the regions below, keep their dimensions fixed, and spend your design effort on what goes in the body. This page breaks down that shell and the page patterns that repeat across Forge's [blocks](/blocks/).
+
+## Structure of a Tyler Cloud App
+
+<AnatomyDemo fit="cover" zoom={0.75} height="440px">
+  <forge-app-layout app-title="My Application" breakpoint="0">
+    <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+    <div slot="app-bar-end" class="flex items-center gap-xsmall">
+      <AnatomyMarker
+        label={1}
+        title="App bar"
+        description="Logo, app title, and global actions. 56px tall, --forge-theme-brand."
+        placement="center"
+      />
+      <span class="relative inline-flex">
+        <forge-app-launcher></forge-app-launcher>
+        <AnatomyMarker
+          label={2}
+          title="App launcher"
+          description="Switches between related Tyler applications. Always in the app bar, just before the user profile."
+          placement="bottom-start"
+          outside
+        />
+      </span>
+      <span class="relative inline-flex">
+        <forge-user-profile full-name="Tyler Tech" email="tyler.tech@tylertech.com" button-label="Open profile menu" theme-toggle></forge-user-profile>
+        <AnatomyMarker
+          label={3}
+          title="User profile"
+          description="The signed-in user's avatar and menu: profile links, theme toggle, and sign out. Always last in the app bar."
+          placement="bottom-start"
+          outside
+        />
+      </span>
+    </div>
+    <div slot="navigation" class="relative h-full">
+      <AnatomyMarker label={4} title="Navigation" description="The app's main destinations. 320px wide, or 56px as a mini drawer." placement="bottom-end" />
+      <forge-list navlist>
+        <forge-list-item selected>
+          <forge-icon slot="start" name="dashboard"></forge-icon>
+          <a href="#">Dashboard</a>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="folder"></forge-icon>
+          <a href="#">Projects</a>
+        </forge-list-item>
+        <forge-list-item>
+          <forge-icon slot="start" name="person"></forge-icon>
+          <a href="#">Users</a>
+        </forge-list-item>
+        <forge-divider></forge-divider>
+        <forge-list-item>
+          <forge-icon slot="start" name="settings"></forge-icon>
+          <a href="#">Settings</a>
+        </forge-list-item>
+      </forge-list>
+    </div>
+    <div slot="body-header" class="relative">
+      <AnatomyMarker label={5} title="Body header" description="Page title and page-level actions, optionally tabs. 56px toolbar." placement="center" />
+      <forge-toolbar>
+        <span slot="start" class="text-heading4">
+          <span>Page title</span>
+        </span>
+        <div slot="end" class="flex items-center gap-small">
+          <forge-button variant="tonal">
+            <forge-icon slot="start" name="add"></forge-icon>
+            <span>New item</span>
+          </forge-button>
+        </div>
+      </forge-toolbar>
+    </div>
+    <main slot="body" class="relative p-medium bg-surface-dim">
+      <AnatomyMarker label={6} title="Body" description="The page's content, usually on cards. 16px padding on --forge-theme-surface-dim." />
+      <div class="grid gap-medium h-full">
+        <forge-card class="p-0 h-full">
+          <forge-scaffold>
+            <forge-toolbar slot="header">
+              <span slot="start" class="text-heading3">
+                <div>Card title</div>
+              </span>
+              <forge-icon-button slot="end" density="medium" aria-label="More options">
+                <forge-icon name="more_vert"></forge-icon>
+              </forge-icon-button>
+            </forge-toolbar>
+            <div slot="body" class="p-medium h-full box-border">
+            <span slot="start" class="text-subheading3">Subheading 3</span>
+            <p class="text-body2">lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              <div class="striped-box h-full"></div>
+            </div>
+          </forge-scaffold>
+        </forge-card>
+      </div>
+    </main>
+    <div slot="body-footer" class="relative">
+      <AnatomyMarker label={7} title="Body footer" description="Copyright, status, or persistent actions. 56px toolbar, optional." placement="start" />
+      <forge-toolbar inverted>
+        <span slot="center" class="text-body1">
+          © 2026 My Application
+        </span>
+      </forge-toolbar>
+    </div>
+  </forge-app-layout>
+</AnatomyDemo>
+
+<InlineMessage theme="info" title="Surfaces create the hierarchy">
+  The body background is `--forge-theme-surface-dim`, a step darker than the cards, toolbars, and drawers placed on it (`--forge-theme-surface`). That contrast,
+  not shadows or borders, is what separates content from the page. Keep the body dim and put content on cards.
+</InlineMessage>
+
+### Headings
+
+The app title in the app bar is the page's `h1`. Content headings start at `h2`:
+
+- **Page title** in the body header: `forge-typography--heading4`, one step larger than container titles.
+- **Card, dialog, and drawer titles**: `forge-typography--heading3`, in the container's header toolbar. Never larger, since `forge-typography--heading4` and up are reserved for page titles.
+- **Section headings** inside a card or form: `forge-typography--heading2`.
+- **Body text**: `forge-typography--body2` is the page default. `forge-typography--body1` is for dense or secondary content.
+- **Group labels** (above a checkbox list or filter facet): `forge-typography--label1` or `forge-typography--label2`, often in `--forge-theme-text-medium`.
+
+Forge's heading scale runs from small to large, so `forge-typography--heading4` is larger than `forge-typography--heading3`, which is larger than `forge-typography--heading2`. Visual size and semantic level are independent: a page title is an `h2` styled with `forge-typography--heading4`. Sizes and weights for each style are on the [typography tokens](/tokens/typography/) page.
+
+### Responsive behavior
+
+The shell has one breakpoint, **960px**.
+
+- **960px and wider:** navigation is a persistent drawer beside the body.
+- **Below 960px:** navigation collapses behind a menu button in the app bar and opens as a modal drawer over the content.
+
+Within the body, content reflows at these widths: **640px**, **768px**, **1024px**, and **1280px**. Design at least two frames: one around 1440px and one around 390px. The shell handles everything in between, as long as body content reflows the way the patterns below describe.
+
+## Navigation styles
+
+Choose one per app. Every block uses an icon with each nav item.
+
+| Style                | When to use                                                                                                                                                   | Width                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| **Standard**         | The default. Six to ten destinations with short labels.                                                                                                       | 320px                           |
+| **Mini**             | Content needs the width, like data-heavy screens or editors. Users recognize the icons.                                                                       | 56px, expands to 256px on hover |
+| **Context switcher** | The whole app is scoped to an organization, facility, or account the user can switch between. The switcher sits at the top of the drawer, above the nav list. | 320px                           |
+
+Group secondary destinations like Settings and Help at the bottom of the list, separated by a divider.
+
+<Example
+  description="Standard navigation with a page title toolbar and footer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/application-layout/basic/basic.html"
+  height="480px"
+/>
+
+## Page patterns
+
+Most screens are one of the patterns below. Find the closest one and design within its structure.
+
+### Dashboard or overview
+
+A responsive grid of cards in the body.
+
+- Cards use a **16px gap** in every direction.
+- Use an auto-fill grid targeting about **320px per card**, or set column counts by breakpoint: 1 column on mobile, 2 at 640px, 3 at 1024px, 4 at 1280px.
+- Give cards a consistent height within a row.
+
+### Data table
+
+A table inside a card that fills the body width.
+
+- The card header holds the table title and icon actions (filter, export, more). The primary page action, like "New order", goes in the **body header**, not the card.
+- Remove the card's padding so the table runs edge to edge.
+- Pagination sits in the card footer.
+- Filters open in a **256px side panel** on the right, with a header toolbar ("Filters"), a padded body of facets separated by dividers, and a footer with "Clear all" and "Apply".
+
+<Example
+  description="A paginated table with a filter side panel."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/application-layout/table-with-filters/table-with-filters.html"
+  height="560px"
+/>
+
+### Form
+
+A card containing a header toolbar, a padded body, and a footer toolbar with actions.
+
+- **Width:** short forms max out around **672px**. Long, sectioned forms max out around **768px**. Never stretch a form to fill a wide screen.
+- **Columns:** stack fields in one column, or use a 2-column (short) or 6-column (long) grid where related fields share a row: first and last name, or city, state, and ZIP.
+- **Footer actions** are end-aligned: secondary action first, primary action last.
+- See [Spacing](/designing/spacing/#forms) for field and section spacing.
+
+<Example
+  description="A long form divided into sections on a 6-column grid."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/forms/complex-form-with-grouped-sections/complex-form-with-grouped-sections.html"
+  height="640px"
+/>
+
+### Master-detail
+
+A primary list or table in the body, with details for the selected item in a right side panel. The body and the panel **scroll independently**, so design both as separate scroll areas.
+
+### Tabbed page
+
+When a page has several views of the same object, put a tab bar directly below the page title, inside the body header. Remove the title toolbar's bottom divider so the title and tabs read as one header.
+
+## Containers
+
+Forge's cards, dialogs, and drawers share one internal structure. Learn it once and every container follows it.
+
+<AnatomyDemo>
+  <forge-card class="p-0 w-full max-w-md my-large">
+    <forge-scaffold>
+      <div slot="header" class="relative">
+        <AnatomyMarker label={1} title="Header toolbar" description="Title and icon actions. 56px tall with a bottom divider." placement="center" />
+        <forge-toolbar>
+          <span slot="start" class="text-heading3">
+            Card title
+          </span>
+          <forge-icon-button slot="end" density="medium" aria-label="More options">
+            <forge-icon name="more_vert"></forge-icon>
+          </forge-icon-button>
+        </forge-toolbar>
+      </div>
+      <div slot="body" class="relative p-medium">
+        <AnatomyMarker label={2} title="Body" description="The container's content and the only part that scrolls. 16px padding." />
+        <div class="striped-box h-28"></div>
+      </div>
+      <div slot="footer" class="relative">
+        <AnatomyMarker label={3} title="Footer toolbar" description="Actions, end-aligned with the primary action last. 56px tall." placement="center" />
+        <forge-toolbar inverted>
+          <div slot="end" class="flex items-center gap-small">
+            <forge-button>Cancel</forge-button>
+            <forge-button variant="raised">Save</forge-button>
+          </div>
+        </forge-toolbar>
+      </div>
+    </forge-scaffold>
+  </forge-card>
+</AnatomyDemo>
+
+| #   | Part               | What goes here                                        | Size                      |
+| --- | ------------------ | ----------------------------------------------------- | ------------------------- |
+| 1   | **Header toolbar** | Title (`forge-typography--heading3`) and icon actions | 56px tall, bottom divider |
+| 2   | **Body**           | The container's content; the only part that scrolls   | 16px padding              |
+| 3   | **Footer toolbar** | Actions, end-aligned with the primary action last     | 56px tall, top divider    |
+
+- The header and footer stay put while the body scrolls.
+- Corner radius is **4px** (`--forge-shape-medium`) for cards, dialogs, and toolbars.
+- Cards are flat with a 1px (`--forge-border-thin`) border in `--forge-theme-outline`. Use the raised (shadow) variant only to lift a card above other content.
+- A container doesn't need all three parts. A simple card can be body only.
+
+### Actions
+
+- Actions live in **toolbars**, at the top of the page (body header) or the bottom of a container (footer).
+- **One primary action per container.** It goes last (rightmost) and uses the raised or filled button.
+- The secondary action (Cancel) sits to its left as a text or tonal button, **12px** apart.
+- Icon-only actions in a header use 36px icon buttons (`density="medium"`), **8px** apart, with a tooltip.
+
+## Do and don't
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      'Start every screen from the app layout frame and keep its regions at their fixed sizes.',
+      'Put page content on surface cards over the dim body background.',
+      'Put the page title and primary page action in the body header toolbar.',
+      'Constrain forms and reading content to a max width.',
+      'Design the side panel and body as independently scrolling areas.'
+    ]}
+  />
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't redesign the app bar or navigation per screen. They're shared across the app.",
+      "Don't put primary content in the side panel. It's for supplementary content and filters.",
+      "Don't nest a card inside a card of the same surface color. Use a tonal surface for the inner card.",
+      "Don't place buttons floating in the body. Put actions in a header or footer toolbar.",
+      "Don't put a page-level heading inside a card."
+    ]}
+  />
+</Rules>
