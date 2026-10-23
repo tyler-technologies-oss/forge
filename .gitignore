@@ -12,4 +12,3 @@ blocks/manifest.json
 .heroku-deploy/
 .astro/
 docs/skill/
-docs/public/blocks/
