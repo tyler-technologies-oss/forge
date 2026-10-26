@@ -23,7 +23,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 ### Versioning & Release
 
-Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Changesets only bump `package.json`, so when releasing a new version also update the version number in the other two files so all three match:
+Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Releases are automated: merging to `main` opens a `chore: release (main)` PR, and merging that PR publishes to npm. Do not bump versions or publish by hand.
+
+The release PR's `pnpm run version-packages` step runs `plugin/scripts/sync-version.mjs`, which copies the `package.json` version into the plugin manifests so all three match:
 
 - `package.json`
 - `plugin/.claude-plugin/plugin.json`
