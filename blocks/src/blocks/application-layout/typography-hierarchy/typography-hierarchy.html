@@ -1,0 +1,92 @@
+<!--
+  @block Typography Hierarchy
+  @type template
+  @description Standard application shell demonstrating the page typography hierarchy top to bottom: a text-heading4 page title in the body header toolbar, a card with a text-heading3 title in its header toolbar, text-subheading3 section headings within the card body, two side-by-side sections in a responsive two-column grid, each with text-body1 paragraph text and text-body1 secondary text in medium emphasis, the second wrapped in a tonal card for separation
+  @tags layout, application, typography, hierarchy, headings, page-title, card, reference, app-bar, navigation, drawer
+-->
+<body class="h-dvh">
+  <forge-app-layout app-title="My Application" app-title-href="/">
+    <!-- App bar logo -->
+    <forge-icon slot="app-bar-logo" name="home"></forge-icon>
+
+    <!-- App bar end actions -->
+    <div slot="app-bar-end" class="flex items-center gap-xsmall">
+      <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
+        <forge-icon name="notifications" external></forge-icon>
+      </forge-icon-button>
+
+      <forge-user-profile
+        email="tyler.tech@tylertech.com"
+        button-label="Open the incredibly awesome profile menu"
+        theme-toggle
+        image-url
+        full-name="Tyler tech"
+        slot="app-bar-end">
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="settings" external></forge-icon>
+          <a href="http://www.google.com" target="_blank">Settings</a>
+        </forge-profile-link>
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="account" external></forge-icon>
+          <a href="http://www.google.com" target="_blank">Profile</a>
+        </forge-profile-link>
+        <span slot="sign-in-button-text">Sign in</span>
+        <span slot="sign-out-button-text">Sign Out</span>
+      </forge-user-profile>
+    </div>
+
+    <!-- Navigation drawer content -->
+    {{> app-nav}}
+
+    <!-- Body header toolbar: page title -->
+    <div slot="body-header">
+      <forge-toolbar>
+        <h2 slot="start" class="text-heading4">Heading4 title</h2>
+      </forge-toolbar>
+    </div>
+
+    <!-- Main content -->
+    <main class="p-medium bg-surface-dim" slot="body">
+      <forge-card no-padding>
+        <forge-scaffold>
+          <!-- Card title -->
+          <forge-toolbar slot="header">
+            <h3 slot="start" class="text-heading3">Heading3 title</h3>
+          </forge-toolbar>
+
+          <div slot="body" class="p-medium flex flex-col gap-medium">
+            <!-- Section: body text -->
+            <section class="flex flex-col gap-medium">
+              <h4 class="text-subheading3 m-0">Subheading3 title</h4>
+              <p class="text-body2 m-0">
+                This is using the body2 class. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis consectetur nisl, quis euismod aliquet. Nulla eu turpis eu magna faucibus
+                eleifend eu quis nulla. Pellentesque odio ante, vulputate sit amet euismod nec, viverra a sem.
+              </p>
+            </section>
+
+            <section class="flex flex-col gap-small">
+              <forge-card class="tonal-card">
+                <div class="flex flex-col gap-medium">
+                <h4 class="text-subheading2 m-0">Subheading2 title</h4>
+                <div class="flex flex-col gap-small">
+                  <p class="text-body1 m-0">
+                    This is using the body1 class. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis consectetur nisl, quis euismod aliquet. Nulla eu turpis eu magna faucibus
+                    eleifend eu quis nulla. Pellentesque odio ante, vulputate sit amet euismod nec, viverra a sem.
+                  </p>
+                </div>
+              </div>
+              </forge-card>
+            </section>
+          </div>
+        </forge-scaffold>
+      </forge-card>
+    </main>
+
+    <!-- Footer -->
+    <footer slot="body-footer">
+      <forge-toolbar inverted>
+        <div slot="center" class="text-body1">© 2026 My Application. All rights reserved.</div>
+      </forge-toolbar>
+    </footer>
+  </forge-app-layout>
+</body>
