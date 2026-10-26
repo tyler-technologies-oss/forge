@@ -18,6 +18,12 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+Sliders reflect a range of values along a bar, from which users may select a single value or a range. They are ideal for adjusting settings such as volume, brightness, or applying image filters.
+
+Sliders can be somewhat difficult to manipulate, so they should be used when an approximate value is good enough. When using sliders, consider the unit. If only whole numbers can be chosen, for example, default the slider to use whole values only.
+
 ## Usage
 
 `forge-slider` selects a value — or, with `range`, a start and end value — along a bounded track through `min`, `max`, `step`, `tickmarks`, and `labeled`, and participates in form submission via `name`. Reserve it for a value that's fine to be approximate; when a user needs to enter a known, specific number, use a <a href={`${import.meta.env.BASE_URL}components/text-field/usage/`}>text field</a> instead.
@@ -41,6 +47,7 @@ import Rule from "../../../components/Rule.astro";
       "Don't use a slider for a binary on/off setting — use a switch instead.",
       "Don't use a slider when a user needs to enter a known, specific value — use a text field instead.",
       "Don't hide the current value's label unless space is truly constrained.",
+      "Don't use a slider when the range is very large making it difficult to select specific values accurately.",
     ]}
   />
 </Rules>
