@@ -1,5 +1,11 @@
 # @tylertech/forge-mcp
 
+## 1.3.1
+
+### Bug Fixes
+
+- 61e5142: **forge-mcp**: recommend per-component side-effect imports instead of definition functions, and align installation CSS guidance with the Forge docs
+
 ## 1.3.0
 
 ### Minor Changes
