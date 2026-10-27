@@ -108,6 +108,11 @@ declare global {
  * @csspart surface - The tooltip surface.
  * @csspart arrow - The tooltip arrow.
  * @csspart overlay - The overlay surface.
+ *
+ * @cssclass forge-tooltip - The tooltip class, with text provided via a `data-text` attribute _(required)_.
+ * @cssclass forge-tooltip--top - Positions the tooltip above the element.
+ * @cssclass forge-tooltip--bottom - Positions the tooltip below the element.
+ * @cssclass forge-tooltip--left - Positions the tooltip to the left of the element.
  */
 @customElement({
   name: TOOLTIP_CONSTANTS.elementName,

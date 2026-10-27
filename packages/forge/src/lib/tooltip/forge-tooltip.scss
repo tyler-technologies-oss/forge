@@ -1,0 +1,178 @@
+@use 'sass:string';
+@use './core' as *;
+@use './animations';
+@use '../core/styles/typography';
+@use '../core/styles/utils' as style-utils;
+
+.forge-tooltip {
+  @include tokens;
+
+  // Gap between the tooltip and its anchor. CSS-only equivalent of the `offset` property
+  // on <forge-tooltip>, so it is declared here rather than in the shared token map.
+  #{declare(offset)}: #{style-utils.module-val(tooltip, offset, 4px)};
+
+  // Animation custom properties (defaults for right placement)
+  #{declare(slidein-x)}: -10px;
+  #{declare(slidein-y)}: -50%;
+  #{declare(slideout-x)}: 0px;
+  #{declare(slideout-y)}: -50%;
+  #{declare(arrow-clip-path)}: polygon(0 0, 0 100%, 100% 100%);
+
+  position: relative;
+
+  //
+  // Tooltip content
+  //
+
+  &::before {
+    @include typography.style(body1);
+
+    content: attr(data-text);
+    position: absolute;
+    display: none;
+    pointer-events: none;
+
+    background: #{token(background)};
+    color: #{token(color)};
+    width: #{token(width)};
+    max-width: #{token(max-width)};
+    text-align: #{token(content-align)};
+    line-height: normal;
+    white-space: normal;
+
+    border-radius: #{token(shape)};
+    border-width: #{token(border-width)};
+    border-style: #{token(border-style)};
+    border-color: #{token(border-color)};
+    padding-block: #{token(padding-block)};
+    padding-inline: #{token(padding-inline)};
+    box-shadow: #{token(elevation)};
+
+    // Default: right placement
+    top: 50%;
+    left: 100%;
+    margin-left: calc(#{token(arrow-width)} / 2 + #{token(border-width)} + #{token(offset, custom)});
+  }
+
+  //
+  // Tooltip arrow
+  //
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: none;
+
+    height: #{token(arrow-height)};
+    width: #{token(arrow-width)};
+    background: #{token(background)};
+    border-width: #{token(border-width)};
+    border-style: #{token(border-style)};
+    border-color: #{token(border-color)};
+    border-end-start-radius: #{token(arrow-shape)};
+    clip-path: #{token(arrow-clip-path, custom)};
+
+    // Default: right placement
+    top: 50%;
+    left: 100%;
+    @include arrow-placement-right(#{token(offset, custom)});
+  }
+
+  //
+  // Show on hover and focus-visible
+  //
+
+  &:hover,
+  &:focus-visible {
+    &::before,
+    &::after {
+      display: block;
+      z-index: 1;
+      animation-duration: #{token(animation-duration)};
+      animation-timing-function: #{token(animation-timing)};
+      animation-fill-mode: forwards;
+    }
+
+    &::before {
+      animation-name: slidein;
+    }
+
+    &::after {
+      animation-name: slidein-arrow;
+    }
+  }
+
+  //
+  // Top placement
+  //
+
+  &--top {
+    #{declare(slidein-x)}: -50%;
+    #{declare(slidein-y)}: 10px;
+    #{declare(slideout-x)}: -50%;
+    #{declare(slideout-y)}: 0px;
+
+    &::before {
+      top: auto;
+      left: 50%;
+      bottom: 100%;
+      margin-left: 0;
+      margin-bottom: calc(#{token(arrow-height)} / 2 + #{token(border-width)} + #{token(offset, custom)});
+    }
+
+    &::after {
+      top: auto;
+      left: 50%;
+      bottom: 100%;
+      margin-inline-start: 0;
+      @include arrow-placement-top(#{token(offset, custom)});
+    }
+  }
+
+  //
+  // Bottom placement
+  //
+
+  &--bottom {
+    #{declare(slidein-x)}: -50%;
+    #{declare(slidein-y)}: -10px;
+    #{declare(slideout-x)}: -50%;
+    #{declare(slideout-y)}: 0px;
+
+    &::before {
+      top: 100%;
+      left: 50%;
+      margin-left: 0;
+      margin-top: calc(#{token(arrow-height)} / 2 + #{token(border-width)} + #{token(offset, custom)});
+    }
+
+    &::after {
+      top: 100%;
+      left: 50%;
+      margin-inline-start: 0;
+      @include arrow-placement-bottom(#{token(offset, custom)});
+    }
+  }
+
+  //
+  // Left placement
+  //
+
+  &--left {
+    #{declare(slidein-x)}: 10px;
+
+    &::before {
+      left: auto;
+      right: 100%;
+      margin-left: 0;
+      margin-right: calc(#{token(arrow-width)} / 2 + #{token(border-width)} + #{token(offset, custom)});
+    }
+
+    &::after {
+      left: auto;
+      right: 100%;
+      margin-inline-start: 0;
+      @include arrow-placement-left(#{token(offset, custom)});
+    }
+  }
+}

@@ -18,7 +18,8 @@ $tokens: (
   elevation: utils.module-val(tooltip, elevation, theme.variable(surface-bright-shadow)),
   content-align: utils.module-val(tooltip, content-align, center),
   // Border
-  border-width: utils.module-val(tooltip, border-width, 0),
+  // Unit required: this token is summed with lengths in calc(), and calc() rejects unitless 0.
+  border-width: utils.module-val(tooltip, border-width, 0px),
   border-style: utils.module-val(tooltip, border-style, solid),
   border-color: utils.module-val(tooltip, border-color, theme.variable(outline)),
   // Animation
