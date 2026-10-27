@@ -15,6 +15,10 @@ import Rule from "../../../components/Rule.astro";
   <forge-app-launcher></forge-app-launcher>
 </ComponentHeader>
 
+## Overview
+
+App launcher is a persistent navigation component for users to switch context. It is a personal local map to navigate a product ecosystem. It lives in the user information section of app bar and is represented by the apps icon.
+
 ## Usage
 
 `forge-app-launcher` opens a grid of `relatedApps` and `allApps` — each an object with `label`, `uri`, `iconName`, and an optional `target` — set as JS properties rather than HTML attributes, plus any number of custom `forge-app-launcher-link` entries in its default slot. It automatically switches between a popover on desktop and a dialog on mobile. Place it in the app bar's `end` slot, alongside the other <a href={`${import.meta.env.BASE_URL}components/app-bar/usage/`}>app bar</a> action buttons. Use it when people regularly need to jump between related applications in a larger ecosystem; for in-app navigation, use a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a> or <a href={`${import.meta.env.BASE_URL}components/menu/usage/`}>menu</a> instead.

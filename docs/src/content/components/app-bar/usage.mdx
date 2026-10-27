@@ -25,6 +25,12 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   </forge-app-bar>
 </ComponentHeader>
 
+## Overview
+
+The app bar serves as a user's primary navigation hub, containing everything needed to navigate within the current application, access other applications, and customize their experience. It provides persistent access to essential functionality including application identity, search capabilities, notifications, help resources, and user account management across all application contexts.
+
+The app bar maintains consistent placement and functionality across different screen sizes and device types, ensuring users always have access to core navigation and utility functions regardless of their current location within the application.
+
 ## Usage
 
 `forge-app-bar` lays out branding and top-level actions through its `logo`, `title`, `start`, `center`, and `end` slots, plus `elevation`, `theme`, and `themeMode`. Reserve the `start` slot for navigation (typically a menu button that opens a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a>), the `center` slot for app-wide search, and the `end` slot for a small set of purpose-built buttons: help, notifications, an app launcher, and the user's profile.
@@ -35,6 +41,7 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   <Rule
     variant="do"
     rules={[
+      "Maintain consistent app bar presence across all application screens.",
       "Keep the menu button visible at every screen size for apps with a dismissible navigation drawer.",
       "Reserve center-slot search for apps that are primarily search-driven; place search near the component it searches otherwise.",
       "Order end-slot actions consistently: help, notifications, app launcher, then profile.",
@@ -47,6 +54,8 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
       "Don't crowd the end slot with more actions than help, notifications, an app launcher, and profile.",
       "Don't duplicate primary navigation in both the app bar and a drawer — pick one place for it.",
       "Don't use app bar search for a filter that's local to a single component on the page.",
+      "Don’t place links in the app bar — use appropriate navigation patterns instead.",
+      "Don’t place item-specific actions in the app bar — keep them contextual to affected content.",
     ]}
   />
 </Rules>

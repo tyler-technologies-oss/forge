@@ -22,6 +22,10 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+Guided steppers provide a clear path to completion by breaking complex processes into manageable steps. Offering users a clear idea of how many steps it takes to reach the final target can significantly reduce abandonment, while presenting information in meaningful sections facilitates completion and reduces cognitive load.
+
 ## Usage
 
 `forge-stepper` sequences `forge-step` children through `linear`, `selectedIndex`, `layoutMode`, and `vertical`, while each step tracks its own `completed`, `error`, `editable`, and `expanded` state. Use it for an unfamiliar or complex process a user completes occasionally, especially when tracking progress matters; skip it for a familiar, repetitive task, where a plain form is simpler.
@@ -33,6 +37,9 @@ import Rule from "../../../components/Rule.astro";
     variant="do"
     rules={[
       "Use a stepper for a process that's unfamiliar, complex, or only completed occasionally.",
+      "Mark optional steps clearly to set proper expectations.",
+      "Enable navigation to previous steps when the process allows editing.",
+      "Make steppers self-sufficient with all necessary information accessible within the process.",
       "Mark completed steps so progress stays visible, and surface an error state on a step with missing or invalid data.",
       "Use vertical mode on mobile and horizontal mode on desktop for the same flow.",
     ]}
@@ -44,6 +51,8 @@ import Rule from "../../../components/Rule.astro";
       "Don't use a stepper for a familiar or repetitive task — a plain form is simpler.",
       "Don't let a linear stepper allow skipping ahead to a step whose prerequisites aren't complete.",
       "Don't use more steps than the process actually needs — combine steps that are always completed together.",
+      "Avoid requiring information from another part of the app that forces users to leave and restart.",
+      "Don’t create separate \"Submit\" steps. Use \"Review\" as a final step or integrate submission into the last content step.",
     ]}
   />
 </Rules>

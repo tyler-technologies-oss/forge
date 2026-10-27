@@ -16,6 +16,12 @@ import Rule from "../../../components/Rule.astro";
   <forge-paginator page-size="15" total="95"></forge-paginator>
 </ComponentHeader>
 
+## Overview
+
+The paginator component enables navigation through large collections of items by breaking content into manageable pages. It is typically used with tables, lists, and card collections to help users navigate datasets while maintaining their orientation within the results, but can be used in any context where pagination of content is desired. 
+
+Pagination works best when records are sorted in a logical way, allowing users to mentally bookmark their location in an ordered result set.
+
 ## Usage
 
 `forge-paginator` navigates a `total`-item collection through `pageIndex`, `pageSize`, `pageSizeOptions`, and `firstLast`/`first` jump buttons, plus an `alternative` compact layout. Pair it with a <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> or <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> whose data is sorted in a logical order, so a user can jump to a page or mentally orient within the set. For casual browsing or discovery, infinite scroll fits better than pagination.
@@ -39,6 +45,8 @@ import Rule from "../../../components/Rule.astro";
       "Don't use pagination for casual browsing or discovery — infinite scroll fits that better.",
       "Don't fix the paginator's position so it overlaps the content above it.",
       "Don't omit page-size control on a data set large enough that users would want to adjust it.",
+      "Don't use pagination when datasets are small and don't require breaking into pages.",
+      "Don't use when there is real-time content where new items are frequently added at the top.",
     ]}
   />
 </Rules>

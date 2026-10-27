@@ -20,6 +20,12 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   </forge-view-switcher>
 </ComponentHeader>
 
+## Overview
+
+The view switcher component allows users to toggle between different views of related content using smooth transitions. It employs a shared axis pattern to display transitions between UI elements that have spatial or navigational relationships. This pattern uses shared transformations to reinforce the connection between elements, making content changes feel cohesive and intentional rather than jarring.
+
+The component is commonly used with tabs, navigation controls, or other switching mechanisms to control which view is actively displayed while maintaining the relationship between different content states.
+
 ## Usage
 
 `forge-view-switcher` shows one `forge-view` child at a time, set via `index` and transitioning with `animationType` (`none`, `slide`, or `fade`), plus `next()`/`previous()`/`goToStart()`/`goToEnd()` for programmatic control. Drive its `index` from whatever is switching views — most often a <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tab bar</a>'s change event, or a <a href={`${import.meta.env.BASE_URL}components/stepper/usage/`}>stepper</a>'s selected step. The slide/fade transitions reinforce that the views are spatially related, the same way switching tabs in a card should feel connected rather than like a hard cut.
