@@ -39,12 +39,14 @@
       </forge-autocomplete>
 
       <section class="flex flex-col" aria-labelledby="people-with-access-label">
-        <h3 id="people-with-access-label" class="text-label2 text-medium m-0">People with access</h3>
+        <h3 id="people-with-access-label" class="text-overline text-medium m-0">People with access</h3>
         <forge-list id="member-list"></forge-list>
       </section>
 
-      <section class="flex flex-col" aria-labelledby="general-access-label">
-        <h3 id="general-access-label" class="text-label2 text-medium m-0">General access</h3>
+      <section
+        class="flex flex-col [--forge-avatar-background:var(--forge-theme-surface-container-minimum)] [--forge-icon-color:var(--forge-theme-text-medium)] [--forge-icon-size:1rem]"
+        aria-labelledby="general-access-label">
+        <h3 id="general-access-label" class="text-overline text-medium m-0">General access</h3>
         <forge-list>
           <forge-list-item noninteractive two-line class="[&::part(text-container)]:overflow-visible">
             <forge-avatar slot="start">
