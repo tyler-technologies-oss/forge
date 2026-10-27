@@ -19,6 +19,12 @@ import Rule from "../../../components/Rule.astro";
   </forge-card>
 </ComponentHeader>
 
+## Overview
+
+Cards are flexible container surfaces that display content and actions focused on a single topic or related set of information. They serve as discrete units that organize information into scannable, actionable containers with clear visual hierarchy and consistent styling.
+
+Cards function as versatile building blocks that can contain various types of content while maintaining visual consistency and providing users with predictable interaction patterns across different interface contexts.
+
 ## Usage
 
 `forge-card` groups content and actions about one topic through `raised` and `no-padding`. Reach for a `forge-scaffold` inside it once the card needs a distinct header, scrollable body, and footer. Use a card to organize related information or preview a record that links to the full one; avoid it when the content inside isn't actually related, or when scanning and comparing homogeneous data matters more than grouping.
@@ -30,6 +36,8 @@ import Rule from "../../../components/Rule.astro";
     variant="do"
     rules={[
       "Keep everything inside a card related to a single topic or record.",
+      "Apply consistent padding and spacing throughout card content.",
+      "Group related information logically within card boundaries.",
       "Align content inside a card consistently — centered or left-aligned, not mixed.",
       "Show a hover or focus state on a card that's clickable or draggable, so its interactivity is obvious.",
     ]}

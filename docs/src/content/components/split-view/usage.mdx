@@ -23,6 +23,10 @@ import Rule from "../../../components/Rule.astro";
   </forge-split-view>
 </ComponentHeader>
 
+## Overview
+
+The split view component presents page elements side-by-side as resizable panels, allowing users to adjust how much screen space is devoted to different parts of the interface. It typically consists of one or more resizable panels alongside at least one non-resizable panel. This component is particularly useful for interfaces where users benefit from controlling the relative size of content areas, such as displaying maps, image viewers, or data tables alongside related information.
+
 ## Usage
 
 `forge-split-view` lays out `forge-split-view-panel` children through `orientation` (`horizontal` or `vertical`), while each panel controls its own `resizable` edge, `size`, `min`/`max`, and `open` state. Use it when a user benefits from adjusting how much space two related regions get, like a data grid next to a map or preview. Keep it to two or three panels — more becomes unwieldy, especially on smaller screens.

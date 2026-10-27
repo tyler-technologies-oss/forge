@@ -21,6 +21,10 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+Expansion panels are lightweight containers that support progressive disclosure by highlighting important summary information and revealing additional details when expanded. They help focus designs by displaying critical information first while keeping secondary details accessible but not overwhelming. Expansion panels can stand alone or be integrated within various components including cards, navigation items, lists, and tables.
+
 ## Usage
 
 `forge-expansion-panel` reveals its default-slot content on toggle, through `open`, `orientation`, `trigger` (an external button's id), and `name` — pairing a `header` slot or an external button with a `forge-open-icon` for the chevron indicator. Give several panels the same `name` to form an accordion group where opening one closes the others, or wrap them in `forge-accordion` for the same effect scoped to a specific set of panels. Use it for progressive disclosure inside a <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a>, <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a>, or <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> row. Content inside a closed panel stays findable by the browser's native find-in-page search — a match automatically opens the panel to reveal it.
@@ -43,6 +47,7 @@ import Rule from "../../../components/Rule.astro";
       "Don't rely on editing inside an expansion panel for anything beyond a quick edit — prefer a dialog or a dedicated page.",
       "Don't shrink the clickable header below a comfortable touch target.",
       "Don't nest an accordion group inside another accordion group's panel.",
+      "Don’t hide critical information that users need to see immediately.",
     ]}
   />
 </Rules>

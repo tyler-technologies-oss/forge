@@ -22,6 +22,10 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+The toolbar is a horizontal container component that spans 100% width and provides structured slots for organizing content across the interface. It uses a border to visually separate the toolbar from adjacent content areas and offers distinct areas for content. This flexible layout system makes toolbars suitable for various contexts including page headers, dialog headers and footers, and drawer sections.
+
 ## Usage
 
 `forge-toolbar` aligns content to `before-start`, `start`, `center`, `end`, and `after-end` slots inside a full-width container, through `inverted`, `noDivider`, `noPadding`, and `autoHeight`. Use it as a header or footer inside a <a href={`${import.meta.env.BASE_URL}components/scaffold/usage/`}>scaffold</a> or <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a>, as a section within a <a href={`${import.meta.env.BASE_URL}components/drawer/usage/`}>drawer</a>, or anywhere else a title and actions need consistent alignment.
@@ -44,6 +48,7 @@ import Rule from "../../../components/Rule.astro";
       "Don't overload a single toolbar with more actions than its slots can hold at the narrowest supported width.",
       "Don't use a toolbar as a substitute for an app bar at the top of a page — reserve it for a header/footer role inside another surface.",
       "Don't mix unrelated groups of actions into the same slot without a divider between them.",
+      "Don’t stack unrelated elements vertically; toolbars are for horizontal organization.",
     ]}
   />
 </Rules>
