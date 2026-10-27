@@ -22,6 +22,12 @@ import Rule from "../../../components/Rule.astro";
   </div>
 </ComponentHeader>
 
+## Overview
+
+A banner displays an important, succinct message, and provides actions for users to address (or dismiss the banner). It requires a user action to be dismissed.
+
+Banners should be displayed at the top of the screen, below the app bar. The banner displays a short amount of information, but may be clicked to launch a dialog with rich text information.
+
 ## Usage
 
 `forge-banner` displays a persistent, page-level message through `theme`, `dismissed`, and `persistent`, plus optional `icon` and `button` slots. Reserve it for a full-page announcement the user only needs to see once; for guidance scoped to a single field or section, use an <a href={`${import.meta.env.BASE_URL}components/inline-message/usage/`}>inline message</a> instead, for a reactive confirmation of an action use a <a href={`${import.meta.env.BASE_URL}components/toast/usage/`}>toast</a>, and for a high-priority alert that requires a decision use a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a>.
