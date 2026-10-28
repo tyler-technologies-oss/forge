@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tyler Forge™ Table Dev</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 18rem minmax(0, 1fr);
+        gap: var(--forge-spacing-large);
+        min-height: 100vh;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: var(--forge-spacing-medium);
+        padding: var(--forge-spacing-medium);
+        border-inline-end: 1px solid var(--forge-theme-outline);
+        overflow-y: auto;
+      }
+
+      .options h2 {
+        margin: 0;
+      }
+
+      .content {
+        padding: var(--forge-spacing-medium);
+        min-width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="options">
+        <h2 class="forge-typography--overline">Options</h2>
+        <forge-switch label-position="start" id="grouped-columns"><span>Grouped columns</span></forge-switch>
+        <forge-switch label-position="start" id="resizable"><span>Resizable</span></forge-switch>
+        <forge-switch label-position="start" id="reorderable" checked><span>Reorderable</span></forge-switch>
+        <forge-switch label-position="start" id="striped"><span>Striped</span></forge-switch>
+        <forge-switch label-position="start" id="hover"><span>Hover</span></forge-switch>
+        <forge-switch label-position="start" id="compact"><span>Compact</span></forge-switch>
+        <forge-switch label-position="start" id="bordered"><span>Bordered</span></forge-switch>
+        <forge-switch label-position="start" id="allow-row-click"><span>Allow row click</span></forge-switch>
+        <forge-switch label-position="start" id="expandable"><span>Expandable rows</span></forge-switch>
+        <forge-switch label-position="start" id="custom-cell-template"><span>Custom cell template</span></forge-switch>
+        <forge-select label="Row selection" id="row-select" value="off">
+          <forge-option value="off">Off</forge-option>
+          <forge-option value="single">Single</forge-option>
+          <forge-option value="multiple">Multiple</forge-option>
+        </forge-select>
+        <forge-switch label-position="start" id="sortable"><span>Sortable</span></forge-switch>
+        <forge-switch label-position="start" id="manual-sort"><span>Manual sort</span></forge-switch>
+        <forge-switch label-position="start" id="multi-sort"><span>Multi-column sort</span></forge-switch>
+        <forge-select label="Multi-sort key" id="multi-sort-key" value="shift">
+          <forge-option value="shift">Shift</forge-option>
+          <forge-option value="ctrl">Ctrl</forge-option>
+          <forge-option value="meta">Meta</forge-option>
+          <forge-option value="alt">Alt</forge-option>
+        </forge-select>
+        <forge-select label="Max multi-sort columns" id="max-multi-sort-col-count" value="unlimited">
+          <forge-option value="unlimited">Unlimited</forge-option>
+          <forge-option value="2">2</forge-option>
+          <forge-option value="3">3</forge-option>
+          <forge-option value="4">4</forge-option>
+        </forge-select>
+        <forge-switch label-position="start" id="filterable"><span>Filterable</span></forge-switch>
+        <forge-switch label-position="start" id="manual-filter"><span>Manual filter</span></forge-switch>
+        <forge-switch label-position="start" id="show-footer"><span>Show footer</span></forge-switch>
+        <forge-select label="Hidden columns" id="hidden-columns" multiple></forge-select>
+      </aside>
+
+      <main class="content">
+        <h1>Data table</h1>
+        <forge-data-table></forge-data-table>
+      </main>
+    </div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

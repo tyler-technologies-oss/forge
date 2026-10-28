@@ -2,13 +2,14 @@ import { ArgTypes, Args, type StoryObj } from '@storybook/web-components-vite';
 import { type ControlType } from '@storybook/addon-docs/blocks';
 import cem from '../../custom-elements.json' with { type: 'json' };
 import rteCem from '../../../forge-rich-text-editor/custom-elements.json' with { type: 'json' };
+import tableCem from '../../../forge-table/custom-elements.json' with { type: 'json' };
 
-// The rich text editor ships in its own package with its own manifest, so tag lookups have to span
-// both or its docs page resolves no declaration. Read relatively for the same reason the Vite alias
-// in `.storybook/main.ts` reaches into that package directly: this package does not depend on it,
-// and the storybook turbo tasks already depend on its build.
-const cemModules: any[] = [...cem.modules, ...rteCem.modules];
-const cemForgeTypes = { ...cem.forgeTypes, ...rteCem.forgeTypes } as Record<string, { path: string; lineNumber: number }>;
+// The rich text editor and the data table each ship in their own package with their own manifest, so
+// tag lookups have to span all of them or their docs pages resolve no declaration. Read relatively for
+// the same reason the Vite aliases in `.storybook/main.ts` reach into those packages directly: this
+// package does not depend on them, and the storybook turbo tasks already depend on their builds.
+const cemModules: any[] = [...cem.modules, ...rteCem.modules, ...tableCem.modules];
+const cemForgeTypes = { ...cem.forgeTypes, ...rteCem.forgeTypes, ...tableCem.forgeTypes } as Record<string, { path: string; lineNumber: number }>;
 
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
