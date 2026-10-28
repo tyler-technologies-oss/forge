@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { urlToBlockId, derivedBlockId, blockExists, cleanMdxBody } from "./build-forge-skill.mjs";
+import { urlToBlockId, derivedBlockId, blockExists, cleanMdxBody, rewriteSiteLink } from "./build-forge-skill.mjs";
 
 const url = (p) => `https://forge.tylerdev.io/blocks/v1/${p}`;
 
@@ -58,6 +58,20 @@ test("cleanMdxBody: renders backtick spans in <Rule> strings as inline code", ()
   const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
   assert.match(out, /- Set `no-padding` on the card\./);
   assert.doesNotMatch(out, /\\`/);
+});
+
+test("rewriteSiteLink: links to shipped pages resolve to reference files relative to the source", () => {
+  assert.equal(rewriteSiteLink("/designing/color/#text", { outDir: "design" }), "./color.md#text");
+  assert.equal(rewriteSiteLink("/designing/layout/", { outDir: "components" }), "../design/layout.md");
+  assert.equal(rewriteSiteLink("/components/button/usage/#grouping", { outDir: "design" }), "../components/button.md#grouping");
+  assert.equal(rewriteSiteLink("/developing/icons/", { outDir: "development/frameworks" }), "../icons.md");
+});
+
+test("rewriteSiteLink: site-only pages become absolute links, and external links are untouched", () => {
+  assert.equal(rewriteSiteLink("/tokens/color/", { outDir: "design" }), "https://tylerforge.design/tokens/color/");
+  assert.equal(rewriteSiteLink("/blocks/", { outDir: "design" }), "https://tylerforge.design/blocks/");
+  assert.equal(rewriteSiteLink("https://example.com/x", { outDir: "design" }), "https://example.com/x");
+  assert.equal(rewriteSiteLink("#local", { outDir: "design" }), "#local");
 });
 
 test("blockExists matches id, file, and file minus .html like get_forge_blocks", () => {

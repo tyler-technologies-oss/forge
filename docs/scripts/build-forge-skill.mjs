@@ -26,12 +26,12 @@ const BLOCKS_BASE_URL = "https://forge.tylerdev.io/blocks/v1";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const COMPONENTS_DIR = path.join(ROOT, "src/content/components");
 const DEVELOPMENT_DIR = path.join(ROOT, "src/content/developing");
+const DESIGN_DIR = path.join(ROOT, "src/content/designing");
 const TEMPLATE_PATH = path.join(ROOT, "scripts/forge-skill-template/SKILL.md");
 
 const OUT_DIR = path.join(ROOT, "skill/forge-design");
 const OUT_REFERENCES_DIR = path.join(OUT_DIR, "references");
 const OUT_COMPONENTS_DIR = path.join(OUT_REFERENCES_DIR, "components");
-const OUT_DEVELOPMENT_DIR = path.join(OUT_REFERENCES_DIR, "development");
 
 const CATEGORY_LABELS = {
   layout: "Layout",
@@ -326,12 +326,37 @@ function unwrapInlineMessage(node) {
 const INTERNAL_LINK_PATTERN =
   /^`\$\{import\.meta\.env\.BASE_URL\}components\/([a-z0-9-]+)\/[a-z0-9-]+\/?`$/;
 
-function transformInternalLink(node) {
+function transformInternalLink(node, ctx) {
   const hrefAttr = getAttr(node, "href");
   const raw = hrefAttr?.value && typeof hrefAttr.value === "object" ? hrefAttr.value.value : null;
   const match = raw ? raw.match(INTERNAL_LINK_PATTERN) : null;
   if (!match) return node;
-  return { type: "link", url: `./${match[1]}.md`, children: node.children };
+  return { type: "link", url: relativeReference(ctx, `components/${match[1]}.md`), children: node.children };
+}
+
+/** Docs site sections that become skill reference folders; any other site path stays a live link. */
+const SITE_SECTION_TO_REFERENCE_DIR = { components: "components", designing: "design", developing: "development" };
+const SITE_URL = "https://tylerforge.design";
+
+/** Path from the reference file being written to another file under `references/`. */
+function relativeReference(ctx, target) {
+  const relative = path.posix.relative(ctx.outDir, target);
+  return relative.startsWith(".") ? relative : `./${relative}`;
+}
+
+/**
+ * Rewrites a root-relative docs site link (`/designing/color/#text`). A link to a page the
+ * skill also ships becomes a relative link to that reference file; anything else (tokens,
+ * blocks, icons) becomes an absolute link to the live site, since it has no skill equivalent.
+ */
+export function rewriteSiteLink(url, ctx) {
+  const match = url.match(/^\/([a-z-]+)\/(.*?)\/?(#.*)?$/);
+  if (!match) return url;
+  const [, section, rest, hash = ""] = match;
+  const referenceDir = SITE_SECTION_TO_REFERENCE_DIR[section];
+  if (!referenceDir || !rest) return `${SITE_URL}${url}`;
+  const slug = section === "components" ? rest.split("/")[0] : rest;
+  return `${relativeReference(ctx, `${referenceDir}/${slug}.md`)}${hash}`;
 }
 
 /** Post-order dispatcher: recurses into each node's children first, then rewrites or drops
@@ -342,6 +367,7 @@ function transformChildren(children, ctx) {
   for (const child of children) {
     if (child.children) child.children = transformChildren(child.children, ctx);
     if (child.type === "heading") ctx.heading = nodeToPlainText(child.children);
+    if (child.type === "link") child.url = rewriteSiteLink(child.url, ctx);
 
     if (isJsxElement(child)) {
       if (child.name === "StorybookEmbed" || child.name === "ComponentHeader") continue;
@@ -367,7 +393,7 @@ function transformChildren(children, ctx) {
         continue;
       }
       if (child.name === "a") {
-        out.push(transformInternalLink(child));
+        out.push(transformInternalLink(child, ctx));
         continue;
       }
     }
@@ -383,7 +409,7 @@ function demoteHeadings(nodes) {
   }
 }
 
-/** `ctx`: { file, slug (component pages only), lineOffset (frontmatter lines), examples: [] to collect into }. */
+/** `ctx`: { file, slug (component pages only), outDir (output folder under references/, for relative links), lineOffset (frontmatter lines), examples: [] to collect into }. */
 function buildCleanTree(body, ctx) {
   const tree = mdxParser.parse(body);
   ctx.heading = null;
@@ -431,6 +457,7 @@ async function buildComponentDocs(examples) {
     const cleanedBody = cleanMdxBody(body, {
       file: path.relative(ROOT, path.join(COMPONENTS_DIR, slug, "usage.mdx")),
       slug,
+      outDir: "components",
       lineOffset: frontmatterLineCount(frontmatterMatch),
       examples,
     });
@@ -442,6 +469,7 @@ async function buildComponentDocs(examples) {
       const accessibilityTree = buildCleanTree(await readFile(accessibilityPath, "utf8"), {
         file: path.relative(ROOT, accessibilityPath),
         slug,
+        outDir: "components",
         lineOffset: 0,
         examples,
       });
@@ -471,40 +499,42 @@ async function buildComponentDocs(examples) {
   return components;
 }
 
-async function buildDevelopmentDocs(examples) {
-  const developmentSlugs = await findMdxFiles(DEVELOPMENT_DIR);
-  const development = [];
-  for (const slug of developmentSlugs) {
-    const raw = await readFile(path.join(DEVELOPMENT_DIR, `${slug}.mdx`), "utf8");
+/** Builds one reference file per guide page in `sourceDir`, written under `references/<outName>/`. */
+async function buildGuideDocs(sourceDir, outName, examples) {
+  const slugs = await findMdxFiles(sourceDir);
+  const guides = [];
+  for (const slug of slugs) {
+    const raw = await readFile(path.join(sourceDir, `${slug}.mdx`), "utf8");
 
     const frontmatterMatch = raw.match(/^---\n([\s\S]*?)\n---\n?/);
     if (!frontmatterMatch) {
-      console.warn(`Skipping developing/${slug}: no frontmatter found`);
+      console.warn(`Skipping ${path.basename(sourceDir)}/${slug}: no frontmatter found`);
       continue;
     }
     const frontmatter = parseFrontmatter(frontmatterMatch[1]);
     const body = raw.slice(frontmatterMatch[0].length);
     const cleanedBody = cleanMdxBody(body, {
-      file: path.relative(ROOT, path.join(DEVELOPMENT_DIR, `${slug}.mdx`)),
+      file: path.relative(ROOT, path.join(sourceDir, `${slug}.mdx`)),
       slug: null,
+      outDir: path.posix.dirname(`${outName}/${slug}`),
       lineOffset: frontmatterLineCount(frontmatterMatch),
       examples,
     });
 
     const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${cleanedBody}\n`;
-    const outPath = path.join(OUT_DEVELOPMENT_DIR, `${slug}.md`);
+    const outPath = path.join(OUT_REFERENCES_DIR, outName, `${slug}.md`);
     await mkdir(path.dirname(outPath), { recursive: true });
     await writeFile(outPath, md, "utf8");
 
-    development.push({
+    guides.push({
       name: slug,
       title: frontmatter.title,
       description: frontmatter.description,
-      docsPath: `development/${slug}.md`,
+      docsPath: `${outName}/${slug}.md`,
     });
   }
-  development.sort((a, b) => a.name.localeCompare(b.name));
-  return development;
+  guides.sort((a, b) => a.name.localeCompare(b.name));
+  return guides;
 }
 
 function replaceBetweenMarkers(template, marker, replacement) {
@@ -538,18 +568,19 @@ function buildComponentIndex(components) {
   return sections.join("\n\n");
 }
 
-function buildDevelopmentIndex(development) {
-  return development
+function buildGuideIndex(guides) {
+  return guides
     .slice()
     .sort((a, b) => a.title.localeCompare(b.title))
     .map((d) => `- [${d.title}](references/${d.docsPath}) — ${d.description}`)
     .join("\n");
 }
 
-async function writeSkillMd(components, development) {
+async function writeSkillMd(components, design, development) {
   const template = await readFile(TEMPLATE_PATH, "utf8");
   let skillMd = replaceBetweenMarkers(template, "COMPONENT-INDEX", buildComponentIndex(components));
-  skillMd = replaceBetweenMarkers(skillMd, "DEVELOPMENT-INDEX", buildDevelopmentIndex(development));
+  skillMd = replaceBetweenMarkers(skillMd, "DESIGN-INDEX", buildGuideIndex(design));
+  skillMd = replaceBetweenMarkers(skillMd, "DEVELOPMENT-INDEX", buildGuideIndex(development));
   await writeFile(path.join(OUT_DIR, "SKILL.md"), skillMd, "utf8");
 }
 
@@ -596,19 +627,20 @@ async function main() {
 
   const examples = [];
   const components = await buildComponentDocs(examples);
-  const development = await buildDevelopmentDocs(examples);
+  const design = await buildGuideDocs(DESIGN_DIR, "design", examples);
+  const development = await buildGuideDocs(DEVELOPMENT_DIR, "development", examples);
 
-  const manifest = { generatedAt: new Date().toISOString(), components, development };
+  const manifest = { components, design, development };
   await writeFile(
     path.join(OUT_REFERENCES_DIR, "manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
 
-  await writeSkillMd(components, development);
+  await writeSkillMd(components, design, development);
 
   console.log(
-    `Wrote skill bundle (${components.length} component doc(s), ${development.length} development doc(s)) to ${path.relative(ROOT, OUT_DIR)}/`,
+    `Wrote skill bundle (${components.length} component doc(s), ${design.length} design doc(s), ${development.length} development doc(s)) to ${path.relative(ROOT, OUT_DIR)}/`,
   );
   return examples;
 }

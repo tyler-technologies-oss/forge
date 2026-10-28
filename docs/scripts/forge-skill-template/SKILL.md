@@ -5,8 +5,8 @@ description: Look up Tyler Forge component usage, accessibility guidance, and de
 
 # Forge Design
 
-Reference docs for Tyler Forge, generated from the design system's own component and developer
-guide MDX. Each component and guide below is a separate file under `references/` — load only the
+Reference docs for Tyler Forge, generated from the design system's own component, design, and
+developer guide MDX. Each component and guide below is a separate file under `references/` — load only the
 ones relevant to the current task, not the whole set.
 
 `references/manifest.json` is the full catalog (status, source, category, storybookId, figmaUrl,
@@ -17,6 +17,11 @@ whether accessibility docs exist) if you need to search or filter rather than br
 <!-- COMPONENT-INDEX:START -->
 <!-- COMPONENT-INDEX:END -->
 
+## Design guides
+
+<!-- DESIGN-INDEX:START -->
+<!-- DESIGN-INDEX:END -->
+
 ## Developer guides
 
 <!-- DEVELOPMENT-INDEX:START -->
@@ -25,7 +30,8 @@ whether accessibility docs exist) if you need to search or filter rather than br
 ## How to use this skill
 
 1. Identify the component(s) or topic involved in the task.
-2. Open the matching `references/components/<slug>.md` or `references/development/<slug>.md`
-   file for exact usage and accessibility guidance before writing markup.
+2. Open the matching `references/components/<slug>.md`, `references/design/<slug>.md`, or
+   `references/development/<slug>.md` file for exact usage and accessibility guidance before
+   writing markup.
 3. Follow the component's documented Do/Don't rules and accessibility requirements exactly —
    they reflect Tyler Forge design guidelines, not general web conventions.
