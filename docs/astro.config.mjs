@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import remarkGfm from 'remark-gfm';
 
 import svelte from '@astrojs/svelte';
 
@@ -10,12 +9,7 @@ import { CODE_THEMES } from './src/config/code-themes.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    // Astro 6 leaves the deprecated `markdown.gfm` undefined, which @astrojs/mdx treats as disabled.
-    // Register remark-gfm explicitly so MDX pipe tables (rendered via Table.astro) are parsed.
-    mdx({ remarkPlugins: [remarkGfm] }),
-    svelte()
-  ],
+  integrations: [mdx(), svelte()],
   site: 'https://tylerforge.design',
   base: '/',
   trailingSlash: 'always',
