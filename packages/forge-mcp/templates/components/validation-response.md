@@ -2,6 +2,9 @@
 
 **Component:** `<{{tagName}}>`
 **Total APIs Validated:** {{totalValidated}}
+{{#if manifestSource}}
+**Checked Against:** `{{manifestSource.packageName}}{{#if manifestSource.version}}@{{manifestSource.version}}{{/if}}` ({{#if manifestSource.isInstalled}}installed in this project{{else if (eq manifestSource.source "latest")}}latest published release, no local install found{{else}}snapshot bundled with this MCP server, no local install found{{/if}})
+{{/if}}
 
 ## Summary
 
@@ -26,6 +29,10 @@ These APIs were not found in component metadata. Standard HTML/ARIA/data-* attri
 - **`{{name}}`** ({{apiType}})
 {{/each}}
 
+{{#if manifestSource.isInstalled}}
+**Version mismatch?** These results reflect the `{{manifestSource.packageName}}{{#if manifestSource.version}}@{{manifestSource.version}}{{/if}}` installed in this project. If documentation or a block uses one of these APIs, it was likely added in a newer release and is not available in this version. Use an alternative from Available APIs below, or upgrade `{{manifestSource.packageName}}`.
+
+{{/if}}
 {{/if}}
 {{#if deprecatedApis.length}}
 ## ⚠️ Deprecated APIs
