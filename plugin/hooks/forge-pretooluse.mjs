@@ -6,7 +6,7 @@
 //      for non-trivial UIs, a passing validate_ui_plan call this turn.
 //   2. Content-level checks — regex-level rejections for the concrete
 //      anti-patterns cataloged in references/anti-patterns.md
-//      (typography-as-hierarchy, hN inside forge-card, non-token spacing,
+//      (typography-as-hierarchy, card title style, non-token spacing,
 //      div-playing-forge-component, wrong icon import, missing side-effect
 //      imports for subpath-only components).
 //
@@ -183,7 +183,7 @@ function checkContent(text, filePath) {
   if (badIconImport.test(text)) {
     violations.push({
       rule: 'icon-import-path',
-      msg: 'Icons must be imported from @tylertech/tyler-icons root only. Subpaths (/standard, /extended, /core) do not exist. See references/icon.md.',
+      msg: 'Icons must be imported from @tylertech/tyler-icons root only. Subpaths (/standard, /extended, /core) do not exist. See references/components/icon.md.',
     });
   }
 
@@ -202,7 +202,7 @@ function checkContent(text, filePath) {
       if (!sideEffectRe.test(text)) {
         violations.push({
           rule: 'subpath-side-effect-import',
-          msg: `<${tag}> requires a side-effect import: import '@tylertech/forge/${subpath}'; — see references/installation.md.`,
+          msg: `<${tag}> requires a side-effect import: import '@tylertech/forge/${subpath}'; — see references/development/installation.md.`,
         });
       }
     }
@@ -214,17 +214,19 @@ function checkContent(text, filePath) {
 
   const spans = extractForgeSpans(text);
 
-  // 3. hN directly inside forge-card / forge-structured-card body.
+  // 3. Card title styled larger than heading3. The heading element (h1–h6)
+  //    follows the app's document outline, so only the visual style is
+  //    checked, and only on the card's header toolbar.
   for (const span of spans) {
-    if (span.tag !== 'forge-card' && span.tag !== 'forge-structured-card') {
+    if (span.tag !== 'forge-card') {
       continue;
     }
-    // h1/h2 inside cards violate hierarchy. h3+ is fine.
-    const heavyHeadingRe = /<h[12]\b/i;
-    if (heavyHeadingRe.test(span.inner)) {
+    const headerToolbar = span.inner.match(/<forge-toolbar\b[^>]*>[\s\S]*?<\/forge-toolbar>/i);
+    const titleStyle = headerToolbar?.[0].match(/\b(?:text-heading|forge-typography--heading)([4-8])\b/);
+    if (titleStyle) {
       violations.push({
-        rule: 'card-heading-hierarchy',
-        msg: `<h1>/<h2> inside <${span.tag}> — cards must not host page-level headings. Use <h3> or lower and text-heading3. See references/typography.md and references/anti-patterns.md.`,
+        rule: 'card-title-style',
+        msg: `Card title styled heading${titleStyle[1]} — card, dialog, and drawer titles use text-heading3 (one step below the page title's text-heading4). The heading element (h1–h6) is up to the app's outline. See references/design/typography.md.`,
       });
     }
   }
@@ -242,7 +244,7 @@ function checkContent(text, filePath) {
     if (bodyAsHeading.test(span.inner)) {
       violations.push({
         rule: 'typography-as-hierarchy',
-        msg: `Typography class used as pseudo-heading inside <forge-card>. Use <forge-structured-card> with slot="title" and slot="subtitle" instead. See references/anti-patterns.md#typography-classes-used-to-fake-hierarchy.`,
+        msg: `Typography class used as pseudo-heading inside <forge-card>. Put the title in a forge-scaffold header toolbar as a heading styled text-heading3 — fetch get_forge_blocks(component: "forge-card"). See references/anti-patterns.md#typography-classes-used-to-fake-hierarchy.`,
       });
       break;
     }
@@ -253,7 +255,7 @@ function checkContent(text, filePath) {
   if (roleDialog.test(text) && !/<forge-dialog\b/i.test(text)) {
     violations.push({
       rule: 'div-playing-forge-component',
-      msg: '<div role="dialog"> — use <forge-dialog> instead. See references/dialog.md.',
+      msg: '<div role="dialog"> — use <forge-dialog> instead. See references/components/dialog.md.',
     });
   }
   const divCardClass =
@@ -266,7 +268,7 @@ function checkContent(text, filePath) {
   ) {
     violations.push({
       rule: 'div-playing-forge-component',
-      msg: 'A <div> is styled as a card/modal/drawer without a matching <forge-*> component. Use the Forge component. See references/card.md, references/dialog.md, references/drawer.md.',
+      msg: 'A <div> is styled as a card/modal/drawer without a matching <forge-*> component. Use the Forge component. See references/components/card.md, references/components/dialog.md, references/components/drawer.md.',
     });
   }
 
@@ -287,7 +289,7 @@ function checkContent(text, filePath) {
     }
     violations.push({
       rule: 'no-inline-styles',
-      msg: `Inline style on <${elTag}>: "${styleValue.trim()}". NEVER use the style attribute — use a stylesheet class or Forge design tokens (var(--forge-spacing-*), var(--forge-theme-*)). See references/anti-patterns.md and references/spacing.md.`,
+      msg: `Inline style on <${elTag}>: "${styleValue.trim()}". NEVER use the style attribute — use a stylesheet class or Forge design tokens (var(--forge-spacing-*), var(--forge-theme-*)). See references/anti-patterns.md and references/design/spacing.md.`,
     });
     break;
   }
