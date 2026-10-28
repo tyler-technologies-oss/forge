@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { SECTIONS, TYPE_MARKER_PATTERN } from './conventional-types.mjs';
 
 const PACKAGES_DIR = fileURLToPath(new URL('../packages/', import.meta.url));
+const PLUGIN_CHANGELOG_PATH = fileURLToPath(new URL('../plugin/CHANGELOG.md', import.meta.url));
 const VERSION_HEADING = /^## /;
 const SEMVER_HEADING = /^### (Major|Minor|Patch) Changes$/;
 const LIST_ITEM = /^- /;
@@ -66,8 +67,8 @@ export const groupChangelog = markdown => {
 
 export const groupPackageChangelogs = () => {
   const grouped = [];
-  for (const dir of readdirSync(PACKAGES_DIR)) {
-    const path = `${PACKAGES_DIR}${dir}/CHANGELOG.md`;
+  const paths = [...readdirSync(PACKAGES_DIR).map(dir => `${PACKAGES_DIR}${dir}/CHANGELOG.md`), PLUGIN_CHANGELOG_PATH];
+  for (const path of paths) {
     if (!existsSync(path)) {
       continue;
     }
