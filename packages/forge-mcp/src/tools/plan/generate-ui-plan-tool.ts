@@ -3,6 +3,22 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { BaseToolHandler, ToolInput } from '../tool-handler.js';
 import { PAGE_TYPES, HEADING_ROLES, BODY_ROLES, SPACING_SCALES, REGION_NAMES } from './plan-types.js';
 
+const SUBPATH_ONLY_COMPONENTS = [
+  'forge-app-layout',
+  'forge-structured-card',
+  'forge-count-card',
+  'forge-busy-indicator',
+  'forge-confirmation-dialog',
+  'forge-user-profile',
+  'forge-app-launcher',
+  'forge-multi-select-header',
+  'forge-quantity-field',
+  'forge-responsive-toolbar',
+  'forge-content-scaffold',
+  'forge-footer',
+  'forge-theme-toggle'
+];
+
 export interface GenerateUIPlanInput extends ToolInput {
   description: string;
   framework?: string;
@@ -72,7 +88,7 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
         }
       },
       typography: {
-        page_title: 'text-heading5',
+        page_title: 'text-heading4',
         section_headings: 'text-heading3',
         body: 'text-body1'
       },
@@ -135,14 +151,34 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
     sections.push('');
     sections.push('- `page_title` typography role must NOT be used inside a `forge-card` region — cards use `text-heading3` or lower.');
     sections.push('- If any region uses a `<table>` for data, replace it with `forge-table` + `forge-paginator` in the plan.');
-    sections.push(
-      "- Every Forge component requires a side-effect import from `@tylertech/forge/<name>` in the generated code (e.g. `import '@tylertech/forge/button';`). Do not use definition functions (`defineButtonComponent()`, `defineComponents()`) or import all components at once. Subpath-only components (`forge-app-layout`, `forge-structured-card`, `forge-count-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-user-profile`, `forge-app-launcher`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`, `forge-content-scaffold`, `forge-footer`, `forge-theme-toggle`) are easy to miss — note them in `regions.*.components` and remember to import."
-    );
+    sections.push(this._getImportConstraint(framework));
     sections.push('');
     sections.push('## Reference');
     sections.push('');
     sections.push('See [references/ui-plan.md](references/ui-plan.md) for full field docs and failure modes.');
 
     return this._createTextResponse(sections.join('\n'));
+  }
+
+  private _getImportConstraint(framework?: string): string {
+    const subpathOnly = `Subpath-only components (${SUBPATH_ONLY_COMPONENTS.map(c => `\`${c}\``).join(', ')}) are easy to miss — note them in \`regions.*.components\` and remember to import.`;
+    const normalizedFramework = framework?.trim().toLowerCase();
+
+    if (normalizedFramework === 'angular') {
+      return `- Every Forge component is registered by importing its Angular module from \`@tylertech/forge-angular\` into your NgModule's or standalone component's \`imports\` (e.g. \`ForgeButtonModule\`). The module registers the element, so do not add side-effect imports from \`@tylertech/forge/<name>\` or call definition functions (\`defineButtonComponent()\`, \`defineComponents()\`). ${subpathOnly} Each has its own module (e.g. \`ForgeAppLayoutModule\`, \`ForgeStructuredCardModule\`).`;
+    }
+
+    const sideEffectImport =
+      "- Every Forge component requires a side-effect import from `@tylertech/forge/<name>` in the generated code (e.g. `import '@tylertech/forge/button';`). Do not use definition functions (`defineButtonComponent()`, `defineComponents()`) or import all components at once.";
+
+    if (normalizedFramework === 'react') {
+      return `${sideEffectImport} Render each one with its \`@tylertech/forge-react\` wrapper (e.g. \`ForgeButton\`); the wrapper does not register the element, so the side-effect import is still required. ${subpathOnly}`;
+    }
+
+    const angularNote = normalizedFramework
+      ? ''
+      : ' In an Angular project, import the `ForgeXModule` for each component from `@tylertech/forge-angular` instead (e.g. `ForgeButtonModule`); it registers the element, so no side-effect import is needed.';
+
+    return `${sideEffectImport}${angularNote} ${subpathOnly}`;
   }
 }

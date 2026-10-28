@@ -84,6 +84,20 @@ For the common confirm/cancel prompt, use the pre-built `forge-confirmation-dial
 
 Example (A pre-built confirmation dialog handles the title, message, and button slots.): `get_forge_blocks(blockId: "components/dialog/confirmation-dialog/confirmation-dialog")`
 
+Listen for `forge-confirmation-dialog-action` to handle the result. `detail.value` is `true` when the user clicks the primary button, and `false` when they click the secondary button or press Escape (`detail.reason` is `'light-dismiss'`). The dialog closes on its own afterward. To keep it open while an async action runs, call `preventDefault()` and set `isBusy`, then close it yourself when the action finishes.
+
+```js
+confirmationDialog.addEventListener("forge-confirmation-dialog-action", async (event) => {
+  if (!event.detail.value) {
+    return;
+  }
+  event.preventDefault();
+  confirmationDialog.isBusy = true;
+  await deleteRecord();
+  confirmationDialog.open = false;
+});
+```
+
 ## Presets
 
 **Looking for Bottom Sheet?**
@@ -110,15 +124,20 @@ Example (A fullscreen dialog fills the entire viewport.): `get_forge_blocks(bloc
 
 ### Labeling
 
-You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog>` — the native `<dialog>` element underneath it lives across a shadow boundary those attributes can't reach. Use one of these instead, and the dialog wires up the equivalent ARIA relationships and announces them correctly when it opens:
-
-- **`label` and `description`**: plain-text values, for a dialog without a visible title.
-- **`labelledby` and `describedby`**: the id (or space-separated ids) of elements inside the dialog that label or describe it, such as the title in its header toolbar. These are resolved across the shadow boundary for you, and take precedence over `label` and `description`. Note there's no `aria-` prefix.
+You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog>` — the native `<dialog>` element underneath it lives across a shadow boundary those attributes can't reach. Use `labelledby` and `describedby` instead: the id (or space-separated ids) of elements inside the dialog that label or describe it, such as the title in its header toolbar. The dialog resolves them across the shadow boundary, wires up the equivalent ARIA relationships, and announces them correctly when it opens. Note there's no `aria-` prefix.
 
 ```html
 <forge-dialog labelledby="dialog-title" describedby="dialog-message">
   <h2 id="dialog-title" class="forge-typography--heading3">Delete file?</h2>
   <p id="dialog-message">This can't be undone.</p>
+</forge-dialog>
+```
+
+`labelledby` and `describedby` were added in Forge 3.24.0. On earlier versions, or for a dialog without a visible title, set `label` and `description` to plain-text values instead. When both are set, `labelledby` and `describedby` take precedence.
+
+```html
+<forge-dialog label="Delete file?" description="This can't be undone.">
+  <p>Are you sure you want to delete this file?</p>
 </forge-dialog>
 ```
 

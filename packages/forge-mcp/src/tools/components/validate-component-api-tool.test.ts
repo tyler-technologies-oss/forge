@@ -78,6 +78,7 @@ vi.mock('../../services/cem-loader.js', () => ({
       }
       return null;
     }),
+    getComponentPackage: vi.fn(() => undefined),
     getComponentTagNames: vi.fn(() => ['forge-button', 'forge-card', 'forge-dialog'])
   }))
 }));
