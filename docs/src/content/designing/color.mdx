@@ -3,6 +3,83 @@ title: Color System
 description: Guidance for using Tyler Forge's color system in your designs.
 ---
 
-import ComingSoon from "../../components/docs/ComingSoon.astro";
+import InlineMessage from '../../components/docs/InlineMessage.astro';
+import Rules from '../../components/Rules.astro';
+import Rule from '../../components/Rule.astro';
 
-<ComingSoon icon="palette" label="Color System" />
+Every color in a Forge design comes from a theme token. Tokens are named by role, like `--forge-theme-surface` or `--forge-theme-primary`, not by hue, so the same design works in light mode, dark mode, and any custom theme. The full set of values is on the [color tokens](/tokens/color/) page.
+
+## Surfaces
+
+Surfaces are the backgrounds that content sits on. Hierarchy comes from contrast between surfaces, not from shadows or borders.
+
+| Token                                 | Use                                                                    |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| `--forge-theme-surface-dim`           | The page body behind cards and other surfaces                          |
+| `--forge-theme-surface`               | Cards, dialogs, drawers, and other surfaces that hold content          |
+| `--forge-theme-surface-container-low` | A tonal surface inside another surface, like a settings row in a card  |
+| `--forge-theme-surface-container`     | A stronger tonal surface, for a nested area that needs more separation |
+| `--forge-theme-surface-inverse`       | High-contrast surfaces such as tooltips and toasts                     |
+
+Put page content on `surface` cards over the `surface-dim` body. Don't put a card on a background of the same surface color. Use a tonal `surface-container` color for the inner one instead.
+
+## Text
+
+Text color sets emphasis. Use the emphasis tokens on surfaces, and the matching `on-*` token on a filled color like `primary`.
+
+| Token                       | Use                                                      |
+| --------------------------- | -------------------------------------------------------- |
+| `--forge-theme-text-high`   | Primary content: headings, body text, field values       |
+| `--forge-theme-text-medium` | Secondary content: descriptions, group labels, metadata  |
+| `--forge-theme-text-low`    | Supporting text that should recede                       |
+| `--forge-theme-text-lowest` | Disabled text                                            |
+| `--forge-theme-on-primary`  | Text and icons on a `primary` fill                       |
+| `--forge-theme-on-surface`  | Text and icons on a surface when you need the base color |
+
+`text-medium` carries most secondary text. Use `text-low` and `text-lowest` sparingly, since low-emphasis text is harder to read and must still meet contrast requirements.
+
+## Brand and accent
+
+- **`--forge-theme-primary`** is the main accent: the filled button, selected states, and links. Use it for the one thing you want users to notice, not for decoration.
+- **`--forge-theme-brand`** colors the app bar. Don't reuse it elsewhere in the page.
+- **Container tones** (`primary-container`, with `-high`, `-low`, and `-minimum` variants) are softer versions of a color for backgrounds. Use `primary-container-low` for a light accent area, like a highlighted row or an informational panel.
+
+## Status colors
+
+`success`, `warning`, `error`, and `info` each have a base color, an `on-*` color, and container tones. Use them only to communicate status, such as a validation error, a completed step, or a warning banner. Pair the color with text or an icon, because color alone doesn't communicate meaning to every user.
+
+## Borders and dividers
+
+Use `--forge-theme-outline` for borders and dividers. `outline-low` and `outline-medium` give a quieter line, and `outline-high` a stronger one. Cards are flat with a 1px outline border, and use the raised variant only when they need to lift above other content.
+
+## Gradients
+
+Forge designs rarely use gradients. When one is needed, keep it subtle by moving between two close tones of the same color, such as `--forge-theme-surface-container-minimum` to `--forge-theme-surface-container-low`, or `--forge-theme-primary-container-minimum` to `--forge-theme-primary-container`. Avoid gradients between unrelated colors, like `primary` to `secondary`, and avoid saturated or dark tones.
+
+<InlineMessage theme="info" title="Use tokens in code too">
+  In CSS, reference the custom property directly, like `var(--forge-theme-surface-dim)`. With [Tailwind](/developing/tailwind/), the same tokens are available
+  as utilities, like `bg-surface-dim` and `text-medium`.
+</InlineMessage>
+
+## Do and don't
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      'Use a theme token for every color, so the design adapts to dark mode and custom themes.',
+      'Pick tokens by role: surface for backgrounds, text emphasis for text, outline for borders.',
+      'Reserve primary for the most important action or state in a view.',
+      'Pair status colors with text or an icon.'
+    ]}
+  />
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't hard-code hex, RGB, or named colors.",
+      "Don't use status colors for decoration.",
+      "Don't put a card on a background of the same surface color.",
+      "Don't use bold or saturated gradients."
+    ]}
+  />
+</Rules>
