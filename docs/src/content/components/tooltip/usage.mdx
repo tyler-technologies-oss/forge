@@ -47,6 +47,15 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
 Set `anchor` to the id of the element the tooltip describes.
 
+Or place the tooltip as a child of the element it describes, such as inside a `forge-icon-button`. It anchors to its parent without needing an `anchor` id. Make it the first child: a tooltip with a previous sibling anchors to that sibling instead (see Anchor gotchas below).
+
+```html
+<forge-icon-button aria-label="Delete">
+  <forge-tooltip>Delete</forge-tooltip>
+  <forge-icon name="delete"></forge-icon>
+</forge-icon-button>
+```
+
 <Example
   description="A tooltip anchored to a button by id."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/tooltip/demo/demo.html"

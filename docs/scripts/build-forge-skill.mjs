@@ -1,33 +1,17 @@
 #!/usr/bin/env node
 /**
- * Builds the forge-design Agent Skill bundle (skill/forge-design/) straight
- * from the source MDX: strips the component docs (src/content/components)
- * and developer guide docs (src/content/developing) down to the prose an LLM
- * actually wants — headings, usage copy, do/don't rules, and accessibility
- * guidance (when a component has an accessibility.mdx) — then packages the
- * result as references/ under a SKILL.md generated from
- * scripts/forge-skill-template/SKILL.md. Callout wrappers like
- * <InlineMessage> and <Blockquote> are unwrapped to keep their prose without
- * the presentational tag, raw <table> markup becomes a markdown table, and
- * <StorybookEmbed> (a live preview only) is dropped. Each <Example> becomes a
- * one-line pointer — `Example (<description>): \`get_forge_blocks(blockId:
- * "<id>")\`` — since Forge markup must come from blocks, not the docs. The id
- * is derived from the example's blockUrl; an <Example> with no blockUrl
- * (block not published yet) falls back to
- * components/<slug>/<heading-as-kebab>/<same> ("Basic usage" -> demo), marked
- * pending. After writing, every id is checked against the live block
- * manifest (the same one the forge MCP's get_forge_blocks reads): a dangling
- * id from an explicit blockUrl exits non-zero, a dangling derived id is
- * reported as pending and only fails with --strict.
+ * Builds the forge-design Agent Skill bundle (skill/forge-design/) from the
+ * component and developer guide MDX, keeping only the prose an LLM needs.
  *
- * Parses each MDX body into a real AST (remark + remark-mdx) instead of
- * scanning raw text for tag spans, so indentation and fenced code samples
- * (which contain their own `import` lines) can't confuse the cleanup.
+ * - Live previews (<StorybookEmbed>, <ComponentHeader>) are dropped.
+ * - Callouts (<InlineMessage>, <Blockquote>) are unwrapped; <table> becomes markdown.
+ * - Each <Example> becomes a `get_forge_blocks(blockId: "...")` pointer, and
+ *   every block id is checked against the live block manifest. Ids derived
+ *   for unpublished blocks only fail the build with --strict.
  *
- * Runs as part of `pnpm build` (after `astro build`), or on its own with
- * `pnpm build:forge-skill [-- --strict]`.
+ * Runs after `astro build`, or alone with `pnpm build:forge-skill [-- --strict]`.
  */
-import { readFile, writeFile, mkdir, readdir, access } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir, access, rm, cp } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { unified } from "unified";
@@ -42,12 +26,15 @@ const BLOCKS_BASE_URL = "https://forge.tylerdev.io/blocks/v1";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const COMPONENTS_DIR = path.join(ROOT, "src/content/components");
 const DEVELOPMENT_DIR = path.join(ROOT, "src/content/developing");
+const DESIGN_DIR = path.join(ROOT, "src/content/designing");
 const TEMPLATE_PATH = path.join(ROOT, "scripts/forge-skill-template/SKILL.md");
 
-const OUT_DIR = path.join(ROOT, "skill/forge-design");
+const TEMPLATE_REFERENCES_DIR = path.join(ROOT, "scripts/forge-skill-template/references");
+
+/** The plugin ships this folder as-is, so the generated skill is committed and reviewed with the docs change. */
+const OUT_DIR = path.resolve(ROOT, "../plugin/skills/forge-design");
 const OUT_REFERENCES_DIR = path.join(OUT_DIR, "references");
 const OUT_COMPONENTS_DIR = path.join(OUT_REFERENCES_DIR, "components");
-const OUT_DEVELOPMENT_DIR = path.join(OUT_REFERENCES_DIR, "development");
 
 const CATEGORY_LABELS = {
   layout: "Layout",
@@ -275,6 +262,18 @@ function buildTableNode(tableNode) {
   };
 }
 
+/** Splits a plain rule string on backtick spans so `code` round-trips as inline code, not escaped text. */
+function ruleToInlineNodes(rule) {
+  return rule
+    .split(/(`[^`]+`)/)
+    .filter(Boolean)
+    .map((part) =>
+      part.startsWith("`") && part.endsWith("`")
+        ? { type: "inlineCode", value: part.slice(1, -1) }
+        : { type: "text", value: part },
+    );
+}
+
 /** Renders a `<Rules><Rule variant="do" rules={[...]}/>...</Rules>` block as Do/Don't lists. */
 function buildRulesNodes(rulesNode) {
   const nodes = [];
@@ -299,7 +298,7 @@ function buildRulesNodes(rulesNode) {
       children: items.map((item) => ({
         type: "listItem",
         spread: false,
-        children: [{ type: "paragraph", children: [{ type: "text", value: item }] }],
+        children: [{ type: "paragraph", children: ruleToInlineNodes(item) }],
       })),
     });
   }
@@ -330,12 +329,37 @@ function unwrapInlineMessage(node) {
 const INTERNAL_LINK_PATTERN =
   /^`\$\{import\.meta\.env\.BASE_URL\}components\/([a-z0-9-]+)\/[a-z0-9-]+\/?`$/;
 
-function transformInternalLink(node) {
+function transformInternalLink(node, ctx) {
   const hrefAttr = getAttr(node, "href");
   const raw = hrefAttr?.value && typeof hrefAttr.value === "object" ? hrefAttr.value.value : null;
   const match = raw ? raw.match(INTERNAL_LINK_PATTERN) : null;
   if (!match) return node;
-  return { type: "link", url: `./${match[1]}.md`, children: node.children };
+  return { type: "link", url: relativeReference(ctx, `components/${match[1]}.md`), children: node.children };
+}
+
+/** Docs site sections that become skill reference folders; any other site path stays a live link. */
+const SITE_SECTION_TO_REFERENCE_DIR = { components: "components", designing: "design", developing: "development" };
+const SITE_URL = "https://tylerforge.design";
+
+/** Path from the reference file being written to another file under `references/`. */
+function relativeReference(ctx, target) {
+  const relative = path.posix.relative(ctx.outDir, target);
+  return relative.startsWith(".") ? relative : `./${relative}`;
+}
+
+/**
+ * Rewrites a root-relative docs site link (`/designing/color/#text`). A link to a page the
+ * skill also ships becomes a relative link to that reference file; anything else (tokens,
+ * blocks, icons) becomes an absolute link to the live site, since it has no skill equivalent.
+ */
+export function rewriteSiteLink(url, ctx) {
+  const match = url.match(/^\/([a-z-]+)\/(.*?)\/?(#.*)?$/);
+  if (!match) return url;
+  const [, section, rest, hash = ""] = match;
+  const referenceDir = SITE_SECTION_TO_REFERENCE_DIR[section];
+  if (!referenceDir || !rest) return `${SITE_URL}${url}`;
+  const slug = section === "components" ? rest.split("/")[0] : rest;
+  return `${relativeReference(ctx, `${referenceDir}/${slug}.md`)}${hash}`;
 }
 
 /** Post-order dispatcher: recurses into each node's children first, then rewrites or drops
@@ -346,9 +370,10 @@ function transformChildren(children, ctx) {
   for (const child of children) {
     if (child.children) child.children = transformChildren(child.children, ctx);
     if (child.type === "heading") ctx.heading = nodeToPlainText(child.children);
+    if (child.type === "link") child.url = rewriteSiteLink(child.url, ctx);
 
     if (isJsxElement(child)) {
-      if (child.name === "StorybookEmbed") continue;
+      if (child.name === "StorybookEmbed" || child.name === "ComponentHeader") continue;
       if (child.name === "Example") {
         out.push(exampleToPointer(child, ctx));
         continue;
@@ -371,7 +396,7 @@ function transformChildren(children, ctx) {
         continue;
       }
       if (child.name === "a") {
-        out.push(transformInternalLink(child));
+        out.push(transformInternalLink(child, ctx));
         continue;
       }
     }
@@ -387,7 +412,7 @@ function demoteHeadings(nodes) {
   }
 }
 
-/** `ctx`: { file, slug (component pages only), lineOffset (frontmatter lines), examples: [] to collect into }. */
+/** `ctx`: { file, slug (component pages only), outDir (output folder under references/, for relative links), lineOffset (frontmatter lines), examples: [] to collect into }. */
 function buildCleanTree(body, ctx) {
   const tree = mdxParser.parse(body);
   ctx.heading = null;
@@ -395,7 +420,7 @@ function buildCleanTree(body, ctx) {
   return tree;
 }
 
-function cleanMdxBody(body, ctx) {
+export function cleanMdxBody(body, ctx) {
   return mdStringifier.stringify(buildCleanTree(body, ctx)).trim();
 }
 
@@ -435,6 +460,7 @@ async function buildComponentDocs(examples) {
     const cleanedBody = cleanMdxBody(body, {
       file: path.relative(ROOT, path.join(COMPONENTS_DIR, slug, "usage.mdx")),
       slug,
+      outDir: "components",
       lineOffset: frontmatterLineCount(frontmatterMatch),
       examples,
     });
@@ -446,6 +472,7 @@ async function buildComponentDocs(examples) {
       const accessibilityTree = buildCleanTree(await readFile(accessibilityPath, "utf8"), {
         file: path.relative(ROOT, accessibilityPath),
         slug,
+        outDir: "components",
         lineOffset: 0,
         examples,
       });
@@ -475,40 +502,48 @@ async function buildComponentDocs(examples) {
   return components;
 }
 
-async function buildDevelopmentDocs(examples) {
-  const developmentSlugs = await findMdxFiles(DEVELOPMENT_DIR);
-  const development = [];
-  for (const slug of developmentSlugs) {
-    const raw = await readFile(path.join(DEVELOPMENT_DIR, `${slug}.mdx`), "utf8");
+const EXPERIMENTAL_NOTE =
+  "> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.";
+
+/** Builds one reference file per guide page in `sourceDir`, written under `references/<outName>/`. */
+async function buildGuideDocs(sourceDir, outName, examples) {
+  const slugs = await findMdxFiles(sourceDir);
+  const guides = [];
+  for (const slug of slugs) {
+    const raw = await readFile(path.join(sourceDir, `${slug}.mdx`), "utf8");
 
     const frontmatterMatch = raw.match(/^---\n([\s\S]*?)\n---\n?/);
     if (!frontmatterMatch) {
-      console.warn(`Skipping developing/${slug}: no frontmatter found`);
+      console.warn(`Skipping ${path.basename(sourceDir)}/${slug}: no frontmatter found`);
       continue;
     }
     const frontmatter = parseFrontmatter(frontmatterMatch[1]);
     const body = raw.slice(frontmatterMatch[0].length);
     const cleanedBody = cleanMdxBody(body, {
-      file: path.relative(ROOT, path.join(DEVELOPMENT_DIR, `${slug}.mdx`)),
+      file: path.relative(ROOT, path.join(sourceDir, `${slug}.mdx`)),
       slug: null,
+      outDir: path.posix.dirname(`${outName}/${slug}`),
       lineOffset: frontmatterLineCount(frontmatterMatch),
       examples,
     });
 
-    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${cleanedBody}\n`;
-    const outPath = path.join(OUT_DEVELOPMENT_DIR, `${slug}.md`);
+    const status = frontmatter.status ?? "stable";
+    const experimentalNote = status === "experimental" ? `${EXPERIMENTAL_NOTE}\n\n` : "";
+    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${experimentalNote}${cleanedBody}\n`;
+    const outPath = path.join(OUT_REFERENCES_DIR, outName, `${slug}.md`);
     await mkdir(path.dirname(outPath), { recursive: true });
     await writeFile(outPath, md, "utf8");
 
-    development.push({
+    guides.push({
       name: slug,
       title: frontmatter.title,
       description: frontmatter.description,
-      docsPath: `development/${slug}.md`,
+      status,
+      docsPath: `${outName}/${slug}.md`,
     });
   }
-  development.sort((a, b) => a.name.localeCompare(b.name));
-  return development;
+  guides.sort((a, b) => a.name.localeCompare(b.name));
+  return guides;
 }
 
 function replaceBetweenMarkers(template, marker, replacement) {
@@ -536,24 +571,25 @@ function buildComponentIndex(components) {
       .sort((a, b) => a.title.localeCompare(b.title))
       .map((c) => `- [${c.title}](references/${c.docsPath}) — ${c.description}`)
       .join("\n");
-    return `### ${label}\n\n${items}`;
+    return `#### ${label}\n\n${items}`;
   });
 
   return sections.join("\n\n");
 }
 
-function buildDevelopmentIndex(development) {
-  return development
+function buildGuideIndex(guides) {
+  return guides
     .slice()
     .sort((a, b) => a.title.localeCompare(b.title))
-    .map((d) => `- [${d.title}](references/${d.docsPath}) — ${d.description}`)
+    .map((d) => `- [${d.title}](references/${d.docsPath})${d.status === "experimental" ? " (experimental)" : ""} — ${d.description}`)
     .join("\n");
 }
 
-async function writeSkillMd(components, development) {
+async function writeSkillMd(components, design, development) {
   const template = await readFile(TEMPLATE_PATH, "utf8");
   let skillMd = replaceBetweenMarkers(template, "COMPONENT-INDEX", buildComponentIndex(components));
-  skillMd = replaceBetweenMarkers(skillMd, "DEVELOPMENT-INDEX", buildDevelopmentIndex(development));
+  skillMd = replaceBetweenMarkers(skillMd, "DESIGN-INDEX", buildGuideIndex(design));
+  skillMd = replaceBetweenMarkers(skillMd, "DEVELOPMENT-INDEX", buildGuideIndex(development));
   await writeFile(path.join(OUT_DIR, "SKILL.md"), skillMd, "utf8");
 }
 
@@ -596,23 +632,30 @@ function reportExamples(examples, manifest, strict) {
 }
 
 async function main() {
+  // Rebuild from scratch so a deleted or renamed docs page doesn't leave a stale reference behind.
+  if (!OUT_DIR.endsWith(path.join("plugin", "skills", "forge-design"))) {
+    throw new BuildError(`Refusing to clear unexpected skill output folder: ${OUT_DIR}`);
+  }
+  await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_REFERENCES_DIR, { recursive: true });
+  await cp(TEMPLATE_REFERENCES_DIR, OUT_REFERENCES_DIR, { recursive: true });
 
   const examples = [];
   const components = await buildComponentDocs(examples);
-  const development = await buildDevelopmentDocs(examples);
+  const design = await buildGuideDocs(DESIGN_DIR, "design", examples);
+  const development = await buildGuideDocs(DEVELOPMENT_DIR, "development", examples);
 
-  const manifest = { generatedAt: new Date().toISOString(), components, development };
+  const manifest = { components, design, development };
   await writeFile(
     path.join(OUT_REFERENCES_DIR, "manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
 
-  await writeSkillMd(components, development);
+  await writeSkillMd(components, design, development);
 
   console.log(
-    `Wrote skill bundle (${components.length} component doc(s), ${development.length} development doc(s)) to ${path.relative(ROOT, OUT_DIR)}/`,
+    `Wrote skill bundle (${components.length} component doc(s), ${design.length} design doc(s), ${development.length} development doc(s)) to ${path.relative(ROOT, OUT_DIR)}/`,
   );
   return examples;
 }

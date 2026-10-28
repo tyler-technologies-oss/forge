@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test scripts/*.test.mjs",
-    "build:forge-skill": "node scripts/build-forge-skill.mjs"
+    "build:forge-skill": "node scripts/build-forge-skill.mjs",
+    "check:forge-skill": "node scripts/check-forge-skill.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "~8.0.3",

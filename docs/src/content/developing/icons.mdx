@@ -76,6 +76,12 @@ icons manually.
   "custom" to access icons from those sets.
 </Blockquote>
 
+<Blockquote>
+  **Important:** "standard", "extended", and "custom" are CDN URL path segments only, not npm import paths. The `@tylertech/tyler-icons`
+  package exports only its root and `./tyler-icons-metadata.json`, so always import icons from the package root
+  (`import { tylIconCake } from '@tylertech/tyler-icons'`). Subpaths like `@tylertech/tyler-icons/standard` do not exist.
+</Blockquote>
+
 ### Fetch
 
 You could also fetch these SVG files dynamically in your application using the `fetch` API. This would give you access to the `<svg>` data that

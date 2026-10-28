@@ -77,6 +77,27 @@ Set `data` and `columnConfigurations` as JS properties to populate the table —
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/table/css-only/css-only.html"
 />
 
+## Inside a card
+
+Place a table in a `forge-card no-padding` with a `forge-scaffold`, so it runs edge to edge. Put the table title and icon actions (filter, export, more) in the header toolbar, and a `forge-paginator` in an `inverted` footer toolbar. The primary page action, like "New order", goes in the page's body header, not the card.
+
+```html
+<forge-card no-padding>
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h3 slot="start" class="forge-typography--heading3">Orders</h3>
+      <forge-icon-button slot="end" density="medium" aria-label="Filter orders">
+        <forge-icon name="filter_list"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+    <forge-table slot="body"></forge-table>
+    <forge-toolbar slot="footer" inverted>
+      <forge-paginator slot="end"></forge-paginator>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-card>
+```
+
 ## Configuring columns
 
 Each entry in `columnConfigurations` describes one column: `header` (and optional `footer`) text, the `property` to read from each row in `data`, and whether it's `sortable` (with `initialSort` marking the column sorted by default) or `filter`-able.

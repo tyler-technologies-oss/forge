@@ -8,11 +8,16 @@
   "baseBranch": "main",
   "updateInternalDependencies": "minor",
   "privatePackages": {
-    "version": false,
+    "version": true,
     "tag": false
   },
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "out-of-range",
     "onlyUpdatePeerDependentsWhenOutOfRange": true
-  }
+  },
+  "ignore": [
+    "blocks",
+    "forge-docs",
+    "@tylertech/forge-adapter-codegen"
+  ]
 }

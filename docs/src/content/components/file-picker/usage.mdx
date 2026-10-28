@@ -47,6 +47,7 @@ File pickers enable users to upload single or multiple files through drag-and-dr
   <Rule
     variant="do"
     rules={[
+      "Always use `forge-file-picker` for file and image uploads.",
       "Always pair the drag-and-drop target with a button — it's the only way to pick files with a keyboard or screen reader.",
       "State any file-type or size constraints in the secondary or helper-text slot so they're visible before a user tries to upload.",
       "Show per-file upload progress and completion, and let a user remove or retry a file after it's added.",
@@ -57,6 +58,7 @@ File pickers enable users to upload single or multiple files through drag-and-dr
   <Rule
     variant="dont"
     rules={[
+      "Don't use a native `<input type=\"file\">` for uploads — use `forge-file-picker` instead.",
       "Don't accept a file past the accept or max-size constraint without immediate, specific error feedback.",
       "Don't use a full-size file picker where space is tight — use compact instead.",
       "Don't customize the trigger button's label without keeping it a clear, actionable verb, like \"Select files\".",

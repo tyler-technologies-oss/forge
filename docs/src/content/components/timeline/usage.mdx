@@ -31,7 +31,7 @@ import Rule from "../../../components/Rule.astro";
 
 ## Usage
 
-`forge-timeline` connects a series of `forge-timeline-item` children with a vertical line through their markers, each item pairing a `marker` slot with `detail` content and a `theme`-colored indicator. Use `forge-timeline-break` between items to visually separate non-sequential groups. Reach for a plain <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> instead when order and time aren't meaningful to the content.
+`forge-timeline` connects a series of `forge-timeline-item` children with a vertical line through their markers. Each item's main content goes in its default slot, with `start` and `end` slots on either side, a `marker` slot for the indicator, and a `detail` slot below for extra context. Use `forge-timeline-break` between items to visually separate non-sequential groups. Reach for a plain <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> instead when order and time aren't meaningful to the content.
 
 ## Rules
 
@@ -56,69 +56,72 @@ import Rule from "../../../components/Rule.astro";
 
 ## Basic usage
 
-Each `forge-timeline-item` shows a default circular marker unless something is slotted into `marker`, and its main content goes in the default slot.
+Each `forge-timeline-item` shows a default circular marker, and its main content goes in the default slot.
 
-<Example description="A timeline of items connected by a vertical line through their markers.">
-  <forge-timeline>
-    <forge-timeline-item>
-      <div slot="detail">Application submitted</div>
-    </forge-timeline-item>
-    <forge-timeline-item theme="success">
-      <div slot="detail">Application approved</div>
-    </forge-timeline-item>
-  </forge-timeline>
-</Example>
+<Example
+  description="A timeline of items connected by a vertical line through their markers."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/demo/demo.html"
+/>
 
-## Markers
+## Icons
 
-Slot an icon or other content into `marker` to replace an item's default circular indicator — treat it as decorative, since the item's own content should carry the actual meaning.
+Slot a `forge-icon` into `marker` to replace an item's default circular indicator. Treat the icon as decorative, since the item's own content should carry the meaning.
 
-<Example description="A timeline item with an icon in its marker slot.">
-  <forge-timeline>
-    <forge-timeline-item>
-      <forge-icon slot="marker" name="check_circle" external aria-hidden="true"></forge-icon>
-      <div slot="detail">Step complete</div>
-    </forge-timeline-item>
-  </forge-timeline>
-</Example>
+<Example
+  description="Timeline items with an icon in the marker slot in place of the default marker."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/with-icons/with-icons.html"
+/>
 
-## Timestamps
+## Badges
 
-Place a <a href={`${import.meta.env.BASE_URL}components/timestamp/usage/`}>timestamp</a> as a direct child of the timeline to show it as a heading alongside the items it applies to, or inside a timeline item to render it as body text.
+Slot a `forge-badge` into `marker` for a short text label, and theme the item and badge together to reflect its status.
 
-<Example description="A timestamp heading grouping the timeline items below it.">
-  <forge-timeline>
-    <forge-timestamp datetime="2024-03-15" format="MMMM dd, yyyy"></forge-timestamp>
-    <forge-timeline-item>
-      <div slot="detail">Event on this date</div>
-    </forge-timeline-item>
-  </forge-timeline>
-</Example>
+<Example
+  description="Timeline items with a badge in the marker slot, themed to match each item's status."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/with-badges/with-badges.html"
+/>
 
 ## Breaks
 
 Add a `forge-timeline-break` between items to show a gap, separating non-sequential groups of events.
 
-<Example description="A break between two groups of timeline items.">
-  <forge-timeline>
-    <forge-timeline-item>
-      <div slot="detail">Earlier event</div>
-    </forge-timeline-item>
-    <forge-timeline-break></forge-timeline-break>
-    <forge-timeline-item>
-      <div slot="detail">Later event</div>
-    </forge-timeline-item>
-  </forge-timeline>
-</Example>
+<Example
+  description="A break separating recent activity from earlier activity."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/with-break/with-break.html"
+/>
 
 ## Sidebar lines
 
-By default, an item draws its connecting line above and below its marker, automatically omitting whichever side doesn't apply to the first or last item. Set an item's `sidebar` to `start`, `end`, `both`, or `none` to control this manually — useful for implying items exist before or after what's actually rendered.
+An item's `sidebar` defaults to `auto`, which draws its connecting line above and below its marker, automatically omitting whichever side doesn't apply to the first or last item. Set `sidebar` to `start`, `end`, `both`, or `none` to control this manually — useful for implying items exist before or after what's actually rendered.
 
-<Example description="An item with only its start sidebar line drawn, implying earlier items exist above it.">
-  <forge-timeline>
-    <forge-timeline-item sidebar="start">
-      <div slot="detail">Implies earlier items above</div>
-    </forge-timeline-item>
-  </forge-timeline>
-</Example>
+<Example
+  description="Each sidebar value on a timeline item: auto, none, start, end, and both."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/sidebar-options/sidebar-options.html"
+/>
+
+## Theme
+
+Set `theme` on an item to color its default marker. Use the `marker` slot instead when the item needs an icon or badge.
+
+<Example
+  description="Timeline items using each marker theme."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/themed/themed.html"
+/>
+
+## Detail
+
+Put extra context for an item in its `detail` slot, below its main content. Wrap the detail in a `forge-card` when it needs visual grouping, like a summary with badges.
+
+<Example
+  description="Timeline items with extra context in the detail slot, one of them in a card."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/with-detail/with-detail.html"
+/>
+
+## Timestamps
+
+Place a <a href={`${import.meta.env.BASE_URL}components/timestamp/usage/`}>timestamp</a> as a direct child of the timeline to show it as a date heading for the items below it. Inside an item, a timestamp renders inline with the content, and `separator` adds a dot between them. Put item timestamps in the `start` slot when they should line up across items.
+
+<Example
+  description="Timestamps as date headings between items, and as times before, after, or inside an item's detail."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/timeline/with-timestamps/with-timestamps.html"
+/>

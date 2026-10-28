@@ -25,11 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 Versioning is driven by changesets (`pnpm changeset` from the monorepo root). Releases are automated: merging to `main` opens a `chore: release (main)` PR, and merging that PR publishes to npm. Do not bump versions or publish by hand.
 
-The release PR's `pnpm run version-packages` step runs `plugin/scripts/sync-version.mjs`, which copies the `package.json` version into the plugin manifests so all three match:
-
-- `package.json`
-- `plugin/.claude-plugin/plugin.json`
-- `.claude-plugin/marketplace.json` (at the monorepo root)
+The Claude Code plugin (`plugin/`) that registers this server is versioned separately from forge-mcp; see `plugin/CLAUDE.md`. The plugin's `.mcp.json` runs `@tylertech/forge-mcp@latest`, so a forge-mcp release reaches plugin users without a plugin version bump.
 
 ### Data Flow
 

@@ -1,0 +1,885 @@
+{
+  "components": [
+    {
+      "name": "accordion",
+      "title": "Accordion",
+      "description": "Wraps a set of expansion panels so that opening one automatically closes any other open panel.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-accordion--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/accordion.md"
+    },
+    {
+      "name": "app-bar",
+      "title": "App Bar",
+      "description": "App bars are headers used to display branding, navigation, and actions at the top of an application.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-app-bar--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/app-bar.md"
+    },
+    {
+      "name": "app-launcher",
+      "title": "App Launcher",
+      "description": "The app launcher lets a user switch between related apps, browse every available app, and jump to custom links, from the app bar's end slot.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-app-launcher--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/app-launcher.md"
+    },
+    {
+      "name": "app-layout",
+      "title": "App Layout",
+      "description": "The app layout provides a complete application shell with an app bar, responsive navigation drawer, and a body area for page content.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/app-layout.md"
+    },
+    {
+      "name": "autocomplete",
+      "title": "Autocomplete",
+      "description": "Autocomplete components provide real-time typeahead suggestions as users type in a text field.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-autocomplete--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/autocomplete.md"
+    },
+    {
+      "name": "avatar",
+      "title": "Avatar",
+      "description": "A non-interactive circle that represents an entity — with an image, initials, or an icon.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-avatar--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/avatar.md"
+    },
+    {
+      "name": "badge",
+      "title": "Badge",
+      "description": "Badges display small amounts of non-interactive information like counts, status indicators, or notifications.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-badge--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/badge.md"
+    },
+    {
+      "name": "banner",
+      "title": "Banner",
+      "description": "Banners inform users of important, page-level information — such as errors, warnings, or success messages — without interrupting their workflow.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-banner--default",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/banner.md"
+    },
+    {
+      "name": "busy-indicator",
+      "title": "Busy Indicator",
+      "description": "A busy indicator blocks interaction with a fullscreen or inline region while a longer-running process completes.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-busy-indicator--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/busy-indicator.md"
+    },
+    {
+      "name": "button",
+      "title": "Button",
+      "description": "Buttons allow users to take actions and make choices with a single tap.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-button--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/button.md"
+    },
+    {
+      "name": "button-area",
+      "title": "Button Area",
+      "description": "Makes an entire region of content — like a card — behave as a single clickable control, backed by a real button or link underneath.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-button-area--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/button-area.md"
+    },
+    {
+      "name": "button-toggle",
+      "title": "Button Toggle",
+      "description": "Button toggles allow users to select from a group of choices with single or multiple selection.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-button-toggle--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/button-toggle.md"
+    },
+    {
+      "name": "calendar",
+      "title": "Calendar",
+      "description": "A flexible calendar component for date selection with support for single dates, ranges, multiple selections, and extensive customization options.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-calendar--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/calendar.md"
+    },
+    {
+      "name": "card",
+      "title": "Card",
+      "description": "Cards group related content and actions about a single topic into one surface.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-card--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/card.md"
+    },
+    {
+      "name": "checkbox",
+      "title": "Checkbox",
+      "description": "Checkboxes allow for selecting multiple options from a set.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-checkbox--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/checkbox.md"
+    },
+    {
+      "name": "chip",
+      "title": "Chip",
+      "description": "A compact, interactive element that represents an entity, action, or attribute with support for selection, removal, and various styling options.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-chips--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/chip.md"
+    },
+    {
+      "name": "chip-field",
+      "title": "Chip Field",
+      "description": "A specialized input field that lets users create and manage a collection of chips representing freeform text values or selections.",
+      "status": "deprecated",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-chip-field--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/chip-field.md"
+    },
+    {
+      "name": "circular-progress",
+      "title": "Circular Progress",
+      "description": "Circular progress indicators display progress along a circular track, for both determinate and indeterminate waits.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-circular-progress--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/circular-progress.md"
+    },
+    {
+      "name": "color-picker",
+      "title": "Color Picker",
+      "description": "An interactive color selection component with support for multiple color formats (hex, RGB, HSV) and optional opacity control.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-color-picker--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/color-picker.md"
+    },
+    {
+      "name": "date-picker",
+      "title": "Date Picker",
+      "description": "A date input component with an integrated calendar popup for selecting single dates.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-date-picker--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/date-picker.md"
+    },
+    {
+      "name": "date-range-picker",
+      "title": "Date Range Picker",
+      "description": "A date input component with an integrated calendar popup for selecting date ranges with separate \"from\" and \"to\" date values.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-date-range-picker--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/date-range-picker.md"
+    },
+    {
+      "name": "dialog",
+      "title": "Dialog",
+      "description": "Dialogs are modal windows that interrupt the user to convey critical information or request a decision.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-dialog--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/dialog.md"
+    },
+    {
+      "name": "divider",
+      "title": "Divider",
+      "description": "A thin line that visually separates groups of related content, horizontally or vertically.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-divider--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/divider.md"
+    },
+    {
+      "name": "drawer",
+      "title": "Drawer",
+      "description": "Drawers support persistent navigation or supplementary content pinned to the left or right edge of the screen.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-drawer--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/drawer.md"
+    },
+    {
+      "name": "expansion-panel",
+      "title": "Expansion Panel",
+      "description": "Expansion panels show summary content and reveal additional detail on tap, for progressive disclosure inside a card, list, or table.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-expansion-panel--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/expansion-panel.md"
+    },
+    {
+      "name": "fab",
+      "title": "Floating Action Button",
+      "description": "Floating action buttons represent the single most important action on a page, positioned above other content to draw attention to it.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-floating-action-button--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/fab.md"
+    },
+    {
+      "name": "file-picker",
+      "title": "File Picker",
+      "description": "Lets a user upload one or more files via drag-and-drop or a system file chooser, with visual cues for valid and invalid drops.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-file-picker--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/file-picker.md"
+    },
+    {
+      "name": "icon",
+      "title": "Icon",
+      "description": "Icons render a registered SVG from the Tyler Forge icon library, or a custom source, to represent information or reinforce an action.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-icon--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/icon.md"
+    },
+    {
+      "name": "icon-button",
+      "title": "Icon Button",
+      "description": "Icon buttons are buttons that contain only an icon, and are used to represent actions or commands.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-icon-button--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/icon-button.md"
+    },
+    {
+      "name": "inline-message",
+      "title": "Inline Message",
+      "description": "Inline messages provide contextual feedback about a specific action or state, inside the component they refer to.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-inline-message--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/inline-message.md"
+    },
+    {
+      "name": "key",
+      "title": "Key",
+      "description": "Keys label the meaning of colors or values in a chart or data visualization, such as which color in a grouped meter represents which series.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-key--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/key.md"
+    },
+    {
+      "name": "keyboard-shortcut",
+      "title": "Keyboard Shortcut",
+      "description": "Attaches a keyboard shortcut to an element, or the whole page, without any visible UI of its own.",
+      "status": "stable",
+      "source": "core",
+      "category": "utilities",
+      "storybookId": "components-keyboard-shortcut--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/keyboard-shortcut.md"
+    },
+    {
+      "name": "label",
+      "title": "Label",
+      "description": "Labels attach an accessible caption and Forge typography to a specific set of label-aware Forge components, in place of a plain HTML label element.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/label.md"
+    },
+    {
+      "name": "label-value",
+      "title": "Label Value",
+      "description": "Label values display a label and value pair in a compact format with the proper typography and spacing styles applied.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-label-value--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/label-value.md"
+    },
+    {
+      "name": "linear-progress",
+      "title": "Linear Progress",
+      "description": "Linear progress indicators display progress by animating along a horizontal track, for both determinate and indeterminate waits.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-linear-progress--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/linear-progress.md"
+    },
+    {
+      "name": "list",
+      "title": "List",
+      "description": "Lists present a vertical, scannable group of related items, from plain text rows to full navigation menus.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-list--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/list.md"
+    },
+    {
+      "name": "menu",
+      "title": "Menu",
+      "description": "Menus display a list of contextual actions or options in a popup, triggered from a button, icon, or list item.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-menu--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/menu.md"
+    },
+    {
+      "name": "meter",
+      "title": "Meter",
+      "description": "Meters display a scalar value within a known range, using color to signal whether it's optimal, suboptimal, or least optimal.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-meter--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/meter.md"
+    },
+    {
+      "name": "page-state",
+      "title": "Page State",
+      "description": "Page state displays a full-height message — for an empty result, an error, or general information — with an optional graphic and actions.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-page-state--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/page-state.md"
+    },
+    {
+      "name": "paginator",
+      "title": "Paginator",
+      "description": "The paginator divides a logically sorted collection into pages, so users can navigate and mentally orient within the set.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-paginator--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/paginator.md"
+    },
+    {
+      "name": "popover",
+      "title": "Popover",
+      "description": "A popover floats content above the page, positioned relative to the trigger element that anchors it.",
+      "status": "stable",
+      "source": "core",
+      "category": "utilities",
+      "storybookId": "components-popover--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/popover.md"
+    },
+    {
+      "name": "radio",
+      "title": "Radio",
+      "description": "The Forge Radio component is used to create a form input where only one out of a set of values should be selected.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-radio--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/radio.md"
+    },
+    {
+      "name": "scaffold",
+      "title": "Scaffold",
+      "description": "The scaffold lays out a header, scrollable body, and footer using named slots, for full pages or smaller sections alike.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-scaffold--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/scaffold.md"
+    },
+    {
+      "name": "secret",
+      "title": "Secret",
+      "description": "Conceals sensitive content with a blur, mask, or noise effect, revealing it on user interaction.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-secret--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/secret.md"
+    },
+    {
+      "name": "select",
+      "title": "Select",
+      "description": "Select components are comboboxes that present a list of options to users for single or multi-selection.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-select--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/select.md"
+    },
+    {
+      "name": "skeleton",
+      "title": "Skeleton",
+      "description": "A skeleton screen is a low-fidelity placeholder that gradually loads into real content, giving users a visual cue that content is on its way.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-skeleton--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/skeleton.md"
+    },
+    {
+      "name": "skip-link",
+      "title": "Skip Link",
+      "description": "Skip links let a user bypass repetitive content and navigate directly to a section of the page, meeting WCAG's bypass-blocks requirement.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-skip-link--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/skip-link.md"
+    },
+    {
+      "name": "slider",
+      "title": "Slider",
+      "description": "Sliders allow users to make selections from a range of values.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-slider--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/slider.md"
+    },
+    {
+      "name": "split-button",
+      "title": "Split Button",
+      "description": "Splits an action into two parts — typically a primary action and a secondary action that opens a menu or performs an alternative action.",
+      "status": "stable",
+      "source": "core",
+      "category": "actions",
+      "storybookId": "components-split-button--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/split-button.md"
+    },
+    {
+      "name": "split-view",
+      "title": "Split View",
+      "description": "Split view lays out two or more panels side by side, at least one of which a user can resize by dragging.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-split-view--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/split-view.md"
+    },
+    {
+      "name": "stack",
+      "title": "Stack",
+      "description": "A layout utility that manages spacing and alignment of its immediate children along a single vertical or horizontal axis.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-stack--demo",
+      "hasAccessibilityDocs": false,
+      "docsPath": "components/stack.md"
+    },
+    {
+      "name": "stepper",
+      "title": "Stepper",
+      "description": "Steppers break a multi-step process into a numbered sequence, showing progress toward completion.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-stepper--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/stepper.md"
+    },
+    {
+      "name": "switch",
+      "title": "Switch",
+      "description": "Switches toggle the state of a single setting on or off.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-switch--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/switch.md"
+    },
+    {
+      "name": "table",
+      "title": "Table",
+      "description": "Tables display sets of data in sortable, filterable, selectable rows and columns, configured through data and column definitions.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-table--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/table.md"
+    },
+    {
+      "name": "tabs",
+      "title": "Tabs",
+      "description": "Tabs organize and switch between groups of related content that sit at the same level of hierarchy.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-tabs--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/tabs.md"
+    },
+    {
+      "name": "text-field",
+      "title": "Text Field",
+      "description": "An input field used to capture user text input, with an optional label, helper text, and validation state.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-text-field--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/text-field.md"
+    },
+    {
+      "name": "time-picker",
+      "title": "Time Picker",
+      "description": "A time input component with an integrated dropdown for selecting time values, with support for various formats, masking, and validation.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-time-picker--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/time-picker.md"
+    },
+    {
+      "name": "timeline",
+      "title": "Timeline",
+      "description": "Timelines display a list of events in chronological order, showing the sequence and relationship between events over time.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-timeline--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/timeline.md"
+    },
+    {
+      "name": "timestamp",
+      "title": "Timestamp",
+      "description": "Timestamps display a formatted, localized date, time, or duration value using the native time element.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-timestamp--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/timestamp.md"
+    },
+    {
+      "name": "toast",
+      "title": "Toast",
+      "description": "Toasts are brief, non-modal notifications that confirm a user's action and disappear automatically.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-toast--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/toast.md"
+    },
+    {
+      "name": "toolbar",
+      "title": "Toolbar",
+      "description": "Toolbars align a title and actions inside a full-width container, most often as a header or footer for another surface.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-toolbar--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/toolbar.md"
+    },
+    {
+      "name": "tooltip",
+      "title": "Tooltip",
+      "description": "Tooltips display a short text label for an element when the user hovers, focuses, or long-presses it.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-tooltip--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/tooltip.md"
+    },
+    {
+      "name": "tree",
+      "title": "Tree",
+      "description": "Trees are interactive lists that allow users to navigate through hierarchical data.",
+      "status": "beta",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-tree--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/tree.md"
+    },
+    {
+      "name": "view-switcher",
+      "title": "View Switcher",
+      "description": "A view switcher shows one of several views at a time, animating between them along a shared axis as the active index changes.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-view-switcher--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/view-switcher.md"
+    }
+  ],
+  "design": [
+    {
+      "name": "color",
+      "title": "Color System",
+      "description": "Guidance for using Tyler Forge's color system in your designs.",
+      "status": "experimental",
+      "docsPath": "design/color.md"
+    },
+    {
+      "name": "getting-started",
+      "title": "Getting Started",
+      "description": "Start here for an overview of designing with Tyler Forge.",
+      "status": "experimental",
+      "docsPath": "design/getting-started.md"
+    },
+    {
+      "name": "iconography",
+      "title": "Iconography",
+      "description": "Guidance for using Tyler Forge icons in your designs.",
+      "status": "experimental",
+      "docsPath": "design/iconography.md"
+    },
+    {
+      "name": "layout",
+      "title": "Layout",
+      "description": "The anatomy, dimensions, and page patterns of a Forge application, for designers building screens by hand.",
+      "status": "stable",
+      "docsPath": "design/layout.md"
+    },
+    {
+      "name": "spacing",
+      "title": "Spacing",
+      "description": "How to apply Tyler Forge's spacing scale so hand-built designs match what Forge components and blocks produce in code.",
+      "status": "stable",
+      "docsPath": "design/spacing.md"
+    },
+    {
+      "name": "typography",
+      "title": "Typography",
+      "description": "Guidance for using Tyler Forge's typography system in your designs.",
+      "status": "experimental",
+      "docsPath": "design/typography.md"
+    }
+  ],
+  "development": [
+    {
+      "name": "accessibility",
+      "title": "Accessibility",
+      "description": "An introduction to web accessibility, tools, and best practices as they relate to Forge.",
+      "status": "stable",
+      "docsPath": "development/accessibility.md"
+    },
+    {
+      "name": "css-only-components",
+      "title": "CSS-Only Components",
+      "description": "An experimental, framework-agnostic alternative to Forge's Web Components using only CSS classes.",
+      "status": "stable",
+      "docsPath": "development/css-only-components.md"
+    },
+    {
+      "name": "customization",
+      "title": "Customization",
+      "description": "Ways to customize Forge components — theming, CSS custom properties, shadow parts, and slots.",
+      "status": "stable",
+      "docsPath": "development/customization.md"
+    },
+    {
+      "name": "forms",
+      "title": "Forms",
+      "description": "How Forge's form-associated components participate in native form submission and validation.",
+      "status": "stable",
+      "docsPath": "development/forms.md"
+    },
+    {
+      "name": "frameworks/angular",
+      "title": "Angular",
+      "description": "Using Tyler Forge with Angular.",
+      "status": "stable",
+      "docsPath": "development/frameworks/angular.md"
+    },
+    {
+      "name": "frameworks/blazor",
+      "title": "Blazor",
+      "description": "Using Tyler Forge with Blazor.",
+      "status": "stable",
+      "docsPath": "development/frameworks/blazor.md"
+    },
+    {
+      "name": "frameworks/react",
+      "title": "React",
+      "description": "Using Tyler Forge with React.",
+      "status": "stable",
+      "docsPath": "development/frameworks/react.md"
+    },
+    {
+      "name": "frameworks/svelte",
+      "title": "Svelte",
+      "description": "Using Tyler Forge with Svelte.",
+      "status": "stable",
+      "docsPath": "development/frameworks/svelte.md"
+    },
+    {
+      "name": "frameworks/vue",
+      "title": "Vue",
+      "description": "Using Tyler Forge with Vue.",
+      "status": "stable",
+      "docsPath": "development/frameworks/vue.md"
+    },
+    {
+      "name": "global-configuration",
+      "title": "Global Configuration",
+      "description": "Overriding default component state application-wide via a global configuration object.",
+      "status": "stable",
+      "docsPath": "development/global-configuration.md"
+    },
+    {
+      "name": "icons",
+      "title": "Icons",
+      "description": "How to install and use the Tyler icons library with the Forge icon component.",
+      "status": "stable",
+      "docsPath": "development/icons.md"
+    },
+    {
+      "name": "illustrations",
+      "title": "Illustrations",
+      "description": "Using Tyler Forge illustrations in your application.",
+      "status": "stable",
+      "docsPath": "development/illustrations.md"
+    },
+    {
+      "name": "installation",
+      "title": "Installation",
+      "description": "How to install Tyler Forge via npm or CDN.",
+      "status": "stable",
+      "docsPath": "development/installation.md"
+    },
+    {
+      "name": "mcp-server",
+      "title": "Forge MCP Server",
+      "description": "Give AI clients direct access to Forge component documentation, design tokens, and code generation.",
+      "status": "stable",
+      "docsPath": "development/mcp-server.md"
+    },
+    {
+      "name": "sass-library",
+      "title": "Sass Library",
+      "description": "Using Forge's internal Sass files, mixins, and variables in your own application or library.",
+      "status": "stable",
+      "docsPath": "development/sass-library.md"
+    },
+    {
+      "name": "tailwind",
+      "title": "Tailwind CSS",
+      "description": "An optional Tailwind CSS v4 theme that maps Tailwind utilities to Forge design tokens.",
+      "status": "stable",
+      "docsPath": "development/tailwind.md"
+    },
+    {
+      "name": "theming",
+      "title": "Theming",
+      "description": "How to customize Forge's colors and theme via CSS custom properties and Sass mixins.",
+      "status": "stable",
+      "docsPath": "development/theming.md"
+    },
+    {
+      "name": "typography",
+      "title": "Typography",
+      "description": "Forge's typography font, stylesheet, and typographic scale.",
+      "status": "stable",
+      "docsPath": "development/typography.md"
+    },
+    {
+      "name": "usage",
+      "title": "Usage",
+      "description": "How Tyler Forge components work as Web Components — properties, events, methods, slots, and more.",
+      "status": "stable",
+      "docsPath": "development/usage.md"
+    }
+  ]
+}

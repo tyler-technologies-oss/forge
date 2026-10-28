@@ -27,7 +27,7 @@ Cards function as versatile building blocks that can contain various types of co
 
 ## Usage
 
-`forge-card` groups content and actions about one topic through `raised` and `no-padding`. Reach for a `forge-scaffold` inside it once the card needs a distinct header, scrollable body, and footer. Use a card to organize related information or preview a record that links to the full one; avoid it when the content inside isn't actually related, or when scanning and comparing homogeneous data matters more than grouping.
+`forge-card` groups content and actions about one topic through `raised` and `no-padding`. When a card needs a header or footer, nest a `forge-scaffold` inside it with a `forge-toolbar` in each of the `header` and `footer` slots. Use a card to organize related information or preview a record that links to the full one; avoid it when the content inside isn't actually related, or when scanning and comparing homogeneous data matters more than grouping.
 
 ## Rules
 
@@ -36,6 +36,8 @@ Cards function as versatile building blocks that can contain various types of co
     variant="do"
     rules={[
       "Keep everything inside a card related to a single topic or record.",
+      "Build a card's header and footer from a `forge-scaffold` with a `forge-toolbar` in each slot, and set `no-padding` on the card so the toolbars reach its edges.",
+      "Use `inverted` on the footer toolbar so its divider sits above the actions.",
       "Apply consistent padding and spacing throughout card content.",
       "Group related information logically within card boundaries.",
       "Align content inside a card consistently — centered or left-aligned, not mixed.",
@@ -49,6 +51,7 @@ Cards function as versatile building blocks that can contain various types of co
       "Don't group unrelated content into the same card.",
       "Don't use a card when scanning and comparing homogeneous data matters more than grouping — a table or list fits better.",
       "Don't mix alignment styles for content within the same card.",
+      "Don't hand-build a card header or footer from flex `div`s — use a scaffold and toolbars.",
     ]}
   />
 </Rules>
@@ -64,19 +67,10 @@ A card applies consistent padding and shape to its content by default.
 
 ## Header, body, and footer
 
-Compose a header (title plus an overflow action), body content, and a footer of actions — all optional, depending on what the card needs.
+When a card needs a header or footer, nest a `forge-scaffold` inside it. Put a `forge-toolbar` in the `header` slot for the title (`text-heading3`) and any icon actions, the content in the `body` slot with `p-medium` padding, and an `inverted` `forge-toolbar` in the `footer` slot for the actions. Set `no-padding` on the card so the toolbars run edge to edge. The header and footer stay pinned while the body scrolls. Each part is optional, so a card with only a header uses just the header toolbar.
 
 <Example
-  description="A card with a header, body, and footer of actions."
-  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/styled/styled.html"
-/>
-
-## With a scaffold
-
-Nest a `forge-scaffold` inside a card once it needs a pinned header and footer around a scrollable body.
-
-<Example
-  description="A card structured with a scaffold's header, body, and footer slots."
+  description="A card structured with a scaffold, with a toolbar in its header and footer."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/scaffold/scaffold.html"
 />
 

@@ -54,11 +54,17 @@ const components = await getCollection("components");
     <!-- Theme initialization (prevent flash) -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("forge-docs-theme");
+        const legacy = localStorage.getItem("forge-docs-theme");
+        if (legacy) {
+          localStorage.setItem(".forge-theme", legacy);
+          localStorage.removeItem("forge-docs-theme");
+        }
+        const stored = localStorage.getItem(".forge-theme");
         const system = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
-        document.documentElement.setAttribute("data-forge-theme", stored || system);
+        const theme = stored === "light" || stored === "dark" ? stored : system;
+        document.documentElement.setAttribute("data-forge-theme", theme);
       })();
     </script>
 

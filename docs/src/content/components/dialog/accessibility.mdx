@@ -1,6 +1,18 @@
 ## Labeling
 
-You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog>` — the native `<dialog>` element underneath it lives across a shadow boundary those attributes can't reach. Set the `label` and `description` attributes instead; the dialog wires up the equivalent ARIA relationships for you and announces them correctly when it opens.
+You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog>` — the native `<dialog>` element underneath it lives across a shadow boundary those attributes can't reach. Use one of these instead, and the dialog wires up the equivalent ARIA relationships and announces them correctly when it opens:
+
+- **`label` and `description`**: plain-text values, for a dialog without a visible title.
+- **`labelledby` and `describedby`**: the id (or space-separated ids) of elements inside the dialog that label or describe it, such as the title in its header toolbar. These are resolved across the shadow boundary for you, and take precedence over `label` and `description`. Note there's no `aria-` prefix.
+
+```html
+<forge-dialog labelledby="dialog-title" describedby="dialog-message">
+  <h2 id="dialog-title" class="forge-typography--heading3">Delete file?</h2>
+  <p id="dialog-message">This can't be undone.</p>
+</forge-dialog>
+```
+
+Give the close icon button in the header an accessible name with `aria-label="Close dialog"`.
 
 ## Keyboard interaction
 

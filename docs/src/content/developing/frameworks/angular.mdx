@@ -26,6 +26,7 @@ This adapter provides the following:
 - Automatically provides `ControlValueAccessor` directives for native Angular integration with Forge's form-associated elements.
 - Exposes Angular providers for creating dynamic components such as dialogs, toasts, and popovers.
   - Ensures that the dynamic components are created within the Angular context (zone), and are properly destroyed when no longer needed.
+  - To open a dialog programmatically, inject `DialogService` from `@tylertech/forge-angular` and call `open()` with your component. `ToastService` and `PopoverService` work the same way for toasts and popovers.
 
 While the adapter is not _required_ to use Forge with Angular, it is **highly** recommended to make the integration easier.
 
@@ -81,6 +82,8 @@ import { ForgeButtonModule } from '@tylertech/forge-angular';
 })
 export class MyComponent {}
 ```
+
+Components that are only available through their own subpath import (such as `user-profile`, which isn't included in the root `@tylertech/forge` import) have Angular modules too, for example `ForgeUserProfileModule`.
 
 ## Importing Styles
 

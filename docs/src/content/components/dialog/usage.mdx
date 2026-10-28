@@ -28,7 +28,7 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
     variant="do"
     rules={[
       "Reserve a dialog for critical information or a decision that truly needs to block the rest of the app.",
-      "Use a raised button for the confirming action and an outlined button for the dismissive one, with the confirming action on the right.",
+      "Use a filled button for the confirming action and a tonal button for the dismissive one, with the confirming action on the right.",
       "Disable the confirming action until every required field in the dialog is filled.",
       "Confirm before discarding unsaved changes when a user tries to close a dialog containing form input.",
     ]}
@@ -39,7 +39,7 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
     rules={[
       "Don't stack a dialog on top of another dialog.",
       "Don't let a click outside the dialog close it when the dialog contains a form — that risks accidental data loss.",
-      "Don't place two raised buttons next to each other in a dialog's footer.",
+      "Don't place two filled buttons next to each other in a dialog's footer.",
       "Don't use a vague action label like \"OK\" or \"Done\" — use a specific verb like \"Save\" or \"Send\".",
     ]}
   />
@@ -47,13 +47,47 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
 ## Structure
 
-A dialog's content is typically a `forge-scaffold` with a `header` toolbar (title plus a close icon button), a `body` (the message or form), and a `footer` toolbar (actions) — pinning the header and footer so only the body scrolls.
+A dialog's content is typically a `forge-scaffold` with a `header` toolbar (title plus a close icon button), a `body` (the message or form), and a `footer` toolbar (actions) — pinning the header and footer so only the body scrolls. The title goes in the header toolbar's `start` slot and the close icon button in its `end` slot. The footer toolbar sets `inverted` so its divider sits above it.
+
+```html
+<forge-dialog labelledby="edit-profile-title">
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h2 slot="start" id="edit-profile-title" class="forge-typography--heading3">Edit profile</h2>
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+    <div slot="body" class="p-medium">...</div>
+    <forge-toolbar slot="footer" inverted>
+      <div slot="end" class="flex items-center gap-medium">
+        <forge-button variant="tonal">Cancel</forge-button>
+        <forge-button variant="filled">Save</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-dialog>
+```
 
 <Example
   description="A dialog built from a scaffold's header, body, and footer slots."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/dialog/demo/demo.html"
   height="400px"
 />
+
+## Opening a dialog
+
+Set `open` on a dialog already in the page to show it, and remove it (or set `open = false`) to close it. To create one on demand, build it in script, append it to `document.body`, then set `open`:
+
+```js
+const dialog = document.createElement("forge-dialog");
+dialog.label = "Edit profile";
+dialog.append(content);
+document.body.append(dialog);
+dialog.open = true;
+```
+
+In Angular apps, open dialogs through `DialogService` from `@tylertech/forge-angular` instead of creating the element yourself.
 
 ## Modes
 

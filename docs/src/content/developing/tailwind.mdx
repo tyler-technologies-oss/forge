@@ -21,9 +21,13 @@ npm install @tylertech/forge-tailwind
 
 ## Setup
 
-Import Tailwind and the Forge theme in your main CSS file using CSS layers for proper cascade control:
+Import Forge CSS, Tailwind, and the Forge theme in your main CSS file using CSS layers for proper cascade control. The Forge stylesheets go at the top, before the Tailwind layer imports:
 
 ```css
+/* Forge CSS provides the design tokens the Tailwind theme references */
+@import "@tylertech/forge/dist/forge-core.css";
+@import "@tylertech/forge/dist/forge.css";
+
 /* Step 1: Define your Tailwind layers */
 @layer theme, base, components, utilities;
 
@@ -40,6 +44,16 @@ Import Tailwind and the Forge theme in your main CSS file using CSS layers for p
   tokens to be available. The Tailwind theme references Forge's CSS custom
   properties.
 </Blockquote>
+
+Tailwind's preflight (`tailwindcss/preflight.css`) is skipped on purpose: its global resets fight Forge component styles.
+
+### Dark mode
+
+Forge's theme toggle sets `data-forge-theme="dark"` on `<html>`. To make Tailwind's `dark:` variant follow it instead of the OS-level `prefers-color-scheme`, add a custom variant to your entry CSS after the imports:
+
+```css
+@custom-variant dark (&:where(html[data-forge-theme='dark'] *));
+```
 
 ## Angular Setup
 
@@ -70,6 +84,9 @@ Create a `.postcssrc.json` file in the root of your Angular project:
 Add the imports to your global stylesheet (typically `src/styles.css` or `src/styles.scss`):
 
 ```css
+@import "@tylertech/forge/dist/forge-core.css";
+@import "@tylertech/forge/dist/forge.css";
+
 /* Step 1: Define your Tailwind layers */
 @layer theme, base, components, utilities;
 
@@ -211,6 +228,39 @@ The package extends Tailwind's theme with Forge design tokens:
     </tr>
   </tbody>
 </table>
+
+### Utility Classes
+
+The package also ships pre-built classes for common Forge layout patterns:
+
+<table class="forge-data-table">
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>grid-min-320</code>
+      </td>
+      <td>
+        Responsive auto-fill grid for card layouts. Columns use{" "}
+        <code>minmax(min(320px, 100%), 1fr)</code>, so each targets ~320px and
+        shrinks to fit narrow containers, with a <code>gap-medium</code> gap.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+```html
+<div class="grid-min-320">
+  <forge-card>...</forge-card>
+  <forge-card>...</forge-card>
+  <forge-card>...</forge-card>
+</div>
+```
 
 ## Background Colors
 
@@ -987,7 +1037,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-display1">text-display1</div>
       </td>
-      <td>Display 1 (largest)</td>
+      <td>Display 1 (smallest)</td>
     </tr>
     <tr>
       <td>
@@ -1029,7 +1079,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-display8">text-display8</div>
       </td>
-      <td>Display 8 (smallest display)</td>
+      <td>Display 8 (largest display)</td>
     </tr>
   </tbody>
 </table>
@@ -1048,7 +1098,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-heading1">text-heading1</div>
       </td>
-      <td>Heading 1 (largest)</td>
+      <td>Heading 1 (smallest)</td>
     </tr>
     <tr>
       <td>
@@ -1090,7 +1140,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-heading8">text-heading8</div>
       </td>
-      <td>Heading 8 (smallest heading)</td>
+      <td>Heading 8 (largest heading)</td>
     </tr>
   </tbody>
 </table>
@@ -1109,7 +1159,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-subheading1">text-subheading1</div>
       </td>
-      <td>Subheading 1 (largest)</td>
+      <td>Subheading 1 (smallest)</td>
     </tr>
     <tr>
       <td>
@@ -1151,7 +1201,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-subheading8">text-subheading8</div>
       </td>
-      <td>Subheading 8 (smallest subheading)</td>
+      <td>Subheading 8 (largest subheading)</td>
     </tr>
   </tbody>
 </table>
@@ -1170,7 +1220,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-body1">text-body1</div>
       </td>
-      <td>Body 1 (largest)</td>
+      <td>Body 1 (smallest)</td>
     </tr>
     <tr>
       <td>
@@ -1188,7 +1238,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-body4">text-body4</div>
       </td>
-      <td>Body 4 (smallest body)</td>
+      <td>Body 4 (largest body)</td>
     </tr>
   </tbody>
 </table>
@@ -1207,7 +1257,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-label1">text-label1</div>
       </td>
-      <td>Label 1 (largest)</td>
+      <td>Label 1 (smallest)</td>
     </tr>
     <tr>
       <td>
@@ -1219,7 +1269,7 @@ Apply complete Forge typography styles with single utility classes.
       <td>
         <div class="text-label3">text-label3</div>
       </td>
-      <td>Label 3 (smallest label)</td>
+      <td>Label 3 (largest label)</td>
     </tr>
   </tbody>
 </table>

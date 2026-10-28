@@ -10,6 +10,11 @@ This means that you can use them in any front-end framework or library, such as 
 just like any other built-in HTML element. Each component has API documentation that describes the properties, events, and methods that
 it supports, as well as examples of how to use the component in your application.
 
+<Blockquote>
+  **Important:** custom elements can't self-close in HTML. Always write an explicit closing tag, even for elements with no content:
+  `<forge-icon name="close"></forge-icon>`, not `<forge-icon name="close" />`. JSX (React) is the exception, where self-closing tags are valid.
+</Blockquote>
+
 ## VS Code Integration
 
 This is optional, but Forge provides custom data files for VS Code that you can use to get autocompletion and documentation for Forge components in your HTML and CSS files.
@@ -153,6 +158,18 @@ forge-meter:state(optimum-value) {
   States provide a more reliable way to find and style components based on their current state than similar features such as attributes, which are
   not guaranteed to always represent the current state of a component.
 </Blockquote>
+
+## Classes on Forge elements
+
+You can put a class on a Forge element, but it only reaches the element's host box, not anything inside its shadow root. Use host classes for layout (margin, width, flex and grid placement) and for setting the component's CSS custom properties. To change the component's internal appearance, set its custom properties (below) or, as a last resort, style a shadow part. A class that sets `color`, `padding`, or `background` on the host usually has no visible effect.
+
+```html
+<!-- Works: layout and custom properties on the host -->
+<forge-card class="w-full [--forge-card-padding:0]">...</forge-card>
+
+<!-- Doesn't work: the button's internals ignore host padding and color -->
+<forge-button class="p-large text-red-600">Save</forge-button>
+```
 
 ## CSS Custom Properties
 

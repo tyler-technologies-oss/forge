@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'docs/src/content/components/**'
+      - 'docs/src/content/designing/**'
       - 'docs/src/content/developing/**'
       - 'docs/scripts/build-forge-skill.mjs'
       - 'docs/scripts/forge-skill-template/**'
@@ -41,7 +42,7 @@ jobs:
         run: pnpm --filter forge-docs build:forge-skill
 
       - name: Zip skill bundle
-        working-directory: docs/skill
+        working-directory: plugin/skills
         run: zip -r ../../forge-design-skill.zip forge-design
 
       - name: Publish release
@@ -51,7 +52,7 @@ jobs:
           name: Forge Design skill (latest)
           body: |
             Auto-published from `${{ github.sha }}` on push to `main`.
-            Generated from `docs/src/content/components/**` and `docs/src/content/developing/**`
+            Generated from `docs/src/content/{components,designing,developing}/**`
             via `pnpm --filter forge-docs build:forge-skill`.
           make_latest: false
           files: forge-design-skill.zip
