@@ -1,1 +1,1 @@
-import{E as e,Yn as t,i as n,in as r}from"../../../chunks/icon-CV4NQqAk.js";n.define([t,e,r]);
+import{E as e,Xn as t,i as n,in as r}from"../../../chunks/icon-D9P92MWE.js";n.define([t,e,r]);

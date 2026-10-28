@@ -1,0 +1,48 @@
+<!--
+  @block Timeline — With Break
+  @type component
+  @description A timeline break separating recent activity from earlier, non-sequential activity.
+  @tags timeline, with-break, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Timeline — With Break</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <forge-timeline>
+  <forge-timeline-item>
+    <span>Recent Activity</span>
+  </forge-timeline-item>
+  <forge-timeline-item>
+    <span>Code Review</span>
+  </forge-timeline-item>
+  <forge-timeline-break></forge-timeline-break>
+  <forge-timeline-item>
+    <span>Previous Activity</span>
+  </forge-timeline-item>
+  <forge-timeline-item>
+    <span>Initial Commit</span>
+  </forge-timeline-item>
+</forge-timeline>
+  </body>
+</html>
