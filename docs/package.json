@@ -36,6 +36,7 @@
     "remark-stringify": "^11.0.0",
     "sass-embedded": "^1.99.0",
     "typescript": "^6.0.3",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "vite": "^7.3.6"
   }
 }
