@@ -53,5 +53,5 @@ jobs:
             Auto-published from `${{ github.sha }}` on push to `main`.
             Generated from `docs/src/content/components/**` and `docs/src/content/developing/**`
             via `pnpm --filter forge-docs build:forge-skill`.
-          make_latest: true
+          make_latest: false
           files: forge-design-skill.zip

@@ -19,6 +19,10 @@ env:
 
 jobs:
   deploy:
+    # TODO: Deployment is not configured yet, so this job is skipped until the DOCS_PAGES_REPOSITORY
+    # repo variable exists. When ready to deploy, create the target repo, set the DOCS_PAGES_REPOSITORY
+    # variable and DOCS_DEPLOY_KEY secret, then remove this condition.
+    if: ${{ vars.DOCS_PAGES_REPOSITORY != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
