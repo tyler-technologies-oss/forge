@@ -5,13 +5,13 @@ import {
   tylIconArrowBack,
   tylIconArrowDownward,
   tylIconArrowForward,
+  tylIconArrowLeftRight,
   tylIconArrowUpward,
   tylIconMoreVert,
-  tylIconOpenInFull,
   tylIconPushPin,
   tylIconVisibilityOff
 } from '@tylertech/tyler-icons';
-import { html, LitElement, TemplateResult } from 'lit';
+import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
 import { SELECT_COLUMN_ID } from '../data-table/constants.js';
@@ -22,6 +22,8 @@ import type { ColumnMenuAction, ColumnMenuActionEventDetail } from './types.js';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/menu';
+
+import styles from './column-menu.scss';
 
 type MoveDirection = -1 | 1;
 
@@ -39,6 +41,21 @@ const DIVIDER_OPTION: IMenuOption = { value: undefined, label: '', divider: true
  */
 @customElement(COLUMN_MENU_TAG_NAME)
 export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
+  static {
+    IconRegistry.define([
+      tylIconMoreVert,
+      tylIconArrowBack,
+      tylIconArrowForward,
+      tylIconArrowLeftRight,
+      tylIconArrowUpward,
+      tylIconArrowDownward,
+      tylIconVisibilityOff,
+      tylIconPushPin
+    ]);
+  }
+
+  public static override styles = unsafeCSS(styles);
+
   /**
    * The column that the menu actions apply to.
    */
@@ -52,24 +69,16 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
   public table: Table<TData> | undefined;
 
   /**
+   * Whether the table allows its columns to be reordered. The move actions are only offered when this is set.
+   */
+  @property({ type: Boolean })
+  public reorderable = false;
+
+  /**
    * The accessible label for the menu button.
    */
   @property({ attribute: 'button-label' })
   public buttonLabel = 'Column options';
-
-  constructor() {
-    super();
-    IconRegistry.define([
-      tylIconMoreVert,
-      tylIconArrowBack,
-      tylIconArrowForward,
-      tylIconArrowUpward,
-      tylIconArrowDownward,
-      tylIconVisibilityOff,
-      tylIconPushPin,
-      tylIconOpenInFull
-    ]);
-  }
 
   @query('forge-menu')
   private _menu?: IMenuComponent;
@@ -80,7 +89,6 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
       return [];
     }
 
-    const canSort = column.getCanSort();
     const isPinned = !!column.getIsPinned();
 
     const item = (value: ColumnMenuAction, label: string, leadingIcon: string, disabled = false): IMenuOption<ColumnMenuAction> => ({
@@ -91,17 +99,19 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
       disabled
     });
 
-    return [
-      item('move-left', 'Move left', 'arrow_back', !this.#getMoveTarget(-1)),
-      item('move-right', 'Move right', 'arrow_forward', !this.#getMoveTarget(1)),
-      DIVIDER_OPTION,
-      item('sort-ascending', 'Sort ascending', 'arrow_upward', !canSort),
-      item('sort-descending', 'Sort descending', 'arrow_downward', !canSort),
-      DIVIDER_OPTION,
-      item('hide', 'Hide', 'visibility_off', !column.getCanHide()),
-      item(isPinned ? 'unpin' : 'pin', isPinned ? 'Unpin' : 'Pin', 'push_pin'),
-      item('maximize', 'Maximize', 'open_in_full')
+    const groups: Array<Array<IMenuOption<ColumnMenuAction>>> = [
+      this.reorderable
+        ? [item('move-left', 'Move left', 'arrow_back', !this.#getMoveTarget(-1)), item('move-right', 'Move right', 'arrow_forward', !this.#getMoveTarget(1))]
+        : [],
+      column.getCanSort() ? [item('sort-ascending', 'Sort ascending', 'arrow_upward'), item('sort-descending', 'Sort descending', 'arrow_downward')] : [],
+      [
+        item('hide', 'Hide', 'visibility_off', !column.getCanHide()),
+        item(isPinned ? 'unpin' : 'pin', isPinned ? 'Unpin' : 'Pin', 'push_pin'),
+        ...(column.getCanResize() ? [item('maximize', 'Maximize', 'arrow_left_right')] : [])
+      ]
     ];
+
+    return groups.filter(group => group.length).flatMap((group, index) => (index ? [DIVIDER_OPTION, ...group] : group));
   };
 
   #getMoveTarget(direction: MoveDirection): Column<TData, unknown> | undefined {

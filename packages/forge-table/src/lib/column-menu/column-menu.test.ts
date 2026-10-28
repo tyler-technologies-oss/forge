@@ -24,11 +24,12 @@ const DATA: TestData[] = [
   { id: 2, name: 'Bob', age: 25 }
 ];
 
-function createTestTable(options: { enableSorting?: boolean } = {}): Table<TestData> {
+function createTestTable(options: { enableSorting?: boolean; enableColumnResizing?: boolean; columns?: ColumnDef<TestData>[] } = {}): Table<TestData> {
   const baseOptions = {
     data: DATA,
-    columns: COLUMNS,
+    columns: options.columns ?? COLUMNS,
     enableSorting: options.enableSorting ?? true,
+    enableColumnResizing: options.enableColumnResizing ?? true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     renderFallbackValue: null,
@@ -47,8 +48,10 @@ function createTestTable(options: { enableSorting?: boolean } = {}): Table<TestD
   return table;
 }
 
-async function renderMenu(table: Table<TestData>, columnId: string): Promise<ColumnMenuElement<TestData>> {
-  const screen = await render(html`<forge-data-table-column-menu .table=${table} .column=${table.getColumn(columnId)}></forge-data-table-column-menu>`);
+async function renderMenu(table: Table<TestData>, columnId: string, reorderable = true): Promise<ColumnMenuElement<TestData>> {
+  const screen = await render(
+    html`<forge-data-table-column-menu .table=${table} .column=${table.getColumn(columnId)} .reorderable=${reorderable}></forge-data-table-column-menu>`
+  );
   const element = screen.container.querySelector('forge-data-table-column-menu') as ColumnMenuElement<TestData>;
   await element.updateComplete;
   return element;
@@ -60,6 +63,10 @@ async function openMenu(element: ColumnMenuElement<TestData>): Promise<HTMLEleme
   const getItems = (): HTMLElement[] => Array.from(document.querySelectorAll('forge-list-item'));
   await vi.waitFor(() => expect(getItems().length).toBeGreaterThan(0));
   return getItems();
+}
+
+function getLabels(items: HTMLElement[]): Array<string | undefined> {
+  return items.map(i => i.textContent?.trim());
 }
 
 function getItem(items: HTMLElement[], label: string): HTMLElement {
@@ -112,13 +119,43 @@ describe('ColumnMenu', () => {
     expect(table.getState().sorting).toEqual([{ id: 'age', desc: true }]);
   });
 
-  it('should disable sort actions when the column cannot be sorted', async () => {
+  it('should omit sort actions when the table does not allow sorting', async () => {
     const element = await renderMenu(createTestTable({ enableSorting: false }), 'name');
 
-    const items = await openMenu(element);
+    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Hide', 'Pin', 'Maximize']);
+  });
 
-    expect(isDisabled(items, 'Sort ascending')).toBe(true);
-    expect(isDisabled(items, 'Sort descending')).toBe(true);
+  it('should omit sort actions when the column does not allow sorting', async () => {
+    const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enableSorting: false } : column));
+    const element = await renderMenu(createTestTable({ columns }), 'name');
+
+    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Hide', 'Pin', 'Maximize']);
+  });
+
+  it('should omit move actions when the table does not allow reordering', async () => {
+    const element = await renderMenu(createTestTable(), 'name', false);
+
+    expect(getLabels(await openMenu(element))).toEqual(['Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+  });
+
+  it('should omit the maximize action when the table does not allow resizing', async () => {
+    const element = await renderMenu(createTestTable({ enableColumnResizing: false }), 'name');
+
+    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Sort ascending', 'Sort descending', 'Hide', 'Pin']);
+  });
+
+  it('should reflect option changes made after the menu was first opened', async () => {
+    const table = createTestTable();
+    const element = await renderMenu(table, 'name');
+    await openMenu(element);
+    await userEvent.keyboard('{Escape}');
+    await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item')).toHaveLength(0));
+
+    element.reorderable = false;
+    table.setOptions(prev => ({ ...prev, enableSorting: false, enableColumnResizing: false }));
+    await element.updateComplete;
+
+    expect(getLabels(await openMenu(element))).toEqual(['Hide', 'Pin']);
   });
 
   it('should hide the column when hide is chosen', async () => {

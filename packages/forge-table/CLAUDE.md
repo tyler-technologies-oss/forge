@@ -41,15 +41,16 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Takes the TanStack `column` and `table` as properties; sort, move and hide are applied directly, while pin and
   maximize only dispatch `forge-data-table-column-menu-action`. It assigns `forge-menu`'s `options` in
   `firstUpdated` because `forge-menu` drops an `options` value that Lit sets during the first render.
-- `src/dev/` — a scratch page on **localhost:3470** that imports the built `esm/` rather than source. Not
-  published.
+- `src/dev/` — a scratch page on **localhost:3470**. `vite.config.mts` aliases this package to `src/lib` and
+  compiles its SCSS from source (including forge's SCSS), so edits reload the page with no rebuild. forge itself
+  still resolves to its built `esm/`, so forge changes need a forge rebuild. Not published.
 
 ## Commands
 
 ```bash
 pnpm run --filter @tylertech/forge-table build   # rollup ESM + CEM + types
 pnpm run --filter @tylertech/forge-table test    # Vitest browser mode
-pnpm run --filter @tylertech/forge-table dev     # scratch page at localhost:3470
+pnpm run --filter @tylertech/forge-table dev     # scratch page at localhost:3470 (reloads on source edits)
 ```
 
 ### Build through turbo, not just this package
@@ -69,7 +70,7 @@ The build also removes `esm/` and `custom-elements.json` first, so a failed buil
 - **Do not import from `@tylertech/forge/core`.** Its type declarations are real, but forge's built
   `esm/core/index.js` contains no exports, so it type-checks and then fails in the browser with
   `does not provide an export named ...`. Neither the build nor the tests catch this because the tests
-  alias forge to its source — only the dev page (or a real consumer) does.
+  alias forge to its source — only the dev page (which uses forge's build) or a real consumer does.
 
 ### Storybook
 

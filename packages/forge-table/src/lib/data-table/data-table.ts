@@ -40,6 +40,7 @@ import '@tylertech/forge/date-picker';
 import '@tylertech/forge/list';
 import '@tylertech/forge/popover';
 import '@tylertech/forge/tooltip';
+import '../column-menu/column-menu.js';
 
 import styles from './data-table.scss';
 
@@ -362,6 +363,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
       columns: this._tableColumns,
       data: this._data,
       columnResizeMode: 'onChange',
+      enableColumnResizing: this.resizable,
       enableSorting: this.sortable,
       enableMultiSort: this.sortable && this.multiSort,
       maxMultiSortColCount: this.maxMultiSortColCount,
@@ -501,6 +503,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                           ${svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`}
                         `
                       : null}
+                    <forge-data-table-column-menu .table=${table} .column=${header.column} .reorderable=${this.reorderable}></forge-data-table-column-menu>
                   </div>
                 </div>
                 ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(header.column)}</div>` : nothing}
