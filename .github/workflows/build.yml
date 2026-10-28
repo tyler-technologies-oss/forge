@@ -50,5 +50,14 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # The docs build regenerates the plugin's forge-design skill from the docs MDX. A diff here
+      # means a docs change was committed without the skill it produces.
+      - name: Check Forge Design Skill Is Up To Date
+        run: |
+          if ! git diff --exit-code --stat -- plugin/skills/forge-design || [ -n "$(git ls-files --others --exclude-standard -- plugin/skills/forge-design)" ]; then
+            echo "::error::plugin/skills/forge-design is out of date. Run 'pnpm --filter forge-docs build:forge-skill' and commit the result."
+            exit 1
+          fi
+
       - name: Test
         run: pnpm run test

@@ -52,7 +52,7 @@ Skip the plan step for **single-component edits** (e.g. "change this button labe
     }
   },
   "typography": {
-    "page_title": "text-heading5",
+    "page_title": "text-heading4",
     "section_headings": "text-heading3",
     "body": "text-body1"
   },
@@ -95,7 +95,7 @@ On failure, the tool returns `{ valid: false, errors: [{ path, message, hint }] 
 |---|---|
 | `components.forge-foo not found in CEM` | Call `find_components` for what you actually want. Do not invent tag names. |
 | `block_id not in manifest` | Call `get_forge_blocks(query: ...)` and pick a real block ID. |
-| `typography.page_title = "body2" is not a heading role` | Pick from `text-heading{1..8}`; card headers default to `text-heading3`, page titles to `text-heading4` or `text-heading5`. |
+| `typography.page_title = "body2" is not a heading role` | Pick from `text-heading{1..8}`; card headers use `text-heading3`, page titles `text-heading4`. |
 | `spacing_scale = "custom" is not allowed` | Use `tokens-only`. Freehand pixels are an anti-pattern. |
 | `icon "filter" not found` | Call `find_icons` and use the exact name (e.g. `filter_list`). |
 | `page_title inside forge-card region` | Move the page title to `header` region or a `forge-toolbar` above the card. |
@@ -105,7 +105,7 @@ On failure, the tool returns `{ valid: false, errors: [{ path, message, hint }] 
 **User request:** "Build me a settings page with a nav sidebar and a form for account preferences."
 
 1. Call `generate_ui_plan` with that description.
-2. Tool returns a plan pinning `scaffold_block_id: "src/blocks/application-layout/app-scaffold-with-side-nav"`, `main.block_id: "src/blocks/forms/settings-form"`, `page_title: "text-heading5"`, `section_headings: "text-heading3"`.
+2. Tool returns a plan pinning `scaffold_block_id: "src/blocks/application-layout/app-scaffold-with-side-nav"`, `main.block_id: "src/blocks/forms/settings-form"`, `page_title: "text-heading4"`, `section_headings: "text-heading3"`.
 3. Call `validate_ui_plan` — passes.
 4. Call `get_forge_blocks(blockId: "src/blocks/forms/settings-form")` to fetch the concrete markup.
 5. Write the markup, adapting content only.
