@@ -38,9 +38,9 @@ These are the styles to reach for in a Forge application. They match the [layout
 
 Container titles are one step smaller than the page title, so a card never competes with the page around it. When a container needs smaller headings, go smaller, not larger.
 
-## Semantic level vs visual style
+## Heading level vs visual style
 
-Pick the HTML heading level from the document outline, and the visual style from the hierarchy above. The two are independent. In an app layout, the app title in the app bar is the `h1`, so the page title is an `h2` styled `heading4`, and card titles are usually `h3` styled `heading3`.
+The hierarchy above sets each title's visual style, which is what keeps a Forge application consistent. The HTML heading element (`h1`–`h6`) is separate: it follows the application's own document outline, so it depends on where a card or section ends up. A card title is always styled `heading3`, whether it's an `h2`, `h3`, or `h4` in a given page.
 
 ## Emphasis
 
@@ -54,7 +54,7 @@ Change emphasis with text color, not with size or weight. Use `text-high` for pr
     rules={[
       'Use a Forge type style for every piece of text.',
       'Keep container titles at `heading3` or smaller, one step below the page title.',
-      'Choose heading levels from the page outline, and visual styles from the hierarchy.',
+      "Choose the heading element from your page's outline, and the visual style from the hierarchy.",
       'Use text color to set emphasis.'
     ]}
   />

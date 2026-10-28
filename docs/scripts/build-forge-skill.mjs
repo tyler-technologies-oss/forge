@@ -11,7 +11,7 @@
  *
  * Runs after `astro build`, or alone with `pnpm build:forge-skill [-- --strict]`.
  */
-import { readFile, writeFile, mkdir, readdir, access } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir, access, rm, cp } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { unified } from "unified";
@@ -29,7 +29,10 @@ const DEVELOPMENT_DIR = path.join(ROOT, "src/content/developing");
 const DESIGN_DIR = path.join(ROOT, "src/content/designing");
 const TEMPLATE_PATH = path.join(ROOT, "scripts/forge-skill-template/SKILL.md");
 
-const OUT_DIR = path.join(ROOT, "skill/forge-design");
+const TEMPLATE_REFERENCES_DIR = path.join(ROOT, "scripts/forge-skill-template/references");
+
+/** The plugin ships this folder as-is, so the generated skill is committed and reviewed with the docs change. */
+const OUT_DIR = path.resolve(ROOT, "../plugin/skills/forge-design");
 const OUT_REFERENCES_DIR = path.join(OUT_DIR, "references");
 const OUT_COMPONENTS_DIR = path.join(OUT_REFERENCES_DIR, "components");
 
@@ -568,7 +571,7 @@ function buildComponentIndex(components) {
       .sort((a, b) => a.title.localeCompare(b.title))
       .map((c) => `- [${c.title}](references/${c.docsPath}) — ${c.description}`)
       .join("\n");
-    return `### ${label}\n\n${items}`;
+    return `#### ${label}\n\n${items}`;
   });
 
   return sections.join("\n\n");
@@ -629,7 +632,13 @@ function reportExamples(examples, manifest, strict) {
 }
 
 async function main() {
+  // Rebuild from scratch so a deleted or renamed docs page doesn't leave a stale reference behind.
+  if (!OUT_DIR.endsWith(path.join("plugin", "skills", "forge-design"))) {
+    throw new BuildError(`Refusing to clear unexpected skill output folder: ${OUT_DIR}`);
+  }
+  await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_REFERENCES_DIR, { recursive: true });
+  await cp(TEMPLATE_REFERENCES_DIR, OUT_REFERENCES_DIR, { recursive: true });
 
   const examples = [];
   const components = await buildComponentDocs(examples);
