@@ -1,0 +1,25 @@
+{{#if titleIcon}}
+<div slot="start" class="flex items-center gap-xsmall">
+  <h2 class="text-heading3">{{title}}</h2>
+  <forge-icon name="{{titleIcon}}" class="text-primary" aria-label="{{titleIconLabel}}"></forge-icon>
+</div>
+{{else}}
+<h2 slot="start" class="text-heading3">{{title}}</h2>
+{{/if}}
+{{#if action1}}
+<div slot="end" class="flex items-center gap-xsmall">
+  <forge-icon-button density="medium" aria-label="{{action1Label}}">
+    <forge-icon name="{{action1}}"></forge-icon>
+  </forge-icon-button>
+  {{#if action2}}
+  <forge-icon-button density="medium" aria-label="{{action2Label}}">
+    <forge-icon name="{{action2}}"></forge-icon>
+  </forge-icon-button>
+  {{/if}}
+  {{#if action3}}
+  <forge-icon-button density="medium" aria-label="{{action3Label}}">
+    <forge-icon name="{{action3}}"></forge-icon>
+  </forge-icon-button>
+  {{/if}}
+</div>
+{{/if}}
