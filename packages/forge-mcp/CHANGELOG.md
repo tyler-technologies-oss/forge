@@ -1,5 +1,18 @@
 # @tylertech/forge-mcp
 
+## 1.4.0
+
+### Features
+
+- a4d4c99: **forge-mcp**: show which `@tylertech/forge` version `validate_component_api` checked against
+
+  Validation results now name the package version and whether it came from the project's install, the latest published release, or the bundled snapshot. When an API is unmatched against an installed version, the response notes that it may have been added in a newer release, rather than presenting it as a typo.
+
+### Bug Fixes
+
+- a4d4c99: **forge-mcp**: default the `generate_ui_plan` template's `page_title` to `text-heading4`, matching the forge-design skill
+- a4d4c99: **forge-mcp**: tailor `generate_ui_plan` import guidance to the framework, so Angular projects are told to import `ForgeXModule` from `@tylertech/forge-angular` instead of side-effect imports
+
 ## 1.3.2
 
 ### Bug Fixes
