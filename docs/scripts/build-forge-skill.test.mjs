@@ -53,6 +53,13 @@ test("cleanMdxBody: drops <ComponentHeader> and its import, keeping surrounding 
   assert.match(out, /Intro copy\.\n\n## Overview\n\nOverview copy\./);
 });
 
+test("cleanMdxBody: renders backtick spans in <Rule> strings as inline code", () => {
+  const body = '<Rules>\n  <Rule variant="do" rules={["Set `no-padding` on the card."]} />\n</Rules>';
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
+  assert.match(out, /- Set `no-padding` on the card\./);
+  assert.doesNotMatch(out, /\\`/);
+});
+
 test("blockExists matches id, file, and file minus .html like get_forge_blocks", () => {
   const manifest = { blocks: [{ id: "forms/login/login", file: "forms/login/login.html" }] };
   assert.ok(blockExists(manifest, "forms/login/login"));

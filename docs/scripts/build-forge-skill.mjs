@@ -259,6 +259,18 @@ function buildTableNode(tableNode) {
   };
 }
 
+/** Splits a plain rule string on backtick spans so `code` round-trips as inline code, not escaped text. */
+function ruleToInlineNodes(rule) {
+  return rule
+    .split(/(`[^`]+`)/)
+    .filter(Boolean)
+    .map((part) =>
+      part.startsWith("`") && part.endsWith("`")
+        ? { type: "inlineCode", value: part.slice(1, -1) }
+        : { type: "text", value: part },
+    );
+}
+
 /** Renders a `<Rules><Rule variant="do" rules={[...]}/>...</Rules>` block as Do/Don't lists. */
 function buildRulesNodes(rulesNode) {
   const nodes = [];
@@ -283,7 +295,7 @@ function buildRulesNodes(rulesNode) {
       children: items.map((item) => ({
         type: "listItem",
         spread: false,
-        children: [{ type: "paragraph", children: [{ type: "text", value: item }] }],
+        children: [{ type: "paragraph", children: ruleToInlineNodes(item) }],
       })),
     });
   }
