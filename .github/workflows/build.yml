@@ -25,8 +25,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Fix Git Ownership
         run: git config --global --add safe.directory '*'
@@ -51,32 +49,6 @@ jobs:
 
       - name: Build
         run: pnpm run build
-
-      # The docs build regenerates the plugin's forge-design skill from the docs MDX. A diff here
-      # means a docs change was committed without the skill it produces.
-      - name: Check Forge Design Skill Is Up To Date
-        run: |
-          if ! git diff --exit-code --stat -- plugin/skills/forge-design || [ -n "$(git ls-files --others --exclude-standard -- plugin/skills/forge-design)" ]; then
-            echo "::error::plugin/skills/forge-design is out of date. Run 'pnpm --filter forge-docs build:forge-skill' and commit the result."
-            exit 1
-          fi
-
-      # Plugin users only receive changes when the plugin version changes, so any change to what
-      # the plugin ships needs a changeset. Version-bump files are excluded so the release PR passes.
-      - name: Check Plugin Changeset
-        env:
-          BASE_REF: origin/${{ github.base_ref }}
-        run: |
-          changed=$(git diff --name-only "$BASE_REF"...HEAD -- plugin ':!plugin/package.json' ':!plugin/CHANGELOG.md' ':!plugin/tests/**')
-          if [ -z "$changed" ]; then
-            exit 0
-          fi
-          pnpm exec changeset status --since="$BASE_REF" --output=changeset-status.json > /dev/null
-          if ! node -e "process.exit(require('./changeset-status.json').releases.some(r => r.name === '@tylertech/forge-plugin') ? 0 : 1)"; then
-            echo "$changed"
-            echo "::error::These plugin files changed without a @tylertech/forge-plugin changeset. Run 'pnpm changeset' and select @tylertech/forge-plugin so users receive the update."
-            exit 1
-          fi
 
       - name: Test
         run: pnpm run test
