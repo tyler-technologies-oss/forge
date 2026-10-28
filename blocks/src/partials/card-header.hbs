@@ -1,20 +1,23 @@
+{{#if tab1}}
+<div slot="header">
+  <forge-toolbar no-divider>
+    {{> card-header-content}}
+  </forge-toolbar>
+  <forge-tab-bar active-tab="0" clustered>
+    <forge-tab id="{{tab1Id}}">{{tab1}}</forge-tab>
+    {{#if tab2}}
+    <forge-tab id="{{tab2Id}}">{{tab2}}</forge-tab>
+    {{/if}}
+    {{#if tab3}}
+    <forge-tab id="{{tab3Id}}">{{tab3}}</forge-tab>
+    {{/if}}
+    {{#if tab4}}
+    <forge-tab id="{{tab4Id}}">{{tab4}}</forge-tab>
+    {{/if}}
+  </forge-tab-bar>
+</div>
+{{else}}
 <forge-toolbar slot="header">
-  <h2 slot="start" class="text-heading3">{{title}}</h2>
-  {{#if action1}}
-  <div slot="end" class="flex items-center gap-xsmall">
-    <forge-icon-button density="medium" aria-label="{{action1Label}}">
-      <forge-icon name="{{action1}}"></forge-icon>
-    </forge-icon-button>
-    {{#if action2}}
-    <forge-icon-button density="medium" aria-label="{{action2Label}}">
-      <forge-icon name="{{action2}}"></forge-icon>
-    </forge-icon-button>
-    {{/if}}
-    {{#if action3}}
-    <forge-icon-button density="medium" aria-label="{{action3Label}}">
-      <forge-icon name="{{action3}}"></forge-icon>
-    </forge-icon-button>
-    {{/if}}
-  </div>
-  {{/if}}
+  {{> card-header-content}}
 </forge-toolbar>
+{{/if}}
