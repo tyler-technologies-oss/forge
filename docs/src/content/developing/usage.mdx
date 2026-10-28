@@ -154,6 +154,18 @@ forge-meter:state(optimum-value) {
   not guaranteed to always represent the current state of a component.
 </Blockquote>
 
+## Classes on Forge elements
+
+You can put a class on a Forge element, but it only reaches the element's host box, not anything inside its shadow root. Use host classes for layout (margin, width, flex and grid placement) and for setting the component's CSS custom properties. To change the component's internal appearance, set its custom properties (below) or, as a last resort, style a shadow part. A class that sets `color`, `padding`, or `background` on the host usually has no visible effect.
+
+```html
+<!-- Works: layout and custom properties on the host -->
+<forge-card class="w-full [--forge-card-padding:0]">...</forge-card>
+
+<!-- Doesn't work: the button's internals ignore host padding and color -->
+<forge-button class="p-large text-red-600">Save</forge-button>
+```
+
 ## CSS Custom Properties
 
 Many Tyler Forge components support design tokens, which are implemented as [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)

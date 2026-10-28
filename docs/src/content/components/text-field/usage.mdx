@@ -48,7 +48,7 @@ Text fields allow users to enter and edit text within forms, dialogs, and other 
     variant="dont"
     rules={[
       "Don't truncate long label text or allow labels to wrap to multiple lines.",
-      "Don't use placeholder text as a substitute for a label — it disappears the moment the user types.",
+      "Don't use placeholder text as a substitute for a label — it disappears the moment the user types. The one exception is a search or filter field.",
       "Don't show error text and helper text in the same space — the error replaces the helper text, it doesn't stack with it.",
       "Don't disable a field just to display a fixed value — use a label-value pair instead.",
       "Don't validate before users enter information — wait until they leave the field.",
@@ -67,7 +67,7 @@ Set `variant` to `outlined` (the default), `plain`, `tonal`, `filled`, or `raise
 
 ## Label position
 
-Set `label-position` to control where the label sits relative to the input: `inset` (the default) floats it inside the field, `block-start` places it above, and `inline-start` places it beside the field.
+Set `label-position` to control where the label sits relative to the input: `inset` (the default) floats it inside the field, `block-start` places it above, `inline-start` and `inline-end` place it beside the field, and `none` hides it. Only use `none` for a search or filter field, and give the `<input>` an `aria-label` so it still has an accessible name.
 
 <Example
   description="Label positioned above the field."
@@ -115,6 +115,23 @@ Set `show-clear` to add a button that clears the field's value, appearing once t
   description="A clear button appears once the field has a value."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/text-field/clear-button/clear-button.html"
 />
+
+## Leading and trailing content
+
+Slot an icon or short text in the `start` slot to render it before the input, or in the `end` slot to render it after, like a unit suffix.
+
+## Search and filter fields
+
+A search or filter field is the one place a field may go without a visible label. Set `label-position="none"`, put a search icon in the `start` slot, set `show-clear`, and use a short placeholder like "Search" or "Filter by name" in place of the label. Give the `<input>` an `aria-label`, since the placeholder isn't an accessible name.
+
+```html
+<forge-text-field label-position="none" show-clear>
+  <forge-icon slot="start" name="search"></forge-icon>
+  <input type="search" placeholder="Search" aria-label="Search" />
+</forge-text-field>
+```
+
+Every other form field keeps a visible label and doesn't use a placeholder.
 
 ## Disabled and readonly
 

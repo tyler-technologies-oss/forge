@@ -18,8 +18,8 @@ Set these up as number variables (or a spacing collection) in Figma, named to ma
 | `--forge-spacing-xxxsmall`     | 2px   | Optical nudges only                                                     |
 | `--forge-spacing-xxsmall`      | 4px   | Icon-to-text inside a link, badge, or metric                            |
 | `--forge-spacing-xsmall`       | 8px   | Icon buttons in a row, label to its control                             |
-| `--forge-spacing-small`        | 12px  | Buttons in a group, compact card padding, stacked checkboxes            |
-| **`--forge-spacing-medium`**   | 16px  | **The default.** Container padding, gaps between fields and cards       |
+| `--forge-spacing-small`        | 12px  | Compact card padding, stacked checkboxes                                |
+| **`--forge-spacing-medium`**   | 16px  | **The default.** Container padding, buttons in a group, gaps between fields and cards |
 | `--forge-spacing-medium-large` | 20px  | Rarely used; prefer `--forge-spacing-medium` or `--forge-spacing-large` |
 | `--forge-spacing-large`        | 24px  | Vertical rhythm between rows of form fields, label/value columns        |
 | `--forge-spacing-xlarge`       | 32px  | Between major sections of a long form or page                           |
@@ -39,7 +39,7 @@ Pick spacing based on how closely two things are related, not on how much room i
 | ------------------------------- | ----------------------------- | ------------------------------------------------------------ |
 | Parts of one element            | 4px `--forge-spacing-xxsmall` | An icon and its count in a view-count metric                 |
 | A label and the thing it labels | 8px `--forge-spacing-xsmall`  | A facet title above its checkbox list; a file picker's label |
-| Siblings in a control group     | 8–12px                        | Icon buttons in a toolbar (8px); action buttons (12px)       |
+| Siblings in a control group     | 8–16px                        | Icon buttons in a toolbar (8px); action buttons (16px)       |
 | Peer content blocks             | 16px `--forge-spacing-medium` | Fields in a short form; cards in a grid                      |
 | Rows in a multi-column form     | 24px `--forge-spacing-large`  | Rows in a 6-column grid form (horizontal gap stays 16px)     |
 | Distinct sections               | 32px `--forge-spacing-xlarge` | "Project Details" → "Timeline" in a long form                |
@@ -66,7 +66,7 @@ Forms produce most of the spacing questions, and blocks follow a consistent rhyt
 - **Section heading to first field:** 16px.
 - **Between sections:** 32px, with a divider centered in that space.
 - **Checkbox and radio groups:** stacked with no extra gap (the controls include their own touch target), with the group label 8–12px above.
-- **Form actions:** in a footer toolbar, end-aligned, 12px between buttons.
+- **Form actions:** in a footer toolbar, end-aligned, 16px between buttons.
 
 Labels sit above fields (`label-position="block-start"`) in every form block. The 8px between label and input is built into the field, so don't add your own.
 
