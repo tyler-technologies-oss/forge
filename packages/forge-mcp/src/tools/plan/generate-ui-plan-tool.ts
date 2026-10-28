@@ -136,7 +136,7 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
     sections.push('- `page_title` typography role must NOT be used inside a `forge-card` region — cards use `text-heading3` or lower.');
     sections.push('- If any region uses a `<table>` for data, replace it with `forge-table` + `forge-paginator` in the plan.');
     sections.push(
-      '- Subpath-only components (`forge-app-layout`, `forge-structured-card`, `forge-count-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-user-profile`, `forge-app-launcher`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`, `forge-content-scaffold`, `forge-footer`, `forge-theme-toggle`) require a side-effect import from `@tylertech/forge/<name>` in the generated code — note them in `regions.*.components` and remember to import.'
+      "- Every Forge component requires a side-effect import from `@tylertech/forge/<name>` in the generated code (e.g. `import '@tylertech/forge/button';`). Do not use definition functions (`defineButtonComponent()`, `defineComponents()`) or import all components at once. Subpath-only components (`forge-app-layout`, `forge-structured-card`, `forge-count-card`, `forge-busy-indicator`, `forge-confirmation-dialog`, `forge-user-profile`, `forge-app-launcher`, `forge-multi-select-header`, `forge-quantity-field`, `forge-responsive-toolbar`, `forge-content-scaffold`, `forge-footer`, `forge-theme-toggle`) are easy to miss — note them in `regions.*.components` and remember to import."
     );
     sections.push('');
     sections.push('## Reference');
