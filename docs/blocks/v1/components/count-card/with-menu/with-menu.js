@@ -1,1 +1,1 @@
-import{An as e,Q as t,i as n}from"../../../chunks/icon-D9P92MWE.js";n.define([t,e]);var r=document.querySelector(`forge-menu`);r&&(r.options=[{label:`View details`,value:`details`},{label:`Export data`,value:`export`},{label:`Remove card`,value:`remove`}]);
+import{An as e,Q as t,i as n}from"../../../chunks/icon-BVKx1y3H.js";n.define([t,e]);var r=document.querySelector(`forge-menu`);r&&(r.options=[{label:`View details`,value:`details`},{label:`Export data`,value:`export`},{label:`Remove card`,value:`remove`}]);

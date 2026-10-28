@@ -1,8 +1,8 @@
 <!--
-  @block Simple Toolbar
+  @block Card Header Toolbar
   @type pattern
-  @description Horizontal toolbar component featuring a centered title section with icon action buttons positioned at the end for common operations such as search, filter, and overflow menu actions
-  @tags toolbar, header, actions
+  @description Card header toolbar for a forge-scaffold header slot, with the card title in the start slot styled at heading3
+  @tags toolbar, header, card, title
 -->
 <!doctype html>
 <html lang="en">
@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/blocks/v1/" />
-    <title>Simple Toolbar</title>
+    <title>Card Header Toolbar</title>
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
@@ -29,9 +29,15 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-toolbar>
-  <h2 slot="start" class="text-heading3">Page Title</h2>
-</forge-toolbar>
-
+    <forge-card no-padding class="max-w-md">
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h2 slot="start" class="text-heading3">Card title</h2>
+    </forge-toolbar>
+    <div slot="body" class="p-medium">
+      <div class="striped-box min-h-24"></div>
+    </div>
+  </forge-scaffold>
+</forge-card>
   </body>
 </html>

@@ -31,10 +31,12 @@
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
     <div class="p-medium">
   <forge-card no-padding>
-    <forge-toolbar>
-      <h2 slot="start" class="text-heading3">Blacksmith Inventory</h2>
-    </forge-toolbar>
-    <forge-table id="blacksmith-table"></forge-table>
+    <forge-scaffold>
+      <forge-toolbar slot="header">
+        <h2 slot="start" class="text-heading3">Blacksmith Inventory</h2>
+      </forge-toolbar>
+      <forge-table slot="body" id="blacksmith-table"></forge-table>
+    </forge-scaffold>
   </forge-card>
 </div>
 <script type="module" src="/blocks/v1/tables/simple/simple.js"></script>
