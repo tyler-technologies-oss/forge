@@ -1,5 +1,15 @@
 # @tylertech/forge
 
+## 3.24.0
+
+### Features
+
+- fc72092: **dialog**: add `labelledBy`, `describedBy`, `labelledByElements`, and `describedByElements` properties to associate labelling and describing elements across the shadow boundary
+
+### Bug Fixes
+
+- 50e6abf: **app-layout**: place content without a `slot` attribute in the body grid area so it positions correctly at all breakpoints
+
 ## 3.23.0
 
 ### Features

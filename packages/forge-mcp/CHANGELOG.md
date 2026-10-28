@@ -1,5 +1,11 @@
 # @tylertech/forge-mcp
 
+## 1.3.2
+
+### Bug Fixes
+
+- 275a834: **forge-mcp**: point `validate_ui_plan` hints at the generated forge-design skill references (`references/design/typography.md`, `references/components/table.md`)
+
 ## 1.3.1
 
 ### Bug Fixes
