@@ -1,5 +1,0 @@
-import{n as e,r as t}from"./rolldown-runtime-sJBDdmOt.js";import{a as n,o as r,t as i}from"./lit-html-SpIZ5SkX.js";import{l as a,m as o,s}from"./utils-C3ow8Ikc.js";import{r as c,t as l}from"./style-map-C_WKUe4Y.js";import{t as u}from"./backdrop-6p7wFSjY.js";var d=t({Demo:()=>m,__namedExportsOrder:()=>h,default:()=>p}),f,p,m,h;function g(){return(g=e((()=>{r(),l(),o(),u(),f=`forge-backdrop`,p={title:`Components/Backdrop`,render:e=>{let t=a(e),r=t?c(t):i;return n`
-      <div style="height: 256px; width: 320px; position: relative;">
-        <forge-backdrop .visible=${e.visible} .fixed=${e.fixed} style=${r}> </forge-backdrop>
-      </div>
-    `},component:f,parameters:{layout:`centered`,actions:{disable:!0}},argTypes:{...s({tagName:f})},args:{visible:!0,fixed:!1}},m={},m.parameters={...m.parameters,docs:{...m.parameters?.docs,source:{originalSource:`{}`,...m.parameters?.docs?.source}}},h=[`Demo`]})))()}export{m as n,g as r,d as t};
