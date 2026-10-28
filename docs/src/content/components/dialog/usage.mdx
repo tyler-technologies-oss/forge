@@ -115,6 +115,20 @@ For the common confirm/cancel prompt, use the pre-built `forge-confirmation-dial
   height="350px"
 />
 
+Listen for `forge-confirmation-dialog-action` to handle the result. `detail.value` is `true` when the user clicks the primary button, and `false` when they click the secondary button or press Escape (`detail.reason` is `'light-dismiss'`). The dialog closes on its own afterward. To keep it open while an async action runs, call `preventDefault()` and set `isBusy`, then close it yourself when the action finishes.
+
+```js
+confirmationDialog.addEventListener("forge-confirmation-dialog-action", async (event) => {
+  if (!event.detail.value) {
+    return;
+  }
+  event.preventDefault();
+  confirmationDialog.isBusy = true;
+  await deleteRecord();
+  confirmationDialog.open = false;
+});
+```
+
 ## Presets
 
 <InlineMessage theme="info" title="Looking for Bottom Sheet?">
