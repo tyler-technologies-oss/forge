@@ -39,6 +39,8 @@ The toolbar is a horizontal container component that spans 100% width and provid
       "Use start for a title, end for the primary actions, and center only for content that's meant to stay centered regardless of the other slots' widths.",
       "Pair a toolbar footer's actions the same way you would a dialog footer — confirming action last, dismissive action before it.",
       "Set noDivider when the toolbar sits directly against another divider or border that already separates it from its neighbor.",
+      "Set `inverted` on every footer toolbar (card, dialog, table, and page footers) so its divider separates it from the content above.",
+      "Give toolbar titles a typography class: `forge-typography--heading4` for a page title, `forge-typography--heading3` for a card, dialog, or drawer title.",
     ]}
   />
 
@@ -70,3 +72,60 @@ Set `inverted` to move the toolbar's divider from the bottom edge to the top —
   description="An inverted toolbar's divider sits on top instead of the bottom."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/toolbar/inverted/inverted.html"
 />
+
+## Common patterns
+
+Page titles are `h2` styled with `forge-typography--heading4`, since the app bar title is the page's `h1`. Container titles (card, dialog, drawer) use `forge-typography--heading3`.
+
+**Page header**: the page title in `start` and page-level actions in `end`.
+
+```html
+<forge-toolbar>
+  <h2 slot="start" class="forge-typography--heading4">Orders</h2>
+  <forge-button slot="end" variant="filled">New order</forge-button>
+</forge-toolbar>
+```
+
+**Page header with back navigation**: a back icon button in `start`, before the title.
+
+```html
+<forge-toolbar>
+  <forge-icon-button slot="start" aria-label="Back to orders">
+    <forge-icon name="arrow_back"></forge-icon>
+  </forge-icon-button>
+  <h2 slot="start" class="forge-typography--heading4">Order 1042</h2>
+</forge-toolbar>
+```
+
+**Card or dialog header**: the title in `start`, and close or overflow icon buttons in `end`.
+
+```html
+<forge-toolbar slot="header">
+  <h3 slot="start" class="forge-typography--heading3">Recent activity</h3>
+  <forge-icon-button slot="end" density="medium" aria-label="More options">
+    <forge-icon name="more_vert"></forge-icon>
+  </forge-icon-button>
+</forge-toolbar>
+```
+
+**Drawer or side sheet header**: the title in `start` and a close icon button in `end`.
+
+```html
+<forge-toolbar>
+  <h3 slot="start" class="forge-typography--heading3">Filters</h3>
+  <forge-icon-button slot="end" density="medium" aria-label="Close filters">
+    <forge-icon name="close"></forge-icon>
+  </forge-icon-button>
+</forge-toolbar>
+```
+
+**Footer**: `inverted`, with actions end-aligned following the <a href={`${import.meta.env.BASE_URL}components/button/usage/`}>button</a> hierarchy: the secondary `tonal` action first, the primary `filled` action last, `--forge-spacing-medium` apart.
+
+```html
+<forge-toolbar slot="footer" inverted>
+  <div slot="end" class="flex items-center gap-medium">
+    <forge-button variant="tonal">Cancel</forge-button>
+    <forge-button variant="filled">Save</forge-button>
+  </div>
+</forge-toolbar>
+```

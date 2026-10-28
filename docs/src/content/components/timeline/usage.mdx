@@ -69,6 +69,25 @@ Each `forge-timeline-item` shows a default circular marker unless something is s
   </forge-timeline>
 </Example>
 
+## Item slots
+
+Besides the default slot and `marker`, each item has `start` and `end` slots on either side of its summary, and a `detail` slot below it for extra context. Put timestamps in `start` so they line up across items.
+
+<Example description="Timestamps in the start slot aligned across items, with extra context in detail.">
+  <forge-timeline>
+    <forge-timeline-item>
+      <span slot="start">9:00</span>
+      Created
+      <div slot="detail">Submitted by Ada Lovelace</div>
+    </forge-timeline-item>
+    <forge-timeline-item theme="success">
+      <span slot="start">10:30</span>
+      Approved
+      <div slot="detail">Approved by Grace Hopper</div>
+    </forge-timeline-item>
+  </forge-timeline>
+</Example>
+
 ## Markers
 
 Slot an icon or other content into `marker` to replace an item's default circular indicator — treat it as decorative, since the item's own content should carry the actual meaning.
@@ -113,7 +132,7 @@ Add a `forge-timeline-break` between items to show a gap, separating non-sequent
 
 ## Sidebar lines
 
-By default, an item draws its connecting line above and below its marker, automatically omitting whichever side doesn't apply to the first or last item. Set an item's `sidebar` to `start`, `end`, `both`, or `none` to control this manually — useful for implying items exist before or after what's actually rendered.
+An item's `sidebar` defaults to `auto`, which draws its connecting line above and below its marker, automatically omitting whichever side doesn't apply to the first or last item. Set `sidebar` to `start`, `end`, `both`, or `none` to control this manually — useful for implying items exist before or after what's actually rendered.
 
 <Example description="An item with only its start sidebar line drawn, implying earlier items exist above it.">
   <forge-timeline>

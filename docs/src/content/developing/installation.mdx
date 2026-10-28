@@ -4,6 +4,7 @@ description: How to install Tyler Forge via npm or CDN.
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import InlineMessage from "../../components/docs/InlineMessage.astro";
 
 Before we get into the details, you first need to determine what kind of installation you need. Forge is available in two formats:
 
@@ -25,7 +26,7 @@ The `@tylertech/forge` package follows the following format:
 - `dist/`: Contains all pre-built static distribution sources.
   - `<component-name>/`: pre-built CSS stylesheets for specific components.
     - Ex. `<component-name>/forge-<component-name>.css`: Contains the pre-built CSS stylesheets for CSS-only components.
-  - `forge-core.css`: The optional Forge core stylesheet. Typically useful when using the `<forge-scaffold>` for your outer page layout.
+  - `forge-core.css`: The optional Forge core stylesheet. Sets `height: 100dvh; width: 100dvw; margin: 0; background-color: var(--forge-theme-surface-dim)` on `<body>`. Full-page app shells (`<forge-app-layout>` or a root-level `<forge-scaffold>`) need these body styles to fill the window, so load this stylesheet or set them yourself.
   - `forge-tokens.css`: The optional Forge tokens stylesheet. Contains all design tokens used in the Forge components so your application has access to them as well.
   - `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
   - `forge.css`: The pre-built Forge global stylesheet. Contains all global stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
@@ -65,6 +66,10 @@ If you're prototyping, it can be handy to pull in all components:
 import '@tylertech/forge';
 ```
 
+<InlineMessage theme="warning" title="Not included in the root import">
+  `import '@tylertech/forge'` does not register these components. Each needs its own side-effect import (`import '@tylertech/forge/<name>'`): `app-launcher`, `app-layout`, `busy-indicator`, `confirmation-dialog`, `content-scaffold`, `count-card`, `footer`, `multi-select-header`, `quantity-field`, `responsive-toolbar`, `structured-card`, `theme-toggle`, and `user-profile`.
+</InlineMessage>
+
 <Blockquote>
   Note: make sure to import the components as early as possible in your application bootstrapping process to ensure they are
   registered with the browser before your application is rendered to avoid FOUC (Flash of Unstyled Content).
@@ -86,7 +91,7 @@ To use Forge via CDN, include the following script tag in your HTML:
   Note: The CDN distributes Forge components as ES modules. This means you need to use the `type="module"` attribute in your script tag.
 </Blockquote>
 
-Using the above `<script>` will automatically load **all** components into your page. You can then use them anywhere in your HTML. While this is easy,
+Using the above `<script>` will automatically load **all** components into your page (except the subpath-only components listed under Import Components, which need their own `<component>/index.js` script). You can then use them anywhere in your HTML. While this is easy,
 it is not recommended for production use as it will load all components, even if you only use a few. For production use, you should load only the components
 you need. You can do this by referencing the individual component files directly:
 

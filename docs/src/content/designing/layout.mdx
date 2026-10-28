@@ -84,7 +84,7 @@ So the most useful thing a designer can do is **design inside the shell**. Start
       </forge-toolbar>
     </div>
     <main slot="body" class="relative p-medium bg-surface-dim">
-      <AnatomyMarker label={6} title="Body" description="The page's content, usually on cards. 16px padding on --forge-theme-surface-dim." />
+      <AnatomyMarker label={6} title="Body" description="The page's content, usually on cards. --forge-spacing-medium padding on --forge-theme-surface-dim." />
       <div class="grid gap-medium h-full">
         <forge-card class="p-0 h-full">
           <forge-scaffold>
@@ -168,7 +168,7 @@ Most screens are one of the patterns below. Find the closest one and design with
 
 A responsive grid of cards in the body.
 
-- Cards use a **16px gap** in every direction.
+- Cards use a **`--forge-spacing-medium` gap** in every direction.
 - Use an auto-fill grid targeting about **320px per card**, or set column counts by breakpoint: 1 column on mobile, 2 at 640px, 3 at 1024px, 4 at 1280px.
 - Give cards a consistent height within a row.
 
@@ -229,7 +229,7 @@ Forge's cards, dialogs, and drawers share one internal structure. Learn it once 
         </forge-toolbar>
       </div>
       <div slot="body" class="relative p-medium">
-        <AnatomyMarker label={2} title="Body" description="The container's content and the only part that scrolls. 16px padding." />
+        <AnatomyMarker label={2} title="Body" description="The container's content and the only part that scrolls. --forge-spacing-medium padding." />
         <div class="striped-box h-28"></div>
       </div>
       <div slot="footer" class="relative">
@@ -248,7 +248,7 @@ Forge's cards, dialogs, and drawers share one internal structure. Learn it once 
 | #   | Part               | What goes here                                        | Size                      |
 | --- | ------------------ | ----------------------------------------------------- | ------------------------- |
 | 1   | **Header toolbar** | Title (`forge-typography--heading3`) and icon actions | 56px tall, bottom divider |
-| 2   | **Body**           | The container's content; the only part that scrolls   | 16px padding              |
+| 2   | **Body**           | The container's content; the only part that scrolls   | `--forge-spacing-medium` padding |
 | 3   | **Footer toolbar** | Actions, end-aligned with the primary action last     | 56px tall, top divider    |
 
 - The header and footer stay put while the body scrolls.
@@ -260,8 +260,8 @@ Forge's cards, dialogs, and drawers share one internal structure. Learn it once 
 
 - Actions live in **toolbars**, at the top of the page (body header) or the bottom of a container (footer).
 - **One primary action per container.** It goes last (rightmost) and uses the `filled` button.
-- The secondary action (Cancel) sits to its left as a `tonal` button, **16px** apart. See [Button grouping](/components/button/usage/#grouping) for the full hierarchy.
-- Icon-only actions in a header use 36px icon buttons (`density="medium"`), **8px** apart, with a tooltip.
+- The secondary action (Cancel) sits to its left as a `tonal` button, spaced `--forge-spacing-medium` apart. See [Button grouping](/components/button/usage/#grouping) for the full hierarchy.
+- Icon-only actions in a header use 36px icon buttons (`density="medium"`), spaced `--forge-spacing-xsmall` apart, with a tooltip.
 
 ## Do and don't
 

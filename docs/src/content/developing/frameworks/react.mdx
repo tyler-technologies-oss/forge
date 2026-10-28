@@ -59,7 +59,7 @@ This will configure the default font family for your application, and load the r
 ## Importing Components
 
 To use Forge components in your React application, import the components you need from the `@tylertech/forge-react` package,
-as well as the definition functions from `@tylertech/forge`.
+as well as a side-effect import from `@tylertech/forge` for each component to register it.
 
 ```jsx
 import { ForgeButton, ForgeCard } from '@tylertech/forge-react';
@@ -76,6 +76,16 @@ function App() {
     </div>
   );
 }
+```
+
+Each `forge-x` element has a matching `ForgeX` wrapper (for example, `forge-button` becomes `ForgeButton`). Wrapper props use the camelCase property names, not the dash-case attribute names: `labelPosition`, not `label-position`.
+
+Components that are only available through their own subpath import, such as `forge-structured-card` and `forge-user-profile`, have wrappers too (`ForgeStructuredCard`, `ForgeUserProfile`). They still need their side-effect import:
+
+```jsx
+import { ForgeStructuredCard } from '@tylertech/forge-react';
+
+import '@tylertech/forge/structured-card';
 ```
 
 ## Importing Styles

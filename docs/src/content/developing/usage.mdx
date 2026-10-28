@@ -10,6 +10,11 @@ This means that you can use them in any front-end framework or library, such as 
 just like any other built-in HTML element. Each component has API documentation that describes the properties, events, and methods that
 it supports, as well as examples of how to use the component in your application.
 
+<Blockquote>
+  **Important:** custom elements can't self-close in HTML. Always write an explicit closing tag, even for elements with no content:
+  `<forge-icon name="close"></forge-icon>`, not `<forge-icon name="close" />`. JSX (React) is the exception, where self-closing tags are valid.
+</Blockquote>
+
 ## VS Code Integration
 
 This is optional, but Forge provides custom data files for VS Code that you can use to get autocompletion and documentation for Forge components in your HTML and CSS files.

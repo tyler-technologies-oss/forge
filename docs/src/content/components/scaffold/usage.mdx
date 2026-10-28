@@ -70,6 +70,8 @@ Every slot at once shows how the scaffold positions content: `left`/`right` fram
 
 Set `viewport` to size the scaffold to the full viewport height, with an app bar in `header`, a drawer in `body-left`, and page content in `body`.
 
+A root-level, full-page scaffold also needs `<body>` styled to fill the window: load `forge-core.css` from `@tylertech/forge/dist/forge-core.css`, or set `height: 100dvh; width: 100dvw; margin: 0; background-color: var(--forge-theme-surface-dim)` yourself. Nested scaffolds in dialogs, cards, or panels need neither `viewport` nor these body styles.
+
 <Example
   description="An app bar, a drawer, and page content, laid out with a scaffold."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/scaffold/full-page-layout/full-page-layout.html"

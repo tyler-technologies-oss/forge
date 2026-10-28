@@ -37,7 +37,7 @@ import Rule from "../../../components/Rule.astro";
 
 ## Usage
 
-`forge-list` groups `forge-list-item` children through `dense`, `twoLine`/`threeLine`, `wrap`, `multicolumn`, and `navlist`, while each item carries its own `selected`, `value`, and `start`/`end` slots. Use a list for related, primarily textual items; for content with three or more sortable dimensions, use a <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> instead, and for content built around imagery or non-homogeneous data, use a <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a> instead.
+`forge-list` groups `forge-list-item` children through `dense`, `indented`, `twoLine`/`threeLine`, `wrap`, `multicolumn`, and `navlist`, while each item carries its own `selected`, `value`, and `start`/`end` slots. The `start` slot holds a leading icon or avatar; the `end` slot holds trailing content like icons, badges, or actions. Use a list for related, primarily textual items; for content with three or more sortable dimensions, use a <a href={`${import.meta.env.BASE_URL}components/table/usage/`}>table</a> instead, and for content built around imagery or non-homogeneous data, use a <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a> instead.
 
 ## Rules
 
@@ -48,6 +48,8 @@ import Rule from "../../../components/Rule.astro";
       "Sort list items in a logical order that makes the content easy to scan.",
       "Use icons in the start slot consistently — either every item has one, or none does.",
       "Use navlist styling when a list is functioning as navigation, such as inside a drawer.",
+      "Use a `forge-divider` between sections of a list.",
+      "Set `indented` on a nested list so its items sit inset from the parent list's items.",
     ]}
   />
 
@@ -99,6 +101,17 @@ Nest an <a href={`${import.meta.env.BASE_URL}components/expansion-panel/usage/`}
     <p>Additional detail shown when expanded.</p>
   </forge-expansion-panel>
 </forge-list-item>
+```
+
+## Indented
+
+Set `indented` to indent all of a list's items. Use it for a nested list, such as a sub-list inside an expandable item, so the hierarchy reads at a glance.
+
+```html
+<forge-list indented>
+  <forge-list-item>Child item</forge-list-item>
+  <forge-list-item>Another child item</forge-list-item>
+</forge-list>
 ```
 
 ## Multicolumn

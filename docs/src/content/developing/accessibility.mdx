@@ -124,13 +124,15 @@ are commonly found in most applications and provide a great base level set of to
 - Always use `alt` text on all images.
   - If you want the image to be perceived as decorative-only, set an empty `alt` attribute: `<img alt="">`
 - Use the correct ARIA landmark elements and/or roles.
-  - You should use semantic elements such as `<header>`, `<main>`, `<footer>`, `<aside>`... etc. just to name a few.
+  - You should use semantic elements such as `<header>`, `<nav>`, `<main>`, `<footer>`, `<aside>`... etc. just to name a few.
 - Never use color only to convey information.
   - In addition to color, consider adding a relevant icon potentially.
 - Always add a label to all form fields.
   - This is commonly done with the `<label>` element, but you can also use ARIA attributes such as `aria-label`
 - Keep related form fields together.
   - It is common to use elements such as `<fieldset>` and `<legend>` for this.
+- Wrap form fields in a `<form>` element.
+  - This gives assistive technology a form context and enables native submit behavior such as pressing Enter.
 - Focusable fields should always provide a clear focus indicator.
   - Forge components will handle the dirty work for you on this one, but keep it in mind for your own custom components.
 - Always ensure sufficient color contrast ratios are met between foreground and background.
