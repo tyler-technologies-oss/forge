@@ -1,0 +1,117 @@
+<!--
+  @block Dialog — Share
+  @type pattern
+  @description Modal share dialog for managing who can access a resource (document, report, project, folder). Use when users need to grant or revoke access, set per-person permission levels, and control general visibility from a single place. Includes search-and-add for individual people (or an email invite) and groups (static teams or dynamic role-based, such as admins), each added with an access level; a list of current members with per-member access menus (change level or remove) and a protected last owner; a general access setting (restricted or organization-wide); and a copy-link action. Changes are staged and only committed on Apply, and Cancel reverts them.
+  @tags dialog, modal, share, sharing, permissions, access, members, people-picker, groups, teams, roles, autocomplete, menu, list, avatar, copy-link, visibility, invite
+  @screenshot-click #open-share-dialog-btn
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Dialog — Share</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="flex justify-center items-center min-h-screen">
+  <forge-button id="open-share-dialog-btn" variant="raised">
+    <forge-icon slot="start" name="person_add_alt"></forge-icon>
+    Share
+  </forge-button>
+</div>
+
+<forge-dialog id="share-dialog" persistent label='Share "Quarterly report"' description="Manage who has access to this report">
+  <forge-scaffold class="h-auto w-[95vw] max-w-[544px]">
+    <forge-toolbar slot="header">
+      <div slot="start">
+        <h1 class="text-heading3">Share "Quarterly report"</h1>
+      </div>
+      <forge-icon-button slot="end" density="medium" aria-label="Close dialog" id="close-dialog-btn">
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+
+    <div slot="body" class="p-medium flex flex-col gap-medium">
+      <forge-autocomplete id="add-member-autocomplete" mode="stateless" filter-on-focus="false">
+        <forge-text-field>
+          <forge-icon slot="start" name="person_add_alt"></forge-icon>
+          <input type="text" id="add-member-input" aria-label="Add people or groups by name or email" />
+          <forge-menu id="new-member-access-menu" slot="end" persist-selection>
+            <forge-button variant="text" aria-label="Access level for people you add">
+              <span id="new-member-access-label">Can edit</span>
+              <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
+            </forge-button>
+          </forge-menu>
+        </forge-text-field>
+      </forge-autocomplete>
+
+      <section class="flex flex-col" aria-labelledby="people-with-access-label">
+        <h3 id="people-with-access-label" class="text-overline text-medium m-0">People with access</h3>
+        <forge-list id="member-list"></forge-list>
+      </section>
+
+      <section
+        class="flex flex-col [--forge-avatar-background:var(--forge-theme-surface-container-minimum)] [--forge-icon-color:var(--forge-theme-text-medium)] [--forge-icon-size:1rem]"
+        aria-labelledby="general-access-label">
+        <h3 id="general-access-label" class="text-overline text-medium m-0">General access</h3>
+        <forge-list>
+          <forge-list-item noninteractive two-line class="[&::part(text-container)]:overflow-visible">
+            <forge-avatar slot="start">
+              <forge-icon id="visibility-icon" name="lock_outline"></forge-icon>
+            </forge-avatar>
+            <forge-menu id="visibility-menu" persist-selection>
+              <forge-button variant="text" aria-label="Change who can access this report" class="-ml-xsmall">
+                <span id="visibility-label">Restricted</span>
+                <forge-icon slot="end" name="arrow_drop_down"></forge-icon>
+              </forge-button>
+            </forge-menu>
+            <span id="visibility-description" slot="secondary-text">Only people specifically added can open</span>
+          </forge-list-item>
+        </forge-list>
+      </section>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <forge-button id="copy-link-btn" slot="start" variant="text">
+        <forge-icon slot="start" name="link"></forge-icon>
+        Copy link
+      </forge-button>
+      <div class="flex items-center gap-medium" slot="end">
+        <forge-button id="cancel-btn">Cancel</forge-button>
+        <forge-button id="apply-btn" variant="filled">Apply</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-dialog>
+
+<template id="member-item-template">
+  <forge-list-item noninteractive two-line>
+    <forge-avatar slot="start" data-avatar></forge-avatar>
+    <span class="flex items-center gap-xsmall">
+      <span data-name></span>
+      <forge-badge theme="info-secondary" data-you-badge hidden>you</forge-badge>
+    </span>
+    <span slot="secondary-text" data-email></span>
+    <div slot="end" data-access></div>
+  </forge-list-item>
+</template>
+<script type="module" src="/blocks/v1/dialogs/share-dialog/share-dialog.js"></script>
+  </body>
+</html>
