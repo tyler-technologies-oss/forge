@@ -7,7 +7,9 @@
 
 <div class="p-medium">
   <forge-card no-padding>
-    {{> card-header title="Blacksmith Inventory"}}
-    {{> simple-table id="blacksmith-table"}}
+    <forge-scaffold>
+      {{> card-header title="Blacksmith Inventory"}}
+      {{> simple-table id="blacksmith-table" slot="body"}}
+    </forge-scaffold>
   </forge-card>
 </div>

@@ -1,8 +1,14 @@
 <!--
   @block Card Header Toolbar
   @type pattern
-  @description Toolbar used as a card header, with the card title in the start slot styled at heading3
+  @description Card header toolbar for a forge-scaffold header slot, with the card title in the start slot styled at heading3
   @tags toolbar, header, card, title
 -->
-
-{{> card-header title="Card title"}}
+<forge-card no-padding class="max-w-md">
+  <forge-scaffold>
+    {{> card-header title="Card title"}}
+    <div slot="body" class="p-medium">
+      <div class="striped-box min-h-24"></div>
+    </div>
+  </forge-scaffold>
+</forge-card>

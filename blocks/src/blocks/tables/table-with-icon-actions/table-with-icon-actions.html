@@ -6,7 +6,9 @@
 -->
 <div class="p-medium">
   <forge-card no-padding>
-    {{> table-header title="Project Tasks"}}
-    <forge-table id="tasks-table"></forge-table>
+    <forge-scaffold>
+      {{> card-header title="Project Tasks" action1="filter_list" action1Label="Filter" action2="download" action2Label="Export" action3="more_vert" action3Label="More options"}}
+      <forge-table slot="body" id="tasks-table"></forge-table>
+    </forge-scaffold>
   </forge-card>
 </div>
