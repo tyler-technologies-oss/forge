@@ -5,10 +5,10 @@
 .pnpm-store/
 node_modules/
 dist/
-docs/
 *.tgz
 *storybook.log
 storybook-static/
 blocks/manifest.json
 .heroku-deploy/
-/docs/
+.astro/
+docs/skill/

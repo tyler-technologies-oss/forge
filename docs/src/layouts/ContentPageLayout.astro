@@ -1,0 +1,33 @@
+---
+/**
+ * ContentPageLayout - Consistent layout for non-component content pages.
+ *
+ * Use this for MDX pages that need consistent page header styling
+ * but don't require the tabbed component documentation structure.
+ */
+import BaseLayout from "./BaseLayout.astro";
+import ContentHeader from "../components/ContentHeader.astro";
+import PageScaffold from "../components/PageScaffold.astro";
+import TableOfContents from "../components/docs/TableOfContents.svelte";
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+  };
+}
+
+const { title, description } = Astro.props.frontmatter;
+---
+
+<BaseLayout title={title} description={description}>
+  <TableOfContents slot="aside" client:load />
+
+  <PageScaffold>
+    <ContentHeader slot="header" title={title} description={description} />
+
+    <div class="content-body">
+      <slot />
+    </div>
+  </PageScaffold>
+</BaseLayout>

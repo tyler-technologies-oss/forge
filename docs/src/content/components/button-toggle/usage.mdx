@@ -1,0 +1,90 @@
+---
+title: Button Toggle
+description: Button toggles allow users to select from a group of choices with single or multiple selection.
+status: stable
+source: core
+category: forms
+storybookId: components-button-toggle--demo
+---
+
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-button-toggle-group value="day">
+    <forge-button-toggle value="day">Day</forge-button-toggle>
+    <forge-button-toggle value="week">Week</forge-button-toggle>
+    <forge-button-toggle value="month">Month</forge-button-toggle>
+  </forge-button-toggle-group>
+</ComponentHeader>
+
+## Overview
+Button toggle is a selection component that groups related options into a unified control, allowing users to choose one option from a set of alternatives. It functions similarly to radio buttons but with a more prominent visual treatment that emphasizes the available choices and current selection state.  
+
+Button toggles are commonly used for switching between different views of the same information or selecting from a small set of related options where the choices need to be immediately visible and easily comparable.
+
+## Usage
+
+`forge-button-toggle-group` groups `forge-button-toggle` children into one bordered control, enforcing a single selection by default or several when `multiple` is set, through `outlined`, `vertical`, `stretch`, `dense`, and `theme` — plus native form participation via `name` and `required`. Use it for a small, always-visible set of options; reach for a <a href={`${import.meta.env.BASE_URL}components/radio/usage/`}>radio group</a> when each option needs a fully written-out label, or a <a href={`${import.meta.env.BASE_URL}components/select/usage/`}>select</a> instead once there are more than a handful of options.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Limit a button toggle group to a small, glanceable set of options.",
+      "Pair every icon-only button toggle with an aria-label.",
+      "Use multiple only when more than one option can be true at once, like text formatting.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a button toggle group for more than a handful of options — use a select instead.",
+      "Don't rely on icons alone without an accessible label on each button toggle.",
+      "Don't mix single- and multi-select semantics within the same group.",
+    ]}
+  />
+</Rules>
+
+## Selection
+
+A button toggle group enforces a single selection by default — choosing one option deselects any other. Set `multiple` when more than one option can be true at once, such as a text-formatting toolbar.
+
+<Example
+  title="Single selection"
+  description="Only one button toggle in the group is active at a time."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button-toggle/demo/demo.html"
+/>
+
+## Outline
+
+`outlined` is on by default, drawing a border around the group; set it to `false` for a borderless button toggle group.
+
+<Example
+  description="Outlined (default) compared to no-outline."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button-toggle/outline/outline.html"
+/>
+
+## With icons
+
+Slot a `forge-icon` inside a button toggle to pair its label with a leading icon.
+
+<Example
+  description="A leading icon reinforces each option's label."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button-toggle/with-icons/with-icons.html"
+/>
+
+## Dense and vertical
+
+Pair `dense` with `vertical` for a compact, stacked button toggle group.
+
+<Example
+  description="A dense, vertical button toggle group."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/button-toggle/dense-and-vertical/dense-and-vertical.html"
+/>
+

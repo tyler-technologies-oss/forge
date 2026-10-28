@@ -1,0 +1,11 @@
+## Keyboard interaction
+
+Chips must be reachable by Tab, with a visible cue for active, inactive, and focused states. Pressing Space or Enter while a chip is focused should toggle it the same way a click would. If a chip has a delete icon, make sure it can be focused and activated independently of the chip body — a screen reader or keyboard user needs to reach the delete action on its own, not just the chip as a whole.
+
+## Screen reader behavior
+
+Set a `role` on the chip so assistive technology can announce what it represents (a filter, a selection, an input value) rather than reading it as generic content.
+
+## Color and contrast
+
+Meet WCAG contrast requirements between a chip's foreground text and background. If a chip's color conveys meaning on its own, pair it with an icon or label — don't rely on color alone for users with color vision deficiencies.

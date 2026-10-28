@@ -1,0 +1,87 @@
+---
+/**
+ * ComponentHeader — a live, clipped demo shown at the top of a component page.
+ *
+ * The frame is at least 200px tall so every component page header matches, and
+ * grows to fit the demo when it is taller. Cover mode with `zoom` other than 1
+ * scales the demo with a transform, so it keeps a fixed frame instead, 200px
+ * by default; pass `height` (any CSS length, e.g. "280px") to change it.
+ *
+ * `fit="center"` centers the slotted demo horizontally and vertically.
+ * `fit="cover"` makes the demo fill the whole frame and clips the overflow,
+ * for large components (app layout, scaffold) where only a part is shown.
+ *
+ * `zoom` scales the demo inside the frame. Above 1 it magnifies a region,
+ * anchored at `origin` (any CSS transform-origin, e.g. "top left"). Below 1
+ * it shrinks the demo to show more of it, anchored top left. Cover mode
+ * always fills the frame. `inset` (cover mode only) pulls the demo in from the
+ * frame edges, accepting CSS inset shorthand (default "32px"; e.g. "32px 32px 0"),
+ * so the frame's background shows around a rounded, bordered demo. Pass
+ * "0" for an edge-to-edge demo.
+ *
+ * The demo is interactive by default; pass `interactive={false}` to make it
+ * `inert` for a purely decorative visual.
+ */
+interface Props {
+  fit?: "center" | "cover";
+  zoom?: number;
+  origin?: string;
+  inset?: string;
+  height?: string;
+  interactive?: boolean;
+}
+
+const {
+  fit = "center",
+  zoom = 1,
+  origin = "center",
+  inset = "32px",
+  height = "200px",
+  interactive = true,
+} = Astro.props;
+
+const flows = fit === "center" || zoom === 1;
+const shrink = zoom < 1;
+const size = `${100 / Math.max(zoom, Number.EPSILON)}%`;
+const coverStyle = [
+  `width: ${shrink ? size : "100%"}`,
+  `height: ${shrink ? size : "100%"}`,
+  `transform: scale(${zoom})`,
+  `transform-origin: ${shrink ? "top left" : origin}`,
+].join("; ");
+---
+
+<div
+  class:list={[
+    "tonal-card-p-0 relative overflow-hidden mb-large",
+    flows ? "grid min-h-[200px]" : "",
+  ]}
+  style={flows ? undefined : `height: ${height}`}
+  inert={!interactive}>
+  {
+    fit === "cover" ? (
+      flows ? (
+        <div class="grid" style={`padding: ${inset}`}>
+          <div
+            class={inset === "0" ? "overflow-hidden" : "overflow-hidden rounded-lg border border-outline"}>
+            <slot />
+          </div>
+        </div>
+      ) : (
+        <div
+          class={inset === "0" ? "absolute overflow-hidden" : "absolute overflow-hidden rounded-lg border border-outline"}
+          style={`inset: ${inset}`}>
+          <div style={coverStyle}>
+            <slot />
+          </div>
+        </div>
+      )
+    ) : (
+      <div
+        class="flex min-h-[200px] items-center justify-center gap-medium p-large"
+        style={zoom === 1 ? undefined : `zoom: ${zoom}`}>
+        <slot />
+      </div>
+    )
+  }
+</div>

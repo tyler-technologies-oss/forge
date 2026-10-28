@@ -1,0 +1,18 @@
+@use '@tylertech/forge/sass/theme/theme-dark';
+
+// Scoped to the theme attribute (instead of Forge's `forge-dark.css`, which targets `:root`)
+// so the docs theme toggle can switch it on and off.
+html[data-forge-theme='dark'] {
+  @include theme-dark.theme-properties;
+  color-scheme: dark;
+}
+
+// Shiki bakes the light theme in as inline styles; swap to the dark theme's CSS variables.
+html[data-forge-theme='dark'] .astro-code,
+html[data-forge-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}

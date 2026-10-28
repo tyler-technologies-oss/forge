@@ -1,0 +1,11 @@
+## Structure
+
+A timeline is rendered as a semantic list — `role="list"` on the timeline itself, `role="listitem"` on each timeline item — so assistive technology announces it as a real list of events, not arbitrary markup.
+
+## Markers and breaks
+
+Marker icons should be decorative, since the surrounding item content already provides the necessary context — don't make a marker icon the only place meaning lives. A `forge-timeline-break` is purely visual and is marked `aria-hidden="true"` for that reason; it carries no content of its own to announce.
+
+## Color contrast
+
+When using `theme` to color a marker, make sure that color still meets WCAG contrast requirements against its background.
