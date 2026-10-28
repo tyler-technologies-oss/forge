@@ -499,6 +499,9 @@ async function buildComponentDocs(examples) {
   return components;
 }
 
+const EXPERIMENTAL_NOTE =
+  "> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.";
+
 /** Builds one reference file per guide page in `sourceDir`, written under `references/<outName>/`. */
 async function buildGuideDocs(sourceDir, outName, examples) {
   const slugs = await findMdxFiles(sourceDir);
@@ -521,7 +524,9 @@ async function buildGuideDocs(sourceDir, outName, examples) {
       examples,
     });
 
-    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${cleanedBody}\n`;
+    const status = frontmatter.status ?? "stable";
+    const experimentalNote = status === "experimental" ? `${EXPERIMENTAL_NOTE}\n\n` : "";
+    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${experimentalNote}${cleanedBody}\n`;
     const outPath = path.join(OUT_REFERENCES_DIR, outName, `${slug}.md`);
     await mkdir(path.dirname(outPath), { recursive: true });
     await writeFile(outPath, md, "utf8");
@@ -530,6 +535,7 @@ async function buildGuideDocs(sourceDir, outName, examples) {
       name: slug,
       title: frontmatter.title,
       description: frontmatter.description,
+      status,
       docsPath: `${outName}/${slug}.md`,
     });
   }
@@ -572,7 +578,7 @@ function buildGuideIndex(guides) {
   return guides
     .slice()
     .sort((a, b) => a.title.localeCompare(b.title))
-    .map((d) => `- [${d.title}](references/${d.docsPath}) — ${d.description}`)
+    .map((d) => `- [${d.title}](references/${d.docsPath})${d.status === "experimental" ? " (experimental)" : ""} — ${d.description}`)
     .join("\n");
 }
 

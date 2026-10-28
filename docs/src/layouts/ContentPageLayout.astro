@@ -9,24 +9,41 @@ import BaseLayout from "./BaseLayout.astro";
 import ContentHeader from "../components/ContentHeader.astro";
 import PageScaffold from "../components/PageScaffold.astro";
 import TableOfContents from "../components/docs/TableOfContents.svelte";
+import InlineMessage from "../components/docs/InlineMessage.astro";
 
 interface Props {
   frontmatter: {
     title: string;
     description?: string;
+    status?: "stable" | "experimental";
   };
 }
 
-const { title, description } = Astro.props.frontmatter;
+const { title, description, status = "stable" } = Astro.props.frontmatter;
+const isExperimental = status === "experimental";
 ---
 
 <BaseLayout title={title} description={description}>
   <TableOfContents slot="aside" client:load />
 
   <PageScaffold>
-    <ContentHeader slot="header" title={title} description={description} />
+    <ContentHeader
+      slot="header"
+      title={title}
+      description={description}
+      showBadge={isExperimental}
+      badgeText="Experimental"
+      badgeTheme="warning"
+    />
 
     <div class="content-body">
+      {
+        isExperimental && (
+          <InlineMessage theme="warning" title="Experimental">
+            This guidance is an early draft and will likely change as it's reviewed.
+          </InlineMessage>
+        )
+      }
       <slot />
     </div>
   </PageScaffold>
