@@ -1,6 +1,8 @@
 export type Theme = 'light' | 'dark';
 
-const STORAGE_KEY = 'forge-docs-theme';
+// Shared with forge-theme-toggle (inside the user-profile demos), so a toggle on any page reads and
+// writes the same preference instead of overwriting the docs theme with its own default.
+const STORAGE_KEY = '.forge-theme';
 const THEME_ATTRIBUTE = 'data-forge-theme';
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
