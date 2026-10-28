@@ -1,31 +1,15 @@
 #!/usr/bin/env node
 /**
- * Builds the forge-design Agent Skill bundle (skill/forge-design/) straight
- * from the source MDX: strips the component docs (src/content/components)
- * and developer guide docs (src/content/developing) down to the prose an LLM
- * actually wants — headings, usage copy, do/don't rules, and accessibility
- * guidance (when a component has an accessibility.mdx) — then packages the
- * result as references/ under a SKILL.md generated from
- * scripts/forge-skill-template/SKILL.md. Callout wrappers like
- * <InlineMessage> and <Blockquote> are unwrapped to keep their prose without
- * the presentational tag, raw <table> markup becomes a markdown table, and
- * <StorybookEmbed> (a live preview only) is dropped. Each <Example> becomes a
- * one-line pointer — `Example (<description>): \`get_forge_blocks(blockId:
- * "<id>")\`` — since Forge markup must come from blocks, not the docs. The id
- * is derived from the example's blockUrl; an <Example> with no blockUrl
- * (block not published yet) falls back to
- * components/<slug>/<heading-as-kebab>/<same> ("Basic usage" -> demo), marked
- * pending. After writing, every id is checked against the live block
- * manifest (the same one the forge MCP's get_forge_blocks reads): a dangling
- * id from an explicit blockUrl exits non-zero, a dangling derived id is
- * reported as pending and only fails with --strict.
+ * Builds the forge-design Agent Skill bundle (skill/forge-design/) from the
+ * component and developer guide MDX, keeping only the prose an LLM needs.
  *
- * Parses each MDX body into a real AST (remark + remark-mdx) instead of
- * scanning raw text for tag spans, so indentation and fenced code samples
- * (which contain their own `import` lines) can't confuse the cleanup.
+ * - Live previews (<StorybookEmbed>, <ComponentHeader>) are dropped.
+ * - Callouts (<InlineMessage>, <Blockquote>) are unwrapped; <table> becomes markdown.
+ * - Each <Example> becomes a `get_forge_blocks(blockId: "...")` pointer, and
+ *   every block id is checked against the live block manifest. Ids derived
+ *   for unpublished blocks only fail the build with --strict.
  *
- * Runs as part of `pnpm build` (after `astro build`), or on its own with
- * `pnpm build:forge-skill [-- --strict]`.
+ * Runs after `astro build`, or alone with `pnpm build:forge-skill [-- --strict]`.
  */
 import { readFile, writeFile, mkdir, readdir, access } from "node:fs/promises";
 import path from "node:path";
@@ -348,7 +332,7 @@ function transformChildren(children, ctx) {
     if (child.type === "heading") ctx.heading = nodeToPlainText(child.children);
 
     if (isJsxElement(child)) {
-      if (child.name === "StorybookEmbed") continue;
+      if (child.name === "StorybookEmbed" || child.name === "ComponentHeader") continue;
       if (child.name === "Example") {
         out.push(exampleToPointer(child, ctx));
         continue;
@@ -395,7 +379,7 @@ function buildCleanTree(body, ctx) {
   return tree;
 }
 
-function cleanMdxBody(body, ctx) {
+export function cleanMdxBody(body, ctx) {
   return mdStringifier.stringify(buildCleanTree(body, ctx)).trim();
 }
 

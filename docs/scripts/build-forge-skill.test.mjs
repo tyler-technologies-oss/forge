@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { urlToBlockId, derivedBlockId, blockExists } from "./build-forge-skill.mjs";
+import { urlToBlockId, derivedBlockId, blockExists, cleanMdxBody } from "./build-forge-skill.mjs";
 
 const url = (p) => `https://forge.tylerdev.io/blocks/v1/${p}`;
 
@@ -33,6 +33,24 @@ test("urlToBlockId: rejects URLs that are not /blocks/v1/...html", () => {
 test("derivedBlockId: 'Basic usage' is demo, other headings are kebab-cased", () => {
   assert.equal(derivedBlockId("tree", "Basic usage"), "components/tree/demo/demo");
   assert.equal(derivedBlockId("timeline", "Sidebar lines"), "components/timeline/sidebar-lines/sidebar-lines");
+});
+
+test("cleanMdxBody: drops <ComponentHeader> and its import, keeping surrounding prose", () => {
+  const body = [
+    'import ComponentHeader from "../../../components/ComponentHeader.astro";',
+    "",
+    "Intro copy.",
+    "",
+    "<ComponentHeader>",
+    "  <forge-button>Button</forge-button>",
+    "</ComponentHeader>",
+    "",
+    "## Overview",
+    "Overview copy.",
+  ].join("\n");
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "button", lineOffset: 0, examples: [] });
+  assert.doesNotMatch(out, /ComponentHeader|forge-button/);
+  assert.match(out, /Intro copy\.\n\n## Overview\n\nOverview copy\./);
 });
 
 test("blockExists matches id, file, and file minus .html like get_forge_blocks", () => {
