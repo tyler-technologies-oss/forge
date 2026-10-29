@@ -1,11 +1,12 @@
+import { provide } from '@lit/context';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
-import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { removeDefaultAttribute } from '../../core/utils/lit-utils.js';
 import { ChipComponent, IChipComponent } from '../chip/chip.js';
 import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipNavigateEventData } from '../chip/chip-constants.js';
-import { CHIP_SET_CONSTANTS } from './chip-set-constants.js';
+import { CHIP_SET_CONSTANTS, CHIP_SET_DENSE, CHIP_SET_DISABLED, CHIP_SET_INVALID, CHIP_SET_THEME, CHIP_SET_TYPE } from './chip-set-constants.js';
 
 import styles from './chip-set.scss';
 
@@ -18,18 +19,6 @@ export interface IChipSetComponent extends BaseLitElement {
   invalid: boolean;
   theme: ChipTheme;
 }
-
-type SyncedChipProperty = 'type' | 'dense' | 'disabled' | 'invalid' | 'theme';
-
-const SYNCED_CHIP_PROPERTIES: SyncedChipProperty[] = ['type', 'dense', 'disabled', 'invalid', 'theme'];
-
-const SYNCED_CHIP_DEFAULTS: Record<SyncedChipProperty, IChipSetComponent[SyncedChipProperty]> = {
-  type: CHIP_CONSTANTS.defaults.TYPE,
-  dense: false,
-  disabled: false,
-  invalid: false,
-  theme: CHIP_CONSTANTS.defaults.THEME
-};
 
 /**
  * @tag forge-chip-set
@@ -68,6 +57,7 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
    * @default 'action'
    * @attribute
    */
+  @provide({ context: CHIP_SET_TYPE })
   @property({
     reflect: true,
     converter: { toAttribute: (value: ChipType) => removeDefaultAttribute(value, CHIP_CONSTANTS.defaults.TYPE) }
@@ -79,6 +69,7 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
    * @default false
    * @attribute
    */
+  @provide({ context: CHIP_SET_DENSE })
   @property({ type: Boolean, reflect: true })
   public dense = false;
 
@@ -87,6 +78,7 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
    * @default false
    * @attribute
    */
+  @provide({ context: CHIP_SET_DISABLED })
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
@@ -95,6 +87,7 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
    * @default false
    * @attribute
    */
+  @provide({ context: CHIP_SET_INVALID })
   @property({ type: Boolean, reflect: true })
   public invalid = false;
 
@@ -103,6 +96,7 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
    * @default 'primary'
    * @attribute
    */
+  @provide({ context: CHIP_SET_THEME })
   @property({
     reflect: true,
     converter: { toAttribute: (value: ChipTheme) => removeDefaultAttribute(value, CHIP_CONSTANTS.defaults.THEME) }
@@ -119,14 +113,6 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEventListener(CHIP_CONSTANTS.events.NAVIGATE, this.#chipNavigateListener);
-  }
-
-  public override willUpdate(changedProperties: PropertyValues<this>): void {
-    for (const prop of SYNCED_CHIP_PROPERTIES) {
-      if (changedProperties.has(prop) && (this.hasUpdated || this[prop] !== SYNCED_CHIP_DEFAULTS[prop])) {
-        this.#syncChipsProperty(prop, this[prop]);
-      }
-    }
   }
 
   public render(): TemplateResult {
@@ -156,10 +142,6 @@ export class ChipSetComponent extends BaseLitElement implements IChipSetComponen
 
   #findChipDescendants(): IChipComponent[] {
     return Array.from(this.querySelectorAll(CHIP_CONSTANTS.elementName));
-  }
-
-  #syncChipsProperty<T extends keyof IChipComponent>(prop: T, value: IChipComponent[T]): void {
-    this.#findChipDescendants().forEach(chip => (chip[prop] = value));
   }
 }
 

@@ -1,18 +1,22 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
+import { consume, ContextRoot } from '@lit/context';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconClose } from '@tylertech/tyler-icons';
-import { BaseComponent, IBaseComponent } from '../../core/index.js';
-import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
-import { IconComponent, IconRegistry } from '../../icon/index.js';
+import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
+import { property, query } from 'lit/decorators.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { removeDefaultAttribute, removeEmptyAttribute } from '../../core/utils/lit-utils.js';
+import { FocusIndicatorComponent, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
 import { IconButtonComponent } from '../../icon-button/index.js';
-import { StateLayerComponent } from '../../state-layer/index.js';
-import { ChipAdapter } from './chip-adapter.js';
-import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipSelectEventData } from './chip-constants.js';
-import { ChipCore } from './chip-core.js';
+import { IconRegistry } from '../../icon/icon-registry.js';
+import { IconComponent } from '../../icon/icon.js';
+import { IStateLayerComponent, StateLayerComponent } from '../../state-layer/index.js';
+import { CHIP_SET_CONSTANTS, CHIP_SET_DENSE, CHIP_SET_DISABLED, CHIP_SET_INVALID, CHIP_SET_THEME, CHIP_SET_TYPE } from '../chip-set/chip-set-constants.js';
+import { ChipTheme, ChipType, CHIP_CONSTANTS, IChipDeleteEventData, IChipNavigateEventData, IChipSelectEventData } from './chip-constants.js';
 
-import template from './chip.html';
 import styles from './chip.scss';
 
-export interface IChipComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using ChipComponent. */
+export interface IChipComponent extends BaseLitElement {
   type: ChipType;
   value: unknown;
   selected: boolean;
@@ -20,55 +24,37 @@ export interface IChipComponent extends IBaseComponent {
   disabled: boolean;
   dense: boolean;
   theme: ChipTheme;
-  href: string;
-  target: string;
-  download: string;
-  rel: string;
-  removeButtonLabel: string;
+  href?: string;
+  target?: string;
+  download?: string;
+  rel?: string;
+  removeButtonLabel?: string;
   focusRemoveButton(): void;
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'forge-chip': IChipComponent;
-  }
-
   interface HTMLElementEventMap {
     'forge-chip-delete': CustomEvent<IChipDeleteEventData>;
     'forge-chip-select': CustomEvent<IChipSelectEventData>;
   }
 }
 
+type ChipSetInheritedProperty = 'type' | 'dense' | 'disabled' | 'invalid' | 'theme';
+
+const CHIP_TYPES: ChipType[] = ['action', 'choice', 'filter', 'input', 'field'];
+const SELECTABLE_CHIP_TYPES: ChipType[] = ['filter', 'choice', 'input'];
+const CHIP_SET_DEFAULTS: Record<ChipSetInheritedProperty, unknown> = {
+  type: CHIP_CONSTANTS.defaults.TYPE,
+  dense: false,
+  disabled: false,
+  invalid: false,
+  theme: CHIP_CONSTANTS.defaults.THEME
+};
+
 /**
  * @summary A compact, interactive element that represents an entity, action, or attribute with support for selection, removal, and various styling options.
  *
  * @tag forge-chip
- *
- * @property {ChipType} type - The type of chip.
- * @property {unknown} value - The value of the chip.
- * @property {boolean} selected - Whether the chip is selected.
- * @property {boolean} invalid - Whether the chip is invalid.
- * @property {boolean} disabled - Whether the chip is disabled.
- * @property {boolean} dense - Whether the chip is dense.
- * @property {ChipTheme} theme - The theme of the chip.
- * @property {string} href - The href of the chip.
- * @property {string} target - The target of the chip.
- * @property {string} download - The download of the chip.
- * @property {string} rel - The rel of the chip.
- * @property {string} removeButtonLabel - The custom aria-label for the remove button.
- *
- * @attribute {ChipType} type - The type of chip.
- * @attribute {unknown} value - The value of the chip.
- * @attribute {boolean} selected - Whether the chip is selected.
- * @attribute {boolean} invalid - Whether the chip is invalid.
- * @attribute {boolean} disabled - Whether the chip is disabled.
- * @attribute {boolean} dense - Whether the chip is dense.
- * @attribute {ChipTheme} theme - The theme of the chip.
- * @attribute {string} href - The href of the chip.
- * @attribute {string} target - The target of the chip.
- * @attribute {string} download - The download of the chip.
- * @attribute {string} rel - The rel of the chip.
- * @attribute {string} remove-button-label - The custom aria-label for the remove button.
  *
  * @fires {CustomEvent<IChipDeleteEventData>} forge-chip-delete - Event fired when the chip is deleted.
  * @fires {CustomEvent<IChipSelectEventData>} forge-chip-select - Event fired when the chip is selected.
@@ -133,118 +119,442 @@ declare global {
  * @cssclass forge-chip--field - Renders a chip in its field variant (for use within inputs).
  * @cssclass forge-chip--dense - Uses a smaller font size and height.
  *
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
+ * @dependency forge-icon-button
+ * @dependency forge-icon
+ *
  * @slot - The content of the chip.
  * @slot start - The start content of the chip.
  * @slot end - The end content of the chip.
  */
-@customElement({
-  name: CHIP_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent, IconButtonComponent, IconComponent]
-})
-export class ChipComponent extends BaseComponent implements IChipComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(CHIP_CONSTANTS.observedAttributes);
-  }
+export class ChipComponent extends BaseLitElement implements IChipComponent {
+  public static styles = unsafeCSS(styles);
 
-  protected _core: ChipCore;
+  /** @internal */
+  public static contextRoot = new ContextRoot();
 
-  constructor() {
-    super();
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CHIP_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent, IconButtonComponent, IconComponent];
+
+  static {
     IconRegistry.define(tylIconClose);
-    attachShadowTemplate(this, template, styles);
-    this._core = new ChipCore(new ChipAdapter(this));
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
+  /**
+   * The type of chip.
+   * @default 'action'
+   * @attribute
+   */
+  @property({
+    reflect: true,
+    converter: { toAttribute: (value: ChipType) => removeDefaultAttribute(value, CHIP_CONSTANTS.defaults.TYPE) }
+  })
+  public set type(value: ChipType) {
+    this.#type = CHIP_TYPES.includes(value) ? value : CHIP_CONSTANTS.defaults.TYPE;
+  }
+  public get type(): ChipType {
+    return this.#type;
+  }
+  #type: ChipType = CHIP_CONSTANTS.defaults.TYPE;
+
+  /**
+   * The value of the chip.
+   * @attribute
+   */
+  @property()
+  public value: unknown;
+
+  /**
+   * Whether the chip is selected.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public selected = false;
+
+  /**
+   * Whether the chip is invalid.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public invalid = false;
+
+  /**
+   * Whether the chip is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public disabled = false;
+
+  /**
+   * Whether the chip is dense.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public dense = false;
+
+  /**
+   * The theme of the chip.
+   * @default 'primary'
+   * @attribute
+   */
+  @property({
+    reflect: true,
+    converter: { toAttribute: (value: ChipTheme) => removeDefaultAttribute(value, CHIP_CONSTANTS.defaults.THEME) }
+  })
+  public set theme(value: ChipTheme) {
+    this.#theme = value ?? CHIP_CONSTANTS.defaults.THEME;
+  }
+  public get theme(): ChipTheme {
+    return this.#theme;
+  }
+  #theme: ChipTheme = CHIP_CONSTANTS.defaults.THEME;
+
+  /**
+   * The href of the chip. Setting this renders the chip as an anchor.
+   * @attribute
+   */
+  @property({ reflect: true, converter: { toAttribute: (value?: string) => removeEmptyAttribute(value?.trim() ?? '') } })
+  public href?: string;
+
+  /**
+   * The target of the chip anchor.
+   * @attribute
+   */
+  @property({ reflect: true, converter: { toAttribute: (value?: string) => removeEmptyAttribute(value?.trim() ?? '') } })
+  public target?: string;
+
+  /**
+   * The download attribute of the chip anchor.
+   * @attribute
+   */
+  @property({ reflect: true, converter: { toAttribute: (value?: string) => removeEmptyAttribute(value?.trim() ?? '') } })
+  public download?: string;
+
+  /**
+   * The rel attribute of the chip anchor.
+   * @attribute
+   */
+  @property({ reflect: true, converter: { toAttribute: (value?: string) => removeEmptyAttribute(value?.trim() ?? '') } })
+  public rel?: string;
+
+  /**
+   * The custom aria-label for the remove button.
+   * @attribute remove-button-label
+   */
+  @property({ attribute: 'remove-button-label' })
+  public removeButtonLabel?: string;
+
+  // *****
+  // Context setters
+  // *****
+
+  readonly #inheritedProperties = new Set<ChipSetInheritedProperty>();
+
+  @consume({ context: CHIP_SET_TYPE, subscribe: true })
+  private set _chipSetType(value: ChipType) {
+    if (this.#shouldInherit('type', value)) {
+      this.type = value;
+    }
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case CHIP_CONSTANTS.attributes.TYPE:
-        this.type = newValue as ChipType;
+  @consume({ context: CHIP_SET_DENSE, subscribe: true })
+  private set _chipSetDense(value: boolean) {
+    if (this.#shouldInherit('dense', value)) {
+      this.dense = value;
+    }
+  }
+
+  @consume({ context: CHIP_SET_DISABLED, subscribe: true })
+  private set _chipSetDisabled(value: boolean) {
+    if (this.#shouldInherit('disabled', value)) {
+      this.disabled = value;
+    }
+  }
+
+  @consume({ context: CHIP_SET_INVALID, subscribe: true })
+  private set _chipSetInvalid(value: boolean) {
+    if (this.#shouldInherit('invalid', value)) {
+      this.invalid = value;
+    }
+  }
+
+  @consume({ context: CHIP_SET_THEME, subscribe: true })
+  private set _chipSetTheme(value: ChipTheme) {
+    if (this.#shouldInherit('theme', value)) {
+      this.theme = value;
+    }
+  }
+
+  @query('#trigger', true) private _trigger?: HTMLButtonElement | HTMLAnchorElement;
+  @query('#remove-button', true) private _removeButton?: IconButtonComponent;
+  @query('forge-focus-indicator', true) private _focusIndicator?: IFocusIndicatorComponent;
+  @query('forge-state-layer', true) private _stateLayer?: IStateLayerComponent;
+
+  #renderedTrigger?: HTMLElement;
+
+  public override connectedCallback(): void {
+    // Ensures context is provided even if the chip is upgraded before the chip set
+    const chipSet = this.closest(CHIP_SET_CONSTANTS.elementName);
+    if (chipSet) {
+      ChipComponent.contextRoot.attach(chipSet);
+    }
+
+    super.connectedCallback();
+  }
+
+  public override updated(): void {
+    const trigger = this._trigger;
+    if (this.#renderedTrigger && this.#renderedTrigger !== trigger) {
+      // The trigger element was swapped between a button and an anchor
+      if (this._focusIndicator) {
+        this._focusIndicator.targetElement = trigger;
+      }
+      if (this._stateLayer) {
+        this._stateLayer.targetElement = trigger ?? null;
+      }
+    }
+    this.#renderedTrigger = trigger;
+  }
+
+  public override focus(options?: FocusOptions): void {
+    this._trigger?.focus({ preventScroll: true, ...options });
+  }
+
+  /** Moves focus to the remove button, if one is rendered. */
+  public focusRemoveButton(): void {
+    this._removeButton?.focus();
+  }
+
+  public override click(): void {
+    this._trigger?.click();
+  }
+
+  public render(): TemplateResult {
+    const isAnchor = this.#isAnchor;
+    const isDisabled = this.disabled && !isAnchor;
+    const hasRemoveButton = this.type === 'input' || this.type === 'field';
+
+    return html`
+      <div class="forge-chip" part="root" @click=${this.#onClick} @keydown=${this.#onKeydown}>
+        ${this.type === 'filter' ? this.#renderCheckmark() : nothing} ${isAnchor ? this.#renderAnchor() : this.#renderButton()}
+        ${isDisabled ? nothing : html`<forge-focus-indicator target="trigger" part="focus-indicator"></forge-focus-indicator>`}
+        ${isDisabled || this.type === 'field' ? nothing : html`<forge-state-layer target="trigger" exportparts="surface:state-layer"></forge-state-layer>`}
+        ${hasRemoveButton ? this.#renderRemoveButton(isDisabled) : nothing}
+      </div>
+    `;
+  }
+
+  get #isAnchor(): boolean {
+    return !!this.href?.trim();
+  }
+
+  #renderCheckmark(): TemplateResult {
+    return html`
+      <div class="checkmark" aria-hidden="true">
+        <svg viewBox="-2 -3 30 30">
+          <path fill="none" stroke="black" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+        </svg>
+      </div>
+    `;
+  }
+
+  #renderButton(): TemplateResult {
+    return html`
+      <button
+        type="button"
+        id="trigger"
+        class="trigger"
+        part="trigger"
+        ?disabled=${this.disabled}
+        tabindex=${this.disabled ? -1 : nothing}
+        aria-pressed=${this.selected ? 'true' : nothing}>
+        ${this.#renderTriggerContent()}
+      </button>
+    `;
+  }
+
+  #renderAnchor(): TemplateResult {
+    return html`
+      <a
+        id="trigger"
+        class="trigger"
+        part="trigger"
+        href=${this.href?.trim() || nothing}
+        target=${this.target || nothing}
+        download=${this.download || nothing}
+        rel=${this.rel || nothing}>
+        ${this.#renderTriggerContent()}
+      </a>
+    `;
+  }
+
+  #renderTriggerContent(): TemplateResult {
+    // The checkmark replaces any leading content when a filter chip is selected
+    const hideStart = this.type === 'filter' && this.selected;
+    return html`
+      <slot name="start" style=${hideStart ? 'display: none' : nothing}>
+        <slot name="leading"></slot>
+      </slot>
+      <slot></slot>
+      <slot name="end">
+        <slot name="trailing"></slot>
+      </slot>
+    `;
+  }
+
+  #renderRemoveButton(isDisabled: boolean): TemplateResult {
+    const label = this.removeButtonLabel;
+    return html`
+      <forge-icon-button
+        id="remove-button"
+        class="remove"
+        part="remove-button"
+        density="small"
+        ?disabled=${isDisabled}
+        aria-label=${label ? label.trim() : nothing}
+        aria-labelledby=${label ? nothing : 'remove-text trigger'}>
+        <forge-icon name="close"></forge-icon>
+      </forge-icon-button>
+      <span id="remove-text" style="display: none">Remove</span>
+    `;
+  }
+
+  #shouldInherit(key: ChipSetInheritedProperty, value: unknown): boolean {
+    // Only inherit the chip set's initial value if it differs from the default to avoid clobbering the chip's own values
+    const shouldInherit = this.#inheritedProperties.has(key) || value !== CHIP_SET_DEFAULTS[key];
+    this.#inheritedProperties.add(key);
+    return shouldInherit;
+  }
+
+  #onClick(evt: MouseEvent): void {
+    if (this.disabled) {
+      return;
+    }
+
+    if (this.#isRemoveButton(evt)) {
+      evt.stopImmediatePropagation();
+      this.#dispatchDeleteEvent();
+    } else {
+      this.#handleSelectInteraction();
+    }
+  }
+
+  #onKeydown(evt: KeyboardEvent): void {
+    if (this.disabled) {
+      return;
+    }
+
+    switch (evt.key) {
+      case 'Delete':
+      case 'Backspace':
+        if (this.type === 'input') {
+          evt.preventDefault();
+          this.#dispatchDeleteEvent();
+        }
         break;
-      case CHIP_CONSTANTS.attributes.VALUE:
-        this.value = newValue;
+      case 'Enter':
+      case ' ':
+        evt.preventDefault();
+        if (this.#isRemoveButton(evt)) {
+          evt.stopImmediatePropagation();
+          if (evt.key === 'Enter') {
+            this._removeButton?.click();
+          }
+        } else {
+          this.click();
+          if (this.#isAnchor) {
+            this._stateLayer?.playAnimation();
+          }
+        }
         break;
-      case CHIP_CONSTANTS.attributes.SELECTED:
-        this.selected = coerceBoolean(newValue);
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.#tryNavigate(evt);
         break;
-      case CHIP_CONSTANTS.attributes.INVALID:
-        this.invalid = coerceBoolean(newValue);
-        break;
-      case CHIP_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
-      case CHIP_CONSTANTS.attributes.DENSE:
-        this.dense = coerceBoolean(newValue);
-        break;
-      case CHIP_CONSTANTS.attributes.THEME:
-        this.theme = newValue as ChipTheme;
-        break;
-      case CHIP_CONSTANTS.attributes.HREF:
-        this.href = newValue;
-        break;
-      case CHIP_CONSTANTS.attributes.TARGET:
-        this.target = newValue;
-        break;
-      case CHIP_CONSTANTS.attributes.DOWNLOAD:
-        this.download = newValue;
-        break;
-      case CHIP_CONSTANTS.attributes.REL:
-        this.rel = newValue;
-        break;
-      case CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL:
-        this.removeButtonLabel = newValue;
+      case 'Tab':
+        if (this.type === 'input' && this.#isRemoveButton(evt)) {
+          this.#tryNavigate(evt);
+        }
         break;
     }
   }
 
-  public override focus(options?: FocusOptions): void {
-    this._core.focus(options);
+  #tryNavigate(evt: KeyboardEvent): void {
+    if (this.type === 'input') {
+      const isRemoveButtonFocused = !!this._removeButton?.matches(':focus');
+      if (isRemoveButtonFocused) {
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        if (evt.key === 'ArrowLeft') {
+          this.focus();
+          return;
+        }
+      } else if (evt.key === 'ArrowRight') {
+        this.#tryFocusRemoveButton();
+        return;
+      }
+    }
+
+    const detail: IChipNavigateEventData = {
+      direction: evt.key === 'ArrowRight' || evt.key === 'Tab' ? 'next' : 'previous'
+    };
+    this.dispatchEvent(new CustomEvent(CHIP_CONSTANTS.events.NAVIGATE, { bubbles: true, detail }));
   }
 
-  public focusRemoveButton(): void {
-    this._core.focusRemoveButton();
+  #tryFocusRemoveButton(): void {
+    if (this._removeButton) {
+      this._removeButton.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
+    } else {
+      this.focus();
+    }
   }
 
-  public override click(): void {
-    this._core.click();
+  #isRemoveButton(evt: Event): boolean {
+    return !!this._removeButton && evt.composedPath().includes(this._removeButton);
   }
 
-  @coreProperty()
-  declare public type: ChipType;
+  #handleSelectInteraction(): void {
+    const originalSelected = this.selected;
 
-  @coreProperty()
-  declare public value: unknown;
+    // Reflect the pending state on the event target while the select event is dispatched
+    this.selected = !originalSelected;
+    const wasDefaultPrevented = this.#dispatchSelectEvent();
+    this.selected = originalSelected;
 
-  @coreProperty()
-  declare public selected: boolean;
+    if (!wasDefaultPrevented && SELECTABLE_CHIP_TYPES.includes(this.type)) {
+      this.selected = !originalSelected;
+    }
+  }
 
-  @coreProperty()
-  declare public invalid: boolean;
+  #dispatchSelectEvent(): boolean {
+    const detail: IChipSelectEventData = {
+      selected: this.selected,
+      value: this.value
+    };
+    const event = new CustomEvent(CHIP_CONSTANTS.events.SELECT, { detail, bubbles: true, cancelable: true });
+    this.dispatchEvent(event);
+    return event.defaultPrevented;
+  }
 
-  @coreProperty()
-  declare public disabled: boolean;
+  #dispatchDeleteEvent(): void {
+    const detail: IChipDeleteEventData = { value: this.value };
+    this.dispatchEvent(new CustomEvent(CHIP_CONSTANTS.events.DELETE, { detail, bubbles: true }));
+  }
+}
 
-  @coreProperty()
-  declare public dense: boolean;
+tryDefine(CHIP_CONSTANTS.elementName, ChipComponent);
 
-  @coreProperty()
-  declare public theme: ChipTheme;
-
-  @coreProperty()
-  declare public href: string;
-
-  @coreProperty()
-  declare public target: string;
-
-  @coreProperty()
-  declare public download: string;
-
-  @coreProperty()
-  declare public rel: string;
-
-  @coreProperty()
-  declare public removeButtonLabel: string;
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-chip': IChipComponent;
+  }
 }

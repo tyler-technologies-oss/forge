@@ -250,24 +250,78 @@ describe('Chips', () => {
 
       expect(chips.every(chip => chip.theme === 'error')).toBe(true);
     });
+
+    it('should apply chip set properties to chips added after the chip set is created', async () => {
+      const screen = render(html`<forge-chip-set type="filter" dense disabled invalid theme="error"></forge-chip-set>`);
+      const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
+
+      const chip = document.createElement('forge-chip');
+      el.appendChild(chip);
+      await chip.updateComplete;
+
+      expect(chip.type).toBe('filter');
+      expect(chip.dense).toBe(true);
+      expect(chip.disabled).toBe(true);
+      expect(chip.invalid).toBe(true);
+      expect(chip.theme).toBe('error');
+    });
+
+    it('should not override chip properties with default chip set values', async () => {
+      const screen = render(html`
+        <forge-chip-set>
+          <forge-chip type="filter" dense disabled invalid theme="error">Test</forge-chip>
+        </forge-chip-set>
+      `);
+      const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
+      const [chip] = getChips(el);
+      await chip.updateComplete;
+
+      expect(chip.type).toBe('filter');
+      expect(chip.dense).toBe(true);
+      expect(chip.disabled).toBe(true);
+      expect(chip.invalid).toBe(true);
+      expect(chip.theme).toBe('error');
+    });
+
+    it('should override chip properties when chip set properties change', async () => {
+      const screen = render(html`
+        <forge-chip-set>
+          <forge-chip disabled>Test</forge-chip>
+        </forge-chip-set>
+      `);
+      const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
+      const [chip] = getChips(el);
+
+      el.disabled = true;
+      el.disabled = false;
+      await chip.updateComplete;
+
+      expect(chip.disabled).toBe(false);
+    });
   });
 
   describe('Chip', () => {
     it('should contain shadow root', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       expect(el.shadowRoot).not.toBeNull();
     });
 
     it('should be accessible', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       await expect(el).toBeAccessible();
     });
 
     it('should have expected defaults', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       expect(el.type).toBe(CHIP_CONSTANTS.defaults.TYPE);
       expect(el.value).toBeUndefined();
@@ -286,13 +340,16 @@ describe('Chips', () => {
     it('should set type via attribute', async () => {
       const screen = render(html`<forge-chip type="filter">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       expect(el.type).toBe('filter');
     });
 
     it('should update type attribute when setting property', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       el.type = 'filter';
+      await el.updateComplete;
 
       expect(el.hasAttribute(CHIP_CONSTANTS.attributes.TYPE)).toBe(true);
     });
@@ -300,7 +357,9 @@ describe('Chips', () => {
     it('should reset to default type when removing attribute', async () => {
       const screen = render(html`<forge-chip type="filter">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       el.removeAttribute(CHIP_CONSTANTS.attributes.TYPE);
+      await el.updateComplete;
 
       expect(el.type).toBe(CHIP_CONSTANTS.defaults.TYPE);
     });
@@ -308,19 +367,23 @@ describe('Chips', () => {
     it('should set value attribute', async () => {
       const screen = render(html`<forge-chip value="test">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       expect(el.value).toBe('test');
     });
 
     it('should set selected attribute', async () => {
       const screen = render(html`<forge-chip selected>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       expect(el.selected).toBe(true);
     });
 
     it('should set selected attribute when setting property', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       el.selected = true;
+      await el.updateComplete;
 
       expect(el.hasAttribute(CHIP_CONSTANTS.attributes.SELECTED)).toBe(true);
     });
@@ -329,6 +392,7 @@ describe('Chips', () => {
       const href = 'javascript: void(0);';
       const screen = render(html`<forge-chip href="${href}">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el);
 
       expect(triggerEl).toBeInstanceOf(HTMLAnchorElement);
@@ -339,11 +403,13 @@ describe('Chips', () => {
       const href = 'javascript: void(0);';
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       let triggerEl = getTriggerElement(el);
       expect(triggerEl).toBeInstanceOf(HTMLButtonElement);
 
       el.href = href;
+      await el.updateComplete;
 
       triggerEl = getTriggerElement(el);
       expect(triggerEl).toBeInstanceOf(HTMLAnchorElement);
@@ -353,11 +419,13 @@ describe('Chips', () => {
     it('should reset trigger to button element when removing href', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       let triggerEl = getTriggerElement(el);
       expect(triggerEl).toBeInstanceOf(HTMLAnchorElement);
 
       el.removeAttribute(CHIP_CONSTANTS.attributes.HREF);
+      await el.updateComplete;
 
       triggerEl = getTriggerElement(el);
       expect(triggerEl).toBeInstanceOf(HTMLButtonElement);
@@ -366,6 +434,7 @@ describe('Chips', () => {
     it('should set anchor target via attribute', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);" target="_blank">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
       expect(anchorEl.target).toBe('_blank');
@@ -375,12 +444,14 @@ describe('Chips', () => {
     it('should update target attribute when setting property', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
       expect(anchorEl.target).toBe('');
       expect(el.target).toBeUndefined();
 
       el.target = '_blank';
+      await el.updateComplete;
 
       expect(anchorEl.target).toBe('_blank');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.TARGET)).toBe('_blank');
@@ -389,6 +460,7 @@ describe('Chips', () => {
     it('should set anchor download via attribute', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);" download="test">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
       expect(anchorEl.download).toBe('test');
@@ -398,12 +470,14 @@ describe('Chips', () => {
     it('should update download attribute when setting property', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
       expect(anchorEl.download).toBe('');
       expect(el.download).toBeUndefined();
 
       el.download = 'test';
+      await el.updateComplete;
 
       expect(anchorEl.download).toBe('test');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.DOWNLOAD)).toBe('test');
@@ -412,6 +486,7 @@ describe('Chips', () => {
     it('should set anchor rel via attribute', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);" rel="noopener">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = el.shadowRoot?.querySelector(CHIP_CONSTANTS.selectors.TRIGGER) as HTMLAnchorElement;
 
       expect(anchorEl.rel).toBe('noopener');
@@ -421,12 +496,14 @@ describe('Chips', () => {
     it('should update rel attribute when setting property', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
       expect(anchorEl.rel).toBe('');
       expect(el.rel).toBeUndefined();
 
       el.rel = 'noopener';
+      await el.updateComplete;
 
       expect(anchorEl.rel).toBe('noopener');
       expect(el.getAttribute(CHIP_CONSTANTS.attributes.REL)).toBe('noopener');
@@ -435,8 +512,10 @@ describe('Chips', () => {
     it('should inherit target, download, and rel values when href is set', async () => {
       const screen = render(html`<forge-chip target="_blank" download="test" rel="noopener">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       el.href = 'javascript: void(0);';
+      await el.updateComplete;
 
       const anchorEl = getTriggerElement(el) as HTMLAnchorElement;
 
@@ -448,6 +527,7 @@ describe('Chips', () => {
     it('should set remove button label via attribute', async () => {
       const screen = render(html`<forge-chip type="input" remove-button-label="Custom remove">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBe('Custom remove');
@@ -457,12 +537,14 @@ describe('Chips', () => {
     it('should update remove button label attribute when setting property', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeUndefined();
       expect(removeButton).toHaveAccessibleName('Remove Test');
 
       el.removeButtonLabel = 'Custom remove';
+      await el.updateComplete;
 
       expect(removeButton).toHaveAccessibleName('Custom remove');
     });
@@ -470,6 +552,7 @@ describe('Chips', () => {
     it('should use default remove button label when custom label is not set', async () => {
       const screen = render(html`<forge-chip type="input">Test Chip</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeUndefined();
@@ -479,11 +562,13 @@ describe('Chips', () => {
     it('should update remove button label when property is set after creation', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       let removeButton = getRemoveButtonElement(el);
 
       expect(removeButton).toHaveAccessibleName('Remove Test');
 
       el.removeButtonLabel = 'Delete item';
+      await el.updateComplete;
       removeButton = getRemoveButtonElement(el);
 
       expect(removeButton).toHaveAccessibleName('Delete item');
@@ -492,11 +577,13 @@ describe('Chips', () => {
     it('should reset to default remove button label when custom label is removed', async () => {
       const screen = render(html`<forge-chip type="input" remove-button-label="Custom remove">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       let removeButton = getRemoveButtonElement(el);
 
       expect(removeButton).toHaveAccessibleName('Custom remove');
 
       el.removeAttribute(CHIP_CONSTANTS.attributes.REMOVE_BUTTON_LABEL);
+      await el.updateComplete;
       removeButton = getRemoveButtonElement(el);
 
       expect(el.removeButtonLabel).toBeNull();
@@ -506,6 +593,7 @@ describe('Chips', () => {
     it('should set focus to trigger element when calling focus() method', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       el.focus();
 
@@ -515,6 +603,7 @@ describe('Chips', () => {
     it('should set disabled', async () => {
       const screen = render(html`<forge-chip disabled>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const focusIndicatorEl = getFocusIndicator(el);
       const stateLayerEl = getStateLayer(el);
       const triggerEl = getTriggerElement(el) as HTMLButtonElement;
@@ -529,6 +618,7 @@ describe('Chips', () => {
     it('should toggle disabled dynamically', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el) as HTMLButtonElement;
 
       let focusIndicatorEl = getFocusIndicator(el);
@@ -541,6 +631,7 @@ describe('Chips', () => {
       expect(stateLayerEl).toBeTruthy();
 
       el.disabled = true;
+      await el.updateComplete;
       focusIndicatorEl = getFocusIndicator(el);
       stateLayerEl = getStateLayer(el);
 
@@ -551,6 +642,7 @@ describe('Chips', () => {
       expect(stateLayerEl).toBeNull();
 
       el.disabled = false;
+      await el.updateComplete;
       focusIndicatorEl = getFocusIndicator(el);
       stateLayerEl = getStateLayer(el);
 
@@ -564,6 +656,7 @@ describe('Chips', () => {
     it('should not disable if anchor element is used as trigger', async () => {
       const screen = render(html`<forge-chip href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el) as HTMLAnchorElement;
       const focusIndicatorEl = getFocusIndicator(el);
       const stateLayerEl = getStateLayer(el);
@@ -575,6 +668,7 @@ describe('Chips', () => {
       expect(stateLayerEl).toBeTruthy();
 
       el.disabled = true;
+      await el.updateComplete;
 
       expect(el.disabled).toBe(true);
       expect(el.hasAttribute(CHIP_CONSTANTS.attributes.DISABLED)).toBe(true);
@@ -586,6 +680,7 @@ describe('Chips', () => {
     it('should allow interaction if disabled and href are set', async () => {
       const screen = render(html`<forge-chip disabled>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       let triggerEl = getTriggerElement(el) as HTMLButtonElement;
       let focusIndicatorEl = getFocusIndicator(el);
       let stateLayerEl = getStateLayer(el);
@@ -596,6 +691,7 @@ describe('Chips', () => {
       expect(stateLayerEl).toBeNull();
 
       el.href = 'javascript: void(0);';
+      await el.updateComplete;
 
       triggerEl = getTriggerElement(el) as HTMLButtonElement;
       focusIndicatorEl = getFocusIndicator(el);
@@ -610,6 +706,7 @@ describe('Chips', () => {
     it('should disable remove button if chip type is "input" when disabled', async () => {
       const screen = render(html`<forge-chip type="input" disabled>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const removeButton = getRemoveButtonElement(el);
 
       expect(removeButton?.disabled).toBe(true);
@@ -618,10 +715,12 @@ describe('Chips', () => {
     it('should set default theme if null is provided', async () => {
       const screen = render(html`<forge-chip theme="success">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       expect(el.theme).toBe('success');
 
       el.theme = null as any;
+      await el.updateComplete;
 
       expect(el.theme).toBe(CHIP_CONSTANTS.defaults.THEME);
     });
@@ -629,6 +728,7 @@ describe('Chips', () => {
     it('should remove state layer when field type is set', async () => {
       const screen = render(html`<forge-chip type="field">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const stateLayerEl = getStateLayer(el);
 
       expect(stateLayerEl).toBeNull();
@@ -637,6 +737,7 @@ describe('Chips', () => {
     it('should manually animate state layer when pressing enter or space on focused anchor chip', async () => {
       const screen = render(html`<forge-chip type="choice" href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const stateLayerEl = getStateLayer(el);
       const animateSpy = vi.spyOn(stateLayerEl, 'playAnimation');
 
@@ -653,6 +754,7 @@ describe('Chips', () => {
     it('should not manually animate state layer when pressing enter or space on non-anchor focused chip', async () => {
       const screen = render(html`<forge-chip type="choice">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const stateLayerEl = getStateLayer(el);
       const animateSpy = vi.spyOn(stateLayerEl, 'playAnimation');
 
@@ -671,6 +773,7 @@ describe('Chips', () => {
     it('should activate focus indicator when focusing chip', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el) as HTMLButtonElement;
       const focusIndicatorEl = getFocusIndicator(el);
 
@@ -796,6 +899,7 @@ describe('Chips', () => {
     it('should move focus to remove button when pressing ArrowRight on focused input chip', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const removeButton = getRemoveButtonElement(el);
 
       el.focus();
@@ -812,6 +916,7 @@ describe('Chips', () => {
     it('should move focus back to trigger element when pressing ArrowLeft on focused remove button', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el);
       const removeButton = getRemoveButtonElement(el);
 
@@ -855,6 +960,7 @@ describe('Chips', () => {
     it('should dispatch select event when clicking on chip', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const selectSpy = vi.fn();
 
       el.addEventListener(CHIP_CONSTANTS.events.SELECT, selectSpy);
@@ -869,6 +975,7 @@ describe('Chips', () => {
     it('should reflect updated selected state on event target when dispatching select event', async () => {
       const screen = render(html`<forge-chip type="choice">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       let targetSelected = false;
       const selectSpy = vi.fn((evt: Event) => (targetSelected = (evt.target as IChipComponent)?.selected));
 
@@ -884,6 +991,7 @@ describe('Chips', () => {
     it('should dispatch select event when pressing enter or space on chip', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const selectSpy = vi.fn();
 
       el.addEventListener(CHIP_CONSTANTS.events.SELECT, selectSpy);
@@ -902,6 +1010,7 @@ describe('Chips', () => {
     it('should not set selected if select event is cancelled', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const selectSpy = vi.fn((evt: CustomEvent<IChipSelectEventData>) => evt.preventDefault());
 
       el.addEventListener(CHIP_CONSTANTS.events.SELECT, selectSpy);
@@ -941,6 +1050,7 @@ describe('Chips', () => {
     it('should be accessible when selected', async () => {
       const screen = render(html`<forge-chip selected>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el);
 
       expect(triggerEl.getAttribute('aria-pressed')).toBe('true');
@@ -1058,6 +1168,7 @@ describe('Chips', () => {
     it('should not set aria-pressed on anchor chips', async () => {
       const screen = render(html`<forge-chip type="choice" href="javascript: void(0);">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const triggerEl = getTriggerElement(el);
 
       el.focus();
@@ -1071,6 +1182,7 @@ describe('Chips', () => {
     it('should dispatch delete event when clicking on remove button', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const deleteSpy = vi.fn();
 
       el.addEventListener(CHIP_CONSTANTS.events.DELETE, deleteSpy);
@@ -1085,6 +1197,7 @@ describe('Chips', () => {
     it('should dispatch delete event when pressing delete key on focused chip', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const deleteSpy = vi.fn();
 
       el.addEventListener(CHIP_CONSTANTS.events.DELETE, deleteSpy);
@@ -1100,6 +1213,7 @@ describe('Chips', () => {
     it('should dispatch delete event when pressing backspace key on focused chip', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
       const deleteSpy = vi.fn();
 
       el.addEventListener(CHIP_CONSTANTS.events.DELETE, deleteSpy);
@@ -1115,6 +1229,7 @@ describe('Chips', () => {
     it('should dispatch delete event when pressing enter key on focused remove button', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       const deleteSpy = vi.fn();
       el.addEventListener(CHIP_CONSTANTS.events.DELETE, deleteSpy);
@@ -1134,6 +1249,7 @@ describe('Chips', () => {
     it('should dispatch delete event when pressing space key on focused remove button', async () => {
       const screen = render(html`<forge-chip type="input">Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      await el.updateComplete;
 
       const deleteSpy = vi.fn();
       el.addEventListener(CHIP_CONSTANTS.events.DELETE, deleteSpy);

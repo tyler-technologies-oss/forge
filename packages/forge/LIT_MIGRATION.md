@@ -2,7 +2,7 @@
 
 Tracks the components in `packages/forge/src/lib` that still use the legacy component/core/adapter/template architecture and need to move to Lit (`BaseLitElement`). See the `lit-migration` skill (`.claude/skills/lit-migration`) for the migration workflow.
 
-- **Remaining:** 53 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`)
+- **Remaining:** 52 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`, chip on `feat/chip-lit`)
 - **Last audited:** 2026-10-29
 - **Effort basis:** source size (component, core, adapter, delegate), property count, test size, and dependence on shared infrastructure. Estimates were made without reading every file, so adjust tiers as components are opened.
 - **Sizes** are total source lines in the component folder, including constants and delegates. **Tests** are lines in the component's own `*.test.ts` files. Components with no test count keep their tests in a shared file (`chips.test.ts`, `list.test.ts`, `button-toggle.test.ts`, `stepper.test.ts`, `view-switcher.test.ts`).
@@ -60,7 +60,7 @@ Shared infrastructure, form association, or a wide blast radius.
 | Done | Component              | Size  | Notes                              |
 | ---- | ---------------------- | ----- | ---------------------------------- |
 | [ ]  | list-item              | 803   | 30 properties. No dedicated tests. |
-| [ ]  | chip                   | 904   | 36 properties.                     |
+| [x]  | chip                   | 904   | 36 properties.                     |
 | [ ]  | state-layer            | 944   | Small, but 52 files depend on it.  |
 | [ ]  | button-toggle-group    | 580   | Form-associated, 31 properties.    |
 | [ ]  | checkbox               | 1,195 | Form-associated. Tests: 522.       |
