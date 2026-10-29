@@ -55,29 +55,6 @@ claude plugin update forge@tyler-forge
 If `DISABLE_AUTOUPDATER`, `DISABLE_UPDATES`, or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set in your environment, plugin auto-update is off. Set
 `FORCE_AUTOUPDATE_PLUGINS=1` to turn it back on.
 
-#### Set up the plugin for a project
-
-To give everyone working in your app's repository the plugin with auto-update on, commit this to the repository's `.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "tyler-forge": {
-      "source": {
-        "source": "github",
-        "repo": "tyler-technologies-oss/forge"
-      },
-      "autoUpdate": true
-    }
-  },
-  "enabledPlugins": {
-    "forge@tyler-forge": true
-  }
-}
-```
-
-Once someone accepts the folder trust dialog, Claude Code adds the `tyler-forge` marketplace and loads the plugin for them. Admins can put the same settings in [managed settings](https://code.claude.com/docs/en/plugins/org) to install the plugin and turn on auto-update for everyone in an organization.
-
 #### Moving from the `forge-mcp` marketplace
 
 The plugin used to be installed from the `tyler-technologies-oss/forge-mcp` repository, which is now archived. Run `claude plugin marketplace list`. If `tyler-forge` shows `tyler-technologies-oss/forge-mcp` as its source, switch to the current marketplace:
