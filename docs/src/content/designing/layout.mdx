@@ -212,13 +212,13 @@ When a page has several views of the same object, put a tab bar directly below t
 
 ## Containers
 
-Forge's cards, dialogs, and drawers share one internal structure. Learn it once and every container follows it.
+Forge's cards, dialogs, and drawers share one internal structure, built from the same two components: a [scaffold](/components/scaffold/usage/) (`forge-scaffold`) nested inside the container lays out a header, body, and footer, and a [toolbar](/components/toolbar/usage/) (`forge-toolbar`) fills the header and footer. Learn it once and every container follows it.
 
 <AnatomyDemo>
   <forge-card class="p-0 w-full max-w-md my-large">
     <forge-scaffold>
       <div slot="header" class="relative">
-        <AnatomyMarker label={1} title="Header toolbar" description="Title and icon actions. 56px tall with a bottom divider." placement="center" />
+        <AnatomyMarker label={1} title="Header toolbar" description="A forge-toolbar in the scaffold's header slot, with the title and icon actions. 56px tall with a bottom divider." placement="center" />
         <forge-toolbar>
           <span slot="start" class="text-heading3">
             Card title
@@ -229,11 +229,11 @@ Forge's cards, dialogs, and drawers share one internal structure. Learn it once 
         </forge-toolbar>
       </div>
       <div slot="body" class="relative p-medium">
-        <AnatomyMarker label={2} title="Body" description="The container's content and the only part that scrolls. --forge-spacing-medium padding." />
+        <AnatomyMarker label={2} title="Body" description="The scaffold's body slot: the container's content and the only part that scrolls. --forge-spacing-medium padding." />
         <div class="striped-box h-28"></div>
       </div>
       <div slot="footer" class="relative">
-        <AnatomyMarker label={3} title="Footer toolbar" description="Actions, end-aligned with the primary action last. 56px tall." placement="center" />
+        <AnatomyMarker label={3} title="Footer toolbar" description="An inverted forge-toolbar in the scaffold's footer slot, with actions end-aligned and the primary action last. 56px tall." placement="center" />
         <forge-toolbar inverted>
           <div slot="end" class="flex items-center gap-medium">
             <forge-button variant="tonal">Cancel</forge-button>
@@ -245,12 +245,11 @@ Forge's cards, dialogs, and drawers share one internal structure. Learn it once 
   </forge-card>
 </AnatomyDemo>
 
-| #   | Part               | What goes here                                        | Size                      |
-| --- | ------------------ | ----------------------------------------------------- | ------------------------- |
-| 1   | **Header toolbar** | Title (`forge-typography--heading3`) and icon actions | 56px tall, bottom divider |
-| 2   | **Body**           | The container's content; the only part that scrolls   | `--forge-spacing-medium` padding |
-| 3   | **Footer toolbar** | Actions, end-aligned with the primary action last     | 56px tall, top divider    |
-
+- **Header:** a `forge-toolbar` in the scaffold's `header` slot, with the title (`forge-typography--heading3`) in `start` and icon actions in `end`. 56px tall with a bottom divider.
+- **Body:** the scaffold's `body` slot, with `--forge-spacing-medium` padding.
+- **Footer:** a `forge-toolbar` with `inverted` in the scaffold's `footer` slot, with actions in `end` and the primary action last. 56px tall with a top divider.
+- Nest the scaffold directly inside the container: `forge-card`, `forge-dialog`, or a drawer. On a card, set `no-padding` so the toolbars reach its edges.
+- For a card, [structured card](/components/structured-card/usage/) (`forge-structured-card`) provides this structure pre-built, with slots for the title, header actions, body, and footer actions instead of a scaffold and toolbars.
 - The header and footer stay put while the body scrolls.
 - Corner radius is **4px** (`--forge-shape-medium`) for cards, dialogs, and toolbars.
 - Cards are flat with a 1px (`--forge-border-thin`) border in `--forge-theme-outline`. Use the raised (shadow) variant only to lift a card above other content.

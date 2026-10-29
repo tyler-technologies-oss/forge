@@ -571,6 +571,17 @@
       "docsPath": "components/stepper.md"
     },
     {
+      "name": "structured-card",
+      "title": "Structured Card",
+      "description": "Structured cards provide a pre-configured card layout with dedicated slots for a title, header actions, body content, and footer actions.",
+      "status": "beta",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-structured-card--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/structured-card.md"
+    },
+    {
       "name": "switch",
       "title": "Switch",
       "description": "Switches toggle the state of a single setting on or off.",

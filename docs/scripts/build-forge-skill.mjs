@@ -3,7 +3,7 @@
  * Builds the forge-design Agent Skill bundle (skill/forge-design/) from the
  * component and developer guide MDX, keeping only the prose an LLM needs.
  *
- * - Live previews (<StorybookEmbed>, <ComponentHeader>) are dropped.
+ * - Live previews (<StorybookEmbed>, <ComponentHeader>, <AnatomyDemo>) are dropped.
  * - Callouts (<InlineMessage>, <Blockquote>) are unwrapped; <table> becomes markdown.
  * - Each <Example> becomes a `get_forge_blocks(blockId: "...")` pointer, and
  *   every block id is checked against the live block manifest. Ids derived
@@ -362,6 +362,8 @@ export function rewriteSiteLink(url, ctx) {
   return `${relativeReference(ctx, `${referenceDir}/${slug}.md`)}${hash}`;
 }
 
+const LIVE_PREVIEW_ELEMENTS = new Set(["StorybookEmbed", "ComponentHeader", "AnatomyDemo"]);
+
 /** Post-order dispatcher: recurses into each node's children first, then rewrites or drops
  * recognized JSX. Anything unrecognized passes through untouched — remark-mdx's stringifier
  * round-trips it back to valid JSX text. */
@@ -373,7 +375,7 @@ function transformChildren(children, ctx) {
     if (child.type === "link") child.url = rewriteSiteLink(child.url, ctx);
 
     if (isJsxElement(child)) {
-      if (child.name === "StorybookEmbed" || child.name === "ComponentHeader") continue;
+      if (LIVE_PREVIEW_ELEMENTS.has(child.name)) continue;
       if (child.name === "Example") {
         out.push(exampleToPointer(child, ctx));
         continue;
@@ -413,10 +415,19 @@ function demoteHeadings(nodes) {
 }
 
 /** `ctx`: { file, slug (component pages only), outDir (output folder under references/, for relative links), lineOffset (frontmatter lines), examples: [] to collect into }. */
+/** Drops headings left with no content before the next heading of the same or higher level, e.g. a section that held only an <AnatomyDemo>. */
+function dropEmptySections(nodes) {
+  return nodes.filter((node, index) => {
+    if (node.type !== "heading") return true;
+    const next = nodes[index + 1];
+    return next && !(next.type === "heading" && next.depth <= node.depth);
+  });
+}
+
 function buildCleanTree(body, ctx) {
   const tree = mdxParser.parse(body);
   ctx.heading = null;
-  tree.children = transformChildren(tree.children.filter((node) => node.type !== "mdxjsEsm"), ctx);
+  tree.children = dropEmptySections(transformChildren(tree.children.filter((node) => node.type !== "mdxjsEsm"), ctx));
   return tree;
 }
 

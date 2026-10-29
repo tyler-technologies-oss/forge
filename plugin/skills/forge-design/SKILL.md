@@ -140,6 +140,7 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Scaffold](references/components/scaffold.md) — The scaffold lays out a header, scrollable body, and footer using named slots, for full pages or smaller sections alike.
 - [Split View](references/components/split-view.md) — Split view lays out two or more panels side by side, at least one of which a user can resize by dragging.
 - [Stack](references/components/stack.md) — A layout utility that manages spacing and alignment of its immediate children along a single vertical or horizontal axis.
+- [Structured Card](references/components/structured-card.md) — Structured cards provide a pre-configured card layout with dedicated slots for a title, header actions, body content, and footer actions.
 - [Toolbar](references/components/toolbar.md) — Toolbars align a title and actions inside a full-width container, most often as a header or footer for another surface.
 
 #### Navigation
