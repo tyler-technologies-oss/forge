@@ -1,0 +1,10 @@
+## Labeling
+
+A FAB that only contains an icon needs a meaningful accessible name via `aria-label` or `aria-labelledby` — the icon alone doesn't convey its purpose to assistive technology.
+
+Avoid capitalized label text; screen readers read capitalized words character-by-character. Use `text-transform: uppercase` instead so the visual style doesn't affect what gets announced.
+
+## Keyboard and contrast
+
+- Make sure the FAB can be reached by keyboard navigation, with a distinct visual cue when it's focused.
+- Verify sufficient contrast between the FAB's foreground and background to meet WCAG requirements — including against whatever page content it floats above.

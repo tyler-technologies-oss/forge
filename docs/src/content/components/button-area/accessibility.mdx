@@ -1,0 +1,16 @@
+## Accessible name
+
+Give the connected button or link a concise, descriptive text content for its action — preferably matching the visible text within the area, or a portion of it if that text is long.
+
+## Keyboard interaction
+
+- Every nested button or link inside the area should be reachable by keyboard navigation, with a visible focus cue.
+- Pressing Space or Enter while the connected button is focused should activate the area the same way a click would. When the connected element is an `<a>`, only Enter activates it, matching native link behavior.
+
+## Contrast
+
+Verify there's sufficient contrast between the area's foreground text and its background to meet WCAG requirements.
+
+## Interactive content inside the area
+
+An element nested inside a button area needs the same `forge-ignore` handling described in <a href={`${import.meta.env.BASE_URL}developing/accessibility/#nested-interactive-elements`}>nested interactive elements</a> to stay independently clickable instead of triggering the area's own button.

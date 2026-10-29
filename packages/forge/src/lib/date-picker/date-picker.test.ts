@@ -1284,8 +1284,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       const popup = getPopup(harness.component);
       const today = new Date();
@@ -1323,8 +1322,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       let popup = getPopup(harness.component);
       const today = new Date();
@@ -1338,8 +1336,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       popup = getPopup(harness.component);
 
@@ -1359,8 +1356,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickClearButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       const popup = getPopup(harness.component);
 
@@ -1825,6 +1821,10 @@ describe('DatePickerComponent', () => {
 
   async function popupCloseAnimation(): Promise<void> {
     return task(POPOVER_ANIMATION_DURATION);
+  }
+
+  async function waitForPopupRemoved(component: DatePickerComponentTest): Promise<void> {
+    await vi.waitFor(() => expect(getPopup(component)).toBeNull());
   }
 
   function expectPopupOpen(component: DatePickerComponentTest, isOpen: boolean): void {

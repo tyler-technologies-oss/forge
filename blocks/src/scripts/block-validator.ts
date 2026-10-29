@@ -3,7 +3,7 @@
  * Validates that block HTML files contain required metadata annotations.
  */
 
-import { ANNOTATION_REGEX, METADATA_REGEX } from './block-metadata.js';
+import { ANNOTATION_REGEX, METADATA_REGEX, parseScreenshotOptions } from './block-metadata.js';
 import { BLOCK_TYPES } from './types.js';
 import type { ValidationIssue, ValidationResult } from './types.js';
 
@@ -11,7 +11,7 @@ export type { ValidationIssue, ValidationResult, ValidationSeverity } from './ty
 
 /**
  * Validates block HTML content for required metadata.
- * Checks for @block name, @description, @tags, and (if present) a valid @type value.
+ * Checks for @block name, @description, @tags, (if present) a valid @type value, and @screenshot-* consistency.
  */
 export function validateBlockContent(content: string, filePath?: string): ValidationResult {
   const issues: ValidationIssue[] = [];
@@ -73,8 +73,41 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
+  issues.push(...validateScreenshotOptions(content, filePath));
+
   const hasErrors = issues.some(i => i.severity === 'error');
   return { valid: !hasErrors, issues };
+}
+
+/** Matches a selector that is only an id, e.g. `#open-dialog-btn`. */
+const ID_SELECTOR_REGEX = /^#([\w-]+)$/;
+
+/**
+ * Validates @screenshot-click and @screenshot-wait annotations.
+ * Only id selectors are checked against the HTML, since other selectors need a DOM to resolve.
+ */
+function validateScreenshotOptions(content: string, filePath?: string): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const { click, wait } = parseScreenshotOptions(content);
+
+  if (wait && !click) {
+    issues.push({
+      severity: 'warning',
+      message: '@screenshot-wait has no effect without @screenshot-click',
+      file: filePath
+    });
+  }
+
+  const id = click?.match(ID_SELECTOR_REGEX)?.[1];
+  if (id && !content.includes(`id="${id}"`)) {
+    issues.push({
+      severity: 'warning',
+      message: `@screenshot-click selector "${click}" does not match any id in the block`,
+      file: filePath
+    });
+  }
+
+  return issues;
 }
 
 /**

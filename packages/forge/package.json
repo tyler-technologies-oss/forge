@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge",
-  "version": "3.22.0",
+  "version": "3.24.1",
   "description": "Tyler Forge™ Web Components library",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -133,7 +133,6 @@
     "vite": "catalog:",
     "vite-plugin-ejs": "^1.7.0",
     "vite-plugin-full-reload": "^1.2.0",
-    "vite-tsconfig-paths": "catalog:",
     "vitest": "^4.1.11",
     "vitest-browser-lit": "^1.0.1"
   },

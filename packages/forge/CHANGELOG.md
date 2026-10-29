@@ -1,5 +1,36 @@
 # @tylertech/forge
 
+## 3.24.1
+
+### Documentation
+
+- a4d4c99: **confirmation-dialog**: describe the `forge-confirmation-dialog-action` event's `{ value, reason }` payload and that it's cancelable
+
+## 3.24.0
+
+### Features
+
+- fc72092: **dialog**: add `labelledBy`, `describedBy`, `labelledByElements`, and `describedByElements` properties to associate labelling and describing elements across the shadow boundary
+
+### Bug Fixes
+
+- 50e6abf: **app-layout**: place content without a `slot` attribute in the body grid area so it positions correctly at all breakpoints
+
+## 3.23.0
+
+### Features
+
+- d1c657b: **breadcrumb**: add `forge-breadcrumb`, `forge-breadcrumb-item`, and `forge-breadcrumb-overflow-menu` components
+- d24ac99: **app-launcher**: dispatch a standard `toggle` event (`ToggleEvent`) when the app launcher opens or closes
+- 2340db2: Add `description` to each category and token in `design-tokens.json`.
+
+### Bug Fixes
+
+- 41ab86d: **button**: sync the `disabled` attribute with the `disabled` property synchronously
+- ca4f1c7: **focus-indicator**: hide focus indicator when anchor element is completely obscured
+- 61832ae: **table**: reposition the sort button as a sibling of header template content to prevent interactive content being included among presentational children
+- cdc8be2: **user-profile**: propagate `--forge-avatar-background` and `--forge-avatar-color` to the popover avatar
+
 ## 3.22.0
 
 ### Minor Changes

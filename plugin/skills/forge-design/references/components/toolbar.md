@@ -1,0 +1,103 @@
+# Toolbar
+
+Toolbars align a title and actions inside a full-width container, most often as a header or footer for another surface.
+
+## Overview
+
+The toolbar is a horizontal container component that spans 100% width and provides structured slots for organizing content across the interface. It uses a border to visually separate the toolbar from adjacent content areas and offers distinct areas for content. This flexible layout system makes toolbars suitable for various contexts including page headers, dialog headers and footers, and drawer sections.
+
+## Usage
+
+`forge-toolbar` aligns content to `before-start`, `start`, `center`, `end`, and `after-end` slots inside a full-width container, through `inverted`, `noDivider`, `noPadding`, and `autoHeight`. Use it as a header or footer inside a [scaffold](./scaffold.md) or [dialog](./dialog.md), as a section within a [drawer](./drawer.md), or anywhere else a title and actions need consistent alignment.
+
+## Rules
+
+**Do**
+
+- Use start for a title, end for the primary actions, and center only for content that's meant to stay centered regardless of the other slots' widths.
+- Pair a toolbar footer's actions the same way you would a dialog footer — confirming action last, dismissive action before it.
+- Set noDivider when the toolbar sits directly against another divider or border that already separates it from its neighbor.
+- Set `inverted` on every footer toolbar (card, dialog, table, and page footers) so its divider separates it from the content above.
+- Give toolbar titles a typography class: `forge-typography--heading4` for a page title, `forge-typography--heading3` for a card, dialog, or drawer title.
+
+**Don't**
+
+- Don't overload a single toolbar with more actions than its slots can hold at the narrowest supported width.
+- Don't use a toolbar as a substitute for an app bar at the top of a page — reserve it for a header/footer role inside another surface.
+- Don't mix unrelated groups of actions into the same slot without a divider between them.
+- Don’t stack unrelated elements vertically; toolbars are for horizontal organization.
+
+## Structure
+
+Every slot at once shows how the toolbar positions content: `before-start` and `after-end` sit outside the main three, which align to `start`, `center`, and `end`.
+
+Example (Every toolbar slot filled in at once, to show how each one is positioned.): `get_forge_blocks(blockId: "components/toolbar/demo/demo")`
+
+## Inverted
+
+Set `inverted` to move the toolbar's divider from the bottom edge to the top — use it on a footer toolbar, where the divider should separate it from the content above rather than below.
+
+Example (An inverted toolbar's divider sits on top instead of the bottom.): `get_forge_blocks(blockId: "components/toolbar/inverted/inverted")`
+
+## Common patterns
+
+Page titles are `h2` styled with `forge-typography--heading4`, since the app bar title is the page's `h1`. Container titles (card, dialog, drawer) use `forge-typography--heading3`.
+
+**Page header**: the page title in `start` and page-level actions in `end`.
+
+```html
+<forge-toolbar>
+  <h2 slot="start" class="forge-typography--heading4">Orders</h2>
+  <forge-button slot="end" variant="filled">New order</forge-button>
+</forge-toolbar>
+```
+
+**Page header with back navigation**: a back icon button in `start`, before the title.
+
+```html
+<forge-toolbar>
+  <forge-icon-button slot="start" aria-label="Back to orders">
+    <forge-icon name="arrow_back"></forge-icon>
+  </forge-icon-button>
+  <h2 slot="start" class="forge-typography--heading4">Order 1042</h2>
+</forge-toolbar>
+```
+
+**Card or dialog header**: the title in `start`, and close or overflow icon buttons in `end`.
+
+```html
+<forge-toolbar slot="header">
+  <h3 slot="start" class="forge-typography--heading3">Recent activity</h3>
+  <forge-icon-button slot="end" density="medium" aria-label="More options">
+    <forge-icon name="more_vert"></forge-icon>
+  </forge-icon-button>
+</forge-toolbar>
+```
+
+**Drawer or side sheet header**: the title in `start` and a close icon button in `end`.
+
+```html
+<forge-toolbar>
+  <h3 slot="start" class="forge-typography--heading3">Filters</h3>
+  <forge-icon-button slot="end" density="medium" aria-label="Close filters">
+    <forge-icon name="close"></forge-icon>
+  </forge-icon-button>
+</forge-toolbar>
+```
+
+**Footer**: `inverted`, with actions end-aligned following the [button](./button.md) hierarchy: the secondary `tonal` action first, the primary `filled` action last, `--forge-spacing-medium` apart.
+
+```html
+<forge-toolbar slot="footer" inverted>
+  <div slot="end" class="flex items-center gap-medium">
+    <forge-button variant="tonal">Cancel</forge-button>
+    <forge-button variant="filled">Save</forge-button>
+  </div>
+</forge-toolbar>
+```
+
+## Accessibility
+
+### Keyboard interaction
+
+Ensure every control slotted into the toolbar is reachable by the tab key and can be activated or updated by keyboard, not just a pointer.

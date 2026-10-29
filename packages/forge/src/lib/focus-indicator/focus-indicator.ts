@@ -6,7 +6,7 @@ import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
-import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
+import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
 
@@ -261,7 +261,8 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
       return;
     }
 
-    const targetRect = this.parentElement?.getBoundingClientRect() ?? this.#targetElement.getBoundingClientRect();
+    const anchor = this.parentElement ?? this.#targetElement;
+    const targetRect = anchor.getBoundingClientRect();
 
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-left', `${targetRect.left}px`);
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-top', `${targetRect.top}px`);
@@ -270,6 +271,38 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     this.#indicatorElement.toggleAttribute('inward', this.inward);
     this.#indicatorElement.toggleAttribute('circular', this.circular);
+    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, targetRect));
+  }
+
+  /**
+   * Determines whether any part of the anchor is visible on the page by sampling a grid of points
+   * within the portion of its bounds that is inside the viewport. Exits on the first visible point.
+   */
+  #isAnchorVisible(anchor: HTMLElement, rect: DOMRect): boolean {
+    const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
+    if (!root.elementFromPoint) {
+      return true;
+    }
+
+    const left = Math.max(rect.left, 0);
+    const top = Math.max(rect.top, 0);
+    const right = Math.min(rect.right, document.documentElement.clientWidth);
+    const bottom = Math.min(rect.bottom, document.documentElement.clientHeight);
+    if (left > right || top > bottom) {
+      return false;
+    }
+
+    for (const yRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
+      for (const xRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
+        const x = Math.min(left + (right - left) * xRatio, document.documentElement.clientWidth - 1);
+        const y = Math.min(top + (bottom - top) * yRatio, document.documentElement.clientHeight - 1);
+        const hit = root.elementFromPoint(x, y);
+        if (hit && (anchor.contains(hit) || hit.contains(anchor))) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   #stopPositioning(): void {

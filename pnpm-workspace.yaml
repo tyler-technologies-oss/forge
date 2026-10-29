@@ -2,6 +2,7 @@ packages:
   - packages/*
   - blocks
   - plugin
+  - docs
 
 catalog:
   '@custom-elements-manifest/analyzer': ^0.11.0
@@ -50,8 +51,7 @@ catalog:
   tslib: ^2.8.1
   tailwindcss: ^4.1.10
   '@tailwindcss/vite': ^4.1.10
-  vite: ^7.3.1
-  vite-tsconfig-paths: ^6.1.1
+  vite: ^8.3.4
 
 onlyBuiltDependencies:
   - '@parcel/watcher'

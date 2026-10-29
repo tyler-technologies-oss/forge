@@ -41,8 +41,9 @@ function applyTheme(theme: Theme): void {
 }
 
 function handleMessage(event: MessageEvent): void {
-  // Only accept messages from the same origin (the docs site iframing this block)
-  if (event.origin !== window.location.origin) {
+  // Only accept messages from the page embedding this block. The docs site may be on a
+  // different origin than the hosted blocks, so an origin check would reject it.
+  if (event.source !== window.parent) {
     return;
   }
 

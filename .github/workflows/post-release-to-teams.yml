@@ -1,12 +1,14 @@
 name: Post Release to Teams
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Changesets]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing release tag to replay (e.g. v1.2.3)"
+        description: "Existing release tag to replay (e.g. @tylertech/forge@3.21.0)"
         required: true
         type: string
       webhook_url:
@@ -17,36 +19,54 @@ on:
 concurrency: 1
 
 jobs:
+  detect-releases:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tags: ${{ steps.tags.outputs.tags }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-tags: true
+
+      - id: tags
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [[ -n "$INPUT_TAG" ]]; then
+            TAGS=$(jq -cn --arg t "$INPUT_TAG" '[$t]')
+          else
+            TAGS=$(git tag --points-at HEAD | grep '^@tylertech/' | jq -Rcs 'split("\n") | map(select(length > 0))')
+          fi
+          echo "Release tags: $TAGS"
+          echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
+
   notify:
+    needs: detect-releases
+    if: needs.detect-releases.outputs.tags != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: read
+    strategy:
+      max-parallel: 1
+      matrix:
+        tag: ${{ fromJSON(needs.detect-releases.outputs.tags) }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Get release info
         id: release
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ matrix.tag }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            RELEASE_JSON=$(gh api "repos/${{ github.repository }}/releases/tags/${{ inputs.tag }}")
-            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
-            echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
-            echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
-            echo "body<<EOF" >> $GITHUB_OUTPUT
-            echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-            echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
-            echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
-            echo "body<<EOF" >> $GITHUB_OUTPUT
-            echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
+          RELEASE_JSON=$(gh api "repos/${{ github.repository }}/releases/tags/$TAG")
+          echo "name=$(echo "$RELEASE_JSON" | jq -r '.name')" >> $GITHUB_OUTPUT
+          echo "url=$(echo "$RELEASE_JSON" | jq -r '.html_url')" >> $GITHUB_OUTPUT
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_JSON" | jq -r '.body' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Build Teams message JSON
         id: message
@@ -101,3 +121,4 @@ jobs:
             }')
 
           curl -H 'Content-Type: application/json' -d "$PAYLOAD" "$TEAMS_WEBHOOK_URL"
+ 
