@@ -23,7 +23,8 @@ It helps developers discover components, generate framework-specific examples, a
 Get started with the Tyler Forge™ MCP server in your AI client:
 
 <Blockquote>
-  The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js >=20.10 and npm to be installed on your system.
+  The Tyler Forge™ MCP server runs locally as a stdio server, which requires Node.js >=20.10 and npm to be installed on your system. A hosted [remote
+  server](#remote-server-experimental) is also available in preview for clients that connect by URL.
 </Blockquote>
 
 ### Claude Code Plugin (Recommended)
@@ -159,6 +160,77 @@ This will open your file explorer to the directory where the `claude_desktop_con
     "forge": {
       "command": "npx",
       "args": ["-y", "@tylertech/forge-mcp@latest"]
+    }
+  }
+}
+```
+
+### Remote Server (Experimental)
+
+<InlineMessage theme="warning" title="Experimental">
+  The remote server is in preview. Its URL is temporary and will change, so expect to update your configuration. For day-to-day work, prefer the local stdio
+  setup above.
+</InlineMessage>
+
+A hosted instance of the Forge MCP server is available over Streamable HTTP, for clients that connect by URL instead of running `npx` locally, or for machines without Node.js:
+
+```
+https://forge-mcp-6ea25f585a82.herokuapp.com/mcp
+```
+
+No sign-in is required.
+
+Like the local server, the remote server works on its own in any MCP client and gives the AI direct access to Forge components, blocks, and design tokens. In
+Claude Code, the [Forge plugin](#claude-code-plugin-recommended) is still recommended, because it also brings in the `forge-design` skill and hooks that guide
+the AI to use those tools correctly. Adding the server by itself gives you the tools without that workflow.
+
+<Blockquote>
+  The remote server can't read your project's `node_modules`, so it can't detect which version of `@tylertech/forge` you have installed. It always answers from
+  the latest published version. If your project is on an older version, use the local stdio server so component APIs match what you have installed.
+</Blockquote>
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http -s [scope] forge https://forge-mcp-6ea25f585a82.herokuapp.com/mcp
+```
+
+<Blockquote>The `[scope]` must be `user`, `project` or `local`.</Blockquote>
+
+#### Claude.ai and Claude Desktop
+
+1. Go to **Customize > Connectors**.
+2. Click **Add**, then **Add custom connector**.
+3. Name it `Forge`, paste the URL above, and click **Continue**.
+4. Under **Authentication**, choose **No sign in**, then click **Add**.
+
+On Team and Enterprise plans, an organization Owner adds the connector under **Organization settings > Connectors**, and members then connect to it from **Customize > Connectors**.
+
+#### VS Code
+
+Choose `HTTP (HTTP or Server-Sent Events)` in `MCP: Add Server...` and enter the URL, or add it to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "forge": {
+      "type": "http",
+      "url": "https://forge-mcp-6ea25f585a82.herokuapp.com/mcp"
+    }
+  }
+}
+```
+
+#### Other clients
+
+Any client that supports Streamable HTTP can use the same URL. Most accept a configuration like this:
+
+```json
+{
+  "mcpServers": {
+    "forge": {
+      "type": "http",
+      "url": "https://forge-mcp-6ea25f585a82.herokuapp.com/mcp"
     }
   }
 }
