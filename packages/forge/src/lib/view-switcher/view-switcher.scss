@@ -38,7 +38,7 @@ $host-tokens: (height, width);
 // Slide
 //
 
-:host(.slide) {
+:host(:state(slide)) {
   ::slotted(forge-view) {
     @include view-slidable;
   }
@@ -48,7 +48,7 @@ $host-tokens: (height, width);
 // Fade
 //
 
-:host(.fade) {
+:host(:state(fade)) {
   ::slotted(forge-view) {
     @include view-fadeable;
   }

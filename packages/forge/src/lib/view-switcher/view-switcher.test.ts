@@ -22,6 +22,53 @@ describe('View Switcher', () => {
     expect(harness.viewSwitcher.animationType).toBe('none');
   });
 
+  it('should not reflect default values as attributes', async () => {
+    const harness = await createFixture();
+
+    expect(harness.viewSwitcher.hasAttribute('index')).toBe(false);
+    expect(harness.viewSwitcher.hasAttribute('animation-type')).toBe(false);
+  });
+
+  it('should reflect index and animation type as attributes when changed', async () => {
+    const harness = await createFixture();
+
+    harness.viewSwitcher.index = 1;
+    harness.viewSwitcher.animationType = 'fade';
+    await harness.viewSwitcher.updateComplete;
+
+    expect(harness.viewSwitcher.getAttribute('index')).toBe('1');
+    expect(harness.viewSwitcher.getAttribute('animation-type')).toBe('fade');
+  });
+
+  it('should reset index to 0 when index attribute is removed', async () => {
+    const harness = await createFixture({ index: 1 });
+
+    harness.viewSwitcher.removeAttribute('index');
+    await harness.viewSwitcher.updateComplete;
+
+    expect(harness.viewSwitcher.index).toBe(0);
+    expect(harness.isViewVisible(0)).toBe(true);
+  });
+
+  it('should apply custom state matching the animation type', async () => {
+    const harness = await createFixture();
+
+    expect(harness.viewSwitcher.matches(':state(slide)')).toBe(false);
+    expect(harness.viewSwitcher.matches(':state(fade)')).toBe(false);
+
+    harness.viewSwitcher.animationType = 'slide';
+    await harness.viewSwitcher.updateComplete;
+
+    expect(harness.viewSwitcher.matches(':state(slide)')).toBe(true);
+    expect(harness.viewSwitcher.matches(':state(fade)')).toBe(false);
+
+    harness.viewSwitcher.animationType = 'fade';
+    await harness.viewSwitcher.updateComplete;
+
+    expect(harness.viewSwitcher.matches(':state(slide)')).toBe(false);
+    expect(harness.viewSwitcher.matches(':state(fade)')).toBe(true);
+  });
+
   it('should show first view by default', async () => {
     const harness = await createFixture();
 
@@ -63,6 +110,7 @@ describe('View Switcher', () => {
     expect(harness.isViewVisible(0)).toBe(true);
 
     harness.viewSwitcher.index = harness.views.length - 1;
+    await harness.viewSwitcher.updateComplete;
     expect(harness.viewSwitcher.index).toBe(harness.views.length - 1);
     expect(harness.isViewVisible(harness.views.length - 1)).toBe(true);
   });
@@ -81,6 +129,7 @@ describe('View Switcher', () => {
     expect(harness.isViewVisible(0)).toBe(true);
 
     harness.viewSwitcher.index = 1;
+    await harness.viewSwitcher.updateComplete;
     expect(harness.viewSwitcher.index).toBe(1);
     expect(harness.isViewVisible(1)).toBe(true);
   });
@@ -330,5 +379,6 @@ async function createFixture({ index, animationType }: IViewSwitcherFixtureConfi
     </forge-view-switcher>
   `);
   const viewSwitcherEl = screen.container.querySelector('forge-view-switcher') as IViewSwitcherComponent;
+  await viewSwitcherEl.updateComplete;
   return new ViewSwitcherHarness(viewSwitcherEl);
 }
