@@ -11,6 +11,7 @@ import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js
 
 import template from './app-bar-help-button.html';
 
+/** @deprecated Use a `forge-icon-button` wrapped in a `forge-menu` instead. */
 export interface IAppBarHelpButtonComponent extends IBaseComponent {
   options: IMenuOption[];
   icon: string;
@@ -24,6 +25,8 @@ declare global {
 
 /**
  * @tag forge-app-bar-help-button
+ *
+ * @deprecated Use a `forge-icon-button` wrapped in a `forge-menu` in the app bar's `end` slot instead. This component will be removed in a future version.
  *
  * @summary A help button component with a predefined help icon that displays a dropdown menu when clicked, designed for use in an app bar's end slot.
  *

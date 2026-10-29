@@ -9,6 +9,7 @@ import { forwardAttributes } from '../../core/utils/reflect-utils.js';
 
 import template from './app-bar-menu-button.html';
 
+/** @deprecated Use a `forge-icon-button` instead. */
 export interface IAppBarMenuButtonComponent extends IBaseComponent {
   icon: string;
   expanded: boolean;
@@ -24,6 +25,8 @@ declare global {
 
 /**
  * @tag forge-app-bar-menu-button
+ *
+ * @deprecated Use a `forge-icon-button` in the app bar's `start` slot instead. This component will be removed in a future version.
  *
  * @summary A menu toggle button component with a predefined hamburger menu icon, typically used in an app bar's start slot to open navigation menus.
  *

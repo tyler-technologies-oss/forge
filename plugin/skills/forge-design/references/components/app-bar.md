@@ -59,6 +59,8 @@ forge-app-bar forge-avatar {
 
 ## Menu button
 
+> **Deprecated:** `forge-app-bar-menu-button` is deprecated in favor of a `forge-icon-button` in the `start` slot. Do not use it for new work.
+
 `forge-app-bar-menu-button` is a preset icon button — defaulting to a hamburger `icon` — for opening navigation from the `start` slot.
 
 Example (A menu button in the start slot, ready to open a drawer.): `get_forge_blocks(blockId: "components/app-bar/menu-button/demo/demo")`
@@ -70,6 +72,8 @@ Example (A menu button in the start slot, ready to open a drawer.): `get_forge_b
 Example (Search in the center slot, styled for the app bar.): `get_forge_blocks(blockId: "components/app-bar/search/demo/demo")`
 
 ## Help button
+
+> **Deprecated:** `forge-app-bar-help-button` is deprecated in favor of a `forge-icon-button` wrapped in a `forge-menu` in the `end` slot. Do not use it for new work.
 
 `forge-app-bar-help-button` is a preset icon button that opens a dropdown menu of `options` — help links, docs, support contacts.
 
