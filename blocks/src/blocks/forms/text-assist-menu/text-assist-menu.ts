@@ -1,14 +1,14 @@
 import type { IMenuComponent, IMenuOption } from '@tylertech/forge';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconAutoFixHigh, tylIconSpellcheck, tylIconReceiptLong, tylIconCloseFullscreen, tylIconSchool, tylIconMood } from '@tylertech/tyler-icons';
+import { tylIconAutoFixHigh, tylIconSpellcheck, tylIconReceiptLong, tylIconArrowCollapse, tylIconSchoolOutline, tylIconMood } from '@tylertech/tyler-icons';
 
-IconRegistry.define([tylIconAutoFixHigh, tylIconSpellcheck, tylIconReceiptLong, tylIconCloseFullscreen, tylIconSchool, tylIconMood]);
+IconRegistry.define([tylIconAutoFixHigh, tylIconSpellcheck, tylIconReceiptLong, tylIconArrowCollapse, tylIconSchoolOutline, tylIconMood]);
 
 const options: IMenuOption[] = [
   { label: 'Check grammar', value: 'grammar', leadingIcon: 'spellcheck', leadingIconType: 'component' },
   { label: 'Elaborate', value: 'elaborate', leadingIcon: 'receipt_long', leadingIconType: 'component' },
-  { label: 'Make more concise', value: 'concise', leadingIcon: 'close_fullscreen', leadingIconType: 'component' },
-  { label: 'Make more formal', value: 'formal', leadingIcon: 'school', leadingIconType: 'component' },
+  { label: 'Make more concise', value: 'concise', leadingIcon: 'arrow_collapse', leadingIconType: 'component' },
+  { label: 'Make more formal', value: 'formal', leadingIcon: 'school_outline', leadingIconType: 'component' },
   { label: 'Make more casual', value: 'casual', leadingIcon: 'mood', leadingIconType: 'component' }
 ];
 
