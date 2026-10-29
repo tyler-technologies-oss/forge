@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../spacing';
-@use '../../../theme';
-@use '../../../utils';
-@use '../../../shape';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/shape';
 
 $tokens: (
   marker-size: utils.module-val(timeline-item, marker-size, 14px),

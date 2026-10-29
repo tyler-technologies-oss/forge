@@ -1,5 +1,5 @@
 @use 'sass:string';
-@use '../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/typography';
 @use './token-utils' as *;
 @use './core.animation' as animation;
 

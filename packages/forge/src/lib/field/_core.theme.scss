@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../core/styles/elevation';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/theme';
 @use './token-utils' as *;
 
 $tonal-backgrounds: (

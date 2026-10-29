@@ -1,12 +1,12 @@
 @use 'sass:map';
-@use '../../animation';
-@use '../../border';
-@use '../../elevation';
-@use '../../shape';
-@use '../../theme';
-@use '../../typography';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
 @use '../focus-indicator/tokens' as focus-indicator;
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(field, background, transparent),

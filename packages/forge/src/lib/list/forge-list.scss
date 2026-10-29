@@ -2,7 +2,7 @@
 @use './list-item/core' as list-item-core;
 @use '../focus-indicator';
 @use '../state-layer';
-@use '../core/styles/shape';
+@use '@tylertech/forge-tokens/sass/shape';
 
 @layer list, list-item, navlist, with-start-end, two-line, three-line, dense, wrap, selected, indented, disabled, multicolumn;
 

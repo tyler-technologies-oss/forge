@@ -1,5 +1,5 @@
-@use '../../utils';
-@use '../../spacing';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 $tokens: (
   group-margin: utils.module-val(listbox, group-margin, spacing.variable(medium)),

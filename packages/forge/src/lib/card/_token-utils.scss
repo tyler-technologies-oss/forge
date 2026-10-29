@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/card/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: card;
 $_tokens: tokens.$tokens;
