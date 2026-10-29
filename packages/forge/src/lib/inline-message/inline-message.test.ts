@@ -48,7 +48,25 @@ describe('Inline Message', () => {
     const screen = render(html`<forge-inline-message></forge-inline-message>`);
     const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
     el.theme = 'error';
+    await el.updateComplete;
     expect(el.getAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME)).toBe('error');
+  });
+
+  it('should remove theme attribute when theme property is set to the default', async () => {
+    const screen = render(html`<forge-inline-message theme="error"></forge-inline-message>`);
+    const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
+    el.theme = 'info';
+    await el.updateComplete;
+    expect(el.hasAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME)).toBe(false);
+    expect(el.theme).toBe('info');
+  });
+
+  it('should reset theme property to the default when theme attribute is removed', async () => {
+    const screen = render(html`<forge-inline-message theme="error"></forge-inline-message>`);
+    const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
+    el.removeAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME);
+    await el.updateComplete;
+    expect(el.theme).toBe('info');
   });
 
   it('should set theme property when theme attribute is set', async () => {

@@ -1,28 +1,23 @@
-import { customElement, attachShadowTemplate, toggleAttribute } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { removeDefaultAttribute } from '../core/utils/lit-utils.js';
 import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants.js';
 
-import template from './inline-message.html';
 import styles from './inline-message.scss';
 
-export interface IInlineMessageComponent extends IBaseComponent {
-  theme: InlineMessageTheme;
-}
+const DEFAULT_THEME = INLINE_MESSAGE_CONSTANTS.defaults.THEME as InlineMessageTheme;
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-inline-message': IInlineMessageComponent;
-  }
+/** @deprecated - This will be removed in the future. Please switch to using InlineMessageComponent. */
+export interface IInlineMessageComponent extends BaseLitElement {
+  theme: InlineMessageTheme;
 }
 
 /**
  * @tag forge-inline-message
  *
  * @summary Inline messages are used to provide feedback to the user about a specific action or state. Use inline messages to communicate information such as errors, warnings, or success messages in a way that is contextual to the content on the page.
- *
- * @property {InlineMessageTheme} [theme="info"] - The theme to apply.
- *
- * @attribute {InlineMessageTheme} [theme="info"] - The theme to apply.
  *
  * @cssproperty --forge-inline-message-background - The background color.
  * @cssproperty --forge-inline-message-color - The text color.
@@ -49,19 +44,43 @@ declare global {
  * @slot title - The title of the inline message.
  * @slot icon - The icon to display.
  */
-@customElement({
-  name: INLINE_MESSAGE_CONSTANTS.elementName
-})
-export class InlineMessageComponent extends BaseComponent implements IInlineMessageComponent {
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-  }
+export class InlineMessageComponent extends BaseLitElement implements IInlineMessageComponent {
+  public static styles = unsafeCSS(styles);
 
-  public get theme(): InlineMessageTheme {
-    return (this.getAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME) as InlineMessageTheme) ?? INLINE_MESSAGE_CONSTANTS.defaults.THEME;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = INLINE_MESSAGE_CONSTANTS.elementName;
+
+  /**
+   * The theme to apply.
+   * @default 'info'
+   * @attribute
+   */
+  @property({
+    reflect: true,
+    converter: {
+      fromAttribute: (value: string | null) => (value ?? DEFAULT_THEME) as InlineMessageTheme,
+      toAttribute: (value: InlineMessageTheme) => removeDefaultAttribute(value, DEFAULT_THEME)
+    }
+  })
+  public theme: InlineMessageTheme = DEFAULT_THEME;
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-inline-message" part="root">
+        <slot name="icon"></slot>
+        <div class="container" part="container">
+          <slot name="title"></slot>
+          <slot></slot>
+        </div>
+      </div>
+    `;
   }
-  public set theme(value: InlineMessageTheme) {
-    toggleAttribute(this, value !== INLINE_MESSAGE_CONSTANTS.defaults.THEME, INLINE_MESSAGE_CONSTANTS.attributes.THEME, value);
+}
+
+tryDefine(INLINE_MESSAGE_CONSTANTS.elementName, InlineMessageComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-inline-message': IInlineMessageComponent;
   }
 }
