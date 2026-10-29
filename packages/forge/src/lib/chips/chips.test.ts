@@ -6,23 +6,25 @@ import { frame } from '../core/utils/utils.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 import type { IconButtonComponent } from '../icon-button/index.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
-import { CHIP_SET_CONSTANTS, type IChipSetComponent } from './chip-set/index.js';
+import { CHIP_SET_CONSTANTS, defineChipSetComponent, type IChipSetComponent } from './chip-set/index.js';
 import { CHIP_CONSTANTS, type IChipSelectEventData } from './chip/chip-constants.js';
 import type { IChipComponent } from './chip/chip.js';
 
-import './chip-set/index.js';
+defineChipSetComponent();
 
 describe('Chips', () => {
   describe('ChipSet', () => {
     it('should contain shadow root', async () => {
       const screen = render(html`<forge-chip-set></forge-chip-set>`);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       expect(el.shadowRoot).not.toBeNull();
     });
 
     it('should be accessible without chips', async () => {
       const screen = render(html`<forge-chip-set></forge-chip-set>`);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       await expect(el).toBeAccessible();
     });
 
@@ -35,6 +37,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       await expect(el).toBeAccessible();
     });
 
@@ -47,6 +50,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       await frame();
       await expect(el).toBeAccessible();
     });
@@ -54,6 +58,7 @@ describe('Chips', () => {
     it('should have expected defaults', async () => {
       const screen = render(html`<forge-chip-set></forge-chip-set>`);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
 
       expect(el.vertical).toBe(false);
       expect(el.type).toBe(CHIP_CONSTANTS.defaults.TYPE);
@@ -66,7 +71,9 @@ describe('Chips', () => {
     it('should update set vertical attribute when setting property', async () => {
       const screen = render(html`<forge-chip-set></forge-chip-set>`);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       el.vertical = true;
+      await el.updateComplete;
 
       expect(el.hasAttribute(CHIP_SET_CONSTANTS.attributes.VERTICAL)).toBe(true);
     });
@@ -74,7 +81,9 @@ describe('Chips', () => {
     it('should update vertical property when removing attribute', async () => {
       const screen = render(html`<forge-chip-set vertical></forge-chip-set>`);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       el.removeAttribute(CHIP_SET_CONSTANTS.attributes.VERTICAL);
+      await el.updateComplete;
 
       expect(el.vertical).toBe(false);
     });
@@ -88,6 +97,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
 
       const chips = getChips(el);
       expect(chips.length).toBe(3);
@@ -103,11 +113,13 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.type === CHIP_CONSTANTS.defaults.TYPE)).toBe(true);
 
       el.type = 'filter';
+      await el.updateComplete;
 
       expect(chips.every(chip => chip.type === 'filter')).toBe(true);
     });
@@ -121,6 +133,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.dense)).toBe(true);
@@ -136,6 +149,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.disabled)).toBe(true);
@@ -151,12 +165,14 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.disabled)).toBe(false);
       expect(chips.every(chip => chip.hasAttribute(CHIP_CONSTANTS.attributes.DISABLED))).toBe(false);
 
       el.disabled = true;
+      await el.updateComplete;
 
       expect(chips.every(chip => chip.disabled)).toBe(true);
       expect(chips.every(chip => chip.hasAttribute(CHIP_CONSTANTS.attributes.DISABLED))).toBe(true);
@@ -171,6 +187,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.invalid)).toBe(true);
@@ -186,12 +203,14 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.invalid)).toBe(false);
       expect(chips.every(chip => chip.hasAttribute(CHIP_CONSTANTS.attributes.INVALID))).toBe(false);
 
       el.invalid = true;
+      await el.updateComplete;
 
       expect(chips.every(chip => chip.invalid)).toBe(true);
       expect(chips.every(chip => chip.hasAttribute(CHIP_CONSTANTS.attributes.INVALID))).toBe(true);
@@ -206,6 +225,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.theme === 'error')).toBe(true);
@@ -220,11 +240,13 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
 
       expect(chips.every(chip => chip.theme === CHIP_CONSTANTS.defaults.THEME)).toBe(true);
 
       el.theme = 'error';
+      await el.updateComplete;
 
       expect(chips.every(chip => chip.theme === 'error')).toBe(true);
     });
@@ -669,6 +691,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const secondChip = chips[1];
@@ -690,6 +713,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const secondChip = chips[1];
@@ -711,6 +735,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const secondChip = chips[1];
@@ -733,6 +758,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const lastChip = chips[2];
@@ -754,6 +780,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const lastChip = chips[2];
@@ -808,6 +835,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
       const secondChip = chips[1];
@@ -893,6 +921,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
 
@@ -929,6 +958,7 @@ describe('Chips', () => {
             </forge-chip-set>
           `);
           const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+          await el.updateComplete;
           const chips = getChips(el);
           const firstChip = chips[0];
 
@@ -949,6 +979,7 @@ describe('Chips', () => {
             </forge-chip-set>
           `);
           const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+          await el.updateComplete;
           const chips = getChips(el);
           const firstChip = chips[0];
 
@@ -969,6 +1000,7 @@ describe('Chips', () => {
             </forge-chip-set>
           `);
           const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+          await el.updateComplete;
           const chips = getChips(el);
           const firstChip = chips[0];
 
@@ -1006,6 +1038,7 @@ describe('Chips', () => {
         </forge-chip-set>
       `);
       const el = screen.container.querySelector('forge-chip-set') as IChipSetComponent;
+      await el.updateComplete;
       const chips = getChips(el);
       const firstChip = chips[0];
 
