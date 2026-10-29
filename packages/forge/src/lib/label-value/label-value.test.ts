@@ -39,6 +39,7 @@ describe('Label Value', () => {
     const el = await createFixture();
 
     el.empty = true;
+    await el.updateComplete;
 
     expect(el.empty).toBe(true);
     expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY)).toBe(true);
@@ -55,6 +56,7 @@ describe('Label Value', () => {
     const el = await createFixture();
 
     el.ellipsis = true;
+    await el.updateComplete;
 
     expect(el.ellipsis).toBe(true);
     expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS)).toBe(true);
@@ -72,6 +74,7 @@ describe('Label Value', () => {
     const el = await createFixture();
 
     el.inline = true;
+    await el.updateComplete;
 
     expect(el.inline).toBe(true);
     expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).toBe(true);
@@ -81,16 +84,31 @@ describe('Label Value', () => {
     const el = await createFixture();
 
     el.dense = true;
+    await el.updateComplete;
 
     expect(el.dense).toBe(true);
     expect(el.inline).toBe(true);
     expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).toBe(true);
   });
 
+  it('should unset inline when deprecated dense attribute is removed', async () => {
+    const el = await createFixture();
+
+    el.setAttribute(LABEL_VALUE_CONSTANTS.attributes.DENSE, '');
+    await el.updateComplete;
+    el.removeAttribute(LABEL_VALUE_CONSTANTS.attributes.DENSE);
+    await el.updateComplete;
+
+    expect(el.dense).toBe(false);
+    expect(el.inline).toBe(false);
+    expect(el.hasAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE)).toBe(false);
+  });
+
   it('should set inline via deprecated dense attribute', async () => {
     const el = await createFixture();
 
     el.setAttribute(LABEL_VALUE_CONSTANTS.attributes.DENSE, '');
+    await el.updateComplete;
 
     expect(el.dense).toBe(true);
     expect(el.inline).toBe(true);
@@ -98,12 +116,14 @@ describe('Label Value', () => {
   });
 });
 
-function createFixture({ empty = false, ellipsis = false, inline = false } = {}): ILabelValueComponent {
+async function createFixture({ empty = false, ellipsis = false, inline = false } = {}): Promise<ILabelValueComponent> {
   const screen = render(html`
     <forge-label-value ?empty=${empty} ?ellipsis=${ellipsis} ?inline=${inline}>
       <span slot="label">Label</span>
       <span slot="value">Value</span>
     </forge-label-value>
   `);
-  return screen.container.querySelector('forge-label-value') as ILabelValueComponent;
+  const el = screen.container.querySelector('forge-label-value') as ILabelValueComponent;
+  await el.updateComplete;
+  return el;
 }

@@ -1,11 +1,13 @@
-import { customElement, attachShadowTemplate, coerceBoolean } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { LABEL_VALUE_CONSTANTS } from './label-value-constants.js';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
 
-import template from './label-value.html';
 import styles from './label-value.scss';
 
-export interface ILabelValueComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using LabelValueComponent. */
+export interface ILabelValueComponent extends BaseLitElement {
   empty: boolean;
   ellipsis: boolean;
   inline: boolean;
@@ -13,25 +15,10 @@ export interface ILabelValueComponent extends IBaseComponent {
   dense: boolean;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-label-value': ILabelValueComponent;
-  }
-}
-
 /**
  * @tag forge-label-value
  *
  * @summary Label values are used to display a label and value pair in a compact format with the proper typography and spacing styles applied.
- *
- * @property {boolean} [empty=false] - If true, the value will be displayed in an alternative emphasized style.
- * @property {boolean} [ellipsis=false] - If true, the value will be truncated with an ellipsis if it overflows its container.
- * @property {boolean} [inline=false] - If true, the label and value will be displayed on the same line.
- * @property {boolean} [dense=false] - Deprecated. Use `inline` instead.
- *
- * @attribute {boolean} [empty=false] - If present, the value will be displayed in an alternative emphasized style.
- * @attribute {boolean} [ellipsis=false] - If present, the value will be truncated with an ellipsis if it overflows its container.
- * @attribute {boolean} [inline=false] - If present, the label and value will be displayed on the same line.
  *
  * @cssproperty --forge-label-value-align - Aligns the label and value. Possible values: `start` (default), `center`, `end`.
  * @cssproperty --forge-label-value-label-spacing - The spacing between the label and value.
@@ -60,76 +47,71 @@ declare global {
  * @slot value - The value to display.
  * @slot icon - An icon to display next to the label.
  */
-@customElement({
-  name: LABEL_VALUE_CONSTANTS.elementName
-})
-export class LabelValueComponent extends BaseComponent implements ILabelValueComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(LABEL_VALUE_CONSTANTS.observedAttributes);
-  }
+export class LabelValueComponent extends BaseLitElement implements ILabelValueComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _empty = false;
-  private _ellipsis = false;
-  private _inline = false;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LABEL_VALUE_CONSTANTS.elementName;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-  }
+  /**
+   * If true, the value will be displayed in an alternative emphasized style.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public empty = false;
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case LABEL_VALUE_CONSTANTS.observedAttributes.EMPTY:
-        this.empty = coerceBoolean(newValue);
-        break;
-      case LABEL_VALUE_CONSTANTS.observedAttributes.ELLIPSIS:
-        this.ellipsis = coerceBoolean(newValue);
-        break;
-      case LABEL_VALUE_CONSTANTS.observedAttributes.INLINE:
-      case LABEL_VALUE_CONSTANTS.observedAttributes.DENSE:
-        this.inline = coerceBoolean(newValue);
-        break;
-    }
-  }
+  /**
+   * If true, the value will be truncated with an ellipsis if it overflows its container.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public ellipsis = false;
 
-  public get empty(): boolean {
-    return this._empty;
-  }
-  public set empty(value: boolean) {
-    value = Boolean(value);
-    if (this._empty !== value) {
-      this._empty = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.EMPTY, this._empty);
-    }
-  }
+  /**
+   * If true, the label and value will be displayed on the same line.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public inline = false;
 
-  public get ellipsis(): boolean {
-    return this._ellipsis;
+  /**
+   * Deprecated. Use `inline` instead.
+   * @deprecated Use `inline` instead.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean })
+  public set dense(value: boolean) {
+    this.inline = value;
   }
-  public set ellipsis(value: boolean) {
-    value = Boolean(value);
-    if (this._ellipsis !== value) {
-      this._ellipsis = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.ELLIPSIS, this._ellipsis);
-    }
-  }
-
-  public get inline(): boolean {
-    return this._inline;
-  }
-  public set inline(value: boolean) {
-    value = Boolean(value);
-    if (this._inline !== value) {
-      this._inline = value;
-      this.toggleAttribute(LABEL_VALUE_CONSTANTS.attributes.INLINE, this._inline);
-    }
-  }
-
-  /** @deprecated Use `inline` instead. */
   public get dense(): boolean {
     return this.inline;
   }
-  public set dense(value: boolean) {
-    this.inline = value;
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-label-value" part="root">
+        <div class="icon" part="icon">
+          <slot name="icon"></slot>
+        </div>
+        <div class="label" part="label">
+          <slot name="label"></slot>
+        </div>
+        <div class="value" part="value">
+          <slot name="value"></slot>
+        </div>
+      </div>
+    `;
+  }
+}
+
+tryDefine(LABEL_VALUE_CONSTANTS.elementName, LabelValueComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-label-value': ILabelValueComponent;
   }
 }
