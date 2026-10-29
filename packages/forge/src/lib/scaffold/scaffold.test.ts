@@ -19,6 +19,7 @@ describe('Scaffold', () => {
     const el = screen.container.querySelector('forge-scaffold') as IScaffoldComponent;
 
     el.viewport = true;
+    await el.updateComplete;
 
     expect(el.viewport).toBe(true);
     expect(el.hasAttribute(SCAFFOLD_CONSTANTS.attributes.VIEWPORT)).toBe(true);

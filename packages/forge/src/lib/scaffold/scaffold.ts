@@ -1,28 +1,20 @@
-import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { SCAFFOLD_CONSTANTS } from './scaffold-constants.js';
 
-import template from './scaffold.html';
 import styles from './scaffold.scss';
 
-export interface IScaffoldComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using ScaffoldComponent. */
+export interface IScaffoldComponent extends BaseLitElement {
   viewport: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-scaffold': IScaffoldComponent;
-  }
 }
 
 /**
  * @tag forge-scaffold
  *
  * @summary The scaffold provides a generic layout structure for your content using common named areas. Use scaffolds for full page layouts or smaller sections within other elements where you want positioned content areas and scrollable body content.
- *
- * @property {boolean} [viewport=false] - Whether the scaffold should be full viewport height.
- *
- * @attribute {boolean} [viewport=false] - Whether the scaffold should be full viewport height.
  *
  * @cssproperty --forge-scaffold-height - The `height` of the scaffold.
  * @cssproperty --forge-scaffold-width - The `width` of the scaffold.
@@ -50,31 +42,45 @@ declare global {
  * @slot body-left - Places content to the left of the body content.
  * @slot body-right - Places content to the right of the body content.
  */
-@customElement({
-  name: SCAFFOLD_CONSTANTS.elementName
-})
-export class ScaffoldComponent extends BaseComponent implements IScaffoldComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(SCAFFOLD_CONSTANTS.observedAttributes);
-  }
+export class ScaffoldComponent extends BaseLitElement implements IScaffoldComponent {
+  public static styles = unsafeCSS(styles);
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-  }
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = SCAFFOLD_CONSTANTS.elementName;
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case SCAFFOLD_CONSTANTS.observedAttributes.VIEWPORT:
-        this.viewport = newValue !== null;
-        break;
-    }
-  }
+  /**
+   * Whether the scaffold should be full viewport height.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public viewport = false;
 
-  public get viewport(): boolean {
-    return this.hasAttribute(SCAFFOLD_CONSTANTS.attributes.VIEWPORT);
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-scaffold" part="root">
+        <slot name="left"></slot>
+        <div class="header" part="header">
+          <slot name="header"></slot>
+        </div>
+        <div class="body" part="body">
+          <slot name="body-left"></slot>
+          <slot name="body-header"></slot>
+          <slot name="body"></slot>
+          <slot name="body-footer"></slot>
+          <slot name="body-right"></slot>
+        </div>
+        <slot name="footer"></slot>
+        <slot name="right"></slot>
+      </div>
+    `;
   }
-  public set viewport(value: boolean) {
-    this.toggleAttribute(SCAFFOLD_CONSTANTS.attributes.VIEWPORT, Boolean(value));
+}
+
+tryDefine(SCAFFOLD_CONSTANTS.elementName, ScaffoldComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-scaffold': IScaffoldComponent;
   }
 }
