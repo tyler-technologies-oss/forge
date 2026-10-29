@@ -53,6 +53,39 @@ test("cleanMdxBody: drops <ComponentHeader> and its import, keeping surrounding 
   assert.match(out, /Intro copy\.\n\n## Overview\n\nOverview copy\./);
 });
 
+test("cleanMdxBody: drops <AnatomyDemo> and a heading left with no content", () => {
+  const body = [
+    'import AnatomyDemo from "../../../components/docs/AnatomyDemo.astro";',
+    'import AnatomyMarker from "../../../components/docs/AnatomyMarker.astro";',
+    "",
+    "## Anatomy",
+    "",
+    "<AnatomyDemo>",
+    "  <forge-card>",
+    '    <AnatomyMarker label={1} title="Body" description="Card content." />',
+    "  </forge-card>",
+    "</AnatomyDemo>",
+    "",
+    "## Rules",
+    "Rules copy.",
+  ].join("\n");
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
+  assert.doesNotMatch(out, /Anatomy|forge-card/);
+  assert.equal(out, "## Rules\n\nRules copy.");
+});
+
+test("cleanMdxBody: keeps prose that follows an <AnatomyDemo> in the same section", () => {
+  const body = ["## Containers", "", "<AnatomyDemo>", "  <forge-card></forge-card>", "</AnatomyDemo>", "", "Container copy."].join("\n");
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
+  assert.equal(out, "## Containers\n\nContainer copy.");
+});
+
+test("cleanMdxBody: keeps a heading whose content is a deeper subsection", () => {
+  const body = ["## Layout", "", "### Headings", "Heading copy."].join("\n");
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
+  assert.match(out, /^## Layout\n\n### Headings/);
+});
+
 test("cleanMdxBody: renders backtick spans in <Rule> strings as inline code", () => {
   const body = '<Rules>\n  <Rule variant="do" rules={["Set `no-padding` on the card."]} />\n</Rules>';
   const out = cleanMdxBody(body, { file: "test.mdx", slug: "card", lineOffset: 0, examples: [] });
