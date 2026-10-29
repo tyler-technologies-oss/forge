@@ -61,10 +61,27 @@ claude plugin marketplace update tyler-forge
 claude plugin update forge@tyler-forge
 ```
 
-<Blockquote>
-  If `DISABLE_AUTOUPDATER`, `DISABLE_UPDATES`, or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set in your environment, plugin auto-update is off. Set
-  `FORCE_AUTOUPDATE_PLUGINS=1` to turn it back on.
-</Blockquote>
+##### If Enable auto-update is missing
+
+If the `tyler-forge` marketplace shows **Update marketplace** and **Remove marketplace** but no **Enable auto-update**, one of these is usually the cause:
+
+- **Updates are turned off in your environment.** When `DISABLE_AUTOUPDATER`, `DISABLE_UPDATES`, or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set, Claude Code
+  turns off plugin auto-update and hides the option. To turn it back on, set `FORCE_AUTOUPDATE_PLUGINS=1`, for example in the `env` block of
+  `~/.claude/settings.json`:
+
+  ```json
+  {
+    "env": {
+      "FORCE_AUTOUPDATE_PLUGINS": "1"
+    }
+  }
+  ```
+
+- **Your organization manages Claude Code.** Run `/status`. If `Enterprise managed settings` is listed under setting sources, your administrator may have turned
+  updates off, and their settings take precedence.
+- **Your Claude Code is out of date.** Run `claude update`, then check again.
+
+Until auto-update is available, choose **Update marketplace** in the same menu, or run the manual update commands above, to get the latest version.
 
 #### Moving from the `forge-mcp` marketplace
 
