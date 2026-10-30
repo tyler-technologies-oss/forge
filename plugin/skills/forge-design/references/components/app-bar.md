@@ -46,7 +46,7 @@ Example (A themed app bar, scoped so the theme doesn't leak to the rest of the p
 
 With the default `themeMode="inherit"`, global theme tokens cascade to every child element — including popovers and dialogs opened from the app bar, which can end up styled with the wrong colors. Switch to `themeMode="scoped"` to stop that cascade.
 
-Scoping the theme comes with a tradeoff: elements placed directly in the app bar no longer inherit its colors automatically either. Set `theme="app-bar"` to opt a child back in — but it's only supported on `forge-button`, `forge-icon-button`, and `forge-tab-bar`. The app bar's own preset buttons (menu, help, profile, notification) already set this for you.
+Scoping the theme comes with a tradeoff: elements placed directly in the app bar no longer inherit its colors automatically either. Set `theme="app-bar"` to opt a child back in — but it's only supported on `forge-button`, `forge-icon-button`, and `forge-tab-bar`. The app bar's own preset buttons (menu, help, notification) and `forge-user-profile` already set this for you.
 
 For any other element, reference the app bar's scoped tokens directly — `--forge-app-bar-theme-foreground` and `--forge-app-bar-theme-background-muted`:
 
@@ -81,37 +81,15 @@ Example (A help button opening a menu of options.): `get_forge_blocks(blockId: "
 
 Example (A notification button showing an unread dot.): `get_forge_blocks(blockId: "components/app-bar/notifications/demo/demo")`
 
-## Profile button
+## User profile
+
+Use `forge-user-profile` in the `end` slot to show the signed-in user. It renders an avatar button that opens a popover with their `fullName` and `email`, any `link`-slotted profile links, an optional `themeToggle`, and a sign-out action, firing `forge-user-profile-sign-out` when it's clicked.
 
 **Deprecated**
 
-`forge-app-bar-profile-button` is deprecated in favor of the `forge-user-profile` component. It remains available but is frozen — no new features, and possible removal in a future release. Prefer `forge-user-profile` for new work.
+`forge-app-bar-profile-button` is deprecated in favor of `forge-user-profile`. It remains available but is frozen — no new features, and possible removal in a future release.
 
-`forge-app-bar-profile-button` shows the signed-in user's avatar and opens a profile card with their `fullName`, `email`, and optional `signOutButton`/`profileButton` actions on click — customize the card further with `profileCardBuilder`.
-
-Example (A profile button opening a card with the user's name and email.): `get_forge_blocks(blockId: "components/app-bar/profile/demo/demo")`
-
-Set `profileCardBuilder` to a callback returning your own DOM to replace the card's default content entirely — useful for a list of account-related links instead of the default name/email/sign-out layout:
-
-```js
-profileButton.profileCardBuilder = () => {
-  const list = document.createElement("forge-list");
-  list.style.setProperty("--forge-list-padding", "0");
-  list.appendChild(buildListItem("My Reports", "assignment"));
-  list.appendChild(buildListItem("My Preferences", "settings"));
-  return list;
-};
-
-function buildListItem(text, icon) {
-  const item = document.createElement("forge-list-item");
-  const iconEl = document.createElement("forge-icon");
-  iconEl.slot = "leading";
-  iconEl.name = icon;
-  item.appendChild(iconEl);
-  item.appendChild(document.createTextNode(text));
-  return item;
-}
-```
+Example (A user profile in the end slot, opening a popover with profile links, a theme toggle, and sign out.): `get_forge_blocks(blockId: "components/app-bar/profile/demo/demo")`
 
 ## Accessibility
 
