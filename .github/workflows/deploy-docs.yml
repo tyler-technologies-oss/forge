@@ -6,7 +6,11 @@ on:
     paths:
       - 'docs/**'
       - 'packages/forge/**'
+      - 'packages/forge-core/**'
       - 'packages/forge-tailwind/**'
+      - 'packages/forge-tokens/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
 concurrency:
@@ -19,10 +23,6 @@ env:
 
 jobs:
   deploy:
-    # TODO: Deployment is not configured yet, so this job is skipped until the DOCS_PAGES_REPOSITORY
-    # repo variable exists. When ready to deploy, create the target repo, set the DOCS_PAGES_REPOSITORY
-    # variable and DOCS_DEPLOY_KEY secret, then remove this condition.
-    if: ${{ vars.DOCS_PAGES_REPOSITORY != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -45,7 +45,7 @@ jobs:
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          repository-name: ${{ vars.DOCS_PAGES_REPOSITORY }}
+          repository-name: tyler-technologies-oss/forge-design-system
           ssh-key: ${{ secrets.DOCS_DEPLOY_KEY }}
           branch: gh-pages
           folder: docs/dist

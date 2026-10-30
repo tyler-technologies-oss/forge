@@ -285,6 +285,12 @@ export function buildNavigation(
             },
           ],
         },
+        {
+          id: "blog",
+          label: "Blog",
+          icon: "newspaper_variant_outline",
+          href: "/blog/",
+        },
       ],
     },
   ];
