@@ -1,8 +1,8 @@
 <!--
-  @block Profile — With Custom Content
+  @block Button Area — As a Link
   @type component
-  @description With Custom Content usage example for the forge-profile component.
-  @tags profile, with-custom-content, storybook, component-example
+  @description A button area wrapping an anchor so the whole card navigates when clicked.
+  @tags button-area, as-a-link, anchor, link, navigation, storybook, component-example
 -->
 <!doctype html>
 <html lang="en">
@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/blocks/v1/" />
-    <title>Profile — With Custom Content</title>
+    <title>Button Area — As a Link</title>
     <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
     <link rel="stylesheet" href="/blocks/v1/theme.css" />
     <link rel="stylesheet" href="/blocks/v1/styles.css" />
@@ -29,14 +29,18 @@
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
-    <forge-app-bar title-text="Profile With Custom Content" elevation="raised">
-  <forge-app-bar-profile-button slot="end" full-name="First Last" email="first.last@email.com">
-    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-2ltvs">
-      <forge-avatar aria-hidden="true"></forge-avatar>
-    </forge-icon-button>
-    <forge-tooltip type="label" placement="bottom-end" aria-hidden="true" id="forge-tooltip-2ltvs">View First Last's profile</forge-tooltip>
-  </forge-app-bar-profile-button>
-</forge-app-bar>
-<script type="module" src="/blocks/v1/components/app-bar/profile/with-custom-content/with-custom-content.js"></script>
+    <forge-card class="p-0 w-[320px] max-w-full">
+  <forge-button-area>
+    <a slot="button" href="javascript: void(0);" aria-labelledby="button-area-link-heading"></a>
+    <div class="flex items-center gap-xsmall p-medium">
+      <div class="me-auto">
+        <div class="text-heading3" id="button-area-link-heading">Page title</div>
+        <div>Click anywhere to navigate.</div>
+      </div>
+      <forge-icon name="chevron_right"></forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>
+<script type="module" src="/blocks/v1/components/button-area/as-a-link/as-a-link.js"></script>
   </body>
 </html>

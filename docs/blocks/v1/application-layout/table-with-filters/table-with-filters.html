@@ -38,9 +38,17 @@
       <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
         <forge-icon name="notifications"></forge-icon>
       </forge-icon-button>
-      <forge-icon-button density="medium" aria-label="Account" theme="app-bar">
-        <forge-icon name="account_circle"></forge-icon>
-      </forge-icon-button>
+      <forge-user-profile button-label="Open profile menu" theme-toggle full-name="First Last" email="first.last@tylertech.com">
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="settings"></forge-icon>
+          <a href="#">Settings</a>
+        </forge-profile-link>
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="account_circle"></forge-icon>
+          <a href="#">Profile</a>
+        </forge-profile-link>
+        <span slot="sign-out-button-text">Sign Out</span>
+      </forge-user-profile>
     </div>
 
     <!-- Left navigation drawer -->
