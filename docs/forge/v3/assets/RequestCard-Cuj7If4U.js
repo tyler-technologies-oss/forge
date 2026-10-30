@@ -1,5 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-CqthO5_N.js";import{a as r}from"./chunk-RD3KTAHR-scUwhTZZ.js";import{h as i,n as a,u as o}from"./blocks-DnLnh7by.js";import{n as s}from"./CustomArgTypes-DS7Rl0eI.js";import{n as c,r as l,t as u}from"./RequestCard.stories-CTEC5mLp.js";function d(e){let n={h1:`h1`,p:`p`,...t(),...e.components};return(0,p.jsxs)(p.Fragment,{children:[(0,p.jsx)(o,{of:c}),`
-`,(0,p.jsx)(n.h1,{id:`recipe-request-card`,children:`Recipe: Request Card`}),`
-`,(0,p.jsx)(n.p,{children:`This "request card" recipe is an example of how to create a styled card that offers a common internal layout to represent a how to
-group related information together with optional actions.`}),`
-`,(0,p.jsx)(a,{of:u})]})}function f(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,p.jsx)(n,{...e,children:(0,p.jsx)(d,{...e})}):d(e)}var p;function m(){return(m=e((()=>{p=r(),n(),i(),s(),l()})))()}m();export{f as default};

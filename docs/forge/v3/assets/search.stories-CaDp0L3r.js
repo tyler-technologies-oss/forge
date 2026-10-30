@@ -1,0 +1,16 @@
+import{n as e,r as t}from"./rolldown-runtime-sJBDdmOt.js";import{a as n}from"./lit-html-SpIZ5SkX.js";import{g as r}from"./iframe-B8S20_VI.js";import{_ as i,m as a,o,s}from"./utils-BifgMLEM.js";import{t as c}from"./app-bar-BrLMbxm_.js";var l=t({Demo:()=>f,__namedExportsOrder:()=>p,default:()=>d}),u,d,f,p;function m(){return(m=e((()=>{r(),a(),c(),u=`forge-app-bar-search`,d={title:`Components/App Bar/Search`,render:e=>o(u,e),component:u,parameters:{actions:{disable:!0}},argTypes:{...s({tagName:u,exclude:[`options`,`icon`]})},args:{}},f={...i,render:()=>n`
+    <forge-app-bar title-text="Search">
+      <forge-app-bar-search slot="center">
+        <input type="text" aria-label="Search for a record" placeholder="Search" />
+      </forge-app-bar-search>
+    </forge-app-bar>
+  `},f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
+  ...standaloneStoryParams,
+  render: () => html\`
+    <forge-app-bar title-text="Search">
+      <forge-app-bar-search slot="center">
+        <input type="text" aria-label="Search for a record" placeholder="Search" />
+      </forge-app-bar-search>
+    </forge-app-bar>
+  \`
+}`,...f.parameters?.docs?.source}}},p=[`Demo`]})))()}export{m as n,l as r,f as t};

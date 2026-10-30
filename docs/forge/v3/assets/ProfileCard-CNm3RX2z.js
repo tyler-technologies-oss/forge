@@ -1,0 +1,4 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-CqthO5_N.js";import{a as r}from"./chunk-W22LQPXL-DaWckgVw.js";import{h as i,n as a,u as o}from"./blocks-fd9Z3xSU.js";import{n as s}from"./CustomArgTypes-Cnceb5ig.js";import{n as c,r as l,t as u}from"./ProfileCard.stories-D7FAOrje.js";function d(e){let n={h1:`h1`,p:`p`,...t(),...e.components};return(0,p.jsxs)(p.Fragment,{children:[(0,p.jsx)(o,{of:c}),`
+`,(0,p.jsx)(n.h1,{id:`recipe-profile`,children:`Recipe: Profile`}),`
+`,(0,p.jsx)(n.p,{children:`This recipe shows an example of using a card to show user/profile information.`}),`
+`,(0,p.jsx)(a,{of:u})]})}function f(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,p.jsx)(n,{...e,children:(0,p.jsx)(d,{...e})}):d(e)}var p;function m(){return(m=e((()=>{p=r(),n(),i(),s(),l()})))()}m();export{f as default};
