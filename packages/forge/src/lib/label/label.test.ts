@@ -64,6 +64,7 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.forElement = ctx.labelAwareElement;
+    await el.updateComplete;
 
     expect(el.forElement).toBe(ctx.labelAwareElement);
   });
@@ -82,6 +83,7 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
 
     expect(connectedSpy).toHaveBeenCalledOnce();
   });
@@ -94,6 +96,7 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.forElement = ctx.labelAwareElement;
+    await el.updateComplete;
 
     expect(connectedSpy).toHaveBeenCalledOnce();
   });
@@ -119,7 +122,7 @@ describe('Label', () => {
     await frame();
 
     const updatedSpy = vi.spyOn(ctx.labelAwareElement, 'labelChangedCallback');
-    el.update();
+    el.updateTargetLabel();
 
     expect(updatedSpy).toHaveBeenCalledOnce();
   });
@@ -131,6 +134,7 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
 
     const changedSpy = vi.spyOn(ctx.labelAwareElement, 'labelChangedCallback');
     el.innerText = 'New Label';
@@ -145,6 +149,7 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
 
     const changedSpy = vi.spyOn(ctx.labelAwareElement, 'labelChangedCallback');
     el.innerText = 'New Label';
@@ -161,10 +166,12 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
     el.innerText = 'New Label';
 
     await frame();
     el.dynamic = false;
+    await el.updateComplete;
 
     const changedSpy = vi.spyOn(ctx.labelAwareElement, 'labelChangedCallback');
     el.innerText = 'New Label 2';
@@ -179,10 +186,89 @@ describe('Label', () => {
 
     el.insertAdjacentElement('afterend', ctx.labelAwareElement);
     el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
 
     const clickedSpy = vi.spyOn(ctx.labelAwareElement, 'labelClickedCallback');
     await ctx.clickElement(el);
 
     expect(clickedSpy).toHaveBeenCalledOnce();
+  });
+
+  it('should not handle click when non-interactive', async () => {
+    const screen = render(html`<forge-label non-interactive>Label</forge-label>`);
+    const el = screen.container.querySelector('forge-label') as ILabelComponent;
+    const ctx = new LabelHarness(el);
+
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
+
+    const clickedSpy = vi.spyOn(ctx.labelAwareElement, 'labelClickedCallback');
+    await ctx.clickElement(el);
+
+    expect(clickedSpy).not.toHaveBeenCalled();
+  });
+
+  it('should stop handling click when non-interactive is set', async () => {
+    const screen = render(html`<forge-label>Label</forge-label>`);
+    const el = screen.container.querySelector('forge-label') as ILabelComponent;
+    const ctx = new LabelHarness(el);
+
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
+    el.nonInteractive = true;
+    await el.updateComplete;
+
+    const clickedSpy = vi.spyOn(ctx.labelAwareElement, 'labelClickedCallback');
+    await ctx.clickElement(el);
+
+    expect(clickedSpy).not.toHaveBeenCalled();
+  });
+
+  it('should clear the target label when disconnected', async () => {
+    const screen = render(html`<forge-label>Label</forge-label>`);
+    const el = screen.container.querySelector('forge-label') as ILabelComponent;
+    const ctx = new LabelHarness(el);
+
+    el.insertAdjacentElement('afterend', ctx.labelAwareElement);
+    el.for = ctx.labelAwareElement.id;
+    await el.updateComplete;
+
+    const changedSpy = vi.spyOn(ctx.labelAwareElement, 'labelChangedCallback');
+    el.remove();
+
+    expect(changedSpy).toHaveBeenCalledWith(null);
+  });
+
+  it('should dispatch connected event when legend', async () => {
+    const connectedSpy = vi.fn();
+    const screen = render(html`<div @forge-label-connected=${connectedSpy}><forge-label legend>Label</forge-label></div>`);
+    const el = screen.container.querySelector('forge-label') as ILabelComponent;
+    await el.updateComplete;
+    await frame();
+
+    expect(connectedSpy).toHaveBeenCalledOnce();
+  });
+
+  it('should reflect attributes', async () => {
+    const screen = render(html`<forge-label></forge-label>`);
+    const el = screen.container.querySelector('forge-label') as ILabelComponent;
+
+    el.for = 'test';
+    el.dynamic = true;
+    el.nonInteractive = true;
+    el.legend = true;
+    await el.updateComplete;
+
+    expect(el.getAttribute('for')).toBe('test');
+    expect(el).toHaveAttribute('dynamic');
+    expect(el).toHaveAttribute('non-interactive');
+    expect(el).toHaveAttribute('legend');
+
+    el.for = '';
+    await el.updateComplete;
+
+    expect(el).not.toHaveAttribute('for');
   });
 });
