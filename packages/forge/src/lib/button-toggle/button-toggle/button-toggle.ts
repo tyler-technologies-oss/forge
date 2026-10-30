@@ -1,33 +1,23 @@
-import { attachShadowTemplate, coerceBoolean, customElement, coreProperty } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { property, query } from 'lit/decorators.js';
 import { ExperimentalFocusOptions } from '../../constants.js';
-import { IWithFocusable, WithFocusable } from '../../core/mixins/focus/with-focusable.js';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
-import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
-import { StateLayerComponent } from '../../state-layer/index.js';
-import { BaseComponent } from '../../core/base/base-component.js';
-import { ButtonToggleAdapter } from './button-toggle-adapter.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { task } from '../../core/utils/utils.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../../state-layer/state-layer.js';
 import { BUTTON_TOGGLE_CONSTANTS, IButtonToggleSelectEventData } from './button-toggle-constants.js';
-import { ButtonToggleCore } from './button-toggle-core.js';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
 
-import template from './button-toggle.html';
 import styles from './button-toggle.scss';
 
-export interface IButtonToggleComponent<T = unknown> extends IWithElementInternals, IWithDefaultAria, IWithFocusable {
+/** @deprecated - This will be removed in the future. Please switch to using ButtonToggleComponent. */
+export interface IButtonToggleComponent<T = unknown> extends BaseLitElement {
   value: T;
   selected: boolean;
   disabled: boolean;
   readonly: boolean;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-button-toggle': IButtonToggleComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-button-toggle-select': CustomEvent<IButtonToggleSelectEventData>;
-  }
+  focus(options?: ExperimentalFocusOptions): void;
 }
 
 /**
@@ -35,15 +25,8 @@ declare global {
  *
  * @summary Button toggles allow users to select from a group of choices with single or multiple selection.
  *
- * @property {unknown} value - The value of the button toggle.
- * @property {boolean} [selected=false] - Whether or not the button is selected.
- * @property {boolean} [disabled=false] - Whether or not the button is disabled.
- * @property {boolean} [readonly=false] - Whether or not the button is readonly.
- *
- * @attribute {unknown} value - The value of the button toggle.
- * @attribute {boolean} [selected=false] - Whether or not the button is selected.
- * @attribute {boolean} [disabled=false] - Whether or not the button is disabled.
- * @attribute {boolean} [readonly=false] - Whether or not the button is readonly.
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  *
  * @event {CustomEvent<IButtonToggleSelectEventData>} forge-button-toggle-select - Dispatches when the user toggles the button.
  *
@@ -81,66 +64,180 @@ declare global {
  * @slot start - Typically reserved for content/icons that render logically before the default slot content.
  * @slot end - Typically reserved content/icons that render logically after the default slot content.
  */
-@customElement({
-  name: BUTTON_TOGGLE_CONSTANTS.elementName,
-  dependencies: [FocusIndicatorComponent, StateLayerComponent]
-})
-export class ButtonToggleComponent<T = unknown> extends WithDefaultAria(WithElementInternals(WithFocusable(BaseComponent))) implements IButtonToggleComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(BUTTON_TOGGLE_CONSTANTS.observedAttributes);
+export class ButtonToggleComponent<T = unknown> extends BaseLitElement implements IButtonToggleComponent<T> {
+  public static styles = unsafeCSS(styles);
+
+  public static override get observedAttributes(): string[] {
+    return [...super.observedAttributes, BUTTON_TOGGLE_CONSTANTS.attributes.TABINDEX];
   }
 
-  private _core: ButtonToggleCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BUTTON_TOGGLE_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [FocusIndicatorComponent, StateLayerComponent];
+
+  #internals: ElementInternals;
+  #selected = false;
+  #externalTabIndex: number | null = null;
+  #isUpdatingTabIndex = false;
+
+  /**
+   * The value of the button toggle.
+   * @attribute
+   */
+  @property()
+  public value!: T;
+
+  /**
+   * Whether or not the button is selected.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public set selected(value: boolean) {
+    this.#selected = !!value;
+  }
+  public get selected(): boolean {
+    return this.#selected;
+  }
+
+  /**
+   * Whether or not the button is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public disabled = false;
+
+  /**
+   * Whether or not the button is readonly.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public readonly = false;
+
+  @query('forge-focus-indicator', true) private _focusIndicator?: FocusIndicatorComponent;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new ButtonToggleCore(new ButtonToggleAdapter(this));
+    this.#internals = this.attachInternals();
+    this.addEventListener('click', () => this.#handleClick());
+    this.addEventListener('keydown', (evt: KeyboardEvent) => this.#handleKeyDown(evt));
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    setDefaultAria(this, this.#internals, { role: 'button' }, { setAttribute: !this.hasAttribute('role') });
+    this.#updateTabIndex();
   }
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case BUTTON_TOGGLE_CONSTANTS.attributes.VALUE:
-        this.value = newValue as T;
-        return;
-      case BUTTON_TOGGLE_CONSTANTS.attributes.SELECTED:
-        this.selected = coerceBoolean(newValue);
-        return;
-      case BUTTON_TOGGLE_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        return;
-      case BUTTON_TOGGLE_CONSTANTS.attributes.READONLY:
-        this.readonly = coerceBoolean(newValue);
-        return;
-    }
+  public override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue);
+
+    if (name !== BUTTON_TOGGLE_CONSTANTS.attributes.TABINDEX || this.#isUpdatingTabIndex) {
+      return;
+    }
+
+    if (newValue === null) {
+      this.#externalTabIndex = null;
+      this.#updateTabIndex();
+      return;
+    }
+
+    this.#externalTabIndex = this.tabIndex;
   }
 
-  @coreProperty()
-  declare public value: T;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('selected') || !this.hasUpdated) {
+      setDefaultAria(this, this.#internals, { ariaPressed: `${this.selected}` });
+    }
 
-  @coreProperty()
-  declare public selected: boolean;
-
-  @coreProperty()
-  declare public disabled: boolean;
-
-  @coreProperty()
-  declare public readonly: boolean;
-
-  public override focus(options?: ExperimentalFocusOptions): void {
-    this._core.focus(options);
+    if (changedProperties.has('disabled')) {
+      setDefaultAria(this, this.#internals, { ariaDisabled: `${this.disabled}` });
+      this.#updateTabIndex();
+    }
   }
 
-  public override click(): void {
-    this._core.click();
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-button-toggle" part="root">
+        <slot name="start"></slot>
+        <slot></slot>
+        <slot name="end"></slot>
+        <forge-focus-indicator target=":host" part="focus-indicator"></forge-focus-indicator>
+        <forge-state-layer target=":host" exportparts="surface:state-layer" .disabled=${this.disabled}></forge-state-layer>
+      </div>
+    `;
+  }
+
+  /** @ignore */
+  public override focus(options: ExperimentalFocusOptions = { focusVisible: true }): void {
+    super.focus(options);
+
+    if (options.focusVisible && this._focusIndicator) {
+      this._focusIndicator.active = true;
+    }
+  }
+
+  #updateTabIndex(): void {
+    if (!this.isConnected) {
+      return;
+    }
+    this.#isUpdatingTabIndex = true;
+    this.tabIndex = this.#externalTabIndex ?? (this.disabled ? -1 : 0);
+    this.#isUpdatingTabIndex = false;
+  }
+
+  async #handleClick(): Promise<void> {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+
+    // The toggled state is applied directly to the backing field so that listeners of the select event (such as the
+    // group) observe the pending state without the attribute and ARIA state being updated until the event is resolved.
+    const originalSelected = this.#selected;
+    this.#selected = !originalSelected;
+
+    const detail: IButtonToggleSelectEventData = {
+      value: this.value,
+      selected: this.#selected
+    };
+    const evt = new CustomEvent(BUTTON_TOGGLE_CONSTANTS.events.SELECT, { detail, bubbles: true, cancelable: true });
+    this.dispatchEvent(evt);
+
+    await task();
+
+    this.#selected = originalSelected;
+
+    if (evt.defaultPrevented) {
+      return;
+    }
+
+    this.selected = !originalSelected;
+  }
+
+  #handleKeyDown(evt: KeyboardEvent): void {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      evt.preventDefault();
+      this.click();
+    }
+  }
+}
+
+tryDefine(BUTTON_TOGGLE_CONSTANTS.elementName, ButtonToggleComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-button-toggle': IButtonToggleComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-button-toggle-select': CustomEvent<IButtonToggleSelectEventData>;
   }
 }

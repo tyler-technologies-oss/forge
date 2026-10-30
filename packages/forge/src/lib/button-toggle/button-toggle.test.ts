@@ -48,6 +48,7 @@ describe('Button Toggle', () => {
     const harness = await createFixture();
 
     harness.element.value = 'two';
+    await harness.updateComplete();
 
     expect(harness.element.value).toBe('two');
     expect(harness.buttonToggles[1].selected).toBe(true);
@@ -78,6 +79,7 @@ describe('Button Toggle', () => {
     const harness = await createFixture();
 
     harness.element.setAttribute('value', 'two');
+    await harness.updateComplete();
 
     expect(harness.element.value).toBe('two');
     expect(harness.buttonToggles[1].selected).toBe(true);
@@ -90,6 +92,7 @@ describe('Button Toggle', () => {
     expect(harness.element.value).toBe('two');
 
     harness.element.value = null;
+    await harness.updateComplete();
 
     expect(harness.element.value).toBeNull();
     expect(harness.buttonToggles.every(toggle => toggle.selected)).toBe(false);
@@ -564,6 +567,10 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
 
   public get buttonToggles(): IButtonToggleComponent[] {
     return Array.from(this.element.querySelectorAll(BUTTON_TOGGLE_CONSTANTS.elementName));
+  }
+
+  public async updateComplete(): Promise<void> {
+    await Promise.all(this.buttonToggles.map(toggle => toggle.updateComplete));
   }
 
   public async selectToggleViaMouse(index: number): Promise<void> {
