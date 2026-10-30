@@ -112,6 +112,7 @@ async function createFixture({ open = false, mode, persistent, fullscreen }: IBo
   `);
 
   const bottomSheetEl = screen.container.querySelector('forge-bottom-sheet') as IBottomSheetComponent;
+  await bottomSheetEl.updateComplete;
   return new BottomSheetHarness(bottomSheetEl);
 }
 
@@ -348,5 +349,39 @@ describe('Bottom Sheet', () => {
 
     expect(beforeCloseSpy).toHaveBeenCalledOnce();
     expect(harness.isOpen).toBe(true);
+  });
+
+  it('should remove the open attribute when dismissed via escape key press', async () => {
+    const harness = await createFixture({ open: true, mode: 'modal' });
+    await harness.enterAnimation();
+
+    await harness.pressEscapeKey();
+    await harness.exitAnimation();
+
+    expect(harness.element.open).toBe(false);
+    expect(harness.element.hasAttribute(BOTTOM_SHEET_CONSTANTS.attributes.OPEN)).toBe(false);
+  });
+
+  it('should update aria-modal when the mode changes', async () => {
+    const harness = await createFixture();
+
+    expect(harness.element.getAttribute('aria-modal')).toBe('false');
+
+    harness.element.mode = 'modal';
+    await harness.element.updateComplete;
+
+    expect(harness.element.getAttribute('aria-modal')).toBe('true');
+  });
+
+  it('should remove the fullscreen class when closed', async () => {
+    const harness = await createFixture({ open: true, fullscreen: true });
+    await harness.element.updateComplete;
+
+    expect(harness.dialogElement.classList.contains(BOTTOM_SHEET_CONSTANTS.classes.FULLSCREEN)).toBe(true);
+
+    harness.element.open = false;
+    await harness.element.updateComplete;
+
+    expect(harness.dialogElement.classList.contains(BOTTOM_SHEET_CONSTANTS.classes.FULLSCREEN)).toBe(false);
   });
 });
