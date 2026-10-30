@@ -13,5 +13,15 @@
   </forge-app-bar-search>
   <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
   <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
-  <forge-app-bar-profile-button slot="end" avatar-text="First Last" full-name="First Last" email="first.last@tylertech.com"></forge-app-bar-profile-button>
+  <forge-user-profile slot="end" button-label="Open profile menu" theme-toggle full-name="First Last" email="first.last@tylertech.com">
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="settings"></forge-icon>
+      <a href="#">Settings</a>
+    </forge-profile-link>
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="account_circle"></forge-icon>
+      <a href="#">Profile</a>
+    </forge-profile-link>
+    <span slot="sign-out-button-text">Sign Out</span>
+  </forge-user-profile>
 </forge-app-bar>
