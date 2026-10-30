@@ -14,12 +14,14 @@ describe('Banner', () => {
   it('should contain shadow root', async () => {
     const screen = render(html`<forge-banner>Test</forge-banner>`);
     const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+    await el.updateComplete;
     expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should add and remove class when icon slot is populated', async () => {
     const screen = render(html`<forge-banner><span slot="icon">icon</span>Test</forge-banner>`);
     const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+    await el.updateComplete;
     const iconEl = el.querySelector('[slot=icon]') as HTMLSpanElement;
     const rootEl = el.shadowRoot?.querySelector('.forge-banner');
 
@@ -37,6 +39,7 @@ describe('Banner', () => {
   it('should add and remove class when button slot is populated', async () => {
     const screen = render(html`<forge-banner><button slot="button">button</button>Test</forge-banner>`);
     const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+    await el.updateComplete;
     const buttonEl = el.querySelector('[slot=button]') as HTMLButtonElement;
     const rootEl = el.shadowRoot?.querySelector('.forge-banner');
 
@@ -55,6 +58,8 @@ describe('Banner', () => {
     it('should be accessible', async () => {
       const screen = render(html`<forge-banner>Test</forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       await frame();
       await expect(el).toBeAccessible();
     });
@@ -62,6 +67,8 @@ describe('Banner', () => {
     it('should be accessible in all theme colors', async () => {
       const screen = render(html`<forge-banner>Test</forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       const themes: BannerTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
       for (const theme of themes) {
@@ -76,6 +83,8 @@ describe('Banner', () => {
     it('should set dismissed attribute when dismissed property is set', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       el.dismissed = true;
       await frame();
       await task(DISMISS_ANIMATION_TIMEOUT);
@@ -87,6 +96,8 @@ describe('Banner', () => {
     it('should set dismissed property when dismissed attribute is set', async () => {
       const screen = render(html`<forge-banner dismissed></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       expect(el.dismissed).toBe(true);
       expect(el.offsetHeight).toBe(0);
@@ -95,8 +106,11 @@ describe('Banner', () => {
     it('should set inert attribute when dismissed', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const rootEl = el.shadowRoot?.querySelector('.forge-banner') as HTMLElement;
       el.dismissed = true;
+      await el.updateComplete;
 
       expect(rootEl.hasAttribute('inert')).toBe(true);
     });
@@ -106,6 +120,8 @@ describe('Banner', () => {
     it('should be dismissible (not persistent) by default', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON);
       expect(el.persistent).toBe(false);
@@ -115,7 +131,10 @@ describe('Banner', () => {
     it('should hide dismiss button when persistent', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       el.persistent = true;
+      await el.updateComplete;
 
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLElement;
       expect(dismissButton.hidden).toBe(true);
@@ -124,6 +143,8 @@ describe('Banner', () => {
     it('should dispatch dismissed event after toggling persistent', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       await frame();
 
@@ -150,6 +171,8 @@ describe('Banner', () => {
     it('should dispatch dismissed event when dismiss button is clicked', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
 
       const beforeDismissSpy = vi.fn();
@@ -170,9 +193,29 @@ describe('Banner', () => {
       expect(dismissSpy).toHaveBeenCalledOnce();
     });
 
+    it('should report dismissed as true while the before dismiss event is dispatched', async () => {
+      const screen = render(html`<forge-banner></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+
+      let dismissedDuringEvent: boolean | undefined;
+      el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, (evt: Event) => {
+        dismissedDuringEvent = el.dismissed;
+        evt.preventDefault();
+      });
+
+      dismissButton.click();
+
+      expect(dismissedDuringEvent).toBe(true);
+      expect(el.dismissed).toBe(false);
+    });
+
     it('should not dismiss when before dismiss event is prevented', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
 
       el.addEventListener(BANNER_CONSTANTS.events.BEFORE_DISMISS, (evt: Event) => evt.preventDefault());
@@ -189,6 +232,8 @@ describe('Banner', () => {
     it('should not dispatch dismissed event when persistent', async () => {
       const screen = render(html`<forge-banner persistent></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
 
       expect(dismissButton.hidden).toBe(true);
@@ -204,6 +249,8 @@ describe('Banner', () => {
     it('should dispatch dismissed event after animation is complete when dismiss button is clicked', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       await frame();
 
@@ -223,6 +270,8 @@ describe('Banner', () => {
     it('should not dispatch dismissed event when dismiss button is clicked and before dismiss event is prevented', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
 
       const beforeDismissSpy = vi.fn(evt => evt.preventDefault());
@@ -244,6 +293,8 @@ describe('Banner', () => {
     it('should not dispatch events if dismiss button is clicked while already dismissed', async () => {
       const screen = render(html`<forge-banner dismissed></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
       const beforeDismissSpy = vi.fn();
       const dismissSpy = vi.fn();
@@ -263,6 +314,8 @@ describe('Banner', () => {
     it('should not dispatch events if dismiss button is clicked while persistent', async () => {
       const screen = render(html`<forge-banner persistent></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
       const beforeDismissSpy = vi.fn();
       const dismissSpy = vi.fn();
@@ -284,19 +337,36 @@ describe('Banner', () => {
     it('should set theme attribute when theme property is set', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       el.theme = 'error';
+      await el.updateComplete;
       expect(el.getAttribute(BANNER_CONSTANTS.attributes.THEME)).toBe('error');
     });
 
     it('should set theme property when theme attribute is set', async () => {
       const screen = render(html`<forge-banner theme="error"></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       expect(el.theme).toBe('error');
+    });
+
+    it('should not reflect the default theme', async () => {
+      const screen = render(html`<forge-banner theme="error"></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+
+      el.theme = 'info';
+      await el.updateComplete;
+
+      expect(el.hasAttribute(BANNER_CONSTANTS.attributes.THEME)).toBe(false);
     });
 
     it('should use default theme when set to null', async () => {
       const screen = render(html`<forge-banner theme="error"></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       expect(el.theme).toBe('error');
 
@@ -310,6 +380,8 @@ describe('Banner', () => {
     it('should proxy deprecated can-dismiss attribute to persistent property', async () => {
       const screen = render(html`<forge-banner can-dismiss="false"></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
       expect(el.persistent).toBe(true);
 
       el.setAttribute('can-dismiss', '');
@@ -319,6 +391,8 @@ describe('Banner', () => {
     it('should proxy deprecated canDismiss property to persistent property', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await el.updateComplete;
+      await el.updateComplete;
 
       el.canDismiss = false;
       expect(el.canDismiss).toBe(false);
