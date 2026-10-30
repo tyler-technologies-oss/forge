@@ -33,12 +33,6 @@ const navigation = buildNavigation(components);
     </forge-icon-button>
   </forge-toolbar>
   <div slot="body">
-    <div class="px-2 mt-medium mb-small" hidden>
-      <forge-text-field density="small">
-        <forge-icon slot="start" name="search"></forge-icon>
-        <input type="text" placeholder="Search..." aria-label="Search" />
-      </forge-text-field>
-    </div>
     {
       navigation.map((section, index) => (
         <>
