@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-plugin",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": true,
   "description": "Tyler Forge™ Claude Code plugin: skills, hooks and MCP server registration",
   "author": "Tyler Technologies, Inc.",
