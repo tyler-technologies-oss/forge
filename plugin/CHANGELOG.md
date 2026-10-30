@@ -1,5 +1,17 @@
 # @tylertech/forge-plugin
 
+## 1.5.0
+
+### Documentation
+
+- afe63da: **structured-card**: add structured card component guidance, and drop anatomy diagram markup from the forge-design skill
+- 25b6854: **app-bar**: point the profile section at forge-user-profile instead of the deprecated profile button
+- 6811a90: **designing**: mark the color, getting started, iconography, and typography design guides as stable
+- ad39d3e: **mcp-server**: fix the plugin marketplace source and document enabling auto-update
+- ad39d3e: **mcp-server**: document the experimental remote MCP server
+- 6811a90: **designing**: present the spacing don'ts as a single Don't list, note the adjustable app layout breakpoint, and link the layout patterns to their blocks
+- 25b6854: **tree**: point the basic usage example at the tree demo block
+
 ## 1.4.1
 
 ### Documentation
