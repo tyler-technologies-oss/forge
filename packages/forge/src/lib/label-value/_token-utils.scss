@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/label-value/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: label-value;
 $_tokens: tokens.$tokens;

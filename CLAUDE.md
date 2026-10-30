@@ -64,6 +64,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+- `packages/forge-tokens` - Global design tokens (JSON) and Sass utilities, built with Style Dictionary (see its CLAUDE.md)
 - `packages/forge-react` - React adapter library (see its CLAUDE.md)
 - `packages/forge-angular` - Angular adapter library (see its CLAUDE.md)
 - `packages/forge-schematics` - Angular Schematics for generating custom element proxies (see its CLAUDE.md)
@@ -77,6 +78,7 @@ Outside `packages/` (private, not published to npm):
 
 - `blocks` - Pre-built HTML block templates (see Blocks below)
 - `plugin` - Claude Code plugin for Forge: skills, hooks, and MCP registration (see its CLAUDE.md)
+- `docs` - Astro documentation site, `forge-docs` (see its CLAUDE.md)
 
 ## Blocks
 

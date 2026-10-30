@@ -40,3 +40,34 @@ describe('forge-pretooluse hook inline style rule', () => {
     expect(Date.now() - start).toBeLessThan(5000);
   });
 });
+
+describe('forge-pretooluse hook card title style rule', () => {
+  const cardWithTitle = (title: string): string =>
+    `<forge-card><forge-scaffold><forge-toolbar slot="header">${title}</forge-toolbar></forge-scaffold></forge-card>`;
+
+  it('should allow any heading element when the card title is styled heading3', () => {
+    for (const tag of ['h1', 'h2', 'h3', 'h4']) {
+      const result = runHook(cardWithTitle(`<${tag} slot="start" class="text-heading3">Orders</${tag}>`));
+
+      expect(result.stderr).not.toContain('[card-title-style]');
+    }
+  });
+
+  it('should block a card title styled larger than heading3', () => {
+    const result = runHook(cardWithTitle('<h3 slot="start" class="text-heading4">Orders</h3>'));
+
+    expect(result.stderr).toContain('[card-title-style]');
+  });
+
+  it('should block a larger card title styled with the forge-typography class', () => {
+    const result = runHook(cardWithTitle('<h3 slot="start" class="forge-typography--heading5">Orders</h3>'));
+
+    expect(result.stderr).toContain('[card-title-style]');
+  });
+
+  it('should not check headings outside the card header toolbar', () => {
+    const result = runHook('<forge-card><p class="text-heading6">Big number</p></forge-card>');
+
+    expect(result.stderr).not.toContain('[card-title-style]');
+  });
+});

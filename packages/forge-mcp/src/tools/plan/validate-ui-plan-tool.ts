@@ -152,7 +152,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: `typography.${key}`,
           message: `"${val}" is not a heading role.`,
-          hint: `Pick one of the text-heading{1..8} or text-display{1..8} roles. See references/typography.md.`
+          hint: `Pick one of the text-heading{1..8} or text-display{1..8} roles. See references/design/typography.md.`
         });
       }
     }
@@ -371,7 +371,7 @@ export class ValidateUIPlanTool extends BaseToolHandler<ValidateUIPlanInput> {
         errors.push({
           path: `regions.${regionName}.components`,
           message: 'Plain <table> in the plan without forge-table.',
-          hint: 'Use forge-table + forge-paginator for data tables. See references/tables.md.'
+          hint: 'Use forge-table + forge-paginator for data tables. See references/components/table.md.'
         });
       }
     }

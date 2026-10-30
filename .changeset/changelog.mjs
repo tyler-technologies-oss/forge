@@ -1,18 +1,8 @@
-import { execFileSync } from 'node:child_process';
 import { createTypeMarker, parseConventionalHeader, sectionKeyForType } from './conventional-types.mjs';
 
 const SHORT_HASH_LENGTH = 7;
 
-const readCommitSubject = commit => {
-  try {
-    return execFileSync('git', ['show', '-s', '--format=%s', commit], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-  } catch {
-    return '';
-  }
-};
-
-const classify = (summaryHeader, commit, bumpType) => {
-  const header = summaryHeader ?? parseConventionalHeader(commit ? readCommitSubject(commit) : '');
+const classify = (header, bumpType) => {
   if (bumpType === 'major' || header?.breaking) {
     return 'breaking';
   }
@@ -22,7 +12,7 @@ const classify = (summaryHeader, commit, bumpType) => {
 const getReleaseLine = async (changeset, bumpType) => {
   const [firstLine, ...futureLines] = changeset.summary.split('\n').map(line => line.trimEnd());
   const summaryHeader = parseConventionalHeader(firstLine);
-  const key = classify(summaryHeader, changeset.commit, bumpType);
+  const key = classify(summaryHeader, bumpType);
   const text = summaryHeader ? `${summaryHeader.scope ? `**${summaryHeader.scope}**: ` : ''}${firstLine.slice(summaryHeader.header.length)}` : firstLine;
   const hash = changeset.commit ? `${changeset.commit.slice(0, SHORT_HASH_LENGTH)}: ` : '';
   const continuation = futureLines.length ? `\n${futureLines.map(line => `  ${line}`).join('\n')}` : '';

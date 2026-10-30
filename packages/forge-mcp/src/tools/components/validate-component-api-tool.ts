@@ -3,10 +3,18 @@ import { BaseToolHandler, ToolInput } from '../tool-handler.js';
 import { getCEMLoader } from '../../services/cem-loader.js';
 import { getApiValidationService, ComponentApiValidationInput, ComponentValidationResults } from '../../services/api-validation-service.js';
 import { getTemplateEngine } from '../../services/handlebars-template-engine.js';
+import { PackageManifestSource } from '../../services/package-discovery.js';
 
 export interface ComponentApiValidationToolInput extends ToolInput {
   component: string;
   apis?: ComponentApiValidationInput;
+}
+
+interface ManifestSourceContext {
+  packageName: string;
+  version?: string;
+  source: PackageManifestSource;
+  isInstalled: boolean;
 }
 
 /**
@@ -117,17 +125,27 @@ export class ValidateComponentApiTool extends BaseToolHandler<ComponentApiValida
 
     // Perform validation
     const validationResults = this._validationService.validateComponentApis(componentData, apis);
+    const manifestSource = this._getManifestSource(component);
 
     // Generate response using template
-    const responseText = await this._generateValidationResponse(validationResults);
+    const responseText = await this._generateValidationResponse(validationResults, manifestSource);
 
     return this._createTextResponse(responseText);
+  }
+
+  private _getManifestSource(component: string): ManifestSourceContext | undefined {
+    const pkg = this._cemLoader.getComponentPackage(component);
+    if (!pkg) {
+      return undefined;
+    }
+    const { packageName, version, source } = pkg;
+    return { packageName, version, source, isInstalled: source === 'installed' };
   }
 
   /**
    * Generate formatted validation response using template
    */
-  private async _generateValidationResponse(results: ComponentValidationResults): Promise<string> {
-    return await this._templateEngine.render('components/validation-response.md', results);
+  private async _generateValidationResponse(results: ComponentValidationResults, manifestSource?: ManifestSourceContext): Promise<string> {
+    return await this._templateEngine.render('components/validation-response.md', { ...results, manifestSource });
   }
 }

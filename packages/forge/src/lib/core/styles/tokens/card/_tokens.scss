@@ -1,9 +1,9 @@
-@use '../../theme';
-@use '../../border';
-@use '../../spacing';
-@use '../../shape';
-@use '../../elevation';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   // Base

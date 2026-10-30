@@ -15,14 +15,14 @@ export async function buildCss({ releaseOutdir = 'dist', cdnOutdir = getCdnOutdi
   await mkdir(cdnOutdir, { recursive: true });
 
   for (const file of rootStylesheets) {
-    const result = sass.compile(file, { style: 'compressed' });
+    const result = sass.compile(file, { style: 'compressed', loadPaths: ['node_modules'] });
     const outFileName = basename(file).replace('.scss', '.css');
     await writeFile(join(releaseOutdir, outFileName), LICENSE_HEADER + result.css);
     await writeFile(join(cdnOutdir, outFileName), LICENSE_HEADER + result.css);
   }
 
   for (const file of componentStylesheets) {
-    const result = sass.compile(file, { style: 'compressed' });
+    const result = sass.compile(file, { style: 'compressed', loadPaths: ['node_modules'] });
     const componentDir = dirname(relative('src/lib', file));
     const outFileName = basename(file).replace('.scss', '.css');
 

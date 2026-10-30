@@ -1,5 +1,21 @@
 # @tylertech/forge
 
+## 3.24.1
+
+### Documentation
+
+- a4d4c99: **confirmation-dialog**: describe the `forge-confirmation-dialog-action` event's `{ value, reason }` payload and that it's cancelable
+
+## 3.24.0
+
+### Features
+
+- fc72092: **dialog**: add `labelledBy`, `describedBy`, `labelledByElements`, and `describedByElements` properties to associate labelling and describing elements across the shadow boundary
+
+### Bug Fixes
+
+- 50e6abf: **app-layout**: place content without a `slot` attribute in the body grid area so it positions correctly at all breakpoints
+
 ## 3.23.0
 
 ### Features
