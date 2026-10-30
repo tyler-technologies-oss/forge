@@ -1,14 +1,16 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, coerceBoolean, coerceNumber, tryDefine } from '@tylertech/forge-core';
+import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { property, query, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ButtonComponent } from '../button/index.js';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
-import { FilePickerAdapter } from './file-picker-adapter.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { FILE_PICKER_CONSTANTS, IFilePickerChangeEventData } from './file-picker-constants.js';
-import { FilePickerCore } from './file-picker-core.js';
 
-import template from './file-picker.html';
 import styles from './file-picker.scss';
 
-export interface IFilePickerComponent extends IBaseComponent {
+/** @deprecated - This will be removed in the future. Please switch to using FilePickerComponent. */
+export interface IFilePickerComponent extends BaseLitElement {
   accept: string | null | undefined;
   maxSize: number | null | undefined;
   capture: string | null | undefined;
@@ -18,15 +20,14 @@ export interface IFilePickerComponent extends IBaseComponent {
   borderless: boolean;
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-file-picker': IFilePickerComponent;
-  }
+const booleanConverter = {
+  fromAttribute: (value: string | null): boolean => coerceBoolean(value as string),
+  toAttribute: (value: boolean): string | null => (value ? '' : null)
+};
 
-  interface HTMLElementEventMap {
-    'forge-file-picker-change': CustomEvent<IFilePickerChangeEventData>;
-  }
-}
+const optionalStringConverter = {
+  toAttribute: (value?: string | null): string | null => value || null
+};
 
 /**
  * @tag forge-file-picker
@@ -39,21 +40,7 @@ declare global {
  * The expectation of this component is that it will be used as a familiar element on the page that will let users upload files,
  * while providing that visual and functional consistency.
  *
- * @property {string | null} [accept=null] - Gets/sets the allowed file types.
- * @property {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
- * @property {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
- * @property {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
- * @property {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
- * @property {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
- * @property {boolean} [borderless=false] - Gets and sets whether the file picker is borderless.
- *
- * @attribute {string | null} [accept=null] - Gets/sets the allowed file types.
- * @attribute {string | null} [maxSize=null] - Gets/sets the maximum allowed file size.
- * @attribute {string | null} [capture=null] - Gets/sets the camera to use when capturing video or images.
- * @attribute {boolean} [multiple=false] - Gets/sets whether multiple files are allowed.
- * @attribute {boolean} [disabled=false] - Gets/sets whether the file picker is disabled.
- * @attribute {boolean} [compact=false] - Gets/sets whether the file picker uses the compact variant.
- * @attribute {boolean} [borderless=false] - Gets and sets whether the file picker is borderless.
+ * @dependency forge-button
  *
  * @cssproperty --forge-file-picker-background - Controls the background color.
  * @cssproperty --forge-file-picker-width - Controls the width.
@@ -77,91 +64,224 @@ declare global {
  * @csspart secondary - The container element around the secondary slot.
  * @csspart input - The `<input type="file">` element.
  * @csspart helper-text-container - The container around the helper-text slot.
+ *
+ * @slot - The button that opens the system file chooser.
+ * @slot primary - The primary text.
+ * @slot secondary - The secondary text.
+ * @slot helper-text - Helper text displayed below the file picker.
  */
-@customElement({
-  name: FILE_PICKER_CONSTANTS.elementName,
-  dependencies: [ButtonComponent]
-})
-export class FilePickerComponent extends BaseComponent implements IFilePickerComponent {
-  public static get observedAttributes(): string[] {
-    return [
-      FILE_PICKER_CONSTANTS.attributes.ACCEPT,
-      FILE_PICKER_CONSTANTS.attributes.MAX_SIZE,
-      FILE_PICKER_CONSTANTS.attributes.CAPTURE,
-      FILE_PICKER_CONSTANTS.attributes.MULTIPLE,
-      FILE_PICKER_CONSTANTS.attributes.DISABLED,
-      FILE_PICKER_CONSTANTS.attributes.COMPACT,
-      FILE_PICKER_CONSTANTS.attributes.BORDERLESS
-    ];
-  }
+export class FilePickerComponent extends BaseLitElement implements IFilePickerComponent {
+  public static styles = unsafeCSS(styles);
 
-  private _core: FilePickerCore;
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = FILE_PICKER_CONSTANTS.elementName;
 
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new FilePickerCore(new FilePickerAdapter(this));
-  }
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [ButtonComponent];
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
+  /**
+   * Gets/sets the allowed file types.
+   * @default null
+   * @attribute
+   */
+  @property({ reflect: true, converter: optionalStringConverter })
+  public accept: string | null | undefined = null;
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
+  /**
+   * Gets/sets the maximum allowed file size.
+   * @default null
+   * @attribute max-size
+   */
+  @property({
+    attribute: FILE_PICKER_CONSTANTS.attributes.MAX_SIZE,
+    reflect: true,
+    converter: {
+      fromAttribute: (value: string | null): number | null => (value === null ? null : coerceNumber(value)),
+      toAttribute: (value?: number | null): string | null => (value ? `${value}` : null)
+    }
+  })
+  public maxSize: number | null | undefined = null;
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case FILE_PICKER_CONSTANTS.attributes.ACCEPT:
-        this.accept = newValue;
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.MAX_SIZE:
-        this.maxSize = coerceNumber(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.CAPTURE:
-        this.capture = newValue;
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.MULTIPLE:
-        this.multiple = coerceBoolean(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.DISABLED:
-        this.disabled = coerceBoolean(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.COMPACT:
-        this.compact = coerceBoolean(newValue);
-        break;
-      case FILE_PICKER_CONSTANTS.attributes.BORDERLESS:
-        this.borderless = coerceBoolean(newValue);
-        break;
+  /**
+   * Gets/sets the camera to use when capturing video or images.
+   * @default null
+   * @attribute
+   */
+  @property({ reflect: true, converter: optionalStringConverter })
+  public capture: string | null | undefined = null;
+
+  /**
+   * Gets/sets whether multiple files are allowed.
+   * @default false
+   * @attribute
+   */
+  @property({ reflect: true, converter: booleanConverter })
+  public multiple = false;
+
+  /**
+   * Gets/sets whether the file picker is disabled.
+   * @default false
+   * @attribute
+   */
+  @property({ reflect: true, converter: booleanConverter })
+  public disabled = false;
+
+  /**
+   * Gets/sets whether the file picker uses the compact variant.
+   * @default false
+   * @attribute
+   */
+  @property({ reflect: true, converter: booleanConverter })
+  public compact = false;
+
+  /**
+   * Gets/sets whether the file picker is borderless.
+   * @default false
+   * @attribute
+   */
+  @property({ reflect: true, converter: booleanConverter })
+  public borderless = false;
+
+  @state() private _highlighted = false;
+
+  @query(FILE_PICKER_CONSTANTS.selectors.INPUT) private _input?: HTMLInputElement;
+
+  #button?: ButtonComponent;
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    if (!this.hasUpdated || changedProperties.has('disabled')) {
+      this.#initializeButton();
+      this.#syncButtonDisabled();
     }
   }
 
-  /** Gets and sets the allowed file types */
-  @coreProperty()
-  declare public accept: string | null | undefined;
+  public render(): TemplateResult {
+    return html`
+      <form
+        class=${classMap({
+          'forge-file-picker': true,
+          [FILE_PICKER_CONSTANTS.classes.HIGHLIGHT]: this._highlighted,
+          [FILE_PICKER_CONSTANTS.classes.COMPACT]: this.compact,
+          [FILE_PICKER_CONSTANTS.classes.BORDERLESS]: this.borderless
+        })}
+        id="container"
+        part="form"
+        ?disabled=${this.disabled}
+        @click=${this.#handleClick}
+        @dragenter=${this.#handleDragOver}
+        @dragover=${this.#handleDragOver}
+        @dragleave=${this.#handleDragLeave}
+        @drop=${this.#handleDrop}>
+        <div class="primary" id="primary" part="primary">
+          <slot name="primary"></slot>
+        </div>
+        <slot id="button-slot" @slotchange=${this.#handleButtonSlotChange}></slot>
+        <div class="secondary" id="secondary" part="secondary">
+          <slot name="secondary"></slot>
+        </div>
+        <input
+          type="file"
+          class="input"
+          id="input"
+          part="input"
+          accept=${ifDefined(this.accept || undefined)}
+          capture=${ifDefined(this.capture || undefined)}
+          ?multiple=${this.multiple}
+          @change=${this.#handleInputChange} />
+      </form>
+      <div class="helper-text" part="helper-text-container">
+        <slot name="helper-text"></slot>
+      </div>
+    `;
+  }
 
-  /** Gets and sets the maximum allowed file size */
-  @coreProperty()
-  declare public maxSize: number | null | undefined;
+  #initializeButton(): void {
+    this.#button = this.querySelector<ButtonComponent>('forge-button') ?? undefined;
+  }
 
-  /** Gets and sets the camera to use when capturing video or images */
-  @coreProperty()
-  declare public capture: string | null | undefined;
+  #syncButtonDisabled(): void {
+    this.#button?.toggleAttribute('disabled', this.disabled);
+  }
 
-  /** Gets and sets whether multiple files are allowed */
-  @coreProperty()
-  declare public multiple: boolean;
+  #handleButtonSlotChange(): void {
+    this.#initializeButton();
+    if (this.disabled) {
+      this.#syncButtonDisabled();
+    }
+  }
 
-  /** Gets and sets whether the file picker is disabled */
-  @coreProperty()
-  declare public disabled: boolean;
+  #handleClick(): void {
+    if (this.disabled || !this._input) {
+      return;
+    }
+    this._input.value = '';
+    this._input.click();
+  }
 
-  /** Gets and sets whether the file picker is compact */
-  @coreProperty()
-  declare public compact: boolean;
+  #handleInputChange(evt: Event): void {
+    const files = (evt.target as HTMLInputElement).files;
+    if (files) {
+      this.#handleFiles(files);
+    }
+  }
 
-  /** Gets and sets whether the file picker is borderless */
-  @coreProperty()
-  declare public borderless: boolean;
+  #handleDragOver(evt: DragEvent): void {
+    this.#handleDragEvent(evt, true);
+  }
+
+  #handleDragLeave(evt: DragEvent): void {
+    this.#handleDragEvent(evt, false);
+  }
+
+  #handleDrop(evt: DragEvent): void {
+    this.#handleDragEvent(evt, false);
+
+    if (!this.compact && !this.disabled && evt.dataTransfer) {
+      this.#handleFiles(evt.dataTransfer.files);
+    }
+  }
+
+  #handleDragEvent(evt: DragEvent, isOverTarget: boolean): void {
+    if (this.compact || this.disabled) {
+      return;
+    }
+
+    evt.preventDefault();
+    evt.stopPropagation();
+    this._highlighted = isOverTarget;
+  }
+
+  #handleFiles(files: FileList): void {
+    this.dispatchEvent(new CustomEvent(FILE_PICKER_CONSTANTS.events.FILES_CHANGED, { detail: this.#sortFiles(files), bubbles: true }));
+  }
+
+  #sortFiles(files: FileList): IFilePickerChangeEventData {
+    if (!this.accept && !this.maxSize) {
+      return { legalFiles: Array.from(files), illegalFiles: [] };
+    }
+
+    const legalFiles: File[] = [];
+    const illegalFiles: File[] = [];
+    const formats = this.accept ? this.accept.split(',').map(f => f.trim().toLowerCase()) : [''];
+
+    for (const file of Array.from(files)) {
+      const hasLegalFormat = formats.some(f => file.type.toLowerCase().match(f) || file.name.toLowerCase().match(`\\${f}`));
+      const isTooLarge = !!this.maxSize && file.size > this.maxSize;
+      (hasLegalFormat && !isTooLarge ? legalFiles : illegalFiles).push(file);
+    }
+
+    return { legalFiles, illegalFiles };
+  }
+}
+
+tryDefine(FILE_PICKER_CONSTANTS.elementName, FilePickerComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-file-picker': IFilePickerComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-file-picker-change': CustomEvent<IFilePickerChangeEventData>;
+  }
 }

@@ -2,7 +2,7 @@
 
 Tracks the components in `packages/forge/src/lib` that still use the legacy component/core/adapter/template architecture and need to move to Lit (`BaseLitElement`). See the `lit-migration` skill (`.claude/skills/lit-migration`) for the migration workflow.
 
-- **Remaining:** 39 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`, chip on `feat/chip-lit`, label-value on `feat/label-value-lit`, backdrop on `feat/backdrop-lit`, button-toggle on `feat/button-toggle-lit`, list and list-item on `feat/list-lit`, circular-progress on `feat/circular-progress-lit`, linear-progress on `feat/linear-progress-lit`, split-button on `feat/split-button-lit`, banner on `feat/banner-lit`, label on `feat/label-lit`, profile-card on `feat/profile-card-lit`, split-view and split-view-panel on `feat/split-view-lit`)
+- **Remaining:** 38 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`, chip on `feat/chip-lit`, label-value on `feat/label-value-lit`, backdrop on `feat/backdrop-lit`, button-toggle on `feat/button-toggle-lit`, list and list-item on `feat/list-lit`, circular-progress on `feat/circular-progress-lit`, linear-progress on `feat/linear-progress-lit`, split-button on `feat/split-button-lit`, banner on `feat/banner-lit`, label on `feat/label-lit`, profile-card on `feat/profile-card-lit`, split-view and split-view-panel on `feat/split-view-lit`, file-picker on `feat/file-picker-lit`)
 - **Last audited:** 2026-10-29
 - **Effort basis:** source size (component, core, adapter, delegate), property count, test size, and dependence on shared infrastructure. Estimates were made without reading every file, so adjust tiers as components are opened.
 - **Sizes** are total source lines in the component folder, including constants and delegates. **Tests** are lines in the component's own `*.test.ts` files. Components with no test count keep their tests in a shared file (`chips.test.ts`, `list.test.ts`, `button-toggle.test.ts`, `stepper.test.ts`, `view-switcher.test.ts`).
@@ -49,7 +49,7 @@ Has a core and adapter, but few properties and no heavy template logic.
 | [ ]  | step                        | 708  | 30 properties.                                    |
 | [x]  | profile-card                | 786  |                                                   |
 | [x]  | split-view                  | 779  |                                                   |
-| [ ]  | file-picker                 | 818  |                                                   |
+| [x]  | file-picker                 | 818  |                                                   |
 | [ ]  | bottom-sheet                | 884  | Mixins, animation.                                |
 | [x]  | view-switcher               | 919  | Adapter is heavy on DOM manipulation (328 lines). |
 
