@@ -30,6 +30,7 @@ describe('SplitButton', () => {
       </forge-split-button>
     `);
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
+    await el.updateComplete;
 
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => {
@@ -49,6 +50,7 @@ describe('SplitButton', () => {
       </forge-split-button>
     `);
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
+    await el.updateComplete;
 
     expect(el.variant).toBe('outlined');
     expect(el.theme).toBe('error');
@@ -76,6 +78,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.variant = 'raised';
+    await el.updateComplete;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.VARIANT)).toBe(true);
 
@@ -93,6 +96,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.theme = 'error';
+    await el.updateComplete;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME)).toBe(true);
 
@@ -110,6 +114,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.disabled = true;
+    await el.updateComplete;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.DISABLED)).toBe(true);
 
@@ -127,6 +132,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.dense = true;
+    await el.updateComplete;
 
     const buttons = el.querySelectorAll('forge-button');
     buttons.forEach(button => expect(button.dense).toBe(true));
@@ -142,6 +148,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.pill = true;
+    await el.updateComplete;
 
     expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.PILL)).toBe(true);
 
@@ -160,6 +167,7 @@ describe('SplitButton', () => {
     const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
 
     el.pill = true;
+    await el.updateComplete;
 
     const buttons = el.querySelectorAll('forge-button');
     expect(buttons[0].pill).toBe(true);
@@ -233,5 +241,56 @@ describe('SplitButton', () => {
 
     expect('variant' in button).toBe(false);
     expect('pill' in button).toBe(false);
+  });
+
+  it('should not reflect default variant or theme', async () => {
+    const screen = render(html`<forge-split-button variant="outlined" theme="error"></forge-split-button>`);
+    const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
+
+    el.variant = 'text';
+    el.theme = 'primary';
+    await el.updateComplete;
+
+    expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.VARIANT)).toBe(false);
+    expect(el.hasAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME)).toBe(false);
+  });
+
+  it('should fall back to defaults when variant and theme attributes are removed', async () => {
+    const screen = render(html`<forge-split-button variant="outlined" theme="error"></forge-split-button>`);
+    const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
+
+    el.removeAttribute(SPLIT_BUTTON_CONSTANTS.attributes.VARIANT);
+    el.removeAttribute(SPLIT_BUTTON_CONSTANTS.attributes.THEME);
+
+    expect(el.variant).toBe(SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_VARIANT);
+    expect(el.theme).toBe(SPLIT_BUTTON_CONSTANTS.defaults.DEFAULT_THEME);
+  });
+
+  it('should sync buttons and keep observing when reconnected', async () => {
+    const screen = render(html`
+      <forge-split-button variant="filled" dense>
+        <forge-button>First</forge-button>
+      </forge-split-button>
+    `);
+    const el = screen.container.querySelector('forge-split-button') as ISplitButtonComponent;
+    await el.updateComplete;
+    const parent = el.parentElement as HTMLElement;
+
+    el.remove();
+    const button = el.querySelector('forge-button') as HTMLElement & { variant: string; dense: boolean };
+    button.variant = 'text';
+    button.dense = false;
+    parent.appendChild(el);
+    await frame();
+
+    expect(button.variant).toBe('filled');
+    expect(button.dense).toBe(true);
+
+    const added = document.createElement('forge-button');
+    el.appendChild(added);
+    await frame();
+
+    expect(added.variant).toBe('filled');
+    expect(added.dense).toBe(true);
   });
 });
