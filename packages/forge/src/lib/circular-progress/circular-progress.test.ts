@@ -38,6 +38,7 @@ describe('Circular Progress', () => {
     const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
 
     el.determinate = true;
+    await el.updateComplete;
 
     const rootElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
@@ -51,6 +52,7 @@ describe('Circular Progress', () => {
   it('should set determinate via attribute', async () => {
     const screen = render(html`<forge-circular-progress determinate></forge-circular-progress>`);
     const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+    await el.updateComplete;
     const rootElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
 
@@ -63,10 +65,12 @@ describe('Circular Progress', () => {
   it('should remove aria-valuenow when indeterminate after determinate', async () => {
     const screen = render(html`<forge-circular-progress determinate progress="0.5"></forge-circular-progress>`);
     const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+    await el.updateComplete;
 
     expect(el.hasAttribute('aria-valuenow')).toBe(true);
 
     el.determinate = false;
+    await el.updateComplete;
 
     expect(el.hasAttribute('aria-valuenow')).toBe(false);
   });
@@ -77,6 +81,7 @@ describe('Circular Progress', () => {
 
     el.determinate = true;
     el.progress = 0.5;
+    await el.updateComplete;
 
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
 
@@ -89,6 +94,7 @@ describe('Circular Progress', () => {
   it('should set progress via attribute', async () => {
     const screen = render(html`<forge-circular-progress determinate progress="0.5"></forge-circular-progress>`);
     const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+    await el.updateComplete;
     const determinateProgressElement = getShadowElement(el, CIRCULAR_PROGRESS_CONSTANTS.selectors.DETERMINATE_PROGRESS_CIRCLE);
 
     expect(el.progress).toBe(0.5);
@@ -109,6 +115,7 @@ describe('Circular Progress', () => {
     const screen = render(html`<forge-circular-progress></forge-circular-progress>`);
     const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
     el.theme = 'secondary';
+    await el.updateComplete;
 
     expect(el.theme).toBe('secondary');
     expect(el.getAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME)).toBe('secondary');
@@ -128,5 +135,42 @@ describe('Circular Progress', () => {
 
     expect(el.track).toBe(true);
     expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK)).toBe(true);
+  });
+
+  it('should reset progress to 0 when set to NaN', async () => {
+    const screen = render(html`<forge-circular-progress determinate progress="0.5"></forge-circular-progress>`);
+    const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+
+    el.progress = NaN;
+    await el.updateComplete;
+
+    expect(el.progress).toBe(0);
+    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.PROGRESS)).toBe(false);
+    expect(el.getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('should not reflect default theme', async () => {
+    const screen = render(html`<forge-circular-progress theme="secondary"></forge-circular-progress>`);
+    const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+
+    el.theme = 'primary';
+    await el.updateComplete;
+
+    expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.THEME)).toBe(false);
+  });
+
+  it('should apply track from global configuration', async () => {
+    window.TylerForgeGlobalConfiguration = { 'forge-circular-progress': { track: true } };
+
+    try {
+      const screen = render(html`<forge-circular-progress></forge-circular-progress>`);
+      const el = screen.container.querySelector('forge-circular-progress') as ICircularProgressComponent;
+      await el.updateComplete;
+
+      expect(el.track).toBe(true);
+      expect(el.hasAttribute(CIRCULAR_PROGRESS_CONSTANTS.attributes.TRACK)).toBe(true);
+    } finally {
+      window.TylerForgeGlobalConfiguration = undefined as never;
+    }
   });
 });
