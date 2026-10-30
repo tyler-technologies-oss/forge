@@ -5,5 +5,13 @@
   @tags help-button, demo, storybook, component-example
 -->
 <forge-app-bar title-text="Help Icon" elevation="raised">
-  <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
+  <forge-app-bar-help-button slot="end">
+    <forge-menu placement="bottom-end">
+      <forge-icon-button theme="app-bar" aria-atomic="true" aria-live="assertive" aria-haspopup="true" aria-labelledby="forge-tooltip-746pm">
+        <forge-icon name="help">
+        </forge-icon>
+      </forge-icon-button>
+      <forge-tooltip type="label" placement="bottom" aria-hidden="true" id="forge-tooltip-746pm">Help</forge-tooltip>
+    </forge-menu>
+  </forge-app-bar-help-button>
 </forge-app-bar>

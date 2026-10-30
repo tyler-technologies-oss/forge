@@ -1,19 +1,14 @@
 <!--
   @block Profile — Demo
   @type component
-  @description Demo usage example of a forge-user-profile in the forge-app-bar end slot.
-  @tags profile, user-profile, demo, storybook, component-example
+  @description Demo usage example for the forge-profile component.
+  @tags profile, demo, storybook, component-example
 -->
-<forge-app-bar title-text="Profile" theme-mode="scoped" elevation="raised">
-  <forge-user-profile slot="end" button-label="Open profile menu" theme-toggle full-name="First Last" email="first.last@tylertech.com">
-    <forge-profile-link slot="link">
-      <forge-icon slot="icon" name="settings"></forge-icon>
-      <a href="#">Settings</a>
-    </forge-profile-link>
-    <forge-profile-link slot="link">
-      <forge-icon slot="icon" name="account_circle"></forge-icon>
-      <a href="#">Profile</a>
-    </forge-profile-link>
-    <span slot="sign-out-button-text">Sign Out</span>
-  </forge-user-profile>
+<forge-app-bar title-text="Profile" elevation="raised">
+  <forge-app-bar-profile-button slot="end" full-name="First Last" email="first.last@tylertech.com">
+    <forge-icon-button theme="app-bar" aria-labelledby="forge-tooltip-ur3yd">
+      <forge-avatar aria-hidden="true"></forge-avatar>
+    </forge-icon-button>
+    <forge-tooltip type="label" placement="bottom-end" aria-hidden="true" id="forge-tooltip-ur3yd">View First Last's profile</forge-tooltip>
+  </forge-app-bar-profile-button>
 </forge-app-bar>
