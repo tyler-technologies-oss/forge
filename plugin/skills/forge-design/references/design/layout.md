@@ -27,7 +27,7 @@ Forge's heading scale runs from small to large, so `forge-typography--heading4` 
 
 ### Responsive behavior
 
-The shell has one breakpoint, **960px**.
+The shell has one breakpoint, **960px** by default. Teams can adjust it to fit their app with the app layout's `breakpoint` property, so confirm the value with your developers before designing around it.
 
 - **960px and wider:** navigation is a persistent drawer beside the body.
 - **Below 960px:** navigation collapses behind a menu button in the app bar and opens as a modal drawer over the content.
@@ -69,7 +69,7 @@ A table inside a card that fills the body width.
 - Pagination sits in the card footer.
 - Filters open in a **256px side panel** on the right, with a header toolbar ("Filters"), a padded body of facets separated by dividers, and a footer with "Clear all" and "Apply".
 
-Example (A paginated table with a filter side panel.): `get_forge_blocks(blockId: "application-layout/table-with-filters/table-with-filters")`
+See the [table with filters](https://tylerforge.design/blocks/application-layout/table-with-filters/table-with-filters/) block for a paginated table with a filter side panel.
 
 ### Form
 
@@ -86,9 +86,13 @@ Example (A long form divided into sections on a 6-column grid.): `get_forge_bloc
 
 A primary list or table in the body, with details for the selected item in a right side panel. The body and the panel **scroll independently**, so design both as separate scroll areas.
 
+See the [dual scrolling containers](https://tylerforge.design/blocks/application-layout/dual-scroll/dual-scroll/) block for a body and side panel that scroll independently.
+
 ### Tabbed page
 
 When a page has several views of the same object, put a tab bar directly below the page title, inside the body header. Remove the title toolbar's bottom divider so the title and tabs read as one header.
+
+See the [basic application layout with tabs](https://tylerforge.design/blocks/application-layout/basic-layout-with-tabs/basic-layout-with-tabs/) block for a tab bar below a borderless page title.
 
 ## Containers
 

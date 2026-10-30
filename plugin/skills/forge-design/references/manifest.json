@@ -719,21 +719,21 @@
       "name": "color",
       "title": "Color System",
       "description": "Guidance for using Tyler Forge's color system in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/color.md"
     },
     {
       "name": "getting-started",
       "title": "Getting Started",
       "description": "Start here for an overview of designing with Tyler Forge.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/getting-started.md"
     },
     {
       "name": "iconography",
       "title": "Iconography",
       "description": "Guidance for using Tyler Forge icons in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/iconography.md"
     },
     {
@@ -754,7 +754,7 @@
       "name": "typography",
       "title": "Typography",
       "description": "Guidance for using Tyler Forge's typography system in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/typography.md"
     }
   ],

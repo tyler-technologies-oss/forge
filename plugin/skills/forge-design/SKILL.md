@@ -164,12 +164,12 @@ Each reference below is a separate file under `references/`. Load only the ones 
 ### Design guides
 
 <!-- DESIGN-INDEX:START -->
-- [Color System](references/design/color.md) (experimental) — Guidance for using Tyler Forge's color system in your designs.
-- [Getting Started](references/design/getting-started.md) (experimental) — Start here for an overview of designing with Tyler Forge.
-- [Iconography](references/design/iconography.md) (experimental) — Guidance for using Tyler Forge icons in your designs.
+- [Color System](references/design/color.md) — Guidance for using Tyler Forge's color system in your designs.
+- [Getting Started](references/design/getting-started.md) — Start here for an overview of designing with Tyler Forge.
+- [Iconography](references/design/iconography.md) — Guidance for using Tyler Forge icons in your designs.
 - [Layout](references/design/layout.md) — The anatomy, dimensions, and page patterns of a Forge application, for designers building screens by hand.
 - [Spacing](references/design/spacing.md) — How to apply Tyler Forge's spacing scale so hand-built designs match what Forge components and blocks produce in code.
-- [Typography](references/design/typography.md) (experimental) — Guidance for using Tyler Forge's typography system in your designs.
+- [Typography](references/design/typography.md) — Guidance for using Tyler Forge's typography system in your designs.
 <!-- DESIGN-INDEX:END -->
 
 ### Developer guides

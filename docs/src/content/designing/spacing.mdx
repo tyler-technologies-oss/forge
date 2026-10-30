@@ -4,6 +4,8 @@ description: How to apply Tyler Forge's spacing scale so hand-built designs matc
 ---
 
 import InlineMessage from "../../components/docs/InlineMessage.astro";
+import Rules from "../../components/Rules.astro";
+import Rule from "../../components/Rule.astro";
 
 Forge uses a single spacing scale for every padding, margin, and gap. If a value isn't on the scale, it doesn't belong in a Forge design. Developers build with these tokens directly (`--forge-spacing-medium`, `--forge-spacing-large`), so off-scale values in a mockup either get rounded to the nearest token or end up as one-off CSS.
 
@@ -26,7 +28,7 @@ Set these up as number variables (or a spacing collection) in Figma, named to ma
 | `--forge-spacing-xxlarge`      | 48px  | Large section breaks, empty-state framing                               |
 | `--forge-spacing-xxxlarge`     | 56px  | Page-level separation on marketing or landing layouts                   |
 
-<InlineMessage theme="info" title="Medium is the default">
+<InlineMessage theme="info" title="Medium is the default" class="mt-large">
   Across all blocks, `--forge-spacing-medium` (16px) is used more than every other spacing value combined. If you're unsure, start at `--forge-spacing-medium` and only move off it
   with a reason.
 </InlineMessage>
@@ -91,10 +93,17 @@ These sizes are fixed by the components. Draw them exactly, and lay out other co
 
 ## Don'ts
 
-- **Don't use off-scale values** like 10px, 15px, or 18px. Round to the nearest token.
-- **Don't add space inside components.** Fields, buttons, list items, and toolbars carry their own internal spacing. Your spacing goes between components, not inside them.
-- **Don't fill space just because it's there.** Wide screens get more columns or a max-width container, not bigger gaps.
-- **Don't use a divider and large spacing for the same break.** A divider replaces some of the space, so center it in the gap rather than adding it on top.
-- **Don't put margins on flex or grid children to space them.** Set `gap` on the container to a spacing token such as `--forge-spacing-medium` instead.
+<Rules>
+  <Rule
+    variant="dont"
+    rules={[
+      "Use off-scale values like 10px, 15px, or 18px. Round to the nearest token.",
+      "Add space inside components. Fields, buttons, list items, and toolbars carry their own internal spacing, so your spacing goes between components, not inside them.",
+      "Fill space just because it's there. Wide screens get more columns or a max-width container, not bigger gaps.",
+      "Use a divider and large spacing for the same break. A divider replaces some of the space, so center it in the gap rather than adding it on top.",
+      "Put margins on flex or grid children to space them. Set `gap` on the container to a spacing token such as `--forge-spacing-medium` instead.",
+    ]}
+  />
+</Rules>
 
 For how these values come together in a full application, see [Layout](/designing/layout/).

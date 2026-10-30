@@ -41,6 +41,16 @@ const cardClass = isDo
   ? "rule-card rule-card--do"
   : "rule-card rule-card--dont";
 const iconClass = isDo ? "text-success" : "text-error";
+
+// Mirrors ruleToInlineNodes in scripts/build-forge-skill.mjs so `code` spans render as code on the site too.
+const toParts = (rule: string): { text: string; code: boolean }[] =>
+  rule
+    .split(/(`[^`]+`)/)
+    .filter(Boolean)
+    .map((part) => {
+      const code = part.startsWith("`") && part.endsWith("`");
+      return { text: code ? part.slice(1, -1) : part, code };
+    });
 ---
 
 <forge-structured-card heading-level="3" class={cardClass}>
@@ -66,7 +76,9 @@ const iconClass = isDo ? "text-success" : "text-error";
       rules && rules.length > 0 && (
         <forge-list noninteractive dense wrap>
           {rules.map((rule) => (
-            <forge-list-item>{rule}</forge-list-item>
+            <forge-list-item>
+              {toParts(rule).map(({ text, code }) => (code ? <code>{text}</code> : text))}
+            </forge-list-item>
           ))}
         </forge-list>
       )
