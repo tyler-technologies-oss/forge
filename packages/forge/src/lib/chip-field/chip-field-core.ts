@@ -85,6 +85,11 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
       return;
     }
     this._adapter.focusInput();
+
+    // A native label forwards its click to the input, so clicking it here too would toggle the popover closed
+    if (this._adapter.isInputLabelTarget(evt.target)) {
+      return;
+    }
     this._adapter.clickInput();
   }
 
