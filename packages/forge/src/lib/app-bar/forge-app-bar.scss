@@ -1,8 +1,8 @@
 @use './app-bar/core';
-@use '../core/styles/theme';
-@use '../core/styles/spacing';
-@use '../core/styles/shape';
-@use '../core/styles/tokens/theme/color-emphasis';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/color-emphasis';
 @use '../focus-indicator';
 @use '../state-layer';
 @use '../field';

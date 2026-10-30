@@ -2,8 +2,6 @@
 
 Start here for an overview of designing with Tyler Forge.
 
-> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.
-
 Tyler Forge is the design system for Tyler applications. It gives designers and developers the same components, tokens, and patterns, so a design built with Forge translates into code with little interpretation. These pages cover the foundations to follow when you design a Forge screen by hand.
 
 ## Foundations

@@ -88,10 +88,12 @@ These sizes are fixed by the components. Draw them exactly, and lay out other co
 
 ## Don'ts
 
-- **Don't use off-scale values** like 10px, 15px, or 18px. Round to the nearest token.
-- **Don't add space inside components.** Fields, buttons, list items, and toolbars carry their own internal spacing. Your spacing goes between components, not inside them.
-- **Don't fill space just because it's there.** Wide screens get more columns or a max-width container, not bigger gaps.
-- **Don't use a divider and large spacing for the same break.** A divider replaces some of the space, so center it in the gap rather than adding it on top.
-- **Don't put margins on flex or grid children to space them.** Set `gap` on the container to a spacing token such as `--forge-spacing-medium` instead.
+**Don't**
+
+- Use off-scale values like 10px, 15px, or 18px. Round to the nearest token.
+- Add space inside components. Fields, buttons, list items, and toolbars carry their own internal spacing, so your spacing goes between components, not inside them.
+- Fill space just because it's there. Wide screens get more columns or a max-width container, not bigger gaps.
+- Use a divider and large spacing for the same break. A divider replaces some of the space, so center it in the gap rather than adding it on top.
+- Put margins on flex or grid children to space them. Set `gap` on the container to a spacing token such as `--forge-spacing-medium` instead.
 
 For how these values come together in a full application, see [Layout](./layout.md).

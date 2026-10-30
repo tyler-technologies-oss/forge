@@ -571,6 +571,17 @@
       "docsPath": "components/stepper.md"
     },
     {
+      "name": "structured-card",
+      "title": "Structured Card",
+      "description": "Structured cards provide a pre-configured card layout with dedicated slots for a title, header actions, body content, and footer actions.",
+      "status": "beta",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-structured-card--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/structured-card.md"
+    },
+    {
       "name": "switch",
       "title": "Switch",
       "description": "Switches toggle the state of a single setting on or off.",
@@ -708,21 +719,21 @@
       "name": "color",
       "title": "Color System",
       "description": "Guidance for using Tyler Forge's color system in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/color.md"
     },
     {
       "name": "getting-started",
       "title": "Getting Started",
       "description": "Start here for an overview of designing with Tyler Forge.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/getting-started.md"
     },
     {
       "name": "iconography",
       "title": "Iconography",
       "description": "Guidance for using Tyler Forge icons in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/iconography.md"
     },
     {
@@ -743,7 +754,7 @@
       "name": "typography",
       "title": "Typography",
       "description": "Guidance for using Tyler Forge's typography system in your designs.",
-      "status": "experimental",
+      "status": "stable",
       "docsPath": "design/typography.md"
     }
   ],

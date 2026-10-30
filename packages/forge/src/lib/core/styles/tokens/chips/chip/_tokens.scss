@@ -1,10 +1,10 @@
 @use 'sass:map';
-@use '../../../theme';
-@use '../../../shape';
-@use '../../../spacing';
-@use '../../../border';
-@use '../../../animation';
-@use '../../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   // Base

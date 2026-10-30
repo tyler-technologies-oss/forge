@@ -140,6 +140,7 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Scaffold](references/components/scaffold.md) — The scaffold lays out a header, scrollable body, and footer using named slots, for full pages or smaller sections alike.
 - [Split View](references/components/split-view.md) — Split view lays out two or more panels side by side, at least one of which a user can resize by dragging.
 - [Stack](references/components/stack.md) — A layout utility that manages spacing and alignment of its immediate children along a single vertical or horizontal axis.
+- [Structured Card](references/components/structured-card.md) — Structured cards provide a pre-configured card layout with dedicated slots for a title, header actions, body content, and footer actions.
 - [Toolbar](references/components/toolbar.md) — Toolbars align a title and actions inside a full-width container, most often as a header or footer for another surface.
 
 #### Navigation
@@ -163,12 +164,12 @@ Each reference below is a separate file under `references/`. Load only the ones 
 ### Design guides
 
 <!-- DESIGN-INDEX:START -->
-- [Color System](references/design/color.md) (experimental) — Guidance for using Tyler Forge's color system in your designs.
-- [Getting Started](references/design/getting-started.md) (experimental) — Start here for an overview of designing with Tyler Forge.
-- [Iconography](references/design/iconography.md) (experimental) — Guidance for using Tyler Forge icons in your designs.
+- [Color System](references/design/color.md) — Guidance for using Tyler Forge's color system in your designs.
+- [Getting Started](references/design/getting-started.md) — Start here for an overview of designing with Tyler Forge.
+- [Iconography](references/design/iconography.md) — Guidance for using Tyler Forge icons in your designs.
 - [Layout](references/design/layout.md) — The anatomy, dimensions, and page patterns of a Forge application, for designers building screens by hand.
 - [Spacing](references/design/spacing.md) — How to apply Tyler Forge's spacing scale so hand-built designs match what Forge components and blocks produce in code.
-- [Typography](references/design/typography.md) (experimental) — Guidance for using Tyler Forge's typography system in your designs.
+- [Typography](references/design/typography.md) — Guidance for using Tyler Forge's typography system in your designs.
 <!-- DESIGN-INDEX:END -->
 
 ### Developer guides

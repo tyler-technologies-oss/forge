@@ -650,6 +650,38 @@ describe('Chip Field', () => {
 
       expect(focusSpy).toHaveBeenCalled();
     });
+
+    it('should click input only once when native label is clicked', async () => {
+      const screen = render(html`
+        <forge-chip-field>
+          <label slot="label" for="cf-label-input">Label</label>
+          <input type="text" id="cf-label-input" />
+        </forge-chip-field>
+      `);
+      const el = screen.container.querySelector('forge-chip-field') as IChipFieldComponent;
+      const label = el.querySelector('label') as HTMLLabelElement;
+      const input = el.querySelector('input') as HTMLInputElement;
+      const clickListener = vi.fn();
+      input.addEventListener('click', clickListener);
+      await frame();
+
+      label.click();
+      await frame();
+
+      expect(clickListener).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).toBe(input);
+    });
+
+    it('should click input once when field area is clicked', async () => {
+      const harness = await createFixture();
+      const clickListener = vi.fn();
+      harness.inputElement.addEventListener('click', clickListener);
+
+      harness.fieldElement.click();
+      await frame();
+
+      expect(clickListener).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('initialization with pre-slotted members', () => {

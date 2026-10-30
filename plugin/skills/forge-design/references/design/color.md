@@ -2,8 +2,6 @@
 
 Guidance for using Tyler Forge's color system in your designs.
 
-> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.
-
 Every color in a Forge design comes from a theme token. Tokens are named by role, like `--forge-theme-surface` or `--forge-theme-primary`, not by hue, so the same design works in light mode, dark mode, and any custom theme. The full set of values is on the [color tokens](https://tylerforge.design/tokens/color/) page.
 
 ## Surfaces

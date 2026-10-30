@@ -60,14 +60,14 @@ export function buildNavigation(
               href: "/designing/spacing/",
             },
             {
-              id: "design-layout",
-              label: "Layout",
-              href: "/designing/layout/",
-            },
-            {
               id: "design-iconography",
               label: "Iconography",
               href: "/designing/iconography/",
+            },
+            {
+              id: "design-layout",
+              label: "Layout",
+              href: "/designing/layout/",
             },
           ],
         },
@@ -77,62 +77,16 @@ export function buildNavigation(
           icon: "code",
           children: [
             {
-              id: "dev-installation",
-              label: "Installation",
-              href: "/developing/installation/",
-            },
-            { id: "dev-usage", label: "Usage", href: "/developing/usage/" },
-            {
-              id: "dev-theming",
-              label: "Theming",
-              href: "/developing/theming/",
-            },
-            {
-              id: "dev-typography",
-              label: "Typography",
-              href: "/developing/typography/",
-            },
-            { id: "dev-forms", label: "Forms", href: "/developing/forms/" },
-            { id: "dev-icons", label: "Icons", href: "/developing/icons/" },
-            {
-              id: "dev-illustrations",
-              label: "Illustrations",
-              href: "/developing/illustrations/",
-            },
-            {
-              id: "dev-accessibility",
-              label: "Accessibility",
-              href: "/developing/accessibility/",
-            },
-            {
-              id: "dev-customization",
-              label: "Customization",
-              href: "/developing/customization/",
-            },
-            {
-              id: "dev-global-configuration",
-              label: "Global Configuration",
-              href: "/developing/global-configuration/",
-            },
-            {
-              id: "dev-css-only-components",
-              label: "CSS-Only Components",
-              href: "/developing/css-only-components/",
-            },
-            {
-              id: "dev-sass-library",
-              label: "Sass Library",
-              href: "/developing/sass-library/",
-            },
-            {
-              id: "dev-tailwind",
-              label: "Tailwind CSS",
-              href: "/developing/tailwind/",
-            },
-            {
-              id: "dev-mcp-server",
-              label: "Forge MCP Server",
-              href: "/developing/mcp-server/",
+              id: "dev-getting-started",
+              label: "Getting Started",
+              children: [
+                {
+                  id: "dev-installation",
+                  label: "Installation",
+                  href: "/developing/installation/",
+                },
+                { id: "dev-usage", label: "Usage", href: "/developing/usage/" },
+              ],
             },
             {
               id: "dev-frameworks",
@@ -162,6 +116,76 @@ export function buildNavigation(
                   id: "dev-frameworks-vue",
                   label: "Vue",
                   href: "/developing/frameworks/vue/",
+                },
+              ],
+            },
+            {
+              id: "dev-styling",
+              label: "Styling & Theming",
+              children: [
+                {
+                  id: "dev-theming",
+                  label: "Theming",
+                  href: "/developing/theming/",
+                },
+                {
+                  id: "dev-typography",
+                  label: "Typography",
+                  href: "/developing/typography/",
+                },
+                {
+                  id: "dev-customization",
+                  label: "Customization",
+                  href: "/developing/customization/",
+                },
+                {
+                  id: "dev-css-only-components",
+                  label: "CSS-Only Components",
+                  href: "/developing/css-only-components/",
+                },
+              ],
+            },
+            {
+              id: "dev-building-apps",
+              label: "Building Apps",
+              children: [
+                { id: "dev-forms", label: "Forms", href: "/developing/forms/" },
+                { id: "dev-icons", label: "Icons", href: "/developing/icons/" },
+                {
+                  id: "dev-illustrations",
+                  label: "Illustrations",
+                  href: "/developing/illustrations/",
+                },
+                {
+                  id: "dev-accessibility",
+                  label: "Accessibility",
+                  href: "/developing/accessibility/",
+                },
+                {
+                  id: "dev-global-configuration",
+                  label: "Global Configuration",
+                  href: "/developing/global-configuration/",
+                },
+              ],
+            },
+            {
+              id: "dev-tooling",
+              label: "Tooling",
+              children: [
+                {
+                  id: "dev-tailwind",
+                  label: "Tailwind CSS",
+                  href: "/developing/tailwind/",
+                },
+                {
+                  id: "dev-sass-library",
+                  label: "Sass Library",
+                  href: "/developing/sass-library/",
+                },
+                {
+                  id: "dev-mcp-server",
+                  label: "Forge MCP Server",
+                  href: "/developing/mcp-server/",
                 },
               ],
             },
@@ -284,6 +308,12 @@ export function buildNavigation(
               href: "/about/changelog/",
             },
           ],
+        },
+        {
+          id: "blog",
+          label: "Blog",
+          icon: "newspaper_variant_outline",
+          href: "/blog/",
         },
       ],
     },

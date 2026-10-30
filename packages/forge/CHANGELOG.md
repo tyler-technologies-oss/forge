@@ -1,5 +1,11 @@
 # @tylertech/forge
 
+## 3.24.1
+
+### Documentation
+
+- a4d4c99: **confirmation-dialog**: describe the `forge-confirmation-dialog-action` event's `{ value, reason }` payload and that it's cancelable
+
 ## 3.24.0
 
 ### Features

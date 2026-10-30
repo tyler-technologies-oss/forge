@@ -1,6 +1,6 @@
-@use '../core/styles/theme';
-@use '../core/styles/spacing';
-@use '../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/typography';
 
 // The default row height within the table body.
 $tbody-row-height: 48px !default;

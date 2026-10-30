@@ -1,0 +1,169 @@
+---
+title: Structured Card
+description: Structured cards provide a pre-configured card layout with dedicated slots for a title, header actions, body content, and footer actions.
+status: beta
+source: core
+category: layout
+storybookId: components-structured-card--demo
+---
+
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import InlineMessage from "../../../components/docs/InlineMessage.astro";
+import AnatomyDemo from "../../../components/docs/AnatomyDemo.astro";
+import AnatomyMarker from "../../../components/docs/AnatomyMarker.astro";
+
+<InlineMessage theme="warning" title="Experimental">
+  Structured card is an experimental component in developer preview — its API and implementation may change in future versions, and there may be unresolved bugs. Use it with that in mind, and be prepared to update your code as it evolves.
+</InlineMessage>
+
+<ComponentHeader>
+  <forge-structured-card class="w-[400px]">
+    <span slot="title">Project details</span>
+    <forge-icon-button aria-label="More actions" slot="after-header-actions">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+    <p slot="body" class="m-0 forge-typography--body2">A pre-configured layout for a title, actions, body content, and footer buttons.</p>
+    <forge-button variant="text" slot="footer-secondary-action">Cancel</forge-button>
+    <forge-button variant="filled" slot="footer-primary-action">Save</forge-button>
+  </forge-structured-card>
+</ComponentHeader>
+
+## Overview
+
+The structured card is a pre-configured card layout optimized for common patterns in Tyler Cloud applications. Its slot-based architecture provides designated areas for a title, header actions, body content, and footer buttons, so teams build consistent card UIs without hand-assembling the same header and footer structure every time. It's ideal for table containers and self-contained content sections that need their own actions.
+
+## Usage
+
+`forge-structured-card` lays out a <a href={`${import.meta.env.BASE_URL}components/card/usage/`}>card</a> through named slots — `before-title`, `title`, `header-actions`, `after-header-actions`, `body`, `footer-start`, `footer-secondary-action`, and `footer-primary-action` — plus `heading-level` to set the title's semantic level and `body-spacing` to remove body padding for edge-to-edge content. Every slot is optional, and the header and footer hide when nothing is slotted into them. Use it when a card needs a header, body, and footer; for a card that only groups content with no header or footer, use a plain `forge-card` instead.
+
+## Slot locations
+
+<AnatomyDemo>
+  <forge-structured-card class="w-full max-w-lg my-large" style="--forge-card-overflow: visible">
+    <span slot="before-title" class="relative inline-flex">
+      <forge-icon-button aria-label="Back">
+        <forge-icon name="arrow_back"></forge-icon>
+      </forge-icon-button>
+      <AnatomyMarker label={1} title="Before title" description="A back button or navigation icon, before the title." placement="top-start" outside />
+    </span>
+    <span slot="title" class="relative inline-block">
+      <span>Project details</span>
+      <AnatomyMarker label={2} title="Title" description="The card's title, styled as heading3 and exposed at heading-level (2 by default)." placement="top-end" outside />
+    </span>
+    <span slot="header-actions" class="relative inline-flex">
+      <forge-badge theme="info-secondary">Draft</forge-badge>
+      <AnatomyMarker label={3} title="Header actions" description="Status indicators or controls at the end of the header." placement="top-end" outside />
+    </span>
+    <span slot="after-header-actions" class="relative inline-flex">
+      <forge-icon-button aria-label="More actions">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+      <AnatomyMarker label={4} title="After header actions" description="Icon buttons that run up against the card's edge, like an overflow menu or close button." placement="top-end" outside />
+    </span>
+    <div slot="body" class="relative">
+      <div class="striped-box h-28"></div>
+      <AnatomyMarker label={5} title="Body" description="The card's main content. Padded by default; set body-spacing to none for edge-to-edge content." />
+    </div>
+    <span slot="footer-start" class="relative inline-flex">
+      <forge-button variant="text">Learn more</forge-button>
+      <AnatomyMarker label={6} title="Footer start" description="Controls at the start of the footer, like extra buttons opposite a paginator." placement="bottom-start" outside />
+    </span>
+    <span slot="footer-secondary-action" class="relative inline-flex">
+      <forge-button variant="text">Cancel</forge-button>
+      <AnatomyMarker label={7} title="Footer secondary action" description="The alternative action, like Cancel." placement="bottom-end" outside />
+    </span>
+    <span slot="footer-primary-action" class="relative inline-flex">
+      <forge-button variant="filled">Save</forge-button>
+      <AnatomyMarker label={8} title="Footer primary action" description="The card's main action, always last in the footer." placement="bottom-end" outside />
+    </span>
+  </forge-structured-card>
+</AnatomyDemo>
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use a structured card when a card needs a header, body, and footer, rather than hand-building one from a card, scaffold, and toolbars.",
+      "Set `heading-level` so the title fits the page's heading hierarchy.",
+      "Put icon buttons that should sit against the card's edge, like an overflow menu or close button, in `after-header-actions`.",
+      "Put status indicators, like a badge, in `header-actions`.",
+      "Set `body-spacing=\"none\"` for full-width body content, like a table.",
+      "Put the main action in `footer-primary-action` and the alternative, like Cancel, in `footer-secondary-action`.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't style the title with a heading class — the card applies `heading3` to the `title` slot.",
+      "Don't put more than one primary action in the footer.",
+      "Don't use a structured card for a simple grouping of content with no header or footer — use a card.",
+    ]}
+  />
+</Rules>
+
+## With a form
+
+Put a form in the `body` slot and its submit and cancel buttons in the footer action slots. Use `header-actions` for status, like a badge.
+
+<Example
+  description="A structured card containing a form, with a status badge in the header and actions in the footer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/with-form/with-form.html"
+/>
+
+## Header icon button
+
+Use the `after-header-actions` slot for icon buttons that need to run up against the card's edge, such as overflow menus or close buttons.
+
+<Example
+  description="A structured card with an overflow menu icon button at the end of the header."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/header-icon-button/header-icon-button.html"
+/>
+
+## Back navigation
+
+Use the `before-title` slot for a back button or navigation icon, such as in a detail panel.
+
+<Example
+  description="A structured card with a back icon button before the title."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/with-before-title-slot/with-before-title-slot.html"
+/>
+
+## Tables
+
+Set `body-spacing="none"` (or the `bodySpacing` property) for full-width content like a table. It removes the body padding and the footer's bottom padding so the content runs edge to edge. Put a paginator in `footer-primary-action`.
+
+<Example
+  description="A structured card containing a table, with refresh and download icon buttons in the header and a paginator in the footer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/with-table/with-table.html"
+/>
+
+Use `footer-start` for buttons or controls that belong at the start of the footer, opposite the paginator.
+
+<Example
+  description="A structured card containing a table, with buttons at the start of the footer and a paginator at the end."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/with-table-and-start-buttons/with-table-and-start-buttons.html"
+/>
+
+## Scrollable body
+
+Set `--forge-structured-card-body-height` to a fixed value to make the body scroll while the header and footer stay pinned.
+
+<Example
+  description="A structured card with a fixed body height and scrolling content."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/scrollable-body-content/scrollable-body-content.html"
+/>
+
+## Multiple cards
+
+Lay out related structured cards in a wrapping row so they share the same header, body, and footer structure and stay easy to scan.
+
+<Example
+  description="Three structured cards in a wrapping row, each with an icon title, status badge, and footer actions."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/structured-card/multiple-cards/multiple-cards.html"
+/>

@@ -6,6 +6,7 @@ import svelte from '@astrojs/svelte';
 
 import tailwindcss from '@tailwindcss/vite';
 import { CODE_THEMES } from './src/config/code-themes.ts';
+import { LEGACY_REDIRECTS } from './src/config/redirects.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
   site: 'https://tylerforge.design',
   base: '/',
   trailingSlash: 'always',
+  redirects: LEGACY_REDIRECTS,
 
   // Match the theme used by the <Code> component (see Example.astro) so
   // fenced code blocks and component-rendered snippets look consistent.

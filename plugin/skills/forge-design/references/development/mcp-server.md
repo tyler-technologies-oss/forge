@@ -4,28 +4,27 @@ Give AI clients direct access to Forge component documentation, design tokens, a
 
 **Important**
 
-Always validate AI-generated code and information for accuracy. LLMs can make
-assumptions and mistakes.
+Always validate AI-generated code and information for accuracy. LLMs can make assumptions and mistakes.
 
 The Tyler Forge™ MCP Server provides AI clients with direct access to Forge component documentation, design tokens, and code generation capabilities.
 It helps developers discover components, generate framework-specific examples, and follow best practices while building with Forge.
 
-**Key Principle**: While the MCP server significantly enhances AI assistance,
-always verify generated code, validate component usage, and test
-implementations thoroughly.
+**Key Principle**: While the MCP server significantly enhances AI assistance, always verify generated code, validate component usage, and test implementations
+thoroughly.
 
 ## Quick Setup
 
 Get started with the Tyler Forge™ MCP server in your AI client:
 
-The Tyler Forge™ MCP server is currently available as a stdio server only, and requires Node.js >=18 and npm to be installed on your system.
+The Tyler Forge™ MCP server runs locally as a stdio server, which requires Node.js >=20.10 and npm to be installed on your system. A hosted [remote
+server](#remote-server-experimental) is also available in preview for clients that connect by URL.
 
 ### Claude Code Plugin (Recommended)
 
 For Claude Code, installing the **Forge plugin** is the recommended approach instead of adding the MCP server on its own. The plugin bundles the MCP server together with a `/forge-design` skill and enforcement hooks, so Forge UI is grounded in real component/block data end-to-end rather than relying on the model's memory.
 
 ```bash
-/plugin marketplace add tyler-technologies-oss/forge-mcp
+/plugin marketplace add tyler-technologies-oss/forge
 /plugin install forge@tyler-forge
 ```
 
@@ -35,14 +34,59 @@ Verify it installed correctly:
 /skills
 ```
 
-You may need to restart Claude Code or run `/reload-skills` if the skill
-doesn't appear.
+You may need to restart Claude Code or run `/reload-skills` if the skill doesn't appear.
 
-Update the plugin later with:
+#### Keep the plugin up to date
+
+The plugin always runs the latest published MCP server, but the `forge-design` skill and hooks only update when a new plugin version is released. Claude Code doesn't auto-update third-party marketplaces by default, so turn it on once:
+
+1. Run `/plugin`.
+2. Open the **Marketplaces** tab and select `tyler-forge`.
+3. Choose **Enable auto-update**.
+
+With auto-update on, Claude Code checks for a new plugin version shortly after each session starts. When one is installed, run `/reload-plugins` to use it right away, or it loads the next time you start Claude Code.
+
+To update manually instead:
 
 ```bash
 claude plugin marketplace update tyler-forge
+claude plugin update forge@tyler-forge
 ```
+
+##### If Enable auto-update is missing
+
+If the `tyler-forge` marketplace shows **Update marketplace** and **Remove marketplace** but no **Enable auto-update**, one of these is usually the cause:
+
+- **Updates are turned off in your environment.** When `DISABLE_AUTOUPDATER`, `DISABLE_UPDATES`, or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set, Claude Code
+  turns off plugin auto-update and hides the option. To turn it back on, set `FORCE_AUTOUPDATE_PLUGINS=1`, for example in the `env` block of
+  `~/.claude/settings.json`:
+
+  ```json
+  {
+    "env": {
+      "FORCE_AUTOUPDATE_PLUGINS": "1"
+    }
+  }
+  ```
+
+- **Your organization manages Claude Code.** Run `/status`. If `Enterprise managed settings` is listed under setting sources, your administrator may have turned
+  updates off, and their settings take precedence.
+
+- **Your Claude Code is out of date.** Run `claude update`, then check again.
+
+Until auto-update is available, choose **Update marketplace** in the same menu, or run the manual update commands above, to get the latest version.
+
+#### Moving from the `forge-mcp` marketplace
+
+The plugin used to be installed from the `tyler-technologies-oss/forge-mcp` repository, which is now archived. Run `claude plugin marketplace list`. If `tyler-forge` shows `tyler-technologies-oss/forge-mcp` as its source, switch to the current marketplace:
+
+```bash
+/plugin marketplace remove tyler-forge
+/plugin marketplace add tyler-technologies-oss/forge
+/plugin install forge@tyler-forge
+```
+
+Removing the marketplace also uninstalls the plugin, so the last command reinstalls it.
 
 #### Why the plugin over the MCP server alone
 
@@ -110,8 +154,7 @@ Create `.vscode/mcp.json`:
 }
 ```
 
-**Note**: You may need to manually start the MCP server after updating your
-configuration.
+**Note**: You may need to manually start the MCP server after updating your configuration.
 
 ### Claude Desktop
 
@@ -132,28 +175,94 @@ This will open your file explorer to the directory where the `claude_desktop_con
 }
 ```
 
+### Remote Server (Experimental)
+
+**Experimental**
+
+The remote server is in preview. Its URL is temporary and will change, so expect to update your configuration. For day-to-day work, prefer the local stdio
+setup above.
+
+A hosted instance of the Forge MCP server is available over Streamable HTTP, for clients that connect by URL instead of running `npx` locally, or for machines without Node.js:
+
+```
+https://forge-mcp-6ea25f585a82.herokuapp.com/mcp
+```
+
+No sign-in is required.
+
+Like the local server, the remote server works on its own in any MCP client and gives the AI direct access to Forge components, blocks, and design tokens. In
+Claude Code, the [Forge plugin](#claude-code-plugin-recommended) is still recommended, because it also brings in the `forge-design` skill and hooks that guide
+the AI to use those tools correctly. Adding the server by itself gives you the tools without that workflow.
+
+The remote server can't read your project's `node_modules`, so it can't detect which version of `@tylertech/forge` you have installed. It always answers from
+the latest published version. If your project is on an older version, use the local stdio server so component APIs match what you have installed.
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http -s [scope] forge https://forge-mcp-6ea25f585a82.herokuapp.com/mcp
+```
+
+The `[scope]` must be `user`, `project` or `local`.
+
+#### Claude.ai and Claude Desktop
+
+1. Go to **Customize > Connectors**.
+2. Click **Add**, then **Add custom connector**.
+3. Name it `Forge`, paste the URL above, and click **Continue**.
+4. Under **Authentication**, choose **No sign in**, then click **Add**.
+
+On Team and Enterprise plans, an organization Owner adds the connector under **Organization settings > Connectors**, and members then connect to it from **Customize > Connectors**.
+
+#### VS Code
+
+Choose `HTTP (HTTP or Server-Sent Events)` in `MCP: Add Server...` and enter the URL, or add it to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "forge": {
+      "type": "http",
+      "url": "https://forge-mcp-6ea25f585a82.herokuapp.com/mcp"
+    }
+  }
+}
+```
+
+#### Other clients
+
+Any client that supports Streamable HTTP can use the same URL. Most accept a configuration like this:
+
+```json
+{
+  "mcpServers": {
+    "forge": {
+      "type": "http",
+      "url": "https://forge-mcp-6ea25f585a82.herokuapp.com/mcp"
+    }
+  }
+}
+```
+
 ## Using the Forge MCP Server
 
 Once the Forge MCP server is set up in your AI client, you can start interacting with it using natural language prompts.
 
-If you installed the Claude Code plugin, the `forge-design` skill
-auto-activates whenever you mention Forge components or ask to build UI with
-them — you don't need to manually select the `forge_mode` prompt below.
+If you installed the Claude Code plugin, the `forge-design` skill auto-activates whenever you mention Forge components or ask to build UI with them — you
+don't need to manually select the `forge_mode` prompt below.
 
 ### Prompts
 
 Prompts are selected by the user and are sent as a message. They can be used to provide common instructions/rules to guide LLMs on how to properly use the MCP server.
 
-You can activate prompts in your AI client (if supported) by specifying the
-prompt name, typically via a slash command, or via prompt selection UI.
+You can activate prompts in your AI client (if supported) by specifying the prompt name, typically via a slash command, or via prompt selection UI.
 
 - `forge_mode`: Sets baseline rules when running Forge-specific task.
 
   This prompt accepts a `[task]` parameter where you can describe your specific request/query. This helps guide the LLM to use the correct MCP
   server tools, as well as includes some rules and best practices when outputting Tyler Forge-related code.
 
-Learn more about MCP prompts
-[here](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts).
+Learn more about MCP prompts [here](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts).
 
 ### Essential Tools
 
@@ -198,7 +307,7 @@ know what you need and can provide details to guide the LLM, do so. The more inf
 
 Found issues or have suggestions? The Tyler Forge™ MCP Server is open source and welcomes contributions:
 
-- **Repository**: [tyler-technologies-oss/forge-mcp](https://github.com/tyler-technologies-oss/forge-mcp)
+- **Repository**: [tyler-technologies-oss/forge](https://github.com/tyler-technologies-oss/forge) (`packages/forge-mcp`)
 - **Issues**: Report bugs and request features
 - **Pull Requests**: Submit code changes and enhancements
 - **Discussions**: Share best practices, usage patterns, and improvements
@@ -206,7 +315,7 @@ Found issues or have suggestions? The Tyler Forge™ MCP Server is open source a
 ### Documentation
 
 The MCP server will only be as good as its documentation. If you find gaps or areas for improvement, please contribute to the docs via the MCP
-[markdown templates](https://github.com/tyler-technologies-oss/forge-mcp/tree/main/templates), or directly in the [Forge repository](https://github.com/tyler-technologies-oss/forge)
+[markdown templates](https://github.com/tyler-technologies-oss/forge/tree/main/packages/forge-mcp/templates), or directly in the [Forge repository](https://github.com/tyler-technologies-oss/forge)
 where the API docs are generated from.
 
 ## Resources
