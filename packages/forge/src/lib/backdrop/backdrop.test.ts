@@ -108,11 +108,13 @@ describe('Backdrop', () => {
     const harness = await createFixture();
 
     harness.backdropElement.fixed = true;
+    await harness.backdropElement.updateComplete;
 
     expect(harness.backdropElement.fixed).toBe(true);
     expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).toBe(true);
 
     harness.backdropElement.fixed = false;
+    await harness.backdropElement.updateComplete;
 
     expect(harness.backdropElement.fixed).toBe(false);
     expect(harness.backdropElement.hasAttribute(BACKDROP_CONSTANTS.attributes.FIXED)).toBe(false);
@@ -161,5 +163,6 @@ interface IBackdropFixtureConfig {
 async function createFixture({ visible, fixed }: IBackdropFixtureConfig = {}): Promise<BackdropHarness> {
   const screen = render(html`<forge-backdrop ?visible=${visible} ?fixed=${fixed}></forge-backdrop>`);
   const el = screen.container.querySelector('forge-backdrop') as IBackdropComponent;
+  await el.updateComplete;
   return new BackdropHarness(el);
 }
