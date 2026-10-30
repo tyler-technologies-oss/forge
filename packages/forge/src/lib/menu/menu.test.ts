@@ -576,6 +576,7 @@ describe('Menu', () => {
         await harness.clickElement(harness.triggerEl);
         await task(300);
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+        await (getPopupListItem(0) as IListItemComponent).updateComplete;
 
         expect(getPopupListItem(0).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });
@@ -586,6 +587,7 @@ describe('Menu', () => {
         await harness.clickElement(harness.triggerEl);
         await task(300);
         harness.triggerEl.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
+        await (getPopupListItem(6) as IListItemComponent).updateComplete;
 
         expect(getPopupListItem(6).hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       });

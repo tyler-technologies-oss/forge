@@ -2,7 +2,7 @@
 
 Tracks the components in `packages/forge/src/lib` that still use the legacy component/core/adapter/template architecture and need to move to Lit (`BaseLitElement`). See the `lit-migration` skill (`.claude/skills/lit-migration`) for the migration workflow.
 
-- **Remaining:** 49 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`, chip on `feat/chip-lit`, label-value on `feat/label-value-lit`, backdrop on `feat/backdrop-lit`, button-toggle on `feat/button-toggle-lit`)
+- **Remaining:** 47 custom elements (view-switcher and view migrated on `feat/view-switcher-lit`, page-state on `feat/page-state-lit`, scaffold on `feat/scaffold-lit`, inline-message on `feat/inline-message-lit`, chip-set on `feat/chip-set-lit`, chip on `feat/chip-lit`, label-value on `feat/label-value-lit`, backdrop on `feat/backdrop-lit`, button-toggle on `feat/button-toggle-lit`, list and list-item on `feat/list-lit`)
 - **Last audited:** 2026-10-29
 - **Effort basis:** source size (component, core, adapter, delegate), property count, test size, and dependence on shared infrastructure. Estimates were made without reading every file, so adjust tiers as components are opened.
 - **Sizes** are total source lines in the component folder, including constants and delegates. **Tests** are lines in the component's own `*.test.ts` files. Components with no test count keep their tests in a shared file (`chips.test.ts`, `list.test.ts`, `button-toggle.test.ts`, `stepper.test.ts`, `view-switcher.test.ts`).
@@ -37,7 +37,7 @@ Has a core and adapter, but few properties and no heavy template logic.
 | Done | Component                   | Size | Notes                                             |
 | ---- | --------------------------- | ---- | ------------------------------------------------- |
 | [x]  | button-toggle               | 339  |                                                   |
-| [ ]  | list                        | 329  | 25 properties, mixins. 39 dependents.             |
+| [x]  | list                        | 329  | 25 properties, mixins. 39 dependents.             |
 | [ ]  | circular-progress           | 385  | Mixins.                                           |
 | [ ]  | linear-progress             | 397  | Mixins.                                           |
 | [ ]  | app-bar/search              | 393  |                                                   |
@@ -59,7 +59,7 @@ Shared infrastructure, form association, or a wide blast radius.
 
 | Done | Component              | Size  | Notes                              |
 | ---- | ---------------------- | ----- | ---------------------------------- |
-| [ ]  | list-item              | 803   | 30 properties. No dedicated tests. |
+| [x]  | list-item              | 803   | 30 properties. No dedicated tests. |
 | [x]  | chip                   | 904   | 36 properties.                     |
 | [ ]  | state-layer            | 944   | Small, but 52 files depend on it.  |
 | [ ]  | button-toggle-group    | 580   | Form-associated, 31 properties.    |

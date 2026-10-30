@@ -1,14 +1,16 @@
-import { customElement, attachShadowTemplate, coreProperty, coerceBoolean } from '@tylertech/forge-core';
-import { ListItemAdapter } from './list-item-adapter.js';
-import { ListItemCore } from './list-item-core.js';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, isDeepEqual, tryDefine } from '@tylertech/forge-core';
+import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { property, query, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { composedPathFrom } from '../../core/utils/event-utils.js';
+import { removeDefaultAttribute } from '../../core/utils/lit-utils.js';
+import { FocusIndicatorComponent } from '../../focus-indicator/focus-indicator.js';
+import { StateLayerComponent } from '../../state-layer/state-layer.js';
+import { LIST_CONSTANTS } from '../list/list-constants.js';
 import { IListItemSelectEventData, LIST_ITEM_CONSTANTS, ListItemFocusPropagation } from './list-item-constants.js';
-import { StateLayerComponent } from '../../state-layer/index.js';
-import { FocusIndicatorComponent } from '../../focus-indicator/index.js';
-import { IWithElementInternals, WithElementInternals } from '../../core/mixins/internals/with-element-internals.js';
-import { IWithDefaultAria, WithDefaultAria } from '../../core/mixins/internals/with-default-aria.js';
-import { BaseComponent } from '../../core/base/base-component.js';
 
-import template from './list-item.html';
 import styles from './list-item.scss';
 
 export interface IListItemProperties<T = unknown> {
@@ -24,44 +26,16 @@ export interface IListItemProperties<T = unknown> {
   focusPropagation: ListItemFocusPropagation;
 }
 
-export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, IWithElementInternals, IWithDefaultAria {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-list-item': IListItemComponent;
-  }
-
-  interface HTMLElementEventMap {
-    'forge-list-item-select': CustomEvent<IListItemSelectEventData>;
-  }
-}
+/** @deprecated - This will be removed in the future. Please switch to using ListItemComponent. */
+export interface IListItemComponent<T = unknown> extends IListItemProperties<T>, BaseLitElement {}
 
 /**
  * @tag forge-list-item
  *
  * @summary List items are individual rows of content inside of a list.
  *
- * @property {boolean} [selected=false] - Applies the selected state to the list item.
- * @property {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
- * @property {unknown} value - The unique value of the list item.
- * @property {boolean} [dense=false] - Applies the dense state to the list item.
- * @property {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
- * @property {boolean} [twoLine=false] - Sets the list item height to support at least two lines of text.
- * @property {boolean} [threeLine=false] - Sets the list item height to support at least three lines of text.
- * @property {boolean} [wrap=false] - Sets the list item to wrap its text content.
- * @property {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * @property {boolean} [focusPropagation="allow"] - Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
- *
- * @attribute {boolean} [selected=false] - Applies the selected state to the list item.
- * @attribute {boolean} [active=false] - Applies the active state to the list item by emulating its focused state.
- * @attribute {unknown} value - The unique value of the list item.
- * @attribute {boolean} [dense=false] - Applies the dense state to the list item.
- * @attribute {boolean} [indented=false] - Applies the indented state by adding margin to the start of the list item.
- * @attribute {boolean} [two-line=false] - Sets the list item height to support at least two lines of text.
- * @attribute {boolean} [three-line=false] - Sets the list item height to support at least three lines of text.
- * @attribute {boolean} [wrap=false] - Sets the list item to wrap its text content.
- * @attribute {boolean} [noninteractive=false] - Controls whether the list item will automatically attach itself to interactive slotted elements or not.
- * @attribute {boolean} [focus-propagation="allow"] - Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
+ * @dependency forge-focus-indicator
+ * @dependency forge-state-layer
  *
  * @event {CustomEvent<IListItemSelectEventData>} forge-list-item-select - Fires when the list item is selected.
  *
@@ -121,95 +95,495 @@ declare global {
  * @cssclass forge-list-item__start - Styles the start content (typically an icon).
  * @cssclass forge-list-item__end - Styles the end content (typically an icon).
  */
-@customElement({
-  name: LIST_ITEM_CONSTANTS.elementName,
-  dependencies: [StateLayerComponent, FocusIndicatorComponent]
-})
-export class ListItemComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements IListItemComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(LIST_ITEM_CONSTANTS.observedAttributes);
+export class ListItemComponent extends BaseLitElement implements IListItemComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LIST_ITEM_CONSTANTS.elementName;
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [StateLayerComponent, FocusIndicatorComponent];
+
+  #internals: ElementInternals;
+  #focusPropagation: ListItemFocusPropagation = LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION;
+  #interactiveElement: HTMLElement | undefined;
+  #disabledAttrObserver: MutationObserver | undefined;
+  #anchorAttrObserver: MutationObserver | undefined;
+  #clickListener = (evt: Event): void => this.#handleClick(evt as MouseEvent | KeyboardEvent);
+  #keydownListener = (evt: Event): void => this.#handleKeydown(evt as KeyboardEvent);
+  #keyupListener = (evt: Event): void => this.#handleKeyup(evt as KeyboardEvent);
+  #mousedownListener = { handleEvent: (evt: MouseEvent): void => this.#handleMousedown(evt), capture: true };
+
+  /**
+   * Applies the selected state to the list item.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public selected = false;
+
+  /**
+   * Applies the active state to the list item by emulating its focused state.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public active = false;
+
+  /**
+   * The unique value of the list item.
+   * @attribute
+   */
+  @property()
+  public value: unknown;
+
+  /**
+   * Applies the dense state to the list item.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public dense = false;
+
+  /**
+   * Applies the indented state by adding margin to the start of the list item.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public indented = false;
+
+  /**
+   * Sets the list item height to support at least two lines of text.
+   * @default false
+   * @attribute two-line
+   */
+  @property({ type: Boolean, attribute: 'two-line', reflect: true })
+  public twoLine = false;
+
+  /**
+   * Sets the list item height to support at least three lines of text.
+   * @default false
+   * @attribute three-line
+   */
+  @property({ type: Boolean, attribute: 'three-line', reflect: true })
+  public threeLine = false;
+
+  /**
+   * Sets the list item to wrap its text content.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public wrap = false;
+
+  /**
+   * Controls whether the list item will automatically attach itself to interactive slotted elements or not.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public noninteractive = false;
+
+  /**
+   * Controls whether the interactive element will receive focus if a non-interactive element is clicked within the list item.
+   * @default 'allow'
+   * @attribute focus-propagation
+   */
+  @property({
+    attribute: 'focus-propagation',
+    reflect: true,
+    converter: { toAttribute: (value: ListItemFocusPropagation) => removeDefaultAttribute(value, LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION) }
+  })
+  public set focusPropagation(value: ListItemFocusPropagation) {
+    this.#focusPropagation = ['allow', 'off'].includes(value) ? value : LIST_ITEM_CONSTANTS.defaults.FOCUS_PROPAGATION;
+  }
+  public get focusPropagation(): ListItemFocusPropagation {
+    return this.#focusPropagation;
   }
 
-  private _core: ListItemCore;
-  private _adapter: ListItemAdapter;
+  @state() private _interactive = false;
+  @state() private _disabled = false;
+  @state() private _anchorHref: string | undefined;
+
+  @query(LIST_ITEM_CONSTANTS.selectors.ROOT, true) private _root?: HTMLElement;
+  @query('slot:not([name])', true) private _defaultSlot?: HTMLSlotElement;
+  @query('slot[name=start]', true) private _startSlot?: HTMLSlotElement;
+  @query('slot[name=end]', true) private _endSlot?: HTMLSlotElement;
+  @query('forge-focus-indicator') private _focusIndicator?: FocusIndicatorComponent;
+  @query('forge-state-layer') private _stateLayer?: StateLayerComponent;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._adapter = new ListItemAdapter(this);
-    this._core = new ListItemCore(this._adapter);
+    this.#internals = this.attachInternals();
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
-  }
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    setDefaultAria(this, this.#internals, { role: 'listitem' }, { setAttribute: !this.hasAttribute('role') });
+    this.#inheritParentListProps();
 
-  public disconnectedCallback(): void {
-    this._core.destroy();
-  }
-
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case LIST_ITEM_CONSTANTS.observedAttributes.SELECTED:
-        this.selected = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.ACTIVE:
-        this.active = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.VALUE:
-        this.value = newValue;
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.DENSE:
-        this.dense = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.INDENTED:
-        this.indented = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.TWO_LINE:
-        this.twoLine = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.THREE_LINE:
-        this.threeLine = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.WRAP:
-        this.wrap = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.NONINTERACTIVE:
-        this.noninteractive = coerceBoolean(newValue);
-        break;
-      case LIST_ITEM_CONSTANTS.observedAttributes.FOCUS_PROPAGATION:
-        this.focusPropagation = newValue as ListItemFocusPropagation;
-        break;
+    if (this.hasUpdated) {
+      this.#initializeInteractiveElement();
     }
   }
 
-  @coreProperty()
-  declare public selected: boolean;
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#cleanupObservers();
+  }
 
-  @coreProperty()
-  declare public active: boolean;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('value')) {
+      const isSelected = this.#trySelect();
+      if (isSelected !== null && isSelected !== this.selected) {
+        this.selected = isSelected;
+      }
+    }
 
-  @coreProperty()
-  declare public value: unknown;
+    if (changedProperties.has('noninteractive') && this.hasUpdated) {
+      this.#initializeInteractiveElement();
+    }
+  }
 
-  @coreProperty()
-  declare public dense: boolean;
+  public override firstUpdated(): void {
+    this.#initializeInteractiveElement();
+  }
 
-  @coreProperty()
-  declare public indented: boolean;
+  public override updated(): void {
+    if (this._focusIndicator && this._focusIndicator.targetElement !== this.#interactiveElement) {
+      this._focusIndicator.targetElement = this.#interactiveElement;
+    }
+    if (this._stateLayer && this._root && this._stateLayer.targetElement !== this._root) {
+      this._stateLayer.targetElement = this._root;
+    }
+  }
 
-  @coreProperty()
-  declare public twoLine: boolean;
+  public render(): TemplateResult {
+    const classes = {
+      [LIST_ITEM_CONSTANTS.classes.ROOT]: true,
+      [LIST_ITEM_CONSTANTS.classes.INTERACTIVE]: this._interactive,
+      [LIST_ITEM_CONSTANTS.classes.DISABLED]: this._disabled
+    };
+    return html`
+      <div class=${classMap(classes)} part="root" @slotchange=${this.#handleSlotChange} @mousedown=${this.#mousedownListener}>
+        <slot name="start">
+          <slot name="leading"></slot>
+        </slot>
+        <div class="text-container" part="text-container">
+          <slot></slot>
+          <slot name="secondary-text"></slot>
+          <slot name="tertiary-text"></slot>
+        </div>
+        <slot name="end">
+          <slot name="trailing"></slot>
+        </slot>
+        ${this._interactive
+          ? html`
+              <forge-focus-indicator part="focus-indicator" .inward=${true} .active=${this.active}></forge-focus-indicator>
+              <forge-state-layer exportparts="surface:state-layer"></forge-state-layer>
+            `
+          : nothing}
+        ${this._anchorHref !== undefined
+          ? html`<a
+              id=${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}
+              class=${LIST_ITEM_CONSTANTS.classes.INTERNAL_ANCHOR}
+              href=${this._anchorHref}
+              tabindex="-1"
+              aria-hidden="true"></a>`
+          : nothing}
+      </div>
+      <slot name="additional-content"></slot>
+    `;
+  }
 
-  @coreProperty()
-  declare public threeLine: boolean;
+  get #isActivatable(): boolean {
+    return this._interactive && !this.noninteractive;
+  }
 
-  @coreProperty()
-  declare public wrap: boolean;
+  #setInteractive(value: boolean): void {
+    this._interactive = value;
 
-  @coreProperty()
-  declare public noninteractive: boolean;
+    if (value && !this.noninteractive) {
+      this.addEventListener('click', this.#clickListener, { capture: true });
+      this.addEventListener('keydown', this.#keydownListener, { capture: true });
+    } else {
+      this.removeEventListener('click', this.#clickListener, { capture: true });
+      this.removeEventListener('keydown', this.#keydownListener, { capture: true });
+      this.removeEventListener('keyup', this.#keyupListener, { capture: true });
+    }
+  }
 
-  @coreProperty()
-  declare public focusPropagation: ListItemFocusPropagation;
+  #getParentList(): HTMLElement | null {
+    return this.closest(LIST_CONSTANTS.elementName);
+  }
+
+  #inheritParentListProps(): void {
+    const list = this.#getParentList();
+    if (!list) {
+      return;
+    }
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.NONINTERACTIVE)) {
+      this.noninteractive = true;
+    }
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.DENSE)) {
+      this.dense = true;
+    }
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.INDENTED)) {
+      this.indented = true;
+    }
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.TWO_LINE)) {
+      this.twoLine = true;
+    }
+    if (list.hasAttribute(LIST_CONSTANTS.attributes.THREE_LINE)) {
+      this.threeLine = true;
+    }
+  }
+
+  /**
+   * Compares the value of this list item to the selected value of the parent list.
+   * @returns Whether the list item should be selected, or `null` if the parent list has no selected value.
+   */
+  #trySelect(): boolean | null {
+    const list = this.#getParentList() as { selectedValue?: unknown } | null;
+    if (list?.selectedValue === undefined) {
+      return null;
+    }
+    const listValues = Array.isArray(list.selectedValue) ? list.selectedValue : [list.selectedValue];
+    return listValues.some(v => isDeepEqual(v, this.value));
+  }
+
+  #handleSlotChange(evt: Event): void {
+    // We only care about slot changes in the default slot, start/leading slot, and end/trailing slot to search for interactive elements
+    const interactiveSlotNames = ['', 'start', 'end', 'leading', 'trailing'];
+    const isInteractiveSlot = interactiveSlotNames.includes((evt.target as HTMLSlotElement).name);
+    if (!isInteractiveSlot || this.noninteractive) {
+      return;
+    }
+    this.#initializeInteractiveElement();
+  }
+
+  #initializeInteractiveElement(): void {
+    this.#cleanupObservers();
+    this.#interactiveElement = undefined;
+    this._anchorHref = undefined;
+    this._disabled = false;
+
+    if (this.noninteractive || !this._defaultSlot || !this._startSlot || !this._endSlot) {
+      this.#setInteractive(false);
+      return;
+    }
+
+    // We always want to check for form control-like elements first as those take precedence over slotted anchor and button
+    // elements as the interactive element.
+    const assignedStartEndElements = [...this._startSlot.assignedElements({ flatten: true }), ...this._endSlot.assignedElements({ flatten: true })];
+    const slottedFormControl = assignedStartEndElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.FORM_CONTROL_LIKE)) as HTMLElement | undefined;
+    if (slottedFormControl) {
+      this.#interactiveElement = slottedFormControl;
+      this.#watchDisabled(slottedFormControl);
+      return;
+    }
+
+    // If no form control-like elements are found, we check for slotted anchor or button elements within the default slot next.
+    // If an anchor element is found, we render an internal anchor element to prevent the list item from being focusable.
+    // If a button element is found, we sync the disabled state and attach a mutation observer to watch for changes.
+    const assignedElements = this._defaultSlot.assignedElements({ flatten: true });
+    const slottedAnchor = assignedElements.find(e => e.tagName === 'A') as HTMLAnchorElement | undefined;
+    const slottedButtonLike = assignedElements.find(e => e.matches(LIST_ITEM_CONSTANTS.selectors.BUTTON_LIKE)) as HTMLElement | undefined;
+
+    // Slotted anchors take precedence over slotted button-like elements
+    this.#interactiveElement = slottedAnchor ?? slottedButtonLike;
+    this.#setInteractive(!!this.#interactiveElement);
+
+    if (slottedAnchor) {
+      this.#attachInteractiveAnchor(slottedAnchor);
+    } else if (slottedButtonLike) {
+      this.#watchDisabled(slottedButtonLike);
+    }
+  }
+
+  #attachInteractiveAnchor(element: HTMLAnchorElement): void {
+    // The internal (facade) anchor element covers the entire list item to show the href in the status bar but is not
+    // focusable or presented to assistive technology. All clicks on the internal anchor are forwarded to the slotted anchor.
+    this._anchorHref = element.href;
+
+    // Listen for changes to the href attribute to synchronize our internal anchor's href
+    this.#anchorAttrObserver = new MutationObserver(() => (this._anchorHref = element.href));
+    this.#anchorAttrObserver.observe(element, { attributes: true, attributeFilter: ['href'] });
+  }
+
+  #watchDisabled(element: HTMLElement): void {
+    this.#syncDisabled(element);
+
+    // Listen for changes to the disabled attribute and aria-disabled attribute to synchronize our disabled state
+    this.#disabledAttrObserver = new MutationObserver(() => this.#syncDisabled(element));
+    this.#disabledAttrObserver.observe(element, { attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+  }
+
+  #syncDisabled(element: HTMLElement): void {
+    const isDisabled = element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true';
+    this._disabled = isDisabled;
+    this.#setInteractive(!isDisabled);
+  }
+
+  #cleanupObservers(): void {
+    this.#disabledAttrObserver?.disconnect();
+    this.#disabledAttrObserver = undefined;
+
+    this.#anchorAttrObserver?.disconnect();
+    this.#anchorAttrObserver = undefined;
+  }
+
+  #clickInteractiveElement(): void {
+    if (this.focusPropagation === 'allow') {
+      this.#interactiveElement?.focus();
+    }
+    if (this._focusIndicator) {
+      this._focusIndicator.active = false; // Workaround until we can call `focus({ focusVisible: false })` to prevent focus ring from showing
+    }
+    this.#interactiveElement?.click();
+  }
+
+  #dispatchSelectEvent(): void {
+    const detail: IListItemSelectEventData = { value: this.value };
+    this.dispatchEvent(new CustomEvent<IListItemSelectEventData>(LIST_ITEM_CONSTANTS.events.SELECT, { bubbles: true, detail }));
+  }
+
+  #handleMousedown(evt: MouseEvent): void {
+    if (!this.#isActivatable) {
+      return;
+    }
+    const composedElements = composedPathFrom(this, evt);
+    const fromInteractiveElement = composedElements.some(el => el === this.#interactiveElement);
+    if (this.focusPropagation === 'off' || !fromInteractiveElement) {
+      evt.preventDefault();
+    }
+  }
+
+  #handleKeydown(evt: KeyboardEvent): void {
+    if (!this.#isActivatable) {
+      return;
+    }
+
+    const composedElements = composedPathFrom(this, evt);
+    const ignoredElements = composedElements.some(el => el.matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (ignoredElements) {
+      return;
+    }
+
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      evt.stopPropagation();
+
+      const isAnchor = this.#interactiveElement?.tagName === 'A';
+      if (!isAnchor) {
+        evt.preventDefault();
+      }
+
+      this.addEventListener('keyup', this.#keyupListener, { capture: true });
+    }
+  }
+
+  #handleKeyup(evt: KeyboardEvent): void {
+    if (!this.#isActivatable) {
+      this.removeEventListener('keyup', this.#keyupListener, { capture: true });
+      return;
+    }
+
+    const composedElements = composedPathFrom(this, evt);
+    const isFromStartEndSlot = composedElements.some(el => el.matches(LIST_ITEM_CONSTANTS.selectors.SLOTTED_START_END));
+
+    if (isFromStartEndSlot) {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        this._stateLayer?.playAnimation();
+      }
+      if (evt.key === 'Enter') {
+        this.#interactiveElement?.click();
+      }
+      return;
+    }
+
+    if (evt.key === ' ' || evt.key === 'Enter') {
+      const isAnchor = this.#interactiveElement?.tagName === 'A';
+      if (isAnchor) {
+        if (evt.key === ' ') {
+          this.#interactiveElement?.click();
+        }
+      } else {
+        this._stateLayer?.playAnimation();
+        this.#handleClick(evt);
+      }
+    }
+
+    this.removeEventListener('keyup', this.#keyupListener, { capture: true });
+  }
+
+  #handleClick(evt: MouseEvent | KeyboardEvent): void {
+    if (!this.#isActivatable) {
+      return;
+    }
+
+    const composedElements = composedPathFrom(this, evt);
+
+    // Ignore clicks from elements that should not trigger selection
+    const fromIgnoredElement = composedElements.some(el => el.matches(LIST_ITEM_CONSTANTS.selectors.IGNORE));
+    if (fromIgnoredElement) {
+      return;
+    }
+
+    // Ignore clicks from <label> elements that have a for attribute that matches our interactive elements' id
+    const labelElementWithFor = (el: HTMLElement): el is HTMLLabelElement => el.matches('label[for]');
+    const fromLabelFor = composedElements.filter(labelElementWithFor).some(el => el.htmlFor === this.#interactiveElement?.id);
+    if (fromLabelFor) {
+      evt.stopPropagation();
+      return;
+    }
+
+    // Check if our internal anchor was clicked and forward the click to the slotted interactive element
+    const isInternalAnchor = (el: HTMLElement): el is HTMLAnchorElement => el.tagName === 'A' && el.id === LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR;
+    const fromInternalAnchor = composedElements.some(isInternalAnchor);
+    if (fromInternalAnchor) {
+      const isCtrlClick = evt.ctrlKey || evt.metaKey;
+      const hasTarget = this.#interactiveElement?.hasAttribute('target');
+
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
+
+      // Workaround to temporarily set the target attribute to '_blank' if the user is holding the ctrl key and remove it after the click
+      const forceTempAnchorTarget = isCtrlClick && !hasTarget;
+      /* c8 ignore next 3 */
+      if (forceTempAnchorTarget) {
+        this.#interactiveElement?.setAttribute('target', '_blank');
+      }
+
+      this.#clickInteractiveElement();
+
+      /* c8 ignore next 3 */
+      if (forceTempAnchorTarget) {
+        this.#interactiveElement?.removeAttribute('target');
+      }
+      return;
+    }
+
+    // If the click did not originate from the interactive element, forward the click to it
+    const fromInteractiveElement = composedElements.some(el => el === this.#interactiveElement);
+    if (!fromInteractiveElement) {
+      evt.stopImmediatePropagation();
+      this.#clickInteractiveElement();
+      return;
+    }
+
+    this.#dispatchSelectEvent();
+  }
+}
+
+tryDefine(LIST_ITEM_CONSTANTS.elementName, ListItemComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-list-item': IListItemComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-list-item-select': CustomEvent<IListItemSelectEventData>;
+  }
 }

@@ -106,6 +106,7 @@ describe('List', () => {
       const ctx = await createFixture();
 
       ctx.list.setAttribute(LIST_CONSTANTS.attributes.SELECTED_VALUE, '2');
+      await settle(ctx.list);
       expect(ctx.list.selectedValue).toBe('2');
       expect(ctx.listItems[1].selected).toBe(true);
     });
@@ -116,6 +117,7 @@ describe('List', () => {
       expect(ctx.listItems[1].selected).toBe(true);
 
       ctx.list.selectedValue = null;
+      await settle(ctx.list);
       expect(ctx.listItems.filter(li => li.selected).length).toBe(0);
     });
 
@@ -125,6 +127,7 @@ describe('List', () => {
       expect(ctx.listItems[1].selected).toBe(false);
 
       ctx.listItems[1].value = 'some-value';
+      await settle(ctx.list);
       expect(ctx.listItems[1].selected).toBe(true);
     });
   });
@@ -162,6 +165,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('dense', '')).toBe(true);
 
       ctx.list.dense = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.DENSE)).toBe(false);
       expect(ctx.listItemsAttr('dense', '')).toBe(false);
@@ -174,6 +178,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('indented', '')).toBe(true);
 
       ctx.list.indented = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.INDENTED)).toBe(false);
       expect(ctx.listItemsAttr('indented', '')).toBe(false);
@@ -186,6 +191,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('two-line', '')).toBe(true);
 
       ctx.list.twoLine = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.TWO_LINE)).toBe(false);
       expect(ctx.listItemsAttr('two-line', '')).toBe(false);
@@ -198,6 +204,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('three-line', '')).toBe(true);
 
       ctx.list.threeLine = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.THREE_LINE)).toBe(false);
       expect(ctx.listItemsAttr('three-line', '')).toBe(false);
@@ -210,6 +217,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('wrap', '')).toBe(true);
 
       ctx.list.wrap = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_ITEM_CONSTANTS.attributes.WRAP)).toBe(false);
       expect(ctx.listItemsAttr('wrap', '')).toBe(false);
@@ -226,6 +234,7 @@ describe('List', () => {
       expect(ctx.listItemsAttr('multicolumn', '')).toBe(false);
 
       ctx.list.multicolumn = false;
+      await settle(ctx.list);
 
       expect(ctx.list.hasAttribute(LIST_CONSTANTS.attributes.MULTICOLUMN)).toBe(false);
       expect(innerElement.classList.contains(LIST_CONSTANTS.classes.MULTICOLUMN)).toBe(false);
@@ -235,6 +244,7 @@ describe('List', () => {
   describe('focus indicator', () => {
     it('should not have focus indicator when no interactive element is present', async () => {
       const screen = render(html`<forge-list-item>Test Item</forge-list-item>`);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
 
@@ -247,6 +257,7 @@ describe('List', () => {
           <button type="button">Test Item</button>
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
 
@@ -260,6 +271,7 @@ describe('List', () => {
           Test Item
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
 
@@ -273,6 +285,7 @@ describe('List', () => {
           Test Item
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
 
@@ -285,6 +298,7 @@ describe('List', () => {
           <a href="javascript: void(0);">Test Item</a>
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator');
 
@@ -295,6 +309,7 @@ describe('List', () => {
       const ctx = await createFixture();
 
       ctx.listItems[1].active = true;
+      await settle(ctx.list);
       expect(ctx.listItems[1].active).toBe(true);
       expect(ctx.listItems[1].hasAttribute(LIST_ITEM_CONSTANTS.attributes.ACTIVE)).toBe(true);
       expect(ctx.listItemActive(0)).toBe(false);
@@ -304,6 +319,7 @@ describe('List', () => {
 
     it('should not activate focus indicator when clicked', async () => {
       const screen = render(html`<forge-list-item><button>Test Item</button></forge-list-item>`);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const focusIndicator = el.shadowRoot!.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
       const button = el.querySelector('button') as HTMLButtonElement;
@@ -318,6 +334,7 @@ describe('List', () => {
   describe('state layer', () => {
     it('should not have a state layer when no interactive element is present', async () => {
       const screen = render(html`<forge-list-item>Test Item</forge-list-item>`);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
 
@@ -330,6 +347,7 @@ describe('List', () => {
           <button type="button">Test Item</button>
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
 
@@ -343,6 +361,7 @@ describe('List', () => {
           Test Item
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
 
@@ -356,6 +375,7 @@ describe('List', () => {
           Test Item
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
 
@@ -368,6 +388,7 @@ describe('List', () => {
           <a href="javascript: void(0);">Test Item</a>
         </forge-list-item>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list-item') as IListItemComponent;
       const stateLayer = el.shadowRoot!.querySelector('forge-state-layer');
 
@@ -382,6 +403,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItem = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItem.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
@@ -401,6 +423,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
@@ -420,6 +443,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer') as IStateLayerComponent;
@@ -450,6 +474,7 @@ describe('List', () => {
       const listItem = document.createElement('forge-list-item');
       listItem.value = '4';
       ctx.list.appendChild(listItem);
+      await settle(ctx.list);
 
       expect(listItem.dense).toBe(true);
       expect(listItem.twoLine).toBe(true);
@@ -467,6 +492,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
@@ -485,6 +511,7 @@ describe('List', () => {
           <forge-list-item>List Item</forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
@@ -524,6 +551,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const spy = vi.fn();
@@ -542,6 +570,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const internalAnchor = listItemEl.shadowRoot!.querySelector(`#${LIST_ITEM_CONSTANTS.ids.INTERNAL_ANCHOR}`) as HTMLAnchorElement;
@@ -561,6 +590,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const anchor = listItemEl.querySelector('a') as HTMLAnchorElement;
@@ -582,6 +612,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
@@ -608,6 +639,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
 
       await expect(el).toBeAccessible();
@@ -619,6 +651,7 @@ describe('List', () => {
           <forge-list-item>List Item</forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
 
@@ -648,6 +681,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const spy = vi.fn();
@@ -666,6 +700,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const rootEl = listItemEl.shadowRoot!.querySelector(LIST_ITEM_CONSTANTS.selectors.ROOT) as HTMLElement;
@@ -687,6 +722,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const selectSpy = vi.fn();
@@ -705,6 +741,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const selectSpy = vi.fn();
@@ -725,12 +762,14 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
 
       expect(listItemEl.noninteractive).toBe(true);
 
       el.noninteractive = false;
+      await settle(el);
 
       expect(listItemEl.noninteractive).toBe(false);
     });
@@ -743,6 +782,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const selectSpy = vi.fn();
@@ -761,6 +801,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const selectSpy = vi.fn();
@@ -782,6 +823,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const stateLayerEl = listItemEl.shadowRoot!.querySelector('forge-state-layer');
@@ -807,6 +849,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
@@ -827,6 +870,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
@@ -847,6 +891,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const labelEl = listItemEl.querySelector('label') as HTMLLabelElement;
@@ -872,6 +917,7 @@ describe('List', () => {
           </forge-list-item>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const listItemEl = el.querySelector('forge-list-item') as IListItemComponent;
       const checkbox = listItemEl.querySelector('input') as HTMLInputElement;
@@ -896,6 +942,7 @@ describe('List', () => {
           </forge-menu>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
       const menu = el.querySelector('#menu') as IMenuComponent;
       const slottedContent = el.querySelector('#slotted-content') as HTMLElement;
@@ -931,6 +978,7 @@ describe('List', () => {
           </forge-menu>
         </forge-list>
       `);
+      await settle(screen.container);
       const el = screen.container.querySelector('forge-list') as IListComponent;
 
       //List item with forge-ignore on menu and button
@@ -1011,6 +1059,8 @@ async function createFixture({
       <forge-list-item value="3"><button>Three</button></forge-list-item>
     </forge-list>
   `);
+  await settle(screen.container);
+  await settle(screen.container);
   const el = screen.container.querySelector('forge-list') as IListComponent;
   return new ListHarness(el);
 }
@@ -1056,4 +1106,11 @@ class ListHarness {
     const focusIndicator = getShadowElement(this.listItems[index], 'forge-focus-indicator') as IFocusIndicatorComponent;
     return focusIndicator?.active;
   }
+}
+
+async function settle(container: Element): Promise<void> {
+  const elements = Array.from(container.querySelectorAll<IListComponent | IListItemComponent>('forge-list, forge-list-item'));
+  do {
+    await Promise.all(elements.map(el => el.updateComplete));
+  } while (elements.some(el => el.isUpdatePending));
 }
