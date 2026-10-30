@@ -39,6 +39,7 @@ describe('Linear Progress', () => {
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
 
     el.determinate = true;
+    await el.updateComplete;
 
     const rootElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
@@ -52,8 +53,10 @@ describe('Linear Progress', () => {
   it('should reset buffer and progress when setting determinate to indeterminate', async () => {
     const screen = render(html`<forge-linear-progress determinate progress="0.5" buffer="0.75"></forge-linear-progress>`);
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+    await el.updateComplete;
 
     el.determinate = false;
+    await el.updateComplete;
 
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
     const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
@@ -68,6 +71,7 @@ describe('Linear Progress', () => {
   it('should set determinate via attribute', async () => {
     const screen = render(html`<forge-linear-progress determinate></forge-linear-progress>`);
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+    await el.updateComplete;
     const rootElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.ROOT);
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
 
@@ -83,6 +87,7 @@ describe('Linear Progress', () => {
 
     el.determinate = true;
     el.progress = 0.5;
+    await el.updateComplete;
 
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
 
@@ -98,6 +103,7 @@ describe('Linear Progress', () => {
 
     el.determinate = true;
     el.buffer = 0.75;
+    await el.updateComplete;
 
     const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
     const dotsElement = getShadowElement(el, '.dots');
@@ -111,6 +117,7 @@ describe('Linear Progress', () => {
   it('should set progress via attribute', async () => {
     const screen = render(html`<forge-linear-progress determinate progress="0.5"></forge-linear-progress>`);
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+    await el.updateComplete;
     const determinateProgressElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.PROGRESS);
 
     expect(el.progress).toBe(0.5);
@@ -122,6 +129,7 @@ describe('Linear Progress', () => {
   it('should set buffer via attribute', async () => {
     const screen = render(html`<forge-linear-progress determinate buffer="0.75"></forge-linear-progress>`);
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+    await el.updateComplete;
     const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
     const dotsElement = getShadowElement(el, '.dots');
 
@@ -144,6 +152,7 @@ describe('Linear Progress', () => {
     const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
 
     el.theme = 'secondary';
+    await el.updateComplete;
 
     expect(el.theme).toBe('secondary');
     expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME)).toBe('secondary');
@@ -155,5 +164,39 @@ describe('Linear Progress', () => {
 
     expect(el.theme).toBe('secondary');
     expect(el.getAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME)).toBe('secondary');
+  });
+
+  it('should reset progress to 0 when set outside of the 0 to 1 range', async () => {
+    const screen = render(html`<forge-linear-progress determinate progress="0.5"></forge-linear-progress>`);
+    const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+
+    el.progress = 2;
+    await el.updateComplete;
+
+    expect(el.progress).toBe(0);
+    expect(el.hasAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.PROGRESS)).toBe(false);
+    expect(el.getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('should reset buffer to 0 when set to a negative value', async () => {
+    const screen = render(html`<forge-linear-progress determinate></forge-linear-progress>`);
+    const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+
+    el.buffer = -1;
+    await el.updateComplete;
+
+    const trackElement = getShadowElement(el, LINEAR_PROGRESS_CONSTANTS.selectors.TRACK);
+    expect(el.buffer).toBe(0);
+    expect(trackElement.style.transform).toBe('scaleX(0)');
+  });
+
+  it('should not reflect default theme', async () => {
+    const screen = render(html`<forge-linear-progress theme="secondary"></forge-linear-progress>`);
+    const el = screen.container.querySelector('forge-linear-progress') as ILinearProgressComponent;
+
+    el.theme = 'primary';
+    await el.updateComplete;
+
+    expect(el.hasAttribute(LINEAR_PROGRESS_CONSTANTS.attributes.THEME)).toBe(false);
   });
 });

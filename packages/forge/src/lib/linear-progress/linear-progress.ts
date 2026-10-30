@@ -1,25 +1,25 @@
-import { attachShadowTemplate, coerceBoolean, coerceNumber, customElement, coreProperty } from '@tylertech/forge-core';
-import { BaseComponent } from '../core/base/base-component.js';
-import { IWithDefaultAria, WithDefaultAria } from '../core/mixins/internals/with-default-aria.js';
-import { IWithElementInternals, WithElementInternals } from '../core/mixins/internals/with-element-internals.js';
-import { LinearProgressAdapter } from './linear-progress-adapter.js';
-import { LinearProgressTheme, LINEAR_PROGRESS_CONSTANTS } from './linear-progress-constants.js';
-import { LinearProgressCore } from './linear-progress-core.js';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { setDefaultAria } from '../core/utils/a11y-utils.js';
+import { removeDefaultAttribute } from '../core/utils/lit-utils.js';
+import { LINEAR_PROGRESS_CONSTANTS, LinearProgressTheme } from './linear-progress-constants.js';
 
-import template from './linear-progress.html';
 import styles from './linear-progress.scss';
 
-export interface ILinearProgressComponent extends IWithElementInternals, IWithDefaultAria {
+const DEFAULT_THEME: LinearProgressTheme = 'primary';
+const DEFAULT_BUFFER = 1;
+const PERCENT = 100;
+
+/** @deprecated - This will be removed in the future. Please switch to using LinearProgressComponent. */
+export interface ILinearProgressComponent extends BaseLitElement {
   determinate: boolean;
   progress: number;
   buffer: number;
   theme: LinearProgressTheme;
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-linear-progress': ILinearProgressComponent;
-  }
 }
 
 /**
@@ -31,16 +31,6 @@ declare global {
  * Progress indicators inform users about the status of ongoing processes.
  * - Determinate indicators display how long a process will take.
  * - Indeterminate indicators express an unspecified amount of wait time.
- *
- * @property {boolean} [determinate=false] - Controls the determinate state.
- * @property {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
- * @property {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
- * @property {string} [theme=primary] - Sets the theme.
- *
- * @attribute {boolean} [determinate=false] - Controls the determinate state.
- * @attribute {number} [progress=0] - Controls the progress while in a determinate state. Accepts values from `0` to `1`.
- * @attribute {number} [buffer=1] - Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
- * @attribute {string} [theme=primary] - Sets the theme.
  *
  * @cssproperty --forge-linear-progress-height - The height of the element.
  * @cssproperty --forge-linear-progress-track-color - The background color of the indicator.
@@ -55,52 +45,115 @@ declare global {
  *
  * @csspart progressbar - Styles the progress bar container element
  */
-@customElement({
-  name: LINEAR_PROGRESS_CONSTANTS.elementName
-})
-export class LinearProgressComponent extends WithElementInternals(WithDefaultAria(BaseComponent)) implements ILinearProgressComponent {
-  public static get observedAttributes(): string[] {
-    return Object.values(LINEAR_PROGRESS_CONSTANTS.observedAttributes);
+export class LinearProgressComponent extends BaseLitElement implements ILinearProgressComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = LINEAR_PROGRESS_CONSTANTS.elementName;
+
+  #internals: ElementInternals;
+  #progress = 0;
+  #buffer = DEFAULT_BUFFER;
+
+  /**
+   * Controls the determinate state.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean, reflect: true })
+  public determinate = false;
+
+  /**
+   * Controls the progress while in a determinate state. Accepts values from `0` to `1`.
+   * @default 0
+   * @attribute
+   */
+  @property({
+    type: Number,
+    reflect: true,
+    converter: { toAttribute: (value: number) => (value ? `${value}` : null) }
+  })
+  public set progress(value: number) {
+    this.#progress = value == null || value < 0 || value > 1 || isNaN(value) ? 0 : value;
+  }
+  public get progress(): number {
+    return this.#progress;
   }
 
-  private _core: LinearProgressCore;
+  /**
+   * Controls the buffer progress while in a determinate state. Accepts values from `0` to `1`.
+   * @default 1
+   * @attribute
+   */
+  @property({
+    type: Number,
+    reflect: true,
+    converter: { toAttribute: (value: number) => (value === DEFAULT_BUFFER ? null : `${value}`) }
+  })
+  public set buffer(value: number) {
+    this.#buffer = value == null || value < 0 || isNaN(value) ? 0 : value;
+  }
+  public get buffer(): number {
+    return this.#buffer;
+  }
+
+  /**
+   * Sets the theme.
+   * @default 'primary'
+   * @attribute
+   */
+  @property({
+    reflect: true,
+    converter: { toAttribute: (value: LinearProgressTheme) => removeDefaultAttribute(value, DEFAULT_THEME) }
+  })
+  public theme: LinearProgressTheme = DEFAULT_THEME;
 
   constructor() {
     super();
-    attachShadowTemplate(this, template, styles);
-    this._core = new LinearProgressCore(new LinearProgressAdapter(this));
+    this.#internals = this.attachInternals();
   }
 
-  public connectedCallback(): void {
-    this._core.initialize();
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    setDefaultAria(this, this.#internals, {
+      role: 'progressbar',
+      ariaValueMin: '0',
+      ariaValueMax: '1'
+    });
   }
 
-  public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    switch (name) {
-      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.DETERMINATE:
-        this.determinate = coerceBoolean(newValue);
-        break;
-      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.PROGRESS:
-        this.progress = coerceNumber(newValue);
-        break;
-      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.BUFFER:
-        this.buffer = coerceNumber(newValue);
-        break;
-      case LINEAR_PROGRESS_CONSTANTS.observedAttributes.THEME:
-        this.theme = newValue as LinearProgressTheme;
-        break;
+  public override willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('determinate') || changedProperties.has('progress') || !this.hasUpdated) {
+      setDefaultAria(this, this.#internals, { ariaValueNow: this.determinate ? `${this.progress}` : null });
     }
   }
 
-  @coreProperty()
-  declare public determinate: boolean;
+  public render(): TemplateResult {
+    const classes = {
+      'forge-linear-progress': true,
+      [LINEAR_PROGRESS_CONSTANTS.classes.INDETERMINATE]: !this.determinate
+    };
+    const trackStyles = { transform: `scaleX(${(this.determinate ? this.buffer : DEFAULT_BUFFER) * PERCENT}%)` };
+    const progressStyles = { transform: this.determinate ? `scaleX(${this.progress * PERCENT}%)` : '' };
+    return html`
+      <div class=${classMap(classes)} part="progressbar">
+        <div class="dots"></div>
+        <div class="track" style=${styleMap(trackStyles)}></div>
+        <div class="bar primary-bar" style=${styleMap(progressStyles)}>
+          <div class="bar-inner"></div>
+        </div>
+        <div class="bar secondary-bar">
+          <div class="bar-inner"></div>
+        </div>
+      </div>
+    `;
+  }
+}
 
-  @coreProperty()
-  declare public progress: number;
+tryDefine(LINEAR_PROGRESS_CONSTANTS.elementName, LinearProgressComponent);
 
-  @coreProperty()
-  declare public buffer: number;
-
-  @coreProperty()
-  declare public theme: LinearProgressTheme;
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-linear-progress': ILinearProgressComponent;
+  }
 }
