@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../utils';
-@use '../../border';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/border';
 @use '../button/tokens' as button;
 
 $tokens: (

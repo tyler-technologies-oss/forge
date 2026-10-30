@@ -1,0 +1,50 @@
+.align {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.container {
+  forge-scaffold.outer {
+    --forge-scaffold-height: 750px;
+    --forge-scaffold-width: 750px;
+  }
+}
+
+.slot-container {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed var(--forge-theme-outline);
+  transition:
+    border-color 200ms linear,
+    background-color 200ms linear;
+
+  &:hover {
+    cursor: pointer;
+    border-color: deeppink;
+    background-color: rgba(255, 20, 147, 0.12);
+  }
+}
+
+.inner {
+  --forge-scaffold-height: 100%;
+  --forge-scaffold-width: 100%;
+
+  background-color: var(--forge-theme-surface);
+
+  .slot-container {
+    &:hover {
+      border-color: orange;
+      background-color: rgba(255, 165, 0, 0.12);
+    }
+  }
+}
+
+.scrollable {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 200vh;
+}

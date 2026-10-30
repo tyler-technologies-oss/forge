@@ -1,0 +1,34 @@
+<h4>Chip field in reactive form</h4>
+<form [formGroup]="chipFieldForm" (ngSubmit)="onSubmit()" (keydown.enter)="$any($event).target.id !== 'simple-form-chip-field-input'">
+  <forge-chip-field
+    (forge-chip-field-member-added)="addMember($event)"
+    (forge-chip-field-member-removed)="deleteMember($event)"
+    [invalid]="tokensFormArray.invalid"
+    required>
+    <label slot="label" for="simple-form-chip-field-input">Tokens</label>
+    @for (control of tokensFormArray.controls; track control) {
+      <forge-chip
+        slot="member"
+        type="field"
+        dense
+        (forge-chip-delete)="deleteMember($event)"
+        [value]="control.value"
+        [invalid]="tokensFormArray.invalid"
+        [disabled]="tokensFormArray.disabled">
+        {{ control.value }}
+      </forge-chip>
+    }
+    <input type="text" id="simple-form-chip-field-input" [disabled]="tokensFormArray.disabled" />
+    @if (!tokensFormArray.invalid) {
+      <div slot="helper-text">Tokens for stuff</div>
+    }
+    @if (tokensFormArray.invalid) {
+      <div slot="helper-text">At least 2 tokens are required</div>
+    }
+  </forge-chip-field>
+  <forge-button variant="raised" type="submit" [disabled]="chipFieldForm.invalid">Submit</forge-button>
+</form>
+<div style="margin-top: 12px">
+  {{ chipFieldForm.value | json }}
+</div>
+<forge-checkbox (click)="disableForm($event)">Form disabled</forge-checkbox>

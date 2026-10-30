@@ -1,0 +1,128 @@
+<app-demo-card headerText="Date picker">
+  <div class="layout-grid">
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Basic</h2>
+      <h3 class="forge-typography--subheading2">This is a basic date picker that has its form model bound to the &lt;input&gt; element.</h3>
+      <forge-date-picker [(ngModel)]="basicDate">
+        <forge-text-field>
+          <label for="basic-date">Date</label>
+          <input type="text" id="basic-date" />
+        </forge-text-field>
+      </forge-date-picker>
+      <forge-label-value [empty]="!basicDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ basicDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+
+    <forge-divider></forge-divider>
+
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Common</h2>
+      <h3 class="forge-typography--subheading2">
+        This example is a common configuration for using the date picker with a placeholder, silent mask, and ISO date format.
+      </h3>
+      <forge-date-picker [(ngModel)]="commonDate" masked value-mode="iso-string">
+        <forge-text-field>
+          <label for="common-date">Date</label>
+          <input type="text" id="common-date" placeholder="mm/dd/yyyy" />
+        </forge-text-field>
+      </forge-date-picker>
+      <forge-label-value [empty]="!commonDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ commonDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+
+    <forge-divider></forge-divider>
+
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Masked</h2>
+      <h3 class="forge-typography--subheading2">
+        This is a date picker that is using an input mask, as well as binding to the value as an ISO-8601 date string.
+      </h3>
+      <forge-date-picker [(ngModel)]="isoDate" value-mode="iso-string" masked show-mask-format>
+        <forge-text-field>
+          <input type="text" id="iso-date" />
+          <label for="iso-date">Date</label>
+        </forge-text-field>
+      </forge-date-picker>
+      <forge-label-value [empty]="!isoDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ isoDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+
+    <forge-divider></forge-divider>
+
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Custom parse/format callbacks</h2>
+      <h3 class="forge-typography--subheading2">
+        This is an advanced usage example that utilizes a custom mask format, parse callback, and format callback methods. It keeps the backing model value as a
+        JavaScript <code>Date</code> object.
+      </h3>
+      <forge-date-picker
+        [(ngModel)]="customDate"
+        value-mode="date"
+        masked
+        show-mask-format
+        mask-format="YYYY-MM-DD"
+        [parseCallback]="parseCb"
+        [formatCallback]="formatCb">
+        <forge-text-field>
+          <input type="text" id="custom-date" />
+          <label for="custom-date">Date</label>
+        </forge-text-field>
+      </forge-date-picker>
+      <forge-label-value [empty]="!customDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ customDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+
+    <forge-divider></forge-divider>
+
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Custom disable day callback</h2>
+      <h3 class="forge-typography--subheading2">
+        This is a callback that allows a developer to disable dates through a callback they provide. This will run on every day in the selected month.
+      </h3>
+      <forge-date-picker [(ngModel)]="disableDayCallbackDate" value-mode="date" [disableDayCallback]="disableDayCallback">
+        <forge-text-field>
+          <input type="text" id="custom-date" />
+          <label for="custom-date">Date</label>
+        </forge-text-field>
+      </forge-date-picker>
+      <forge-label-value [empty]="!disableDayCallbackDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ disableDayCallbackDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+
+    <div class="layout-grid">
+      <h2 class="forge-typography--subheading4">Disable Days of week</h2>
+      <h3 class="forge-typography--subheading2">This is a callback that allows a developer to disable a particular set of days (Sundays, Saturdays)</h3>
+      <div class="disabled-days-control">
+        <forge-date-picker [(ngModel)]="disableDaysOfWeekDate" value-mode="date" [disabledDaysOfWeek]="disabledDaysOfWeek">
+          <forge-text-field>
+            <input type="text" id="custom-date" />
+            <label for="custom-date">Date</label>
+          </forge-text-field>
+        </forge-date-picker>
+        <forge-select multiple label="Disable Days Of Week" value="object" style="min-width: 256px" (change)="change($event.detail)">
+          <forge-option value="0">Sundays</forge-option>
+          <forge-option value="1">Mondays</forge-option>
+          <forge-option value="2">Tuesdays</forge-option>
+          <forge-option value="3">Wednesdays</forge-option>
+          <forge-option value="4">Thursdays</forge-option>
+          <forge-option value="5">Fridays</forge-option>
+          <forge-option value="6">Saturdays</forge-option>
+        </forge-select>
+      </div>
+      <forge-label-value [empty]="!disableDayCallbackDate">
+        <span slot="label">Value</span>
+        <span slot="value">{{ disableDayCallbackDate || 'n/a' }}</span>
+      </forge-label-value>
+    </div>
+  </div>
+</app-demo-card>

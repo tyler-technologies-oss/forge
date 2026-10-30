@@ -1,7 +1,8 @@
 import { consume } from '@lit/context';
+import { tryDefine } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
@@ -29,9 +30,13 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
  * @event {CustomEvent<void>} forge-tree-item-open - Dispatched when the user opens a tree item.
  * @event {CustomEvent<void>} forge-tree-item-close - Dispatched when the user closes a tree item.
  */
-@customElement('forge-tree-item')
 export class TreeItemComponent extends LitElement {
   public static styles = unsafeCSS(styles);
+
+  static {
+    // Oxc drops symbol keys on decorated class fields, so this can't use the `@property` decorator
+    this.createProperty(indeterminate, { attribute: false });
+  }
 
   /**
    * The value of the tree item.
@@ -81,7 +86,7 @@ export class TreeItemComponent extends LitElement {
    * @ignore
    * @default false
    */
-  @property({ attribute: false }) public [indeterminate] = false;
+  public [indeterminate] = false;
 
   /**
    * The depth of the tree item within the tree's hierarchy.
@@ -377,6 +382,8 @@ export class TreeItemComponent extends LitElement {
     this.dispatchEvent(new CustomEvent('forge-tree-item-update', { bubbles: true, detail: { reason } }));
   }
 }
+
+tryDefine('forge-tree-item', TreeItemComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

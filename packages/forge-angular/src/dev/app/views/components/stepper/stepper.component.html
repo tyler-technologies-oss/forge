@@ -1,0 +1,53 @@
+<app-demo-card headerText="Stepper">
+  <forge-stepper
+    [steps]="steps"
+    [selectedIndex]="selectedStepIndex"
+    [linear]="linear"
+    [alternative]="alternative"
+    [layoutMode]="layoutMode"
+    [layoutAlign]="layoutAlign"
+    [vertical]="vertical"
+    (forge-step-selected)="onStepChanged($any($event))" />
+
+  <h6>Using NgFor and ngIf</h6>
+  <forge-stepper
+    [alternative]="alternative"
+    [linear]="linear"
+    [layoutMode]="layoutMode"
+    [layoutAlign]="layoutAlign"
+    [selectedIndex]="selectedStepIndex + (toggleStep ? 1 : 0)">
+    @if (toggleStep) {
+      <forge-step>Toggle Step</forge-step>
+    }
+    @for (step of steps; track step) {
+      <forge-step>
+        {{ step.label }}
+        <span slot="optional">{{ step?.optionalLabel }}</span>
+      </forge-step>
+    }
+  </forge-stepper>
+
+  <div>
+    <forge-checkbox [(ngModel)]="linear">Linear</forge-checkbox>
+  </div>
+  <div>
+    <forge-checkbox [(ngModel)]="alternative">Alternative</forge-checkbox>
+  </div>
+  <div>
+    <forge-checkbox [(ngModel)]="vertical">Vertical</forge-checkbox>
+  </div>
+  <forge-select id="stepperLayoutModeSelect" label="Layout Mode" [(ngModel)]="layoutMode">
+    <forge-option value="clustered">Clustered</forge-option>
+    <forge-option value="fixed">Fixed</forge-option>
+  </forge-select>
+  <forge-select id="stepperLayoutAlignSelect" label="Layout Align" [(ngModel)]="layoutAlign">
+    <forge-option value="left">Left</forge-option>
+    <forge-option value="center">Center</forge-option>
+    <forge-option value="right">Right</forge-option>
+  </forge-select>
+  <div>
+    <forge-button (click)="addStep()">Add Step</forge-button>
+    <forge-button (click)="removeStep()">Remove Step</forge-button>
+    <forge-button (click)="toggleStep = !toggleStep">Toggle Step</forge-button>
+  </div>
+</app-demo-card>

@@ -31,6 +31,8 @@ declare global {
  *
  * @summary Steppers guide users through multi-step processes by breaking them into logical steps.
  *
+ * @deprecated This component will be removed in a future release. Use `<forge-process-stepper>` instead.
+ *
  * @dependency forge-step
  *
  * @event {CustomEvent<number>} forge-step-select - Emits the index when a step is selected.

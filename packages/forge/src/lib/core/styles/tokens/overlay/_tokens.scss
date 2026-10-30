@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../utils';
-@use '../../elevation';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/elevation';
 
 $tokens: (
   position: utils.module-val(overlay, position, fixed),

@@ -46,20 +46,30 @@ jobs:
           title: "chore: release (${{ github.ref_name }})"
           commit: "chore: release (${{ github.ref_name }})"
           publish: pnpm run release
-          version: pnpm changeset version
+          version: pnpm run version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
 
+      # Changesets tags each package it publishes before pushing the tags, so a local forge tag at HEAD
+      # means forge reached npm even if a later step (like the tag push) failed the release step.
+      - name: Detect Forge Release
+        id: forge-release
+        if: ${{ !cancelled() }}
+        run: |
+          if git tag --points-at HEAD | grep -q '^@tylertech/forge@'; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure AWS Credentials
-        if: steps.changesets.outputs.published == 'true'
+        if: ${{ !cancelled() && steps.forge-release.outputs.released == 'true' }}
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy CDN Assets
-        if: steps.changesets.outputs.published == 'true'
+        if: ${{ !cancelled() && steps.forge-release.outputs.released == 'true' }}
         working-directory: packages/forge
         run: |
           aws s3 sync cdn/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/ \

@@ -1,0 +1,18 @@
+<!--
+  @block Stepper — Vertical
+  @type component
+  @description Vertical usage example for the forge-stepper component.
+  @tags stepper, vertical, storybook, component-example
+-->
+<forge-stepper vertical>
+  <forge-step vertical index="0" clustered first selected>Step 1</forge-step>
+  <forge-step vertical index="1" clustered>
+    Step 2
+    <span slot="optional">Optional</span>
+  </forge-step>
+  <forge-step vertical expandable index="2" clustered>
+    <div slot="expansion-content">Expansion Content</div>
+    Step 3
+  </forge-step>
+  <forge-step vertical index="3" clustered last>Step 4</forge-step>
+</forge-stepper>

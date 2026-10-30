@@ -1,0 +1,55 @@
+<app-demo-card headerText="Text Field">
+  <div>
+    <forge-text-field>
+      <input type="text" id="input-text-01" [(ngModel)]="defaultTextFieldValue" />
+      <label for="input-text-01">Default</label>
+    </forge-text-field>
+    <br />
+
+    <forge-text-field density="extra-large">
+      <label for="input-text-02">Roomy</label>
+      <input type="text" id="input-text-02" [(ngModel)]="roomyTextFieldValue" />
+    </forge-text-field>
+
+    <br />
+    <br />
+
+    <forge-text-field dense>
+      <input type="text" id="input-text-02" [(ngModel)]="denseTextFieldValue" />
+    </forge-text-field>
+
+    <br />
+    <br />
+
+    <forge-text-field>
+      <label for="input-textarea-01">Textarea</label>
+      <textarea id="input-textarea-01" [(ngModel)]="textAreaValue"></textarea>
+    </forge-text-field>
+
+    <br />
+    <br />
+
+    <forge-text-field>
+      <forge-icon slot="start" name="event"></forge-icon>
+      <label for="input-text-05">Leading Icon</label>
+      <input type="text" id="input-text-05" />
+    </forge-text-field>
+
+    <br />
+    <br />
+
+    <forge-text-field>
+      <label for="input-text-06">Trailing Icon</label>
+      <input type="text" id="input-text-06" />
+      <forge-icon slot="end" name="event"></forge-icon>
+    </forge-text-field>
+
+    <br />
+    <br />
+
+    <forge-text-field float-label>
+      <label for="input-text-07">First Name</label>
+      <input type="text" id="input-text-07" />
+    </forge-text-field>
+  </div>
+</app-demo-card>

@@ -4,11 +4,11 @@ import { TagItem } from '../utils.js';
 
 import styles from './CustomArgTypes.module.scss';
 
-export function UsageLink({ text, href }: { text: string; href: string }) {
+export function UsageLink({ text, href, external = false }: { text: string; href: string; external?: boolean }) {
   return (
     <p>
       <i>
-        Learn more about <a href={`./${href}`}>{text}</a>.
+        Learn more about <a href={external ? href : `./${href}`}>{text}</a>.
       </i>
     </p>
   );

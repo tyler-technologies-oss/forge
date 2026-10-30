@@ -1,0 +1,21 @@
+forge-expansion-panel {
+  forge-list {
+    margin-left: 56px;
+  }
+
+  forge-open-icon {
+    line-height: 0.5;
+  }
+}
+
+forge-list-item {
+  cursor: pointer;
+}
+
+:host {
+  overflow: hidden;
+}
+
+.dialog-sidenav {
+  width: 256px;
+}

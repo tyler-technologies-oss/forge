@@ -651,6 +651,24 @@ describe('Chip Field', () => {
       expect(focusSpy).toHaveBeenCalled();
     });
   });
+
+  describe('initialization with pre-slotted members', () => {
+    it('should apply has-members class when chips are pre-slotted', async () => {
+      const screen = render(html`
+        <forge-chip-field>
+          <label for="cf-input">Label</label>
+          <input type="text" id="cf-input" />
+          <forge-chip slot="member" value="One">One</forge-chip>
+          <forge-chip slot="member" value="Two">Two</forge-chip>
+          <forge-chip slot="member" value="Three">Three</forge-chip>
+        </forge-chip-field>
+      `);
+      const chipField = screen.container.querySelector('forge-chip-field') as IChipFieldComponent;
+      const containerElement = getShadowElement(chipField, CHIP_FIELD_CONSTANTS.selectors.CONTAINER);
+
+      expect(containerElement.classList.contains(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS)).toBe(true);
+    });
+  });
 });
 
 class ChipFieldHarness {

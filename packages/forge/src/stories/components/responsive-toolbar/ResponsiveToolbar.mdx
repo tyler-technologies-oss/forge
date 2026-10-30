@@ -1,0 +1,37 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as ResponsiveToolbarStories from './ResponsiveToolbar.stories';
+
+<Meta of={ResponsiveToolbarStories} />
+
+<Title />
+
+The Responsive Toolbar dynamically adjusts your toolbar content to prevent overlap on smaller screens. It leverages a `ResizeObserver` to detect
+when the title content collides with the end slot content. When an overlap is detected, the toolbar automatically hides the `end-large` slot
+and displays the `end-small` slot instead.
+
+This approach eliminates the need for manually configuring breakpoints or container queries, ensuring a seamless adaptive experience without extra
+calculations. Simply provide your `end-large` slot content and your `end-small` slot content, and the component handles the rest.
+
+<Canvas of={ResponsiveToolbarStories.Demo} />
+
+> **Note:** The responsive toolbar will not automatically create a mobile friendly version of your end slot content. You
+> should be providing markup for both the `end-large` slot and the `end-small` slot, this lets you fine tune
+> the user experience based on available space.
+
+### Why a responsive toolbar?
+
+The toolbar is a common source of layout issues in applications, often overlooked when adapting to different screen sizes. Managing multiple instances
+of the primitive `<forge-toolbar>` across a page can make breakpoint handling complex and inconsistent.
+
+The `<forge-responsive-toolbar>` solves this by automatically adjusting to various container sizes, preventing hidden content, overlapping text, and
+broken layouts. It ensures a clean, readable UI without the need for manual breakpoint management.
+
+### When to use a responsive toolbar
+
+If you know that your application could potentially be used on lower resolutions or mobile devices, and you're currently using toolbars with actions
+in the end slot, then you should use a responsive toolbar instead.
+
+## API
+
+<CustomArgTypes />

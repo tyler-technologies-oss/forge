@@ -1,0 +1,9 @@
+<app-demo-card headerText="List">
+  <forge-list>
+    @for (item of items; track item) {
+      <forge-list-item>
+        <button>{{ item.label }}</button>
+      </forge-list-item>
+    }
+  </forge-list>
+</app-demo-card>

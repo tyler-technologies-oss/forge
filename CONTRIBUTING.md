@@ -13,6 +13,9 @@ Tyler Forge is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspa
 |---------|-------------|
 | [@tylertech/forge](./packages/forge) | Web components library |
 | [@tylertech/forge-core](./packages/forge-core) | Core utilities and base classes |
+| [@tylertech/forge-react](./packages/forge-react) | React adapter library |
+| [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
+| [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
 
 ## Requirements
 
@@ -33,6 +36,8 @@ pnpm dev:forge
 | Command | Description |
 |---------|-------------|
 | `pnpm dev:forge` | Start dev server |
+| `pnpm dev:forge-react` | Start React adapter dev server |
+| `pnpm dev:forge-angular` | Start Angular adapter dev server |
 | `pnpm storybook:forge` | Start Storybook |
 | `pnpm build` | Build all packages |
 | `pnpm test` | Run tests |
@@ -44,6 +49,9 @@ pnpm dev:forge
 ```bash
 pnpm run --filter @tylertech/forge <command>
 pnpm run --filter @tylertech/forge-core <command>
+pnpm run --filter @tylertech/forge-react <command>
+pnpm run --filter @tylertech/forge-angular <command>
+pnpm run --filter @tylertech/forge-schematics <command>
 ```
 
 **Running tests for a specific path (relative to the package root):**
@@ -81,12 +89,18 @@ pnpm changeset
 ```
 
 Follow the prompts to:
-1. Select affected packages
-2. Choose the semver bump type:
+1. Choose the conventional commit type (`feat`, `fix`, `perf`, `refactor`, `docs`, `chore`)
+2. Enter the module the change affects (such as `button`), or leave it blank
+3. Select affected packages
+4. Choose the semver bump type (a suggestion is pre-selected based on the change type):
    - `patch` - Bug fixes, minor tweaks
    - `minor` - New features, non-breaking changes
    - `major` - Breaking changes
-3. Write a description of your change
+5. Describe the change
+
+The prompts combine your answers into the changeset description, for example `feat(button): add support for invoker commands api`. Any other `pnpm changeset <command>` (such as `pnpm changeset status`) runs the standard Changesets CLI.
+
+The semver bump only decides the version number. Changelog entries are grouped by the conventional commit type in the description (Features, Bug Fixes, Documentation, etc.). A `major` bump, or a `!` written by hand (such as `feat!:`), is listed under Breaking Changes. If a changeset has no type prefix, the type of the commit that adds it is used instead.
 
 **Release process:**
 

@@ -1,0 +1,8 @@
+@use '../tokens/theme-light' as light;
+@use '../tokens/theme-dark' as dark;
+
+// Forge default (light) theme
+$tokens: light.$tokens;
+
+// Forge dark theme
+$tokens-dark: dark.$tokens;

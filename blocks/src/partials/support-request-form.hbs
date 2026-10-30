@@ -1,0 +1,59 @@
+<forge-card class="max-w-2xl p-0">
+  <div class="p-medium">
+    <div class="flex items-center gap-small mb-medium">
+      <forge-icon name="ticket" class="text-primary"></forge-icon>
+      <h2 class="text-heading3">New Support Request</h2>
+    </div>
+    <p class="text-body2 text-medium mb-large">Submit a new support ticket and our team will respond within 24 hours.</p>
+
+    <form class="flex flex-col gap-medium">
+      <forge-text-field label-position="block-start">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" />
+      </forge-text-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-medium">
+        <forge-select label="Category" label-position="block-start">
+          <forge-option value="">Select a category</forge-option>
+          <forge-option value="technical">Technical Issue</forge-option>
+          <forge-option value="billing">Billing Question</forge-option>
+          <forge-option value="account">Account Access</forge-option>
+          <forge-option value="feature">Feature Request</forge-option>
+          <forge-option value="other">Other</forge-option>
+        </forge-select>
+
+        <forge-select label="Priority" label-position="block-start">
+          <forge-option value="low">Low</forge-option>
+          <forge-option value="medium" selected>Medium</forge-option>
+          <forge-option value="high">High</forge-option>
+          <forge-option value="urgent">Urgent</forge-option>
+        </forge-select>
+      </div>
+
+      <forge-text-field label-position="block-start">
+        <label for="description">Description</label>
+        <textarea id="description" rows="5"></textarea>
+      </forge-text-field>
+
+      <div>
+        <label class="text-label1 block mb-xsmall">Attachment (optional)</label>
+        <forge-file-picker>
+          <forge-button variant="outlined">
+            <forge-icon slot="start" name="attach_file"></forge-icon>
+            Select file
+          </forge-button>
+        </forge-file-picker>
+      </div>
+
+      <forge-checkbox>Send me email updates about this request</forge-checkbox>
+
+      <div class="flex gap-small justify-end mt-medium">
+        <forge-button type="button">Cancel</forge-button>
+        <forge-button variant="filled" type="submit">
+          <forge-icon slot="start" name="send"></forge-icon>
+          Submit Request
+        </forge-button>
+      </div>
+    </form>
+  </div>
+</forge-card>

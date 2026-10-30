@@ -1,7 +1,7 @@
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { toggleState } from '../core/utils/utils.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 
 import styles from './card.scss';
@@ -45,7 +45,6 @@ export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
  * @cssclass forge-card - The card container element _(required)_.
  * @cssclass forge-card--raised - The card container element when raised _(required)_.
  */
-@customElement(CARD_TAG_NAME)
 export class CardComponent extends BaseLitElement implements ICardComponent {
   public static styles = unsafeCSS(styles);
 
@@ -72,3 +71,5 @@ export class CardComponent extends BaseLitElement implements ICardComponent {
     return html`<div class="forge-card" part="root"><slot></slot></div>`;
   }
 }
+
+tryDefine(CARD_TAG_NAME, CardComponent);

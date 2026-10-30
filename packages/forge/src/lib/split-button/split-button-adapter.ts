@@ -1,4 +1,4 @@
-import { ButtonTheme, BUTTON_CONSTANTS, IButtonComponent } from '../button/index.js';
+import { ButtonTheme, BUTTON_CONSTANTS, type ButtonComponent } from '../button/index.js';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
 import { ISplitButtonComponent } from './split-button.js';
 import { SplitButtonVariant } from './split-button-constants.js';
@@ -33,9 +33,9 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
             }
             return node.querySelector(BUTTON_CONSTANTS.elementName);
           })
-          .filter(node => !!node) as IButtonComponent[];
+          .filter(node => !!node) as ButtonComponent[];
         return buttons.concat(addedButtonNodes);
-      }, [] as IButtonComponent[]);
+      }, [] as ButtonComponent[]);
 
       if (!addedButtons.length) {
         return;
@@ -101,7 +101,7 @@ export class SplitButtonAdapter extends BaseAdapter<ISplitButtonComponent> imple
     }
   }
 
-  private _getButtons(): NodeListOf<IButtonComponent> {
+  private _getButtons(): NodeListOf<ButtonComponent> {
     return this._component.querySelectorAll(BUTTON_CONSTANTS.elementName);
   }
 }

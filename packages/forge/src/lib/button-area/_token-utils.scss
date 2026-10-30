@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/button-area/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: button-area;
 $_tokens: tokens.$tokens;

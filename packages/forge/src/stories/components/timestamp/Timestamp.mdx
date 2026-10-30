@@ -1,0 +1,65 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as TimestampStories from './Timestamp.stories';
+import { UsageLink } from '../../blocks/Shared';
+
+<Meta of={TimestampStories} />
+
+<Title />
+
+Timestamps display formatted, localized date and time values. They can be used to represent dates,
+times, timezone offsets, and durations.
+
+<Canvas of={TimestampStories.Demo} />
+
+## Datetime value
+
+The timestamp component's `datetime` property acceepts a `Date` object, date-convertible string, or
+any string value accepted by the HTML `<time>` element's `datetime` attribute. The value is used for
+accessibility and formatted for display within the timestamp.
+
+> **Note:** Dateless time, timezone offset, and duration values are accepted and used as-is for
+> accessibility purposes, but only full dates will be automatically formatted. If a value cannot be
+> converted to a date it will display as-is. Custom content may be provided in the timestamp's
+> default slot to bypass this limitation.
+>
+> [See here for a list of valid datetime string
+> values](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time#valid_datetime_values)
+
+## Formatting
+
+The `format` property accepts any valid CLDR date/time format string to customize the display of the
+timestamp.
+
+<UsageLink text="CLDR date/time symbols" href="https://cldr.unicode.org/translation/date-time/date-time-symbols" />
+
+```html
+<!-- Hour and minute -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="HH:mm"></forge-timestamp>
+
+<!-- Day and month -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="MMMM dd"></forge-timestamp>
+
+<!-- With additional text -->
+<forge-timestamp datetime="2024-03-15T14:30:00" format="'Today' • MMMM dd, yyyy"></forge-timestamp>
+```
+
+## Separators
+
+The `separator` property places a dot before or after a timestamp to visually separate it from other
+inline content.
+
+Valid values are `none`, `before`, and `after`. The default value is `none`.
+
+<Canvas of={TimestampStories.WithSeparators} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+The timestamp component uses the HTML `<time>` element, which provides semantic meaning and
+accessibility for date and time content. Ensure that the `datetime` property is set correctly to
+represent the underlying date and time value. Screen readers and other assistive technologies will
+use this value to convey the timestamp's information accurately.

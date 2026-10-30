@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "update-8-0-0": {
+      "version": "8.0.0",
+      "description": "Flags usages of DynamicComponentService.create() that rely on APIs removed in @tylertech/forge-angular v8: the ComponentFactory overload and the moduleRef argument.",
+      "factory": "./update-8-0-0/index"
+    }
+  }
+}

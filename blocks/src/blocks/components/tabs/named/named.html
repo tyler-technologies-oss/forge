@@ -1,0 +1,27 @@
+<!--
+  @block Tabs — Named
+  @type component
+  @description Named usage example for the forge-tabs component, selecting the active tab by a stable name instead of index.
+  @tags tabs, named, storybook, component-example
+-->
+<forge-tab-bar data-aria-label="Demo tabs" active-tab-name="notifications">
+  <forge-tab id="named-tab-general" name="general">
+    General
+  </forge-tab>
+  <forge-tab id="named-tab-notifications" name="notifications">
+    Notifications
+  </forge-tab>
+  <forge-tab id="named-tab-security" name="security">
+    Security
+  </forge-tab>
+</forge-tab-bar>
+
+<forge-tab-panel for="named-tab-general">
+  <div class="p-medium">General content</div>
+</forge-tab-panel>
+<forge-tab-panel for="named-tab-notifications">
+  <div class="p-medium">Notifications content</div>
+</forge-tab-panel>
+<forge-tab-panel for="named-tab-security">
+  <div class="p-medium">Security content</div>
+</forge-tab-panel>

@@ -1,0 +1,13 @@
+:host {
+  display: none;
+}
+
+:host(:state(open)) {
+  display: block;
+  position: relative;
+  outline: none;
+}
+
+:host([hidden]) {
+  display: none;
+}

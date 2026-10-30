@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, getEventPath } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, getEventPath, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { property, queryAssignedElements } from 'lit/decorators.js';
 import { createRef, Ref, ref } from 'lit/directives/ref.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -46,7 +46,6 @@ type TargetElement = DisableableElement | HTMLAnchorElement;
  * @slot - Places content within the default (unnamed) slot (main body of the component).
  * @slot button - Places content within a visually hidden slot. A `<button>` or `<a>` element can be placed here to provide accessible semantics and functionality without being visible on the page.
  */
-@customElement(BUTTON_AREA_TAG_NAME)
 export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaComponent {
   public static styles = unsafeCSS(styles);
 
@@ -148,11 +147,11 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
         @keydown=${this.#handleKeydown}
         @pointerdown=${this.#handlePointerdown}>
         <slot @click=${this.#handleIgnoreStateLayer} @pointerdown=${this.#handleIgnoreStateLayer} @pointerup=${this.#handleIgnoreStateLayer}></slot>
-        <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
-        <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
         <div id="button" class="button" part="button" .hidden=${!!this.targetElement} @slotchange=${this.#handleSlotChange}>
           <slot name="button"></slot>
         </div>
+        <forge-state-layer exportparts="surface:state-layer" ${ref(this.#stateLayer)}></forge-state-layer>
+        <forge-focus-indicator target="button" part="focus-indicator" inward ${ref(this.#focusIndicator)}></forge-focus-indicator>
       </div>
     `;
   }
@@ -416,6 +415,8 @@ export class ButtonAreaComponent extends BaseLitElement implements IButtonAreaCo
     return eventPath.some(el => el.nodeType === 1 && (el.hasAttribute('forge-ignore') || el.hasAttribute('data-forge-ignore')));
   }
 }
+
+tryDefine(BUTTON_AREA_TAG_NAME, ButtonAreaComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

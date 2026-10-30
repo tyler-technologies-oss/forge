@@ -13,6 +13,7 @@ describe('App Bar Help Button', () => {
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar-help-button></forge-app-bar-help-button>`);
     const el = screen.container.querySelector('forge-app-bar-help-button') as IAppBarHelpButtonComponent;
+    await frame();
 
     await expect(el).toBeAccessible();
   });

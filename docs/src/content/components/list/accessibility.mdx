@@ -1,0 +1,21 @@
+## Keyboard interaction
+
+- Every active list item should be reachable by keyboard navigation, with a distinct visual style showing which one is currently focused.
+- Pressing Space or Enter on a focused list item should activate it the same way a mouse click would.
+- If a list item contains a checkbox or radio, make sure it can still be focused and toggled by keyboard.
+
+## Roles
+
+Give each list item a `role` attribute that describes what it's being used for, so screen readers can announce it correctly.
+
+## Navigation lists
+
+When a `navlist` is used for navigation, add `aria-current="page"` to the currently active item in addition to its visual `selected` state — that's the attribute screen readers actually rely on to know it's the current page.
+
+## Expandable items
+
+When nesting an expansion panel inside a list item, put its content in an element with `slot="additional-content"`. That's required for the content to be visually and structurally separated from the main list item content, and to be announced correctly by screen readers.
+
+## Interactive elements in a list item
+
+Placing more than one interactive element inside an interactive list item (like a checkbox alongside the item's main content) needs the same `forge-ignore` handling described in <a href={`${import.meta.env.BASE_URL}developing/accessibility/#nested-interactive-elements`}>nested interactive elements</a> — by default, only the list item itself receives pointer events.

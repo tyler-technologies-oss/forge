@@ -17,8 +17,8 @@ import { PopoverComponent } from '../../popover/index.js';
 import { ScaffoldComponent } from '../../scaffold/index.js';
 import { ToolbarComponent } from '../../toolbar/index.js';
 import { BASE_SELECT_CONSTANTS, BaseSelectComponent, IBaseSelectComponent, SelectSelectAllEventData } from '../core/index.js';
-import { OptionComponent } from '../option/index.js';
-import { OptionGroupComponent } from '../option-group/index.js';
+import { OptionComponent } from '../../option/option/index.js';
+import { OptionGroupComponent } from '../../option/option-group/index.js';
 import { SelectAdapter } from './select-adapter.js';
 import { SELECT_CONSTANTS } from './select-constants.js';
 import { SelectCore } from './select-core.js';
@@ -239,7 +239,8 @@ export class SelectComponent
     this[setDefaultAria]({
       role: 'combobox',
       ariaDisabled: this.disabled ? 'true' : 'false',
-      ariaRequired: this.required ? 'true' : 'false'
+      ariaRequired: this.required ? 'true' : 'false',
+      ariaReadOnly: this.readonly ? 'true' : 'false'
     });
   }
 
@@ -257,6 +258,9 @@ export class SelectComponent
       case SELECT_CONSTANTS.observedAttributes.SHOW_SELECT_ALL:
         this.showSelectAll = coerceBoolean(newValue);
         return;
+      case SELECT_CONSTANTS.observedAttributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
+        return;
       case SELECT_CONSTANTS.observedAttributes.SELECT_ALL_LABEL:
         this.selectAllLabel = newValue;
         return;
@@ -269,10 +273,13 @@ export class SelectComponent
   }
 
   public [setValidity](): void {
+    // A readonly select is barred from constraint validation, matching native <input readonly>
+    // behavior - the user has no way to satisfy a required constraint while readonly.
+    const required = this.required && !this.readonly;
     this[internals].setValidity(
-      { valueMissing: this.required && !this.value },
+      { valueMissing: required && !this.value },
       this[getValidationMessage]({
-        required: this.required,
+        required,
         value: this.value
       })
     );
@@ -306,6 +313,11 @@ export class SelectComponent
   @coreProperty()
   declare public placeholder: string;
 
+  /**
+   * Controls whether the select is readonly.
+   * @default false
+   * @attribute
+   */
   @coreProperty()
   declare public readonly: boolean;
 

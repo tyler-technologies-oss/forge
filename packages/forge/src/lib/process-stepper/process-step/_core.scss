@@ -1,0 +1,159 @@
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '../../focus-indicator';
+@use '../../state-layer';
+@use './token-utils' as *;
+@use '../../icon/token-utils' as icon;
+
+@forward './token-utils';
+
+$_marker-row-block-size: max(#{token(marker-size)}, #{token(marker-size)});
+
+@mixin host {
+  display: block;
+}
+
+@mixin base {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-areas: 'header header' '. detail';
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: #{token(padding)};
+  align-content: start;
+  align-items: start;
+  border-color: #{token(track-background)};
+  border-width: #{token(track-width)};
+  border-style: none;
+}
+
+@mixin vertical {
+  grid-template-areas: 'header header .' '. detail detail';
+  grid-template-columns: auto auto 1fr;
+  min-block-size: #{token(min-block-size)};
+  padding-block-end: #{token(padding)};
+  border-inline-start-style: solid;
+}
+
+@mixin horizontal {
+  padding-block-end: #{token(padding)};
+  border-block-start-style: solid;
+}
+
+@mixin header {
+  position: relative;
+  display: grid;
+  grid-area: header;
+  grid-template-columns: subgrid;
+}
+
+@mixin header-vertical {
+  grid-template-areas: 'marker label' '. support-text';
+  grid-template-rows: auto auto;
+  justify-self: start;
+  padding-block: #{token(padding)};
+  padding-inline-start: #{token(track-padding)};
+  padding-inline-end: #{token(padding)};
+}
+
+@mixin header-horizontal {
+  grid-template-areas: 'marker label' '. support-text';
+  grid-template-rows: auto auto;
+  padding-block-start: #{token(track-padding)};
+  padding-block-end: #{token(padding)};
+  padding-inline-end: #{token(padding)};
+}
+
+@mixin touched {
+  border-color: #{token(track-color)};
+}
+
+@mixin critical {
+  color: #{theme.variable(error)};
+}
+
+@mixin marker {
+  @include icon.provide-theme(
+    (
+      size: #{token(marker-size)}
+    )
+  );
+
+  display: flex;
+  grid-area: marker;
+  align-items: center;
+  align-self: start;
+  justify-content: center;
+  block-size: #{$_marker-row-block-size};
+  color: #{token(marker-color)};
+}
+
+@mixin marker-number {
+  @include typography.style(label1);
+
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #{theme.variable(text-high)};
+  line-height: 100%;
+}
+
+@mixin detail {
+  grid-area: detail;
+  padding-inline-end: #{token(padding)};
+}
+
+@mixin label {
+  @include typography.style(body2);
+
+  grid-area: label;
+  padding-block: calc((#{$_marker-row-block-size} - #{token(marker-size)}) / 2);
+  color: #{theme.variable(text-high)};
+}
+
+@mixin label-current {
+  font-weight: 500;
+}
+
+@mixin support-text {
+  @include typography.style(body1);
+
+  grid-area: support-text;
+  color: #{theme.variable(text-medium)};
+}
+
+@mixin focus-indicator {
+  z-index: 1; // Fixes an animation artifact in Safari
+}
+
+@mixin control {
+  appearance: none;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  text-align: start;
+  text-decoration: none;
+}
+
+@mixin control-hit-target {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+@mixin control-disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+@mixin disabled {
+  opacity: #{token(disabled-opacity)};
+}

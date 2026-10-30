@@ -1,0 +1,14 @@
+<!--
+  @block Card Header Toolbar
+  @type pattern
+  @description Card header toolbar for a forge-scaffold header slot, with the card title in the start slot styled at heading3
+  @tags toolbar, header, card, title
+-->
+<forge-card no-padding class="max-w-md">
+  <forge-scaffold>
+    {{> card-header title="Card title"}}
+    <div slot="body" class="p-medium">
+      <div class="striped-box min-h-24"></div>
+    </div>
+  </forge-scaffold>
+</forge-card>

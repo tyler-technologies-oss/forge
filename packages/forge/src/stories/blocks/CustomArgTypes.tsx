@@ -170,6 +170,7 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
   const attributes = declaration.attributes;
   const methods = declaration.members?.filter(member => member.kind === 'method' && member.privacy === 'public');
   const events = declaration.events;
+  const commands = declaration.commands;
   const dependencies = declaration.dependencies?.map(({ name }) => name);
   const globalConfigProperties = declaration.globalConfigProperties?.map(({ name }) => name);
   const slots =
@@ -204,6 +205,13 @@ function ComponentArgTypes({ tagName, headingLevel }: { tagName: string; heading
         <Section title="Events" name={tagName} headingLevel={headingLevel}>
           <EventsTable items={sortByName(events)} />
           <UsageLink text="Events" href="?path=/docs/getting-started-usage--docs#events" />
+        </Section>
+      )}
+
+      {!!commands?.length && (
+        <Section title="Commands" name={tagName} headingLevel={headingLevel}>
+          <NameDescriptionTable items={sortByName(commands)} />
+          <UsageLink text="Commands" href="https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API" external={true} />
         </Section>
       )}
 

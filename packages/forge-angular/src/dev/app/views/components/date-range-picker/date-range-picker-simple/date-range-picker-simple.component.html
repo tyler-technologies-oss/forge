@@ -1,0 +1,46 @@
+<section>
+  <h4>Date range picker</h4>
+  <forge-date-range-picker
+    #dateRangePicker
+    [valueMode]="valueMode"
+    [disabled]="isDisabled"
+    [from]="fromDate"
+    [to]="toDate"
+    (forge-date-range-picker-change)="onChange($event)"
+    (forge-date-range-picker-open)="onOpened()"
+    (forge-date-range-picker-close)="onClosed()">
+    <forge-text-field>
+      <input type="text" id="input-date-range-picker-01" autocomplete="off" placeholder="mm/dd/yyyy" />
+      <input type="text" id="input-date-range-picker-02" autocomplete="off" placeholder="mm/dd/yyyy" />
+      <label for="input-date-range-picker-01">Date</label>
+    </forge-text-field>
+  </forge-date-range-picker>
+</section>
+
+<section>
+  <forge-label-value [empty]="!fromDate">
+    <span slot="label">From date</span>
+    <span slot="value">{{ fromDate || 'n/a' }}</span>
+  </forge-label-value>
+  <forge-label-value [empty]="!toDate">
+    <span slot="label">To date</span>
+    <span slot="value">{{ toDate || 'n/a' }}</span>
+  </forge-label-value>
+  <forge-label-value [empty]="!dateRangePicker.value">
+    <forge-tooltip placement="top-start">note that the JSON conversion internally converts date object to iso-string format</forge-tooltip>
+    <span slot="label" class="form-value-label">
+      Form value
+      <forge-icon name="info_outline" class="info-icon"></forge-icon>
+    </span>
+    <span slot="value">{{ dateRangePicker.value | json }}</span>
+  </forge-label-value>
+</section>
+
+<section>
+  <forge-select label="Value mode" [(ngModel)]="valueMode">
+    <forge-option value="object">Object</forge-option>
+    <forge-option value="string">string</forge-option>
+    <forge-option value="iso-string">ISO string</forge-option>
+  </forge-select>
+  <forge-checkbox [(ngModel)]="isDisabled">Disabled</forge-checkbox>
+</section>

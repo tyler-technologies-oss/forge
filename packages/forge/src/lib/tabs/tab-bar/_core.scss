@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -28,7 +29,7 @@
   align-self: stretch;
 }
 
-@mixin slotted-selected {
+@mixin slotted-active {
   z-index: 1;
 }
 
@@ -66,10 +67,21 @@
 
 @mixin inverted {
   border-bottom: none;
-  border-top: #{variale(divider-thickness)} solid #{token(divider-color)};
+  border-top: #{variable(divider-thickness)} solid #{token(divider-color)};
 }
 
 @mixin vertical-inverted {
   border-bottom: none;
   border-top: #{token(divider-thickness)} solid #{token(divider-color)};
+}
+
+@mixin enabled-scroll-button($direction) {
+  box-sizing: border-box;
+  border-width: var(--forge-border-thin);
+  border-color: var(--forge-theme-outline);
+
+  $directions: (block-start, block-end, inline-start, inline-end);
+  @if list.index($directions, $direction) {
+    border-#{$direction}-style: solid;
+  }
 }

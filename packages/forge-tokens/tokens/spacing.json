@@ -1,0 +1,36 @@
+{
+  "spacing": {
+    "$type": "dimension",
+    "$description": "The Forge spacing system scales in multiples of 8.",
+    "xxxsmall": {
+      "$value": "2px"
+    },
+    "xxsmall": {
+      "$value": "4px"
+    },
+    "xsmall": {
+      "$value": "8px"
+    },
+    "small": {
+      "$value": "12px"
+    },
+    "medium": {
+      "$value": "16px"
+    },
+    "medium-large": {
+      "$value": "20px"
+    },
+    "large": {
+      "$value": "24px"
+    },
+    "xlarge": {
+      "$value": "32px"
+    },
+    "xxlarge": {
+      "$value": "48px"
+    },
+    "xxxlarge": {
+      "$value": "56px"
+    }
+  }
+}

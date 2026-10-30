@@ -1,0 +1,43 @@
+---
+/**
+ * StorybookEmbed
+ *
+ * Two variants:
+ *
+ *  - `playground` (default) — full Storybook shell with the Controls panel on
+ *    the right. Use once per page as the interactive hero.
+ *  - `preview` — just the story canvas (Storybook's `iframe.html?viewMode=story`).
+ *    No toolbar, no controls, no addons panel. Use for compact per-example
+ *    embeds beneath the hero. Note: per-story code toggles require autodocs
+ *    tags upstream in the Storybook itself; the button component doesn't ship
+ *    those, so preview embeds render the canvas alone.
+ */
+interface Props {
+  storyId: string;
+  height?: string | number;
+  title?: string;
+  variant?: "playground" | "preview";
+}
+
+const {
+  storyId,
+  height = "300px",
+  title = "Component Demo",
+  variant = "playground",
+} = Astro.props;
+
+const baseUrl = "https://forge.tylerdev.io/forge/v3";
+const embedUrl =
+  variant === "preview"
+    ? `${baseUrl}/iframe.html?id=${storyId}&viewMode=story`
+    : `${baseUrl}/?path=/story/${storyId}&singleStory=true&panel=right&selectedPanel=storybook/controls/panel`;
+---
+
+<forge-card class="p-0">
+  <iframe
+    src={embedUrl}
+    title={title}
+    height={height}
+    loading="lazy"
+    class="block w-full border-0"></iframe>
+</forge-card>

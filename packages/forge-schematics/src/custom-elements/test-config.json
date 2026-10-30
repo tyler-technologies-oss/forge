@@ -1,0 +1,12 @@
+{
+  "manifest": "src/custom-elements/test-manifest.json",
+  "importPath": "@tylertech/forge",
+  "exclude": "",
+  "outDir": "test",
+  "outDirExcludePrefix": "forge-",
+  "modulePrefix": "Forge",
+  "useDefineFunction": true,
+  "componentDependencies": {
+    "forge-accordion": ["forge-expansion-panel"]
+  }
+}

@@ -1,10 +1,13 @@
 export * from './date-utils.js';
 export * from './deferred.js';
 export * from './dismissible-stack.js';
+export * from './drag-drop-manager.js';
 export * from './event-utils.js';
 export * from './feature-detection.js';
+export * from './focus-group.js';
 export * from './form-utils.js';
 export * from './key-action.js';
+export { VirtualElement } from './position-utils.js';
 export * from './reflect-utils.js';
 export * from './svg-utils.js';
 export * from './time-utils.js';

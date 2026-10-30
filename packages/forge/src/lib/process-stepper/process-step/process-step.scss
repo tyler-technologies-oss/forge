@@ -1,0 +1,102 @@
+@use './core';
+@use '../../utils/mixins' as utils;
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+//
+// Base
+//
+
+.forge-process-step {
+  @include core.tokens;
+}
+
+.forge-process-step {
+  @include core.base;
+
+  &.vertical {
+    @include core.vertical;
+  }
+
+  &.horizontal {
+    @include core.horizontal;
+  }
+
+  &.disabled {
+    .header,
+    .detail {
+      @include core.disabled;
+    }
+  }
+
+  &.touched {
+    @include core.touched;
+  }
+
+  &.critical {
+    @include core.critical;
+
+    .label,
+    .support-text {
+      @include core.critical;
+    }
+  }
+}
+
+.header {
+  @include core.header;
+}
+
+.vertical .header {
+  @include core.header-vertical;
+}
+
+.horizontal .header {
+  @include core.header-horizontal;
+}
+
+.marker {
+  @include core.marker;
+}
+
+.marker-number {
+  @include core.marker-number;
+}
+
+.label {
+  @include core.label;
+}
+
+.support-text {
+  @include core.support-text;
+}
+
+.detail {
+  @include core.detail;
+}
+
+forge-focus-indicator {
+  @include core.focus-indicator;
+}
+
+.control {
+  @include core.control;
+}
+
+.control::after {
+  @include core.control-hit-target;
+}
+
+.disabled .control {
+  @include core.control-disabled;
+}
+
+.visually-hidden {
+  @include utils.visually-hidden;
+}

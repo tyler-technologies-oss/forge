@@ -1,8 +1,8 @@
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { BadgeTheme } from './badge-constants.js';
 import { toggleState } from '../core/utils/utils.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 
 import styles from './badge.scss';
@@ -49,7 +49,6 @@ export const BADGE_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-badge';
  * @cssclass forge-badge--dot - Renders the badge as a dot.
  * @cssclass forge-badge__icon - Styles a child element as an icon.
  */
-@customElement(BADGE_TAG_NAME)
 export class BadgeComponent extends BaseLitElement implements IBadgeComponent {
   public static styles = unsafeCSS(styles);
 
@@ -103,3 +102,5 @@ export class BadgeComponent extends BaseLitElement implements IBadgeComponent {
     `;
   }
 }
+
+tryDefine(BADGE_TAG_NAME, BadgeComponent);

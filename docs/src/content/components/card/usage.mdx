@@ -1,0 +1,85 @@
+---
+title: Card
+description: Cards group related content and actions about a single topic into one surface.
+status: stable
+source: core
+category: layout
+storybookId: components-card--demo
+---
+
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+
+<ComponentHeader>
+  <forge-card class="w-[450px]">
+    <div class="forge-typography--heading4">Card title</div>
+    <p class="forge-typography--body2">Cards group related content and actions.</p>
+  </forge-card>
+</ComponentHeader>
+
+## Overview
+
+Cards are flexible container surfaces that display content and actions focused on a single topic or related set of information. They serve as discrete units that organize information into scannable, actionable containers with clear visual hierarchy and consistent styling.
+
+Cards function as versatile building blocks that can contain various types of content while maintaining visual consistency and providing users with predictable interaction patterns across different interface contexts.
+
+## Usage
+
+`forge-card` groups content and actions about one topic through `raised` and `no-padding`. When a card needs a header or footer, nest a `forge-scaffold` inside it with a `forge-toolbar` in each of the `header` and `footer` slots. Use a card to organize related information or preview a record that links to the full one; avoid it when the content inside isn't actually related, or when scanning and comparing homogeneous data matters more than grouping.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep everything inside a card related to a single topic or record.",
+      "Build a card's header and footer from a `forge-scaffold` with a `forge-toolbar` in each slot, and set `no-padding` on the card so the toolbars reach its edges.",
+      "Use `inverted` on the footer toolbar so its divider sits above the actions.",
+      "Apply consistent padding and spacing throughout card content.",
+      "Group related information logically within card boundaries.",
+      "Align content inside a card consistently — centered or left-aligned, not mixed.",
+      "Show a hover or focus state on a card that's clickable or draggable, so its interactivity is obvious.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't group unrelated content into the same card.",
+      "Don't use a card when scanning and comparing homogeneous data matters more than grouping — a table or list fits better.",
+      "Don't mix alignment styles for content within the same card.",
+      "Don't hand-build a card header or footer from flex `div`s — use a scaffold and toolbars.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+A card applies consistent padding and shape to its content by default.
+
+<Example
+  description="A basic card with default padding."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/demo/demo.html"
+/>
+
+## Header, body, and footer
+
+When a card needs a header or footer, nest a `forge-scaffold` inside it. Put a `forge-toolbar` in the `header` slot for the title (`text-heading3`) and any icon actions, the content in the `body` slot with `p-medium` padding, and an `inverted` `forge-toolbar` in the `footer` slot for the actions. Set `no-padding` on the card so the toolbars run edge to edge. The header and footer stay pinned while the body scrolls. Each part is optional, so a card with only a header uses just the header toolbar.
+
+<Example
+  description="A card structured with a scaffold, with a toolbar in its header and footer."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/scaffold/scaffold.html"
+/>
+
+## Raised
+
+Set `raised` for a stronger shadow that lifts the card above its surroundings.
+
+<Example
+  description="A raised card sits above its surroundings with a stronger shadow."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/card/raised/raised.html"
+/>
+

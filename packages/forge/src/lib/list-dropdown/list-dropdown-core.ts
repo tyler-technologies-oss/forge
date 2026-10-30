@@ -148,6 +148,7 @@ export class ListDropdownCore implements IListDropdownCore {
       this.activateOption(this._config.activeStartIndex, false);
       this._adapter.scrollSelectedOptionIntoView(false);
     } else if (this._config.selectedValues && this._config.selectedValues.length) {
+      this.activateSelectedOption();
       this._adapter.scrollSelectedOptionIntoView(false);
     } else if (typeof this._config.visibleStartIndex === 'number' && this._nonDividerOptions[this._config.visibleStartIndex]) {
       this._adapter.scrollOptionIntoView(this._config.visibleStartIndex);

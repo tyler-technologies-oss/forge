@@ -1,0 +1,20 @@
+<app-demo-card headerText="View switcher">
+  <forge-button variant="raised" (click)="onAddView()">Add view</forge-button>
+
+  <forge-tab-bar [activeTab]="index" (forge-tab-bar-change)="index = $event.detail.index">
+    @for (tab of tabs; track tab) {
+      <forge-tab>{{ tab }}</forge-tab>
+    }
+  </forge-tab-bar>
+
+  <forge-view-switcher [index]="index" animation-type="slide">
+    @for (view of views; track view; let i = $index) {
+      <forge-view>
+        <div class="view-container">
+          {{ view }}
+          <forge-button variant="outlined" (click)="onRemoveView(i)">Remove</forge-button>
+        </div>
+      </forge-view>
+    }
+  </forge-view-switcher>
+</app-demo-card>

@@ -1,0 +1,18 @@
+<!--
+  @block Stepper — Demo
+  @type component
+  @description Demo usage example for the forge-stepper component.
+  @tags stepper, demo, storybook, component-example
+-->
+<forge-stepper>
+  <forge-step index="0" clustered first selected>Step 1</forge-step>
+  <forge-step index="1" clustered>
+    Step 2
+    <span slot="optional">Optional</span>
+  </forge-step>
+  <forge-step index="2" clustered>
+    <div slot="expansion-content">Expansion Content</div>
+    Step 3
+  </forge-step>
+  <forge-step index="3" clustered last>Step 4</forge-step>
+</forge-stepper>

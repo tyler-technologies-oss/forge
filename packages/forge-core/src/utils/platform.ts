@@ -65,7 +65,11 @@ export class Platform {
   // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
   // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
   // Safari browser should also use Webkit as its layout engine.
-  public SAFARI(): boolean {
+  public static get SAFARI(): boolean {
     return Platform.isBrowser && /safari/i.test(navigator.userAgent) && Platform.WEBKIT;
+  }
+
+  public static get APPLE_PLATFORM(): boolean {
+    return Platform.isBrowser && (/^Mac/.test(navigator.platform) || /iPad|iPhone/.test(navigator.platform));
   }
 }

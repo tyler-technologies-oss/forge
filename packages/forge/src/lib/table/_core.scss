@@ -1,9 +1,9 @@
-@use '../core/styles/border';
-@use '../core/styles/elevation';
-@use '../core/styles/spacing';
-@use '../core/styles/theme';
-@use '../core/styles/typography';
-@use '../core/styles/animation';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/animation';
 @use '../focus-indicator';
 @use './variables';
 
@@ -246,6 +246,31 @@
         'offset-inline': -4px
       )
     );
+  }
+}
+
+// Styles for the sort button of a sortable column with a custom header template. The button overlays the cell so that
+// interactive content within the template is a sibling of the button instead of a descendant.
+@mixin head-cell-sort-overlay($sort-icon-class-name, $sort-order-class-name) {
+  .forge-table-head__cell-container {
+    position: relative;
+
+    > [data-cell-template] {
+      position: relative;
+      z-index: 1;
+    }
+
+    > .#{$sort-icon-class-name},
+    > .#{$sort-order-class-name} {
+      pointer-events: none;
+    }
+  }
+
+  .forge-table-head__cell-sort-button {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    padding: 0;
   }
 }
 

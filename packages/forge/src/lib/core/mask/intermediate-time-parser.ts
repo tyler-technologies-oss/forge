@@ -81,6 +81,14 @@ export class IntermediateTimeParser {
     return this._segmentParser.hours.length === 0;
   }
 
+  public get isInitialMinutesEntry(): boolean {
+    return this._segmentParser.minutes.length === 0;
+  }
+
+  public get isInitialSecondsEntry(): boolean {
+    return this._segmentParser.seconds.length === 0;
+  }
+
   public get hasOnlyHoursSegment(): boolean {
     return !!this._segmentParser.hours && !this._segmentParser.minutes && !this._segmentParser.seconds;
   }

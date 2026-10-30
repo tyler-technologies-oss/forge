@@ -4,7 +4,7 @@ import { html, nothing } from 'lit';
 import { userEvent } from 'vitest/browser';
 import type { IProfileCardComponent } from './profile-card.js';
 import type { IToolbarComponent } from '../toolbar/toolbar.js';
-import type { IButtonComponent } from '../button/button.js';
+import type { ButtonComponent } from '../button/button.js';
 import type { IAvatarComponent } from '../avatar/avatar.js';
 import { TestHarness } from '../core/testing/test-harness.js';
 import { getShadowElement } from '@tylertech/forge-core';
@@ -16,8 +16,8 @@ import './profile-card.js';
 
 class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   private _actionToolbarElement: IToolbarComponent;
-  private _signOutButton: IButtonComponent;
-  private _profileButton: IButtonComponent;
+  private _signOutButton: ButtonComponent;
+  private _profileButton: ButtonComponent;
   private _avatarElement: IAvatarComponent;
   private _fullNameElement: HTMLElement;
   private _emailElement: HTMLElement;
@@ -28,8 +28,8 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
 
   public initElementRefs(): void {
     this._actionToolbarElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) as IToolbarComponent;
-    this._signOutButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as IButtonComponent;
-    this._profileButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as IButtonComponent;
+    this._signOutButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as ButtonComponent;
+    this._profileButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as ButtonComponent;
     this._avatarElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.AVATAR) as IAvatarComponent;
     this._fullNameElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.FULL_NAME) as HTMLElement;
     this._emailElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.EMAIL) as HTMLElement;
@@ -53,11 +53,11 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
     return this._avatarElement;
   }
 
-  public get signOutButton(): IButtonComponent {
+  public get signOutButton(): ButtonComponent {
     return this._signOutButton;
   }
 
-  public get profileButton(): IButtonComponent {
+  public get profileButton(): ButtonComponent {
     return this._profileButton;
   }
 

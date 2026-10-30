@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/toolbar/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: toolbar;
 $_tokens: tokens.$tokens;

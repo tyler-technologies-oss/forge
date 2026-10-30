@@ -1,0 +1,17 @@
+<!--
+  @block Overlay — Demo
+  @type component
+  @description Demo usage example for the forge-overlay component.
+  @tags overlay, demo, storybook, component-example
+-->
+<div id="clipping-container" class="h-[500px] border border-outline overflow-auto">
+  <div class="h-[250%] w-[250%] flex items-center justify-center">
+    <forge-button id="overlay-trigger" variant="raised">Toggle Overlay</forge-button>
+    <forge-overlay anchor="overlay-trigger" position-strategy shift="never" hide="anchor-hidden">
+      <div class="w-[300px] p-xsmall border border-dashed border-primary bg-surface">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui auctor, ultricies nunc nec, ultricies nunc. Nullam in dui auctor, ultricies
+        nunc nec, ultricies nunc.
+      </div>
+    </forge-overlay>
+  </div>
+</div>

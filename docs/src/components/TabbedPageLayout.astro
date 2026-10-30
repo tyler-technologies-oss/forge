@@ -1,0 +1,157 @@
+---
+/**
+ * TabbedPageLayout - Generic tabbed layout for content pages.
+ *
+ * Tab switching is client-side via History API for instant navigation.
+ * All tab content is rendered server-side; visibility is toggled via CSS.
+ */
+import ContentHeader from "./ContentHeader.astro";
+import PageScaffold from "./PageScaffold.astro";
+
+export interface Tab {
+  id: string;
+  label: string;
+  /** Drops the body card's 960px content cap while this tab is active (e.g. Playground's Storybook embed wants the extra width). */
+  wide?: boolean;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  showBadge?: boolean;
+  badgeText?: string;
+  badgeTheme?: string;
+  tabs: Tab[];
+  currentTab: string;
+  baseUrl: string;
+  slug: string;
+}
+
+const {
+  title,
+  description,
+  showBadge = false,
+  badgeText = "Beta",
+  badgeTheme = "warning",
+  tabs,
+  currentTab,
+  baseUrl,
+  slug,
+} = Astro.props;
+
+const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
+---
+
+<PageScaffold>
+  <header slot="header" class="mb-medium">
+    <ContentHeader
+      title={title}
+      description={description}
+      showBadge={showBadge}
+      badgeText={badgeText}
+      badgeTheme={badgeTheme}
+    />
+
+    <nav aria-label="Page tabs">
+      <forge-tab-bar
+        id="page-tab-bar"
+        active-tab={activeTabIndex}
+        data-base-url={baseUrl}
+        data-slug={slug}
+        data-tabs={JSON.stringify(tabs.map((t) => t.id))}
+        data-wide-tabs={JSON.stringify(
+          tabs.filter((t) => t.wide).map((t) => t.id),
+        )}
+        clustered>
+        {
+          tabs.map((tab) => (
+            <forge-tab data-tab-id={tab.id}>{tab.label}</forge-tab>
+          ))
+        }
+      </forge-tab-bar>
+    </nav>
+  </header>
+
+  <div class="pt-medium">
+    <slot />
+  </div>
+</PageScaffold>
+
+<script>
+  /**
+   * Client-side tab switching.
+   * Updates URL via History API and toggles panel visibility without page reload.
+   */
+  function initTabSwitching(): void {
+    const tabBar = document.getElementById("page-tab-bar");
+    if (!tabBar) return;
+
+    // Prevent duplicate initialization
+    if (tabBar.dataset.initialized === "true") return;
+    tabBar.dataset.initialized = "true";
+
+    const baseUrl = tabBar.dataset.baseUrl;
+    const slug = tabBar.dataset.slug;
+    const tabs: string[] = JSON.parse(tabBar.dataset.tabs || "[]");
+    const wideTabs: string[] = JSON.parse(tabBar.dataset.wideTabs || "[]");
+
+    // Handle tab bar change events
+    tabBar.addEventListener("forge-tab-bar-change", ((
+      event: CustomEvent<{ index: number }>,
+    ) => {
+      const tabId = tabs[event.detail.index];
+      if (!tabId) return;
+
+      history.pushState({ tab: tabId }, "", `${baseUrl}/${slug}/${tabId}/`);
+      updateActivePanel(tabId);
+      updateBodyCardWidth(tabId, wideTabs);
+      updateDocumentTitle(tabId);
+    }) as EventListener);
+
+    // Handle browser back/forward
+    window.addEventListener("popstate", (event: PopStateEvent) => {
+      const tabId = (event.state as { tab?: string } | null)?.tab;
+      if (!tabId) return;
+
+      const tabIndex = tabs.indexOf(tabId);
+      if (tabIndex >= 0) {
+        (tabBar as HTMLElement & { activeTab: number }).activeTab = tabIndex;
+        updateActivePanel(tabId);
+        updateBodyCardWidth(tabId, wideTabs);
+      }
+    });
+
+    // Initialize history state
+    const initialTab =
+      tabs[Number(tabBar.getAttribute("active-tab"))] ?? tabs[0];
+    history.replaceState({ tab: initialTab }, "");
+  }
+
+  function updateActivePanel(tabId: string): void {
+    document.querySelectorAll<HTMLElement>(".tab-panel").forEach((panel) => {
+      panel.classList.toggle("active", panel.dataset.tab === tabId);
+    });
+  }
+
+  // The body card's max-width is set server-side to match the tab active on
+  // initial page load; tab switching afterward is client-side only (pushState,
+  // no reload), so it has to be kept in sync here too.
+  function updateBodyCardWidth(tabId: string, wideTabs: string[]): void {
+    const bodyCard = document.querySelector(".body-card");
+    if (!bodyCard) return;
+
+    const isWide = wideTabs.includes(tabId);
+    bodyCard.classList.toggle("max-w-wide", isWide);
+    bodyCard.classList.toggle("max-w-content", !isWide);
+  }
+
+  function updateDocumentTitle(tabId: string): void {
+    const pageTitle =
+      document.querySelector(".content-header h1")?.textContent ?? "";
+    const tabLabel = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+    document.title = `${pageTitle} - ${tabLabel}`;
+  }
+
+  // Run on initial load and after View Transitions navigation
+  document.addEventListener("astro:page-load", initTabSwitching);
+</script>

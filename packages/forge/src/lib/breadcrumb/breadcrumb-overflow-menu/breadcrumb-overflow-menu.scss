@@ -1,0 +1,33 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb-overflow-menu {
+  @include core.tokens;
+}
+
+.forge-breadcrumb-overflow-menu {
+  @include core.base;
+}
+
+.button {
+  @include core.button;
+}
+
+.list {
+  @include core.list;
+}

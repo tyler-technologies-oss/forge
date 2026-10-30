@@ -1,0 +1,39 @@
+<app-demo-card headerText="Circular Progress">
+  <forge-circular-progress
+    [determinate]="determinate"
+    [progress]="progress"
+    [theme]="color"
+    [style.--forge-circular-progress-stroke-width]="strokeWidth + 'px'"
+    [style.--forge-circular-progress-size]="size + 'px'" />
+
+  <br />
+  <br />
+
+  <forge-select id="progress-spinner-mode" label="Mode" [(ngModel)]="determinate">
+    <forge-option [value]="false">Indeterminate</forge-option>
+    <forge-option [value]="true">Determinate</forge-option>
+  </forge-select>
+
+  <forge-select id="progress-spinner-color" label="Color" [(ngModel)]="color">
+    <forge-option value="primary">Primary</forge-option>
+    <forge-option value="tertiary">Tertiary</forge-option>
+    <forge-option value="success">Success</forge-option>
+    <forge-option value="warning">Warning</forge-option>
+    <forge-option value="danger">Danger</forge-option>
+    <forge-option value="info">Info</forge-option>
+  </forge-select>
+
+  <forge-select id="progress-spinner-diameter" label="Size" [(ngModel)]="size">
+    <forge-option [value]="36">36</forge-option>
+    <forge-option [value]="72">72</forge-option>
+    <forge-option [value]="108">108</forge-option>
+    <forge-option [value]="144">144</forge-option>
+  </forge-select>
+
+  <forge-select id="progress-spinner-stroke-width" label="Stroke Width" [(ngModel)]="strokeWidth">
+    <forge-option [value]="1">1</forge-option>
+    <forge-option [value]="4">4</forge-option>
+    <forge-option [value]="10">10</forge-option>
+    <forge-option [value]="15">15</forge-option>
+  </forge-select>
+</app-demo-card>

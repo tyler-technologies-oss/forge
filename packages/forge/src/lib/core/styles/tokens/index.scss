@@ -1,4 +1,2 @@
-@use 'sass:map';
-@use '../core/config';
-
-@forward './theme/tokens';
+@forward '@tylertech/forge-tokens/sass/theme/tokens';
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';

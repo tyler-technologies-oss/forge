@@ -5,13 +5,13 @@ import '@tylertech/forge/floating-action-button';
 import '@tylertech/forge/floating-action-button/forge-floating-action-button.scss';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import type { IFloatingActionButtonComponent } from '@tylertech/forge/floating-action-button';
+import type { FloatingActionButtonComponent } from '@tylertech/forge/floating-action-button';
 import { toggleAttribute } from '@tylertech/forge-core';
 import './fab.scss';
 
 IconRegistry.define([tylIconFavorite, tylIconAdd, tylIconDelete, tylIconOpenInNew]);
 
-const allFABs = Array.from(document.querySelectorAll<IFloatingActionButtonComponent>('.content forge-fab'));
+const allFABs = Array.from(document.querySelectorAll<FloatingActionButtonComponent>('.content forge-fab'));
 allFABs.forEach(btn => btn.addEventListener('click', evt => console.log('click', evt)));
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;

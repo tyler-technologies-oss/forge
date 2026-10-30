@@ -1,0 +1,63 @@
+<div class="forge-typography">
+  <h1>Timestamp</h1>
+  <p>Timestamps display formatted dates and times.</p>
+
+  <section>
+    <h2>Default</h2>
+    <forge-timestamp datetime="2024-06-15"></forge-timestamp>
+  </section>
+
+  <section>
+    <h2>With Time</h2>
+    <forge-timestamp datetime="2024-06-15T14:30:00" format="MM/dd/yyyy HH:mm"></forge-timestamp>
+  </section>
+
+  <section>
+    <h2>Different Formats</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <forge-timestamp datetime="2024-06-15" format="yyyy-MM-dd"></forge-timestamp>
+      <forge-timestamp datetime="2024-06-15" format="dd.MM.yyyy"></forge-timestamp>
+      <forge-timestamp datetime="2024-06-15" format="dd MMM yyyy"></forge-timestamp>
+      <forge-timestamp datetime="2024-06-15T14:30:00" format="HH:mm"></forge-timestamp>
+    </div>
+  </section>
+
+  <section>
+    <h2>Locales</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <forge-timestamp datetime="2024-06-15" locale="en-US" format="dd MMMM yyyy"></forge-timestamp>
+      <forge-timestamp datetime="2024-06-15" locale="de-DE" format="dd MMMM yyyy"></forge-timestamp>
+      <forge-timestamp datetime="2024-06-15" locale="fr-FR" format="dd MMMM yyyy"></forge-timestamp>
+    </div>
+  </section>
+
+  <section>
+    <h2>Separators</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div>
+        <span>No separator:</span>
+        <forge-timestamp datetime="2024-06-15T14:30:00" format="HH:mm"></forge-timestamp>
+      </div>
+      <div>
+        <span>Separator start:</span>
+        <forge-timestamp datetime="2024-06-15T14:30:00" format="HH:mm" separator="start"></forge-timestamp>
+      </div>
+      <div>
+        <span>Separator end:</span>
+        <forge-timestamp datetime="2024-06-15T14:30:00" format="HH:mm" separator="end"></forge-timestamp>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>With Timeline (Context-Aware)</h2>
+    <p>Timestamps automatically adapt their styling when used within timeline components:</p>
+    <forge-timeline>
+      <forge-timestamp datetime="2024-06-15"></forge-timestamp>
+      <forge-timeline-item>
+        <span>Event description</span>
+        <forge-timestamp slot="end" datetime="2024-06-15T14:30:00" format="HH:mm" separator="start"></forge-timestamp>
+      </forge-timeline-item>
+    </forge-timeline>
+  </section>
+</div>

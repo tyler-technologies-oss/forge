@@ -1,0 +1,26 @@
+<!--
+  @block Avatar Card
+  @type pattern
+  @description Profile card with a large centered avatar, name, email link, corner notification badge, and an inverted toolbar footer with actions
+  @tags card, avatar, profile, user, toolbar, notifications
+-->
+<forge-card class="relative w-full max-w-xs" no-padding>
+  <forge-icon-button class="absolute top-xsmall right-xsmall" aria-label="Notifications">
+    <forge-icon name="notifications"></forge-icon>
+    <forge-badge slot="badge" strong theme="info">2</forge-badge>
+  </forge-icon-button>
+
+  <div class="flex flex-col items-center gap-xsmall p-large pt-xlarge">
+    <forge-avatar class="[--forge-avatar-size:150px]" aria-label="First Last"></forge-avatar>
+    <div class="flex flex-col items-center gap-xxxsmall mt-medium">
+      <span class="text-heading3">First Last</span>
+      <span class="text-body1">Secondary Title</span>
+    </div>
+    <a class="mt-medium" href="mailto:first.last@email.com">first.last@email.com</a>
+  </div>
+
+  <forge-toolbar inverted>
+    <forge-button slot="start" variant="text">View profile</forge-button>
+    <forge-button slot="end" variant="outlined">Actions</forge-button>
+  </forge-toolbar>
+</forge-card>

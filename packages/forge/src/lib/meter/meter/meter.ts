@@ -1,11 +1,11 @@
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { Theme } from '../../constants.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 
 import styles from './meter.scss';
@@ -61,7 +61,6 @@ const VALUE_STATE_MAP = new Map<MeterStatus, string>([
  * @slot - The default slot for the meter's label.
  * @slot value - A textual representation of the meter's value.
  */
-@customElement(METER_TAG_NAME)
 export class MeterComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
   public static formAssociated = true;
@@ -360,6 +359,8 @@ export class MeterComponent extends BaseLitElement {
     VALUE_STATE_MAP.forEach((value, status) => toggleState(this._internals, value, this._status === status));
   }
 }
+
+tryDefine(METER_TAG_NAME, MeterComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

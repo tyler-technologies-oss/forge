@@ -1,0 +1,35 @@
+<!--
+  @block Count Card — Budget
+  @type component
+  @description Budget usage example for the forge-count-card component.
+  @tags count-card, budget, storybook, component-example
+-->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-medium">
+  <forge-count-card>
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Cost</span>
+    <span slot="count">$33,002.00</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="account_balance"></forge-icon>
+    <span slot="label">Funding</span>
+    <span slot="count">$23,001.00</span>
+  </forge-count-card>
+
+  <forge-count-card theme="error">
+    <forge-icon slot="icon" name="trending_down"></forge-icon>
+    <span slot="label">Variance</span>
+    <forge-badge slot="header-end" theme="error">Over budget</forge-badge>
+    <span slot="count">-$10,001.00</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="star"></forge-icon>
+    <span slot="label">Total score</span>
+    <forge-icon-button slot="action" aria-label="Edit">
+      <forge-icon name="edit"></forge-icon>
+    </forge-icon-button>
+    <span slot="count">Not scored</span>
+  </forge-count-card>
+</div>

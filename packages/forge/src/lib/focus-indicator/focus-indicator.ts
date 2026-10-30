@@ -1,10 +1,12 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
-import { nothing, PropertyValues, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { autoUpdate } from '@floating-ui/dom';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
-import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
+import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
 
@@ -54,7 +56,6 @@ export const FOCUS_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-focu
  * @cssclass forge-focus-indicator--active - Forces the focus indicator to be visible.
  * @cssclass forge-focus-indicator--inward - Renders the focus inside the target element.
  */
-@customElement(FOCUS_INDICATOR_TAG_NAME)
 export class FocusIndicatorComponent extends BaseLitElement implements IFocusIndicatorComponent {
   public static styles = unsafeCSS(styles);
 
@@ -127,6 +128,8 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
   #targetElement: HTMLElement | undefined;
   #internals: ElementInternals;
+  #indicatorElement: HTMLDivElement | undefined;
+  #cleanupAutoUpdate: (() => void) | undefined;
 
   constructor() {
     super();
@@ -144,10 +147,24 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#detachTargetListeners();
+    this.#stopPositioning();
+    if (this.#indicatorElement) {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+    }
     this.#targetElement = undefined;
   }
 
-  public override willUpdate(changedProperties: PropertyValues<this>): void {
+  public override firstUpdated(): void {
+    if (supportsPopover()) {
+      this.#indicatorElement = this.shadowRoot?.querySelector('.focus-indicator') as HTMLDivElement | undefined;
+    }
+  }
+
+  public willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.hasUpdated) {
       if (changedProperties.has('target')) {
         this.#handleTargetChange();
@@ -156,11 +173,12 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     if (changedProperties.has('active')) {
       this.#handleActiveChange();
+      this.#updateTopLayerState();
     }
   }
 
-  public override render(): typeof nothing {
-    return nothing; // This component does not render any elements, it only applies encapsulated styles to the host element.
+  public render(): TemplateResult {
+    return html`<div class="focus-indicator" part="indicator" popover="manual"></div>`;
   }
 
   #detachTargetListeners(): void {
@@ -207,4 +225,90 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.toggleAttribute('active', this.active);
     toggleState(this.#internals, 'active', this.active);
   }
+
+  #updateTopLayerState(): void {
+    if (!supportsPopover() || !this.#indicatorElement) {
+      return;
+    }
+
+    if (this.active) {
+      try {
+        this.#indicatorElement.showPopover();
+        this.#startPositioning();
+      } catch {
+        // Popover already shown or error occurred
+      }
+    } else {
+      try {
+        this.#indicatorElement.hidePopover();
+      } catch {
+        // Popover already hidden
+      }
+      this.#stopPositioning();
+    }
+  }
+
+  #startPositioning(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition());
+  }
+
+  #updatePosition(): void {
+    if (!this.#targetElement || !this.#indicatorElement) {
+      return;
+    }
+
+    const anchor = this.parentElement ?? this.#targetElement;
+    const targetRect = anchor.getBoundingClientRect();
+
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-left', `${targetRect.left}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-top', `${targetRect.top}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-width', `${targetRect.width}px`);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-height', `${targetRect.height}px`);
+
+    this.#indicatorElement.toggleAttribute('inward', this.inward);
+    this.#indicatorElement.toggleAttribute('circular', this.circular);
+    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, targetRect));
+  }
+
+  /**
+   * Determines whether any part of the anchor is visible on the page by sampling a grid of points
+   * within the portion of its bounds that is inside the viewport. Exits on the first visible point.
+   */
+  #isAnchorVisible(anchor: HTMLElement, rect: DOMRect): boolean {
+    const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
+    if (!root.elementFromPoint) {
+      return true;
+    }
+
+    const left = Math.max(rect.left, 0);
+    const top = Math.max(rect.top, 0);
+    const right = Math.min(rect.right, document.documentElement.clientWidth);
+    const bottom = Math.min(rect.bottom, document.documentElement.clientHeight);
+    if (left > right || top > bottom) {
+      return false;
+    }
+
+    for (const yRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
+      for (const xRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
+        const x = Math.min(left + (right - left) * xRatio, document.documentElement.clientWidth - 1);
+        const y = Math.min(top + (bottom - top) * yRatio, document.documentElement.clientHeight - 1);
+        const hit = root.elementFromPoint(x, y);
+        if (hit && (anchor.contains(hit) || hit.contains(anchor))) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  #stopPositioning(): void {
+    this.#cleanupAutoUpdate?.();
+    this.#cleanupAutoUpdate = undefined;
+  }
 }
+
+tryDefine(FOCUS_INDICATOR_TAG_NAME, FocusIndicatorComponent);

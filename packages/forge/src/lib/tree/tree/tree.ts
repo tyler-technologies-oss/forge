@@ -1,6 +1,7 @@
 import { createContext, provide } from '@lit/context';
+import { tryDefine } from '@tylertech/forge-core';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
@@ -53,7 +54,6 @@ export const TREE_CONTEXT = createContext<ITreeContext>('forge-tree');
  * @slot expand-icon - A custom expand icon to show when an item is closed.
  * @slot collapse-icon - A custom collapse icon to show when an item is open.
  */
-@customElement('forge-tree')
 export class TreeComponent extends LitElement {
   public static styles = unsafeCSS(styles);
 
@@ -546,6 +546,8 @@ export class TreeComponent extends LitElement {
     });
   }
 }
+
+tryDefine('forge-tree', TreeComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

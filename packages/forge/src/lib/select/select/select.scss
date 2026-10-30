@@ -44,6 +44,16 @@ forge-field {
 }
 
 //
+// Readonly
+//
+
+:host([readonly]) {
+  .selected-text-container {
+    cursor: default;
+  }
+}
+
+//
 // Field
 //
 

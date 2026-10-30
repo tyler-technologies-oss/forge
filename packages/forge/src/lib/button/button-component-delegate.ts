@@ -1,22 +1,22 @@
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
 import { ButtonType } from './base/base-button-constants.js';
-import { IButtonComponent } from './button.js';
-import { ButtonVariant, BUTTON_CONSTANTS } from './button-constants.js';
+import { BUTTON_CONSTANTS, ButtonVariant } from './button-constants.js';
+import { ButtonComponent } from './button.js';
 
-export type ButtonComponentDelegateProps = Partial<IButtonComponent>;
+export type ButtonComponentDelegateProps = Partial<ButtonComponent>;
 export interface IButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {
   variant?: ButtonVariant;
   type?: ButtonType;
   text?: string;
 }
-export interface IButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IButtonComponent, IButtonComponentDelegateOptions> {}
+export interface IButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<ButtonComponent, IButtonComponentDelegateOptions> {}
 
-export class ButtonComponentDelegate extends BaseComponentDelegate<IButtonComponent, IButtonComponentDelegateOptions> {
+export class ButtonComponentDelegate extends BaseComponentDelegate<ButtonComponent, IButtonComponentDelegateOptions> {
   constructor(config?: IButtonComponentDelegateConfig) {
     super(config);
   }
 
-  protected _build(): IButtonComponent {
+  protected _build(): ButtonComponent {
     const component = document.createElement(BUTTON_CONSTANTS.elementName);
     if (this._config.options?.variant) {
       component.variant = this._config.options.variant;

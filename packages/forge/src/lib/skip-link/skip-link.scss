@@ -16,7 +16,7 @@ $host-tokens: [inset z-index transition-duration transition-timing-function];
   display: none;
 }
 
-:host(:where(:focus-within, [persistent])) {
+:host(:where(:focus-within, :state(persistent))) {
   @include focused;
 }
 
@@ -29,26 +29,20 @@ $host-tokens: [inset z-index transition-duration transition-timing-function];
 }
 
 @each $theme in 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info' {
-  :host([theme='#{$theme}']) {
-    .forge-skip-link {
-      @include theme($theme);
-    }
-  }
+  .forge-skip-link.#{$theme} {
+    @include theme($theme);
 
-  :host([theme='#{$theme}'][muted]) {
-    .forge-skip-link {
+    &.muted {
       @include theme($theme, true);
     }
   }
 }
 
-:host(:where(:not([theme]), [theme='default'])[muted]) {
-  .forge-skip-link {
-    @include theme('secondary', true);
-  }
+.forge-skip-link.default.muted {
+  @include theme('secondary', true);
 }
 
-:host([inline]) {
+:host(:state(inline)) {
   @include inline-host;
 }
 

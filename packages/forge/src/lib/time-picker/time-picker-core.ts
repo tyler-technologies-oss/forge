@@ -113,7 +113,7 @@ export class TimePickerCore implements ITimePickerCore {
     this._adapter.initializeAccessibility(this._identifier);
 
     // Detect if a value already exists in the input and set our values based on that
-    if (!this._value) {
+    if (this._value == null) {
       const inputValue = this._adapter.getInputValue();
       this._setValue(this._convertTimeStringToMillis(inputValue, this._use24HourTime, this._allowSeconds));
     }

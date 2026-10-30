@@ -1,7 +1,7 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconKeyboardArrowDown } from '@tylertech/tyler-icons';
 import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
@@ -40,7 +40,6 @@ export interface IOpenIconComponent extends IBaseComponent {
  *
  * @state open - Applied when the icon is in the open state.
  */
-@customElement(OPEN_ICON_CONSTANTS.elementName)
 export class OpenIconComponent extends BaseLitElement implements IOpenIconComponent {
   public static styles = unsafeCSS(styles);
 
@@ -108,6 +107,8 @@ export class OpenIconComponent extends BaseLitElement implements IOpenIconCompon
     `;
   }
 }
+
+tryDefine(OPEN_ICON_CONSTANTS.elementName, OpenIconComponent);
 
 declare global {
   interface HTMLElementTagNameMap {

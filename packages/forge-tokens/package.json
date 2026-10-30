@@ -1,0 +1,71 @@
+{
+  "name": "@tylertech/forge-tokens",
+  "version": "0.0.0",
+  "description": "Tyler Forge™ global design tokens and Sass utilities",
+  "license": "Apache-2.0",
+  "author": "Tyler Technologies, Inc.",
+  "keywords": [
+    "tyler forge",
+    "design tokens",
+    "style dictionary",
+    "sass"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-tokens"
+  },
+  "type": "module",
+  "exports": {
+    "./tokens/*.json": {
+      "default": "./tokens/*.json"
+    },
+    "./sass/animation": "./sass/animation/index.scss",
+    "./sass/border": "./sass/border/index.scss",
+    "./sass/color-emphasis": "./sass/color-emphasis/index.scss",
+    "./sass/color-palette": "./sass/color-palette/index.scss",
+    "./sass/elevation": "./sass/elevation/index.scss",
+    "./sass/shape": "./sass/shape/index.scss",
+    "./sass/spacing": "./sass/spacing/index.scss",
+    "./sass/theme": "./sass/theme/index.scss",
+    "./sass/typography": "./sass/typography/index.scss",
+    "./sass/*": {
+      "sass": "./sass/*",
+      "default": "./sass/*"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "files": [
+    "tokens/",
+    "sass/"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/build.js && vite serve dev",
+    "dev:build": "node scripts/build.js && vite build dev",
+    "lint": "eslint && stylelint \"src/sass/**/*.scss\"",
+    "test": "vitest run",
+    "format": "prettier --write \"**/*.{js,md,scss,yaml,json}\"",
+    "format:check": "prettier --check \"**/*.{js,md,scss,yaml,json}\""
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/stylelint-rules": "catalog:",
+    "eslint": "catalog:",
+    "glob": "catalog:",
+    "prettier": "catalog:",
+    "sass": "catalog:",
+    "style-dictionary": "^5.7.0",
+    "stylelint": "catalog:",
+    "vite": "catalog:",
+    "vitest": "^4.1.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

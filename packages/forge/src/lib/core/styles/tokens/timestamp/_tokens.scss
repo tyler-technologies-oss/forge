@@ -1,0 +1,12 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+
+$tokens: (
+  color: utils.module-val(timestamp, color, theme.variable(text-medium))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

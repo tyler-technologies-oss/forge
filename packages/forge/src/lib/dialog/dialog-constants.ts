@@ -14,7 +14,6 @@ const observedAttributes = {
   FULLSCREEN_THRESHOLD: 'fullscreen-threshold',
   TRIGGER: 'trigger',
   MOVEABLE: 'moveable',
-  MOVE_TARGET: 'move-target',
   POSITION_STRATEGY: 'position-strategy',
   PLACEMENT: 'placement',
   SIZE_STRATEGY: 'size-strategy',
@@ -40,6 +39,11 @@ const selectors = {
   ACCESSIBLE_DESCRIPTION: '#forge-dialog-description'
 };
 
+const ids = {
+  ACCESSIBLE_LABEL: 'forge-dialog-label',
+  ACCESSIBLE_DESCRIPTION: 'forge-dialog-description'
+};
+
 const events = {
   BEFORE_CLOSE: `${elementName}-before-close`,
   OPEN: `${elementName}-open`,
@@ -61,12 +65,14 @@ const defaults = {
   FULLSCREEN_THRESHOLD: 599
 };
 
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const DIALOG_CONSTANTS = {
   elementName,
   observedAttributes,
   classes,
   attributes,
   selectors,
+  ids,
   events,
   defaults
 };

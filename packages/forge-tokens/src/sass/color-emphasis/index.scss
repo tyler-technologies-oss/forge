@@ -1,0 +1,23 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '../tokens/color-emphasis' as tokens;
+
+///
+/// The semantic color emphasis levels, expressed as percentages.
+///
+$color-emphasis: () !default;
+@each $name, $value in tokens.$emphasis {
+  $color-emphasis: map.set($color-emphasis, $name, math.percentage($value));
+}
+
+///
+/// Gets a color emphasis level as a percentage by semantic name.
+///
+/// Example:
+/// ```scss
+/// color-emphasis.value(highest) => 87%
+/// ```
+///
+@function value($emphasis) {
+  @return map.get($color-emphasis, $emphasis);
+}

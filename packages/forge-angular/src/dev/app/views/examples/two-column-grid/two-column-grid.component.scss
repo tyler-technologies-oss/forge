@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+
+.container-card {
+  max-width: 1024px;
+  min-height: 300px;
+
+  forge-toolbar {
+    forge-icon {
+      padding-right: 16px;
+    }
+
+    forge-button:not(last-child) {
+      padding-right: 16px;
+    }
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(504px, 1fr));
+
+    .form-inner {
+      height: 300px;
+    }
+
+    .upload-container {
+      padding: var(--forge-spacing-medium);
+      border-top: 1px solid var(--forge-theme-outline);
+
+      forge-file-picker {
+        --forge-file-picker-width: 100%;
+      }
+
+      @media (min-width: 1303px) {
+        padding: 0;
+        border-left: 1px solid var(--forge-theme-outline);
+        border-top: none;
+
+        forge-file-picker {
+          --forge-file-picker-width: 100%;
+        }
+      }
+
+      .upload-inner {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        @media (min-width: 1303px) {
+          max-width: 300px;
+        }
+      }
+    }
+  }
+
+  .footer {
+    --forge-toolbar-height: 68px;
+  }
+}

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { task, frame } from '../core/utils/utils.js';
 import { DEFAULT_DATE_MASK, parseDateString, formatDate, isSameDate } from '../core/index.js';
@@ -10,9 +11,10 @@ import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS } from '../calendar/index.j
 import type { ICalendarComponent } from '../calendar/index.js';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
 import { BASE_DATE_PICKER_CONSTANTS } from './base/base-date-picker-constants.js';
-import type { IButtonComponent } from '../button/index.js';
+import type { ButtonComponent } from '../button/index.js';
 import { FIELD_CONSTANTS, POPOVER_CONSTANTS } from '../index.js';
-import type { IDialogAdapter, IFieldComponent, IPopoverComponent } from '../index.js';
+import type { IFieldComponent, IPopoverComponent } from '../index.js';
+import type { IBaseAdapter } from '../core/base/base-adapter.js';
 
 // Popover animation duration (200ms) + buffer
 const POPOVER_ANIMATION_DURATION = 200;
@@ -22,7 +24,7 @@ type DatePickerComponentTest = IDatePickerComponent & {
     _onInputValueChanged: () => void;
     initialize: () => void;
     _isInitialized: boolean;
-    _adapter: IDialogAdapter & {
+    _adapter: IBaseAdapter & {
       setCalendarDisabledDaysOfWeek: () => void;
       _identifier: string;
     };
@@ -1282,8 +1284,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       const popup = getPopup(harness.component);
       const today = new Date();
@@ -1321,8 +1322,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       let popup = getPopup(harness.component);
       const today = new Date();
@@ -1336,8 +1336,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickTodayButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       popup = getPopup(harness.component);
 
@@ -1357,8 +1356,7 @@ describe('DatePickerComponent', () => {
       openPopup(harness.component);
 
       clickClearButton(harness.component);
-      await task(POPOVER_ANIMATION_DURATION);
-      await frame();
+      await waitForPopupRemoved(harness.component);
 
       const popup = getPopup(harness.component);
 
@@ -1587,6 +1585,91 @@ describe('DatePickerComponent', () => {
       expect(inputElement.value).toBe('01/01/202');
     });
 
+    it('should pad single digit month and continue into the day segment when typing with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('42125');
+
+      expect(inputElement.value).toBe('04/21/25__');
+    });
+
+    it('should pad single digit month and day when slash is typed with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('1/5/2025');
+
+      expect(inputElement.value).toBe('01/05/2025');
+    });
+
+    it('should pad single digit day when typed with mask format shown', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('0152025');
+
+      expect(inputElement.value).toBe('01/05/2025');
+    });
+
+    it('should emit change event with coerced date when input value is coerced on blur', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.showMaskFormat = true;
+      harness.component.allowInvalidDate = true;
+      harness.component.valueMode = 'object';
+      harness.component.value = new Date(2025, 3, 21);
+      const changeSpy = vi.fn();
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      await userEvent.keyboard('{End}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{Backspace}{Backspace}');
+      expect(inputElement.value).toBe('04/__/2025');
+
+      harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+      inputElement.blur();
+
+      const expectedDate = new Date(2025, 3, 20);
+      expect(inputElement.value).toBe('04/20/2025');
+      expect(changeSpy).toHaveBeenCalledOnce();
+      expect(isSameDate(changeSpy.mock.calls[0][0].detail, expectedDate)).toBe(true);
+      expect(isSameDate(harness.component.value as Date, expectedDate)).toBe(true);
+    });
+
+    it('should pad month and day segments when a full date is entered at once', () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.value = '4/5/2025';
+      inputElement.dispatchEvent(new Event('input'));
+
+      expect(inputElement.value).toBe('04/05/2025');
+    });
+
+    it('should not emit change event on blur when the value is unchanged', async () => {
+      harness = setupTestContext(true);
+      harness.component.masked = true;
+      harness.component.value = new Date(2025, 3, 21);
+      const changeSpy = vi.fn();
+      harness.component.addEventListener(DATE_PICKER_CONSTANTS.events.CHANGE, changeSpy);
+
+      const inputElement = getInputElement(harness.component);
+      inputElement.focus();
+      inputElement.blur();
+
+      expect(changeSpy).not.toHaveBeenCalled();
+    });
+
     it('should clear mask format if the input is cleared programmatically', () => {
       harness = setupTestContext(true);
       harness.component.value = new Date();
@@ -1709,16 +1792,16 @@ describe('DatePickerComponent', () => {
     activeCell.click();
   }
 
-  function getTodayButton(component: DatePickerComponentTest): IButtonComponent | null {
+  function getTodayButton(component: DatePickerComponentTest): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#today-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#today-button') as ButtonComponent) ?? null;
   }
 
-  function getClearButton(component: DatePickerComponentTest): IButtonComponent | null {
+  function getClearButton(component: DatePickerComponentTest): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#clear-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#clear-button') as ButtonComponent) ?? null;
   }
 
   function clickTodayButton(component: DatePickerComponentTest): void {
@@ -1738,6 +1821,10 @@ describe('DatePickerComponent', () => {
 
   async function popupCloseAnimation(): Promise<void> {
     return task(POPOVER_ANIMATION_DURATION);
+  }
+
+  async function waitForPopupRemoved(component: DatePickerComponentTest): Promise<void> {
+    await vi.waitFor(() => expect(getPopup(component)).toBeNull());
   }
 
   function expectPopupOpen(component: DatePickerComponentTest, isOpen: boolean): void {
