@@ -1,1 +1,1 @@
-import{i as e,rn as t}from"../../../../chunks/icon-BWPXH1zy.js";e.define([t]);var n=[{label:`Help`,value:`help`}],r=document.querySelector(`forge-app-bar-help-button`);r&&(r.options=n);
+import{an as e,i as t}from"../../../../chunks/icon-CPG01XHI.js";t.define([e]);var n=[{label:`Help`,value:`help`}],r=document.querySelector(`forge-app-bar-help-button`);r&&(r.options=n);

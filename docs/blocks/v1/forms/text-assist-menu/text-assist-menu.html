@@ -1,0 +1,55 @@
+<!--
+  @block Text Assist Menu
+  @type pattern
+  @description Text area and text field with an end-slot icon button that opens a menu of AI-style text editing intents such as check grammar, elaborate, and change tone.
+  @tags text-field, textarea, menu, icon-button, text-assist, rewrite, grammar, tone, form
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Text Assist Menu</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="flex flex-col gap-large max-w-[500px]">
+  <forge-text-field label-position="block-start">
+    <label slot="label" for="assist-textarea">Notes</label>
+    <textarea id="assist-textarea" rows="4">I write gud. Me and him goes to the meeting yesterday and we discussed alot of things</textarea>
+    <forge-menu slot="end" id="assist-menu-textarea" placement="bottom-end">
+      <forge-icon-button density="small" aria-label="Edit text with assistant" aria-haspopup="true">
+        <forge-icon name="auto_fix_high"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+  </forge-text-field>
+
+  <forge-text-field label-position="block-start">
+    <label slot="label" for="assist-input">Subject</label>
+    <input type="text" id="assist-input" value="I write gud" />
+    <forge-menu slot="end" id="assist-menu-input" placement="bottom-end">
+      <forge-icon-button density="small" aria-label="Edit text with assistant" aria-haspopup="true">
+        <forge-icon name="auto_fix_high"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+  </forge-text-field>
+</div>
+<script type="module" src="/blocks/v1/forms/text-assist-menu/text-assist-menu.js"></script>
+  </body>
+</html>

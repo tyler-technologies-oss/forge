@@ -1,1 +1,1 @@
-import{Jn as e,Mn as t,i as n}from"../../../chunks/icon-BWPXH1zy.js";n.define([t,e]);
+import{Fn as e,Zn as t,i as n}from"../../../chunks/icon-CPG01XHI.js";n.define([e,t]);
