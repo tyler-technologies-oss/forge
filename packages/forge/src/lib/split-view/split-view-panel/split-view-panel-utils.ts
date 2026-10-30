@@ -1,6 +1,11 @@
 import { percentToPixels, safeMin, scaleValue } from '../../core/utils/utils.js';
-import { ISplitViewPanelCursorConfig, ISplitViewPanelState, SplitViewInputDeviceType, SPLIT_VIEW_PANEL_CONSTANTS } from './split-view-panel-constants.js';
-import { ISplitViewPanelAdapter } from './split-view-panel-adapter.js';
+import {
+  ISplitViewPanelCursorConfig,
+  ISplitViewPanelResizeAdapter,
+  ISplitViewPanelState,
+  SplitViewInputDeviceType,
+  SPLIT_VIEW_PANEL_CONSTANTS
+} from './split-view-panel-constants.js';
 import { SplitViewOrientation } from '../split-view/split-view-constants.js';
 import { ISplitViewPanelComponent, SplitViewPanelComponent } from './split-view-panel.js';
 
@@ -26,7 +31,7 @@ export function initState(): ISplitViewPanelState {
  * @param state The panel's state object.
  * @returns An updated state object.
  */
-export function setState(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState): ISplitViewPanelState {
+export function setState(adapter: ISplitViewPanelResizeAdapter, state: ISplitViewPanelState): ISplitViewPanelState {
   const currentSize = adapter.getContentSize(state.orientation);
   return {
     ...state,
@@ -61,7 +66,7 @@ export function clearState(state: ISplitViewPanelState): ISplitViewPanelState {
  * @param state The panel's state object.
  * @returns Whether a resize happened.
  */
-export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent, state: ISplitViewPanelState): boolean {
+export function pointerResize(adapter: ISplitViewPanelResizeAdapter, evt: PointerEvent, state: ISplitViewPanelState): boolean {
   if (state.startPoint === undefined || state.startSize === undefined) {
     return false;
   }
@@ -93,7 +98,7 @@ export function pointerResize(adapter: ISplitViewPanelAdapter, evt: PointerEvent
  * @param state The panel's state object.
  * @returns Whether a resize happened.
  */
-export function keyboardResize(adapter: ISplitViewPanelAdapter, increment: number, state: ISplitViewPanelState): boolean {
+export function keyboardResize(adapter: ISplitViewPanelResizeAdapter, increment: number, state: ISplitViewPanelState): boolean {
   if (state.startSize === undefined) {
     return false;
   }
@@ -120,7 +125,7 @@ export function keyboardResize(adapter: ISplitViewPanelAdapter, increment: numbe
  * @param state The panel's state object.
  * @returns The new pixel size of the panel.
  */
-export function minResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState): number {
+export function minResize(adapter: ISplitViewPanelResizeAdapter, state: ISplitViewPanelState): number {
   adapter.setContentSize(state.min);
   return state.min;
 }
@@ -131,7 +136,7 @@ export function minResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPane
  * @param state The panel's state object.
  * @returns The new pixel size of the panel.
  */
-export function maxResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState): number {
+export function maxResize(adapter: ISplitViewPanelResizeAdapter, state: ISplitViewPanelState): number {
   const availableSpace = adapter.getAvailableSpace(state.orientation, state.resizable);
   const max = safeMin(state.max, availableSpace);
   adapter.setContentSize(max);
@@ -144,7 +149,7 @@ export function maxResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPane
  * @param delta The change in size to apply to the sibling.
  * @param state The panel's state object.
  */
-export function resizeSibling(adapter: ISplitViewPanelAdapter, delta: number, state: ISplitViewPanelState): void {
+export function resizeSibling(adapter: ISplitViewPanelResizeAdapter, delta: number, state: ISplitViewPanelState): void {
   if (state.siblingSize !== undefined) {
     const siblingSize = state.siblingSize + delta;
     adapter.setSiblingContentSize(siblingSize);
@@ -171,7 +176,11 @@ export function clampSize(size: number, state: ISplitViewPanelState): number {
  * @param inputDevice The input device responsible for the resize.
  * @returns Whether the panel is at its min or max size.
  */
-export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, state: ISplitViewPanelState, inputDevice?: SplitViewInputDeviceType): boolean {
+export function handleBoundariesDuringResize(
+  adapter: ISplitViewPanelResizeAdapter,
+  state: ISplitViewPanelState,
+  inputDevice?: SplitViewInputDeviceType
+): boolean {
   if (state.currentSize === undefined) {
     return false;
   }
@@ -223,7 +232,7 @@ export function handleBoundariesDuringResize(adapter: ISplitViewPanelAdapter, st
  * @param state The panel's state object.
  * @returns Whether the panel is at its min or max size.
  */
-export function handleBoundariesAfterResize(adapter: ISplitViewPanelAdapter, size: number, state: ISplitViewPanelState): boolean {
+export function handleBoundariesAfterResize(adapter: ISplitViewPanelResizeAdapter, size: number, state: ISplitViewPanelState): boolean {
   if (size <= state.min) {
     adapter.setHandleCursor(state.orientation, { resizable: state.resizable, boundary: 'min' });
     return true;

@@ -111,6 +111,21 @@ export interface ISplitViewPanelState {
   max?: number;
 }
 
+/**
+ * The operations that the resize utilities need from a panel.
+ */
+export interface ISplitViewPanelResizeAdapter {
+  getContentSize(orientation: SplitViewOrientation): number;
+  setContentSize(value: number): void;
+  setValuenow(value: number): void;
+  getAvailableSpace(orientation: SplitViewOrientation, resizable: SplitViewPanelResizable): number;
+  getSiblingContentSize(): number;
+  setSiblingContentSize(value: number): void;
+  setHandleCursor(orientation?: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
+  setBodyCursor(orientation: SplitViewOrientation, config?: ISplitViewPanelCursorConfig): void;
+  animateStateLayer(fromActivated: boolean): void;
+}
+
 export interface ISplitViewPanelWillResizeEvent {
   inputDeviceType: SplitViewInputDeviceType;
 }

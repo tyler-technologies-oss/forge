@@ -5,20 +5,9 @@ import type { ISplitViewPanelComponent } from '../split-view-panel/split-view-pa
 import { SPLIT_VIEW_PANEL_CONSTANTS, SplitViewAnimatingLayer } from '../split-view-panel/split-view-panel-constants.js';
 import type { ISplitViewComponent } from './split-view.js';
 import { SPLIT_VIEW_CONSTANTS } from './split-view-constants.js';
-import type { ISplitViewCore } from './split-view-core.js';
-import type { ISplitViewAdapter } from './split-view-adapter.js';
 
 import '../split-view-panel/split-view-panel.js';
 import './split-view.js';
-
-type SplitViewCoreInternal = ISplitViewCore & { _adapter: ISplitViewAdapter };
-type SplitViewComponentInternal = ISplitViewComponent & { _core: SplitViewCoreInternal };
-
-interface SplitViewPanelCoreInternal {
-  _adapter: ISplitViewAdapter;
-  _orientation: string;
-}
-type SplitViewPanelComponentInternal = ISplitViewPanelComponent & { _core: SplitViewPanelCoreInternal };
 
 describe('SplitView', () => {
   afterEach(() => {
@@ -145,11 +134,57 @@ describe('SplitView', () => {
 
   describe('panels', () => {
     it('should set orientation', async () => {
-      const harness = await createFixture({ appendToBody: false, numberOfPanels: 1 });
+      const harness = await createFixture({ appendToBody: true, numberOfPanels: 1 });
 
       harness.element.orientation = 'vertical';
+      await harness.updateComplete();
 
-      expect((harness.panels[0] as SplitViewPanelComponentInternal)['_core']._orientation).toBe('vertical');
+      const root = harness.panels[0].shadowRoot!.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)!;
+      expect(root.getAttribute('orientation')).toBe('vertical');
+    });
+
+    it('should provide split view properties to panels', async () => {
+      const harness = await createFixture({ appendToBody: true, numberOfPanels: 2 });
+      harness.panels[0].resizable = 'end';
+      await harness.updateComplete();
+
+      harness.element.disabled = true;
+      await harness.updateComplete();
+
+      const root = harness.panels[0].shadowRoot!.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)!;
+      expect(root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED)).toBe(true);
+
+      harness.element.disabled = false;
+      await harness.updateComplete();
+
+      expect(root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED)).toBe(false);
+    });
+
+    it('should provide split view properties to panels that connect later', async () => {
+      const harness = await createFixture({ appendToBody: true, numberOfPanels: 1 });
+      harness.element.disabled = true;
+      await harness.updateComplete();
+
+      const panel = document.createElement('forge-split-view-panel');
+      harness.element.appendChild(panel);
+      await panel.updateComplete;
+
+      const root = panel.shadowRoot!.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)!;
+      expect(root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED)).toBe(true);
+    });
+
+    it('should not override panel properties with split view properties', async () => {
+      const harness = await createFixture({ appendToBody: true, numberOfPanels: 2 });
+      harness.panels[0].disabled = false;
+      await harness.updateComplete();
+
+      harness.element.disabled = true;
+      await harness.updateComplete();
+
+      const firstRoot = harness.panels[0].shadowRoot!.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)!;
+      const secondRoot = harness.panels[1].shadowRoot!.querySelector(SPLIT_VIEW_PANEL_CONSTANTS.selectors.ROOT)!;
+      expect(firstRoot.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED)).toBe(false);
+      expect(secondRoot.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.DISABLED)).toBe(true);
     });
 
     it('should layout when all have resizable set to off', async () => {
@@ -190,9 +225,9 @@ describe('SplitView', () => {
       const harness = await createFixture({ appendToBody: false, numberOfPanels: 2 });
 
       harness.panels[0].resizable = 'end';
-      const updateSpy = vi.spyOn(harness.panels[0], 'update');
+      const updateSpy = vi.spyOn(harness.panels[0], 'updatePanel');
 
-      harness.element.update({ accessibility: true });
+      harness.element.updatePanels({ accessibility: true });
 
       expect(updateSpy).toHaveBeenCalled();
     });
@@ -202,7 +237,7 @@ describe('SplitView', () => {
 
       await frame();
 
-      const updateSpy = vi.spyOn(harness.panels[0], 'update');
+      const updateSpy = vi.spyOn(harness.panels[0], 'updatePanel');
       harness.panels[0].resizable = 'end';
       harness.element.style.width = '100%';
       harness.element.parentElement!.style.width = '400px';
@@ -242,9 +277,13 @@ describe('SplitView', () => {
       div.appendChild(panel);
       harness.element.appendChild(div);
 
-      const queriedComponents = (harness.element as SplitViewComponentInternal)['_core']['_adapter'].getSlottedPanels();
+      harness.element.layerSlottedPanels(harness.panels[0]);
 
-      expect(queriedComponents.length).toBe(2);
+      const layered = Array.from(harness.element.querySelectorAll('forge-split-view-panel')).filter(el =>
+        el.style.getPropertyValue(SPLIT_VIEW_CONSTANTS.customCssProperties.ANIMATING_LAYER)
+      );
+
+      expect(layered.length).toBe(numberOfImmediateChildren);
     });
   });
 });
@@ -255,12 +294,12 @@ interface IFixtureConfig {
 }
 
 async function createFixture({ appendToBody = false, numberOfPanels = 0 }: IFixtureConfig = {}): Promise<SplitViewTestHarness> {
-  const component = document.createElement('forge-split-view') as SplitViewComponentInternal;
+  const component = document.createElement('forge-split-view') as ISplitViewComponent;
 
-  let panels: SplitViewPanelComponentInternal[] = [];
+  let panels: ISplitViewPanelComponent[] = [];
   if (numberOfPanels) {
     panels = new Array(numberOfPanels).fill(undefined).map(() => {
-      const panel = document.createElement('forge-split-view-panel') as SplitViewPanelComponentInternal;
+      const panel = document.createElement('forge-split-view-panel') as ISplitViewPanelComponent;
       component.appendChild(panel);
       return panel;
     });
@@ -274,7 +313,11 @@ async function createFixture({ appendToBody = false, numberOfPanels = 0 }: IFixt
     document.body.appendChild(fixture);
   }
 
-  return new SplitViewTestHarness(component, panels);
+  const harness = new SplitViewTestHarness(component, panels);
+  if (appendToBody) {
+    await harness.updateComplete();
+  }
+  return harness;
 }
 
 class SplitViewTestHarness extends TestHarness<ISplitViewComponent> {
@@ -286,6 +329,11 @@ class SplitViewTestHarness extends TestHarness<ISplitViewComponent> {
   }
 
   public initElementRefs(): void {}
+
+  public async updateComplete(): Promise<void> {
+    await this.element.updateComplete;
+    await Promise.all(this.panels.map(panel => panel.updateComplete));
+  }
 
   public appendToBody(): void {
     document.body.appendChild(this.element);

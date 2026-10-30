@@ -1,3 +1,4 @@
+import { createContext } from '@lit/context';
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 import { ISplitViewBase } from '../core/index.js';
 import { SPLIT_VIEW_PANEL_CONSTANTS } from '../split-view-panel/split-view-panel-constants.js';
@@ -48,7 +49,14 @@ export type SplitViewOrientation = 'horizontal' | 'vertical';
 export interface ISplitViewUpdateConfig {
   accessibility?: boolean;
   cursor?: boolean;
-  orientation?: SplitViewOrientation;
-  properties?: Partial<ISplitViewBase>;
   size?: boolean;
 }
+
+/**
+ * The state that a split view shares with its panels.
+ */
+export interface ISplitViewContext extends ISplitViewBase {
+  orientation: SplitViewOrientation;
+}
+
+export const SPLIT_VIEW_CONTEXT = createContext<ISplitViewContext>(elementName);
