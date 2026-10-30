@@ -38,6 +38,13 @@ import { defineDateRangePickerComponent } from './date-range-picker/index.js';
 import { defineDialogComponent } from './dialog/index.js';
 import { defineDividerComponent } from './divider/index.js';
 import { defineDrawerComponent, defineMiniDrawerComponent, defineModalDrawerComponent } from './drawer/index.js';
+import {
+  defineDropdownMenuComponent,
+  defineDropdownMenuGroupComponent,
+  defineDropdownMenuItemCheckboxComponent,
+  defineDropdownMenuItemComponent,
+  defineDropdownMenuItemRadioComponent
+} from './dropdown-menu/index.js';
 import { defineExpansionPanelComponent } from './expansion-panel/index.js';
 import { defineFieldComponent } from './field/index.js';
 import { defineFilePickerComponent } from './file-picker/index.js';
@@ -122,6 +129,7 @@ export * from './date-range-picker/index.js';
 export * from './dialog/index.js';
 export * from './divider/index.js';
 export * from './drawer/index.js';
+export * from './dropdown-menu/index.js';
 export * from './expansion-panel/index.js';
 export * from './field/index.js';
 export * from './file-picker/index.js';
@@ -216,6 +224,11 @@ export function defineComponents(): void {
   defineDialogComponent();
   defineDividerComponent();
   defineDrawerComponent();
+  defineDropdownMenuComponent();
+  defineDropdownMenuGroupComponent();
+  defineDropdownMenuItemComponent();
+  defineDropdownMenuItemCheckboxComponent();
+  defineDropdownMenuItemRadioComponent();
   defineExpansionPanelComponent();
   defineFieldComponent();
   defineFilePickerComponent();

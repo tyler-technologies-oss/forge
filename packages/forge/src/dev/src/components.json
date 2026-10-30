@@ -22,6 +22,7 @@
   { "label": "Dialog", "path": "/pages/dialog/dialog.html" },
   { "label": "Divider", "path": "/pages/divider/divider.html" },
   { "label": "Drawer", "path": "/pages/drawer/drawer.html" },
+  { "label": "Dropdown menu", "path": "/pages/dropdown-menu/dropdown-menu.html", "tags": ["menu", "popover"] },
   { "label": "Expansion panel", "path": "/pages/expansion-panel/expansion-panel.html" },
   { "label": "Field", "path": "/pages/field/field.html", "tags": ["form"] },
   { "label": "File picker", "path": "/pages/file-picker/file-picker.html", "tags": ["form"] },

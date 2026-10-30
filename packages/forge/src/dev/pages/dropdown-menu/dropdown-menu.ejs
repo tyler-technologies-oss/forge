@@ -1,0 +1,128 @@
+<div class="vert">
+  <div>
+    <h3 class="forge-typography--heading2">Trigger by id</h3>
+    <forge-button id="id-trigger" variant="outlined">Actions</forge-button>
+    <forge-dropdown-menu trigger="id-trigger">
+      <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="duplicate">Duplicate</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="archive" disabled>Archive</forge-dropdown-menu-item>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-item value="share">
+        Share
+        <forge-dropdown-menu-item value="email">Email</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="link">Copy link</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item>
+          Social
+          <forge-dropdown-menu-item value="mastodon">Mastodon</forge-dropdown-menu-item>
+          <forge-dropdown-menu-item value="bluesky">Bluesky</forge-dropdown-menu-item>
+        </forge-dropdown-menu-item>
+      </forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="delete">Delete</forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Trigger element</h3>
+    <forge-icon-button id="element-trigger" aria-label="More options">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+    <forge-dropdown-menu id="element-menu" placement="bottom-end">
+      <forge-dropdown-menu-item value="settings">Settings</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="help">Help</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="sign-out">Sign out</forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Rich items</h3>
+    <forge-button id="rich-trigger" variant="outlined">Open</forge-button>
+    <forge-dropdown-menu trigger="rich-trigger">
+      <forge-dropdown-menu-item value="inbox" two-line>
+        <forge-icon slot="start" name="inbox"></forge-icon>
+        Inbox
+        <span slot="secondary">12 unread messages</span>
+        <forge-kbd slot="end" keys="G I"></forge-kbd>
+      </forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="drafts" two-line>
+        <forge-icon slot="start" name="drafts"></forge-icon>
+        Drafts
+        <span slot="secondary">3 drafts</span>
+      </forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="move">
+        <forge-icon slot="start" name="drive_file_move"></forge-icon>
+        Move to
+        <forge-dropdown-menu-item value="archive">Archive</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="spam">Spam</forge-dropdown-menu-item>
+      </forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Checkbox and radio items</h3>
+    <forge-button id="checkable-trigger" variant="outlined">View</forge-button>
+    <forge-dropdown-menu id="checkable-menu" trigger="checkable-trigger">
+      <forge-dropdown-menu-item-checkbox name="show" value="ruler" checked>Show ruler</forge-dropdown-menu-item-checkbox>
+      <forge-dropdown-menu-item-checkbox name="show" value="grid">Show grid lines</forge-dropdown-menu-item-checkbox>
+      <forge-dropdown-menu-item-checkbox name="show" value="guides" disabled>Show guides</forge-dropdown-menu-item-checkbox>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-item-radio name="density" value="compact">Compact</forge-dropdown-menu-item-radio>
+      <forge-dropdown-menu-item-radio name="density" value="default" checked>Default</forge-dropdown-menu-item-radio>
+      <forge-dropdown-menu-item-radio name="density" value="comfortable">Comfortable</forge-dropdown-menu-item-radio>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-item value="sort">
+        Sort by
+        <forge-dropdown-menu-item-radio name="sort" value="name" checked>Name</forge-dropdown-menu-item-radio>
+        <forge-dropdown-menu-item-radio name="sort" value="date">Date modified</forge-dropdown-menu-item-radio>
+        <forge-divider></forge-divider>
+        <forge-dropdown-menu-item-checkbox name="sort-folders" value="folders-first" checked>Folders first</forge-dropdown-menu-item-checkbox>
+      </forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Groups</h3>
+    <forge-button id="group-trigger" variant="outlined">Edit</forge-button>
+    <forge-dropdown-menu trigger="group-trigger">
+      <forge-dropdown-menu-group label="Clipboard">
+        <forge-dropdown-menu-item value="cut">Cut</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="copy">Copy</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="paste">Paste</forge-dropdown-menu-item>
+      </forge-dropdown-menu-group>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-group label="History">
+        <forge-dropdown-menu-item value="undo">Undo</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="redo" disabled>Redo</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="revisions">
+          Revisions
+          <forge-dropdown-menu-group label="Recent">
+            <forge-dropdown-menu-item value="revision-1">Today, 9:41 AM</forge-dropdown-menu-item>
+            <forge-dropdown-menu-item value="revision-2">Yesterday, 4:12 PM</forge-dropdown-menu-item>
+          </forge-dropdown-menu-group>
+        </forge-dropdown-menu-item>
+      </forge-dropdown-menu-group>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Dense</h3>
+    <forge-button id="dense-trigger" variant="outlined">Dense</forge-button>
+    <forge-dropdown-menu trigger="dense-trigger" dense>
+      <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="duplicate">Duplicate</forge-dropdown-menu-item>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-item-checkbox value="pinned" checked>Pinned</forge-dropdown-menu-item-checkbox>
+      <forge-dropdown-menu-item value="share">
+        Share
+        <forge-dropdown-menu-item value="email">Email</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="link">Copy link</forge-dropdown-menu-item>
+      </forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Last selection</h3>
+    <p id="selection-output">Nothing selected</p>
+  </div>
+</div>
+
+<script type="module" src="dropdown-menu.ts"></script>
