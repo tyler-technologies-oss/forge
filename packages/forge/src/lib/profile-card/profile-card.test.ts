@@ -15,9 +15,9 @@ import { frame } from '../core/utils/utils.js';
 import './profile-card.js';
 
 class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
-  private _actionToolbarElement: IToolbarComponent;
-  private _signOutButton: ButtonComponent;
-  private _profileButton: ButtonComponent;
+  private _actionToolbarElement: IToolbarComponent | null;
+  private _signOutButton: ButtonComponent | null;
+  private _profileButton: ButtonComponent | null;
   private _avatarElement: IAvatarComponent;
   private _fullNameElement: HTMLElement;
   private _emailElement: HTMLElement;
@@ -27,58 +27,57 @@ class ProfileCardHarness extends TestHarness<IProfileCardComponent> {
   }
 
   public initElementRefs(): void {
-    this._actionToolbarElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) as IToolbarComponent;
-    this._signOutButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) as ButtonComponent;
-    this._profileButton = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) as ButtonComponent;
+    this._actionToolbarElement = this.element.shadowRoot?.querySelector(PROFILE_CARD_CONSTANTS.selectors.ACTION_TOOLBAR) ?? null;
+    this._signOutButton = this.element.shadowRoot?.querySelector(PROFILE_CARD_CONSTANTS.selectors.SIGN_OUT_BUTTON) ?? null;
+    this._profileButton = this.element.shadowRoot?.querySelector(PROFILE_CARD_CONSTANTS.selectors.PROFILE_BUTTON) ?? null;
     this._avatarElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.AVATAR) as IAvatarComponent;
     this._fullNameElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.FULL_NAME) as HTMLElement;
     this._emailElement = getShadowElement(this.element, PROFILE_CARD_CONSTANTS.selectors.EMAIL) as HTMLElement;
   }
 
+  public async update(): Promise<void> {
+    await this.element.updateComplete;
+    this.initElementRefs();
+  }
+
   public get fullName(): string {
     return this._fullNameElement.innerText;
-  }
-  public set fullName(value: string) {
-    this.element.fullName = value;
   }
 
   public get email(): string {
     return this._emailElement.innerText;
-  }
-  public set email(value: string) {
-    this.element.email = value;
   }
 
   public get avatarElement(): IAvatarComponent {
     return this._avatarElement;
   }
 
-  public get signOutButton(): ButtonComponent {
+  public get signOutButton(): ButtonComponent | null {
     return this._signOutButton;
   }
 
-  public get profileButton(): ButtonComponent {
+  public get profileButton(): ButtonComponent | null {
     return this._profileButton;
   }
 
   public get isToolbarVisible(): boolean {
-    return getComputedStyle(this._actionToolbarElement).display !== 'none';
+    return !!this._actionToolbarElement && getComputedStyle(this._actionToolbarElement).display !== 'none';
   }
 
   public get isSignOutButtonVisible(): boolean {
-    return getComputedStyle(this._signOutButton).display !== 'none';
+    return !!this._signOutButton && getComputedStyle(this._signOutButton).display !== 'none';
   }
 
   public get isProfileButtonVisible(): boolean {
-    return getComputedStyle(this._profileButton).display !== 'none';
+    return !!this._profileButton && getComputedStyle(this._profileButton).display !== 'none';
   }
 
   public async clickSignOutButton(): Promise<void> {
-    await userEvent.click(this._signOutButton);
+    await userEvent.click(this._signOutButton as ButtonComponent);
   }
 
   public async clickProfileButton(): Promise<void> {
-    await userEvent.click(this._profileButton);
+    await userEvent.click(this._profileButton as ButtonComponent);
   }
 }
 
@@ -126,6 +125,7 @@ describe('Profile Card', () => {
       </forge-profile-card>
     `);
     const el = screen.container.querySelector('forge-profile-card') as IProfileCardComponent;
+    await el.updateComplete;
     return new ProfileCardHarness(el);
   }
 
@@ -145,7 +145,8 @@ describe('Profile Card', () => {
     const harness = await setupTest();
 
     const newFullName = 'New Name';
-    harness.fullName = newFullName;
+    harness.element.fullName = newFullName;
+    await harness.update();
 
     expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.FULL_NAME)).toBe(newFullName);
     expect(harness.fullName).toBe(newFullName);
@@ -162,7 +163,8 @@ describe('Profile Card', () => {
     const harness = await setupTest();
 
     const newEmail = 'new email';
-    harness.email = newEmail;
+    harness.element.email = newEmail;
+    await harness.update();
 
     expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.EMAIL)).toBe(newEmail);
     expect(harness.email).toBe(newEmail);
@@ -269,7 +271,7 @@ describe('Profile Card', () => {
 
     expect(harness.element.signOutText).toBe(signOutText);
     expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.SIGN_OUT_TEXT)).toBe(signOutText);
-    expect(harness.signOutButton.innerText).toBe(signOutText);
+    expect(harness.signOutButton?.innerText).toBe(signOutText);
   });
 
   it('should set profile text', async () => {
@@ -278,7 +280,7 @@ describe('Profile Card', () => {
 
     expect(harness.element.profileText).toBe(profileText);
     expect(harness.element.getAttribute(PROFILE_CARD_CONSTANTS.attributes.PROFILE_TEXT)).toBe(profileText);
-    expect(harness.profileButton.innerText).toBe(profileText);
+    expect(harness.profileButton?.innerText).toBe(profileText);
   });
 
   it('should set avatar icon', async () => {
@@ -302,6 +304,7 @@ describe('Profile Card', () => {
     expect(iconElement).toBeTruthy();
 
     harness.element.avatarIcon = '';
+    await harness.update();
 
     expect(harness.element.avatarIcon).toBe('');
     expect(harness.element.hasAttribute(PROFILE_CARD_CONSTANTS.attributes.AVATAR_ICON)).toBe(false);

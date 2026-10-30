@@ -28,7 +28,8 @@ const defaults = {
   SHOW_SIGN_OUT_BUTTON: true,
   SHOW_PROFILE_BUTTON: false,
   SIGN_OUT_BUTTON_TEXT: 'Sign out',
-  PROFILE_BUTTON_TEXT: 'Profile'
+  PROFILE_BUTTON_TEXT: 'Profile',
+  AVATAR_LETTER_COUNT: 2
 };
 
 const events = {

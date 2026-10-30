@@ -449,6 +449,7 @@ describe('App Bar Profile Button', () => {
       expect(signOutButton.innerText).toBe('Sign out');
 
       el.signOutButtonText = 'Custom Sign Out';
+      await profileCard.updateComplete;
 
       expect(profileCard.signOutText).toBe('Custom Sign Out');
       expect(signOutButton.innerText).toBe('Custom Sign Out');
@@ -466,6 +467,7 @@ describe('App Bar Profile Button', () => {
       expect(profileButton.innerText).toBe('Profile');
 
       el.profileButtonText = 'Custom Profile';
+      await profileCard.updateComplete;
 
       expect(profileCard.profileText).toBe('Custom Profile');
       expect(profileButton.innerText).toBe('Custom Profile');
