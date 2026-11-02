@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentHeader from "../../components/ContentHeader.astro";
+import PageScaffold from "../../components/PageScaffold.astro";
+import ComingSoon from "../../components/docs/ComingSoon.astro";
+
+const title = "Blog";
+const description = "News, release announcements, and articles from the Tyler Forge team.";
+---
+
+<BaseLayout title={title} description={description}>
+  <PageScaffold class="content-page">
+    <ContentHeader slot="header" title={title} description={description} />
+    <ComingSoon icon="newspaper_variant_outline" label="Blog" message="Blog posts are coming soon." />
+  </PageScaffold>
+</BaseLayout>

@@ -1,5 +1,21 @@
 # @tylertech/forge
 
+## 3.25.0
+
+### Bug Fixes
+
+- 262f71c: **chip-field**: prevent popover from closing immediately when the label is clicked
+- f65f9d6: **focus-indicator**: show the focus indicator when the anchor ignores pointer events and the target is visible, including inputs in text fields
+
+### Dependencies
+
+- Updated dependencies [3a0eed4]
+  - @tylertech/forge-tokens@0.1.0
+
+### Other Changes
+
+- 3a0eed4: The global design tokens and their Sass utilities now come from the new `@tylertech/forge-tokens` package, which is a new dependency. The `@tylertech/forge/sass/core/styles/*` modules (including `core/styles/tokens/*`) are deprecated. They continue to work and forward to the new package, but now warn at compile time and will be removed in the next major version. Import the equivalent modules from `@tylertech/forge-tokens/sass/*` instead, for example `@tylertech/forge-tokens/sass/theme`. The generated CSS is unchanged.
+
 ## 3.24.1
 
 ### Documentation

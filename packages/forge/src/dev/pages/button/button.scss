@@ -2,7 +2,7 @@
 @use '../../src/shared';
 @use '../../../lib/button';
 @use '../../../lib/focus-indicator';
-@use '../../../lib/core/styles/elevation';
+@use '@tylertech/forge-tokens/sass/elevation';
 
 .content > .card {
   max-width: 1024px;

@@ -7,12 +7,13 @@
 interface Props {
   icon: string;
   label: string;
+  message?: string;
 }
 
-const { icon, label } = Astro.props;
+const { icon, label, message = `${label} documentation coming soon.` } = Astro.props;
 ---
 
 <div class="flex flex-col items-center justify-center p-xxlarge bg-surface-container-low rounded-lg text-center text-low">
   <forge-icon name={icon} external class="text-[48px] mb-medium opacity-50" />
-  <p class="m-0">{label} documentation coming soon.</p>
+  <p class="m-0">{message}</p>
 </div>

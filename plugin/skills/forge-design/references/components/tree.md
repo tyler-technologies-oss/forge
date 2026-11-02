@@ -25,9 +25,9 @@ Tree is an experimental component in developer preview — its API and implement
 
 ## Basic usage
 
-Nest `forge-tree-item` elements inside each other to build the hierarchy; each item's `value` identifies it when selected.
+Nest `forge-tree-item` elements in each other's `children` slot to build the hierarchy; each item's `value` identifies it when selected.
 
-Example (A tree with nested items, one expanded to show its children.): `get_forge_blocks(blockId: "components/tree/demo/demo")`
+Example (A three-level tree of nested items.): `get_forge_blocks(blockId: "components/tree/demo/demo")`
 
 ## Selection
 

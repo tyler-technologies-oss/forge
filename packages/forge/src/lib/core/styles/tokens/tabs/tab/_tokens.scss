@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../../theme';
-@use '../../../utils';
-@use '../../../spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 $tokens: (
   // Shared

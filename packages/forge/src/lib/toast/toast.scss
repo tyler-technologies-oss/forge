@@ -2,7 +2,7 @@
 @use './animations';
 @use '../button';
 @use '../icon-button';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../utils/mixins-media' as media;
 
 @layer base, open, theme, placement, media;

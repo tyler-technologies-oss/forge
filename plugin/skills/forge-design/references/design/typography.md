@@ -2,8 +2,6 @@
 
 Guidance for using Tyler Forge's typography system in your designs.
 
-> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.
-
 Forge uses one font, Roboto, and a fixed set of type styles. Every piece of text in a design should use one of these styles rather than a custom size or weight. The full list of classes and how to load them is on the [developer typography](../development/typography.md) page, and the token values are on the [typography tokens](https://tylerforge.design/tokens/typography/) page.
 
 ## The scale

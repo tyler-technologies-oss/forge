@@ -1,0 +1,27 @@
+{
+  "z-index": {
+    "$type": "number",
+    "$description": "Layering values that define z-index ranges for common groups of UI elements to ensure floating elements overlay correctly.",
+    "surface": {
+      "$value": 1
+    },
+    "header": {
+      "$value": 4
+    },
+    "backdrop": {
+      "$value": 7
+    },
+    "dialog": {
+      "$value": 8
+    },
+    "notification": {
+      "$value": 9
+    },
+    "popup": {
+      "$value": 10
+    },
+    "tooltip": {
+      "$value": 11
+    }
+  }
+}
