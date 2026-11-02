@@ -20,7 +20,7 @@ Little or no core/adapter, no shared-infrastructure dependencies.
 
 | Done | Component           | Size | Notes                                      |
 | ---- | ------------------- | ---- | ------------------------------------------ |
-| [ ]  | view-switcher/view  | 30   |                                            |
+| [x]  | view-switcher/view  | 30   |                                            |
 | [ ]  | page-state          | 75   | No core.                                   |
 | [ ]  | scaffold            | 114  | No core.                                   |
 | [ ]  | inline-message      | 126  | 2 properties.                              |
