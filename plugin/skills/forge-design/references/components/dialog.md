@@ -30,7 +30,7 @@ A dialog's content is typically a `forge-scaffold` with a `header` toolbar (titl
 <forge-dialog labelledby="edit-profile-title">
   <forge-scaffold>
     <forge-toolbar slot="header">
-      <h2 slot="start" id="edit-profile-title" class="forge-typography--heading3">Edit profile</h2>
+      <h2 slot="start" id="edit-profile-title" class="forge-typography--heading4">Edit profile</h2>
       <forge-icon-button slot="end" density="medium" aria-label="Close dialog">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
@@ -128,7 +128,7 @@ You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog
 
 ```html
 <forge-dialog labelledby="dialog-title" describedby="dialog-message">
-  <h2 id="dialog-title" class="forge-typography--heading3">Delete file?</h2>
+  <h2 id="dialog-title" class="forge-typography--heading4">Delete file?</h2>
   <p id="dialog-message">This can't be undone.</p>
 </forge-dialog>
 ```
