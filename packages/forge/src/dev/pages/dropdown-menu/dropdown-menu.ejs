@@ -34,6 +34,32 @@
   </div>
 
   <div>
+    <h3 class="forge-typography--heading2">Anchor by id</h3>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <forge-button id="anchor-id-trigger" variant="outlined">Actions</forge-button>
+      <span id="anchor-id-target" style="padding: 8px 16px; border: 1px dashed currentColor">Menu is positioned relative to this element</span>
+    </div>
+    <forge-dropdown-menu trigger="anchor-id-trigger" anchor="anchor-id-target">
+      <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="duplicate">Duplicate</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="delete">Delete</forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
+    <h3 class="forge-typography--heading2">Anchor element</h3>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <forge-button id="anchor-element-trigger" variant="outlined">Actions</forge-button>
+      <span id="anchor-element-target" style="padding: 8px 16px; border: 1px dashed currentColor">Menu is positioned relative to this element</span>
+    </div>
+    <forge-dropdown-menu id="anchor-element-menu" trigger="anchor-element-trigger" placement="bottom-end">
+      <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="duplicate">Duplicate</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="delete">Delete</forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">Rich items</h3>
     <forge-button id="rich-trigger" variant="outlined">Open</forge-button>
     <forge-dropdown-menu trigger="rich-trigger">

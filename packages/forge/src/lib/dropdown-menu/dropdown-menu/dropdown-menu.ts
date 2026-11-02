@@ -1,10 +1,11 @@
-import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_NAME_PROPERTY, getShadowElement, tryDefine } from '@tylertech/forge-core';
 import { provide } from '@lit/context';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { KeyActionController } from '../../core/utils/key-action.js';
-import type { OverlayPlacement } from '../../overlay/overlay-constants.js';
+import { IOverlayComponent } from '../../overlay/overlay.js';
+import { OVERLAY_CONSTANTS, type OverlayPlacement } from '../../overlay/overlay-constants.js';
 import { IPopoverToggleEventData } from '../../popover/popover-constants.js';
 import type { PopoverComponent } from '../../popover/popover.js';
 import type { BaseDropdownMenuItem } from '../base/base-dropdown-menu-item.js';
@@ -37,6 +38,9 @@ import styles from './dropdown-menu.scss';
  * @description
  * Unlike most popovers, a dropdown menu does not wrap its trigger. Connect it to a trigger element with either
  * the `trigger` attribute (the `id` of the element) or the `triggerElement` property (a reference to the element).
+ *
+ * By default the menu is positioned relative to its trigger. Use the `anchor` attribute (the `id` of the element) or the
+ * `anchorElement` property (a reference to the element) to position the menu relative to a different element instead.
  *
  * Menus are populated with `<forge-dropdown-menu-item>` elements, which may be nested to create submenus. Use
  * `<forge-dropdown-menu-item-checkbox>` and `<forge-dropdown-menu-item-radio>` elements for items that can be checked, and
@@ -89,6 +93,25 @@ export class DropdownMenuComponent extends BaseLitElement {
   public triggerElement: HTMLElement | null = null;
 
   /**
+   * The id of the element that the menu is positioned relative to. Looked up within the same root as the menu.
+   *
+   * Overrides the trigger as the positioning element. If `anchorElement` is set it takes precedence.
+   * @default null
+   * @attribute
+   */
+  @property()
+  public anchor: string | null = null;
+
+  /**
+   * The element that the menu is positioned relative to.
+   *
+   * Overrides the trigger as the positioning element. Takes precedence over `anchor`.
+   * @default null
+   */
+  @property({ attribute: false })
+  public anchorElement: HTMLElement | null = null;
+
+  /**
    * Whether the menu is open.
    * @default false
    * @attribute
@@ -97,7 +120,7 @@ export class DropdownMenuComponent extends BaseLitElement {
   public open = false;
 
   /**
-   * The placement of the menu relative to its trigger.
+   * The placement of the menu relative to its anchor, or its trigger when no anchor is set.
    * @default 'bottom-start'
    * @attribute
    */
@@ -153,8 +176,13 @@ export class DropdownMenuComponent extends BaseLitElement {
       this.#applyTrigger();
     }
 
+    if (changedProperties.has('anchor') || changedProperties.has('anchorElement')) {
+      this.#applyAnchor();
+    }
+
     if (changedProperties.has('open')) {
       this._popover.open = this.open;
+      this.#activeTrigger?.setAttribute('aria-expanded', String(this.open));
 
       if (this.open) {
         this.#focusOnOpen();
@@ -171,6 +199,7 @@ export class DropdownMenuComponent extends BaseLitElement {
         class="popover"
         part="popover"
         preset="list"
+        anchor-accessibility="none"
         .placement=${this.placement}
         @forge-popover-beforetoggle=${this.#handleBeforeToggle}
         @forge-popover-toggle=${this.#handleToggle}>
@@ -179,20 +208,20 @@ export class DropdownMenuComponent extends BaseLitElement {
     `;
   }
 
-  #locateTrigger(): HTMLElement | null {
-    if (this.triggerElement) {
-      return this.triggerElement;
+  #locateElement(element: HTMLElement | null, id: string | null): HTMLElement | null {
+    if (element) {
+      return element;
     }
-    if (!this.trigger) {
+    if (!id) {
       return null;
     }
 
     const root = this.getRootNode() as Document | ShadowRoot;
-    return root.getElementById?.(this.trigger) ?? null;
+    return root.getElementById?.(id) ?? null;
   }
 
   #applyTrigger(): void {
-    const trigger = this.#locateTrigger();
+    const trigger = this.#locateElement(this.triggerElement, this.trigger);
 
     if (!trigger && this.trigger && document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.#applyTrigger(), { once: true });
@@ -211,10 +240,24 @@ export class DropdownMenuComponent extends BaseLitElement {
         trigger.setAttribute('aria-haspopup', 'menu');
         this.#addedHasPopup = true;
       }
+      trigger.setAttribute('aria-expanded', String(this.open));
     }
 
     this._popover.anchorElement = trigger;
     this._menu.ariaLabelledByElements = trigger ? [trigger] : null;
+    this.#applyAnchor();
+  }
+
+  #applyAnchor(): void {
+    const anchor = this.#locateElement(this.anchorElement, this.anchor);
+
+    if (!anchor && this.anchor && document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.#applyAnchor(), { once: true });
+    }
+
+    // The popover listens for clicks on its anchor, so the trigger stays the popover's anchor and only the overlay's positioning anchor is overridden.
+    const overlay = getShadowElement(this._popover, OVERLAY_CONSTANTS.elementName) as IOverlayComponent;
+    overlay.anchorElement = anchor ?? this.#activeTrigger;
   }
 
   #releaseTrigger(): void {

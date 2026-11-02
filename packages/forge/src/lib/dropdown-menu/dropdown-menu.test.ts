@@ -176,6 +176,99 @@ describe('DropdownMenu', () => {
       host.remove();
     });
 
+    describe('anchor', () => {
+      const anchorTemplate = (): TemplateResult => html`
+        <button id="trigger" type="button">Actions</button>
+        <div id="anchor" style="position: fixed; top: 300px; left: 400px; width: 100px; height: 40px;">Anchor</div>
+        <forge-dropdown-menu trigger="trigger">
+          <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+        </forge-dropdown-menu>
+      `;
+
+      const getAnchor = (harness: DropdownMenuHarness): HTMLElement => harness.menu.parentElement?.querySelector('#anchor') as HTMLElement;
+
+      const expectPositionedBelow = (harness: DropdownMenuHarness, element: HTMLElement): void => {
+        const itemRect = harness.item('edit').getBoundingClientRect();
+        const anchorRect = element.getBoundingClientRect();
+        expect(Math.abs(itemRect.top - anchorRect.bottom)).toBeLessThan(anchorRect.height + 24);
+        expect(Math.abs(itemRect.left - anchorRect.left)).toBeLessThan(24);
+      };
+
+      it('should position the menu relative to the element located by the anchor id', async () => {
+        const harness = await renderMenu(anchorTemplate());
+        harness.menu.anchor = 'anchor';
+        await harness.menu.updateComplete;
+
+        await harness.open();
+        await frame();
+
+        expectPositionedBelow(harness, getAnchor(harness));
+      });
+
+      it('should position the menu relative to the anchorElement', async () => {
+        const harness = await renderMenu(anchorTemplate());
+        harness.menu.anchorElement = getAnchor(harness);
+        await harness.menu.updateComplete;
+
+        await harness.open();
+        await frame();
+
+        expectPositionedBelow(harness, getAnchor(harness));
+      });
+
+      it('should prefer anchorElement over anchor when both are set', async () => {
+        const screen = render(html`
+          <button id="trigger" type="button">Actions</button>
+          <div id="id-anchor" style="position: fixed; top: 100px; left: 100px; width: 100px; height: 40px;">By id</div>
+          <div id="element-anchor" style="position: fixed; top: 300px; left: 400px; width: 100px; height: 40px;">By element</div>
+          <forge-dropdown-menu trigger="trigger" anchor="id-anchor">
+            <forge-dropdown-menu-item value="edit">Edit</forge-dropdown-menu-item>
+          </forge-dropdown-menu>
+        `);
+        const menu = screen.container.querySelector('forge-dropdown-menu') as DropdownMenuComponent;
+        const elementAnchor = screen.container.querySelector('#element-anchor') as HTMLElement;
+        menu.anchorElement = elementAnchor;
+        await menu.updateComplete;
+
+        const harness = new DropdownMenuHarness(menu, screen.container.querySelector('button') as HTMLElement);
+        await harness.open();
+        await frame();
+
+        expectPositionedBelow(harness, elementAnchor);
+      });
+
+      it('should still open from the trigger when an anchor is set', async () => {
+        const harness = await renderMenu(anchorTemplate());
+        harness.menu.anchor = 'anchor';
+        await harness.menu.updateComplete;
+        await harness.open();
+        expect(harness.menu.open).toBe(true);
+        expect(harness.trigger.getAttribute('aria-expanded')).toBe('true');
+      });
+
+      it('should not open when the anchor is clicked', async () => {
+        const harness = await renderMenu(anchorTemplate());
+        harness.menu.anchor = 'anchor';
+        await harness.menu.updateComplete;
+        getAnchor(harness).click();
+        await frame();
+        expect(harness.menu.open).toBe(false);
+      });
+
+      it('should return to the trigger when the anchor is removed', async () => {
+        const harness = await renderMenu(anchorTemplate());
+        harness.menu.anchor = 'anchor';
+        await harness.menu.updateComplete;
+        harness.menu.anchor = null;
+        await harness.menu.updateComplete;
+
+        await harness.open();
+        await frame();
+
+        expectPositionedBelow(harness, harness.trigger);
+      });
+    });
+
     it('should set aria-haspopup and aria-expanded on the trigger', async () => {
       const harness = await renderMenu();
       expect(harness.trigger.getAttribute('aria-haspopup')).toBe('menu');

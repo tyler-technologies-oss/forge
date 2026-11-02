@@ -12,6 +12,9 @@ IconRegistry.define([tylIconDrafts, tylIconDriveFileMove, tylIconFileDownload, t
 const elementMenu = document.getElementById('element-menu') as HTMLElementTagNameMap['forge-dropdown-menu'];
 elementMenu.triggerElement = document.getElementById('element-trigger');
 
+const anchorElementMenu = document.getElementById('anchor-element-menu') as HTMLElementTagNameMap['forge-dropdown-menu'];
+anchorElementMenu.anchorElement = document.getElementById('anchor-element-target');
+
 const output = document.getElementById('selection-output') as HTMLElement;
 document.querySelectorAll('forge-dropdown-menu').forEach(menu => {
   menu.addEventListener('forge-dropdown-menu-item-select', evt => {
