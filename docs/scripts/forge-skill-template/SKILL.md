@@ -15,7 +15,7 @@ You build Forge UI with the Forge MCP server. Every generation must be grounded 
 2. **Start from a block.** Before writing any `<forge-*>` markup, call `get_forge_blocks`. Extract the pattern; adapt content only. See [anti-patterns.md](references/anti-patterns.md).
 3. **Plan before writing.** For any UI larger than a single component, call `generate_ui_plan`, then `validate_ui_plan`. Only write markup after the plan validates. See [ui-plan.md](references/ui-plan.md).
 4. **Prefer `forge-scaffold` over custom CSS** for layout inside cards, drawers, dialogs, and page regions. See [layout](references/design/layout.md).
-5. **Keep the block's visual styles; choose heading elements from the app.** Title styles (`text-heading4` for page titles, `text-heading3` for card, dialog, and drawer titles) are fixed. The `h1`–`h6` element follows the app's own outline. See [typography](references/design/typography.md).
+5. **Keep the block's visual styles; choose heading elements from the app.** Title styles (`text-heading4` for page and dialog titles, `text-heading3` for card and drawer titles) are fixed. The `h1`–`h6` element follows the app's own outline. See [typography](references/design/typography.md).
 6. **Icons only from the `@tylertech/tyler-icons` root.** There are no `/standard`, `/extended`, or `/custom` subpaths. See [icons](references/development/icons.md).
 7. **Subpath-only components need their own import.** Some components aren't registered by `import '@tylertech/forge'`. See [installation](references/development/installation.md).
 8. **Classes on `<forge-*>` elements only reach the host.** Use them for layout and custom properties, not to restyle internals. See [usage](references/development/usage.md).

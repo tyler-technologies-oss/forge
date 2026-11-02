@@ -17,8 +17,9 @@ not shadows or borders, is what separates content from the page. Keep the body d
 
 The app title in the app bar is the page's `h1`. Content headings start at `h2`:
 
-- **Page title** in the body header: `forge-typography--heading4`, one step larger than container titles.
-- **Card, dialog, and drawer titles**: `forge-typography--heading3`, in the container's header toolbar. Never larger, since `forge-typography--heading4` and up are reserved for page titles.
+- **Page title** in the body header: `forge-typography--heading4`, one step larger than card and drawer titles.
+- **Dialog titles**, including sheets and fullscreen dialogs: `forge-typography--heading4`, in the dialog's header toolbar. A dialog is a top-level surface, like the page.
+- **Card and drawer titles**: `forge-typography--heading3`, in the container's header toolbar. Never larger, since `forge-typography--heading4` and up are reserved for page and dialog titles.
 - **Section headings** inside a card or form: `forge-typography--heading2`.
 - **Body text**: `forge-typography--body2` is the page default. `forge-typography--body1` is for dense or secondary content.
 - **Group labels** (above a checkbox list or filter facet): `forge-typography--label1` or `forge-typography--label2`, often in `--forge-theme-text-medium`.

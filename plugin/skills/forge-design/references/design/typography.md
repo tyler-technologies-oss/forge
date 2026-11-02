@@ -25,13 +25,14 @@ These are the styles to reach for in a Forge application. They match the [layout
 | Element                           | Style                |
 | --------------------------------- | -------------------- |
 | Page title (body header)          | `heading4`           |
-| Card, dialog, and drawer titles   | `heading3`           |
+| Dialog titles                     | `heading4`           |
+| Card and drawer titles            | `heading3`           |
 | Section headings inside a surface | `heading2`           |
 | Body text                         | `body2`              |
 | Dense or secondary text           | `body1`              |
 | Group labels and metadata         | `label1` or `label2` |
 
-Container titles are one step smaller than the page title, so a card never competes with the page around it. When a container needs smaller headings, go smaller, not larger.
+Dialogs are top-level surfaces, so their titles match the page title. Card and drawer titles are one step smaller than the page title, so a card never competes with the page around it. When a container needs smaller headings, go smaller, not larger.
 
 ## Heading level vs visual style
 
