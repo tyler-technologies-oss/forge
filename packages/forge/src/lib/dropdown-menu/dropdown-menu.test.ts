@@ -261,20 +261,20 @@ describe('DropdownMenu', () => {
       const harness = await renderMenu();
       const beforeToggle = vi.fn();
       const toggle = vi.fn();
-      harness.menu.addEventListener('forge-dropdown-menu-beforetoggle', beforeToggle);
-      harness.menu.addEventListener('forge-dropdown-menu-toggle', toggle);
+      harness.menu.addEventListener('beforetoggle', beforeToggle);
+      harness.menu.addEventListener('toggle', toggle);
 
       await harness.open();
 
       expect(beforeToggle).toHaveBeenCalledTimes(1);
-      expect(beforeToggle.mock.calls[0][0].detail).toEqual({ oldState: 'closed', newState: 'open' });
+      expect(beforeToggle.mock.calls[0][0]).toMatchObject({ oldState: 'closed', newState: 'open' });
       expect(toggle).toHaveBeenCalledTimes(1);
-      expect(toggle.mock.calls[0][0].detail).toEqual({ oldState: 'closed', newState: 'open' });
+      expect(toggle.mock.calls[0][0]).toMatchObject({ oldState: 'closed', newState: 'open' });
     });
 
     it('should not open when the beforetoggle event is canceled', async () => {
       const harness = await renderMenu();
-      harness.menu.addEventListener('forge-dropdown-menu-beforetoggle', evt => evt.preventDefault());
+      harness.menu.addEventListener('beforetoggle', evt => evt.preventDefault());
 
       harness.trigger.click();
       await frame();

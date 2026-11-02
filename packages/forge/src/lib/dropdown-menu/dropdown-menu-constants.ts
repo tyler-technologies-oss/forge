@@ -12,16 +12,9 @@ export const DROPDOWN_MENU_SUBMENU_CONTENT_SELECTOR = `${DROPDOWN_MENU_ITEM_SELE
 
 export const DROPDOWN_MENU_DENSE = createContext<boolean>('forge-dropdown-menu-dense');
 
-export const DROPDOWN_MENU_BEFORETOGGLE_EVENT = 'forge-dropdown-menu-beforetoggle';
-export const DROPDOWN_MENU_TOGGLE_EVENT = 'forge-dropdown-menu-toggle';
 export const DROPDOWN_MENU_ITEM_SELECT_EVENT = 'forge-dropdown-menu-item-select';
 
 export type DropdownMenuItemFocusTarget = 'first' | 'last';
-
-export interface IDropdownMenuToggleEventData {
-  newState: 'closed' | 'open';
-  oldState: 'closed' | 'open';
-}
 
 export interface IDropdownMenuItemSelectEventData {
   value: unknown;

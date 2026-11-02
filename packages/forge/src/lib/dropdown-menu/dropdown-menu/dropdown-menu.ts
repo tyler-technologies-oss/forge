@@ -8,15 +8,7 @@ import type { OverlayPlacement } from '../../overlay/overlay-constants.js';
 import { IPopoverToggleEventData } from '../../popover/popover-constants.js';
 import type { PopoverComponent } from '../../popover/popover.js';
 import type { BaseDropdownMenuItem } from '../base/base-dropdown-menu-item.js';
-import {
-  DROPDOWN_MENU_BEFORETOGGLE_EVENT,
-  DROPDOWN_MENU_DENSE,
-  DROPDOWN_MENU_TAG_NAME,
-  DROPDOWN_MENU_TOGGLE_EVENT,
-  DropdownMenuItemFocusTarget,
-  IDropdownMenuItemSelectEventData,
-  IDropdownMenuToggleEventData
-} from '../dropdown-menu-constants.js';
+import { DROPDOWN_MENU_DENSE, DROPDOWN_MENU_TAG_NAME, DropdownMenuItemFocusTarget, IDropdownMenuItemSelectEventData } from '../dropdown-menu-constants.js';
 import {
   closeChildSubmenus,
   focusChildItem,
@@ -56,10 +48,9 @@ import styles from './dropdown-menu.scss';
  * @dependency forge-dropdown-menu-item-radio
  * @dependency forge-popover
  *
- * @event {CustomEvent<IDropdownMenuToggleEventData>} forge-dropdown-menu-beforetoggle - Dispatched before the menu is
- * opened or closed by the user. Cancel the event to prevent the menu from toggling.
- * @event {CustomEvent<IDropdownMenuToggleEventData>} forge-dropdown-menu-toggle - Dispatched after the menu is opened
- * or closed by the user.
+ * @event {ToggleEvent} beforetoggle - Dispatched before the menu is opened or closed by the user. Cancel the event to
+ * prevent the menu from toggling.
+ * @event {ToggleEvent} toggle - Dispatched after the menu is opened or closed by the user.
  * @event {CustomEvent<IDropdownMenuItemSelectEventData>} forge-dropdown-menu-item-select - Bubbles from a menu item when it
  * is selected. Cancel the event to keep the menu open.
  *
@@ -265,20 +256,22 @@ export class DropdownMenuComponent extends BaseLitElement {
   }
 
   #handleBeforeToggle = (evt: CustomEvent<IPopoverToggleEventData>): void => {
-    const forwarded = new CustomEvent<IDropdownMenuToggleEventData>(DROPDOWN_MENU_BEFORETOGGLE_EVENT, { detail: evt.detail, cancelable: true });
+    const { newState, oldState } = evt.detail;
+    const forwarded = new ToggleEvent('beforetoggle', { newState, oldState, cancelable: true });
     if (!this.dispatchEvent(forwarded)) {
       evt.preventDefault();
       return;
     }
 
-    if (evt.detail.newState === 'closed' && this.matches(':focus-within')) {
+    if (newState === 'closed' && this.matches(':focus-within')) {
       this.#activeTrigger?.focus();
     }
   };
 
   #handleToggle = (evt: CustomEvent<IPopoverToggleEventData>): void => {
-    this.open = evt.detail.newState === 'open';
-    this.dispatchEvent(new CustomEvent<IDropdownMenuToggleEventData>(DROPDOWN_MENU_TOGGLE_EVENT, { detail: evt.detail }));
+    const { newState, oldState } = evt.detail;
+    this.open = newState === 'open';
+    this.dispatchEvent(new ToggleEvent('toggle', { newState, oldState }));
   };
 
   #handleTriggerKeydown = (evt: KeyboardEvent): void => {
@@ -375,8 +368,6 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-dropdown-menu-beforetoggle': CustomEvent<IDropdownMenuToggleEventData>;
-    'forge-dropdown-menu-toggle': CustomEvent<IDropdownMenuToggleEventData>;
     'forge-dropdown-menu-item-select': CustomEvent<IDropdownMenuItemSelectEventData>;
   }
 }
