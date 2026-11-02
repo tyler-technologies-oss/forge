@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../theme';
-@use '../../../utils';
-@use '../../../border';
-@use '../../../animation';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/animation';
 @use '../base/tokens' as base-tokens;
 
 $tokens: (

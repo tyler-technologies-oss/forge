@@ -49,6 +49,6 @@
     "lint-staged": "^16.4.0",
     "playwright": "catalog:",
     "prettier": "catalog:",
-    "turbo": "^2.9.3"
+    "turbo": "^2.9.14"
   }
 }

@@ -60,18 +60,12 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
 ## Basic usage
 
-Nest `forge-tree-item` elements inside each other to build the hierarchy; each item's `value` identifies it when selected.
+Nest `forge-tree-item` elements in each other's `children` slot to build the hierarchy; each item's `value` identifies it when selected.
 
-<Example description="A tree with nested items, one expanded to show its children.">
-  <forge-tree>
-    <forge-tree-item value="documents" open>
-      Documents
-      <forge-tree-item value="report">Report.docx</forge-tree-item>
-      <forge-tree-item value="budget">Budget.xlsx</forge-tree-item>
-    </forge-tree-item>
-    <forge-tree-item value="photos">Photos</forge-tree-item>
-  </forge-tree>
-</Example>
+<Example
+  description="A three-level tree of nested items."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/tree/demo/demo.html"
+/>
 
 ## Selection
 

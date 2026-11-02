@@ -8,115 +8,6 @@ So the most useful thing a designer can do is **design inside the shell**. Start
 
 ## Structure of a Tyler Cloud App
 
-<AnatomyDemo fit="cover" zoom={0.75} height="440px">
-  <forge-app-layout app-title="My Application" breakpoint="0">
-    <forge-icon slot="app-bar-logo" name="home" />
-
-    <div slot="app-bar-end" class="flex items-center gap-xsmall">
-      <AnatomyMarker label={1} title="App bar" description="Logo, app title, and global actions. 56px tall, --forge-theme-brand." placement="center" />
-
-      <span class="relative inline-flex">
-        <forge-app-launcher />
-
-        <AnatomyMarker label={2} title="App launcher" description="Switches between related Tyler applications. Always in the app bar, just before the user profile." placement="bottom-start" outside />
-      </span>
-
-      <span class="relative inline-flex">
-        <forge-user-profile full-name="Tyler Tech" email="tyler.tech@tylertech.com" button-label="Open profile menu" theme-toggle />
-
-        <AnatomyMarker label={3} title="User profile" description="The signed-in user's avatar and menu: profile links, theme toggle, and sign out. Always last in the app bar." placement="bottom-start" outside />
-      </span>
-    </div>
-
-    <div slot="navigation" class="relative h-full">
-      <AnatomyMarker label={4} title="Navigation" description="The app's main destinations. 320px wide, or 56px as a mini drawer." placement="bottom-end" />
-
-      <forge-list navlist>
-        <forge-list-item selected>
-          <forge-icon slot="start" name="dashboard" />
-
-          <a href="#">Dashboard</a>
-        </forge-list-item>
-
-        <forge-list-item>
-          <forge-icon slot="start" name="folder" />
-
-          <a href="#">Projects</a>
-        </forge-list-item>
-
-        <forge-list-item>
-          <forge-icon slot="start" name="person" />
-
-          <a href="#">Users</a>
-        </forge-list-item>
-
-        <forge-divider />
-
-        <forge-list-item>
-          <forge-icon slot="start" name="settings" />
-
-          <a href="#">Settings</a>
-        </forge-list-item>
-      </forge-list>
-    </div>
-
-    <div slot="body-header" class="relative">
-      <AnatomyMarker label={5} title="Body header" description="Page title and page-level actions, optionally tabs. 56px toolbar." placement="center" />
-
-      <forge-toolbar>
-        <span slot="start" class="text-heading4">
-          <span>Page title</span>
-        </span>
-
-        <div slot="end" class="flex items-center gap-small">
-          <forge-button variant="tonal">
-            <forge-icon slot="start" name="add" />
-
-            <span>New item</span>
-          </forge-button>
-        </div>
-      </forge-toolbar>
-    </div>
-
-    <main slot="body" class="relative p-medium bg-surface-dim">
-      <AnatomyMarker label={6} title="Body" description="The page's content, usually on cards. --forge-spacing-medium padding on --forge-theme-surface-dim." />
-
-      <div class="grid gap-medium h-full">
-        <forge-card class="p-0 h-full">
-          <forge-scaffold>
-            <forge-toolbar slot="header">
-              <span slot="start" class="text-heading3">
-                <div>Card title</div>
-              </span>
-
-              <forge-icon-button slot="end" density="medium" aria-label="More options">
-                <forge-icon name="more_vert" />
-              </forge-icon-button>
-            </forge-toolbar>
-
-            <div slot="body" class="p-medium h-full box-border">
-              <span slot="start" class="text-subheading3">Subheading 3</span>
-              <p class="text-body2">lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-
-              <div class="striped-box h-full" />
-            </div>
-          </forge-scaffold>
-        </forge-card>
-      </div>
-    </main>
-
-    <div slot="body-footer" class="relative">
-      <AnatomyMarker label={7} title="Body footer" description="Copyright, status, or persistent actions. 56px toolbar, optional." placement="start" />
-
-      <forge-toolbar inverted>
-        <span slot="center" class="text-body1">
-          © 2026 My Application
-        </span>
-      </forge-toolbar>
-    </div>
-  </forge-app-layout>
-</AnatomyDemo>
-
 **Surfaces create the hierarchy**
 
 The body background is `--forge-theme-surface-dim`, a step darker than the cards, toolbars, and drawers placed on it (`--forge-theme-surface`). That contrast,
@@ -136,7 +27,7 @@ Forge's heading scale runs from small to large, so `forge-typography--heading4` 
 
 ### Responsive behavior
 
-The shell has one breakpoint, **960px**.
+The shell has one breakpoint, **960px** by default. Teams can adjust it to fit their app with the app layout's `breakpoint` property, so confirm the value with your developers before designing around it.
 
 - **960px and wider:** navigation is a persistent drawer beside the body.
 - **Below 960px:** navigation collapses behind a menu button in the app bar and opens as a modal drawer over the content.
@@ -178,7 +69,7 @@ A table inside a card that fills the body width.
 - Pagination sits in the card footer.
 - Filters open in a **256px side panel** on the right, with a header toolbar ("Filters"), a padded body of facets separated by dividers, and a footer with "Clear all" and "Apply".
 
-Example (A paginated table with a filter side panel.): `get_forge_blocks(blockId: "application-layout/table-with-filters/table-with-filters")`
+See the [table with filters](https://tylerforge.design/blocks/application-layout/table-with-filters/table-with-filters/) block for a paginated table with a filter side panel.
 
 ### Form
 
@@ -195,57 +86,23 @@ Example (A long form divided into sections on a 6-column grid.): `get_forge_bloc
 
 A primary list or table in the body, with details for the selected item in a right side panel. The body and the panel **scroll independently**, so design both as separate scroll areas.
 
+See the [dual scrolling containers](https://tylerforge.design/blocks/application-layout/dual-scroll/dual-scroll/) block for a body and side panel that scroll independently.
+
 ### Tabbed page
 
 When a page has several views of the same object, put a tab bar directly below the page title, inside the body header. Remove the title toolbar's bottom divider so the title and tabs read as one header.
 
+See the [basic application layout with tabs](https://tylerforge.design/blocks/application-layout/basic-layout-with-tabs/basic-layout-with-tabs/) block for a tab bar below a borderless page title.
+
 ## Containers
 
-Forge's cards, dialogs, and drawers share one internal structure. Learn it once and every container follows it.
+Forge's cards, dialogs, and drawers share one internal structure, built from the same two components: a [scaffold](../components/scaffold.md) (`forge-scaffold`) nested inside the container lays out a header, body, and footer, and a [toolbar](../components/toolbar.md) (`forge-toolbar`) fills the header and footer. Learn it once and every container follows it.
 
-<AnatomyDemo>
-  <forge-card class="p-0 w-full max-w-md my-large">
-    <forge-scaffold>
-      <div slot="header" class="relative">
-        <AnatomyMarker label={1} title="Header toolbar" description="Title and icon actions. 56px tall with a bottom divider." placement="center" />
-
-        <forge-toolbar>
-          <span slot="start" class="text-heading3">
-            Card title
-          </span>
-
-          <forge-icon-button slot="end" density="medium" aria-label="More options">
-            <forge-icon name="more_vert" />
-          </forge-icon-button>
-        </forge-toolbar>
-      </div>
-
-      <div slot="body" class="relative p-medium">
-        <AnatomyMarker label={2} title="Body" description="The container's content and the only part that scrolls. --forge-spacing-medium padding." />
-
-        <div class="striped-box h-28" />
-      </div>
-
-      <div slot="footer" class="relative">
-        <AnatomyMarker label={3} title="Footer toolbar" description="Actions, end-aligned with the primary action last. 56px tall." placement="center" />
-
-        <forge-toolbar inverted>
-          <div slot="end" class="flex items-center gap-medium">
-            <forge-button variant="tonal">Cancel</forge-button>
-            <forge-button variant="filled">Save</forge-button>
-          </div>
-        </forge-toolbar>
-      </div>
-    </forge-scaffold>
-  </forge-card>
-</AnatomyDemo>
-
-| # | Part               | What goes here                                        | Size                             |
-| - | ------------------ | ----------------------------------------------------- | -------------------------------- |
-| 1 | **Header toolbar** | Title (`forge-typography--heading3`) and icon actions | 56px tall, bottom divider        |
-| 2 | **Body**           | The container's content; the only part that scrolls   | `--forge-spacing-medium` padding |
-| 3 | **Footer toolbar** | Actions, end-aligned with the primary action last     | 56px tall, top divider           |
-
+- **Header:** a `forge-toolbar` in the scaffold's `header` slot, with the title (`forge-typography--heading3`) in `start` and icon actions in `end`. 56px tall with a bottom divider.
+- **Body:** the scaffold's `body` slot, with `--forge-spacing-medium` padding.
+- **Footer:** a `forge-toolbar` with `inverted` in the scaffold's `footer` slot, with actions in `end` and the primary action last. 56px tall with a top divider.
+- Nest the scaffold directly inside the container: `forge-card`, `forge-dialog`, or a drawer. On a card, set `no-padding` so the toolbars reach its edges.
+- For a card, [structured card](../components/structured-card.md) (`forge-structured-card`) provides this structure pre-built, with slots for the title, header actions, body, and footer actions instead of a scaffold and toolbars.
 - The header and footer stay put while the body scrolls.
 - Corner radius is **4px** (`--forge-shape-medium`) for cards, dialogs, and toolbars.
 - Cards are flat with a 1px (`--forge-border-thin`) border in `--forge-theme-outline`. Use the raised (shadow) variant only to lift a card above other content.

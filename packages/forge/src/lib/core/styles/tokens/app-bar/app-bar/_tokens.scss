@@ -1,10 +1,10 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../theme';
-@use '../../../elevation';
-@use '../../../animation';
-@use '../../../typography';
-@use '../../../spacing';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 $tokens: (
   background: utils.module-val(app-bar, background, theme.variable(brand)),

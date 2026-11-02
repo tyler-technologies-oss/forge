@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../utils';
-@use '../../border';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/border';
 
 $tokens: (
   color: utils.module-val(divider, color, theme.variable(outline)),

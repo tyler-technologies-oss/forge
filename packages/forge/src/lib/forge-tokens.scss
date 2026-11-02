@@ -1,9 +1,9 @@
-@use './core/styles/theme';
-@use './core/styles/animation';
-@use './core/styles/border';
-@use './core/styles/elevation';
-@use './core/styles/shape';
-@use './core/styles/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 // Color emphasis tokens
 :root {

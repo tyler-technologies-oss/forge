@@ -2,8 +2,6 @@
 
 Guidance for using Tyler Forge icons in your designs.
 
-> **Experimental:** this guidance is an early draft and will likely change. Prefer component docs, blocks, and the stable guides where they disagree.
-
 Forge uses the [Tyler Icons](https://tylerforge.design/icons/library/) library for every icon in an interface. Icons help users scan and recognize actions, but they work best alongside text, not in place of it. For how to install and register icons in code, see the [developer icons](../development/icons.md) page.
 
 ## When to use an icon

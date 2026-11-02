@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../spacing';
-@use '../../../shape';
-@use '../../../typography';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/typography';
 
 $tokens: (
   // Base

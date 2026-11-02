@@ -1,6 +1,6 @@
 @use './token-utils' as *;
-@use '../core/styles/theme';
-@use '../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
 
 @forward './token-utils';
 

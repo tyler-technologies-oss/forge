@@ -1,0 +1,9 @@
+@use 'sass:map';
+@use '../tokens/typography' as raw;
+
+@function value($key) {
+  @if not map.has-key(raw.$scale, $key) {
+    @error 'Unknown scale value `#{$key}`.';
+  }
+  @return map.get(raw.$scale, $key);
+}

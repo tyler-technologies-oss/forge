@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../animation';
-@use '../../shape';
-@use '../../theme';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   size: utils.module-val(avatar, size, 40px),

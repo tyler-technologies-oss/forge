@@ -1,6 +1,6 @@
 @use '../../../lib/button-toggle/button-toggle-group';
 @use '../../../lib/button-toggle/button-toggle';
-@use '../../../lib/core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 section:not(:last-of-type) {
   margin-block-end: 32px;

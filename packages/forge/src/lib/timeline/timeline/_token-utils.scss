@@ -1,5 +1,5 @@
 @use '../../core/styles/tokens/timeline/timeline/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: timeline;
 $_tokens: tokens.$tokens;

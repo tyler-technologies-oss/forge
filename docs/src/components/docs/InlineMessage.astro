@@ -21,6 +21,7 @@ interface Props {
   theme?: InlineMessageTheme;
   icon?: string;
   title?: string;
+  class?: string;
 }
 
 const THEME_ICONS: Partial<Record<InlineMessageTheme, string>> = {
@@ -35,10 +36,11 @@ const {
   theme = "info",
   icon = THEME_ICONS[theme] ?? "info_outline",
   title,
+  class: className,
 } = Astro.props;
 ---
 
-<forge-inline-message theme={theme} class="mb-large block">
+<forge-inline-message theme={theme} class:list={["mb-large block", className]}>
   {icon && <forge-icon slot="icon" name={icon} external />}
   {title && <span slot="title">{title}</span>}
   <span class="inline-message-body"><slot /></span>
