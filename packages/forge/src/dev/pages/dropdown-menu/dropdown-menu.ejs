@@ -104,6 +104,31 @@
   </div>
 
   <div>
+    <h3 class="forge-typography--heading2">Links</h3>
+    <forge-button id="link-trigger" variant="outlined">Resources</forge-button>
+    <forge-dropdown-menu trigger="link-trigger">
+      <forge-dropdown-menu-item value="same-page" href="#selection-output">Jump to last selection</forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="docs" href="https://forge.tylertech.com" target="_blank" rel="noopener">
+        <forge-icon slot="start" name="open_in_new"></forge-icon>
+        Forge documentation
+      </forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="download" href="data:text/plain;charset=utf-8,Hello%20from%20Forge" download="hello.txt">
+        <forge-icon slot="start" name="file_download"></forge-icon>
+        Download sample file
+      </forge-dropdown-menu-item>
+      <forge-dropdown-menu-item value="disabled-link" href="https://forge.tylertech.com" disabled>Disabled link</forge-dropdown-menu-item>
+      <forge-divider></forge-divider>
+      <forge-dropdown-menu-item value="ignored" href="https://forge.tylertech.com">
+        Link ignored with submenu
+        <forge-dropdown-menu-item value="ignored-child" href="https://forge.tylertech.com/components" target="_blank" rel="noopener">
+          Components
+        </forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="ignored-child-action">Action</forge-dropdown-menu-item>
+      </forge-dropdown-menu-item>
+    </forge-dropdown-menu>
+  </div>
+
+  <div>
     <h3 class="forge-typography--heading2">Dense</h3>
     <forge-button id="dense-trigger" variant="outlined">Dense</forge-button>
     <forge-dropdown-menu trigger="dense-trigger" dense>

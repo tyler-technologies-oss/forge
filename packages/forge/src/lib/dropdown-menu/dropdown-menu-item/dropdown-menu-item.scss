@@ -2,6 +2,10 @@
 @use './core';
 
 .forge-option {
+  &:is(a) {
+    color: inherit;
+  }
+
   &.open {
     @include core.open;
   }

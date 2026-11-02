@@ -2,7 +2,8 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { tylIconChevronRight } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { ClassInfo } from 'lit/directives/class-map.js';
+import { ClassInfo, classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { IconRegistry } from '../../icon/index.js';
@@ -34,6 +35,10 @@ const SUBMENU_ALIGNMENT_OFFSET = -4;
  * Items, `<forge-dropdown-menu-group>`, and `<forge-divider>` elements that are direct children of an item are rendered in
  * that item's submenu. This includes `<forge-dropdown-menu-item-checkbox>` and `<forge-dropdown-menu-item-radio>` elements.
  *
+ * Set the `href` property to render the item as a link. The host element receives the `none` role and the `root` part
+ * becomes an anchor element with the `menuitem` role. Use `target`, `rel`, and `download` to
+ * configure the link. Items that have a submenu ignore `href`.
+ *
  * @dependency forge-focus-indicator
  * @dependency forge-icon
  * @dependency forge-popover
@@ -52,7 +57,7 @@ const SUBMENU_ALIGNMENT_OFFSET = -4;
  * @state disabled - Applied when the item is disabled.
  * @state open - Applied when the item's submenu is open.
  *
- * @csspart root - The root element of the item.
+ * @csspart root - The root element of the item. This is an anchor element when the item has an `href`.
  * @csspart label - The element containing the label and supporting text.
  * @csspart submenu-icon - The icon shown when the item has a submenu.
  * @csspart submenu - The popover element containing the submenu.
@@ -68,6 +73,41 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
   static {
     IconRegistry.define([tylIconChevronRight]);
   }
+
+  /**
+   * The URL that the item links to. When set, the item is rendered as a link.
+   *
+   * Has no effect on items that have a submenu.
+   * @default ''
+   * @attribute
+   */
+  @property()
+  public href = '';
+
+  /**
+   * Where to display the linked URL, such as `_blank`. Only applies when the item is a link.
+   * @default ''
+   * @attribute
+   */
+  @property()
+  public target = '';
+
+  /**
+   * The relationship of the linked URL to the current document, such as `noopener`. Only applies when the item is a link.
+   * @default ''
+   * @attribute
+   */
+  @property()
+  public rel = '';
+
+  /**
+   * Causes the linked URL to be downloaded instead of navigated to. The value suggests a file name, and an empty
+   * string uses the default file name. Only applies when the item is a link.
+   * @default null
+   * @attribute
+   */
+  @property()
+  public download: string | null = null;
 
   /**
    * Whether the item's submenu is open. Has no effect on items without a submenu.
@@ -90,6 +130,9 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
   @query('forge-popover')
   private _submenu?: PopoverComponent;
 
+  @query('a')
+  private _link?: HTMLAnchorElement;
+
   protected readonly _defaultRole = 'menuitem';
 
   #hoverTimeout?: number;
@@ -101,6 +144,7 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
     this.addEventListener('pointerleave', this.#handlePointerLeave);
     this.#childObserver.observe(this, { childList: true, subtree: true });
     this.#syncSubmenu();
+    this.#syncLinkSemantics();
   }
 
   public override disconnectedCallback(): void {
@@ -111,8 +155,28 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
     window.clearTimeout(this.#hoverTimeout);
   }
 
+  public override focus(options?: FocusOptions): void {
+    if (this.#isLink && this._link) {
+      this._link.focus(options);
+      return;
+    }
+    super.focus(options);
+  }
+
+  public override click(): void {
+    if (this.#isLink && !this.disabled && this._link) {
+      this._link.click();
+      return;
+    }
+    super.click();
+  }
+
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     super.willUpdate(changedProperties);
+
+    if (changedProperties.has('href') || changedProperties.has('disabled') || changedProperties.has('_hasSubmenu' as any)) {
+      this.#syncLinkSemantics();
+    }
 
     if (changedProperties.has('open') || changedProperties.has('_hasSubmenu' as any)) {
       setDefaultAria(this, this._internals, {
@@ -140,6 +204,27 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
 
   protected override _getRootClasses(): ClassInfo {
     return { ...super._getRootClasses(), open: this._hasSubmenu && this.open };
+  }
+
+  protected override _renderRoot(content: TemplateResult): TemplateResult {
+    if (!this.#isLink) {
+      return super._renderRoot(content);
+    }
+
+    return html`
+      <a
+        class=${classMap(this._getRootClasses())}
+        part="root"
+        role="menuitem"
+        tabindex="-1"
+        href=${ifDefined(this.disabled ? undefined : this.href)}
+        target=${ifDefined(this.target || undefined)}
+        rel=${ifDefined(this.rel || undefined)}
+        download=${ifDefined(this.download ?? undefined)}
+        aria-disabled=${ifDefined(this.disabled ? 'true' : undefined)}>
+        ${content}
+      </a>
+    `;
   }
 
   protected override _renderIndicator(): TemplateResult | typeof nothing {
@@ -174,6 +259,25 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
     this.open = true;
     if (evt.detail === 0) {
       focusChildItem(this);
+    }
+  }
+
+  get #isLink(): boolean {
+    return !!this.href && !this._hasSubmenu;
+  }
+
+  /** Links move the menuitem semantics and focus to the anchor, so the host is only a container. */
+  #syncLinkSemantics(): void {
+    const isLink = this.#isLink;
+    setDefaultAria(this, this._internals, {
+      role: isLink ? 'none' : this._defaultRole,
+      ariaDisabled: !isLink && this.disabled ? 'true' : null
+    });
+
+    if (isLink) {
+      this.removeAttribute('tabindex');
+    } else {
+      this.tabIndex = -1;
     }
   }
 

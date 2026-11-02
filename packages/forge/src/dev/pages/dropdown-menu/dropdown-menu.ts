@@ -5,9 +5,9 @@ import '@tylertech/forge/dropdown-menu';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/kbd';
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconDrafts, tylIconDriveFileMove, tylIconInbox, tylIconMoreVert } from '@tylertech/tyler-icons';
+import { tylIconDrafts, tylIconDriveFileMove, tylIconFileDownload, tylIconInbox, tylIconMoreVert, tylIconOpenInNew } from '@tylertech/tyler-icons';
 
-IconRegistry.define([tylIconDrafts, tylIconDriveFileMove, tylIconInbox, tylIconMoreVert]);
+IconRegistry.define([tylIconDrafts, tylIconDriveFileMove, tylIconFileDownload, tylIconInbox, tylIconMoreVert, tylIconOpenInNew]);
 
 const elementMenu = document.getElementById('element-menu') as HTMLElementTagNameMap['forge-dropdown-menu'];
 elementMenu.triggerElement = document.getElementById('element-trigger');

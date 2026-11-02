@@ -755,6 +755,232 @@ describe('DropdownMenu', () => {
     });
   });
 
+  describe('DropdownMenuItemComponent with href', () => {
+    const linkTemplate = (): TemplateResult => html`
+      <button id="trigger" type="button">Links</button>
+      <forge-dropdown-menu trigger="trigger">
+        <forge-dropdown-menu-item value="plain">Plain</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="docs" href="https://example.com/docs">Docs</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="off" href="https://example.com/off" disabled>Off</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="parent" href="https://example.com/parent">
+          Parent
+          <forge-dropdown-menu-item value="child">Child</forge-dropdown-menu-item>
+        </forge-dropdown-menu-item>
+      </forge-dropdown-menu>
+    `;
+
+    const renderLinks = async (): Promise<DropdownMenuHarness> => {
+      const harness = await renderMenu(linkTemplate());
+      await Promise.all(Array.from(harness.menu.querySelectorAll<DropdownMenuItemComponent>('forge-dropdown-menu-item')).map(item => item.updateComplete));
+      harness.menu.addEventListener('click', evt => evt.preventDefault());
+      return harness;
+    };
+
+    const getLink = (item: DropdownMenuItemComponent): HTMLAnchorElement | null | undefined => item.shadowRoot?.querySelector('a');
+
+    it('should render an anchor with the menuitem role as its root when href is set', async () => {
+      const harness = await renderLinks();
+      const link = getLink(harness.item('docs'));
+
+      expect(link).toBeTruthy();
+      expect(link?.getAttribute('href')).toBe('https://example.com/docs');
+      expect(link?.getAttribute('role')).toBe('menuitem');
+      expect(link?.getAttribute('part')).toBe('root');
+      expect(harness.item('docs').shadowRoot?.querySelector('div[part="root"]')).toBeFalsy();
+    });
+
+    it('should pass target, rel, and download to the anchor', async () => {
+      const harness = await renderLinks();
+      const docs = harness.item('docs');
+      const link = getLink(docs);
+      expect(link?.hasAttribute('target')).toBe(false);
+      expect(link?.hasAttribute('rel')).toBe(false);
+      expect(link?.hasAttribute('download')).toBe(false);
+
+      docs.target = '_blank';
+      docs.rel = 'noopener noreferrer';
+      docs.download = 'docs.pdf';
+      await docs.updateComplete;
+
+      expect(link?.getAttribute('target')).toBe('_blank');
+      expect(link?.getAttribute('rel')).toBe('noopener noreferrer');
+      expect(link?.getAttribute('download')).toBe('docs.pdf');
+    });
+
+    it('should render an empty download attribute when download is an empty string', async () => {
+      const harness = await renderLinks();
+      const docs = harness.item('docs');
+
+      docs.setAttribute('download', '');
+      await docs.updateComplete;
+
+      expect(getLink(docs)?.getAttribute('download')).toBe('');
+    });
+
+    it('should remove target, rel, and download from the anchor when cleared', async () => {
+      const harness = await renderLinks();
+      const docs = harness.item('docs');
+      docs.target = '_blank';
+      docs.rel = 'noopener';
+      docs.download = 'docs.pdf';
+      await docs.updateComplete;
+
+      docs.target = '';
+      docs.rel = '';
+      docs.download = null;
+      await docs.updateComplete;
+
+      const link = getLink(docs);
+      expect(link?.hasAttribute('target')).toBe(false);
+      expect(link?.hasAttribute('rel')).toBe(false);
+      expect(link?.hasAttribute('download')).toBe(false);
+    });
+
+    it('should set the host role to none when href is set', async () => {
+      const harness = await renderLinks();
+      expect(harness.item('docs').getAttribute('role')).toBe('none');
+    });
+
+    it('should not render an anchor or change the role when href is not set', async () => {
+      const harness = await renderLinks();
+      expect(getLink(harness.item('plain'))).toBeFalsy();
+      expect(harness.item('plain').shadowRoot?.querySelector('div[part="root"]')).toBeTruthy();
+      expect(harness.item('plain').getAttribute('role')).toBe('menuitem');
+    });
+
+    it('should not be focusable itself when href is set', async () => {
+      const harness = await renderLinks();
+      expect(harness.item('docs').hasAttribute('tabindex')).toBe(false);
+      expect(getLink(harness.item('docs'))?.tabIndex).toBe(-1);
+    });
+
+    it('should restore the menuitem semantics when href is removed', async () => {
+      const harness = await renderLinks();
+      const docs = harness.item('docs');
+
+      docs.href = '';
+      await docs.updateComplete;
+
+      expect(getLink(docs)).toBeFalsy();
+      expect(docs.getAttribute('role')).toBe('menuitem');
+      expect(docs.tabIndex).toBe(-1);
+    });
+
+    it('should render a link when href is set after the item is connected', async () => {
+      const harness = await renderLinks();
+      const plain = harness.item('plain');
+
+      plain.href = 'https://example.com/plain';
+      await plain.updateComplete;
+
+      expect(getLink(plain)?.getAttribute('href')).toBe('https://example.com/plain');
+      expect(plain.getAttribute('role')).toBe('none');
+    });
+
+    it('should do nothing with href when the item has a submenu', async () => {
+      const harness = await renderLinks();
+      const parent = harness.item('parent');
+
+      expect(getLink(parent)).toBeFalsy();
+      expect(parent.getAttribute('role')).toBe('menuitem');
+      expect(parent.tabIndex).toBe(-1);
+      expect(parent.getAttribute('aria-haspopup')).toBe('menu');
+    });
+
+    it('should become a link when its submenu items are removed', async () => {
+      const harness = await renderLinks();
+      const parent = harness.item('parent');
+
+      harness.item('child').remove();
+
+      await vi.waitFor(() => expect(getLink(parent)).toBeTruthy());
+      expect(parent.getAttribute('role')).toBe('none');
+    });
+
+    it('should open the submenu instead of navigating when clicked and href is set', async () => {
+      const harness = await renderLinks();
+      const parent = harness.item('parent');
+      await harness.open();
+
+      parent.click();
+
+      await vi.waitFor(() => expect(parent.open).toBe(true));
+      expect(harness.menu.open).toBe(true);
+    });
+
+    it('should not render the href on a disabled link and mark the anchor as disabled', async () => {
+      const harness = await renderLinks();
+      const off = harness.item('off');
+      const link = getLink(off);
+
+      expect(link?.hasAttribute('href')).toBe(false);
+      expect(link?.getAttribute('aria-disabled')).toBe('true');
+      expect(off.hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    it('should focus the anchor when focused', async () => {
+      const harness = await renderLinks();
+      const docs = harness.item('docs');
+      await harness.open();
+
+      docs.focus();
+
+      expect(docs.shadowRoot?.activeElement).toBe(getLink(docs));
+      expect(docs.matches(':focus')).toBe(true);
+    });
+
+    it('should navigate with arrow keys through links', async () => {
+      const harness = await renderLinks();
+      await harness.open();
+      expect(harness.focusedItem).toBe(harness.item('plain'));
+
+      await harness.pressKey('ArrowDown');
+      expect(harness.focusedItem).toBe(harness.item('docs'));
+      expect(harness.item('docs').shadowRoot?.activeElement).toBe(getLink(harness.item('docs')));
+
+      await harness.pressKey('ArrowDown');
+      expect(harness.focusedItem).toBe(harness.item('parent'));
+    });
+
+    it('should activate the link and close the menu when Enter is pressed', async () => {
+      const harness = await renderLinks();
+      const clicks = vi.fn();
+      const selects = vi.fn();
+      harness.item('docs').addEventListener('click', clicks);
+      harness.menu.addEventListener('forge-dropdown-menu-item-select', selects);
+      await harness.open();
+      await harness.pressKey('ArrowDown');
+
+      await harness.pressKey('Enter');
+
+      expect(clicks).toHaveBeenCalledOnce();
+      expect(selects).toHaveBeenCalledOnce();
+      expect(selects.mock.calls[0][0].detail.value).toBe('docs');
+      await harness.waitForClosed();
+    });
+
+    it('should click the anchor when the item is clicked programmatically', async () => {
+      const harness = await renderLinks();
+      const anchorClick = vi.fn();
+      getLink(harness.item('docs'))?.addEventListener('click', anchorClick);
+
+      harness.item('docs').click();
+
+      expect(anchorClick).toHaveBeenCalledOnce();
+    });
+
+    it('should not dispatch the select event when a disabled link is clicked', async () => {
+      const harness = await renderLinks();
+      const selects = vi.fn();
+      harness.menu.addEventListener('forge-dropdown-menu-item-select', selects);
+      await harness.open();
+
+      harness.item('off').click();
+
+      expect(selects).not.toHaveBeenCalled();
+    });
+  });
+
   describe('DropdownMenuItemCheckboxComponent', () => {
     const checkboxTemplate = (): TemplateResult => html`
       <button id="trigger" type="button">View</button>
@@ -773,6 +999,17 @@ describe('DropdownMenu', () => {
     it('should have the menuitemcheckbox role', async () => {
       const harness = await renderMenu(checkboxTemplate());
       expect(getCheckbox(harness, 'grid').matches('[role="menuitemcheckbox"]')).toBe(true);
+    });
+
+    it('should not support links', async () => {
+      const harness = await renderMenu(checkboxTemplate());
+      const checkbox = getCheckbox(harness, 'grid');
+      checkbox.setAttribute('href', 'https://example.com');
+      await checkbox.updateComplete;
+
+      expect('href' in checkbox).toBe(false);
+      expect(checkbox.shadowRoot?.querySelector('a')).toBeFalsy();
+      expect(checkbox.getAttribute('role')).toBe('menuitemcheckbox');
     });
 
     it('should expose checked state through aria-checked', async () => {
@@ -1037,6 +1274,17 @@ describe('DropdownMenu', () => {
     it('should have the menuitemradio role', async () => {
       const harness = await renderMenu(radioTemplate());
       expect(getRadio(harness, 'compact').matches('[role="menuitemradio"]')).toBe(true);
+    });
+
+    it('should not support links', async () => {
+      const harness = await renderMenu(radioTemplate());
+      const radio = getRadio(harness, 'compact');
+      radio.setAttribute('href', 'https://example.com');
+      await radio.updateComplete;
+
+      expect('href' in radio).toBe(false);
+      expect(radio.shadowRoot?.querySelector('a')).toBeFalsy();
+      expect(radio.getAttribute('role')).toBe('menuitemradio');
     });
 
     it('should expose checked state through aria-checked', async () => {

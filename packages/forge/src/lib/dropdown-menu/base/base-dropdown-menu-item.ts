@@ -133,21 +133,25 @@ export abstract class BaseDropdownMenuItem extends BaseLitElement {
   }
 
   public render(): TemplateResult {
-    return html`
-      <div class=${classMap(this._getRootClasses())} part="root">
-        <slot name="start"></slot>
-        <div id="label" class="label" part="label">
-          <slot></slot>
-          <slot name="secondary"></slot>
-          <slot name="tertiary"></slot>
-        </div>
-        <slot name="end"></slot>
-        ${this._renderIndicator()}
-        <forge-focus-indicator part="focus-indicator" target=":host" focus-mode="focus" inward></forge-focus-indicator>
-        ${this.disabled ? nothing : html`<forge-state-layer exportparts="surface:state-layer"></forge-state-layer>`}
+    const content = html`
+      <slot name="start"></slot>
+      <div id="label" class="label" part="label">
+        <slot></slot>
+        <slot name="secondary"></slot>
+        <slot name="tertiary"></slot>
       </div>
-      ${this._renderOverlay()}
+      <slot name="end"></slot>
+      ${this._renderIndicator()}
+      <forge-focus-indicator part="focus-indicator" target=":host" focus-mode="focus" inward></forge-focus-indicator>
+      ${this.disabled ? nothing : html`<forge-state-layer exportparts="surface:state-layer"></forge-state-layer>`}
     `;
+
+    return html`${this._renderRoot(content)}${this._renderOverlay()}`;
+  }
+
+  /** Renders the root element wrapping the item's content. Extend to render a different type of element. */
+  protected _renderRoot(content: TemplateResult): TemplateResult {
+    return html`<div class=${classMap(this._getRootClasses())} part="root">${content}</div>`;
   }
 
   /** Classes applied to the root element. Extend to add classes for additional states. */
