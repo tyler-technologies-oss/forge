@@ -46,7 +46,7 @@ Set `locale` to format the timestamp for a specific locale instead of following 
 
 Set `separator` to `start` or `end` to place a dot before or after the timestamp, visually separating it from adjacent inline content. The default is `none`.
 
-Example (A timestamp with a leading separator dot, next to other inline content.): `get_forge_blocks(blockId: "components/timestamp/separators/separators")`
+Example (Timestamps with a separator dot before, after, or not at all, next to other inline content.): `get_forge_blocks(blockId: "components/timestamp/separators/separators")`
 
 ## Accessibility
 
