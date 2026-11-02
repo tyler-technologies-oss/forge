@@ -1,18 +1,12 @@
-import { customElement, attachShadowTemplate } from '@tylertech/forge-core';
-import { BaseComponent, IBaseComponent } from '../core/base/base-component.js';
-
+import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
+import { html, TemplateResult, unsafeCSS } from 'lit';
+import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { PAGE_STATE_CONSTANTS } from './page-state-constants.js';
 
-import template from './page-state.html';
 import styles from './page-state.scss';
 
-export interface IPageStateComponent extends IBaseComponent {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'forge-page-state': IPageStateComponent;
-  }
-}
+/** @deprecated - This will be removed in the future. Please switch to using PageStateComponent. */
+export interface IPageStateComponent extends BaseLitElement {}
 
 /**
  * @tag forge-page-state
@@ -49,12 +43,36 @@ declare global {
  * @slot message - The slot where the message will be rendered.
  * @slot action - The slot where the actions will be rendered.
  */
-@customElement({
-  name: PAGE_STATE_CONSTANTS.elementName
-})
-export class PageStateComponent extends BaseComponent implements IPageStateComponent {
-  constructor() {
-    super();
-    attachShadowTemplate(this, template, styles);
+export class PageStateComponent extends BaseLitElement implements IPageStateComponent {
+  public static styles = unsafeCSS(styles);
+
+  /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = PAGE_STATE_CONSTANTS.elementName;
+
+  public render(): TemplateResult {
+    return html`
+      <div class="forge-page-state" part="root">
+        <div class="graphic" part="graphic-container">
+          <slot name="graphic"></slot>
+        </div>
+        <div class="title" part="title-container">
+          <slot name="title"></slot>
+        </div>
+        <div class="message" part="message-container">
+          <slot name="message"></slot>
+        </div>
+        <div class="actions" part="actions-container">
+          <slot name="action"></slot>
+        </div>
+      </div>
+    `;
+  }
+}
+
+tryDefine(PAGE_STATE_CONSTANTS.elementName, PageStateComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'forge-page-state': IPageStateComponent;
   }
 }
