@@ -1,6 +1,6 @@
 /**
  * Block metadata parsing utilities.
- * Extracts @block, @type, @description, @tags, and @screenshot-* annotations from HTML comment headers.
+ * Extracts @block, @type, @description, @tags, @responsive, and @screenshot-* annotations from HTML comment headers.
  */
 
 import path from 'node:path';
@@ -13,6 +13,9 @@ export const METADATA_REGEX = /<!--([\s\S]*?)-->/;
 
 /** Matches a single annotation value up to the next `@` annotation or the end of the comment body. */
 export const ANNOTATION_REGEX = (name: string): RegExp => new RegExp(`@${name}\\s+([\\s\\S]+?)(?=\\s*@\\w|\\s*$)`);
+
+/** Matches a value-less flag annotation such as `@responsive`, without matching longer names like `@responsive-foo`. */
+export const FLAG_REGEX = (name: string): RegExp => new RegExp(`@${name}(?![\\w-])`);
 
 /**
  * Parses block metadata from HTML content.
@@ -39,8 +42,9 @@ export function parseBlockMetadata(content: string, filePath: string): BlockMeta
   const description = descMatch?.[1]?.trim() || '';
   const tags = tagsMatch?.[1]?.split(',').map(t => t.trim()).filter(Boolean) || [];
   const type = normalizeBlockType(typeMatch?.[1]?.trim());
+  const responsive = FLAG_REGEX('responsive').test(body);
 
-  return { name, description, tags, type };
+  return { name, description, tags, type, responsive };
 }
 
 /**

@@ -11,7 +11,7 @@ export type { ValidationIssue, ValidationResult, ValidationSeverity } from './ty
 
 /**
  * Validates block HTML content for required metadata.
- * Checks for @block name, @description, @tags, (if present) a valid @type value, and @screenshot-* consistency.
+ * Checks for @block name, @description, @tags, (if present) a valid @type value, a value-less @responsive flag, and @screenshot-* consistency.
  */
 export function validateBlockContent(content: string, filePath?: string): ValidationResult {
   const issues: ValidationIssue[] = [];
@@ -73,11 +73,23 @@ export function validateBlockContent(content: string, filePath?: string): Valida
     });
   }
 
+  const responsiveValue = body.match(RESPONSIVE_VALUE_REGEX)?.[1]?.trim();
+  if (responsiveValue) {
+    issues.push({
+      severity: 'warning',
+      message: `@responsive is a flag and takes no value (found "${responsiveValue}"). Use a bare @responsive, or remove it to opt out`,
+      file: filePath
+    });
+  }
+
   issues.push(...validateScreenshotOptions(content, filePath));
 
   const hasErrors = issues.some(i => i.severity === 'error');
   return { valid: !hasErrors, issues };
 }
+
+/** Matches a value written on the same line as `@responsive`, e.g. `@responsive true`. */
+const RESPONSIVE_VALUE_REGEX = /@responsive[ \t]+([^\s@][^\n]*)/;
 
 /** Matches a selector that is only an id, e.g. `#open-dialog-btn`. */
 const ID_SELECTOR_REGEX = /^#([\w-]+)$/;

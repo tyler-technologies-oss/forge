@@ -30,6 +30,6 @@ const fileUrl = getBlockFileUrl(block);
   <PageScaffold class="block-detail">
     <ContentHeader slot="header" title={block.name} description={block.description} showBackButton />
 
-    <BlockViewer client:load title={block.name} iframeUrl={fileUrl} />
+    <BlockViewer client:load title={block.name} iframeUrl={fileUrl} responsive={block.responsive} />
   </PageScaffold>
 </BaseLayout>
