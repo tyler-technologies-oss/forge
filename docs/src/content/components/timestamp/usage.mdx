@@ -7,14 +7,16 @@ category: data-display
 storybookId: components-timestamp--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-timestamp datetime="2025-01-15T14:30:00" format="MMM d, yyyy h:mm a"></forge-timestamp>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+Timestamps display a time, date, or other duration, in a specifically formatted style to be used when referencing a date or time in your UI. It's primarily used with the timeline component, but it can be used anywhere a data or time is needed. When referencing a date or time, use the timestamp component to keep your dates and times displayed in the same way through out your applications.
 
 ## Usage
 

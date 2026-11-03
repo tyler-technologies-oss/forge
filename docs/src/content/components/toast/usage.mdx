@@ -7,15 +7,19 @@ category: feedback
 storybookId: components-toast--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
-<ComponentHeader>
-  <forge-button variant="outlined">Show toast</forge-button>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+Toasts are brief, non-intrusive notifications that inform users of an action or process the system has performed or will perform. They appear temporarily near the bottom of the viewport and automatically dismiss after a set duration.  
+
+Toasts should never interrupt workflow or require user input to disappear. They help confirm an action, surface minor updates, or provide passive feedback without stealing focus from the main task.
 
 ## Usage
 
@@ -27,6 +31,8 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   <Rule
     variant="do"
     rules={[
+      "Keep toast messages short and scannable (ideally under 10 words).",
+      "Queue multiple messages in a logical order (newest last).",
       "Confirm an action the user just took, like creating, moving, or updating a record.",
       "Show only one toast at a time — queue successive toasts instead of stacking them.",
       "If you add an action label, keep it a genuine alternate action, never \"Dismiss\" or \"Cancel\" — the toast already disappears on its own.",

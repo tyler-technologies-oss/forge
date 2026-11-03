@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-avatar text="Ada Lovelace"></forge-avatar>
+  <forge-avatar text="Grace Hopper"></forge-avatar>
+  <forge-avatar text="Alan Turing"></forge-avatar>
+</ComponentHeader>

@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="cover" {thumbnail}>
+  <forge-page-state>
+    <forge-icon slot="graphic" name="search"></forge-icon>
+    <span slot="title">No results found</span>
+    <span slot="message">Try adjusting your search or filters.</span>
+  </forge-page-state>
+</ComponentHeader>

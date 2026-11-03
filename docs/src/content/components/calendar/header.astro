@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="center" {thumbnail}>
+  <forge-calendar></forge-calendar>
+</ComponentHeader>
