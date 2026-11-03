@@ -1,6 +1,6 @@
 ---
 name: component-docs-header
-description: This skill should be used when the user asks to "add a component header", "add a ComponentHeader to the X docs page", "create the docs page for a new component", or otherwise discusses the live demo shown at the top of a component's usage page in the `docs/` site.
+description: This skill should be used when the user asks to "add a component header", "add a ComponentHeader to the X docs page", "change the header demo for X", or otherwise discusses the live demo shown at the top of a component's usage page in the `docs/` site. For a whole new docs page, start with component-docs-page, which hands off here.
 ---
 
 # Component Docs Header
