@@ -1,5 +1,14 @@
 # @tylertech/forge-plugin
 
+## 1.6.0
+
+### Documentation
+
+- 6b203c3: add overview sections and usage guidance to component pages
+- 22d4f24: **dialog**: style dialog titles with heading4 like page titles, and fix the timestamp separator values
+- 8496768: **kbd**: add the kbd component docs page
+- 9cbbb58: **timestamp**: show the separators example from its block
+
 ## 1.5.0
 
 ### Documentation
