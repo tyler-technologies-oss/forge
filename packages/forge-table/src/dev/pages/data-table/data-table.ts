@@ -1,9 +1,10 @@
-import '@tylertech/forge/dist/forge.css';
-import '@tylertech/forge/select';
-import '@tylertech/forge/switch';
+import '$src/shared';
 import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
+import './data-table.scss';
 import { DataSource } from '@tylertech/forge-core';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import type { ISwitchComponent } from '@tylertech/forge/switch';
 import type { ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
 
 interface RowData {
@@ -176,34 +177,37 @@ dataTable.addEventListener('forge-data-table-column-order', console.log);
 dataTable.addEventListener('forge-data-table-row-click', console.log);
 dataTable.addEventListener('forge-data-table-column-visibility', console.log);
 
-const groupedColumnsCheckbox = document.getElementById('grouped-columns') as HTMLInputElement;
-groupedColumnsCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const groupedColumnsToggle = document.querySelector('#opt-grouped-columns') as ISwitchComponent;
+groupedColumnsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   dataTable.columns = selected ? groupedColumns : flatColumns;
 });
 
-const resizableCheckbox = document.getElementById('resizable') as HTMLInputElement;
-resizableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.resizable = selected));
+const resizableToggle = document.querySelector('#opt-resizable') as ISwitchComponent;
+resizableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.resizable = selected));
 
-const reorderableCheckbox = document.getElementById('reorderable') as HTMLInputElement;
-reorderableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.reorderable = selected));
+const reorderableToggle = document.querySelector('#opt-reorderable') as ISwitchComponent;
+reorderableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.reorderable = selected));
 
-const hoverCheckbox = document.getElementById('hover') as HTMLInputElement;
-hoverCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.hover = selected));
+const stripedToggle = document.querySelector('#opt-striped') as ISwitchComponent;
+stripedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.striped = selected));
 
-const stripedCheckbox = document.getElementById('striped') as HTMLInputElement;
-stripedCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.striped = selected));
+const hoverToggle = document.querySelector('#opt-hover') as ISwitchComponent;
+hoverToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.hover = selected));
 
-const compactCheckbox = document.getElementById('compact') as HTMLInputElement;
-compactCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.compact = selected));
+const compactToggle = document.querySelector('#opt-compact') as ISwitchComponent;
+compactToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.compact = selected));
 
-const borderedCheckbox = document.getElementById('bordered') as HTMLInputElement;
-borderedCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.bordered = selected));
+const borderedToggle = document.querySelector('#opt-bordered') as ISwitchComponent;
+borderedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.bordered = selected));
 
-const allowRowClickCheckbox = document.getElementById('allow-row-click') as HTMLInputElement;
-allowRowClickCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.allowRowClick = selected));
+const allowRowClickToggle = document.querySelector('#opt-allow-row-click') as ISwitchComponent;
+allowRowClickToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.allowRowClick = selected));
 
-const customCellTemplateCheckbox = document.getElementById('custom-cell-template') as HTMLInputElement;
-customCellTemplateCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const expandableToggle = document.querySelector('#opt-expandable') as ISwitchComponent;
+expandableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.expandable = selected));
+
+const customCellTemplateToggle = document.querySelector('#opt-custom-cell-template') as ISwitchComponent;
+customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const findColumn = (columns: ColumnDef<RowData>[]): ColumnDef<RowData> | undefined => {
     for (const column of columns) {
       if (column.property === 'email') {
@@ -242,37 +246,34 @@ customCellTemplateCheckbox.addEventListener('forge-switch-change', ({ detail: se
   dataTable.columns = [...dataTable.columns];
 });
 
-const expandableCheckbox = document.getElementById('expandable') as HTMLInputElement;
-expandableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.expandable = selected));
+const rowSelectionSelect = document.querySelector('#opt-row-selection') as ISelectComponent;
+rowSelectionSelect.addEventListener('change', ({ detail }) => (dataTable.rowSelection = detail as RowSelectionType));
 
-const rowSelectionSelect = document.getElementById('row-select') as HTMLSelectElement;
-rowSelectionSelect.addEventListener('change', () => (dataTable.rowSelection = rowSelectionSelect.value as RowSelectionType));
+const sortableToggle = document.querySelector('#opt-sortable') as ISwitchComponent;
+sortableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.sortable = selected));
 
-const sortableCheckbox = document.getElementById('sortable') as HTMLInputElement;
-sortableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.sortable = selected));
+const manualSortToggle = document.querySelector('#opt-manual-sort') as ISwitchComponent;
+manualSortToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualSort = selected));
 
-const manualSortCheckbox = document.getElementById('manual-sort') as HTMLInputElement;
-manualSortCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualSort = selected));
+const multiSortToggle = document.querySelector('#opt-multi-sort') as ISwitchComponent;
+multiSortToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.multiSort = selected));
 
-const multiSortCheckbox = document.getElementById('multi-sort') as HTMLInputElement;
-multiSortCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.multiSort = selected));
+const multiSortKeySelect = document.querySelector('#opt-multi-sort-key') as ISelectComponent;
+multiSortKeySelect.addEventListener('change', ({ detail }) => (dataTable.multiSortKey = detail as 'shift' | 'ctrl' | 'meta' | 'alt'));
 
-const multiSortKeySelect = document.getElementById('multi-sort-key') as HTMLSelectElement;
-multiSortKeySelect.addEventListener('change', () => (dataTable.multiSortKey = multiSortKeySelect.value as 'shift' | 'ctrl' | 'meta' | 'alt'));
-
-const maxMultiSortColCountSelect = document.getElementById('max-multi-sort-col-count') as HTMLSelectElement;
-maxMultiSortColCountSelect.addEventListener('change', () => {
-  dataTable.maxMultiSortColCount = maxMultiSortColCountSelect.value === 'unlimited' ? undefined : parseInt(maxMultiSortColCountSelect.value, 10);
+const maxMultiSortColCountSelect = document.querySelector('#opt-max-multi-sort-col-count') as ISelectComponent;
+maxMultiSortColCountSelect.addEventListener('change', ({ detail }) => {
+  dataTable.maxMultiSortColCount = detail === 'unlimited' ? undefined : parseInt(detail, 10);
 });
 
-const filterableCheckbox = document.getElementById('filterable') as HTMLInputElement;
-filterableCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.filterable = selected));
+const filterableToggle = document.querySelector('#opt-filterable') as ISwitchComponent;
+filterableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.filterable = selected));
 
-const manualFilterCheckbox = document.getElementById('manual-filter') as HTMLInputElement;
-manualFilterCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualFilter = selected));
+const manualFilterToggle = document.querySelector('#opt-manual-filter') as ISwitchComponent;
+manualFilterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualFilter = selected));
 
-const showFooterCheckbox = document.getElementById('show-footer') as HTMLInputElement;
-showFooterCheckbox.addEventListener('forge-switch-change', ({ detail: selected }) => {
+const showFooterToggle = document.querySelector('#opt-show-footer') as ISwitchComponent;
+showFooterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const updateColumnFooters = (columns: ColumnDef<RowData>[]): void => {
     columns.forEach(column => {
       if (column.columns) {
@@ -301,27 +302,14 @@ showFooterCheckbox.addEventListener('forge-switch-change', ({ detail: selected }
   dataTable.columns = [...dataTable.columns];
 });
 
-const hiddenColumnsSelect = document.getElementById('hidden-columns') as HTMLSelectElement;
-hiddenColumnsSelect.innerHTML = dataTable.columns
-  .map(({ header, id }) => `<option value="${id ?? header?.toString().toLowerCase()}">${header}</option>`)
-  .join('');
-hiddenColumnsSelect.addEventListener('change', () => {
-  const hiddenColumns = new Set(
-    Array.from(hiddenColumnsSelect.selectedOptions)
-      .map(option => option.value)
-      .filter(Boolean)
-  );
-
-  dataTable.columns.forEach(column => {
-    const columnId = column.id ?? column.header?.toString().toLowerCase();
-    if (!columnId) {
-      return;
-    }
-
-    if (hiddenColumns.has(columnId)) {
-      dataTable.hideColumn(columnId);
+const hiddenColumnsSelect = document.querySelector('#opt-hidden-columns') as ISelectComponent;
+hiddenColumnsSelect.addEventListener('change', ({ detail }) => {
+  const hiddenColumns = new Set<string>(Array.isArray(detail) ? detail : []);
+  flatColumns.forEach(({ property }) => {
+    if (hiddenColumns.has(property as string)) {
+      dataTable.hideColumn(property as string);
     } else {
-      dataTable.showColumn(columnId);
+      dataTable.showColumn(property as string);
     }
   });
 });

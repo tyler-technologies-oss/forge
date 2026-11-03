@@ -2,8 +2,14 @@ import { dirname, isAbsolute, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { compile, type FileImporter } from 'sass';
 import { defineConfig, type FSWatcher, type Plugin } from 'vite';
+import { ViteEjsPlugin } from 'vite-plugin-ejs';
+import ViteFullReload from 'vite-plugin-full-reload';
 
-const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const devDir = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(devDir, '../..');
+const libDir = resolve(rootDir, 'src/lib');
+const forgeDevDir = resolve(rootDir, '../forge/src/dev');
+const forgeDistDir = resolve(rootDir, '../forge/dist');
 const FORGE_SASS_PREFIX = '@tylertech/forge/sass/';
 
 /**
@@ -20,6 +26,7 @@ const SCSS_VIRTUAL_PREFIX = '\0virtual-css-string:';
  * Compiles `.scss` imports into a JS module exporting the CSS string, mirroring the rollup build. A virtual
  * `.js` id keeps vite's own CSS plugin from processing the result. Every file Sass loads (including partials
  * and forge's SCSS sources) is tracked so editing any of them invalidates the module and reloads the page.
+ * Only applies to the library sources; the dev pages import their SCSS as regular stylesheets.
  */
 const inlineScss = (): Plugin => {
   const dependents = new Map<string, Set<string>>();
@@ -32,7 +39,7 @@ const inlineScss = (): Plugin => {
       watcher = server.watcher;
     },
     resolveId(source, importer) {
-      if (!source.endsWith('.scss') || !importer) {
+      if (!source.endsWith('.scss') || !importer?.startsWith(libDir)) {
         return null;
       }
       const resolved = isAbsolute(source) ? source : resolve(dirname(importer), source);
@@ -75,14 +82,26 @@ export default defineConfig({
   // still resolves to its built `esm/` (dropping the `development` condition keeps vite from resolving
   // `@tylertech/forge` to its TypeScript sources, which import `.html` templates vite cannot parse).
   resolve: {
-    alias: {
-      '@tylertech/forge-table': resolve(rootDir, 'src/lib')
-    },
+    alias: [
+      { find: '@tylertech/forge-table', replacement: libDir },
+      // The page shell (scaffold, app bar, options drawer, theme toggle) is shared with forge's own dev pages
+      { find: /^\$src\//, replacement: `${resolve(forgeDevDir, 'src')}/` },
+      // forge's shell imports its stylesheets as `*.scss` sources, which only exist in the forge workspace; use the built CSS
+      { find: /^@tylertech\/forge\/(forge|forge-core|forge-dark)\.scss/, replacement: `${forgeDistDir}/$1.css` }
+    ],
     conditions: ['module', 'browser', 'default']
   },
-  plugins: [inlineScss()],
+  plugins: [
+    inlineScss(),
+    ViteEjsPlugin(
+      { site: { title: 'Tyler Forge™ Table Dev' } },
+      // Includes resolve against this page first, then forge's dev shell
+      { ejs: { views: [devDir, forgeDevDir] } }
+    ),
+    ViteFullReload(['./**/*.ejs'])
+  ],
   server: {
-    open: true,
+    open: '/pages/data-table/data-table.html',
     strictPort: false,
     port: 3470
   }

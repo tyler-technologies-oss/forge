@@ -1,0 +1,90 @@
+<%
+const section = title => ({
+  type: 'custom',
+  render: () => `<h3 class="forge-typography--overline option-section">${title}</h3>`
+});
+%>
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Data table',
+    includePath: './pages/data-table/data-table.ejs',
+    options: [
+      section('Columns'),
+      { type: 'switch', label: 'Grouped columns', id: 'opt-grouped-columns' },
+      { type: 'switch', label: 'Resizable', id: 'opt-resizable' },
+      { type: 'switch', label: 'Reorderable', id: 'opt-reorderable', defaultValue: true },
+      { type: 'switch', label: 'Custom cell template', id: 'opt-custom-cell-template' },
+      { type: 'switch', label: 'Show footer', id: 'opt-show-footer' },
+      {
+        type: 'select',
+        label: 'Hidden columns',
+        id: 'opt-hidden-columns',
+        multiple: true,
+        options: [
+          { label: 'Id', value: 'id' },
+          { label: 'First Name', value: 'firstName' },
+          { label: 'Last Name', value: 'lastName' },
+          { label: 'Email', value: 'email' },
+          { label: 'Phone', value: 'phone' },
+          { label: 'Department', value: 'department' },
+          { label: 'Position', value: 'position' },
+          { label: 'Salary', value: 'salary' },
+          { label: 'City', value: 'city' },
+          { label: 'State', value: 'state' }
+        ]
+      },
+      section('Appearance'),
+      { type: 'switch', label: 'Striped', id: 'opt-striped' },
+      { type: 'switch', label: 'Hover', id: 'opt-hover' },
+      { type: 'switch', label: 'Compact', id: 'opt-compact' },
+      { type: 'switch', label: 'Bordered', id: 'opt-bordered' },
+      section('Rows'),
+      { type: 'switch', label: 'Allow row click', id: 'opt-allow-row-click' },
+      { type: 'switch', label: 'Expandable rows', id: 'opt-expandable' },
+      {
+        type: 'select',
+        label: 'Row selection',
+        id: 'opt-row-selection',
+        defaultValue: 'off',
+        options: [
+          { label: 'Off', value: 'off' },
+          { label: 'Single', value: 'single' },
+          { label: 'Multiple', value: 'multiple' }
+        ]
+      },
+      section('Sorting'),
+      { type: 'switch', label: 'Sortable', id: 'opt-sortable' },
+      { type: 'switch', label: 'Manual sort', id: 'opt-manual-sort' },
+      { type: 'switch', label: 'Multi-column sort', id: 'opt-multi-sort' },
+      {
+        type: 'select',
+        label: 'Multi-sort key',
+        id: 'opt-multi-sort-key',
+        defaultValue: 'shift',
+        options: [
+          { label: 'Shift', value: 'shift' },
+          { label: 'Ctrl', value: 'ctrl' },
+          { label: 'Meta', value: 'meta' },
+          { label: 'Alt', value: 'alt' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Max multi-sort columns',
+        id: 'opt-max-multi-sort-col-count',
+        defaultValue: 'unlimited',
+        options: [
+          { label: 'Unlimited', value: 'unlimited' },
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' }
+        ]
+      },
+      section('Filtering'),
+      { type: 'switch', label: 'Filterable', id: 'opt-filterable' },
+      { type: 'switch', label: 'Manual filter', id: 'opt-manual-filter' }
+    ]
+  }
+})
+%>

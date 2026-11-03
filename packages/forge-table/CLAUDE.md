@@ -41,7 +41,9 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Takes the TanStack `column` and `table` as properties; sort, move and hide are applied directly, while pin and
   maximize only dispatch `forge-data-table-column-menu-action`. It assigns `forge-menu`'s `options` in
   `firstUpdated` because `forge-menu` drops an `options` value that Lit sets during the first render.
-- `src/dev/` — a scratch page on **localhost:3470**. `vite.config.mts` aliases this package to `src/lib` and
+- `src/dev/` — a dev page on **localhost:3470**, written like forge's own dev pages (`pages/data-table/data-table.{html,ejs,ts,scss}`;
+  the options drawer is the `options` array in the `.html`). It reuses forge's page shell (`packages/forge/src/dev/src`: scaffold, app bar,
+  options drawer, theme toggle) through the `$src` alias and the EJS `views` list in `vite.config.mts`. `vite.config.mts` aliases this package to `src/lib` and
   compiles its SCSS from source (including forge's SCSS), so edits reload the page with no rebuild. forge itself
   still resolves to its built `esm/`, so forge changes need a forge rebuild. Not published.
 
