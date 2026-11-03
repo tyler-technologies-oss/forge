@@ -3,7 +3,13 @@ title: React
 description: Using Tyler Forge with React.
 ---
 
-import Blockquote from "../../../components/docs/Blockquote.astro";
+import Blockquote from '../../../components/docs/Blockquote.astro';
+import ComponentHeader from '../../../components/ComponentHeader.astro';
+import FrameworkPairing from '../../../components/docs/FrameworkPairing.astro';
+
+<ComponentHeader interactive={false} height="200px">
+  <FrameworkPairing framework="react" />
+</ComponentHeader>
 
 Direct support for custom elements in React has been a requested feature for long time. As you can see on
 [Custom Elements Everywhere](https://custom-elements-everywhere.com/#react) React scores quite low.
