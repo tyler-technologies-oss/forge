@@ -1,0 +1,3 @@
+@forward '@tylertech/forge-tokens/sass/tokens/typography' show $scale;
+@forward '@tylertech/forge-tokens/sass/typography/scale' show value;
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/scale" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/typography" from @tylertech/forge-tokens instead.';

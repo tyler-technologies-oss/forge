@@ -1,0 +1,24 @@
+@use 'sass:map';
+
+@forward '@tylertech/forge-tokens/sass/tokens/typography' show $font-family, $font-size;
+@use '@tylertech/forge-tokens/sass/typography/core';
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.core" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/typography" from @tylertech/forge-tokens instead.';
+
+$base: map.merge(
+  core.$base,
+  (
+    font-weight: 400,
+    line-height: normal,
+    letter-spacing: normal,
+    text-transform: inherit,
+    text-decoration: inherit
+  )
+) !default;
+
+@function get($key) {
+  @if not map.has-key($base, $key) {
+    @error 'No typography style exists with the key `#{$key}`.';
+  }
+  @return map.get($base, $key);
+}

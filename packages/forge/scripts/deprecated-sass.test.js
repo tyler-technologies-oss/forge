@@ -22,7 +22,29 @@ const DEPRECATED_MODULES = [
   { module: 'tokens/theme/token-utils', replacement: 'theme/token-utils' },
   { module: 'tokens/color-palette', replacement: 'color-palette' },
   { module: 'tokens/color-palette/material-color-palette', replacement: 'color-palette' },
-  { module: 'tokens/color-palette/extended-color-palette', replacement: 'color-palette' }
+  { module: 'tokens/color-palette/extended-color-palette', replacement: 'color-palette' },
+  { module: 'tokens/animation/tokens', replacement: 'tokens/animation' },
+  { module: 'tokens/border/tokens', replacement: 'tokens/border' },
+  { module: 'tokens/elevation/tokens', replacement: 'tokens/elevation' },
+  { module: 'tokens/shape/tokens', replacement: 'tokens/shape' },
+  { module: 'tokens/spacing/tokens', replacement: 'tokens/spacing' },
+  { module: 'tokens/theme/tokens', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.brand', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.core', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.status', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.surface', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.text', replacement: 'theme/tokens' },
+  { module: 'tokens/theme/tokens.utilities', replacement: 'theme/tokens' },
+  { module: 'tokens/typography/scale', replacement: 'tokens/typography' },
+  { module: 'tokens/typography/tokens', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/tokens.body', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/tokens.core', replacement: 'tokens/typography' },
+  { module: 'tokens/typography/tokens.display', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/tokens.heading', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/tokens.label', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/tokens.subheading', replacement: 'typography/tokens' },
+  { module: 'tokens/typography/type-utils', replacement: 'typography' },
+  { module: 'tokens/typography/weight', replacement: 'typography' }
 ];
 
 function compileWithWarnings(source) {
@@ -53,6 +75,19 @@ describe('deprecated core styles modules', () => {
     const { css, warnings } = compileWithWarnings(`@use 'theme'; .a { color: theme.variable(primary); }`);
     expect(css).toContain('color: var(--forge-theme-primary, #3f51b5);');
     expect(warnings).toHaveLength(1);
+  });
+
+  it('should continue to provide the elevation and z-index token maps', () => {
+    const { css } = compileWithWarnings(
+      `@use 'sass:map'; @use 'tokens/elevation/tokens' as m; .a { box-shadow: #{map.get(m.$tokens, 4)}; z-index: map.get(m.$z-index-tokens, dialog); }`
+    );
+    expect(css).toContain('box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);');
+    expect(css).toContain('z-index: 8;');
+  });
+
+  it('should continue to provide the theme token group maps', () => {
+    const { css } = compileWithWarnings(`@use 'sass:map'; @use 'tokens/theme/tokens.core' as m; .a { color: map.get(m.$tokens, primary); }`);
+    expect(css).toContain('color: #3f51b5;');
   });
 
   it('should not warn when using a non-deprecated forge module that uses the global tokens', () => {

@@ -1,0 +1,54 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.status" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
+
+$_keys: (
+  success,
+  success-container-minimum,
+  success-container-low,
+  success-container,
+  success-container-high,
+  on-success,
+  on-success-container-minimum,
+  on-success-container-low,
+  on-success-container,
+  on-success-container-high,
+  error,
+  error-container-minimum,
+  error-container-low,
+  error-container,
+  error-container-high,
+  on-error,
+  on-error-container-minimum,
+  on-error-container-low,
+  on-error-container,
+  on-error-container-high,
+  warning,
+  warning-container-minimum,
+  warning-container-low,
+  warning-container,
+  warning-container-high,
+  on-warning,
+  on-warning-container-minimum,
+  on-warning-container-low,
+  on-warning-container,
+  on-warning-container-high,
+  info,
+  info-container-minimum,
+  info-container-low,
+  info-container,
+  info-container-high,
+  on-info,
+  on-info-container-minimum,
+  on-info-container-low,
+  on-info-container,
+  on-info-container-high
+);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

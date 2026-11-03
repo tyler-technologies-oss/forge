@@ -1,0 +1,16 @@
+@use 'sass:map';
+
+@forward '@tylertech/forge-tokens/sass/tokens/elevation';
+@forward '@tylertech/forge-tokens/sass/tokens/z-index' as z-index-*;
+@use '@tylertech/forge-tokens/sass/tokens/elevation' as tokens;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/elevation/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/elevation" from @tylertech/forge-tokens instead.';
+
+$baseline-color: black !default;
+$umbra-color: rgba($baseline-color, 0.2) !default;
+$penumbra-color: rgba($baseline-color, 0.14) !default;
+$ambient-color: rgba($baseline-color, 0.12) !default;
+
+@function get($key) {
+  @return map.get(tokens.$tokens, $key);
+}

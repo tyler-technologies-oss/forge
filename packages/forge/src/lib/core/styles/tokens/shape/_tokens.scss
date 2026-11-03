@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use 'sass:math';
+
+@forward '@tylertech/forge-tokens/sass/tokens/shape';
+@use '@tylertech/forge-tokens/sass/tokens/shape' as tokens;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/shape/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/shape" from @tylertech/forge-tokens instead.';
+
+$base: 4px !default;
+$extra-small: math.div($base, 4) !default;
+$small: math.div($base, 2) !default;
+$medium: $base !default;
+$large: $base * 2 !default;
+$extra-large: $base * 4 !default;
+
+@function get($key) {
+  @return map.get(tokens.$tokens, $key);
+}

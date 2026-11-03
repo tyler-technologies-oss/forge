@@ -1,0 +1,24 @@
+@use 'sass:map';
+
+@forward '@tylertech/forge-tokens/sass/tokens/spacing';
+@use '@tylertech/forge-tokens/sass/tokens/spacing' as tokens;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/spacing/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/spacing" from @tylertech/forge-tokens instead.';
+
+$base: 16px !default;
+$values: (
+  '0125': $base * 0.125,
+  '025': $base * 0.25,
+  '050': $base * 0.5,
+  '075': $base * 0.75,
+  '100': $base,
+  '125': $base * 1.25,
+  '150': $base * 1.5,
+  '200': $base * 2,
+  '300': $base * 3,
+  '350': $base * 3.5
+) !default;
+
+@function get($key) {
+  @return map.get(tokens.$tokens, $key);
+}

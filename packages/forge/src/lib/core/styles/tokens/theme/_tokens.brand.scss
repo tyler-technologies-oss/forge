@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.brand" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
+
+$_keys: (brand, on-brand);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}
