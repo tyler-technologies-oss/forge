@@ -1,5 +1,11 @@
 # @tylertech/forge
 
+## 3.25.1
+
+### Bug Fixes
+
+- f0e56e1: restore deprecated Sass token paths removed in 3.25
+
 ## 3.25.0
 
 ### Bug Fixes
