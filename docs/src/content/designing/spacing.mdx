@@ -6,6 +6,12 @@ description: How to apply Tyler Forge's spacing scale so hand-built designs matc
 import InlineMessage from "../../components/docs/InlineMessage.astro";
 import Rules from "../../components/Rules.astro";
 import Rule from "../../components/Rule.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import SpacingScale from "../../components/docs/SpacingScale.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <SpacingScale />
+</ComponentHeader>
 
 Forge uses a single spacing scale for every padding, margin, and gap. If a value isn't on the scale, it doesn't belong in a Forge design. Developers build with these tokens directly (`--forge-spacing-medium`, `--forge-spacing-large`), so off-scale values in a mockup either get rounded to the nearest token or end up as one-off CSS.
 
