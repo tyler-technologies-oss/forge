@@ -15,12 +15,18 @@ interface Props {
    * (icon library, blocks gallery, etc). These pages don't render a TOC.
    */
   wide?: boolean;
+  /**
+   * Removes the body card's padding so content (like the homepage hero) runs
+   * edge to edge.
+   */
+  flush?: boolean;
 }
 
 const {
   title,
   description = "Forge Design System Documentation",
   wide = false,
+  flush = false,
 } = Astro.props;
 
 const components = await getCollection("components");
@@ -204,10 +210,10 @@ const components = await getCollection("components");
 
       <main class="py-small pe-small overflow-hidden flex gap-medium items-start" slot="body">
         <forge-card
-          class:list={["body-card h-full min-w-0 flex-1", wide ? "max-w-wide" : "max-w-content"]}>
+          class:list={["body-card h-full min-w-0 flex-1", wide ? "max-w-wide" : "max-w-content", { flush }]}>
           <div class="h-full">
             <forge-scaffold>
-              <div slot="body" data-scroll-body>
+              <div slot="body" data-scroll-body data-flush={flush || undefined}>
                 <slot />
               </div>
             </forge-scaffold>
@@ -230,6 +236,10 @@ const components = await getCollection("components");
         --forge-card-shape: 12px;
         --forge-card-padding: var(--forge-spacing-large);
         --forge-card-overflow: hidden;
+      }
+
+      .body-card.flush {
+        --forge-card-padding: 0;
       }
     </style>
 
@@ -266,6 +276,11 @@ const components = await getCollection("components");
         // rendering it flush against the padded content.
         margin-right: calc(-1 * var(--forge-spacing-large));
         padding-right: var(--forge-spacing-large);
+
+        &[data-flush] {
+          margin-right: 0;
+          padding-right: 0;
+        }
 
         &::-webkit-scrollbar {
           width: 4px;
