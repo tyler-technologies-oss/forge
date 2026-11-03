@@ -79,7 +79,8 @@ export async function discoverBlocks(blocksPath: string): Promise<Block[]> {
         file: relativePath,
         category: formatCategoryName(categoryFolder),
         componentsUsed,
-        hasScript
+        hasScript,
+        responsive: metadata.responsive
       };
 
       if (fs.existsSync(`${basePath}.webp`)) {
