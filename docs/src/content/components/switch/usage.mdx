@@ -7,15 +7,12 @@ category: forms
 storybookId: components-switch--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-switch checked>Enabled</forge-switch>
-  <forge-switch>Disabled</forge-switch>
-</ComponentHeader>
+<Header />
 
 ## Overview
 Switches are selection controls that allow users to toggle a single setting between two states: on/off, show/hide, etc. They appear as a sliding toggle with a marker that moves between positions to indicate the current state.

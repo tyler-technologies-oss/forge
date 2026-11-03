@@ -53,6 +53,20 @@ test("cleanMdxBody: drops <ComponentHeader> and its import, keeping surrounding 
   assert.match(out, /Intro copy\.\n\n## Overview\n\nOverview copy\./);
 });
 
+test("cleanMdxBody: drops the co-located <Header /> demo and its import", () => {
+  const body = [
+    'import Header from "./header.astro";',
+    "",
+    "<Header />",
+    "",
+    "## Usage",
+    "Usage copy.",
+  ].join("\n");
+  const out = cleanMdxBody(body, { file: "test.mdx", slug: "button", lineOffset: 0, examples: [] });
+  assert.doesNotMatch(out, /Header|header\.astro/);
+  assert.match(out, /## Usage\n\nUsage copy\./);
+});
+
 test("cleanMdxBody: drops <AnatomyDemo> and a heading left with no content", () => {
   const body = [
     'import AnatomyDemo from "../../../components/docs/AnatomyDemo.astro";',

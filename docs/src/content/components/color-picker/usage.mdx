@@ -7,14 +7,12 @@ category: forms
 storybookId: components-color-picker--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader fit="cover" zoom={0.9}>
-  <forge-color-picker value="1976d2"></forge-color-picker>
-</ComponentHeader>
+<Header />
 
 ## Overview
 The color picker component allows users to select colors through a visual interface rather than requiring technical color knowledge. It provides an interactive canvas for color selection along with controls for adjusting hue, saturation, lightness, and opacity. This component transforms color selection from a technical task into an intuitive visual experience, making it accessible to users regardless of their familiarity with color codes or values.
