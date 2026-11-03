@@ -1,0 +1,13 @@
+## Screen reader behavior
+
+`forge-kbd` renders native `<kbd>` elements, which assistive technology recognizes as keyboard input. Each key is rendered in its own `<kbd>` inside a wrapping `<kbd>`, so a screen reader can read the combination in order. When only one key is shown, the wrapper gets `role="presentation"` so the key isn't announced twice.
+
+## Labeling
+
+`forge-kbd` isn't focusable and has no accessible name of its own. Always describe the action in nearby text, and don't rely on the glyphs alone.
+
+If the shortcut is actually bound to an element, expose it with `aria-keyshortcuts` on that element, since `forge-kbd` is only a visual representation. Use <a href={`${import.meta.env.BASE_URL}components/keyboard-shortcut/usage/`}>keyboard shortcut</a> to wire up the behavior itself.
+
+## Platform glyphs
+
+Modifier keys and some named keys are shown with different glyphs on Apple platforms (for example `⌘` instead of `Ctrl`). Screen readers may read symbols such as `⌘` and `⇧` differently than the key names, so describe the shortcut in text wherever it matters.

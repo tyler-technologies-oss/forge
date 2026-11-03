@@ -87,6 +87,7 @@ Each reference below is a separate file under `references/`. Load only the ones 
 
 - [Avatar](references/components/avatar.md) — A non-interactive circle that represents an entity — with an image, initials, or an icon.
 - [Icon](references/components/icon.md) — Icons render a registered SVG from the Tyler Forge icon library, or a custom source, to represent information or reinforce an action.
+- [Kbd](references/components/kbd.md) — Kbd displays a keyboard key combination, such as a shortcut in documentation or a hint within the UI.
 - [Key](references/components/key.md) — Keys label the meaning of colors or values in a chart or data visualization, such as which color in a grouped meter represents which series.
 - [Label Value](references/components/label-value.md) — Label values display a label and value pair in a compact format with the proper typography and spacing styles applied.
 - [List](references/components/list.md) — Lists present a vertical, scannable group of related items, from plain text rows to full navigation menus.
