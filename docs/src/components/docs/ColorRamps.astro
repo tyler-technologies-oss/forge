@@ -90,13 +90,13 @@ const statusRamps: Ramp[] = [
 const groups = [brandRamps, statusRamps];
 ---
 
-<div class="flex flex-wrap items-end justify-center gap-x-xlarge gap-y-medium" aria-hidden="true">
+<div class="flex flex-wrap items-end justify-center gap-x-large gap-y-medium" aria-hidden="true">
   {
     groups.map((ramps) => (
-      <div class="flex flex-wrap justify-center gap-small">
+      <div class="flex flex-wrap justify-center gap-xsmall">
         {ramps.map(({ label, base, tones }) => (
-          <div class="w-[88px] flex flex-col rounded-lg overflow-hidden border border-outline bg-surface">
-            <div class:list={["h-24 flex flex-col justify-between p-xsmall", base]}>
+          <div class="w-[72px] flex flex-col rounded-lg overflow-hidden border border-outline bg-surface">
+            <div class:list={["h-20 flex flex-col justify-between p-xsmall", base]}>
               <span class="text-label2">{label}</span>
               <span class="text-heading5 self-end">Aa</span>
             </div>

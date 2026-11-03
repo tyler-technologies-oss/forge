@@ -7,18 +7,12 @@ category: actions
 storybookId: components-chips--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-chip-set type="filter">
-    <forge-chip value="one" selected>Selected</forge-chip>
-    <forge-chip value="two">Option</forge-chip>
-    <forge-chip value="three">Option</forge-chip>
-  </forge-chip-set>
-</ComponentHeader>
+<Header />
 
 ## Overview
 Chips allow users to enter information, make selections, filter content, or trigger actions. They appear dynamically as groups of multiple interactive elements and provide a compact way to display options, tags, or actionable items. Unlike buttons, which serve as consistent calls to action, chips are contextual and can be added, removed, or modified based on user interaction.

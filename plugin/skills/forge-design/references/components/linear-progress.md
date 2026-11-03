@@ -2,6 +2,10 @@
 
 Linear progress indicators display progress by animating along a horizontal track, for both determinate and indeterminate waits.
 
+## Overview
+
+Linear progress indicators communicate loading or processing states through a horizontal progress bar that fills or animates along a fixed track. They are particularly effective for page-level loading, form submissions, and scenarios where users benefit from seeing progress completion. Linear progress indicators work well when integrated into components like text fields, dropdowns, and expansion panels, providing clear visual feedback without taking up significant interface space.
+
 ## Usage
 
 `forge-linear-progress` communicates that a component is loading through `determinate`, `progress`, `buffer`, and `theme`. Reach for it at the bottom of a field, dropdown, or expansion panel; for a spinner that fits inside a smaller component like a button, list item, or card, use a [circular progress](./circular-progress.md) indicator instead.
@@ -13,12 +17,14 @@ Linear progress indicators display progress by animating along a horizontal trac
 - Only show a progress indicator when the expected wait is more than a second.
 - Use determinate progress whenever the completion rate is actually known.
 - Pick one indicator style — linear or circular — for a given action, and use it consistently everywhere that action appears.
+- Use smooth animations to soften transitions between loading and loaded states.
 
 **Don't**
 
 - Don't mix linear and circular indicators for the same kind of activity in different parts of the app.
 - Don't fake a determinate value — use indeterminate when the actual completion rate is unknown.
 - Don't use a linear progress indicator for a full-page load — use a busy indicator instead.
+- Don’t place linear indicators where they would interfere with other interface elements.
 
 ## Basic usage
 

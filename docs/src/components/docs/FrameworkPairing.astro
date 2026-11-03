@@ -1,0 +1,55 @@
+---
+/**
+ * FrameworkPairing — the decorative header on each Frameworks page. The Forge
+ * logo on a primary tile joined to the framework's logo, with the package that
+ * page installs set beneath. Logos are single-color marks from Simple Icons
+ * (CC0), drawn in `currentColor`, and every color is a theme token, so it
+ * follows light, dark, and custom themes. Purely visual: hidden from assistive
+ * tech.
+ */
+import AngularLogo from "../../assets/images/frameworks/angular.svg";
+import BlazorLogo from "../../assets/images/frameworks/blazor.svg";
+import ReactLogo from "../../assets/images/frameworks/react.svg";
+import SvelteLogo from "../../assets/images/frameworks/svelte.svg";
+import VueLogo from "../../assets/images/frameworks/vue.svg";
+
+type Framework = "angular" | "blazor" | "react" | "svelte" | "vue";
+
+interface Props {
+  framework: Framework;
+}
+
+const FRAMEWORKS = {
+  angular: { Logo: AngularLogo, pkg: "@tylertech/forge-angular" },
+  blazor: { Logo: BlazorLogo, pkg: "Adapter coming soon" },
+  react: { Logo: ReactLogo, pkg: "@tylertech/forge-react" },
+  svelte: { Logo: SvelteLogo, pkg: "@tylertech/forge" },
+  vue: { Logo: VueLogo, pkg: "@tylertech/forge" },
+} as const;
+
+const { framework } = Astro.props;
+const { Logo, pkg } = FRAMEWORKS[framework];
+const tile = "size-24 rounded-lg flex items-center justify-center shrink-0";
+---
+
+<div class="flex flex-col items-center gap-large" aria-hidden="true">
+  <div class="flex items-center">
+    <div class:list={[tile, "bg-primary text-(--forge-theme-on-primary) shadow-md"]}>
+      <forge-icon name="forge_logo" class="[--forge-icon-size:48px]" />
+    </div>
+
+    <div class="relative flex items-center justify-center w-20">
+      <div class="absolute inset-x-0 border-0 border-t-2 border-dashed border-outline" />
+      <div
+        class="relative size-8 rounded-full border border-outline bg-surface text-medium flex items-center justify-center">
+        <forge-icon name="add" class="[--forge-icon-size:20px]" />
+      </div>
+    </div>
+
+    <div class:list={[tile, "bg-surface border border-outline text-high"]}>
+      <Logo class="size-12" fill="currentColor" />
+    </div>
+  </div>
+
+  <span class="font-mono text-label2 text-medium bg-surface-dim rounded-sm px-small py-xxsmall">{pkg}</span>
+</div>
