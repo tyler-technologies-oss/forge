@@ -1,133 +1,152 @@
 ---
+import type { SvgComponent } from "astro/types";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DesignIllustration from "../assets/images/home/design.svg";
+import DevelopIllustration from "../assets/images/home/develop.svg";
+import LibrariesIllustration from "../assets/images/home/libraries.svg";
+import MigrateIllustration from "../assets/images/home/migrate.svg";
+import IconsIllustration from "../assets/images/home/icons.svg";
+import DesignTokensIllustration from "../assets/images/home/design-tokens.svg";
+import ComponentsIllustration from "../assets/images/home/components.svg";
+import BlocksIllustration from "../assets/images/home/blocks.svg";
 
 const baseUrl = import.meta.env.BASE_URL;
 
-const popular = [
+const ILLUSTRATION_SIZE = 64;
+
+const heroImage: string | undefined = undefined;
+
+interface HomeLink {
+  title: string;
+  description?: string;
+  href: string;
+  illustration?: SvgComponent;
+}
+
+const links: HomeLink[] = [
   {
-    title: "Icon Library",
-    description: "Browse and search Forge's full icon set.",
-    href: `${baseUrl}icons/library/`,
-    icon: "palette",
+    title: "Design",
+    description: "The basics to get started as a designer using Forge",
+    href: `${baseUrl}designing/getting-started/`,
+    illustration: DesignIllustration,
   },
   {
-    title: "Developer Getting Started",
-    description: "Install Forge and start building in minutes.",
+    title: "Develop",
+    description: "Get set up for building out applications using Forge",
     href: `${baseUrl}developing/installation/`,
-    icon: "code",
+    illustration: DevelopIllustration,
+  },
+  {
+    title: "Libraries",
+    description: "The basics to get started as a designer using Forge",
+    href: `${baseUrl}designing/getting-started/`,
+    illustration: LibrariesIllustration,
+  },
+  {
+    title: "Migrate",
+    description: "How to update and upgrade to newer Forge releases",
+    href: `${baseUrl}about/changelog/`,
+    illustration: MigrateIllustration,
+  },
+  {
+    title: "Icons",
+    description: "Browse and use the Tyler icon library in your applications",
+    href: `${baseUrl}icons/library/`,
+    illustration: IconsIllustration,
+  },
+  {
+    title: "Design Tokens",
+    description: "The colors, typography, and spacing values behind Forge",
+    href: `${baseUrl}tokens/`,
+    illustration: DesignTokensIllustration,
+  },
+  {
+    title: "Components",
+    description: "Explore the full set of Forge components and their usage",
+    href: `${baseUrl}components/`,
+    illustration: ComponentsIllustration,
   },
   {
     title: "Blocks",
-    description: "Pre-built UI patterns and layouts to accelerate development.",
+    description: "Pre-built patterns to jump-start your application layouts",
     href: `${baseUrl}blocks/`,
-    icon: "widgets",
-  },
-];
-
-const explore = [
-  {
-    title: "Tokens",
-    description: "Color, typography, spacing, and other design tokens.",
-    href: `${baseUrl}tokens/`,
-    icon: "text_shadow",
-  },
-  {
-    title: "FAQ",
-    description: "Answers to common questions about using Forge.",
-    href: `${baseUrl}faq/dropdown-options/`,
-    icon: "help_circle_outline",
-  },
-  {
-    title: "About",
-    description: "Roadmap and release history for the design system.",
-    href: `${baseUrl}about/roadmap/`,
-    icon: "info_outline",
+    illustration: BlocksIllustration,
   },
 ];
 ---
 
-<BaseLayout title="Home">
-  <div class="home-page">
-    <section class="mb-xxlarge">
-      <h1 class="text-heading6 mt-0 mb-small">Forge Design System</h1>
-      <p class="text-body3 text-medium mt-0 mb-0 max-w-[640px]">
-        Forge is Tyler's enterprise-grade design system for building
-        consistently usable, delightful, and accessible applications.
+<BaseLayout title="Home" flush>
+  <div class="flex flex-col min-h-full">
+    <section
+      class="h-[400px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">
+      {
+        heroImage && (
+          <img
+            src={heroImage}
+            alt=""
+            class="absolute inset-0 -z-10 size-full object-cover mix-blend-luminosity opacity-40"
+          />
+        )
+      }
+      <h1 class="m-0">
+        <img
+          src="https://forge.tylerdev.io/forge/v3/forge-logo-full-white.svg"
+          alt="Tyler Forge design system"
+          class="block w-[400px] max-w-full"
+        />
+      </h1>
+      <p class="text-body4 m-0 max-w-[760px]">
+        The enterprise-grade design system for public sector software. Built by
+        Tyler Tech.
       </p>
     </section>
 
-    <section class="mb-xxlarge">
-      <h2 class="text-heading4 mt-0 mb-medium">Popular</h2>
-      <div
-        class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-medium">
+    <section class="flex-1 bg-primary-container-minimum p-xlarge">
+      <ul
+        class="home-links grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-xlarge list-none m-0 p-0">
         {
-          popular.map((item) => (
-            <forge-card class="h-full">
-              <forge-button-area>
-                <a slot="button" href={item.href} aria-label={item.title} />
-                <div class="p-medium">
-                  <div class="w-10 h-10 rounded-full bg-primary-container-low flex items-center justify-center mb-small">
-                    <forge-icon
-                      name={item.icon}
-                      external
-                      class="text-[20px] text-primary"
-                    />
+          links.map(({ title, description, href, illustration: Illustration }) => (
+            <li class="m-0">
+              <forge-card class="p-0 h-full">
+                <forge-button-area class="h-full">
+                  <a slot="button" href={href} aria-label={title} />
+                  <div class="h-full flex flex-col items-center gap-large text-center py-xlarge px-large">
+                    {Illustration ? (
+                      <Illustration
+                        width={ILLUSTRATION_SIZE}
+                        height={ILLUSTRATION_SIZE}
+                        class="block shrink-0"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <div class="striped-box size-16 shrink-0 rounded-full p-0" aria-hidden="true" />
+                    )}
+                    <h2 class="text-heading5 text-(--forge-theme-on-primary-container) m-0">
+                      {title}
+                    </h2>
+                    {description && (
+                      <p class="text-body2 m-0">{description}</p>
+                    )}
                   </div>
-                  <h3 class="text-heading3 mt-0 mb-xsmall">{item.title}</h3>
-                  <p class="text-medium mt-0 mb-0">{item.description}</p>
-                </div>
-              </forge-button-area>
-            </forge-card>
+                </forge-button-area>
+              </forge-card>
+            </li>
           ))
         }
-      </div>
-    </section>
-
-    <section>
-      <h2 class="text-heading4 mt-0 mb-medium">Explore the Docs</h2>
-      <div
-        class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-small">
-        {
-          explore.map((item) => (
-            <forge-card class="h-full">
-              <forge-button-area>
-                <a slot="button" href={item.href} aria-label={item.title} />
-                <div class="p-medium">
-                  <div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center mb-xsmall">
-                    <forge-icon
-                      name={item.icon}
-                      external
-                      class="text-[16px] text-medium"
-                    />
-                  </div>
-                  <h3 class="text-subheading2 mt-0 mb-xxsmall">{item.title}</h3>
-                  <p class="text-low text-label2 mt-0 mb-0">
-                    {item.description}
-                  </p>
-                </div>
-              </forge-button-area>
-            </forge-card>
-          ))
-        }
-      </div>
+      </ul>
     </section>
   </div>
 </BaseLayout>
 
 <style>
-  /* Forge component CSS variables (custom properties on <forge-card> and
-     <forge-button-area>) — not representable as Tailwind utilities. */
-  .home-page {
-    --card-radius: 12px;
+  /* Forge component CSS variables, not representable as Tailwind utilities. */
+  .home-links forge-card {
+    --forge-card-shape: var(--forge-shape-extra-large);
+    --forge-card-outline-color: var(--forge-theme-primary-container-high);
+    --forge-card-height: 100%;
   }
 
-  .home-page forge-button-area {
-    --forge-button-area-shape: var(--card-radius);
-  }
-
-  .home-page forge-card {
-    --forge-card-overflow: hidden;
-    --forge-card-padding: 0;
-    --forge-card-shape: var(--card-radius);
+  .home-links forge-button-area {
+    --forge-button-area-shape: var(--forge-shape-extra-large);
   }
 </style>
