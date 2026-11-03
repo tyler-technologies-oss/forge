@@ -197,7 +197,7 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
   // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   protected override render(): TemplateResult {
     return html`
-      <forge-menu placement="bottom-end" @forge-menu-select=${this.#onMenuSelect}>
+      <forge-menu placement="bottom-start" dense @forge-menu-select=${this.#onMenuSelect}>
         <forge-icon-button aria-label=${this.buttonLabel} dense shape="squared">
           <forge-icon name="more_vert"></forge-icon>
         </forge-icon-button>

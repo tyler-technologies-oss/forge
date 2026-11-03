@@ -503,8 +503,8 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                           ${svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`}
                         `
                       : null}
-                    <forge-data-table-column-menu .table=${table} .column=${header.column} .reorderable=${this.reorderable}></forge-data-table-column-menu>
                   </div>
+                  <forge-data-table-column-menu .table=${table} .column=${header.column} .reorderable=${this.reorderable}></forge-data-table-column-menu>
                 </div>
                 ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(header.column)}</div>` : nothing}
                 ${this.resizable && header.column.getCanResize() && !header.isPlaceholder

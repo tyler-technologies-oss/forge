@@ -33,9 +33,14 @@ table {
     min-width: 0;
   }
 
-  thead th {
-    background-color: #{theme.variable(surface-container-minimum)};
-    color: #{theme.variable(on-surface-container-minimum)};
+  thead {
+    tr {
+      th {
+        padding-inline-end: #{spacing.variable(medium)};
+        background-color: #{theme.variable(surface-container-minimum)};
+        color: #{theme.variable(on-surface-container-minimum)};
+      }
+    }
   }
 
   tfoot {
