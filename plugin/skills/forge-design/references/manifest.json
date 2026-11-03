@@ -330,6 +330,17 @@
       "docsPath": "components/inline-message.md"
     },
     {
+      "name": "kbd",
+      "title": "Kbd",
+      "description": "Kbd displays a keyboard key combination, such as a shortcut in documentation or a hint within the UI.",
+      "status": "stable",
+      "source": "core",
+      "category": "data-display",
+      "storybookId": "components-kbd--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/kbd.md"
+    },
+    {
       "name": "key",
       "title": "Key",
       "description": "Keys label the meaning of colors or values in a chart or data visualization, such as which color in a grouped meter represents which series.",
