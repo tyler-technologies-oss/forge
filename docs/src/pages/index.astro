@@ -9,12 +9,11 @@ import IconsIllustration from "../assets/images/home/icons.svg";
 import DesignTokensIllustration from "../assets/images/home/design-tokens.svg";
 import ComponentsIllustration from "../assets/images/home/components.svg";
 import BlocksIllustration from "../assets/images/home/blocks.svg";
+import heroImage from "../assets/images/home/hero.svg";
 
 const baseUrl = import.meta.env.BASE_URL;
 
 const ILLUSTRATION_SIZE = 64;
-
-const heroImage: string | undefined = undefined;
 
 interface HomeLink {
   title: string;
@@ -79,15 +78,11 @@ const links: HomeLink[] = [
   <div class="flex flex-col min-h-full">
     <section
       class="h-[400px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">
-      {
-        heroImage && (
-          <img
-            src={heroImage}
-            alt=""
-            class="absolute inset-0 -z-10 size-full object-cover mix-blend-luminosity opacity-40"
-          />
-        )
-      }
+      <img
+        src={heroImage.src}
+        alt=""
+        class="absolute inset-0 -z-10 size-full object-cover mix-blend-luminosity opacity-40"
+      />
       <h1 class="m-0">
         <img
           src="https://forge.tylerdev.io/forge/v3/forge-logo-full-white.svg"
