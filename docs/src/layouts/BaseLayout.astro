@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import FoundryChatbot from "../components/FoundryChatbot.astro";
+import PendoAnalytics from "../components/PendoAnalytics.astro";
 import Sidenav from "../components/Sidenav.astro";
 import { getCollection } from "astro:content";
 import "../styles/global.css";
@@ -67,6 +68,8 @@ const components = await getCollection("components");
         document.documentElement.setAttribute("data-forge-theme", theme);
       })();
     </script>
+
+    <PendoAnalytics />
 
     <!-- Register Forge components on client -->
     <script>
