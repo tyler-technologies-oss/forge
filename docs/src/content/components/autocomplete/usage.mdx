@@ -7,19 +7,12 @@ category: forms
 storybookId: components-autocomplete--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-autocomplete class="w-64">
-    <forge-text-field show-clear popover-icon>
-      <input type="text" id="state" autocomplete="off" role="combobox" aria-live="polite" aria-atomic="true" aria-haspopup="true" aria-expanded="false" aria-autocomplete="list" aria-controls="forge-aria-controls-placeholder" value="Alabama" />
-      <label for="state" aria-label="Choose state" slot="label">Choose state</label>
-    </forge-text-field>
-  </forge-autocomplete>
-</ComponentHeader>
+<Header />
 
 ## Overview
 Autocomplete enhances text input fields by providing dynamic suggestions as users type. It can be applied to various input components including single selects, multi-selects, and search fields to help users quickly find and select options from large datasets. The component filters and displays relevant suggestions based on the user's input, reducing typing effort and improving accuracy.

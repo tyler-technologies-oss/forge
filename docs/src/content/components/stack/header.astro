@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-stack gap="16">
+    <forge-badge>One</forge-badge>
+    <forge-badge>Two</forge-badge>
+    <forge-badge>Three</forge-badge>
+  </forge-stack>
+</ComponentHeader>

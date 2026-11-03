@@ -1,0 +1,10 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-switch checked>Enabled</forge-switch>
+  <forge-switch>Disabled</forge-switch>
+</ComponentHeader>

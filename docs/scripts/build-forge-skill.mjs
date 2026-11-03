@@ -3,7 +3,7 @@
  * Builds the forge-design Agent Skill bundle (skill/forge-design/) from the
  * component and developer guide MDX, keeping only the prose an LLM needs.
  *
- * - Live previews (<StorybookEmbed>, <ComponentHeader>, <AnatomyDemo>) are dropped.
+ * - Live previews (<StorybookEmbed>, <ComponentHeader>, <Header>, <AnatomyDemo>) are dropped.
  * - Callouts (<InlineMessage>, <Blockquote>) are unwrapped; <table> becomes markdown.
  * - Each <Example> becomes a `get_forge_blocks(blockId: "...")` pointer, and
  *   every block id is checked against the live block manifest. Ids derived
@@ -362,7 +362,7 @@ export function rewriteSiteLink(url, ctx) {
   return `${relativeReference(ctx, `${referenceDir}/${slug}.md`)}${hash}`;
 }
 
-const LIVE_PREVIEW_ELEMENTS = new Set(["StorybookEmbed", "ComponentHeader", "AnatomyDemo"]);
+const LIVE_PREVIEW_ELEMENTS = new Set(["StorybookEmbed", "ComponentHeader", "Header", "AnatomyDemo"]);
 
 /** Post-order dispatcher: recurses into each node's children first, then rewrites or drops
  * recognized JSX. Anything unrecognized passes through untouched — remark-mdx's stringifier
