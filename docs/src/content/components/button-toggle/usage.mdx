@@ -7,18 +7,12 @@ category: forms
 storybookId: components-button-toggle--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-button-toggle-group value="day">
-    <forge-button-toggle value="day">Day</forge-button-toggle>
-    <forge-button-toggle value="week">Week</forge-button-toggle>
-    <forge-button-toggle value="month">Month</forge-button-toggle>
-  </forge-button-toggle-group>
-</ComponentHeader>
+<Header />
 
 ## Overview
 Button toggle is a selection component that groups related options into a unified control, allowing users to choose one option from a set of alternatives. It functions similarly to radio buttons but with a more prominent visual treatment that emphasizes the available choices and current selection state.  

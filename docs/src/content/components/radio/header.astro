@@ -1,0 +1,12 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="flex flex-col">
+    <forge-radio name="demo" value="1" checked>Option one</forge-radio>
+    <forge-radio name="demo" value="2">Option two</forge-radio>
+  </div>
+</ComponentHeader>

@@ -21,6 +21,10 @@
  *
  * The demo is interactive by default; pass `interactive={false}` to make it
  * `inert` for a purely decorative visual.
+ *
+ * `thumbnail` renders the same demo as a small, inert, hidden-from-assistive-tech
+ * preview (used by the All components page): the frame lays out at
+ * `1 / THUMBNAIL_SCALE` times the thumbnail's size, then scales down to fit.
  */
 interface Props {
   fit?: "center" | "cover";
@@ -29,7 +33,11 @@ interface Props {
   inset?: string;
   height?: string;
   interactive?: boolean;
+  thumbnail?: boolean;
 }
+
+const THUMBNAIL_HEIGHT = "160px";
+const THUMBNAIL_SCALE = 0.5;
 
 const {
   fit = "center",
@@ -38,7 +46,16 @@ const {
   inset = "32px",
   height = "200px",
   interactive = true,
+  thumbnail = false,
 } = Astro.props;
+
+const thumbnailSize = `${100 / THUMBNAIL_SCALE}%`;
+const thumbnailStyle = [
+  `width: ${thumbnailSize}`,
+  `height: ${thumbnailSize}`,
+  `transform: scale(${THUMBNAIL_SCALE})`,
+  "transform-origin: top left",
+].join("; ");
 
 const flows = fit === "center" || zoom === 1;
 const shrink = zoom < 1;
@@ -52,12 +69,20 @@ const coverStyle = [
 ---
 
 <div
+  class={thumbnail ? "relative overflow-hidden border-b border-outline" : "contents"}
+  style={thumbnail ? `height: ${THUMBNAIL_HEIGHT}` : undefined}
+  aria-hidden={thumbnail ? "true" : undefined}>
+<div
+  class={thumbnail ? "absolute top-0 left-0" : "contents"}
+  style={thumbnail ? thumbnailStyle : undefined}>
+<div
   class:list={[
-    "tonal-card-p-0 relative overflow-hidden mb-large",
+    "tonal-card-p-0 relative overflow-hidden",
+    thumbnail ? "h-full rounded-none" : "mb-large",
     flows ? "grid min-h-[200px]" : "",
   ]}
-  style={flows ? undefined : `height: ${height}`}
-  inert={!interactive}>
+  style={flows ? undefined : `height: ${thumbnail ? "100%" : height}`}
+  inert={thumbnail || !interactive}>
   {
     fit === "cover" ? (
       flows ? (
@@ -84,4 +109,6 @@ const coverStyle = [
       </div>
     )
   }
+</div>
+</div>
 </div>

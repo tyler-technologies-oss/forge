@@ -5,21 +5,36 @@ description: This skill should be used when the user asks to "add a component he
 
 # Component Docs Header
 
-Every component page in `docs/src/content/components/<slug>/usage.mdx` opens with a `<ComponentHeader>`: a live, clipped demo of the real component that replaces static screenshots. Reference pages: `button/usage.mdx` (centered) and `app-layout/usage.mdx` (cover + inset).
+Every component page in `docs/src/content/components/<slug>/usage.mdx` opens with a `<ComponentHeader>`: a live, clipped demo of the real component that replaces static screenshots. Reference headers: `button/header.astro` (centered) and `app-layout/header.astro` (cover + inset).
 
 ## Placement
 
-Directly after the imports and before `## Usage`:
+Each demo lives in its own `header.astro`, next to the component's `usage.mdx`. The same file renders twice: full size at the top of the usage page, and as a thumbnail on the All components page (`docs/src/pages/components/index.astro`, which loads every `*/header.astro` with `import.meta.glob`). Forward the `thumbnail` prop to `ComponentHeader` so both work:
 
-```mdx
-import ComponentHeader from '../../../components/ComponentHeader.astro';
+```astro
+---
+// docs/src/content/components/<slug>/header.astro
+import ComponentHeader from "../../../components/ComponentHeader.astro";
 
-<ComponentHeader>
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
   <forge-button>Button</forge-button>
 </ComponentHeader>
+```
+
+In `usage.mdx`, import it and render it directly after the imports and before `## Usage`:
+
+```mdx
+import Header from "./header.astro";
+
+<Header />
 
 ## Usage
 ```
+
+Don't write `<ComponentHeader>` inline in the MDX: a component without a `header.astro` gets no thumbnail on the All components page. The Forge Design skill generator drops `<Header />` the same way it drops `<ComponentHeader>`.
 
 The frame is at least 200px tall and grows to fit the demo. Cover mode with `zoom` other than 1 uses a fixed frame (200px, or the `height` prop).
 
@@ -33,6 +48,7 @@ The frame is at least 200px tall and grows to fit the demo. Cover mode with `zoo
 | `height`      | `"200px"` | Frame height for cover mode with `zoom` other than 1 (transformed demos can't grow the frame)                            |
 | `inset`       | `"32px"`   | Cover mode only: CSS inset shorthand (`"0"` for edge to edge); shows the frame background around a rounded, bordered demo |
 | `interactive` | `true`     | Pass `{false}` to make the demo `inert`                                                                                   |
+| `thumbnail`   | `false`    | Set by the All components page, not by hand: renders a 160px, half-scale, inert, `aria-hidden` preview                    |
 
 ## Choosing a style
 
@@ -45,6 +61,5 @@ The frame is at least 200px tall and grows to fit the demo. Cover mode with `zoo
 - Use real Forge markup. Get snippets from the Forge MCP (`get_forge_blocks`, `get_component_docs`) rather than guessing; follow the root CLAUDE.md block guidelines (no placeholder attributes, h2 under app layout, etc.).
 - Register every component and icon the demo uses in `docs/src/scripts/forge-components.ts` (side-effect import for components, `IconRegistry.define` for icons). Unregistered icons render blank; substitute a registered one or add it.
 - Style with Forge components and Tailwind utilities only. No custom CSS (see `docs/CLAUDE.md`).
-- Keep the demo static and self-contained: no scripts, no external assets, no content that needs a network.
-- A new page also needs complete frontmatter (`title`, `description`, `status`, `source`, `category`, optional `storybookId`) matching `docs/src/content.config.ts`.
+- Keep the demo static and self-contained: no scripts, no external assets, no content that needs a network.- A new page also needs complete frontmatter (`title`, `description`, `status`, `source`, `category`, optional `storybookId`) matching `docs/src/content.config.ts`.
 - Don't start the dev server to verify (see `docs/CLAUDE.md`); ask the user to check the rendered page.
