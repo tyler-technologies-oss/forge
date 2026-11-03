@@ -90,6 +90,29 @@ describe('deprecated core styles modules', () => {
     expect(css).toContain('color: #3f51b5;');
   });
 
+  it('should apply shape overrides to the token values', () => {
+    const { css } = compileWithWarnings(`@use 'tokens/shape/tokens' as m with ($base: 8px); .a { a: m.$medium; b: m.get(medium); }`);
+    expect(css).toContain('a: 8px;');
+    expect(css).toContain('b: 8px;');
+  });
+
+  it('should apply spacing overrides to the token values', () => {
+    const { css } = compileWithWarnings(`@use 'tokens/spacing/tokens' as m with ($base: 8px); .a { margin: m.get(medium); }`);
+    expect(css).toContain('margin: 8px;');
+  });
+
+  it('should apply elevation color overrides to the token values', () => {
+    const { css } = compileWithWarnings(`@use 'tokens/elevation/tokens' as m with ($baseline-color: red); .a { box-shadow: #{m.get(1)}; }`);
+    expect(css).toContain('box-shadow: 0px 2px 1px -1px rgba(255, 0, 0, 0.2), 0px 1px 1px 0px rgba(255, 0, 0, 0.14), 0px 1px 3px 0px rgba(255, 0, 0, 0.12);');
+  });
+
+  it('should apply z-index overrides to the elevation z-index tokens', () => {
+    const { css } = compileWithWarnings(
+      `@use 'sass:map'; @use 'tokens/elevation/tokens' as m with ($z-index-tokens: (dialog: 99)); .a { z-index: map.get(m.$z-index-tokens, dialog); }`
+    );
+    expect(css).toContain('z-index: 99;');
+  });
+
   it('should not warn when using a non-deprecated forge module that uses the global tokens', () => {
     const { warnings } = compileWithWarnings(`@use 'button/forge-button';`);
     expect(warnings).toEqual([]);
