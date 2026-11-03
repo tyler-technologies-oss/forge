@@ -20,6 +20,7 @@ interface HomeLink {
   description?: string;
   href: string;
   illustration?: SvgComponent;
+  hidden?: boolean;
 }
 
 const links: HomeLink[] = [
@@ -40,12 +41,14 @@ const links: HomeLink[] = [
     description: "The basics to get started as a designer using Forge",
     href: `${baseUrl}designing/getting-started/`,
     illustration: LibrariesIllustration,
+    hidden: true,
   },
   {
     title: "Migrate",
     description: "How to update and upgrade to newer Forge releases",
     href: `${baseUrl}about/changelog/`,
     illustration: MigrateIllustration,
+    hidden: true,
   },
   {
     title: "Icons",
@@ -72,6 +75,8 @@ const links: HomeLink[] = [
     illustration: BlocksIllustration,
   },
 ];
+
+const visibleLinks = links.filter(({ hidden }) => !hidden);
 ---
 
 <BaseLayout title="Home" flush>
@@ -100,7 +105,7 @@ const links: HomeLink[] = [
       <ul
         class="home-links grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-xlarge list-none m-0 p-0">
         {
-          links.map(({ title, description, href, illustration: Illustration }) => (
+          visibleLinks.map(({ title, description, href, illustration: Illustration }) => (
             <li class="m-0">
               <forge-card class="p-0 h-full">
                 <forge-button-area class="h-full">
