@@ -1,0 +1,41 @@
+<!--
+  @block Kbd — Modifier Keys
+  @type component
+  @description Kbd with each modifier key shown using platform-appropriate glyphs.
+  @tags kbd, modifier-keys, storybook, component-example
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/blocks/v1/" />
+    <title>Kbd — Modifier Keys</title>
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <link rel="stylesheet" href="/blocks/v1/theme.css" />
+    <link rel="stylesheet" href="/blocks/v1/styles.css" />
+    <style>
+      body {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      body.ready {
+        opacity: 1;
+      }
+    </style>
+    <script type="module" src="/blocks/v1/forge-register.js"></script>
+    <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
+    <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
+    <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+  </head>
+  <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
+    <div class="flex flex-wrap items-center gap-medium">
+  <forge-kbd ctrl keys="S"></forge-kbd>
+  <forge-kbd alt keys="S"></forge-kbd>
+  <forge-kbd shift keys="S"></forge-kbd>
+  <forge-kbd meta keys="S"></forge-kbd>
+  <forge-kbd mod keys="S"></forge-kbd>
+  <forge-kbd ctrl alt shift keys="Delete"></forge-kbd>
+</div>
+  </body>
+</html>
