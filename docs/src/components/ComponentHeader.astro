@@ -6,6 +6,9 @@
  * grows to fit the demo when it is taller. Cover mode with `zoom` other than 1
  * scales the demo with a transform, so it keeps a fixed frame instead, 200px
  * by default; pass `height` (any CSS length, e.g. "280px") to change it.
+ * Passing `height` in center mode also fixes the frame at that height, keeping
+ * the demo centered and clipping whatever doesn't fit (used by the Designing
+ * pages, whose headers are decorative and should all match).
  *
  * `fit="center"` centers the slotted demo horizontally and vertically.
  * `fit="cover"` makes the demo fill the whole frame and clips the overflow,
@@ -40,7 +43,8 @@ const {
   interactive = true,
 } = Astro.props;
 
-const flows = fit === "center" || zoom === 1;
+const fixedCenter = fit === "center" && Astro.props.height !== undefined;
+const flows = !fixedCenter && (fit === "center" || zoom === 1);
 const shrink = zoom < 1;
 const size = `${100 / Math.max(zoom, Number.EPSILON)}%`;
 const coverStyle = [
@@ -78,7 +82,10 @@ const coverStyle = [
       )
     ) : (
       <div
-        class="flex min-h-[200px] items-center justify-center gap-medium p-large"
+        class:list={[
+          "flex items-center justify-center gap-medium p-large",
+          fixedCenter ? "h-full" : "min-h-[200px]",
+        ]}
         style={zoom === 1 ? undefined : `zoom: ${zoom}`}>
         <slot />
       </div>
