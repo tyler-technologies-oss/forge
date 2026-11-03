@@ -32,6 +32,7 @@ import "@tylertech/forge/floating-action-button";
 import "@tylertech/forge/icon";
 import "@tylertech/forge/icon-button";
 import "@tylertech/forge/inline-message";
+import "@tylertech/forge/kbd";
 import "@tylertech/forge/key";
 import "@tylertech/forge/keyboard-shortcut";
 import "@tylertech/forge/label";
