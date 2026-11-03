@@ -6,6 +6,10 @@ Trees are interactive lists that allow users to navigate through hierarchical da
 
 Tree is an experimental component in developer preview — its API and implementation may change in future versions, and there may be unresolved bugs. Use it with that in mind, and be prepared to update your code as it evolves.
 
+## Overview
+
+The tree component lets a user visualize and explore hierarchical sets of data in an organized, and collapsible format. It can be used for many different sets of data, including examples like directories, organization hierarchies, and file structures. Anything that has a dedicated hierarchy to it could leverage a tree structure for viewing and exploring relationships between items in the tree.
+
 ## Usage
 
 `forge-tree` nests `forge-tree-item` children to let a user navigate hierarchical data, through `mode` (`single`, `multiple`, `leaf`, or `off`), `accordion`, `indentLines`, `selectionFollowsFocus`, and `disabled`, while each item carries its own `open`, `selected`, `lazy`, and `disabled` state. Use it for genuinely hierarchical data — folders, nested categories, an org chart; for a flat set of items, use a plain [list](./list.md) instead.

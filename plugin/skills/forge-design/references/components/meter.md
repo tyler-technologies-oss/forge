@@ -2,6 +2,10 @@
 
 Meters display a scalar value within a known range, using color to signal whether it's optimal, suboptimal, or least optimal.
 
+## Overview
+
+Meters are components that display scalar values within a known range. They display values in a visual way that makes it easy to compare and contrast values, or see how much a value compares to a whole.
+
 ## Usage
 
 `forge-meter` shows a scalar value within a `min`/`max` range through `value`, `tickmarks`, and an optional `low`/`high`/`optimum` split that colors the track green, yellow, or red depending on where `value` falls. Reach for a meter when the value is a relatively static data point, like a storage quota or a satisfaction score — for a task's busy or in-progress state, use [linear progress](./linear-progress.md) instead; despite the visual similarity, the two represent fundamentally different things.

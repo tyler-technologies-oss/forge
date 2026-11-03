@@ -2,6 +2,10 @@
 
 Timestamps display a formatted, localized date, time, or duration value using the native time element.
 
+## Overview
+
+Timestamps display a time, date, or other duration, in a specifically formatted style to be used when referencing a date or time in your UI. It's primarily used with the timeline component, but it can be used anywhere a data or time is needed. When referencing a date or time, use the timestamp component to keep your dates and times displayed in the same way through out your applications.
+
 ## Usage
 
 `forge-timestamp` renders a `<time>` element from a `datetime` value, formatted through `format` (a CLDR date/time pattern), `locale`, and `separator`. Set `datetime` to a `Date`, a date-convertible string, or any value the native `<time>` element's `datetime` attribute accepts; that value drives both the accessible meaning and, for full dates, the automatic formatting. A dateless time, timezone offset, or duration value is used as-is for accessibility but isn't auto-formatted — pass custom content in the default slot for those cases. Use it anywhere a date or time needs consistent, localized formatting, including inside a [timeline](./timeline.md) item.
