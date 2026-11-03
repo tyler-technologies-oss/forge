@@ -1,0 +1,19 @@
+@use 'sass:math';
+@use '@tylertech/forge-tokens/sass/config';
+@use '@tylertech/forge-tokens/sass/typography/core';
+@use '@tylertech/forge-tokens/sass/typography/scale';
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/type-utils" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography" from @tylertech/forge-tokens instead.';
+
+$module: 'typography' !default;
+$token: 'scale' !default;
+
+@function font-size-relative($style, $property, $scale) {
+  $scale-value: scale.value($scale);
+  $var-name: '--#{config.$prefix}-#{$module}-#{$style}-#{$property}-#{$token}';
+  @return calc(#{core.get(font-size)} * var(#{$var-name}, #{$scale-value}));
+}
+
+@function calc-letter-spacing($tracking, $font-size) {
+  @return math.div($tracking, $font-size * 16) * 1em;
+}

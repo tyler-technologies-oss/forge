@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.core" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
+
+$_keys: (
+  primary,
+  primary-container-minimum,
+  primary-container-low,
+  primary-container,
+  primary-container-high,
+  on-primary,
+  on-primary-container-minimum,
+  on-primary-container-low,
+  on-primary-container,
+  on-primary-container-high,
+  secondary,
+  secondary-container-minimum,
+  secondary-container-low,
+  secondary-container,
+  secondary-container-high,
+  on-secondary,
+  on-secondary-container-minimum,
+  on-secondary-container-low,
+  on-secondary-container,
+  on-secondary-container-high,
+  tertiary,
+  tertiary-container-minimum,
+  tertiary-container-low,
+  tertiary-container,
+  tertiary-container-high,
+  on-tertiary,
+  on-tertiary-container-minimum,
+  on-tertiary-container-low,
+  on-tertiary-container,
+  on-tertiary-container-high
+);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

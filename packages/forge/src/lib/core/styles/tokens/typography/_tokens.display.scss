@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/typography/tokens' as typography;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.display" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography/tokens" from @tylertech/forge-tokens instead.';
+
+$display1: map.get(typography.$tokens, display1) !default;
+$display2: map.get(typography.$tokens, display2) !default;
+$display3: map.get(typography.$tokens, display3) !default;
+$display4: map.get(typography.$tokens, display4) !default;
+$display5: map.get(typography.$tokens, display5) !default;
+$display6: map.get(typography.$tokens, display6) !default;
+$display7: map.get(typography.$tokens, display7) !default;
+$display8: map.get(typography.$tokens, display8) !default;
+
+$tokens: (
+  display1: $display1,
+  display2: $display2,
+  display3: $display3,
+  display4: $display4,
+  display5: $display5,
+  display6: $display6,
+  display7: $display7,
+  display8: $display8
+) !default;
