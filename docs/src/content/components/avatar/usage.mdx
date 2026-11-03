@@ -14,6 +14,10 @@ import Rule from "../../../components/Rule.astro";
 
 <Header />
 
+## Overview
+
+Avatars are visual representations of entities (typically users) that can display text, images, or icons within a circular container. They provide quick visual identification and can be used in lists, tables, cards, navigation headers, and other interface contexts. When no image is available for a user avatar, initials are automatically used as a fallback. While avatars themselves are not interactive, they can be composed within interactive components like icon buttons.
+
 ## Usage
 
 `forge-avatar` represents an entity through `imageUrl`, `text` (rendered as initials via `letterCount`), or a slotted icon when neither is set. Use it for people, accounts, or records that are genuinely identifiable by image or initials, most often in a list, table row, card, or navigation header. Skip it when the image or initials add no real information, like using a category's first letter as a stand-in avatar.
@@ -24,6 +28,8 @@ import Rule from "../../../components/Rule.astro";
   <Rule
     variant="do"
     rules={[
+      "Maintain consistent sizing within the same interface area.",
+      "Use avatars for entities where visual identification adds value.",
       "Use a real photo when one is likely to be available and the person is likely to be recognizable.",
       "Fall back to initials when no image is available, rather than leaving the avatar empty.",
       "Use a larger avatar in a card or profile header, and a smaller one in a list or table row.",

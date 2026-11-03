@@ -14,6 +14,10 @@ import Rule from "../../../components/Rule.astro";
 
 <Header />
 
+## Overview
+
+The timeline component is used to display a list of items or events in chronological order. It provides a way to visualize the relationship between events in the order in which they happened. This is helpful for when there's live data coming into an application, or if a user needs to easily sift through a set of data in order to pinpoint events. Icons and badges can be used to further enhance the detail in each timeline item when needed.
+
 ## Usage
 
 `forge-timeline` connects a series of `forge-timeline-item` children with a vertical line through their markers. Each item's main content goes in its default slot, with `start` and `end` slots on either side, a `marker` slot for the indicator, and a `detail` slot below for extra context. Use `forge-timeline-break` between items to visually separate non-sequential groups. Reach for a plain <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> instead when order and time aren't meaningful to the content.

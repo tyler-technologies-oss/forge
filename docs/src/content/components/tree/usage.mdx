@@ -19,6 +19,10 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
 <Header />
 
+## Overview
+
+The tree component lets a user visualize and explore hierarchical sets of data in an organized, and collapsible format. It can be used for many different sets of data, including examples like directories, organization hierarchies, and file structures. Anything that has a dedicated hierarchy to it could leverage a tree structure for viewing and exploring relationships between items in the tree.
+
 ## Usage
 
 `forge-tree` nests `forge-tree-item` children to let a user navigate hierarchical data, through `mode` (`single`, `multiple`, `leaf`, or `off`), `accordion`, `indentLines`, `selectionFollowsFocus`, and `disabled`, while each item carries its own `open`, `selected`, `lazy`, and `disabled` state. Use it for genuinely hierarchical data — folders, nested categories, an org chart; for a flat set of items, use a plain <a href={`${import.meta.env.BASE_URL}components/list/usage/`}>list</a> instead.

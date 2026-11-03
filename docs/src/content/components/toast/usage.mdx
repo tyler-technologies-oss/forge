@@ -15,6 +15,12 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
 
 <Header />
 
+## Overview
+
+Toasts are brief, non-intrusive notifications that inform users of an action or process the system has performed or will perform. They appear temporarily near the bottom of the viewport and automatically dismiss after a set duration.  
+
+Toasts should never interrupt workflow or require user input to disappear. They help confirm an action, surface minor updates, or provide passive feedback without stealing focus from the main task.
+
 ## Usage
 
 `forge-toast` shows a brief, temporary confirmation through `open`, `duration`, `placement`, and `theme`, plus an optional `actionText` and `dismissible` close button. Trigger it imperatively by setting `open` (or calling the static `ToastComponent.present(...)` helper) in response to a user action; reserve it for confirming something that just happened, and show only one at a time. For a message that requires a decision, use a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a> instead; for a page-level announcement, use a <a href={`${import.meta.env.BASE_URL}components/banner/usage/`}>banner</a> instead.
@@ -25,6 +31,8 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   <Rule
     variant="do"
     rules={[
+      "Keep toast messages short and scannable (ideally under 10 words).",
+      "Queue multiple messages in a logical order (newest last).",
       "Confirm an action the user just took, like creating, moving, or updating a record.",
       "Show only one toast at a time — queue successive toasts instead of stacking them.",
       "If you add an action label, keep it a genuine alternate action, never \"Dismiss\" or \"Cancel\" — the toast already disappears on its own.",
