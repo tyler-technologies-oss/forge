@@ -1,0 +1,34 @@
+---
+/**
+ * TopicPairing — the decorative header on the Developing guide pages: the Forge
+ * logo joined to an icon for the page's topic, with the package, API, or token
+ * the page centers on set beneath. Icons must be registered in
+ * `src/scripts/forge-components.ts`.
+ */
+import HeaderPairing from "./HeaderPairing.astro";
+
+const TOPICS = {
+  installation: { icon: "package_variant", caption: "npm install @tylertech/forge" },
+  usage: { icon: "code_tags", caption: "<forge-*>" },
+  theming: { icon: "palette", caption: "--forge-theme-*" },
+  typography: { icon: "format_letter_case", caption: ".forge-typography--*" },
+  customization: { icon: "tune", caption: "::part()" },
+  "css-only-components": { icon: "language_css_3", caption: 'class="forge-*"' },
+  forms: { icon: "form_textbox", caption: "formAssociated" },
+  icons: { icon: "emoticon_outline", caption: "@tylertech/tyler-icons" },
+  illustrations: { icon: "image_outline", caption: "cdn.forge.tylertech.com" },
+  accessibility: { icon: "accessibility", caption: "aria-*" },
+  "global-configuration": { icon: "cog_outline", caption: "TylerForgeGlobalConfiguration" },
+  tailwind: { icon: "tailwind", caption: "@tylertech/forge-tailwind" },
+  "sass-library": { icon: "sass", caption: "@tylertech/forge/styles" },
+  "mcp-server": { icon: "mcp", caption: "@tylertech/forge-mcp" },
+} as const;
+
+interface Props {
+  topic: keyof typeof TOPICS;
+}
+
+const { icon, caption } = TOPICS[Astro.props.topic];
+---
+
+<HeaderPairing icon={icon} caption={caption} />

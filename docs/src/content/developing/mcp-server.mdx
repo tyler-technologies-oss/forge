@@ -5,6 +5,12 @@ description: Give AI clients direct access to Forge component documentation, des
 
 import InlineMessage from '../../components/docs/InlineMessage.astro';
 import Blockquote from '../../components/docs/Blockquote.astro';
+import ComponentHeader from '../../components/ComponentHeader.astro';
+import TopicPairing from '../../components/docs/TopicPairing.astro';
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="mcp-server" />
+</ComponentHeader>
 
 <InlineMessage theme="warning" title="Important">
   Always validate AI-generated code and information for accuracy. LLMs can make assumptions and mistakes.

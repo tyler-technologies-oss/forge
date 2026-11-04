@@ -4,6 +4,12 @@ description: How Forge's form-associated components participate in native form s
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="forms" />
+</ComponentHeader>
 
 Tyler Forge components are designed to work with forms out of the box. This means that you can use the components within a `<form>`
 element and they will work as expected.

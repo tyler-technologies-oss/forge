@@ -4,6 +4,12 @@ description: Using Forge's internal Sass files, mixins, and variables in your ow
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="sass-library" />
+</ComponentHeader>
 
 As you already know, Forge provides a vast library of Web Components. These components have built-in styles, templates, functionality, and often times
 it's useful to also reference those same styles in your libraries and applications. This helps ensure that there is cohesion and code reuse where possible,

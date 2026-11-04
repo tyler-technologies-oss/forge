@@ -5,6 +5,12 @@ description: An experimental, framework-agnostic alternative to Forge's Web Comp
 
 import InlineMessage from "../../components/docs/InlineMessage.astro";
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="css-only-components" />
+</ComponentHeader>
 
 <InlineMessage theme="warning" title="Experimental">
   CSS-only components are an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
