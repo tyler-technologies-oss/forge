@@ -9,7 +9,11 @@
  *   every block id is checked against the live block manifest. Ids derived
  *   for unpublished blocks only fail the build with --strict.
  *
- * Runs after `astro build`, or alone with `pnpm build:forge-skill [-- --strict]`.
+ * The same references are published to the docs site under dist/skill/forge-design/, with
+ * manifest.json (topic index), rules.md (top-level rules and workflow) and rules.json (data
+ * for hooks and tools), plus dist/llms.txt, so the Forge MCP server can serve them live.
+ *
+ * Runs after `astro build` with --site, or alone with `pnpm build:forge-skill [-- --strict]`.
  */
 import { readFile, writeFile, mkdir, readdir, access, rm, cp } from "node:fs/promises";
 import path from "node:path";
@@ -35,6 +39,32 @@ const TEMPLATE_REFERENCES_DIR = path.join(ROOT, "scripts/forge-skill-template/re
 const OUT_DIR = path.resolve(ROOT, "../plugin/skills/forge-design");
 const OUT_REFERENCES_DIR = path.join(OUT_DIR, "references");
 const OUT_COMPONENTS_DIR = path.join(OUT_REFERENCES_DIR, "components");
+
+const SITE_URL = "https://tylerforge.design";
+const SITE_SKILL_PATH = "skill/forge-design";
+const SITE_SKILL_URL = `${SITE_URL}/${SITE_SKILL_PATH}`;
+const SITE_DIST_DIR = path.join(ROOT, "dist");
+const SITE_OUT_DIR = path.join(SITE_DIST_DIR, SITE_SKILL_PATH);
+/** Bumped when the shape of the published manifest.json or rules.json changes, so older readers can fall back. */
+const SITE_SCHEMA_VERSION = 1;
+
+const FORGE_LIB_DIR = path.resolve(ROOT, "../packages/forge/src/lib");
+
+/** Hand-written references in forge-skill-template/references/, listed in the published manifest as guides. */
+const TEMPLATE_GUIDES = [
+  {
+    name: "anti-patterns",
+    title: "Forge UI anti-patterns",
+    description: "Patterns to avoid, each with the Forge-native alternative.",
+    docsPath: "anti-patterns.md",
+  },
+  {
+    name: "ui-plan",
+    title: "UI plan contract",
+    description: "The UI plan contract for generate_ui_plan and validate_ui_plan.",
+    docsPath: "ui-plan.md",
+  },
+];
 
 const CATEGORY_LABELS = {
   layout: "Layout",
@@ -339,7 +369,6 @@ function transformInternalLink(node, ctx) {
 
 /** Docs site sections that become skill reference folders; any other site path stays a live link. */
 const SITE_SECTION_TO_REFERENCE_DIR = { components: "components", designing: "design", developing: "development" };
-const SITE_URL = "https://tylerforge.design";
 
 /** Path from the reference file being written to another file under `references/`. */
 function relativeReference(ctx, target) {
@@ -604,6 +633,110 @@ async function writeSkillMd(components, design, development) {
   await writeFile(path.join(OUT_DIR, "SKILL.md"), skillMd, "utf8");
 }
 
+const RULES_START_HEADING = "## Top-level rules";
+const RULES_END_HEADING = "## References";
+const RULES_INTRO = `# Tyler Forge rules and workflow
+
+You build Forge UI with the Forge MCP server. Every generation must be grounded in tools (blocks, plans, validators) and the Forge guidance — never memory. The guidance is generated from the Forge docs site (${SITE_URL}), so it is the source of truth. The index of every guidance page is at ${SITE_SKILL_URL}/manifest.json.`;
+
+/**
+ * The rules, workflow and tool list from the skill template, with links made absolute so the
+ * text still works when an MCP server sends it as instructions rather than as a file on the site.
+ */
+export function buildRulesMd(template) {
+  const start = template.indexOf(RULES_START_HEADING);
+  const end = template.indexOf(RULES_END_HEADING, start);
+  if (start === -1 || end === -1) {
+    throw new BuildError(`${TEMPLATE_PATH} needs "${RULES_START_HEADING}" followed by "${RULES_END_HEADING}" to build rules.md`);
+  }
+  const body = template.slice(start, end).trim().replaceAll("](references/", `](${SITE_SKILL_URL}/references/`);
+  return `${RULES_INTRO}\n\n${body}\n`;
+}
+
+/** Relative imports and re-exports (`from './x/index.js'`, `import './x.js'`) in a TypeScript source. */
+const RELATIVE_IMPORT_PATTERN = /(?:from|import)\s+["'](\.{1,2}\/[^"']+)["']/g;
+
+/**
+ * Component folders under packages/forge/src/lib that the root `@tylertech/forge` entry never
+ * imports, so their element is only registered by the `@tylertech/forge/<folder>` subpath.
+ * Returns their tag names (`forge-<folder>`), the form the hooks and plan tool check for.
+ */
+export async function findSubpathOnlyComponents(libDir = FORGE_LIB_DIR) {
+  const reached = new Set();
+  const queue = [path.join(libDir, "index.ts")];
+  while (queue.length) {
+    const file = queue.pop();
+    if (reached.has(file)) continue;
+    reached.add(file);
+    const source = await readFile(file, "utf8").catch(() => null);
+    if (source === null) continue;
+    for (const [, specifier] of source.matchAll(RELATIVE_IMPORT_PATTERN)) {
+      queue.push(path.resolve(path.dirname(file), specifier.replace(/\.js$/, ".ts")));
+    }
+  }
+  const reachedFolders = new Set([...reached].map((file) => path.relative(libDir, file).split(path.sep)[0]));
+
+  const tags = [];
+  for (const entry of await readdir(libDir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || reachedFolders.has(entry.name)) continue;
+    const folder = path.join(libDir, entry.name);
+    const hasEntry = await access(path.join(folder, "index.ts")).then(() => true, () => false);
+    if (!hasEntry) continue;
+    const sources = await Promise.all(
+      (await readdir(folder)).filter((f) => f.endsWith(".ts")).map((f) => readFile(path.join(folder, f), "utf8")),
+    );
+    if (sources.some((s) => s.includes(`COMPONENT_NAME_PREFIX}${entry.name}\``))) tags.push(`forge-${entry.name}`);
+  }
+  if (!tags.length) {
+    throw new BuildError(`Found no subpath-only components under ${libDir}; the root entry's import layout may have changed.`);
+  }
+  return tags.sort();
+}
+
+const absoluteDocsUrl = (docsPath) => `${SITE_SKILL_URL}/references/${docsPath}`;
+
+/** llms.txt (https://llmstxt.org): a plain index of the agent-ready markdown, for clients without the MCP server. */
+export function buildLlmsTxt({ components, design, development }) {
+  const entry = (d) => `- [${d.title}](${absoluteDocsUrl(d.docsPath)}): ${d.description}`;
+  const section = (title, items) =>
+    `## ${title}\n\n${items
+      .slice()
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map(entry)
+      .join("\n")}`;
+  return `${[
+    "# Tyler Forge Design System",
+    "> Tyler Forge is Tyler Technologies' design system: web components (`@tylertech/forge`), design tokens, and pre-built blocks. Build Forge UI with the Forge MCP server (`@tylertech/forge-mcp`); these pages are the same guidance it serves.",
+    `- [Rules and workflow](${SITE_SKILL_URL}/rules.md): the rules that always apply and the step-by-step workflow for building Forge UI.`,
+    section("Guides", TEMPLATE_GUIDES),
+    section("Components", components),
+    section("Design", design),
+    section("Development", development),
+  ].join("\n\n")}\n`;
+}
+
+/** Publishes the references, plus the files the MCP server and hooks read, into the built site. */
+async function writeSiteGuidance(index) {
+  await access(SITE_DIST_DIR).catch(() => {
+    throw new BuildError(`No ${path.relative(ROOT, SITE_DIST_DIR)}/ to publish guidance into; run astro build first.`);
+  });
+  await rm(SITE_OUT_DIR, { recursive: true, force: true });
+  await mkdir(SITE_OUT_DIR, { recursive: true });
+  await cp(OUT_REFERENCES_DIR, path.join(SITE_OUT_DIR, "references"), {
+    recursive: true,
+    filter: (src) => src !== path.join(OUT_REFERENCES_DIR, "manifest.json"),
+  });
+
+  const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
+  const manifest = { schemaVersion: SITE_SCHEMA_VERSION, baseUrl: `${SITE_SKILL_URL}/references/`, guides: TEMPLATE_GUIDES, ...index };
+  const rules = { schemaVersion: SITE_SCHEMA_VERSION, subpathOnlyComponents: await findSubpathOnlyComponents() };
+
+  await writeFile(path.join(SITE_OUT_DIR, "manifest.json"), json(manifest), "utf8");
+  await writeFile(path.join(SITE_OUT_DIR, "rules.json"), json(rules), "utf8");
+  await writeFile(path.join(SITE_OUT_DIR, "rules.md"), buildRulesMd(await readFile(TEMPLATE_PATH, "utf8")), "utf8");
+  await writeFile(path.join(SITE_DIST_DIR, "llms.txt"), buildLlmsTxt(index), "utf8");
+}
+
 /** Mirrors get_forge_blocks' lookup: a block matches on `id`, `file`, or `file` minus `.html`. */
 export function blockExists(manifest, blockId) {
   return manifest.blocks.some(
@@ -668,6 +801,11 @@ async function main() {
   console.log(
     `Wrote skill bundle (${components.length} component doc(s), ${design.length} design doc(s), ${development.length} development doc(s)) to ${path.relative(ROOT, OUT_DIR)}/`,
   );
+
+  if (process.argv.includes("--site")) {
+    await writeSiteGuidance(manifest);
+    console.log(`Published guidance to ${path.relative(ROOT, SITE_OUT_DIR)}/ and ${path.relative(ROOT, SITE_DIST_DIR)}/llms.txt`);
+  }
   return examples;
 }
 
