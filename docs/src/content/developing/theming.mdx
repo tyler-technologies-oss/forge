@@ -4,6 +4,12 @@ description: How to customize Forge's colors and theme via CSS custom properties
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="theming" />
+</ComponentHeader>
 
 Theming within Forge is supported at the core, and colors can be easily adjusted at a granular component level, or across
 the library as a whole depending on which theme token values are inherited by each component.

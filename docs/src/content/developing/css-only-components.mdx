@@ -5,11 +5,17 @@ description: An experimental, framework-agnostic alternative to Forge's Web Comp
 
 import InlineMessage from "../../components/docs/InlineMessage.astro";
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="css-only-components" />
+</ComponentHeader>
 
 <InlineMessage theme="warning" title="Experimental">
   CSS-only components are an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
-  and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed. Please provide feedback and
-  <a href="https://github.com/tyler-technologies-oss/forge/issues">report</a> any issues you encounter, and suggest any features you would like to see in a future update!
+  and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed. Please provide feedback,
+  <a href="https://my.work.tylertech.com/jira/software/c/projects/FORGE/form/7140">report</a> any issues you encounter, and <a href="https://my.work.tylertech.com/jira/software/c/projects/FORGE/form/7138">suggest</a> any features you would like to see in a future update!
 </InlineMessage>
 
 The official implementation of the Tyler Forge™ design system has always been a library of high quality and framework-agnostic Web Components. This will continue to be

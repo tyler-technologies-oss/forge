@@ -785,13 +785,6 @@
       "docsPath": "development/css-only-components.md"
     },
     {
-      "name": "customization",
-      "title": "Customization",
-      "description": "Ways to customize Forge components — theming, CSS custom properties, shadow parts, and slots.",
-      "status": "stable",
-      "docsPath": "development/customization.md"
-    },
-    {
       "name": "forms",
       "title": "Forms",
       "description": "How Forge's form-associated components participate in native form submission and validation.",
