@@ -38,7 +38,7 @@ storybookId: components-tabs--demo   # optional; adds the Playground tab
 
 | Section | Required | Contents |
 | --- | --- | --- |
-| Header | Yes | The live demo at the top. Use the **`component-docs-header`** skill. |
+| Header | Yes | The live demo at the top, in its own `header.astro` rendered as `<Header />`. Use the **`component-docs-header`** skill. Never write `<ComponentHeader>` inline in the MDX: the All components page builds its thumbnail from `header.astro`, so an inline header leaves the card blank. |
 | `## Overview` | Yes | One or two paragraphs: what it is, what it's for, and what it's typically paired with. No API names. |
 | `## Usage` | Yes | One paragraph: the key elements and properties in backticks, when to use it, and when to use something else instead (link to that component's usage page). |
 | `## Slot locations` | When it has named slots or regions | Numbered anatomy diagram. Use the **`docs-anatomy-diagram`** skill. |
@@ -69,9 +69,17 @@ Add every Forge component and icon used in the header, the anatomy diagram, and 
 
 - **API tab:** generated from `@tylertech/forge/custom-elements.json`. If it's empty, the slug doesn't match the tag name, or the component isn't in the installed Forge build yet.
 - **Playground tab:** appears when `storybookId` is set. Confirm the story ID exists.
-- **All components page and sidenav:** come from the collection and `category`.
+- **Sidenav:** comes from the collection and `category`.
 
-## 7. Regenerate the Forge Design skill
+## 7. All components page
+
+The card on `docs/src/pages/components/index.astro` takes its title and description from the frontmatter, and its thumbnail from `<slug>/header.astro`, loaded with `import.meta.glob`. The card still appears without a header file, but with no visual. Confirm:
+
+- `docs/src/content/components/<slug>/header.astro` exists and forwards the `thumbnail` prop to `ComponentHeader`.
+- Every component in the header is registered (step 5), or the thumbnail renders empty.
+- The demo is still readable at the thumbnail's half scale. If it isn't, change the header, not the All components page.
+
+## 8. Regenerate the Forge Design skill
 
 `src/content/components/` feeds the plugin's `forge-design` skill (see `docs/CLAUDE.md`):
 
@@ -79,7 +87,7 @@ Add every Forge component and icon used in the header, the anatomy diagram, and 
 2. Add a changeset for `@tylertech/forge-plugin` (`minor` for a new component page, `patch` for wording fixes) by writing `.changeset/<slug>.md` directly.
 3. `pnpm --filter forge-docs check:forge-skill` until it's clean apart from PENDING block IDs from step 1.
 
-## 8. Verify
+## 9. Verify
 
 - `pnpm --filter forge-docs build` succeeds.
 - `npx astro check` in `docs/` adds no new errors.
@@ -89,10 +97,12 @@ Add every Forge component and icon used in the header, the anatomy diagram, and 
 
 - [ ] Blocks exist for every story (merged and deployed, or PENDING with matching headings)
 - [ ] Frontmatter complete and valid
-- [ ] Header, Overview, Usage, Rules, Basic usage, and one section per variant
+- [ ] `header.astro` exists and is rendered as `<Header />` (no inline `<ComponentHeader>`)
+- [ ] Overview, Usage, Rules, Basic usage, and one section per variant
 - [ ] Anatomy diagram, if the component has named slots
 - [ ] `accessibility.mdx`
 - [ ] Components and icons registered
 - [ ] API and Playground tabs populated
+- [ ] All components page card shows the header thumbnail
 - [ ] Forge Design skill regenerated and changeset added
 - [ ] Build and type check pass
