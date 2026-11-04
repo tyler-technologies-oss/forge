@@ -1,10 +1,12 @@
 ---
 /**
- * TopicPairing — the decorative header on the Developing and Tokens pages: the Forge
- * logo joined to an icon for the page's topic, with the package, API, or token
- * the page centers on set beneath. The topic tile is tinted by its sidebar
- * section. Icons must be registered in `src/scripts/forge-components.ts`.
+ * TopicPairing — the decorative header on the Developing, Tokens, and About
+ * pages: the Forge logo joined to an icon for the page's topic, with the
+ * package, API, token, or link the page centers on set beneath. The topic tile
+ * is tinted by its sidebar section. Icons must be registered in
+ * `src/scripts/forge-components.ts`.
  */
+import { version } from "@tylertech/forge/package.json";
 import HeaderPairing, { type HeaderPairingTone } from "./HeaderPairing.astro";
 
 const SECTION_TONES = {
@@ -13,6 +15,7 @@ const SECTION_TONES = {
   buildingApps: "success",
   tooling: "info",
   tokens: "tertiary",
+  about: "primary",
 } as const satisfies Record<string, HeaderPairingTone>;
 
 const TOPICS = {
@@ -38,6 +41,8 @@ const TOPICS = {
   "tokens-elevation": { section: "tokens", icon: "box_shadow", caption: "--forge-elevation-*" },
   "tokens-layering": { section: "tokens", icon: "layers_triple_outline", caption: "--forge-z-index-*" },
   "tokens-animation": { section: "tokens", icon: "motion_play_outline", caption: "--forge-animation-*" },
+  roadmap: { section: "about", icon: "map_marker_path", caption: "tylerforge.canny.io" },
+  changelog: { section: "about", icon: "history", caption: `@tylertech/forge@${version}` },
 } as const satisfies Record<string, { section: keyof typeof SECTION_TONES; icon: string; caption: string }>;
 
 interface Props {
