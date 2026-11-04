@@ -1,9 +1,9 @@
 @use 'sass:map';
-@use '../../animation';
-@use '../../spacing';
-@use '../../theme';
-@use '../../border';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(banner, background, theme.variable(info-container)),

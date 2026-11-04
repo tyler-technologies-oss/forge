@@ -1,0 +1,11 @@
+<!--
+  @block Timestamp — Separators
+  @type component
+  @description Timestamps with a separator dot before or after them, visually separating them from adjacent inline content.
+  @tags timestamp, separators, separator, date, time, storybook, component-example
+-->
+<div class="flex flex-col gap-small">
+  <div>Start separator <forge-timestamp datetime="2024-06-15T14:30:45" separator="start"></forge-timestamp></div>
+  <div><forge-timestamp datetime="2024-06-15T14:30:45" separator="end"></forge-timestamp> End separator</div>
+  <div>No separator <forge-timestamp datetime="2024-06-15T14:30:45" separator="none"></forge-timestamp></div>
+</div>

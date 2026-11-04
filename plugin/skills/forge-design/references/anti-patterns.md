@@ -16,7 +16,7 @@ These are patterns to avoid when building Forge UI. Each entry pairs the anti-pa
 
 ## Typography classes used to fake hierarchy
 
-**Anti-pattern:** Reaching for a typography class to create a subheading, caption, or label that the block/component already provides through a slot.
+**Anti-pattern:** Using typography classes on plain `div`s to fake a card title and subtitle, instead of the real heading in the card's header toolbar that blocks provide.
 
 ```html
 <!-- ❌ Wrong: body2 pressed into service as a subheading -->
@@ -32,15 +32,18 @@ These are patterns to avoid when building Forge UI. Each entry pairs the anti-pa
 **Do instead:** Use the block's dedicated slots. Fetch the block first so you're using the same pattern everyone else in the app uses.
 
 ```html
-<!-- ✅ Right: use the structured card's slots -->
-<forge-structured-card>
-  <span slot="title">Users</span>
-  <span slot="subtitle">Manage roles and access</span>
-  ...
-</forge-structured-card>
+<!-- ✅ Right: a real heading in the scaffold header toolbar, styled heading3 -->
+<forge-card no-padding>
+  <forge-scaffold>
+    <forge-toolbar slot="header">
+      <h2 slot="start" class="text-heading3">Users</h2>
+    </forge-toolbar>
+    <div slot="body" class="p-medium">...</div>
+  </forge-scaffold>
+</forge-card>
 ```
 
-Fetch the block: `get_forge_blocks(component: "forge-structured-card")`.
+Keep the `text-heading3` style, and choose the heading element from the app's outline (see [Choosing heading levels](#choosing-heading-levels-h1h6)). Fetch the block: `get_forge_blocks(component: "forge-card")`.
 
 ---
 
@@ -139,7 +142,7 @@ The `PreToolUse` hook will block Forge markup writes that lack a `get_forge_bloc
 
 **Why it's wrong:** Blocks are served as complete, standalone HTML documents so they can render in the block preview harness. Everything outside `<body>…</body>` is preview scaffolding — the `<base>` tag rewrites URLs, the theme scripts wire the preview's light/dark toggle, and the stylesheet paths point at the blocks CDN. Dropping any of that into an app double-registers components, breaks routing, or pulls in styles that fight the app's own theme setup.
 
-**Do instead:** Take only the content **between `<body>` and `</body>`** from the block. The app's own entry file handles component registration, theming, and styles — see [installation.md](installation.md).
+**Do instead:** Take only the content **between `<body>` and `</body>`** from the block. The app's own entry file handles component registration, theming, and styles — see [installation](development/installation.md).
 
 ---
 
@@ -159,4 +162,4 @@ The `PreToolUse` hook will block Forge markup writes that lack a `get_forge_bloc
 
 **Why it's wrong:** `<forge-table>` renders rows from JavaScript, not markup. It has no default slot for row content.
 
-**Do instead:** Set the element's `data` and `columnConfigurations` properties from JavaScript — see [tables.md](tables.md) for the pattern.
+**Do instead:** Set the element's `data` and `columnConfigurations` properties from JavaScript — see [table](components/table.md) for the pattern.

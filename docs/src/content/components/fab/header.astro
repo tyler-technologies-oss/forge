@@ -1,0 +1,15 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-fab aria-label="Add">
+    <forge-icon name="add"></forge-icon>
+  </forge-fab>
+  <forge-fab>
+    <forge-icon slot="start" name="add"></forge-icon>
+    <span slot="label">Create</span>
+  </forge-fab>
+</ComponentHeader>

@@ -1,0 +1,20 @@
+## Tab list and panel roles
+
+A tab bar and its content follow the standard `tablist`/`tab`/`tabpanel` pattern: the container needs a `tablist` role, each tab needs an `aria-controls` pointing at its corresponding content, and each content element needs to be labelled by its tab.
+
+`forge-tab-panel` automatically manages these ARIA relationships and focus for you when paired with `forge-tab-bar` — you don't need to hand-wire `aria-controls` or `aria-labelledby` yourself in that setup.
+
+## Keyboard interaction
+
+`forge-tab-bar` uses a single tab stop. Tab moves focus to the active tab, and the arrow keys move between tabs. By default, moving focus doesn't change the active tab. Set `auto-activate` to activate tabs as they receive focus.
+
+| Key                      | Action                                                                             |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| Arrow left / Arrow right | Moves focus to the previous or next tab, wrapping at the ends (horizontal layout). |
+| Arrow up / Arrow down    | Moves focus to the previous or next tab, wrapping at the ends (vertical layout).   |
+| Home / End               | Moves focus to the first or last tab.                                              |
+| Enter / Space            | Activates the focused tab.                                                         |
+| Backspace / Delete       | Closes the focused tab if it's `closable`.                                         |
+| Shift + F10              | Dispatches a menu event for the focused tab.                                       |
+
+Inactive `forge-tab-panel` elements are hidden with `display: none`, so their content is removed from the tab order automatically.

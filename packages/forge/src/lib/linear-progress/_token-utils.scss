@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/linear-progress/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: linear-progress;
 $_tokens: tokens.$tokens;

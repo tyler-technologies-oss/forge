@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../animation';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   // Dimensions

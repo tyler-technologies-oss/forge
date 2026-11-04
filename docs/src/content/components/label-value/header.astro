@@ -1,0 +1,12 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-label-value>
+    <span slot="label">Name</span>
+    <span slot="value">Ada Lovelace</span>
+  </forge-label-value>
+</ComponentHeader>

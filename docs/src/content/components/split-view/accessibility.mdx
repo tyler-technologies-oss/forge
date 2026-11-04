@@ -1,0 +1,11 @@
+## Accessible panel labels
+
+Give every panel a unique `accessibleLabel` describing its content — its resize handle relies on that label to provide an accessible name and size information to assistive technology.
+
+## Reopening a closed panel
+
+If a panel can be closed, provide a way for the user to reopen it, and set `aria-controls` and `aria-expanded` on the control that toggles it.
+
+## Responsive content
+
+Verify slotted content stays usable across a panel's full resizable range — set `min`/`max` if content becomes inaccessible at an extreme size.

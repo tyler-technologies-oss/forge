@@ -1,0 +1,12 @@
+## Decorative icons
+
+Most icons in an interface are decorative — they reinforce a label or action that's already conveyed some other way. Add `aria-hidden="true"` to remove a decorative icon from the accessibility tree, so assistive technology doesn't announce content that adds no information.
+
+## Semantic icons
+
+Treat an icon as semantic when it's the only way a user gets a piece of information — an icon-only button, a status indicator with no adjacent text. Give it:
+
+- `role="img"`, so it's recognized as an image rather than arbitrary markup.
+- An accessible name, via `aria-label`, `aria-describedby`, or a `<title>` element wired to `aria-labelledby` on the `<svg>`.
+
+Either way, treat an icon's color like any other text color — it still has to meet the same contrast ratio requirements.

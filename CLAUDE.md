@@ -64,6 +64,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 ## Packages
 
 - `packages/forge` - Web components library (see its CLAUDE.md)
+- `packages/forge-tokens` - Global design tokens (JSON) and Sass utilities, built with Style Dictionary (see its CLAUDE.md)
 - `packages/forge-react` - React adapter library (see its CLAUDE.md)
 - `packages/forge-angular` - Angular adapter library (see its CLAUDE.md)
 - `packages/forge-schematics` - Angular Schematics for generating custom element proxies (see its CLAUDE.md)
@@ -78,6 +79,7 @@ Outside `packages/` (private, not published to npm):
 
 - `blocks` - Pre-built HTML block templates (see Blocks below)
 - `plugin` - Claude Code plugin for Forge: skills, hooks, and MCP registration (see its CLAUDE.md)
+- `docs` - Astro documentation site, `forge-docs` (see its CLAUDE.md)
 
 ## Blocks
 
@@ -101,4 +103,4 @@ Blocks are pre-built HTML templates demonstrating Forge component patterns. Use 
 - When using `forge-app-layout` or `forge-app-bar`, the page title is the h1, so content headings should start at h2.
 - `forge-select` uses a `label` attribute for its label, not a slotted `<label>` element (unlike `forge-text-field`).
 - When creating forms, reference blocks from the "forms" and "application-layout" categories for typography, spacing, and layout patterns.
-- When creating cards that require a header, body, and footer, use `forge-structured-card` from `@tylertech/forge-extended` as it provides the necessary layout structure with dedicated slots.
+- When creating cards that require a header, body, and footer, use `forge-card` with a `forge-scaffold` (header and footer `forge-toolbar`s). `forge-structured-card` (`import '@tylertech/forge/structured-card'`, in `@tylertech/forge`) is an alternative, not the default.

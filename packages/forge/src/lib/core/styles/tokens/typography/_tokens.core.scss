@@ -1,21 +1,19 @@
 @use 'sass:map';
-@use '../../utils';
-@use '../../core/config';
-@use './weight';
 
-// Base typography style values
-$font-family: 'Roboto', sans-serif !default;
-$font-size: 1rem !default; // 16px
+@forward '@tylertech/forge-tokens/sass/tokens/typography' show $font-family, $font-size;
+@use '@tylertech/forge-tokens/sass/typography/core';
 
-// The base typography styles that other styles inherit from.
-$base: (
-  font-family: utils.create-var(typography, font-family, $font-family),
-  font-size: utils.create-var(typography, font-size, $font-size),
-  font-weight: weight.value(regular),
-  line-height: normal,
-  letter-spacing: normal,
-  text-transform: inherit,
-  text-decoration: inherit
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.core" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/typography" from @tylertech/forge-tokens instead.';
+
+$base: map.merge(
+  core.$base,
+  (
+    font-weight: 400,
+    line-height: normal,
+    letter-spacing: normal,
+    text-transform: inherit,
+    text-decoration: inherit
+  )
 ) !default;
 
 @function get($key) {

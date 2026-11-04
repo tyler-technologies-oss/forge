@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-paginator page-size="15" total="95"></forge-paginator>
+</ComponentHeader>

@@ -1,0 +1,22 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-timeline>
+    <forge-timeline-item>
+      <span slot="start">9:00</span>
+      Created
+    </forge-timeline-item>
+    <forge-timeline-item>
+      <span slot="start">10:30</span>
+      Reviewed
+    </forge-timeline-item>
+    <forge-timeline-item>
+      <span slot="start">12:15</span>
+      Approved
+    </forge-timeline-item>
+  </forge-timeline>
+</ComponentHeader>

@@ -271,14 +271,18 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     this.#indicatorElement.toggleAttribute('inward', this.inward);
     this.#indicatorElement.toggleAttribute('circular', this.circular);
-    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, targetRect));
+    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect));
   }
 
   /**
    * Determines whether any part of the anchor is visible on the page by sampling a grid of points
    * within the portion of its bounds that is inside the viewport. Exits on the first visible point.
+   *
+   * The anchor may be a `pointer-events: none` overlay that hit testing never returns, so a hit on
+   * the target element (or one of its ancestors) also counts as visible. Containment is evaluated
+   * against the flat tree because the target can be a slot wrapper whose slotted content is the hit.
    */
-  #isAnchorVisible(anchor: HTMLElement, rect: DOMRect): boolean {
+  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect): boolean {
     const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
     if (!root.elementFromPoint) {
       return true;
@@ -297,7 +301,7 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
         const x = Math.min(left + (right - left) * xRatio, document.documentElement.clientWidth - 1);
         const y = Math.min(top + (bottom - top) * yRatio, document.documentElement.clientHeight - 1);
         const hit = root.elementFromPoint(x, y);
-        if (hit && (anchor.contains(hit) || hit.contains(anchor))) {
+        if (hit && [anchor, target].some(el => isFlatTreeInclusiveAncestor(el, hit) || isFlatTreeInclusiveAncestor(hit, el))) {
           return true;
         }
       }
@@ -309,6 +313,20 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#cleanupAutoUpdate?.();
     this.#cleanupAutoUpdate = undefined;
   }
+}
+
+/**
+ * Whether `ancestor` is `node` or contains it when slot assignments and shadow hosts are followed.
+ */
+function isFlatTreeInclusiveAncestor(ancestor: Node, node: Node): boolean {
+  let current: Node | null = node;
+  while (current) {
+    if (current === ancestor) {
+      return true;
+    }
+    current = (current as Element).assignedSlot ?? current.parentNode ?? (current as ShadowRoot).host ?? null;
+  }
+  return false;
 }
 
 tryDefine(FOCUS_INDICATOR_TAG_NAME, FocusIndicatorComponent);

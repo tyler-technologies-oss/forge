@@ -1,0 +1,17 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-structured-card class="w-[400px]">
+    <span slot="title">Project details</span>
+    <forge-icon-button aria-label="More actions" slot="after-header-actions">
+      <forge-icon name="more_vert"></forge-icon>
+    </forge-icon-button>
+    <p slot="body" class="m-0 forge-typography--body2">A pre-configured layout for a title, actions, body content, and footer buttons.</p>
+    <forge-button variant="text" slot="footer-secondary-action">Cancel</forge-button>
+    <forge-button variant="filled" slot="footer-primary-action">Save</forge-button>
+  </forge-structured-card>
+</ComponentHeader>

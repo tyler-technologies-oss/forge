@@ -1,7 +1,7 @@
 @use './core' as *;
 @use '../avatar';
 @use '../toolbar';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 //
 // Host

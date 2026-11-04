@@ -1,0 +1,11 @@
+## Contrast
+
+Verify there's sufficient contrast between the tooltip's foreground text and background to meet WCAG requirements.
+
+## No interactive content
+
+A tooltip shouldn't contain interactive content — a user can't reliably move a pointer or focus into a tooltip that disappears on blur or hover-out.
+
+## Labeling
+
+Set `type` to `label` or `description` to have the tooltip wire up `aria-labelledby` or `aria-describedby` on its anchor element automatically. The default, `presentation`, is purely visual and carries no accessible relationship to the anchor.

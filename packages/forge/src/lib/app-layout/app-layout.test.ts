@@ -133,6 +133,24 @@ describe('AppLayout', () => {
     expect(assignedElements.some(el => el.id === 'default-content')).toBe(true);
   });
 
+  it('should place content without a slot attribute in the body grid area on small screens', async () => {
+    stubMatchMedia(false);
+    const element = await createFixture({ hasNavigation: true }, html`<main id="default-content">Main Content</main>`);
+    const main = element.querySelector('#default-content') as HTMLElement;
+
+    expect(getComputedStyle(main).gridRowStart).toBe('body-inner');
+    expect(getComputedStyle(main).gridColumnStart).toBe('body-inner');
+  });
+
+  it('should place content without a slot attribute in the body grid area on large screens', async () => {
+    stubMatchMedia(true);
+    const element = await createFixture({ hasNavigation: true }, html`<main id="default-content">Main Content</main>`);
+    const main = element.querySelector('#default-content') as HTMLElement;
+
+    expect(getComputedStyle(main).gridRowStart).toBe('body-inner');
+    expect(getComputedStyle(main).gridColumnStart).toBe('body-inner');
+  });
+
   it('should project content into the app-bar-logo slot', async () => {
     const element = await createFixture({ hasLogo: true });
     const slot = getShadowElement(element, 'slot[name="app-bar-logo"]') as HTMLSlotElement;

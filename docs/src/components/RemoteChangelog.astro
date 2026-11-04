@@ -1,0 +1,73 @@
+---
+/**
+ * Fetches a CHANGELOG.md from a remote GitHub repo at build time and renders
+ * it inline. Astro's frontmatter script runs once per static build (or once
+ * per request in `astro dev`), so this never touches the network client-side.
+ */
+import { marked } from "marked";
+
+interface Props {
+  rawUrl: string;
+  sourceUrl: string;
+}
+
+const { rawUrl, sourceUrl } = Astro.props;
+
+// The upstream changelog labels its release-note sections with emoji (from
+// the "auto" release tool this repo used before switching to changesets).
+// Swap each for the equivalent forge-icon so the page stays icon-only.
+const EMOJI_ICONS: Record<string, string> = {
+  "💥": "error",
+  "🐛": "bug",
+  "🔩": "package",
+  "📝": "description",
+  "🚀": "rocket",
+  "🏎️": "speed",
+  "🏎": "speed",
+  "⚠️": "warning",
+  "⚠": "warning",
+  "🧪": "flask",
+};
+
+function replaceEmojiIcons(input: string): string {
+  return Object.entries(EMOJI_ICONS).reduce(
+    (acc, [emoji, icon]) =>
+      acc.replaceAll(
+        emoji,
+        `<forge-icon name="${icon}" class="align-middle mr-xsmall text-medium" external></forge-icon>`,
+      ),
+    input,
+  );
+}
+
+let html: string | null = null;
+let fetchFailed = false;
+
+try {
+  const response = await fetch(rawUrl);
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+
+  const markdown = await response.text();
+  // Drop the leading package-name heading (e.g. `# @tylertech/forge`) —
+  // ContentHeader already renders "Changelog" as the page's own <h1>.
+  const body = markdown.replace(/^#\s+.*\n+/, "");
+
+  html = replaceEmojiIcons(await marked.parse(body));
+} catch (error) {
+  console.error(`RemoteChangelog: failed to fetch ${rawUrl} — ${error}`);
+  fetchFailed = true;
+}
+---
+
+{
+  fetchFailed ? (
+    <p>
+      Couldn't load the changelog at build time. View it directly on{" "}
+      <a href={sourceUrl}>GitHub →</a>.
+    </p>
+  ) : (
+    <Fragment set:html={html} />
+  )
+}

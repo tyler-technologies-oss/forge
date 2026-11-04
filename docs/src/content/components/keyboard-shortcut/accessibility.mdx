@@ -1,0 +1,7 @@
+## Don't fight the platform
+
+Never override a shortcut the browser, operating system, or assistive technology already owns. Avoid the `accesskey` attribute for the same reason — it conflicts unpredictably across browsers and screen readers. And don't duplicate behavior the platform already provides — a form already submits on Enter when it has a submit button, with no shortcut needed.
+
+## Announce what you're activating
+
+Set `aria-keyshortcuts` on whichever element a global or targeted shortcut ultimately activates, so assistive technology can announce it. Also describe the shortcut's function and key combination somewhere visible on the page — a shortcut a user can't discover isn't accessible just because it technically works.

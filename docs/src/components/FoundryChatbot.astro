@@ -1,0 +1,90 @@
+---
+/**
+ * FoundryChatbot - Embeds the Forge Support Assistant (Tyler Foundry floating chat)
+ * behind our own launcher button.
+ *
+ * The embed loads a chain of remote scripts that can take several seconds on a cold
+ * load, so the launcher shows a loading state until the chatbot is ready.
+ *
+ * `forge-ai-fab` is defined by the embed itself, which bundles its own copy of
+ * @tylertech/forge-ai. Don't import that package on the site: the embed registers its
+ * elements without checking, so any forge-ai element we define first makes it throw.
+ * Until the embed defines the tag, the `undefined:` classes style a fallback pill.
+ */
+---
+
+<forge-ai-fab
+  data-chatbot-launcher
+  extended
+  disabled
+  label="Loading Forge chat"
+  class="fixed bottom-medium end-medium z-popup undefined:flex undefined:items-center undefined:gap-small undefined:rounded-full undefined:bg-surface undefined:px-medium undefined:py-small undefined:shadow-4 undefined:text-label2"
+  transition:persist>
+  <forge-circular-progress
+    slot="icon"
+    data-chatbot-loading
+    aria-hidden="true"
+    class="[--forge-circular-progress-size:20px]"></forge-circular-progress>
+  <span data-chatbot-label>Loading Forge chat…</span>
+</forge-ai-fab>
+
+<script>
+  const BOOTSTRAP_URL = "https://foundry.tylertechai.com/api/embed/bootstrap.js";
+
+  interface FoundryChatbot extends HTMLElement {
+    show(): void;
+  }
+
+  interface FoundryEmbed {
+    initChatbot(options: Record<string, unknown>): Promise<FoundryChatbot>;
+  }
+
+  declare global {
+    interface Window {
+      TylerAI?: FoundryChatbot;
+    }
+  }
+
+  const launcher = document.querySelector<HTMLElement>("[data-chatbot-launcher]");
+
+  const showLauncher = () => launcher?.classList.remove("hidden");
+  const hideLauncher = () => launcher?.classList.add("hidden");
+
+  const setReady = () => {
+    if (!launcher) {
+      return;
+    }
+    launcher.querySelector("[data-chatbot-loading]")?.remove();
+    launcher.querySelector("[data-chatbot-label]")!.textContent = "Ask Forge";
+    launcher.setAttribute("label", "Ask Forge");
+    launcher.removeAttribute("disabled");
+  };
+
+  try {
+    const { initChatbot }: FoundryEmbed = await import(/* @vite-ignore */ BOOTSTRAP_URL);
+
+    const chatbot = await initChatbot({
+      baseUrl: "https://foundry.tylertechai.com",
+      agentId: "e48688ea-751a-4830-bf9d-7acc75e1a112",
+      chatViewType: "floating",
+      chatTitle: "Forge Support Assistant",
+      initialOpen: false,
+      floatingConfig: { showTriggerButton: false },
+    });
+    window.TylerAI = chatbot;
+
+    chatbot.addEventListener("foundry-floating-chatbot-open", hideLauncher);
+    chatbot.addEventListener("foundry-floating-chatbot-close", showLauncher);
+    launcher?.addEventListener("click", () => chatbot.show());
+
+    // The chatbot appends itself to <body>, which ClientRouter replaces on
+    // navigation. Re-attach it after each swap; moving it into the incoming
+    // document instead would drop its shadow DOM stylesheets.
+    document.addEventListener("astro:after-swap", () => document.body.append(chatbot));
+
+    setReady();
+  } catch (error) {
+    console.error("Failed to load the Forge Support Assistant", error);
+    launcher?.remove();
+  }
+</script>

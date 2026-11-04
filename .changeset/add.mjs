@@ -5,6 +5,8 @@ import { checkbox, confirm, input, select } from '@inquirer/prompts';
 import { CHANGESET_TYPES } from './conventional-types.mjs';
 
 const PACKAGES_DIR = fileURLToPath(new URL('../packages/', import.meta.url));
+// Private, but versioned by changesets so users get skill updates. See .changeset/config.json.
+const PLUGIN_PACKAGE_PATH = fileURLToPath(new URL('../plugin/package.json', import.meta.url));
 const CHANGESET_DIR = fileURLToPath(new URL('./', import.meta.url));
 const SCOPE_PATTERN = /^[a-z0-9][a-z0-9-]*$/;
 const MAX_SLUG_WORDS = 6;
@@ -25,14 +27,15 @@ export const slugify = text =>
     .slice(0, MAX_SLUG_WORDS)
     .join('-');
 
-const getPublishedPackageNames = () =>
-  readdirSync(PACKAGES_DIR)
+export const getReleasablePackageNames = () => [
+  ...readdirSync(PACKAGES_DIR)
     .map(dir => `${PACKAGES_DIR}${dir}/package.json`)
     .filter(existsSync)
     .map(path => JSON.parse(readFileSync(path, 'utf8')))
     .filter(({ private: isPrivate }) => !isPrivate)
-    .map(({ name }) => name)
-    .sort();
+    .map(({ name }) => name),
+  JSON.parse(readFileSync(PLUGIN_PACKAGE_PATH, 'utf8')).name
+].sort();
 
 const getUniqueFilePath = slug => {
   const base = slug || 'changeset';
@@ -53,7 +56,7 @@ const promptForChangeset = async () => {
   ).trim();
   const packages = await checkbox({
     message: 'Which packages should be released?',
-    choices: getPublishedPackageNames().map(name => ({ value: name })),
+    choices: getReleasablePackageNames().map(name => ({ value: name })),
     required: true
   });
   const bump = await select({

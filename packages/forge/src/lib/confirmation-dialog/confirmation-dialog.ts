@@ -59,7 +59,7 @@ export const CONFIRMATION_DIALOG_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-
  * @slot secondary-button-text - The text used in the secondary action button
  * @slot primary-button-text - The text used in the primary action button
  *
- * @event {CustomEvent<ConfirmationDialogActionEventData>} forge-confirmation-dialog-action - Fired when an action button is clicked. Will contain `false` if the secondary button is clicked, `true` if the primary button is clicked.
+ * @event {CustomEvent<ConfirmationDialogActionEventData>} forge-confirmation-dialog-action - Fired when the user confirms or dismisses the dialog. `detail.value` is `true` for the primary button and `false` for the secondary button or a light dismiss (Escape). `detail.reason` is `'action'` for a button click or `'light-dismiss'`. Cancelable: call `preventDefault()` to keep the dialog open, for example while `isBusy` shows progress for an async action.
  */
 export class ConfirmationDialogComponent extends BaseLitElement implements IConfirmationDialogComponent {
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */

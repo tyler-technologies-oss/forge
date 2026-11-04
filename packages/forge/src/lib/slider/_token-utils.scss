@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/slider/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: slider;
 $_tokens: tokens.$tokens;

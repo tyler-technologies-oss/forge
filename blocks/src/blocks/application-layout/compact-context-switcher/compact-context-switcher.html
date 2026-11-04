@@ -1,6 +1,7 @@
 <!--
   @block Compact Context Switcher
   @type template
+  @responsive
   @description Application layout with a compact context switcher in the navigation drawer. The selected context (organization, property, account, workspace, etc.) determines the scope of all data displayed throughout the app. Features a minimal select dropdown for quick context switching.
   @tags layout, application, context-switcher, compact, minimal, scope, workspace, tenant, multi-tenant, organization, navigation, drawer, select, global-context
 -->
@@ -14,7 +15,17 @@
       <forge-icon-button density="medium" aria-label="Notifications" theme="app-bar">
         <forge-icon name="notifications"></forge-icon>
       </forge-icon-button>
-      <forge-avatar text="Maria Santos" style="--forge-avatar-size: 40px"></forge-avatar>
+      <forge-user-profile button-label="Open profile menu" theme-toggle full-name="Maria Santos" email="maria.santos@tylertech.com">
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="settings"></forge-icon>
+          <a href="#">Settings</a>
+        </forge-profile-link>
+        <forge-profile-link slot="link">
+          <forge-icon slot="icon" name="account_circle"></forge-icon>
+          <a href="#">Profile</a>
+        </forge-profile-link>
+        <span slot="sign-out-button-text">Sign Out</span>
+      </forge-user-profile>
     </div>
 
     <!-- Navigation drawer content -->
@@ -45,7 +56,7 @@
     <!-- Body header toolbar -->
     <div slot="body-header">
       <forge-toolbar>
-        <h2 slot="start" class="text-heading3">Page title</h2>
+        <h2 slot="start" class="text-heading4">Page title</h2>
       </forge-toolbar>
     </div>
 

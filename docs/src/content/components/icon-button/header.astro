@@ -1,0 +1,17 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-icon-button aria-label="Favorite">
+    <forge-icon name="favorite"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Search">
+    <forge-icon name="search"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Settings">
+    <forge-icon name="settings"></forge-icon>
+  </forge-icon-button>
+</ComponentHeader>

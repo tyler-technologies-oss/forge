@@ -1,4 +1,4 @@
-@use '../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/typography';
 
 @mixin host {
   /* Typography styles are set on the host to make it easier to override them via a class */

@@ -1,0 +1,12 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-view-switcher index="0">
+    <forge-view name="view1"><div class="p-medium">First view</div></forge-view>
+    <forge-view name="view2"><div class="p-medium">Second view</div></forge-view>
+  </forge-view-switcher>
+</ComponentHeader>
