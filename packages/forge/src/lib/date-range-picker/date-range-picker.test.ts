@@ -12,7 +12,7 @@ import { defineTextFieldComponent, TEXT_FIELD_CONSTANTS } from '../text-field/in
 import type { ITextFieldComponent } from '../text-field/index.js';
 import { ICON_BUTTON_CONSTANTS } from '../icon-button/index.js';
 import { BASE_DATE_PICKER_CONSTANTS } from '../date-picker/base/base-date-picker-constants.js';
-import type { IButtonComponent } from '../button/index.js';
+import type { ButtonComponent } from '../button/index.js';
 
 // Popover animation duration (200ms) + buffer
 const POPOVER_ANIMATION_DURATION = 200;
@@ -1637,16 +1637,16 @@ describe('DateRangePickerComponent', () => {
     return popup.querySelector('[data-forge-live-announcer]') as HTMLElement;
   }
 
-  function getTodayButton(component: DateRangePickerWithCore): IButtonComponent | null {
+  function getTodayButton(component: DateRangePickerWithCore): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#today-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#today-button') as ButtonComponent) ?? null;
   }
 
-  function getClearButton(component: DateRangePickerWithCore): IButtonComponent | null {
+  function getClearButton(component: DateRangePickerWithCore): ButtonComponent | null {
     const popup = getPopup(component);
     const calendar = popup.querySelector('forge-calendar') as ICalendarComponent;
-    return (getShadowElement(calendar, '#clear-button') as IButtonComponent) ?? null;
+    return (getShadowElement(calendar, '#clear-button') as ButtonComponent) ?? null;
   }
 
   function clickTodayButton(component: DateRangePickerWithCore): void {

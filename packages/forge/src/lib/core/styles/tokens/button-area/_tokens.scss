@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../utils';
-@use '../../border';
-@use '../../shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/shape';
 
 $tokens: (
   // Shared

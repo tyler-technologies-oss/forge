@@ -1,0 +1,16 @@
+<app-demo-card headerText="Responsive Toolbar">
+  <p>Resize the browser window to see the actions collapse into an overflow menu in the small-screen layout.</p>
+  <forge-responsive-toolbar>
+    <h3 slot="start" class="forge-typography--subheading2">Toolbar title</h3>
+    <div slot="end-large" class="toolbar-actions">
+      <forge-button variant="outlined">Export</forge-button>
+      <forge-button variant="outlined">Filter</forge-button>
+      <forge-button variant="raised">Add new</forge-button>
+    </div>
+    <forge-menu slot="end-small" [options]="overflowMenuOptions">
+      <forge-icon-button aria-label="More actions">
+        <forge-icon name="more_vert" />
+      </forge-icon-button>
+    </forge-menu>
+  </forge-responsive-toolbar>
+</app-demo-card>

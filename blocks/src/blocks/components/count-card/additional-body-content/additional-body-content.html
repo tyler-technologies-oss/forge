@@ -1,0 +1,24 @@
+<!--
+  @block Count Card — Additional Body Content
+  @type component
+  @description Additional Body Content usage example for the forge-count-card component.
+  @tags count-card, additional-body-content, storybook, component-example
+-->
+<div class="w-[320px]">
+  <forge-count-card>
+    <span slot="label">Todays money</span>
+    <forge-badge slot="header-end" theme="success">
+      +8.2%
+      <forge-icon slot="end" name="trending_up"></forge-icon>
+    </forge-badge>
+    <span slot="count">$50,846.00</span>
+    <div slot="body" class="flex justify-between items-center text-medium">
+      <span class="text-body1">66% of monthly target</span>
+      <span class="text-body1">100k</span>
+    </div>
+    <div slot="body" class="flex flex-col gap-xsmall">
+      <forge-meter value="0.66" min="0" max="1" theme="success"></forge-meter>
+      <span class="text-label1 text-low">Last updated 12/12/2025</span>
+    </div>
+  </forge-count-card>
+</div>

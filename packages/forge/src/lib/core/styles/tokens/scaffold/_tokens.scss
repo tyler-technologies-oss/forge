@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   height: utils.module-val(scaffold, height, 100%),

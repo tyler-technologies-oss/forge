@@ -1,9 +1,9 @@
 @use 'sass:map';
-@use '../../animation';
-@use '../../elevation';
-@use '../../shape';
-@use '../../theme';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   // Shared

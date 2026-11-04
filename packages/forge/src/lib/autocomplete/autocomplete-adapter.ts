@@ -113,6 +113,11 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     if (!this._targetElement) {
       return;
     }
+    // If a previous dropdown is still around (e.g. mid-close animation), destroy it immediately
+    // so we never leave a stale popover orphaned in the DOM when a new one opens.
+    if (this._listDropdown) {
+      this._listDropdown.destroy();
+    }
     this._listDropdown = new ListDropdown(this._targetElement, config);
     this._listDropdown.open();
     this._inputElement.setAttribute('aria-expanded', 'true');
@@ -131,18 +136,23 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
       return;
     }
 
-    const { anchorElement } = this._listDropdown.dropdownElement as IPopoverComponent;
+    // Capture the current dropdown so an awaited close can't null a newer one that opened in the meantime
+    const listDropdown = this._listDropdown;
+
+    const { anchorElement } = listDropdown.dropdownElement as IPopoverComponent;
     if (anchorElement && anchorElement instanceof HTMLElement) {
       anchorElement?.removeEventListener(POPOVER_CONSTANTS.events.TOGGLE, listener);
     }
 
     if (destroy) {
-      this._listDropdown.destroy();
+      listDropdown.destroy();
     } else {
-      await this._listDropdown.close();
+      await listDropdown.close();
     }
 
-    this._listDropdown = undefined;
+    if (this._listDropdown === listDropdown) {
+      this._listDropdown = undefined;
+    }
   }
 
   public setBusyVisibility(isVisible: boolean): void {

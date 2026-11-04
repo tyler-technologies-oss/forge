@@ -5,7 +5,7 @@ import { userEvent } from 'vitest/browser';
 import { task, frame } from '../../core/utils/utils.js';
 import type { IAppBarProfileButtonComponent } from './app-bar-profile-button.js';
 import { APP_BAR_PROFILE_BUTTON_CONSTANTS } from './app-bar-profile-button-constants.js';
-import type { IIconButtonComponent } from '../../icon-button/index.js';
+import type { IconButtonComponent } from '../../icon-button/index.js';
 import type { IProfileCardComponent } from '../../profile-card/index.js';
 import { PROFILE_CARD_CONSTANTS } from '../../profile-card/index.js';
 import type { IPopoverComponent } from '../../popover/index.js';
@@ -26,6 +26,7 @@ describe('App Bar Profile Button', () => {
   it('should be accessible', async () => {
     const screen = render(html`<forge-app-bar-profile-button></forge-app-bar-profile-button>`);
     const el = screen.container.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
+    await frame();
 
     await expect(el).toBeAccessible();
   });
@@ -269,7 +270,7 @@ describe('App Bar Profile Button', () => {
       expect(popup).toBeTruthy();
       expect(popup.isConnected).toBe(true);
 
-      const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
+      const iconButton = el.querySelector('forge-icon-button') as IconButtonComponent;
       await userEvent.click(iconButton);
       await task(POPOVER_ANIMATION_DURATION);
 
@@ -499,13 +500,13 @@ describe('App Bar Profile Button', () => {
       const el = screen.container.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
 
       await openPopup(el);
-      const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
+      const iconButton = el.querySelector('forge-icon-button') as IconButtonComponent;
 
       expect(document.activeElement).toBe(iconButton);
     });
 
     async function openPopup(el: IAppBarProfileButtonComponent): Promise<IPopoverComponent> {
-      const iconButton = el.querySelector('forge-icon-button') as IIconButtonComponent;
+      const iconButton = el.querySelector('forge-icon-button') as IconButtonComponent;
       iconButton.focus();
       await userEvent.click(iconButton);
       await task(POPOVER_ANIMATION_DURATION);

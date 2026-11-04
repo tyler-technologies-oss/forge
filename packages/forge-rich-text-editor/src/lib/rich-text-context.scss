@@ -1,0 +1,62 @@
+@use '@tylertech/forge/sass/typography' as forge-typography;
+
+:host {
+  display: contents;
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block-start: var(--forge-spacing-small);
+  padding-inline: var(--forge-spacing-medium);
+  min-height: var(--forge-spacing-large);
+  gap: var(--forge-spacing-medium);
+}
+
+.editor-error {
+  @include forge-typography.style(body1);
+
+  color: var(--forge-theme-error);
+}
+
+.editor-counts {
+  @include forge-typography.style(body1);
+
+  color: var(--forge-theme-text-secondary);
+  margin-inline-start: auto;
+}
+
+.editor-initialization-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--forge-spacing-large);
+  gap: var(--forge-spacing-medium);
+  background-color: var(--forge-theme-error-container);
+  color: var(--forge-theme-on-error-container);
+  border-radius: var(--forge-shape-medium);
+  margin: var(--forge-spacing-medium);
+  text-align: center;
+}
+
+.editor-initialization-error__title {
+  @include forge-typography.style(subheading2);
+
+  margin: 0;
+}
+
+.editor-initialization-error__message {
+  @include forge-typography.style(body2);
+
+  margin: 0;
+}
+
+.editor-initialization-error__details {
+  @include forge-typography.style(body1);
+
+  color: var(--forge-theme-text-secondary);
+  margin: 0;
+  max-width: 600px;
+}

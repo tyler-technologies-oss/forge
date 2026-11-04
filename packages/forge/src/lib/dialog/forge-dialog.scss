@@ -1,7 +1,7 @@
 @use './core';
 @use './animations';
 @use '../backdrop';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 @mixin animation-fade {
   &.forge-dialog {

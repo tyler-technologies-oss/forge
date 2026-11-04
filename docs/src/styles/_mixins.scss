@@ -1,0 +1,38 @@
+@mixin nav-list-item() {
+  --forge-list-item-height: 32px;
+  --forge-list-item-padding: 0 var(--forge-spacing-small);
+  --forge-list-item-gap: var(--forge-spacing-medium);
+  --forge-list-item-shape: var(--forge-shape-large);
+  --forge-list-item-text-font-weight: 400;
+  --forge-list-item-width: 100%;
+  --forge-list-item-indent: var(--forge-spacing-xxxlarge);
+  --forge-state-layer-hover-color: var(--forge-theme-primary-container-high);
+
+  --forge-list-item-margin: 0 var(--forge-spacing-xxsmall) 0
+    var(--forge-spacing-small);
+
+  display: flex;
+  align-items: center;
+  gap: var(--forge-spacing-xsmall);
+  margin-inline: calc(var(--forge-spacing-xxsmall) * -1) 0;
+  margin-block: 0;
+  width: 100%;
+
+  &::part(root) {
+    width: 100%;
+  }
+}
+
+/**
+ * Grid background pattern for preview areas
+ * Creates a subtle dot grid pattern commonly used in design tools
+ */
+@mixin grid-background() {
+  background-color: #fff;
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@mixin small-icon {
+  --forge-icon-font-size: 18px;
+}

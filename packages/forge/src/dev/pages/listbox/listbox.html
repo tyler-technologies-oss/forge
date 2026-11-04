@@ -1,0 +1,16 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Listbox',
+    includePath: './pages/listbox/listbox.ejs',
+    options: [
+      { type: 'switch', label: 'Multiple', id: 'opt-multiple', defaultValue: false },
+      { type: 'switch', label: 'Reorderable', id: 'opt-reorderable', defaultValue: false },
+      { type: 'switch', label: 'Dense', id: 'opt-dense', defaultValue: false },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled', defaultValue: false },
+      { type: 'switch', label: 'Read only', id: 'opt-readonly', defaultValue: false },
+      { type: 'switch', label: 'Allow deselect', id: 'opt-allow-deselect', defaultValue: false },
+    ]
+  }
+})
+%>

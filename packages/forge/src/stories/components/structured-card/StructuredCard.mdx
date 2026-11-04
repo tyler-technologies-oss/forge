@@ -1,0 +1,47 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as StructuredCardStories from './StructuredCard.stories';
+
+<Meta of={StructuredCardStories} />
+
+<Title />
+
+🚧 **Experimental** 🚧
+
+A pre-configured card layout optimized for common patterns in Tyler Cloud applications. Using a slot-based architecture, it provides designated areas for titles, actions, body content, and footer buttons—helping developers build consistent card UIs without manually configuring the same layout structure repeatedly. Ideal for table containers and self-contained content sections that require their own actions.
+
+<Canvas of={StructuredCardStories.Demo} />
+
+## Examples
+
+#### With Form
+
+<Canvas of={StructuredCardStories.WithForm} />
+
+#### With Header Icon Button
+
+Use the `after-header-actions` slot for icon buttons that need to run up against the card edge, such as overflow menus or close buttons.
+
+<Canvas of={StructuredCardStories.HeaderIconButton} />
+
+#### Detail Panel with Back Navigation
+
+Use the `before-title` slot for back buttons or navigation icons.
+
+<Canvas of={StructuredCardStories.WithBeforeTitleSlot} />
+
+#### Data Table with Pagination
+
+Use the `body-spacing="none"` attribute (or `bodySpacing` property) for full-width content like tables. This removes body padding, sets gap to `0`, and removes footer bottom padding to ensure content extends edge-to-edge. The data table demo below demonstrates the `bodySpacing` property in action.
+
+<Canvas of={StructuredCardStories.WithTable} />
+
+#### Scrollable Content
+
+Set `--forge-structured-card-body-height` to a fixed value to enable scrollable body content.
+
+<Canvas of={StructuredCardStories.ScrollableBodyContent} />
+
+## API
+
+<CustomArgTypes />

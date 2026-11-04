@@ -1,0 +1,8 @@
+.inline-popover {
+  width: 320px;
+  padding: 16px;
+}
+
+forge-button:not(:first-of-type) {
+  margin-inline-start: 16px;
+}

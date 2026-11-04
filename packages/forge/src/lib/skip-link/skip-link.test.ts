@@ -3,25 +3,25 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
 import './skip-link.js';
-import { ISkipLinkComponent } from './skip-link.js';
+import { SkipLinkComponent } from './skip-link.js';
 import { SKIP_LINK_CONSTANTS } from './skip-link-constants.js';
 
 describe('SkipLink', () => {
   it('should initialize', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should should be accessible', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     await expect(el).toBeAccessible();
   });
 
   it('should initialize with correct defaults', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     expect(el.target).toBe('');
     expect(el.theme).toBe('default');
     expect(el.muted).toBe(false);
@@ -30,86 +30,93 @@ describe('SkipLink', () => {
 
   it('should update the target attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.target = 'main';
+    await el.updateComplete;
     expect(el.getAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET)).toBe('main');
     expect(getAnchorEl(el).getAttribute('href')).toBe('#main');
   });
 
   it('should update the theme attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.theme = 'primary';
+    await el.updateComplete;
     expect(el.getAttribute(SKIP_LINK_CONSTANTS.attributes.THEME)).toBe('primary');
   });
 
   it('should update the muted attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.muted = true;
+    await el.updateComplete;
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.MUTED)).toBe(true);
   });
 
   it('should update the persistent attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.persistent = true;
+    await el.updateComplete;
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT)).toBe(true);
   });
 
   it('should update the inline attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.inline = true;
+    await el.updateComplete;
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE)).toBe(true);
   });
 
   it('should update the skip-url-change attribute when the property is set', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.skipUrlChange = true;
+    await el.updateComplete;
     expect(el.hasAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE)).toBe(true);
   });
 
   it('should change the target property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.TARGET, 'main');
+    await el.updateComplete;
     expect(el.target).toBe('main');
     expect(getAnchorEl(el).getAttribute('href')).toBe('#main');
   });
 
   it('should change the theme property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.THEME, 'primary');
     expect(el.theme).toBe('primary');
   });
 
   it('should change the muted property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.MUTED, '');
     expect(el.muted).toBe(true);
   });
 
   it('should change the persistent property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.PERSISTENT, '');
     expect(el.persistent).toBe(true);
   });
 
   it('should change the inline property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.INLINE, '');
     expect(el.inline).toBe(true);
   });
 
   it('should change the skipUrlChange property when set via attribute', async () => {
     const screen = render(html`<forge-skip-link></forge-skip-link>`);
-    const el = screen.container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const el = screen.container.querySelector('forge-skip-link') as SkipLinkComponent;
     el.setAttribute(SKIP_LINK_CONSTANTS.attributes.SKIP_URL_CHANGE, '');
     expect(el.skipUrlChange).toBe(true);
   });
@@ -122,7 +129,8 @@ describe('SkipLink', () => {
       </div>
     `);
     const container = screen.container.querySelector('div') as HTMLDivElement;
-    const skipLink = container.querySelector('forge-skip-link') as ISkipLinkComponent;
+    const skipLink = container.querySelector('forge-skip-link') as SkipLinkComponent;
+    await skipLink.updateComplete;
     const target = container.querySelector('#main');
     const anchor = getAnchorEl(skipLink);
 
@@ -132,6 +140,6 @@ describe('SkipLink', () => {
   });
 });
 
-function getAnchorEl(el: ISkipLinkComponent): HTMLAnchorElement {
-  return el.shadowRoot!.querySelector(SKIP_LINK_CONSTANTS.selectors.ANCHOR) as HTMLAnchorElement;
+function getAnchorEl(el: SkipLinkComponent): HTMLAnchorElement {
+  return el.shadowRoot!.querySelector('a') as HTMLAnchorElement;
 }

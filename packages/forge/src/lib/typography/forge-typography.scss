@@ -1,4 +1,4 @@
-@use '../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/typography';
 
 // Apply base typography styles to the body element by default
 body {
@@ -10,3 +10,6 @@ body {
 
 // Automatically apply styles to anchor elements
 @include typography.anchor;
+
+// Automatically apply styles to kbd elements
+@include typography.kbd;

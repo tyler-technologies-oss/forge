@@ -393,12 +393,7 @@ describe('globalConfig decorator', () => {
     it('should throw TypeError for symbol properties', () => {
       const symbolProp = Symbol('test');
 
-      expect(() => {
-        class _TestClass {
-          @globalConfig()
-          public [symbolProp] = 'value';
-        }
-      }).toThrow(TypeError);
+      expect(() => globalConfig()({}, symbolProp)).toThrow(TypeError);
     });
   });
 });

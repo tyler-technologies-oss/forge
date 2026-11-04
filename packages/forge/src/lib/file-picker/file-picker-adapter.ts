@@ -3,7 +3,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { IFilePickerComponent } from './file-picker.js';
 import { FILE_PICKER_CONSTANTS } from './file-picker-constants.js';
 import { BaseAdapter, IBaseAdapter } from '../core/index.js';
-import { IButtonComponent } from '../button/index.js';
+import type { ButtonComponent } from '../button/index.js';
 
 export interface IFilePickerAdapter extends IBaseAdapter {
   destroy(): void;
@@ -30,7 +30,7 @@ export interface IFilePickerAdapter extends IBaseAdapter {
 export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> implements IFilePickerAdapter {
   private _container: HTMLElement;
   private _buttonSlot: HTMLSlotElement;
-  private _button: IButtonComponent | undefined;
+  private _button: ButtonComponent | undefined;
   private _input: HTMLInputElement;
   private _inputEventListener: EventListener | undefined;
 
@@ -97,7 +97,7 @@ export class FilePickerAdapter extends BaseAdapter<IFilePickerComponent> impleme
   }
 
   public initializeButton(): void {
-    const button = this._component.querySelector('forge-button') as IButtonComponent;
+    const button = this._component.querySelector('forge-button') as ButtonComponent;
     this._button = button || undefined;
   }
 

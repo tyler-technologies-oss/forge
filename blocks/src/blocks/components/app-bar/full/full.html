@@ -1,0 +1,27 @@
+<!--
+  @block App Bar — Full
+  @type component
+  @description Full usage example for the forge-app-bar component.
+  @tags app-bar, full, storybook, component-example
+-->
+<forge-app-bar title-text="Tyler Forge™" theme-mode="scoped" elevation="raised">
+  <forge-app-bar-menu-button slot="start"></forge-app-bar-menu-button>
+  <forge-icon slot="logo" name="forge_logo">
+  </forge-icon>
+  <forge-app-bar-search slot="center">
+    <input type="text" placeholder="Search">
+  </forge-app-bar-search>
+  <forge-app-bar-help-button slot="end"></forge-app-bar-help-button>
+  <forge-app-bar-notification-button slot="end"></forge-app-bar-notification-button>
+  <forge-user-profile slot="end" button-label="Open profile menu" theme-toggle full-name="First Last" email="first.last@tylertech.com">
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="settings"></forge-icon>
+      <a href="#">Settings</a>
+    </forge-profile-link>
+    <forge-profile-link slot="link">
+      <forge-icon slot="icon" name="account_circle"></forge-icon>
+      <a href="#">Profile</a>
+    </forge-profile-link>
+    <span slot="sign-out-button-text">Sign Out</span>
+  </forge-user-profile>
+</forge-app-bar>

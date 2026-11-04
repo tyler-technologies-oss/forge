@@ -1,0 +1,50 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+
+:host {
+  display: block;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-rich-text-editor {
+  border: var(--forge-border-thin) solid var(--forge-theme-outline);
+  border-radius: var(--forge-shape-medium);
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background-color: var(--forge-theme-surface);
+}
+
+forge-rich-text-content {
+  --forge-rich-text-content-padding: var(--forge-rich-text-editor-content-padding, var(--forge-spacing-medium));
+}
+
+// Layout and button styling come from forge-rich-text-toolbar itself; this is the editor's frame.
+.editor-toolbar {
+  padding: var(--forge-spacing-small) var(--forge-spacing-small);
+  background-color: var(--forge-theme-surface-container-lowest);
+  border-bottom: var(--forge-border-thin) solid var(--forge-theme-outline);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  min-height: 48px;
+}
+
+:host([disabled]) {
+  .forge-rich-text-editor {
+    opacity: var(--forge-rich-text-editor-disabled-opacity, #{forge-theme.emphasis(medium-low)});
+    pointer-events: none;
+
+    // `pointer-events: none` stops a selection starting inside the editor but does not prevent one
+    // dragged in from outside, so a disabled editor's text stayed selectable without this.
+    user-select: none;
+  }
+}

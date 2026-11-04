@@ -1,0 +1,88 @@
+---
+/**
+ * FoundationsMosaic — the decorative header on the Designing Getting Started
+ * page. One tile per foundation, each a miniature of that page's own header:
+ * color ramps, a type specimen, a spacing gap, an app frame, and the Forge
+ * logo. Colors come from theme tokens, so it follows light, dark, and custom
+ * themes. Purely visual: hidden from assistive tech.
+ */
+type Kind = "color" | "typography" | "spacing" | "layout" | "iconography";
+
+const tiles: Kind[] = ["color", "typography", "spacing", "layout", "iconography"];
+
+const ramps = [
+  {
+    base: "bg-primary",
+    tones: ["bg-primary-container-high", "bg-primary-container", "bg-primary-container-low"],
+  },
+  {
+    base: "bg-secondary",
+    tones: ["bg-secondary-container-high", "bg-secondary-container", "bg-secondary-container-low"],
+  },
+  {
+    base: "bg-success",
+    tones: ["bg-success-container-high", "bg-success-container", "bg-success-container-low"],
+  },
+];
+---
+
+<div class="flex items-center justify-center gap-large" aria-hidden="true">
+  {
+    tiles.map((kind) => (
+      <div class="shrink-0">
+        <div class="size-28 rounded-lg border border-outline bg-surface flex items-center justify-center overflow-hidden">
+          {kind === "color" && (
+            <div class="flex gap-xxsmall">
+              {ramps.map(({ base, tones }) => (
+                <div class="w-5 flex flex-col rounded-sm overflow-hidden">
+                  <div class:list={["h-10", base]} />
+                  {tones.map((tone) => (
+                    <div class:list={["h-2", tone]} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {kind === "typography" && (
+            <div class="flex flex-col items-start gap-xsmall">
+              <span class="text-display5 text-primary leading-none">Aa</span>
+              <div class="h-1.5 w-14 rounded-full bg-surface-container-medium" />
+              <div class="h-1.5 w-10 rounded-full bg-surface-container" />
+            </div>
+          )}
+
+          {kind === "spacing" && (
+            <div class="flex items-stretch">
+              <div class="w-0.5 h-12 rounded-full bg-surface-container" />
+              <div class="relative flex items-center w-(--forge-spacing-xlarge) bg-primary-container-high">
+                <div class="absolute inset-x-0 h-px bg-primary" />
+                <div class="absolute left-0 h-2 w-px bg-primary" />
+                <div class="absolute right-0 h-2 w-px bg-primary" />
+              </div>
+              <div class="w-0.5 h-12 rounded-full bg-surface-container" />
+            </div>
+          )}
+
+          {kind === "layout" && (
+            <div class="w-20 h-16 flex flex-col rounded-md border border-outline overflow-hidden">
+              <div class="h-3 bg-brand" />
+              <div class="flex flex-1">
+                <div class="w-5 bg-surface-container-low border-r border-outline" />
+                <div class="flex-1 bg-surface-dim p-1">
+                  <div class="h-full rounded-sm border border-outline bg-surface" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {kind === "iconography" && (
+            <div class="size-14 rounded-lg bg-primary text-(--forge-theme-on-primary) flex items-center justify-center shadow-md">
+              <forge-icon name="forge_logo" class="[--forge-icon-size:32px]" />
+            </div>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>

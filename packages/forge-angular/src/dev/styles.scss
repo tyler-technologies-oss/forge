@@ -1,0 +1,14 @@
+@use '@tylertech/forge/dist/forge-core';
+@use '@tylertech/forge/dist/forge';
+@use '@tylertech/forge/dist/utils/forge-flex';
+@use '@tylertech/forge/sass/theme/theme-dark' as forge-theme-dark;
+
+.app-theme-dark {
+  @include forge-theme-dark.theme-properties;
+}
+
+forge-text-field,
+forge-select,
+forge-chip-field {
+  margin: 8px 0;
+}

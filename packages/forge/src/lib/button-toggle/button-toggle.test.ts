@@ -208,6 +208,20 @@ describe('Button Toggle', () => {
     expect(changeSpy.mock.calls[0][0].detail).toBe('two');
   });
 
+  it('should select button toggle when focused and enter is pressed', async () => {
+    const harness = await createFixture();
+    const changeSpy = vi.fn();
+    harness.element.addEventListener(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, changeSpy);
+
+    await harness.selectToggleViaKeyboard(1, 'Enter');
+
+    expect(harness.element.value).toBe('two');
+    expect(harness.buttonToggles[1].selected).toBe(true);
+    expect(harness.buttonToggles[1].getAttribute('aria-pressed')).toBe('true');
+    expect(changeSpy).toHaveBeenCalledOnce();
+    expect(changeSpy.mock.calls[0][0].detail).toBe('two');
+  });
+
   it('should select button toggle when click() is called', async () => {
     const harness = await createFixture();
     const changeSpy = vi.fn();
@@ -249,6 +263,19 @@ describe('Button Toggle', () => {
     expect(changeSpy.mock.calls[0][0].detail).toBeNull();
   });
 
+  it('should deselect button toggle when focused and enter is pressed', async () => {
+    const harness = await createFixture({ value: 'two' });
+    const changeSpy = vi.fn();
+    harness.element.addEventListener(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, changeSpy);
+
+    await harness.selectToggleViaKeyboard(1, 'Enter');
+
+    expect(harness.element.value).toBeNull();
+    expect(harness.buttonToggles[1].selected).toBe(false);
+    expect(changeSpy).toHaveBeenCalledOnce();
+    expect(changeSpy.mock.calls[0][0].detail).toBeNull();
+  });
+
   it('should select multiple button toggles when clicked', async () => {
     const harness = await createFixture({ multiple: true });
     const changeSpy = vi.fn();
@@ -272,6 +299,22 @@ describe('Button Toggle', () => {
 
     await harness.selectToggleViaKeyboard(0);
     await harness.selectToggleViaKeyboard(2);
+
+    expect(harness.element.value).toEqual(['one', 'three']);
+    expect(harness.buttonToggles[0].selected).toBe(true);
+    expect(harness.buttonToggles[2].selected).toBe(true);
+    expect(changeSpy).toHaveBeenCalledTimes(2);
+    expect(changeSpy.mock.calls[0][0].detail).toEqual(['one']);
+    expect(changeSpy.mock.calls[1][0].detail).toEqual(['one', 'three']);
+  });
+
+  it('should select multiple button toggles when focused and enter is pressed', async () => {
+    const harness = await createFixture({ multiple: true });
+    const changeSpy = vi.fn();
+    harness.element.addEventListener(BUTTON_TOGGLE_GROUP_CONSTANTS.events.CHANGE, changeSpy);
+
+    await harness.selectToggleViaKeyboard(0, 'Enter');
+    await harness.selectToggleViaKeyboard(2, 'Enter');
 
     expect(harness.element.value).toEqual(['one', 'three']);
     expect(harness.buttonToggles[0].selected).toBe(true);
@@ -530,9 +573,9 @@ class ButtonToggleGroupHarness extends TestHarness<IButtonToggleGroupComponent> 
     await userEvent.click(this.buttonToggles[index]);
   }
 
-  public async selectToggleViaKeyboard(index: number): Promise<void> {
+  public async selectToggleViaKeyboard(index: number, key: ' ' | 'Enter' = ' '): Promise<void> {
     this.buttonToggles[index].focus();
-    await userEvent.keyboard(' ');
+    await userEvent.keyboard(key === 'Enter' ? '{Enter}' : key);
   }
 }
 

@@ -1,12 +1,9 @@
-import { defineCustomElement } from '@tylertech/forge-core';
+/**
+ * Exports all option component modules from this path for backwards compatibility.
+ * The option component has been moved to a top-level location with the option group component.
+ */
 
-import { OptionComponent } from './option.js';
-
-export * from './option-adapter.js';
-export * from './option-constants.js';
-export * from './option-core.js';
-export * from './option.js';
-
-export function defineOptionComponent(): void {
-  defineCustomElement(OptionComponent);
-}
+export * from '../../option/option/option-config.js';
+export * from '../../option/option/option-constants.js';
+export * from '../../option/option/option.js';
+export { defineOptionComponent } from '../../option/option/index.js';

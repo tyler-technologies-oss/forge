@@ -1,42 +1,13 @@
-@use '../color-palette/radix-color-palette' as color-palette;
-@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
 
-// Light
-$tokens: (
-  text-high: color-palette.$text-5,
-  text-medium: color-palette.$text-4,
-  text-low: color-palette.$text-3,
-  text-lowest: color-palette.$text-2,
-  text-minimum: color-palette.$text-1,
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.text" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
 
-  text-success: color-palette.$green-a11,
-  text-informational: color-palette.$blue-a11,
-  text-warning: color-palette.$amber-a11,
-  text-critical: color-palette.$red-a11,
+$_keys: (text-high, text-high-inverse, text-medium, text-medium-inverse, text-low, text-low-inverse, text-lowest, text-lowest-inverse);
 
-  text-high-inverse: color-palette-dark.$text-5,
-  text-medium-inverse: color-palette-dark.$text-4,
-  text-low-inverse: color-palette-dark.$text-3,
-  text-lowest-inverse: color-palette-dark.$text-2,
-  text-minimum-inverse: color-palette-dark.$text-1
-);
-
-// Dark
-$tokens-dark: (
-  text-high: color-palette-dark.$text-5,
-  text-medium: color-palette-dark.$text-4,
-  text-low: color-palette-dark.$text-3,
-  text-lowest: color-palette-dark.$text-2,
-  text-minimum: color-palette-dark.$text-1,
-
-  text-success: color-palette.$green-a11,
-  text-informational: color-palette.$blue-a11,
-  text-warning: color-palette.$amber-a11,
-  text-critical: color-palette.$red-a11,
-
-  text-high-inverse: color-palette.$text-5,
-  text-medium-inverse: color-palette.$text-4,
-  text-low-inverse: color-palette.$text-3,
-  text-lowest-inverse: color-palette.$text-2,
-  text-minimum-inverse: color-palette.$text-1
-);
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

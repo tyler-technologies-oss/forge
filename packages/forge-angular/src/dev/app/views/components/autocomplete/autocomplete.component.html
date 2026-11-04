@@ -1,0 +1,19 @@
+<app-demo-card headerText="Autocomplete">
+  <forge-autocomplete [(ngModel)]="selectedState" [filter]="filterListener">
+    <forge-text-field>
+      <input type="text" id="input-state-single" />
+      <label for="input-state">Choose State</label>
+      <forge-icon slot="end" name="arrow_drop_down" class="forge-dropdown-icon" />
+    </forge-text-field>
+  </forge-autocomplete>
+  <div>Value: {{ selectedState | json }}</div>
+
+  <h4>Multiple</h4>
+  <forge-autocomplete multiple="true" [(ngModel)]="selectedStates" [filter]="filterListener">
+    <forge-text-field>
+      <input type="text" id="input-state-multi" />
+      <label for="input-state">Choose States</label>
+    </forge-text-field>
+  </forge-autocomplete>
+  <div>Value: {{ selectedStates | json }}</div>
+</app-demo-card>

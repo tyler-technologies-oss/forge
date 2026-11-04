@@ -1,0 +1,37 @@
+<forge-banner [dismissed]="isDismissed" (forge-banner-dismissed)="dismissBanner()">
+  <forge-icon slot="icon" name="add_alert" />
+  <div>This is the banner with an icon and action using the default theme.</div>
+  <forge-button slot="button" variant="outlined" (click)="openAlert()">Learn more...</forge-button>
+</forge-banner>
+
+<div class="demo-card-container">
+  <app-demo-card headerText="Banner">
+    <div class="banner-state-txt">Banner is dismissed: {{ isDismissed }}</div>
+    <forge-button variant="raised" (click)="toggleBanner()">Toggle banner</forge-button>
+  </app-demo-card>
+</div>
+
+<div style="margin-top: 24px">
+  <forge-banner theme="warning" [canDismiss]="false">
+    <forge-icon slot="icon" name="add_alert"></forge-icon>
+    <div>
+      This is the banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This
+      is the banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This is the
+      banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla.
+    </div>
+  </forge-banner>
+</div>
+
+<div style="margin-top: 24px">
+  <forge-banner theme="success">
+    <div class="two-line-clamp">
+      This is the banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This
+      is the banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This is the
+      banner with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This is the banner
+      with only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This is the banner with
+      only text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla. This is the banner with only
+      text, using the 'warning' theme. Ut voluptate ex Lorem irure voluptate in veniam excepteur consectetur ipsum ex nulla.
+    </div>
+    <forge-button variant="outlined" slot="button">Learn more...</forge-button>
+  </forge-banner>
+</div>

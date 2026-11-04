@@ -4,6 +4,7 @@ cdn/
 esm/
 sass/
 custom-elements.json
+design-tokens.json
 vscode.*.json
 coverage/
 .coverage/

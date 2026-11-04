@@ -505,6 +505,70 @@ describe('Menu', () => {
   });
 
   describe('events', () => {
+    describe('option onSelect callback', () => {
+      it('should call the selected option onSelect callback with the select event data', async () => {
+        const onSelectSpies = [vi.fn(), vi.fn(), vi.fn()];
+        const options: IMenuOption<number>[] = OPTIONS.map((o, i) => ({ ...o, onSelect: onSelectSpies[i] }));
+        const harness = await createFixture({ options });
+
+        await harness.selectOption(1);
+
+        expect(onSelectSpies[1]).toHaveBeenCalledOnce();
+        expect(onSelectSpies[1]).toHaveBeenCalledWith({ index: 1, value: 2 });
+        expect(onSelectSpies[0]).not.toHaveBeenCalled();
+        expect(onSelectSpies[2]).not.toHaveBeenCalled();
+      });
+
+      it('should call onSelect after dispatching the select event', async () => {
+        const calls: string[] = [];
+        const options: IMenuOption<number>[] = [{ label: 'Option 1', value: 1, onSelect: () => calls.push('onSelect') }];
+        const harness = await createFixture({ options });
+        harness.menuEl.addEventListener(MENU_CONSTANTS.events.SELECT, () => calls.push('event'));
+
+        await harness.selectOption(0);
+
+        expect(calls).toEqual(['event', 'onSelect']);
+      });
+
+      it('should not call onSelect when the select event is cancelled', async () => {
+        const onSelectSpy = vi.fn();
+        const options: IMenuOption<number>[] = [{ label: 'Option 1', value: 1, onSelect: onSelectSpy }];
+        const harness = await createFixture({ options });
+        harness.menuEl.addEventListener(MENU_CONSTANTS.events.SELECT, evt => evt.preventDefault());
+
+        await harness.selectOption(0);
+
+        expect(onSelectSpy).not.toHaveBeenCalled();
+      });
+
+      it('should call onSelect for an option selected in a child menu', async () => {
+        const harness = await createFixture();
+        const options = generateMenuOptions(3);
+        const childOptions = generateMenuOptions(2);
+        const parentOnSelectSpy = vi.fn();
+        const childOnSelectSpy = vi.fn();
+        options[1].onSelect = parentOnSelectSpy;
+        options[1].options = childOptions;
+        childOptions[1].onSelect = childOnSelectSpy;
+
+        harness.menuEl.options = options;
+        harness.menuEl.open = true;
+        await frame();
+
+        const childMenuComponent = getPopupListItem(1) as IMenuComponent;
+        const menuTrigger = childMenuComponent.querySelector('forge-list-item') as HTMLElement;
+        menuTrigger.dispatchEvent(new MouseEvent('mouseenter'));
+        await frame();
+
+        const childMenuListItems = getChildMenuListItems(getPopoverElement());
+        childMenuListItems[1].dispatchEvent(new MouseEvent('click'));
+
+        expect(childOnSelectSpy).toHaveBeenCalledOnce();
+        expect(childOnSelectSpy).toHaveBeenCalledWith({ index: 1, value: childOptions[1].value });
+        expect(parentOnSelectSpy).not.toHaveBeenCalled();
+      });
+    });
+
     describe('keyboard', () => {
       it('arrow down from the start should activate the first list element', async () => {
         const harness = await createFixture({ options: generateMenuOptions(7) });

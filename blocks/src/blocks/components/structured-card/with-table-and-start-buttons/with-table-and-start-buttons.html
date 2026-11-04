@@ -1,0 +1,21 @@
+<!--
+  @block Structured Card — With Table And Start Buttons
+  @type component
+  @description With Table And Start Buttons usage example for the forge-structured-card component.
+  @tags structured-card, with-table-and-start-buttons, storybook, component-example
+-->
+<forge-structured-card heading-level="2" body-spacing="none" class="w-[700px]">
+  <div slot="title">Asset Inventory</div>
+  <forge-icon-button aria-label="Refresh data" slot="after-header-actions">
+    <forge-icon name="refresh"></forge-icon>
+  </forge-icon-button>
+  <forge-icon-button aria-label="Download report" slot="after-header-actions">
+    <forge-icon name="download"></forge-icon>
+  </forge-icon-button>
+  <forge-table slot="body" id="asset-table"></forge-table>
+  <forge-stack slot="footer-start" inline alignment="center" wrap gap="8">
+    <forge-button variant="outlined">Update asset inventory</forge-button>
+    <forge-button variant="outlined">Asset inventory dataset</forge-button>
+  </forge-stack>
+  <forge-paginator slot="footer-primary-action" page-size="5" total="25" page-index="0"></forge-paginator>
+</forge-structured-card>

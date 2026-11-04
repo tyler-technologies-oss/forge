@@ -1,0 +1,46 @@
+<!--
+  @block Stack — Complex Form
+  @type component
+  @description Complex Form usage example for the forge-stack component.
+  @tags stack, complex-form, storybook, component-example
+-->
+<form>
+  <forge-stack>
+    <forge-stack>
+      <forge-stack>
+        <forge-text-field>
+          <label for="input-text-1" slot="label">Text field</label>
+          <input type="text" id="input-text-1">
+        </forge-text-field>
+        <forge-stack inline stretch>
+          <forge-text-field>
+            <label for="input-text-2" slot="label">Text field</label>
+            <input type="text" id="input-text-2">
+          </forge-text-field>
+          <forge-text-field>
+            <label for="input-text-3" slot="label">Text field</label>
+            <input type="text" id="input-text-3">
+          </forge-text-field>
+        </forge-stack>
+      </forge-stack>
+      <forge-stack inline stretch>
+        <forge-stack inline stretch>
+          <forge-text-field>
+            <input type="text" id="input-text-4">
+            <label for="input-text-4" slot="label">Text field</label>
+          </forge-text-field>
+          <forge-text-field>
+            <input type="text" id="input-text-5">
+            <label for="input-text-5" slot="label">Text field</label>
+          </forge-text-field>
+        </forge-stack>
+        <forge-stack inline stretch>
+          <forge-text-field>
+            <input type="text" id="input-text-6">
+            <label for="input-text-6" slot="label">Text field</label>
+          </forge-text-field>
+        </forge-stack>
+      </forge-stack>
+    </forge-stack>
+  </forge-stack>
+</form>

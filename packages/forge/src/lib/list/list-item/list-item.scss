@@ -1,7 +1,7 @@
 @use './core' as *;
 @use '../../focus-indicator';
 @use '../../state-layer';
-@use '../../core/styles/shape';
+@use '@tylertech/forge-tokens/sass/shape';
 
 //
 // Host

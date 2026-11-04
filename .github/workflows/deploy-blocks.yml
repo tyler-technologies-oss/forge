@@ -1,0 +1,84 @@
+name: Deploy Blocks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blocks/**'
+  workflow_dispatch:
+
+env:
+  CI: true
+  TURBO_TELEMETRY_DISABLED: 1
+  MANIFEST_URL: https://forge.tylerdev.io/blocks/v1/manifest.json
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      generated-at: ${{ steps.manifest.outputs.generated-at }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build blocks
+        run: pnpm turbo run build --filter=blocks
+        env:
+          BASE_HREF: /blocks/v1/
+
+      - name: Read manifest timestamp
+        id: manifest
+        run: echo "generated-at=$(jq -r .generatedAt blocks/dist/manifest.json)" >> "$GITHUB_OUTPUT"
+
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: blocks/dist
+          target-folder: docs/blocks/v1
+          clean: true
+
+  # The docs build fetches the blocks manifest and block HTML from the live site, so it must
+  # run after GitHub Pages has published this deploy, not just after the push to gh-pages.
+  rebuild-docs:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      actions: write
+
+    steps:
+      - name: Wait for the new manifest to be served
+        env:
+          EXPECTED: ${{ needs.deploy.outputs.generated-at }}
+        run: |
+          # Longer than the CDN's 10 minute max-age, so a stale cached copy can't outlast the wait
+          for attempt in $(seq 1 60); do
+            live=$(curl -fsS "$MANIFEST_URL" | jq -r .generatedAt || true)
+            if [ "$live" = "$EXPECTED" ]; then
+              echo "Manifest $EXPECTED is live"
+              exit 0
+            fi
+            echo "Attempt $attempt: live manifest is ${live:-unavailable}, waiting for $EXPECTED"
+            sleep 15
+          done
+          echo "::error::Blocks manifest $EXPECTED was not served within 15 minutes; docs were not rebuilt"
+          exit 1
+
+      # GITHUB_TOKEN can start workflow_dispatch runs, unlike most events it triggers
+      - name: Trigger docs deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: gh workflow run deploy-docs.yml --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"

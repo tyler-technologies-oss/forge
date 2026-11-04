@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../utils';
-@use '../../spacing';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 $tokens: (
   gap: utils.module-val(stack, gap, spacing.variable(medium)),

@@ -1,0 +1,120 @@
+<forge-card no-padding class="max-w-lg [--forge-card-height:auto]">
+  <forge-scaffold>
+    {{> card-header title="Atlassian MCP" titleIcon="verified" titleIconLabel="Verified" action1="more_vert" action1Label="More options" tab1="Overview" tab1Id="tabbed-card-overview" tab2="Resources" tab2Id="tabbed-card-resources" tab3="Tools" tab3Id="tabbed-card-tools" tab4="Prompts" tab4Id="tabbed-card-prompts"}}
+
+    <div slot="body">
+      <forge-tab-panel for="tabbed-card-overview">
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Description</span>
+                <span slot="value">Tyler Agency Intelligence MCP server providing user management, group management, and task administration tools for the Agency Intelligence platform.</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Version</span>
+                <span slot="value">26.0.0</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Forwarded Headers</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>x-correlation-id</forge-chip>
+                  <forge-chip dense>x-session-id</forge-chip>
+                  <forge-chip dense>x-user-email</forge-chip>
+                  <forge-chip dense>x-user-email-sig</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Authentication type</span>
+                <span slot="value" class="font-mono">API_KEY</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-tab-panel>
+      <forge-tab-panel for="tabbed-card-resources">
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Resources</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>jira://issues</forge-chip>
+                  <forge-chip dense>confluence://pages</forge-chip>
+                  <forge-chip dense>bitbucket://repos</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Resource Templates</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>jira://issues/{issueKey}</forge-chip>
+                  <forge-chip dense>confluence://pages/{pageId}</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Cache TTL</span>
+                <span slot="value" class="font-mono">300s</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-tab-panel>
+      <forge-tab-panel for="tabbed-card-tools">
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Tools</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>create_issue</forge-chip>
+                  <forge-chip dense>search_issues</forge-chip>
+                  <forge-chip dense>update_issue</forge-chip>
+                  <forge-chip dense>add_comment</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Rate Limit</span>
+                <span slot="value" class="font-mono">100 req/min</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Timeout</span>
+                <span slot="value" class="font-mono">30s</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-tab-panel>
+      <forge-tab-panel for="tabbed-card-prompts">
+        <div class="p-medium">
+          <forge-card class="tonal-card">
+            <div class="flex flex-col gap-medium">
+              <forge-label-value>
+                <span slot="label">Available Prompts</span>
+                <div slot="value" class="flex flex-wrap gap-xsmall">
+                  <forge-chip dense>summarize_issue</forge-chip>
+                  <forge-chip dense>draft_release_notes</forge-chip>
+                  <forge-chip dense>analyze_sprint</forge-chip>
+                </div>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Default Model</span>
+                <span slot="value" class="font-mono">claude-sonnet-4-20250514</span>
+              </forge-label-value>
+              <forge-label-value>
+                <span slot="label">Max Tokens</span>
+                <span slot="value" class="font-mono">4096</span>
+              </forge-label-value>
+            </div>
+          </forge-card>
+        </div>
+      </forge-tab-panel>
+    </div>
+
+    <forge-toolbar slot="footer" inverted>
+      <div slot="end" class="flex items-center gap-medium">
+        <forge-button variant="tonal">Cancel</forge-button>
+        <forge-button variant="filled">Save</forge-button>
+      </div>
+    </forge-toolbar>
+  </forge-scaffold>
+</forge-card>

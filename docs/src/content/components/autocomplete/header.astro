@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-autocomplete class="w-64">
+    <forge-text-field show-clear popover-icon>
+      <input type="text" id="state" autocomplete="off" role="combobox" aria-live="polite" aria-atomic="true" aria-haspopup="true" aria-expanded="false" aria-autocomplete="list" aria-controls="forge-aria-controls-placeholder" value="Alabama" />
+      <label for="state" aria-label="Choose state" slot="label">Choose state</label>
+    </forge-text-field>
+  </forge-autocomplete>
+</ComponentHeader>

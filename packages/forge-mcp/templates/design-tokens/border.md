@@ -1,0 +1,9 @@
+# Border Design Tokens
+
+Border tokens width of borders and outlines used throughout the design system.
+
+| Token                   | Value |
+| ----------------------- | ----- |
+| `--forge-border-thin`   | `1px` |
+| `--forge-border-medium` | `2px` |
+| `--forge-border-thick`  | `4px` |

@@ -1,0 +1,62 @@
+<!--
+  @block Structured Card — Multiple Cards
+  @type component
+  @description Multiple Cards usage example for the forge-structured-card component.
+  @tags structured-card, multiple-cards, storybook, component-example
+-->
+<div class="flex flex-wrap gap-large">
+  <forge-structured-card heading-level="2" class="grow basis-[300px] max-w-[400px]">
+    <div slot="title" class="flex items-center gap-medium">
+      <forge-icon name="person"></forge-icon>
+      <span>User Profile</span>
+    </div>
+    <forge-badge theme="success" slot="header-actions">
+      <forge-icon name="check_circle" slot="start"></forge-icon>
+      <span>Active</span>
+    </forge-badge>
+    <div slot="body" class="flex flex-col gap-small">
+      <div class="bg-surface-dim rounded-sm h-[48px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[24px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[24px] w-[60%]"></div>
+    </div>
+    <forge-button variant="text" slot="footer-secondary-action">Cancel</forge-button>
+    <forge-button variant="tonal" slot="footer-primary-action">Save</forge-button>
+  </forge-structured-card>
+
+  <forge-structured-card heading-level="2" class="grow basis-[300px] max-w-[400px]">
+    <div slot="title" class="flex items-center gap-medium">
+      <forge-icon name="settings"></forge-icon>
+      <span>Preferences</span>
+    </div>
+    <forge-badge theme="warning" slot="header-actions">
+      <forge-icon name="construction" slot="start"></forge-icon>
+      <span>Modified</span>
+    </forge-badge>
+    <div slot="body" class="flex flex-col gap-small">
+      <div class="bg-surface-dim rounded-sm h-[24px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[24px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[48px]"></div>
+    </div>
+    <forge-button variant="text" slot="footer-secondary-action">Reset</forge-button>
+    <forge-button variant="tonal" slot="footer-primary-action">Apply</forge-button>
+  </forge-structured-card>
+
+  <forge-structured-card heading-level="2" class="grow basis-[300px] max-w-[400px]">
+    <div slot="title" class="flex items-center gap-medium">
+      <forge-icon name="edit"></forge-icon>
+      <span>Notes</span>
+    </div>
+    <forge-badge theme="info-secondary" slot="header-actions">
+      <forge-icon name="description" slot="start"></forge-icon>
+      <span>Draft</span>
+    </forge-badge>
+    <div slot="body" class="flex flex-col gap-small">
+      <div class="bg-surface-dim rounded-sm h-[24px] w-[60%]"></div>
+      <div class="bg-surface-dim rounded-sm h-[48px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[24px]"></div>
+      <div class="bg-surface-dim rounded-sm h-[24px] w-[60%]"></div>
+    </div>
+    <forge-button variant="text" slot="footer-secondary-action">Discard</forge-button>
+    <forge-button variant="tonal" slot="footer-primary-action">Save</forge-button>
+  </forge-structured-card>
+</div>

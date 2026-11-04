@@ -1,0 +1,23 @@
+## Trigger and item selection
+
+- The trigger element that opens and closes the menu should be reachable and activatable by keyboard, with a visible focus cue.
+- Pressing Space or Enter while the trigger is focused should open the menu the same way a click would.
+- Once open, each menu item should be selectable using the up and down arrow keys.
+
+## Keyboard shortcuts
+
+| Menu open           | Action                                         |
+| ------------------- | ---------------------------------------------- |
+| Space / Escape      | Closes the menu.                               |
+| Enter / Right arrow | Opens or closes the focused item's child menu. |
+| Left arrow          | Closes the menu (cascade mode only).           |
+
+| Menu closed | Action                                            |
+| ----------- | ------------------------------------------------- |
+| Space       | Opens the menu.                                   |
+| Enter       | Opens the menu and its focused item's child menu. |
+| Down arrow  | Opens the menu and focuses the first item.        |
+
+## Interactive elements in a menu option
+
+Placing an interactive element inside a menu option needs the same `forge-ignore` handling described in <a href={`${import.meta.env.BASE_URL}developing/accessibility/#nested-interactive-elements`}>nested interactive elements</a>.

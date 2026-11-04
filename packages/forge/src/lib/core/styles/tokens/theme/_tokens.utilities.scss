@@ -1,19 +1,13 @@
 @use 'sass:map';
-@use '../color-palette/radix-color-palette' as color-palette;
-@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
 
-// Light
-$tokens: (
-  outline-low: color-palette.$slate-a6,
-  outline: color-palette.$slate-a8,
-  outline-medium: color-palette.$slate-a10,
-  outline-high: color-palette.$slate-a12
-);
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.utilities" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
 
-// Dark
-$tokens-dark: (
-  outline-low: color-palette-dark.$slate-a6,
-  outline: color-palette-dark.$slate-a8,
-  outline-medium: color-palette-dark.$slate-a10,
-  outline-high: color-palette-dark.$slate-a12
-);
+$_keys: (outline-high, outline-medium, outline-low, outline);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

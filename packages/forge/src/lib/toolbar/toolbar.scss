@@ -48,10 +48,8 @@
 // Inverted
 //
 
-:host([inverted]) {
-  .forge-toolbar {
-    @include inverted;
-  }
+.inverted {
+  @include inverted;
 }
 
 //

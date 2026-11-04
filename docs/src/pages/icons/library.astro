@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContentHeader from "../../components/ContentHeader.astro";
+import PageScaffold from "../../components/PageScaffold.astro";
+import IconLibrary from "../../components/IconLibrary.svelte";
+
+const title = "Icon Library";
+const description = "Browse and search all icons in the Tyler Forge icon set.";
+---
+
+<BaseLayout title={title} description={description} wide>
+  <PageScaffold class="content-page">
+    <ContentHeader slot="header" title={title} description={description} />
+    <IconLibrary client:load />
+  </PageScaffold>
+</BaseLayout>

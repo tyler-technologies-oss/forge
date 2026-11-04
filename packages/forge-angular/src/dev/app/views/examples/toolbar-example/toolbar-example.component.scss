@@ -1,0 +1,46 @@
+:host {
+  --forge-card-padding: 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap: 16px;
+  max-width: 1024px;
+
+  .chart-placeholder {
+    justify-self: center;
+  }
+
+  forge-card {
+    margin-bottom: 0;
+  }
+}
+
+.padding-16 {
+  padding: 16px;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+.span-full {
+  grid-column: 1 / -1;
+}
+
+.feedback-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 16px;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.toolbar--no-footer {
+  --forge-toolbar-border-bottom: none;
+}

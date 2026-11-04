@@ -1,60 +1,20 @@
-@use '../../utils';
-@use './type-utils';
-@use './weight';
-@use './scale';
-@use './tokens.core' as core;
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/typography/tokens' as typography;
 
-$label1: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(label, font-size, '0750'),
-    line-height: type-utils.font-size-relative(label, line-height, '1250'),
-    letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
-  )
-) !default;
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.label" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography/tokens" from @tylertech/forge-tokens instead.';
 
-$label2: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(label, font-size, '0813'),
-    line-height: type-utils.font-size-relative(label, line-height, '1250'),
-    letter-spacing: type-utils.calc-letter-spacing(0.125, scale.value('0813'))
-  )
-) !default;
-
-$label3: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(label, font-size, '0875'),
-    line-height: type-utils.font-size-relative(label, line-height, '1250'),
-    letter-spacing: type-utils.calc-letter-spacing(0.125, scale.value('0875'))
-  )
-) !default;
-
-$button: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(button, font-size, '0875'),
-    font-weight: weight.value(medium),
-    letter-spacing: type-utils.calc-letter-spacing(1, scale.value('0875'))
-  )
-) !default;
-
-$overline: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(overline, font-size, '0750'),
-    font-weight: weight.value(medium),
-    line-height: type-utils.font-size-relative(overline, line-height, '2000'),
-    letter-spacing: type-utils.calc-letter-spacing(2, scale.value('0750')),
-    text-transform: uppercase
-  )
-) !default;
+$label1: map.get(typography.$tokens, label1) !default;
+$label2: map.get(typography.$tokens, label2) !default;
+$label3: map.get(typography.$tokens, label3) !default;
+$button: map.get(typography.$tokens, button) !default;
+$overline: map.get(typography.$tokens, overline) !default;
+$kbd: map.get(typography.$tokens, kbd) !default;
 
 $tokens: (
   label1: $label1,
   label2: $label2,
   label3: $label3,
   button: $button,
-  overline: $overline
+  overline: $overline,
+  kbd: $kbd
 ) !default;

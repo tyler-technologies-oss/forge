@@ -1,0 +1,16 @@
+<app-demo-card headerText="Slider">
+  <h4>Continuous: {{ continuous | number: '1.2-2' }}</h4>
+  <forge-slider [value]="continuous" [(ngModel)]="continuous" />
+
+  <h4>Disabled</h4>
+  <forge-slider [value]="33" disabled />
+
+  <h4>Discrete: {{ discrete | number: '1.2-2' }}</h4>
+  <forge-slider [value]="discrete" [(ngModel)]="discrete" />
+
+  <h4>w/Tick Marks: {{ discreteMarkers | number: '1.2-2' }}</h4>
+  <forge-slider tickmarks [value]="discreteMarkers" [(ngModel)]="discreteMarkers" step="10" />
+
+  <h4>Range: {{ rangeValue | json }}</h4>
+  <forge-slider range tickmarks [(ngModel)]="rangeValue" step="5" />
+</app-demo-card>

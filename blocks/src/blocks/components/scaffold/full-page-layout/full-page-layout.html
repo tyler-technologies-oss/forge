@@ -1,0 +1,16 @@
+<!--
+  @block Scaffold — Full Page Layout
+  @type component
+  @description Full Page Layout usage example for the forge-scaffold component.
+  @tags scaffold, full-page-layout, storybook, component-example
+-->
+<forge-scaffold class="h-72">
+  <forge-app-bar slot="header" title-text="App" elevation="raised"></forge-app-bar>
+  <forge-drawer slot="body-left" open>
+    <forge-list navlist>
+      <forge-list-item selected>Overview</forge-list-item>
+      <forge-list-item>Settings</forge-list-item>
+    </forge-list>
+  </forge-drawer>
+  <main slot="body" class="p-medium">Page content</main>
+</forge-scaffold>
