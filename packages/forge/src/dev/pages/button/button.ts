@@ -1,6 +1,6 @@
 import '$src/shared';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import type { IButtonComponent } from '@tylertech/forge/button';
+import type { ButtonComponent } from '@tylertech/forge/button';
 import type { IDeprecatedButtonComponent } from '@tylertech/forge/deprecated/button';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import { IconRegistry } from '@tylertech/forge/icon';
@@ -50,7 +50,7 @@ showDialogBtn.addEventListener('click', () => {
 });
 
 const allDeprecatedButtons = Array.from(document.querySelectorAll<IDeprecatedButtonComponent>('.content forge-deprecated-button'));
-const allButtons = Array.from(document.querySelectorAll<IButtonComponent>('.content forge-button'));
+const allButtons = Array.from(document.querySelectorAll<ButtonComponent>('.content forge-button'));
 allButtons.forEach(btn => btn.addEventListener('click', evt => console.log('click', evt)));
 
 const disabledToggle = document.querySelector('#opt-disabled') as ISwitchComponent;

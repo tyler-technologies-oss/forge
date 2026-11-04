@@ -65,6 +65,16 @@ export const Demo: Story = {
   decorators: [storyStyles(styles)]
 };
 
+export const GapSizes: Story = {
+  decorators: [storyStyles(styles)],
+  argTypes: {
+    gap: { control: 'select', options: ['xxxs', 'xxs', 'xs', 's', 'm', 'ml', 'l', 'xl', 'xxl', 'xxxl'] }
+  },
+  args: {
+    gap: 'm'
+  }
+};
+
 export const SimpleVerticalForm: Story = {
   render: args => {
     const cssVarArgs = getCssVariableArgs(args);

@@ -502,4 +502,89 @@ describe('Icon', () => {
       expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
     });
   });
+
+  describe('synchronous rendering', () => {
+    it('should render icon without setTimeout delay when icon is already cached with node', async () => {
+      const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
+      const firstIcon = screen.container.querySelector('forge-icon') as IconComponent;
+      await waitForIconRender(firstIcon);
+
+      // Ensure the icon is cached with a node
+      const entry = IconRegistry.get(ICON_NAME);
+      expect(entry?.node).toBeTruthy();
+
+      // Spy on setTimeout to verify it's not called
+      const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
+
+      // Create a second icon with the same name - should not use setTimeout
+      const screen2 = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
+      const secondIcon = screen2.container.querySelector('forge-icon') as IconComponent;
+      await secondIcon.updateComplete;
+
+      // Verify setTimeout was not called for queuing the icon update
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+
+      // Icon should be available after microtasks resolve
+      await frame();
+      expect(secondIcon.shadowRoot?.querySelector('svg')).toBeTruthy();
+
+      setTimeoutSpy.mockRestore();
+    });
+
+    it('should render icon without setTimeout delay when src is provided', async () => {
+      const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
+
+      const screen = render(html`<forge-icon src=${tylIconFace.data}></forge-icon>`);
+      const el = screen.container.querySelector('forge-icon') as IconComponent;
+      await el.updateComplete;
+
+      // Verify setTimeout was not called for queuing the icon update
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+
+      // Icon should be available after microtasks resolve
+      await frame();
+      expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
+
+      setTimeoutSpy.mockRestore();
+    });
+
+    it('should render icon without setTimeout delay when setting src dynamically', async () => {
+      const screen = render(html`<forge-icon></forge-icon>`);
+      const el = screen.container.querySelector('forge-icon') as IconComponent;
+
+      const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
+
+      el.src = tylIconFace.data;
+      await el.updateComplete;
+
+      // Verify setTimeout was not called for queuing the icon update
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+
+      // Icon should be available after microtasks resolve
+      await frame();
+      expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
+
+      setTimeoutSpy.mockRestore();
+    });
+
+    it('should clear content without setTimeout delay when name is removed', async () => {
+      const screen = render(html`<forge-icon name=${ICON_NAME}></forge-icon>`);
+      const el = screen.container.querySelector('forge-icon') as IconComponent;
+      await waitForIconRender(el);
+
+      const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
+
+      el.name = '';
+      await el.updateComplete;
+
+      // Verify setTimeout was not called for queuing the icon update
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+
+      // Content should be cleared after microtasks resolve
+      await frame();
+      expect(el.shadowRoot?.childElementCount).toBe(0);
+
+      setTimeoutSpy.mockRestore();
+    });
+  });
 });

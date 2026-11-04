@@ -1,0 +1,7 @@
+<app-demo-card headerText="Multi Select Header">
+  <forge-multi-select-header [text]="selectedText" (forge-multi-select-header-select-all)="selectedAll = true">
+    <span slot="select-all-button-text">Select all</span>
+    <forge-button slot="actions" variant="outlined">Delete</forge-button>
+    <forge-button slot="actions" variant="outlined">Archive</forge-button>
+  </forge-multi-select-header>
+</app-demo-card>

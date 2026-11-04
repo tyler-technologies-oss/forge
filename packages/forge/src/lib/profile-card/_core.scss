@@ -1,7 +1,7 @@
 @use './token-utils' as *;
-@use '../core/styles/typography';
-@use '../core/styles/theme';
-@use '../core/styles/spacing';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
 @use '../utils/mixins-media';
 
 @forward './token-utils';

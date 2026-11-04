@@ -1,6 +1,6 @@
-import { type IIconButtonComponent } from '../../icon-button/icon-button.js';
+import { IconButtonComponent } from '../../icon-button/icon-button.js';
 
-export function createToggleElement(iconName: string): IIconButtonComponent {
+export function createToggleElement(iconName: string): IconButtonComponent {
   const iconButtonElement = document.createElement('forge-icon-button');
   iconButtonElement.type = 'button';
   iconButtonElement.tabIndex = -1;

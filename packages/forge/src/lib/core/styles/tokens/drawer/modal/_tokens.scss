@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../theme';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(modal-drawer, background, theme.variable(surface-elevated))

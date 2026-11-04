@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-96">
+    <forge-inline-message theme="success">Your changes have been saved.</forge-inline-message>
+  </div>
+</ComponentHeader>

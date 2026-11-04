@@ -1,5 +1,5 @@
 @use '../../core/styles/tokens/app-bar/app-bar/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: app-bar;
 $_tokens: tokens.$tokens;

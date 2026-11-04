@@ -1,4 +1,8 @@
 export const ARIA_CONTROLS_PLACEHOLDER_ID = 'forge-aria-controls-placeholder';
+
+/** A semantic heading level, corresponding to `<h1>` through `<h6>`. */
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
 /**
  * Highlights text in the given label by converting it to HTML and using a `<span>` tag to show the highlighted text within the original label.
  * @param label The full text.

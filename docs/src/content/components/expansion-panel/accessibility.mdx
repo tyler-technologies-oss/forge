@@ -1,0 +1,24 @@
+## Trigger markup
+
+Use a real `<button>` as the interactive element that toggles the panel, and give it a clear label. Don't place complex or interactive content inside that button — if the header needs more than the toggle itself, put a plain button in the header alongside that content instead of wrapping it all in one.
+
+Make sure the trigger stays keyboard-focusable and can be activated from the keyboard, not just by pointer.
+
+## ARIA wiring
+
+- Set `aria-expanded` on the trigger button to reflect the panel's open state, and update it when the panel opens or closes.
+- Set `aria-controls` on the trigger button to reference the id of the expandable content.
+- Give the expandable content itself `role="group"` (or another non-generic role).
+
+Associating a button via the `trigger` attribute manages `aria-expanded` and `aria-controls` for you automatically:
+
+```html
+<forge-expansion-panel trigger="button-id">
+  <button slot="header" id="button-id">Toggle panel</button>
+  <div id="expandable-content" role="group">Expandable content</div>
+</forge-expansion-panel>
+```
+
+## Interactive elements in the header
+
+Placing another interactive element (like an icon button) in the header slot alongside the trigger needs the same `forge-ignore` handling described in <a href={`${import.meta.env.BASE_URL}developing/accessibility/#nested-interactive-elements`}>nested interactive elements</a> — otherwise clicking it will also toggle the panel.

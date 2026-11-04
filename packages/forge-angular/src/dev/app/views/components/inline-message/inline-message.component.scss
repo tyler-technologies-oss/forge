@@ -1,0 +1,11 @@
+forge-inline-message.custom-properties {
+  --forge-inline-message-color: lime;
+  --forge-inline-message-background: violet;
+  --forge-inline-message-icon-color: yellow;
+}
+
+.demo-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--forge-spacing-small);
+}

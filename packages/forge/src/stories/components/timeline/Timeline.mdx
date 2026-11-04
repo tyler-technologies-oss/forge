@@ -1,0 +1,93 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import { UsageLink } from '../../blocks/Shared';
+import * as TimelineStories from './Timeline.stories';
+
+<Meta of={TimelineStories} />
+
+<Title />
+
+Timelines display a list of events in chronological order, showing the sequence and relationship
+between events over time.
+
+<Canvas of={TimelineStories.Demo} />
+
+## Timeline Items
+
+Timeline items represent individual events or milestones in the timeline. Each item consists of a
+marker and content area. By default, items are connected by a vertical line that runs through their
+markers.
+
+### Markers
+
+Timeline items display a default circular marker when no custom marker is provided. The marker can
+be customized by providing content in the `marker` slot, such as icons or badges.
+
+<Canvas of={TimelineStories.WithIcons} />
+
+### Details
+
+Use the detail slot of a timeline item to provide additional information or context for the event.
+Consider using card component to visually group and separate detail content from the item's summary.
+
+<Canvas of={TimelineStories.WithDetail} />
+
+## Timeline Break
+
+Use the `<forge-timeline-break>` component to provide visual separation between non-sequential
+groups of timeline items.
+
+<Canvas of={TimelineStories.WithBreak} />
+
+## Sidebar Options
+
+By default side bar lines are drawn above and below a timeline item's marker unless the item is the
+first or last element in the timeline, in which case either the top or bottom line is omitted. Use
+the `sidebar` property to manually set which lines are drawn for an item. This can be used to imply
+the presence of items before or after what's rendered by continuing lines past the first or last
+marker.
+
+Possible values are `auto`, `start`, `end`, and `none`. The default value is `auto`.
+
+<Canvas of={TimelineStories.SidebarOptions} />
+
+## Theming
+
+Set the theme of a timeline item to control the color of the marker.
+
+<Canvas of={TimelineStories.Themed} />
+
+## Timestamps
+
+The `<forge-timestamp>` component can be used to display a timestamp in a timeline. Timestamps
+placed as a direct child of a timeline display as a heading alongside the timeline items. Placing a
+timestamp within a timeline item renders it as body text.
+
+<UsageLink text="the timestamp component" href="?path=/docs/components-timestamp--docs" />
+
+<Canvas of={TimelineStories.WithTimestamps} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+Timelines are rendered as semantic lists with `role="list"` on the timeline and `role="listitem"`
+on each timeline item.
+
+### Best Practices
+
+- Include time information when the timing of events is important
+- Ensure marker colors meet WCAG contrast requirements against the background
+- When using icons as markers, they should be decorative since the content should provide the
+  necessary context
+- Timeline breaks are marked with `aria-hidden="true"` as they are purely decorative
+
+### Content Structure
+
+Timeline items should include enough context to be understood independently. Consider including:
+
+- A brief title or summary of the event
+- Any relevant details or description
+- Visual indicators (badges, themes) to communicate status or category

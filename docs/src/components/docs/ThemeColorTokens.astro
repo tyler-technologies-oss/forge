@@ -1,0 +1,93 @@
+---
+/**
+ * ThemeColorTokens - Renders a section per theme color category from design-tokens.json.
+ *
+ * Sections follow the order in `themeColorSections`; theme categories missing from that list
+ * render after them. Every table uses the same fixed columns so they line up down the page.
+ * Each `--forge-theme-on-*` token is paired with its base token's row, and the preview shows
+ * "Aa" in the on-color on top of the base color swatch. Swatches resolve
+ * `var(<token>)` live so they follow the active theme.
+ */
+import { getTokenCategories, type DesignToken } from "../../data/design-tokens";
+import { themeColorSections } from "../../data/theme-color-sections";
+
+const THEME_TOKEN_PREFIX = "--forge-theme-";
+const ON_TOKEN_PREFIX = `${THEME_TOKEN_PREFIX}on-`;
+
+interface ThemeColorRow {
+  token: DesignToken;
+  onToken?: DesignToken;
+}
+
+const toRows = (tokens: DesignToken[]): ThemeColorRow[] => {
+  const onTokens = new Map(
+    tokens
+      .filter((t) => t.name.startsWith(ON_TOKEN_PREFIX))
+      .map((t) => [t.name.replace(ON_TOKEN_PREFIX, THEME_TOKEN_PREFIX), t]),
+  );
+  const baseTokens = tokens.filter((t) => !t.name.startsWith(ON_TOKEN_PREFIX));
+  const unpaired = [...onTokens.entries()]
+    .filter(([baseName]) => !baseTokens.some((t) => t.name === baseName))
+    .map(([, token]) => token);
+
+  return [...baseTokens.map((token) => ({ token, onToken: onTokens.get(token.name) })), ...unpaired.map((token) => ({ token }))];
+};
+
+const order = themeColorSections.map(({ category }) => category);
+const rank = (name: string) => (order.includes(name) ? order.indexOf(name) : order.length);
+const sections = getTokenCategories()
+  .filter(({ tokens }) => tokens.some((t) => t.values))
+  .sort((a, b) => rank(a.name) - rank(b.name))
+  .map(({ name, tokens }) => {
+    const rows = toRows(tokens);
+    return {
+      name,
+      title: `${name[0].toUpperCase()}${name.slice(1)}`,
+      description: themeColorSections.find(({ category }) => category === name)?.description,
+      rows,
+    };
+  });
+---
+
+{
+  sections.map(({ name, title, description, rows }) => (
+    <>
+      <h2 id={name}>{title}</h2>
+      {description && <p>{description}</p>}
+      {/* TODO: Add a Description column once token descriptions are added to the design token manifest. */}
+      <table class="forge-data-table table-fixed w-full">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>On color</th>
+            <th class="w-32">Preview</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ token, onToken }) => (
+            <tr>
+              <td>
+                <code>{token.name}</code>
+              </td>
+              <td>{onToken && <code>{onToken.name}</code>}</td>
+              <td>
+                {token.name.endsWith("-shadow") ? (
+                  <div class="w-8 h-8 rounded-md bg-surface-bright" style={`box-shadow: var(${token.name})`} />
+                ) : (
+                  <div
+                    class="w-8 h-8 rounded-md flex items-center justify-center text-heading3"
+                    style={[`background-color: var(${token.name})`, onToken && `color: var(${onToken.name})`]
+                      .filter(Boolean)
+                      .join("; ")}
+                  >
+                    {onToken && "Aa"}
+                  </div>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  ))
+}

@@ -250,7 +250,11 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
   @coreProperty()
   declare public optionBuilder: AutocompleteOptionBuilder | null | undefined;
 
-  /** Sets the filter callback that will be executed when fetching options for the autocomplete dropdown. */
+  /**
+   * Sets the filter callback that will be executed when fetching options for the autocomplete dropdown.
+   *
+   * The callback is also invoked to resolve the display label for an already-selected value (e.g. on initialization, or via `forceFilter()`) by calling it with an empty `filterText` and the current `value` as its second argument. Implementations must handle this case by returning the matching option(s) for `value`, or the selected text will fail to resolve and appear blank.
+   */
   @coreProperty()
   declare public filter: AutocompleteFilterCallback | null | undefined;
 
@@ -319,6 +323,8 @@ export class AutocompleteComponent extends ListDropdownAware implements IAutocom
 
   /**
    * Forces the filter callback to be executed to update the current selection state with new options.
+   *
+   * This invokes the `filter` callback with the current `value` (and an empty filter text) so it can resolve and return the matching option(s), allowing the selected text to be updated to their label.
    */
   public forceFilter(opts: IAutocompleteForceFilterOptions = { preserveValue: false }): void {
     this._core.forceFilter(opts);

@@ -1,0 +1,16 @@
+<!--
+  @block Dialog — Confirmation Dialog
+  @type component
+  @description Usage example for the forge-confirmation-dialog component, a standalone pre-built modal for brief confirm/cancel decisions. It is not a forge-dialog: it renders its own title, message, and action buttons from the title, message, secondary-button-text, and primary-button-text slots, so no forge-scaffold or toolbars are needed. It requires its own side-effect import from the forge/confirmation-dialog subpath.
+  @tags dialog, confirmation-dialog, forge-confirmation-dialog, confirm, alert, destructive-action, storybook, component-example
+  @screenshot-click #open-confirmation-dialog-demo
+-->
+<div>
+  <forge-button id="open-confirmation-dialog-demo" variant="raised">Delete record</forge-button>
+  <forge-confirmation-dialog id="confirmation-dialog-demo" label="Delete record?">
+    <span slot="title">Delete record?</span>
+    <span slot="message">This action can't be undone.</span>
+    <span slot="secondary-button-text">Cancel</span>
+    <span slot="primary-button-text">Delete</span>
+  </forge-confirmation-dialog>
+</div>

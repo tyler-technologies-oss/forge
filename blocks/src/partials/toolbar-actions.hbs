@@ -1,0 +1,8 @@
+<forge-toolbar>
+  <h2 slot="start" class="text-heading3">{{#if title}}{{title}}{{else}}Title{{/if}}</h2>
+  <div slot="end" class="flex gap-small">
+    <forge-button>{{#if textButton}}{{textButton}}{{else}}Cancel{{/if}}</forge-button>
+    <forge-button variant="tonal">{{#if tonalButton}}{{tonalButton}}{{else}}Save Draft{{/if}}</forge-button>
+    <forge-button variant="raised">{{#if primaryButton}}{{primaryButton}}{{else}}Submit{{/if}}</forge-button>
+  </div>
+</forge-toolbar>

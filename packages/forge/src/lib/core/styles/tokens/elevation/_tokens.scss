@@ -1,16 +1,8 @@
 @use 'sass:map';
 
-/// Layering values to define z-index ranges for common groups of UI elements
-/// to ensure floating elements overlay correctly.
-$z-index-tokens: (
-  surface: 1,
-  header: 4,
-  backdrop: 7,
-  dialog: 8,
-  notification: 9,
-  popup: 10,
-  tooltip: 11
-) !default;
+@forward '@tylertech/forge-tokens/sass/tokens/z-index' as z-index-*;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/elevation/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/elevation" from @tylertech/forge-tokens instead.';
 
 $baseline-color: black !default;
 $umbra-color: rgba($baseline-color, 0.2) !default;

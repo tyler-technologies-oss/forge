@@ -1,0 +1,41 @@
+{
+  "color": {
+    "emphasis": {
+      "$type": "number",
+      "$description": "Opacity levels applied to content colors to convey visual emphasis.",
+      "highest": {
+        "$value": 0.87
+      },
+      "inverse": {
+        "$value": 0.8
+      },
+      "higher": {
+        "$value": 0.7
+      },
+      "high": {
+        "$value": 0.65
+      },
+      "medium-high": {
+        "$value": 0.6
+      },
+      "medium": {
+        "$value": 0.54
+      },
+      "medium-low": {
+        "$value": 0.38
+      },
+      "low": {
+        "$value": 0.24
+      },
+      "lower": {
+        "$value": 0.12
+      },
+      "lowest": {
+        "$value": 0.08
+      },
+      "minimum": {
+        "$value": 0.04
+      }
+    }
+  }
+}

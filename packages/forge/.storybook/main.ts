@@ -3,7 +3,6 @@ import { dirname } from 'node:path';
 import type { StorybookConfig } from '@storybook/web-components-vite';
 import remarkGfm from 'remark-gfm';
 import tailwindcss from '@tailwindcss/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import ViteInlineForgeHtml from '../plugins/vite/vite-inline-forge-html.ts';
 import ViteTransformForgeInlineStyleImports from '../plugins/vite/vite-inline-forge-style-import.ts';
 
@@ -38,7 +37,31 @@ const config: StorybookConfig = {
   async viteFinal(configuration) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(configuration, {
-      plugins: [tailwindcss(), tsconfigPaths(), ViteInlineForgeHtml, ViteTransformForgeInlineStyleImports]
+      plugins: [tailwindcss(), ViteInlineForgeHtml, ViteTransformForgeInlineStyleImports],
+      css: {
+        // Lightning CSS (Vite 8's default CSS minifier) errors on a few invalid selectors in our SCSS, which browsers
+        // already discard, such as `::slotted(...)::-moz-focus-inner` and `::before::after`.
+        lightningcss: { errorRecovery: true }
+      },
+      resolve: {
+        tsconfigPaths: true,
+        alias: [
+          // The rich text editor ships as its own package. forge cannot take a dependency on it -
+          // that package depends on forge, and turbo rejects the resulting cycle - so its stories
+          // resolve through an alias instead. They point at the built `esm/` output rather than
+          // source so rollup has already inlined the component SCSS, which otherwise needs the
+          // custom `@tylertech/forge/sass/*` importer that package's own vitest config provides.
+          // The `storybook` turbo tasks depend on that package's build for this reason.
+          {
+            find: '@tylertech/forge-rich-text-editor/features',
+            replacement: fileURLToPath(new URL('../../forge-rich-text-editor/esm/features/index.js', import.meta.url))
+          },
+          {
+            find: '@tylertech/forge-rich-text-editor',
+            replacement: fileURLToPath(new URL('../../forge-rich-text-editor/esm/index.js', import.meta.url))
+          }
+        ]
+      }
     });
   }
 };

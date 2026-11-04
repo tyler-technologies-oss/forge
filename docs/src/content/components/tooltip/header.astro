@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-button variant="outlined">Hover me</forge-button>
+</ComponentHeader>

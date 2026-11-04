@@ -1,0 +1,31 @@
+<!--
+  @block Count Card — Multiple Cards
+  @type component
+  @description Multiple Cards usage example for the forge-count-card component.
+  @tags count-card, multiple-cards, storybook, component-example
+-->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-medium">
+  <forge-count-card>
+    <forge-icon slot="icon" name="attach_money"></forge-icon>
+    <span slot="label">Revenue</span>
+    <span slot="count">$12,450.00</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="people"></forge-icon>
+    <span slot="label">Total Users</span>
+    <span slot="count">1,234</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="shopping_cart"></forge-icon>
+    <span slot="label">Orders</span>
+    <span slot="count">567</span>
+  </forge-count-card>
+
+  <forge-count-card>
+    <forge-icon slot="icon" name="trending_up"></forge-icon>
+    <span slot="label">Growth</span>
+    <span slot="count">+23.5%</span>
+  </forge-count-card>
+</div>

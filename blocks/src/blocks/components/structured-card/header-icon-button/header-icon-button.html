@@ -1,0 +1,33 @@
+<!--
+  @block Structured Card — Header Icon Button
+  @type component
+  @description Header Icon Button usage example for the forge-structured-card component.
+  @tags structured-card, header-icon-button, storybook, component-example
+-->
+<div class="w-[600px]">
+  <forge-structured-card heading-level="2">
+    <div slot="title">Project Details</div>
+    <forge-menu slot="after-header-actions" id="structured-card-menu">
+      <forge-icon-button aria-label="More actions">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+
+    <div slot="body">
+      <p class="m-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+        when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
+        into electronic typesetting, remaining essentially unchanged.
+      </p>
+    </div>
+
+    <forge-button variant="text" slot="footer-secondary-action">
+      <forge-icon slot="start" name="delete"></forge-icon>
+      Cancel
+    </forge-button>
+    <forge-button variant="filled" slot="footer-primary-action">
+      <forge-icon slot="start" name="save"></forge-icon>
+      Save
+    </forge-button>
+  </forge-structured-card>
+</div>

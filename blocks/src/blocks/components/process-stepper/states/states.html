@@ -1,0 +1,19 @@
+<!--
+  @block Process Stepper — States
+  @type component
+  @description Process stepper showing every step state, with support text on the not-started and critical steps.
+  @tags process-stepper, states, storybook, component-example
+-->
+<forge-process-stepper>
+  <forge-process-step state="current">Current</forge-process-step>
+  <forge-process-step state="completed">Completed</forge-process-step>
+  <forge-process-step state="in-progress">In progress</forge-process-step>
+  <forge-process-step state="not-started">
+    Not started
+    <span slot="support-text">Optional</span>
+  </forge-process-step>
+  <forge-process-step state="critical">
+    Critical
+    <span slot="support-text">Error</span>
+  </forge-process-step>
+</forge-process-stepper>

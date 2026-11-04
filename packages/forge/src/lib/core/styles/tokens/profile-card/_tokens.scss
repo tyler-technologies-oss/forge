@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../shape';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   min-width: utils.module-val(profile-card, min-width, 360px),

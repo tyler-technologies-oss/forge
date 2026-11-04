@@ -19,6 +19,7 @@ const classes = {
   TABLE_HEAD_CELL: 'forge-table-head__cell',
   TABLE_HEAD_CELL_CONTAINER: 'forge-table-head__cell-container',
   TABLE_HEAD_CELL_SORTABLE: 'forge-table-head__cell--sortable',
+  TABLE_HEAD_CELL_SORT_BUTTON: 'forge-table-head__cell-sort-button',
   TABLE_HEAD_CELL_SORT_ICON: 'forge-table-head__cell-sort-icon',
   TABLE_HEAD_CELL_TEXT: 'forge-table-head__cell-text',
   TABLE_HEAD_CELL_SORT_ICON_ACTIVE: 'forge-table-head__cell-sort-icon--active',
@@ -85,7 +86,9 @@ const attributes = {
   CHECKBOX_TYPE: 'forge-checkbox-type',
   CUSTOM_CELL_TEMPLATE: 'data-cell-template',
   CUSTOM_CELL_TEMPLATE_STOP_PROPAGATION: 'data-cell-template-stop-propagation',
-  SELECT_CHECKBOX: 'forge-table-row-select-checkbox'
+  SELECT_CHECKBOX: 'forge-table-row-select-checkbox',
+  IGNORE: 'data-forge-ignore',
+  IGNORE_ALT: 'forge-ignore'
 };
 
 const events = {

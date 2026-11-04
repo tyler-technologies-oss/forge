@@ -1,1 +1,2 @@
-$prefix: forge !default;
+@forward '@tylertech/forge-tokens/sass/config';
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/core/config" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/config" from @tylertech/forge-tokens instead.';

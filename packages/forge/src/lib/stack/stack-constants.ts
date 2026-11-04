@@ -23,17 +23,41 @@ const attributes = {
   ...observedAttributes
 };
 
-const strings = {
-  DEFAULT_GAP: '16'
+const defaults = {
+  GAP: '16',
+  ALIGNMENT: 'start' as StackAlignment
 };
 
+const strings = {
+  DEFAULT_GAP: defaults.GAP
+};
+
+/** @deprecated - These are internal constants that will be removed/moved in the future. Please avoid using them. */
 export const STACK_CONSTANTS = {
   elementName,
   classes,
   observedAttributes,
   attributes,
   selectors,
-  strings
+  strings,
+  defaults
 };
+
+export const STACK_GAP_SIZE_TOKENS = {
+  xxxs: 'xxxsmall',
+  xxs: 'xxsmall',
+  xs: 'xsmall',
+  s: 'small',
+  m: 'medium',
+  ml: 'medium-large',
+  l: 'large',
+  xl: 'xlarge',
+  xxl: 'xxlarge',
+  xxxl: 'xxxlarge'
+} as const;
+
+export type StackGapSize = keyof typeof STACK_GAP_SIZE_TOKENS;
+
+export const isStackGapSize = (value: string): value is StackGapSize => Object.hasOwn(STACK_GAP_SIZE_TOKENS, value);
 
 export type StackAlignment = 'start' | 'center' | 'end';

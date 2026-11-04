@@ -6,7 +6,7 @@ import { IPopoverComponent, IPopoverToggleEventData, type IPopoverProperties } f
 import { styleMap } from 'lit/directives/style-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { ToastComponent } from '@tylertech/forge/toast';
-import { type IButtonComponent } from '@tylertech/forge/button';
+import { type ButtonComponent } from '@tylertech/forge/button';
 import { storyStyles } from '../../decorators.js';
 
 import '@tylertech/forge/button';
@@ -128,7 +128,7 @@ export const NonModal: Story = {
   render: () => {
     const popoverRef = createRef<IPopoverComponent>();
     const inputRef = createRef<HTMLInputElement>();
-    const saveButtonRef = createRef<IButtonComponent>();
+    const saveButtonRef = createRef<ButtonComponent>();
 
     function handleInput(): void {
       if (saveButtonRef.value) {

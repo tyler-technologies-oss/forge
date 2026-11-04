@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64">
+    <forge-meter value="65" min="0" max="100">Storage used</forge-meter>
+  </div>
+</ComponentHeader>

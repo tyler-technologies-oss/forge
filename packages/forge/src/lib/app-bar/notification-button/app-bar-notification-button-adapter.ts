@@ -3,7 +3,7 @@ import { IBadgeComponent } from '../../badge/index.js';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
 import { forwardAttributes } from '../../core/utils/reflect-utils.js';
 import { ICON_CONSTANTS, IIconComponent } from '../../icon/index.js';
-import { IIconButtonComponent } from '../../icon-button/icon-button.js';
+import { type IconButtonComponent } from '../../icon-button/icon-button.js';
 import { ICON_BUTTON_CONSTANTS } from '../../icon-button/icon-button-constants.js';
 import { IAppBarNotificationButtonComponent } from './app-bar-notification-button.js';
 import { APP_BAR_NOTIFICATION_BUTTON_CONSTANTS } from './app-bar-notification-button-constants.js';
@@ -19,7 +19,7 @@ export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
 }
 
 export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotificationButtonComponent> implements IAppBarNotificationButtonAdapter {
-  private _iconButtonElement: IIconButtonComponent;
+  private _iconButtonElement: IconButtonComponent;
   private _badgeElement: IBadgeComponent;
   private _iconElement: IIconComponent;
   private _forwardObserver?: MutationObserver;
@@ -33,7 +33,7 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
   }
 
   public initialize(): void {
-    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IIconButtonComponent;
+    this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
     this._badgeElement = getLightElement(this._component, 'forge-badge') as IBadgeComponent;
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
 

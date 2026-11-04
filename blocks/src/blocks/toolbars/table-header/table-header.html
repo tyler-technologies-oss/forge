@@ -1,0 +1,15 @@
+<!--
+  @block Card Header Toolbar with Actions
+  @type pattern
+  @description Card header toolbar with the card title in the start slot and medium-density icon buttons for filter, export, and more options grouped in the end slot
+  @tags toolbar, header, card, table, actions
+-->
+<forge-card no-padding class="max-w-md">
+  <forge-scaffold>
+    {{> card-header title="Card title" action1="filter_list" action1Label="Filter" action2="download" action2Label="Export" action3="more_vert"
+    action3Label="More options"}}
+    <div slot="body" class="p-medium">
+      <div class="striped-box min-h-24"></div>
+    </div>
+  </forge-scaffold>
+</forge-card>

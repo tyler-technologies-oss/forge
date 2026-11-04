@@ -1,4 +1,4 @@
-@use '../core/styles/tokens/color-palette/material-color-palette';
+@use '@tylertech/forge-tokens/sass/color-palette' as material-color-palette;
 
 $width: 100%;
 $row-gap: 2px;

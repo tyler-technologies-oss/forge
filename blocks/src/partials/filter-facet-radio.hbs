@@ -1,0 +1,28 @@
+<!-- Radio facet for single-select filtering -->
+<div class="flex flex-col gap-xsmall">
+  <span class="text-label1 text-medium">Date Range</span>
+  <forge-radio-group>
+    <forge-list dense>
+      <forge-list-item>
+        <forge-radio slot="start" dense name="date-range" value="today"></forge-radio>
+        Today
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" dense name="date-range" value="week"></forge-radio>
+        Last 7 days
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" dense name="date-range" value="month"></forge-radio>
+        Last 30 days
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" dense name="date-range" value="year"></forge-radio>
+        Last year
+      </forge-list-item>
+      <forge-list-item>
+        <forge-radio slot="start" dense name="date-range" value="all"></forge-radio>
+        All time
+      </forge-list-item>
+    </forge-list>
+  </forge-radio-group>
+</div>

@@ -1,0 +1,15 @@
+<!--
+  @block Table with Icon Actions
+  @type pattern
+  @description Data table inside a card with a toolbar header featuring icon buttons for filtering, exporting, and additional options
+  @tags table, data, card, toolbar, icons, actions
+-->
+<div class="p-medium">
+  <forge-card no-padding>
+    <forge-scaffold>
+      {{> card-header title="Project Tasks" action1="filter_list" action1Label="Filter" action2="download" action2Label="Export" action3="more_vert"
+      action3Label="More options"}}
+      <forge-table slot="body" id="tasks-table"></forge-table>
+    </forge-scaffold>
+  </forge-card>
+</div>

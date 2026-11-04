@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64">
+    <div class="p-small">Above</div>
+    <forge-divider></forge-divider>
+    <div class="p-small">Below</div>
+  </div>
+</ComponentHeader>

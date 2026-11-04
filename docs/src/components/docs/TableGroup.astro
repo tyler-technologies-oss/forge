@@ -1,0 +1,19 @@
+---
+/**
+ * TableGroup — gives every markdown table inside it the same fixed column
+ * widths, so consecutive tables line up. `widths` lists CSS widths for the
+ * leading columns (up to four); the remaining column takes the leftover space.
+ */
+interface Props {
+  widths: string[];
+}
+
+const { widths } = Astro.props;
+const style = widths.map((width, index) => `--table-col-${index + 1}: ${width}`).join("; ");
+---
+
+<div
+  style={style}
+  class="[&_table]:table-fixed [&_table]:w-full [&_th:nth-child(1)]:w-(--table-col-1) [&_th:nth-child(2)]:w-(--table-col-2) [&_th:nth-child(3)]:w-(--table-col-3) [&_th:nth-child(4)]:w-(--table-col-4)">
+  <slot />
+</div>

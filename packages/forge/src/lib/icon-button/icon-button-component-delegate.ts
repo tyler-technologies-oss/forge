@@ -1,12 +1,12 @@
 import { addClass } from '@tylertech/forge-core';
-import { IconExternalType, ICON_CONSTANTS, IIconComponent } from '../icon/index.js';
 import { ICON_CLASS_NAME } from '../constants.js';
 import { BaseComponentDelegate, IBaseComponentDelegateConfig, IBaseComponentDelegateOptions } from '../core/delegates/base-component-delegate.js';
-import { IIconButtonComponent } from './icon-button.js';
-import { ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { ICON_CONSTANTS, IconExternalType, IIconComponent } from '../icon/index.js';
 import { TooltipPlacement } from '../tooltip/tooltip-constants.js';
+import { ICON_BUTTON_CONSTANTS } from './icon-button-constants.js';
+import { IconButtonComponent } from './icon-button.js';
 
-export type IconButtonComponentDelegateProps = Partial<IIconButtonComponent>;
+export type IconButtonComponentDelegateProps = Partial<IconButtonComponent>;
 export interface IIconButtonComponentDelegateOptions extends IBaseComponentDelegateOptions {
   iconName?: string;
   iconExternal?: boolean;
@@ -16,16 +16,16 @@ export interface IIconButtonComponentDelegateOptions extends IBaseComponentDeleg
   tooltip?: string;
   tooltipPosition?: TooltipPlacement;
 }
-export interface IIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IIconButtonComponent, IIconButtonComponentDelegateOptions> {}
+export interface IIconButtonComponentDelegateConfig extends IBaseComponentDelegateConfig<IconButtonComponent, IIconButtonComponentDelegateOptions> {}
 
-export class IconButtonComponentDelegate extends BaseComponentDelegate<IIconButtonComponent, IIconButtonComponentDelegateOptions> {
+export class IconButtonComponentDelegate extends BaseComponentDelegate<IconButtonComponent, IIconButtonComponentDelegateOptions> {
   private _iconElement?: IIconComponent;
 
   constructor(config?: IIconButtonComponentDelegateConfig) {
     super(config);
   }
 
-  protected _build(): IIconButtonComponent {
+  protected _build(): IconButtonComponent {
     const component = document.createElement(ICON_BUTTON_CONSTANTS.elementName);
 
     if (this._config.options?.tooltip) {

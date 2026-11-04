@@ -1,0 +1,41 @@
+@use 'sass:meta';
+
+::ng-deep {
+  @include meta.load-css('@tylertech/forge/dist/table/forge-table');
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.align-vert {
+  display: flex;
+  align-items: center;
+}
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 0;
+}
+
+.selection-header {
+  background-color: var(--forge-theme-primary-container-low);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+
+  .journal-action-buttons {
+    forge-button:not(:first-child) {
+      margin-left: 16px;
+    }
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}

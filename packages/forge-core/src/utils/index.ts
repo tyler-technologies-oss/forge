@@ -1,5 +1,6 @@
 export * from './a11y.js';
 export * from './clipboard.js';
+export * from './date-utils.js';
 export * from './dom-utils.js';
 export * from './event-utils.js';
 export * from './http-utils.js';

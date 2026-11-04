@@ -8,6 +8,7 @@
 }
 
 @mixin base {
+  display: grid;
   position: relative;
   overflow: hidden;
   block-size: 100%;
@@ -31,6 +32,8 @@
   position: absolute;
   inline-size: 100%;
   block-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
   pointer-events: none;
 }
 
@@ -38,6 +41,8 @@
   position: absolute;
   inline-size: 100%;
   block-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
   margin: 0;
   padding: 0;
   border: none;

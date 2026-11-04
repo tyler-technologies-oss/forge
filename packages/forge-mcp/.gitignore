@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.claude/
+.vscode/
+.DS_Store
+*.tgz
+.pnpm-store/

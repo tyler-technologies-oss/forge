@@ -42,6 +42,8 @@ declare global {
  *
  * @summary Individual steps within a stepper component that represent progress in a multi-step process.
  *
+ * @deprecated This component will be removed in a future release. Use `<forge-process-step>` instead.
+ *
  * @property {boolean} [alternative=false] - Whether the step is in the alternative style.
  * @property {boolean} [completed=false] - Whether the step is completed.
  * @property {boolean} [editable=false] - Whether the step is editable.

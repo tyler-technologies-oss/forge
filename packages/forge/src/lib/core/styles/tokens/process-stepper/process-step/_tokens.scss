@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/utils';
+
+$tokens: (
+  marker-size: utils.module-val(process-step, marker-size, 20px),
+  marker-color: utils.module-val(process-step, marker-color, inherit),
+  track-width: utils.module-val(process-step, track-width, 3px),
+  track-background: utils.module-val(process-step, track-background, theme.variable(text-lowest)),
+  track-color: utils.module-val(process-step, track-color, theme.variable(text-high)),
+  track-padding: utils.module-val(process-step, track-padding, spacing.variable(xsmall)),
+  padding: utils.module-val(process-step, padding, spacing.variable(small)),
+  min-block-size: utils.module-val(process-step, min-block-size, 72px),
+  disabled-opacity: utils.module-val(process-step, disabled-opacity, 0.38)
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

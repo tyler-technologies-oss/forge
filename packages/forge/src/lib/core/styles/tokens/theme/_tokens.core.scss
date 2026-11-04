@@ -1,101 +1,44 @@
 @use 'sass:map';
-@use '../color-palette/radix-color-palette' as color-palette;
-@use '../color-palette/radix-color-palette-dark' as color-palette-dark;
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
 
-// Light
-$tokens: (
-  primary: color-palette.$indigo-9,
-  primary-container-minimum: color-palette.$indigo-surface,
-  primary-container-low: color-palette.$indigo-3,
-  primary-container: color-palette.$indigo-4,
-  primary-container-high: color-palette.$indigo-5,
-  primary-container-highest: color-palette.$indigo-6,
-  primary-container-maximum: color-palette.$indigo-7,
-  on-primary: color-palette.$indigo-contrast,
-  on-primary-container-minimum: color-palette.$indigo-a11,
-  on-primary-container-low: color-palette.$indigo-a12,
-  on-primary-container: color-palette.$indigo-a12,
-  on-primary-container-high: color-palette.$indigo-a12,
-  on-primary-container-highest: color-palette.$indigo-a12,
-  on-primary-container-maximum: color-palette.$indigo-a12,
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.core" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
 
-  secondary: color-palette.$iris-9,
-  secondary-container-minimum: color-palette.$iris-surface,
-  secondary-container-low: color-palette.$iris-3,
-  secondary-container: color-palette.$iris-4,
-  secondary-container-high: color-palette.$iris-5,
-  secondary-container-highest: color-palette.$iris-6,
-  secondary-container-maximum: color-palette.$iris-7,
-  on-secondary: color-palette.$iris-contrast,
-  on-secondary-container-minimum: color-palette.$iris-a11,
-  on-secondary-container-low: color-palette.$iris-a12,
-  on-secondary-container: color-palette.$iris-a12,
-  on-secondary-container-high: color-palette.$iris-a12,
-  on-secondary-container-highest: color-palette.$iris-a12,
-  on-secondary-container-maximum: color-palette.$iris-a12,
-
-  // @deprecated Use secondary tokens instead
-  tertiary: color-palette.$iris-9,
-  tertiary-container-minimum: color-palette.$iris-surface,
-  tertiary-container-low: color-palette.$iris-3,
-  tertiary-container: color-palette.$iris-4,
-  tertiary-container-high: color-palette.$iris-5,
-  tertiary-container-highest: color-palette.$iris-6,
-  tertiary-container-maximum: color-palette.$iris-7,
-  on-tertiary: color-palette.$iris-contrast,
-  on-tertiary-container-minimum: color-palette.$iris-a11,
-  on-tertiary-container-low: color-palette.$iris-a12,
-  on-tertiary-container: color-palette.$iris-a12,
-  on-tertiary-container-high: color-palette.$iris-a12,
-  on-tertiary-container-highest: color-palette.$iris-a12,
-  on-tertiary-container-maximum: color-palette.$iris-a12
+$_keys: (
+  primary,
+  primary-container-minimum,
+  primary-container-low,
+  primary-container,
+  primary-container-high,
+  on-primary,
+  on-primary-container-minimum,
+  on-primary-container-low,
+  on-primary-container,
+  on-primary-container-high,
+  secondary,
+  secondary-container-minimum,
+  secondary-container-low,
+  secondary-container,
+  secondary-container-high,
+  on-secondary,
+  on-secondary-container-minimum,
+  on-secondary-container-low,
+  on-secondary-container,
+  on-secondary-container-high,
+  tertiary,
+  tertiary-container-minimum,
+  tertiary-container-low,
+  tertiary-container,
+  tertiary-container-high,
+  on-tertiary,
+  on-tertiary-container-minimum,
+  on-tertiary-container-low,
+  on-tertiary-container,
+  on-tertiary-container-high
 );
 
-// Dark
-$tokens-dark: (
-  primary: color-palette-dark.$indigo-9,
-  primary-container-minimum: color-palette-dark.$indigo-surface,
-  primary-container-low: color-palette-dark.$indigo-3,
-  primary-container: color-palette-dark.$indigo-4,
-  primary-container-high: color-palette-dark.$indigo-5,
-  primary-container-highest: color-palette-dark.$indigo-6,
-  primary-container-maximum: color-palette-dark.$indigo-7,
-  on-primary: color-palette-dark.$indigo-1,
-  on-primary-container-minimum: color-palette-dark.$indigo-a11,
-  on-primary-container-low: color-palette-dark.$indigo-a12,
-  on-primary-container: color-palette-dark.$indigo-a12,
-  on-primary-container-high: color-palette-dark.$indigo-a12,
-  on-primary-container-highest: color-palette-dark.$indigo-a12,
-  on-primary-container-maximum: color-palette-dark.$indigo-a12,
-
-  secondary: color-palette-dark.$iris-9,
-  secondary-container-minimum: color-palette-dark.$iris-surface,
-  secondary-container-low: color-palette-dark.$iris-3,
-  secondary-container: color-palette-dark.$iris-4,
-  secondary-container-high: color-palette-dark.$iris-5,
-  secondary-container-highest: color-palette-dark.$iris-6,
-  secondary-container-maximum: color-palette-dark.$iris-7,
-  on-secondary: color-palette-dark.$iris-contrast,
-  on-secondary-container-minimum: color-palette-dark.$iris-a11,
-  on-secondary-container-low: color-palette-dark.$iris-a12,
-  on-secondary-container: color-palette-dark.$iris-a12,
-  on-secondary-container-high: color-palette-dark.$iris-a12,
-  on-secondary-container-highest: color-palette-dark.$iris-a12,
-  on-secondary-container-maximum: color-palette-dark.$iris-a12,
-
-  // @deprecated Use secondary tokens instead
-  tertiary: color-palette-dark.$iris-9,
-  tertiary-container-minimum: color-palette-dark.$iris-surface,
-  tertiary-container-low: color-palette-dark.$iris-3,
-  tertiary-container: color-palette-dark.$iris-4,
-  tertiary-container-high: color-palette-dark.$iris-5,
-  tertiary-container-highest: color-palette-dark.$iris-6,
-  tertiary-container-maximum: color-palette-dark.$iris-7,
-  on-tertiary: color-palette-dark.$iris-contrast,
-  on-tertiary-container-minimum: color-palette-dark.$iris-a11,
-  on-tertiary-container-low: color-palette-dark.$iris-a12,
-  on-tertiary-container: color-palette-dark.$iris-a12,
-  on-tertiary-container-high: color-palette-dark.$iris-a12,
-  on-tertiary-container-highest: color-palette-dark.$iris-a12,
-  on-tertiary-container-maximum: color-palette-dark.$iris-a12
-);
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

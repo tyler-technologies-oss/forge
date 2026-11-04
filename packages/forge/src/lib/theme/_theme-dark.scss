@@ -1,6 +1,6 @@
-@use '../core/styles/theme';
-@use '../core/styles/border';
-@use '../core/styles/tokens/color-palette/radix-color-palette-dark' as color-palette-dark;
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/color-palette/radix-dark' as color-palette-dark;
 
 @use '../button';
 @use '../icon-button';

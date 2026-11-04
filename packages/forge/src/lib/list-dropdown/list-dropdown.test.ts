@@ -569,11 +569,12 @@ describe('ListDropdown', () => {
     await delayPopupAnimation();
 
     const listItems = getListItems();
-    expect(listItems[2].active).toBe(false);
+    expect(listItems[2].active).toBe(true);
 
     context.listDropdown.activateFirstOption();
 
     expect(listItems[0].active).toBe(true);
+    expect(listItems[2].active).toBe(false);
 
     context.listDropdown.destroy();
     if (context.targetElement.isConnected) {

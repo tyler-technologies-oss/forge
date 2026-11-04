@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../typography';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   color: utils.module-val(icon, color, currentColor),

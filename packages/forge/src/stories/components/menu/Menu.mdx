@@ -37,6 +37,22 @@ This options array can then be set (or bound via framework) to the `options` pro
 > There are also corresponding `leadingIconType` and `trailingIconType` properties to specify the element type that will be rendered. Set these
 > to `'component'` to render a `<forge-icon>` element.
 
+## Option select callbacks
+
+Every selection dispatches a single `forge-menu-select` event on the `<forge-menu>` element with the selected option's `value` in the event detail. When a
+menu lists actions, that means a handler that branches over every value. Instead, you can attach an `onSelect` callback directly to each option so the
+action lives next to the option that triggers it:
+
+```javascript
+const options: IMenuOption[] = [
+  { label: 'Print', value: 'print', onSelect: () => print() },
+  { label: 'Export', value: 'export', onSelect: () => exportReport() }
+];
+```
+
+The callback receives the same data as the `forge-menu-select` event and runs after the event has been dispatched. Calling `preventDefault()` on the
+event cancels the selection, and the callback does not run. Nested options in cascading menus are called from the child menu that renders them.
+
 ## Cascading
 
 Cascading menus are used to display a hierarchical list of options. When a menu item is hovered, a child menu will open next of the parent menu item.

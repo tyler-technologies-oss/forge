@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../theme';
-@use '../../../shape';
-@use '../../../animation';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/animation';
 
 $tokens: (
   color: utils.module-val(app-bar-search, color, currentColor),

@@ -80,7 +80,7 @@ forge-state-layer {
 // Disabled
 //
 
-:host([disabled]) {
+:host(:state(disabled)) {
   @include host-disabled;
 
   .forge-tab {
@@ -91,10 +91,10 @@ forge-state-layer {
 }
 
 //
-// Selected
+// Active
 //
 
-:host([selected]) {
+:host(:state(active)) {
   .forge-tab {
     color: #{token(active-label-text-color)};
 
@@ -132,25 +132,27 @@ forge-state-layer {
   }
 }
 
-:host([selected]:not([vertical])) {
-  forge-focus-indicator {
-    @include focus-indicator.provide-theme(
-      (
-        offset-block: 0 calc(#{token(indicator-height)} + 1px)
-      )
-    );
+:host(:state(active):not(:state(vertical))) {
+  .forge-tab:not(.vertical) {
+    forge-focus-indicator {
+      @include focus-indicator.provide-theme(
+        (
+          offset-block: 0 calc(#{token(indicator-height)} + 1px)
+        )
+      );
+    }
   }
 }
 
-:host([selected]:focus) {
+:host(:state(active):focus) {
   .forge-tab {
-    @include selected-focus;
+    @include active-focus;
   }
 }
 
-:host([selected]:active) {
+:host(:state(active):active) {
   .forge-tab {
-    @include selected-pressed;
+    @include active-pressed;
   }
 }
 
@@ -158,13 +160,11 @@ forge-state-layer {
 // Stacked
 //
 
-:host([stacked]) {
-  .forge-tab {
-    @include override(height, stacked-height);
+.forge-tab.stacked {
+  @include override(height, stacked-height);
 
-    .content {
-      @include content-stacked;
-    }
+  .content {
+    @include content-stacked;
   }
 }
 
@@ -172,17 +172,16 @@ forge-state-layer {
 // Vertical
 //
 
-:host([vertical]) {
-  .forge-tab {
-    @include vertical;
+.forge-tab.vertical {
+  @include vertical;
+  @include override(indicator-shape, vertical-indicator-shape);
 
-    .content {
-      @include vertical-content;
-    }
+  .content {
+    @include vertical-content;
+  }
 
-    .indicator {
-      @include vertical-indicator;
-    }
+  .indicator {
+    @include vertical-indicator;
   }
 
   forge-focus-indicator {
@@ -194,32 +193,22 @@ forge-state-layer {
   }
 }
 
-:host([vertical]) {
-  .forge-tab {
-    @include override(indicator-shape, vertical-indicator-shape);
-  }
-}
-
 //
 // Inverted
 //
 
-:host([inverted]) {
-  .forge-tab {
-    @include override(indicator-shape, inverted-indicator-shape);
-  }
+.forge-tab.inverted {
+  @include override(indicator-shape, inverted-indicator-shape);
 
   .indicator {
     @include inverted-indicator;
   }
-}
 
-:host([inverted][vertical]) {
-  .forge-tab {
+  &.vertical {
     @include override(indicator-shape, vertical-inverted-indicator-shape);
-  }
 
-  .indicator {
-    @include vertical-inverted-indicator;
+    .indicator {
+      @include vertical-inverted-indicator;
+    }
   }
 }

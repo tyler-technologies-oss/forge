@@ -1,0 +1,46 @@
+---
+/**
+ * AnatomyDemo — a ComponentHeader for anatomy diagrams: the demo is
+ * non-interactive, but the AnatomyMarkers placed inside it stay interactive.
+ *
+ * HTML `inert` can't be undone on a descendant, so the frame itself can't be
+ * inert. Instead, on page load every subtree of the demo that doesn't contain
+ * a marker is made inert, leaving only the markers (and the containers on the
+ * path to them, which aren't interactive) reachable.
+ *
+ *   <AnatomyDemo fit="cover" zoom={0.65} height="440px">
+ *     <forge-app-layout>…<AnatomyMarker … />…</forge-app-layout>
+ *   </AnatomyDemo>
+ */
+import type { ComponentProps } from "astro/types";
+import ComponentHeader from "../ComponentHeader.astro";
+
+type Props = Omit<ComponentProps<typeof ComponentHeader>, "interactive">;
+---
+
+<div data-anatomy-demo>
+  <ComponentHeader {...Astro.props}>
+    <slot />
+  </ComponentHeader>
+</div>
+
+<script>
+  const MARKER_SELECTOR = "[data-anatomy-marker]";
+
+  const inertExceptMarkers = (element: Element): void => {
+    for (const child of element.children) {
+      if (child.matches(MARKER_SELECTOR)) {
+        continue;
+      }
+      if (child.querySelector(MARKER_SELECTOR)) {
+        inertExceptMarkers(child);
+      } else {
+        child.toggleAttribute("inert", true);
+      }
+    }
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll("[data-anatomy-demo]").forEach(inertExceptMarkers);
+  });
+</script>

@@ -2,23 +2,51 @@ name: Deploy Storybook (Forge)
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Changesets]
+    types: [completed]
+    branches: [main]
 
 env:
   CI: true
   TURBO_TELEMETRY_DISABLED: 1
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
+  detect-release:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      deploy: ${{ steps.release.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-tags: true
+
+      - id: release
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          elif git tag --points-at HEAD | grep -q '^@tylertech/forge@'; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No @tylertech/forge release tag at HEAD, skipping deploy"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          fi
+
   deploy:
-    if: startsWith(github.event.release.tag_name, '@tylertech/forge@') || github.event_name == 'workflow_dispatch'
+    needs: detect-release
+    if: needs.detect-release.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: write
-
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - uses: pnpm/action-setup@v4
 
@@ -37,3 +65,4 @@ jobs:
           folder: packages/forge/storybook-static
           target-folder: docs/forge/v3
           clean: true
+ 

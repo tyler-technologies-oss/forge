@@ -1,5 +1,5 @@
 @use './core';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 .forge-icon {
   @include core.tokens;

@@ -31,6 +31,10 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
 
   public initialize(): void {
     this._adapter.initialize();
+
+    // Initialize has-members class for pre-slotted chips
+    this._adapter.toggleContainerClass(CHIP_FIELD_CONSTANTS.classes.HAS_MEMBERS, this._adapter.getSlottedMemberElements().length > 0);
+
     this._adapter.addRootListener('mousedown', this._mouseDownListener, { capture: true });
     this._adapter.addRootListener('click', this._clickListener);
     this._adapter.addRootListener('keydown', this._rootKeyDownListener);
@@ -81,6 +85,11 @@ export class ChipFieldCore extends BaseFieldCore<IChipFieldAdapter> implements I
       return;
     }
     this._adapter.focusInput();
+
+    // A native label forwards its click to the input, so clicking it here too would toggle the popover closed
+    if (this._adapter.isInputLabelTarget(evt.target)) {
+      return;
+    }
     this._adapter.clickInput();
   }
 
