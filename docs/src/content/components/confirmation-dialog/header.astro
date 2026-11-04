@@ -5,14 +5,29 @@ const { thumbnail = false } = Astro.props;
 ---
 
 <ComponentHeader {thumbnail}>
-  <forge-card class="w-full max-w-sm p-large">
-    <div class="flex flex-col gap-medium">
-      <div class="forge-typography--heading4">Delete selected images?</div>
-      <div class="forge-typography--body2">Images will be permanently removed from your account and all synced devices.</div>
-      <div class="flex justify-end gap-small">
-        <forge-button variant="outlined">No</forge-button>
-        <forge-button variant="raised">Yes</forge-button>
-      </div>
-    </div>
-  </forge-card>
+  <forge-button variant="outlined" theme="error" data-confirmation-dialog-trigger>Delete images</forge-button>
+  {
+    !thumbnail && (
+      <forge-confirmation-dialog>
+        <span slot="title">Delete selected images?</span>
+        <span slot="message">Images will be permanently removed from your account and all synced devices.</span>
+        <span slot="secondary-button-text">Cancel</span>
+        <span slot="primary-button-text">Delete</span>
+      </forge-confirmation-dialog>
+    )
+  }
 </ComponentHeader>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-confirmation-dialog-trigger]").forEach((button) => {
+      const dialog = button.parentElement?.querySelector("forge-confirmation-dialog");
+      if (!dialog) {
+        return;
+      }
+      button.addEventListener("click", () => {
+        dialog.open = true;
+      });
+    });
+  });
+</script>
