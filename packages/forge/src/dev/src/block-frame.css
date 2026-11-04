@@ -1,0 +1,30 @@
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@tylertech/forge-tailwind';
+
+@source '../../../../../blocks/src/blocks/components';
+
+html,
+body {
+  height: auto;
+  width: auto;
+}
+
+body {
+  margin: 0;
+  padding: var(--forge-spacing-medium);
+  background-color: transparent;
+  overflow: hidden;
+}
+
+@layer components {
+  .grid > * {
+    @apply min-h-0 min-w-0;
+  }
+
+  forge-card.p-0 {
+    --forge-card-padding: 0;
+  }
+}

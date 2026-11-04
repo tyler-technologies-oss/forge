@@ -1,0 +1,18 @@
+<div class="all-components">
+  <div class="all-components__controls">
+    <forge-text-field show-clear id="all-components-filter" class="all-components__filter">
+      <forge-icon slot="start" name="search"></forge-icon>
+      <label for="all-components-filter-input">Filter components</label>
+      <input type="text" id="all-components-filter-input" autocomplete="off" />
+    </forge-text-field>
+    <span class="forge-typography--label2 all-components__count" id="all-components-count" aria-live="polite"></span>
+  </div>
+
+  <nav class="all-components__nav" id="all-components-nav" aria-label="Component categories"></nav>
+
+  <div id="all-components-sections"></div>
+
+  <p class="forge-typography--body2 all-components__empty" id="all-components-empty" hidden>No components match your filter.</p>
+</div>
+
+<script type="module" src="all-components.ts"></script>

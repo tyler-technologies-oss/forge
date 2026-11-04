@@ -1,0 +1,107 @@
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/shape';
+
+$tile-min-width: 360px;
+
+.content .card {
+  max-width: none;
+  margin-inline: spacing.variable(medium);
+}
+
+.all-components {
+  display: grid;
+  gap: spacing.variable(large);
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: spacing.variable(medium);
+  }
+
+  &__filter {
+    flex: 1 1 320px;
+    max-inline-size: 480px;
+  }
+
+  &__count {
+    color: theme.variable(text-medium);
+  }
+
+  &__nav {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    padding-block: spacing.variable(xsmall);
+    background-color: theme.variable(surface);
+  }
+
+  &__empty {
+    margin: 0;
+    color: theme.variable(text-medium);
+  }
+}
+
+.component-category {
+  display: grid;
+  gap: spacing.variable(medium);
+  scroll-margin-block-start: 64px;
+
+  & + & {
+    margin-block-start: spacing.variable(xlarge);
+  }
+
+  &__title {
+    margin: 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, #{$tile-min-width}), 1fr));
+    gap: spacing.variable(medium);
+    align-items: start;
+  }
+}
+
+.content .card .component-tile {
+  --forge-card-padding: 0;
+
+  min-inline-size: 0;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: spacing.variable(xsmall);
+    padding: spacing.variable(medium) spacing.variable(medium) 0;
+  }
+
+  &__title {
+    margin: 0;
+  }
+
+  &__link {
+    display: inline-flex;
+    color: theme.variable(text-medium);
+    border-radius: shape.variable(small);
+
+    &:hover {
+      color: theme.variable(primary);
+    }
+  }
+
+  &__id {
+    display: block;
+    padding-inline: spacing.variable(medium);
+    color: theme.variable(text-low);
+    overflow-wrap: anywhere;
+  }
+
+  &__frame {
+    display: block;
+    inline-size: 100%;
+    border: none;
+    color-scheme: normal;
+  }
+}
