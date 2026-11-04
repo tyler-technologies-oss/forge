@@ -1,0 +1,21 @@
+## Labeling
+
+The signed-in avatar button is icon-only, so it gets its accessible name from `button-label`, which defaults to "Open user profile". Set it to something specific for your app, and localize it. The theme toggle's button group is named by `theme-toggle-aria-label`, which defaults to "Select a theme".
+
+Give each link in a `forge-profile-link` descriptive text in its `<a>`. Icons in the `icon` slot are decorative.
+
+## Keyboard interaction
+
+The avatar button, or the sign-in button when signed out, is a standard button. When the popover is open, its contents follow the tab order.
+
+| Key           | Action                                                                                   |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| Tab           | Moves focus to the sign-in or avatar button, then through the popover content when open. |
+| Enter / Space | Activates the focused button: signs in, opens or closes the popover, or signs out.       |
+| Escape        | Closes the open popover.                                                                 |
+
+## Screen reader behavior
+
+The popover is anchored to the avatar button and shows the user's full name and email as text, so they are read as the user moves through its content. Links are read as regular links from their slotted `<a>` elements.
+
+The component only dispatches `forge-user-profile-sign-in` and `forge-user-profile-sign-out`. After handling them, move focus somewhere sensible and update the page, for example by showing the signed-out state, so users aren't left without context.

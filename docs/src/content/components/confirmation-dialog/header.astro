@@ -1,0 +1,18 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-card class="w-full max-w-sm p-large">
+    <div class="flex flex-col gap-medium">
+      <div class="forge-typography--heading4">Delete selected images?</div>
+      <div class="forge-typography--body2">Images will be permanently removed from your account and all synced devices.</div>
+      <div class="flex justify-end gap-small">
+        <forge-button variant="outlined">No</forge-button>
+        <forge-button variant="raised">Yes</forge-button>
+      </div>
+    </div>
+  </forge-card>
+</ComponentHeader>

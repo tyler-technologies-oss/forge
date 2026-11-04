@@ -1,0 +1,75 @@
+---
+title: Footer
+description: Footers display secondary links, legal text, and branding at the bottom of an app or page.
+status: stable
+source: core
+category: layout
+storybookId: components-footer--demo
+---
+
+import Header from "./header.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import AnatomyDemo from "../../../components/docs/AnatomyDemo.astro";
+import AnatomyMarker from "../../../components/docs/AnatomyMarker.astro";
+
+<Header />
+
+## Overview
+
+A footer sits at the bottom of an app or page and holds the content users rarely need but should always be able to find: links to about, contact, and privacy pages, copyright text, and a brand graphic. It adapts to the available width, laying items out in a row on wide screens and stacking them on narrow ones.
+
+Footers are typically paired with an <a href={`${import.meta.env.BASE_URL}components/app-layout/usage/`}>app layout</a>, which places the footer below the main content.
+
+## Usage
+
+`forge-footer` wraps one `forge-footer-item` per link or line of text, and accepts a `graphic` slot for a logo. Set `layout` to `standard`, `alternative`, or `auto` (the default); in `auto`, the footer switches to the alternative layout below `layoutBreakpoint` (900px by default). Use a footer for persistent, low-priority links and legal text; for primary navigation, use a <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tab bar</a> or drawer instead.
+
+## Slot locations
+
+<AnatomyDemo>
+  <forge-footer layout="standard" class="my-large w-full">
+    <forge-footer-item>
+      <span class="relative inline-block">
+        <a href="#">About</a>
+        <AnatomyMarker label={1} title="Footer item" description="One link or line of text. Each item is exposed as a list item." placement="top-end" outside />
+      </span>
+    </forge-footer-item>
+    <forge-footer-item><a href="#">Contact</a></forge-footer-item>
+    <forge-footer-item><span>© 2026 Tyler Technologies</span></forge-footer-item>
+    <span slot="graphic" class="relative inline-block">
+      <span class="striped-box inline-block h-8 w-24"></span>
+      <AnatomyMarker label={2} title="Graphic" description="A logo or brand mark, set apart from the items." placement="top-end" outside />
+    </span>
+  </forge-footer>
+</AnatomyDemo>
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep the footer to a few short, stable links.",
+      "Wrap each link or line of text in its own `forge-footer-item`.",
+      "Give a graphic image meaningful `alt` text, or an empty one if it is decorative.",
+      "Leave `layout` on `auto` so the footer adapts to narrow screens.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't put primary navigation or key actions in the footer.",
+      "Don't put loose content in the footer without a `forge-footer-item` — it won't be exposed as a list item.",
+      "Don't add so many links that the footer dominates the page.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Each `forge-footer-item` holds a link or text, and the `graphic` slot holds a logo.
+
+<Example description="A footer with links, copyright text, and a graphic." />
