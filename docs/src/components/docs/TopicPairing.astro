@@ -1,34 +1,50 @@
 ---
 /**
- * TopicPairing — the decorative header on the Developing guide pages: the Forge
+ * TopicPairing — the decorative header on the Developing and Tokens pages: the Forge
  * logo joined to an icon for the page's topic, with the package, API, or token
- * the page centers on set beneath. Icons must be registered in
- * `src/scripts/forge-components.ts`.
+ * the page centers on set beneath. The topic tile is tinted by its sidebar
+ * section. Icons must be registered in `src/scripts/forge-components.ts`.
  */
-import HeaderPairing from "./HeaderPairing.astro";
+import HeaderPairing, { type HeaderPairingTone } from "./HeaderPairing.astro";
+
+const SECTION_TONES = {
+  gettingStarted: "primary",
+  styling: "secondary",
+  buildingApps: "success",
+  tooling: "info",
+  tokens: "tertiary",
+} as const satisfies Record<string, HeaderPairingTone>;
 
 const TOPICS = {
-  installation: { icon: "package_variant", caption: "npm install @tylertech/forge" },
-  usage: { icon: "code_tags", caption: "<forge-*>" },
-  theming: { icon: "palette", caption: "--forge-theme-*" },
-  typography: { icon: "format_letter_case", caption: ".forge-typography--*" },
-  customization: { icon: "tune", caption: "::part()" },
-  "css-only-components": { icon: "language_css_3", caption: 'class="forge-*"' },
-  forms: { icon: "form_textbox", caption: "formAssociated" },
-  icons: { icon: "emoticon_outline", caption: "@tylertech/tyler-icons" },
-  illustrations: { icon: "image_outline", caption: "cdn.forge.tylertech.com" },
-  accessibility: { icon: "accessibility", caption: "aria-*" },
-  "global-configuration": { icon: "cog_outline", caption: "TylerForgeGlobalConfiguration" },
-  tailwind: { icon: "tailwind", caption: "@tylertech/forge-tailwind" },
-  "sass-library": { icon: "sass", caption: "@tylertech/forge/styles" },
-  "mcp-server": { icon: "mcp", caption: "@tylertech/forge-mcp" },
-} as const;
+  installation: { section: "gettingStarted", icon: "package_variant", caption: "npm install @tylertech/forge" },
+  usage: { section: "gettingStarted", icon: "code_tags", caption: "<forge-*>" },
+  theming: { section: "styling", icon: "palette", caption: "--forge-theme-*" },
+  typography: { section: "styling", icon: "format_letter_case", caption: ".forge-typography--*" },
+  "css-only-components": { section: "styling", icon: "language_css_3", caption: 'class="forge-*"' },
+  forms: { section: "buildingApps", icon: "form_textbox", caption: "formAssociated" },
+  icons: { section: "buildingApps", icon: "emoticon_outline", caption: "@tylertech/tyler-icons" },
+  illustrations: { section: "buildingApps", icon: "image_outline", caption: "cdn.forge.tylertech.com" },
+  accessibility: { section: "buildingApps", icon: "accessibility", caption: "aria-*" },
+  "global-configuration": { section: "buildingApps", icon: "cog_outline", caption: "TylerForgeGlobalConfiguration" },
+  tailwind: { section: "tooling", icon: "tailwind", caption: "@tylertech/forge-tailwind" },
+  "sass-library": { section: "tooling", icon: "sass", caption: "@tylertech/forge/styles" },
+  "mcp-server": { section: "tooling", icon: "mcp", caption: "@tylertech/forge-mcp" },
+  "tokens-introduction": { section: "tokens", icon: "variable", caption: "--forge-*" },
+  "tokens-color": { section: "tokens", icon: "palette_swatch_variant", caption: "--forge-theme-*" },
+  "tokens-typography": { section: "tokens", icon: "format_size", caption: "--forge-typography-*" },
+  "tokens-spacing": { section: "tokens", icon: "ruler", caption: "--forge-spacing-*" },
+  "tokens-shape": { section: "tokens", icon: "rounded_corner", caption: "--forge-shape-*" },
+  "tokens-border": { section: "tokens", icon: "border_style", caption: "--forge-border-*" },
+  "tokens-elevation": { section: "tokens", icon: "box_shadow", caption: "--forge-elevation-*" },
+  "tokens-layering": { section: "tokens", icon: "layers_triple_outline", caption: "--forge-z-index-*" },
+  "tokens-animation": { section: "tokens", icon: "motion_play_outline", caption: "--forge-animation-*" },
+} as const satisfies Record<string, { section: keyof typeof SECTION_TONES; icon: string; caption: string }>;
 
 interface Props {
   topic: keyof typeof TOPICS;
 }
 
-const { icon, caption } = TOPICS[Astro.props.topic];
+const { section, icon, caption } = TOPICS[Astro.props.topic];
 ---
 
-<HeaderPairing icon={icon} caption={caption} />
+<HeaderPairing icon={icon} caption={caption} tone={SECTION_TONES[section]} />

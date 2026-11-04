@@ -180,7 +180,6 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Angular](references/development/frameworks/angular.md) — Using Tyler Forge with Angular.
 - [Blazor](references/development/frameworks/blazor.md) — Using Tyler Forge with Blazor.
 - [CSS-Only Components](references/development/css-only-components.md) — An experimental, framework-agnostic alternative to Forge's Web Components using only CSS classes.
-- [Customization](references/development/customization.md) — Ways to customize Forge components — theming, CSS custom properties, shadow parts, and slots.
 - [Forge MCP Server](references/development/mcp-server.md) — Give AI clients direct access to Forge component documentation, design tokens, and code generation.
 - [Forms](references/development/forms.md) — How Forge's form-associated components participate in native form submission and validation.
 - [Global Configuration](references/development/global-configuration.md) — Overriding default component state application-wide via a global configuration object.

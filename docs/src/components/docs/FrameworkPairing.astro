@@ -3,7 +3,7 @@
  * FrameworkPairing — the decorative header on each Frameworks page: the Forge
  * logo joined to the framework's logo, with the package that page installs set
  * beneath. Logos are single-color marks from Simple Icons (CC0), drawn in
- * `currentColor`.
+ * `currentColor`. The logo tile uses the Frameworks section's tone.
  */
 import HeaderPairing from "./HeaderPairing.astro";
 import AngularLogo from "../../assets/images/frameworks/angular.svg";
@@ -30,6 +30,6 @@ const { framework } = Astro.props;
 const { Logo, pkg } = FRAMEWORKS[framework];
 ---
 
-<HeaderPairing caption={pkg}>
+<HeaderPairing caption={pkg} tone="warning">
   <Logo class="size-12" fill="currentColor" />
 </HeaderPairing>

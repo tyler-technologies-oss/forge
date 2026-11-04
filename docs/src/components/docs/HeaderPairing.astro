@@ -1,19 +1,33 @@
 ---
 /**
- * HeaderPairing — the shared decorative header layout for the Developing pages.
- * The Forge logo on a primary tile joined to a second tile, with a caption set
- * in mono beneath. The second tile shows `icon` (a registered Forge icon name)
+ * HeaderPairing — the shared decorative header layout for the Developing and
+ * Tokens pages. The Forge logo on a primary tile joined to a second tile, with
+ * a caption set in mono beneath. The second tile shows `icon` (a registered Forge icon name)
  * or, when slotted, custom content such as a framework logo drawn in
- * `currentColor`. Every color is a theme token, so it follows light, dark, and
- * custom themes. Purely visual: hidden from assistive tech.
+ * `currentColor`.
+ *
+ * `tone` (a theme color family, one per sidebar section) gives the second tile
+ * a tonal gradient, a soft glow behind the icon, and a fading dot grid, all
+ * drawn from that family's tokens, so it follows light, dark, and custom
+ * themes. Purely visual: hidden from assistive tech.
  */
+export type HeaderPairingTone = "primary" | "secondary" | "tertiary" | "success" | "info" | "warning";
+
 interface Props {
   caption: string;
+  tone: HeaderPairingTone;
   icon?: string;
 }
 
-const { caption, icon } = Astro.props;
+const { caption, tone, icon } = Astro.props;
 const tile = "size-24 rounded-lg flex items-center justify-center shrink-0";
+const toneStyle = [
+  `--pairing-tone: var(--forge-theme-${tone})`,
+  `--pairing-tone-container-minimum: var(--forge-theme-${tone}-container-minimum)`,
+  `--pairing-tone-container: var(--forge-theme-${tone}-container)`,
+  `--pairing-tone-container-high: var(--forge-theme-${tone}-container-high)`,
+  `--pairing-on-tone-container: var(--forge-theme-on-${tone}-container)`,
+].join("; ");
 ---
 
 <div class="flex flex-col items-center gap-large" aria-hidden="true">
@@ -30,7 +44,18 @@ const tile = "size-24 rounded-lg flex items-center justify-center shrink-0";
       </div>
     </div>
 
-    <div class:list={[tile, "bg-surface border border-outline text-high"]}>
+    <div
+      class:list={[
+        tile,
+        "relative isolate overflow-hidden shadow-md border border-(--pairing-tone-container-high)",
+        "bg-linear-to-br from-(--pairing-tone-container-minimum) to-(--pairing-tone-container)",
+        "text-(--pairing-on-tone-container)",
+      ]}
+      style={toneStyle}>
+      <div
+        class="absolute inset-0 -z-10 text-(--pairing-tone) opacity-40 bg-[radial-gradient(currentColor_1px,transparent_1.5px)] bg-size-[8px_8px] [mask-image:linear-gradient(to_bottom_left,black,transparent_65%)]"
+      />
+      <div class="absolute size-14 -z-10 rounded-full bg-(--pairing-tone) opacity-35 blur-xl" />
       <slot>
         <forge-icon name={icon} class="[--forge-icon-size:48px]" />
       </slot>
