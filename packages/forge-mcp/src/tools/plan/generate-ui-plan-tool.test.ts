@@ -1,9 +1,18 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GenerateUIPlanTool } from './generate-ui-plan-tool.js';
 import { REGION_NAMES } from './plan-types.js';
+import { _resetGuidanceCacheForTests } from '../../services/guidance-service.js';
+
+const mockRules = { schemaVersion: 1, subpathOnlyComponents: ['forge-app-layout', 'forge-theme-toggle'] };
 
 describe('GenerateUIPlanTool', () => {
   const tool = new GenerateUIPlanTool();
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    _resetGuidanceCacheForTests();
+    vi.spyOn(global, 'fetch').mockResolvedValue({ ok: true, text: () => Promise.resolve(JSON.stringify(mockRules)) } as Response);
+  });
 
   const getTemplate = async (): Promise<any> => {
     const result = await tool.execute({ description: 'a dashboard' });
@@ -70,5 +79,19 @@ describe('GenerateUIPlanTool', () => {
       expect(text).toContain("import '@tylertech/forge/button';");
       expect(text).toContain('In an Angular project, import the `ForgeXModule`');
     });
+
+    it('should list the subpath-only components published in the docs site rules', async () => {
+      const text = await getText();
+
+      expect(text).toContain('Subpath-only components (`forge-app-layout`, `forge-theme-toggle`)');
+    });
+  });
+
+  it('should point to the ui-plan guidance page for field docs', async () => {
+    const result = await tool.execute({ description: 'a dashboard' });
+    const text = result.content[0].type === 'text' ? result.content[0].text : '';
+
+    expect(text).toContain('get_forge_guidance(topic: "ui-plan")');
+    expect(text).not.toContain('references/');
   });
 });

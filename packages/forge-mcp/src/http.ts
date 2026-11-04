@@ -3,9 +3,9 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { createForgeDocsServer } from './core/server.js';
+import { createForgeServer } from './server.js';
 import { getCEMLoader } from './services/cem-loader.js';
-import { SERVER_VERSION } from './version.js';
+import { getGuidanceRulesMd } from './services/guidance-service.js';
 
 const MCP_PATH = '/mcp';
 const MAX_BODY_BYTES = 4 * 1024 * 1024; // 4mb, matches SDK's own request size limit
@@ -68,33 +68,20 @@ async function handleMcpRequest(req: IncomingMessage, res: ServerResponse): Prom
     return;
   }
 
-  const server = new Server(
-    {
-      name: '@tylertech/forge-mcp',
-      version: SERVER_VERSION
-    },
-    {
-      capabilities: {
-        tools: {},
-        resources: {},
-        prompts: {}
-      }
-    }
-  );
-
   // Stateless mode: no session ID is issued, so each request gets a fresh
   // Server/transport pair rather than being tied to a long-lived session.
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined
   });
 
+  let server: Server | undefined;
   res.on('close', () => {
     transport.close();
-    server.close();
+    server?.close();
   });
 
   try {
-    await createForgeDocsServer(server);
+    server = await createForgeServer();
     await server.connect(transport);
     await transport.handleRequest(req, res, parsedBody);
   } catch (error) {
@@ -152,8 +139,17 @@ async function primeCEMData(): Promise<void> {
   }
 }
 
+// Warms the guidance cache so the first request doesn't wait on the docs site; later requests refresh it in the background.
+async function primeGuidance(): Promise<void> {
+  try {
+    await getGuidanceRulesMd();
+  } catch (error) {
+    console.warn(`Forge MCP: failed to preload Forge guidance (will retry per-request): ${error instanceof Error ? error.message : error}`);
+  }
+}
+
 const port = Number(process.env.PORT) || 3000;
-primeCEMData().then(() => {
+Promise.all([primeCEMData(), primeGuidance()]).then(() => {
   httpServer.listen(port, () => {
     console.warn(`Forge MCP Streamable HTTP server listening on port ${port}`);
   });

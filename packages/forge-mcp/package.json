@@ -9,7 +9,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc && node scripts/bundle-manifests.js",
+    "build": "tsc && node scripts/bundle-manifests.js && node scripts/bundle-guidance.js",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "start:http": "node dist/http.js",

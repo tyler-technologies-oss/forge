@@ -1,6 +1,7 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListPromptsRequestSchema, GetPromptRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { getTemplateEngine } from '../services/handlebars-template-engine.js';
+import { getGuidanceRulesMd } from '../services/guidance-service.js';
 
 interface PromptDefinition {
   name: string;
@@ -74,7 +75,8 @@ export class PromptsHandler {
     }
 
     // Load the template with any provided arguments as context
-    const templateContext = args || {};
+    const rules = await getGuidanceRulesMd().catch(() => undefined);
+    const templateContext = { ...args, rules: rules?.trim() };
     const content = await this._templateEngine.render(promptDef.template, templateContext);
 
     return {

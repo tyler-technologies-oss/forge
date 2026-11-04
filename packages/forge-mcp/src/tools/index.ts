@@ -27,6 +27,9 @@ export * from './blocks/index.js';
 // Plan tools
 export * from './plan/index.js';
 
+// Guidance tools
+export * from './guidance/index.js';
+
 // Registry factory function
 import { ToolRegistry } from './tool-registry.js';
 
@@ -55,6 +58,9 @@ import { GetBlocksTool } from './blocks/get-blocks-tool.js';
 // Plan tools
 import { GenerateUIPlanTool } from './plan/generate-ui-plan-tool.js';
 import { ValidateUIPlanTool } from './plan/validate-ui-plan-tool.js';
+
+// Guidance tools
+import { GetGuidanceTool } from './guidance/get-guidance-tool.js';
 
 /**
  * Create and configure the default tool registry with all available tools
@@ -85,8 +91,11 @@ export function createToolRegistry(): ToolRegistry {
   registry.register(new GetBlocksTool());
 
   // Register plan tools
-  registry.register(new GenerateUIPlanTool());
   registry.register(new ValidateUIPlanTool());
+
+  // Register guidance tools. Their content comes live from the docs site, so results aren't cached for the process.
+  registry.register(new GetGuidanceTool(), { cacheResults: false });
+  registry.register(new GenerateUIPlanTool(), { cacheResults: false });
 
   return registry;
 }

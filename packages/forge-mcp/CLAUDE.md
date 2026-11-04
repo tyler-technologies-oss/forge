@@ -65,3 +65,8 @@ When suggesting code changes or additions, please adhere to the following guidel
 ## Hosted deployment
 
 - The hosted HTTP server (`dist/http.js`) runs on Heroku and is deployed manually with `node scripts/deploy-heroku.js --push --app <app>`. It builds the package and force-pushes a minimal artifact, not the monorepo.
+- Heroku pipeline `forge-mcp` (team `tyler-forge-prototyping`): `forge-mcp-next` is staging, `forge-mcp` is production. Deploy branches to staging only; production gets what's on `main`.
+
+## Guidance from the docs site
+
+The server instructions, `get_forge_guidance`, the `forge_mode` prompt, and the plan tool's subpath-only list come from the docs site at runtime (`src/services/guidance-service.ts`), published by `docs/scripts/build-forge-skill.mjs`. Change guidance in the docs, not here. `scripts/bundle-guidance.js` bundles `rules.md`, `rules.json` and `manifest.json` into `dist/bundled-guidance/` as the offline fallback. `FORGE_GUIDANCE_URL` overrides the base URL. Point hints at `get_forge_guidance(topic: "...")`, never at local `references/` paths.

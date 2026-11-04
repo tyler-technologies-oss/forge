@@ -9,19 +9,28 @@ import { getToolCallCache, ToolCallCache } from '../services/tool-call-cache.js'
  * The registry maintains a mapping of tool names to their handlers and provides
  * unified access for the MCP protocol to discover and execute available tools.
  */
+export interface ToolRegistrationOptions {
+  /** Cache results for the life of the process (default true). Disable for tools whose content can change while the server runs. */
+  cacheResults?: boolean;
+}
+
 export class ToolRegistry {
   private readonly _handlers = new Map<string, ToolHandler>();
+  private readonly _uncachedTools = new Set<string>();
   private readonly _cache: ToolCallCache = getToolCallCache();
 
   /**
    * Register a tool handler in the registry.
    *
    * @param handler - The tool handler to register
-   * @throws Error if a tool with the same name is already registered
+   * @param options - Registration options
    */
-  public register<TInput extends ToolInput>(handler: ToolHandler<TInput>): void {
+  public register<TInput extends ToolInput>(handler: ToolHandler<TInput>, { cacheResults = true }: ToolRegistrationOptions = {}): void {
     const tool = handler.getTool();
     this._handlers.set(tool.name, handler);
+    if (!cacheResults) {
+      this._uncachedTools.add(tool.name);
+    }
   }
 
   /**
@@ -49,6 +58,10 @@ export class ToolRegistry {
     }
 
     const normalizedArgs = args || {};
+    if (this._uncachedTools.has(name)) {
+      return handler.execute(normalizedArgs);
+    }
+
     const cacheKey = this._cache.generateKey(name, normalizedArgs);
 
     if (this._cache.has(cacheKey)) {

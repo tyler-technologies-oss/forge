@@ -2,22 +2,7 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { BaseToolHandler, ToolInput } from '../tool-handler.js';
 import { PAGE_TYPES, HEADING_ROLES, BODY_ROLES, SPACING_SCALES, REGION_NAMES } from './plan-types.js';
-
-const SUBPATH_ONLY_COMPONENTS = [
-  'forge-app-layout',
-  'forge-structured-card',
-  'forge-count-card',
-  'forge-busy-indicator',
-  'forge-confirmation-dialog',
-  'forge-user-profile',
-  'forge-app-launcher',
-  'forge-multi-select-header',
-  'forge-quantity-field',
-  'forge-responsive-toolbar',
-  'forge-content-scaffold',
-  'forge-footer',
-  'forge-theme-toggle'
-];
+import { getGuidanceRules } from '../../services/guidance-service.js';
 
 export interface GenerateUIPlanInput extends ToolInput {
   description: string;
@@ -34,7 +19,7 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
   constructor() {
     super(
       'generate_ui_plan',
-      'Emit a machine-checkable UI plan (scaffold block, regions, typography roles, icons) before writing composition-scale Forge markup. Returns the empty plan template and the enums the plan must use. Call validate_ui_plan on the composed plan before writing any <forge-*> markup. See references/ui-plan.md.'
+      'Emit a machine-checkable UI plan (scaffold block, regions, typography roles, icons) before writing composition-scale Forge markup. Returns the empty plan template and the enums the plan must use. Call validate_ui_plan on the composed plan before writing any <forge-*> markup. Field docs: get_forge_guidance(topic: "ui-plan").'
     );
   }
 
@@ -151,17 +136,28 @@ export class GenerateUIPlanTool extends BaseToolHandler<GenerateUIPlanInput> {
     sections.push('');
     sections.push('- `page_title` typography role must NOT be used inside a `forge-card` region — cards use `text-heading3` or lower.');
     sections.push('- If any region uses a `<table>` for data, replace it with `forge-table` + `forge-paginator` in the plan.');
-    sections.push(this._getImportConstraint(framework));
+    sections.push(this._getImportConstraint(await this._getSubpathOnlyComponents(), framework));
     sections.push('');
     sections.push('## Reference');
     sections.push('');
-    sections.push('See [references/ui-plan.md](references/ui-plan.md) for full field docs and failure modes.');
+    sections.push('Call `get_forge_guidance(topic: "ui-plan")` for full field docs and failure modes.');
 
     return this._createTextResponse(sections.join('\n'));
   }
 
-  private _getImportConstraint(framework?: string): string {
-    const subpathOnly = `Subpath-only components (${SUBPATH_ONLY_COMPONENTS.map(c => `\`${c}\``).join(', ')}) are easy to miss — note them in \`regions.*.components\` and remember to import.`;
+  private async _getSubpathOnlyComponents(): Promise<string[]> {
+    try {
+      return (await getGuidanceRules()).subpathOnlyComponents;
+    } catch {
+      return [];
+    }
+  }
+
+  private _getImportConstraint(subpathOnlyComponents: string[], framework?: string): string {
+    const subpathOnlyList = subpathOnlyComponents.length
+      ? `Subpath-only components (${subpathOnlyComponents.map(c => `\`${c}\``).join(', ')})`
+      : 'Subpath-only components (see `get_forge_guidance(topic: "development/installation")`)';
+    const subpathOnly = `${subpathOnlyList} are easy to miss — note them in \`regions.*.components\` and remember to import.`;
     const normalizedFramework = framework?.trim().toLowerCase();
 
     if (normalizedFramework === 'angular') {

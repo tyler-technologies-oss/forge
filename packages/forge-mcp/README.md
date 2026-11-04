@@ -122,7 +122,7 @@ node scripts/deploy-heroku.js                        # build and assemble .herok
 node scripts/deploy-heroku.js --push --app forge-mcp # also force-push it to the Heroku app
 ```
 
-Pushing requires the Heroku CLI to be logged in with access to the app.
+Pushing requires the Heroku CLI to be logged in with access to the app. The apps live in the `forge-mcp` pipeline on the `tyler-forge-prototyping` team: `forge-mcp-next` is staging, for testing a branch before release, and `forge-mcp` is production. Deploy a branch to staging with `--app forge-mcp-next`, then promote it with `heroku pipelines:promote -a forge-mcp-next` once it's tested and merged.
 
 The server is stateless (no `Mcp-Session-Id` is issued; a fresh server/transport pair handles each request), so it scales horizontally with no session affinity required. `GET /healthz` returns `200 ok` for platform health checks.
 
@@ -219,6 +219,13 @@ validate_ui_plan(plan: { ... })
 | `setup_framework` | Framework-specific setup (Angular, React, Vue, Svelte, Lit) |
 | `get_version_migration_guide` | Migration guides between Forge versions |
 | `get_usage_guide` | General usage patterns and best practices |
+| `get_forge_guidance` | Component, design, and developer guidance from the docs site (no topic lists every page) |
+
+### Instructions and guidance
+
+The server sends the Forge rules and workflow as MCP server `instructions`, so every client gets them when it connects. They, and the pages `get_forge_guidance` returns, are fetched from the docs site (`https://tylerforge.design/skill/forge-design`) and cached for five minutes, so a docs change reaches users without a server release. If the site is unreachable the rules and page index fall back to a copy bundled at build time.
+
+Set `FORGE_GUIDANCE_URL` to serve guidance from somewhere else, such as a docs preview deploy.
 
 ### Resources
 
