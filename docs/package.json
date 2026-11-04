@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-forge-skill.mjs",
+    "build": "astro build && node scripts/build-forge-skill.mjs --site",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test scripts/*.test.mjs",
