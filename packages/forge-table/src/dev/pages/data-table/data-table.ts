@@ -2,7 +2,7 @@ import '$src/shared';
 import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
 import './data-table.scss';
-import { DataSource } from '@tylertech/forge-core';
+import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 import type { ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
@@ -16,11 +16,17 @@ interface RowData {
   department: string;
   position: string;
   salary: number;
+  performanceRating: number;
+  bonusRate: number;
+  startDate: Date;
   city: string;
   state: string;
 }
 
 const FETCH_DELAY_MS = 250;
+
+const ratingFormatter = new NumberFormatter({ minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
 const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Id', property: 'id', filterType: 'number' },
@@ -30,7 +36,10 @@ const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Phone', property: 'phone' },
   { header: 'Department', property: 'department' },
   { header: 'Position', property: 'position' },
-  { header: 'Salary', property: 'salary', filterType: 'number', transform: row => `$${row.salary.toLocaleString()}` },
+  { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
+  { header: 'Performance rating', property: 'performanceRating', filterType: 'number', format: ratingFormatter },
+  { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
+  { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
   { header: 'City', property: 'city' },
   { header: 'State', property: 'state' }
 ];
@@ -51,7 +60,10 @@ const groupedColumns: ColumnDef<RowData>[] = [
     columns: [
       { header: 'Department', property: 'department' },
       { header: 'Position', property: 'position' },
-      { header: 'Salary', property: 'salary', filterType: 'number', transform: row => `$${row.salary.toLocaleString()}` }
+      { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
+      { header: 'Performance rating', property: 'performanceRating', filterType: 'number', format: ratingFormatter },
+      { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
+      { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() }
     ]
   },
   {
@@ -77,6 +89,9 @@ const employees: RowData[] = [
     department: 'Engineering',
     position: 'Senior Developer',
     salary: 125000,
+    performanceRating: 4.5,
+    bonusRate: 0.12,
+    startDate: new Date(2019, 2, 18),
     city: 'San Francisco',
     state: 'CA'
   },
@@ -89,6 +104,9 @@ const employees: RowData[] = [
     department: 'Marketing',
     position: 'Marketing Manager',
     salary: 95000,
+    performanceRating: 3.8,
+    bonusRate: 0.08,
+    startDate: new Date(2020, 6, 6),
     city: 'New York',
     state: 'NY'
   },
@@ -101,6 +119,9 @@ const employees: RowData[] = [
     department: 'Engineering',
     position: 'Tech Lead',
     salary: 145000,
+    performanceRating: 4.9,
+    bonusRate: 0.15,
+    startDate: new Date(2017, 10, 2),
     city: 'Austin',
     state: 'TX'
   },
@@ -113,6 +134,9 @@ const employees: RowData[] = [
     department: 'Sales',
     position: 'Sales Representative',
     salary: 85000,
+    performanceRating: 3.2,
+    bonusRate: 0.05,
+    startDate: new Date(2021, 0, 25),
     city: 'Chicago',
     state: 'IL'
   },
@@ -125,6 +149,9 @@ const employees: RowData[] = [
     department: 'Engineering',
     position: 'Junior Developer',
     salary: 75000,
+    performanceRating: 3.6,
+    bonusRate: 0.0425,
+    startDate: new Date(2023, 8, 11),
     city: 'Seattle',
     state: 'WA'
   },
@@ -137,6 +164,9 @@ const employees: RowData[] = [
     department: 'HR',
     position: 'HR Manager',
     salary: 90000,
+    performanceRating: 4.1,
+    bonusRate: 0.07,
+    startDate: new Date(2018, 4, 14),
     city: 'Boston',
     state: 'MA'
   },
@@ -149,6 +179,9 @@ const employees: RowData[] = [
     department: 'Engineering',
     position: 'Senior Developer',
     salary: 130000,
+    performanceRating: 4.7,
+    bonusRate: 0.135,
+    startDate: new Date(2016, 11, 5),
     city: 'Denver',
     state: 'CO'
   },
@@ -161,6 +194,9 @@ const employees: RowData[] = [
     department: 'Finance',
     position: 'Financial Analyst',
     salary: 80000,
+    performanceRating: 3.9,
+    bonusRate: 0.06,
+    startDate: new Date(2022, 3, 29),
     city: 'Atlanta',
     state: 'GA'
   }

@@ -1,7 +1,9 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
 import { html } from 'lit';
 import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
-import type { ColumnDef, FooterCallback, Row, RowSelectionType } from '../types.js';
+import type { ColumnDef, CustomFormatter, FooterCallback, Row, RowSelectionType } from '../types.js';
+import { Formatter } from '@tylertech/forge-core';
+import { getFormatterAttribute } from './formatter-attributes.js';
 
 export interface LeafColumn<TData extends Row> {
   column: ColumnDef<TData>;
@@ -52,7 +54,9 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         cellSlot: column.useTemplateSlot,
         filterVariant: column.filterType,
         stopRowClickPropagation: column.stopRowClickPropagation,
-        reorderable: column.reorderable
+        reorderable: column.reorderable,
+        align: column.align,
+        formatAttribute: getFormatterAttribute(column.format)
       }
     };
 
@@ -64,17 +68,22 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         enableResizing: hasHeader ? (column.resizable ?? true) : false,
         enableSorting: false,
         enableColumnFilter: false
-      } as TanstackColumnDef<TData>;
+      } satisfies TanstackColumnDef<TData>;
     } else {
       const leafColumn = {
         ...baseColumn,
         accessorKey: column.property,
-        accessorFn: column.transform,
+        accessorFn:
+          column.format instanceof Formatter
+            ? (row: TData) => (column.format as Formatter<unknown, unknown>).format(row[column.property as keyof TData])
+            : column.format
+              ? (row: TData, i: number = 0) => (column.format as CustomFormatter<TData>)(row, i)
+              : undefined,
         enableResizing: column.resizable ?? true,
         ...(typeof column.template === 'function' && { cell: column.template })
-      };
+      } satisfies TanstackColumnDef<TData>;
 
-      return leafColumn as TanstackColumnDef<TData>;
+      return leafColumn;
     }
   });
 }

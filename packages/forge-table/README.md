@@ -28,7 +28,7 @@ import type { ColumnDef, DataTableElement } from '@tylertech/forge-table';
 const table = document.querySelector<DataTableElement<Person>>('forge-data-table')!;
 const columns: ColumnDef<Person>[] = [
   { header: 'Name', property: 'name' },
-  { header: 'Salary', property: 'salary', filterType: 'number', transform: row => `$${row.salary.toLocaleString()}` }
+  { header: 'Salary', property: 'salary', filterType: 'number', format: row => `$${row.salary.toLocaleString()}` }
 ];
 
 table.columns = columns;

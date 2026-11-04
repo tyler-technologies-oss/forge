@@ -33,6 +33,24 @@ table {
     min-width: 0;
   }
 
+  td {
+    &:where([data-number-format], [data-currency-format]) {
+      text-align: end;
+    }
+
+    &[data-align='start'] {
+      text-align: start;
+    }
+
+    &[data-align='center'] {
+      text-align: center;
+    }
+
+    &[data-align='end'] {
+      text-align: end;
+    }
+  }
+
   thead {
     tr {
       th {

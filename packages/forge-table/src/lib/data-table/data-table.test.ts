@@ -1,5 +1,5 @@
 import type { ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/lit-table';
-import { DataSource } from '@tylertech/forge-core';
+import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
@@ -468,12 +468,12 @@ describe('DataTable', () => {
       harness.headerCells.concat(harness.bodyCells).forEach(cell => expect(getComputedStyle(cell).borderInlineStartStyle).toBe('none'));
     });
 
-    it('should handle column with transform function', async () => {
+    it('should handle column with format function', async () => {
       const columns: ColumnDef<TestData>[] = [
         {
           id: 'transformed',
           header: 'Upper Name',
-          transform: row => (row.name as string).toUpperCase()
+          format: row => (row.name as string).toUpperCase()
         }
       ];
       const harness = await createFixture({ columns });
@@ -517,6 +517,84 @@ describe('DataTable', () => {
       const computedStyle = window.getComputedStyle(table!);
       const colSizeVar = computedStyle.getPropertyValue('--forge-data-table-column-default-size');
       expect(colSizeVar.trim()).toBe('172px');
+    });
+  });
+
+  describe('Column Alignment', () => {
+    it.each(['start', 'center', 'end'] as const)('should align body cell text to %s when align is set', async align => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', footer: 'Total', align }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe(align);
+    });
+
+    it('should not align header or footer cell text when align is set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', footer: 'Total', align: 'end' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.headerCells[0]).textAlign).not.toBe('end');
+      expect(getComputedStyle(harness.footerCells[0]).textAlign).not.toBe('end');
+    });
+
+    it('should not align cell text when align is not set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe('start');
+    });
+
+    it.each([
+      ['NumberFormatter', () => new NumberFormatter()],
+      ['CurrencyFormatter', () => new CurrencyFormatter()]
+    ])('should align body cell text to end when a %s is used and align is not set', async (_name, createFormatter) => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'ID', property: 'id', format: createFormatter() }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe('end');
+    });
+
+    it.each([
+      ['NumberFormatter', () => new NumberFormatter(), 'data-number-format'],
+      ['CurrencyFormatter', () => new CurrencyFormatter(), 'data-currency-format']
+    ])('should set the format attribute on body cells when a %s is used', async (_name, createFormatter, attribute) => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'ID', property: 'id', format: createFormatter() }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.bodyCells[0].hasAttribute(attribute)).toBe(true);
+      expect(harness.headerCells[0].hasAttribute(attribute)).toBe(false);
+    });
+
+    it('should not set align when a formatter is used', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'ID', property: 'id', format: new NumberFormatter() }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.bodyCells[0].hasAttribute('data-align')).toBe(false);
+    });
+
+    it('should prefer align over the formatter default when both are set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'ID', property: 'id', format: new NumberFormatter(), align: 'start' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe('start');
+    });
+
+    it('should not align body cell text for a custom format function', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'ID', property: 'id', format: row => `#${row.id}` }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe('start');
+    });
+
+    it('should align only the columns that set align', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { header: 'ID', property: 'id', align: 'end' },
+        { header: 'Name', property: 'name' }
+      ];
+      const harness = await createFixture({ columns });
+
+      const [idCell, nameCell] = harness.getBodyRowByIndex(0)?.querySelectorAll('td') ?? [];
+      expect(getComputedStyle(idCell).textAlign).toBe('end');
+      expect(getComputedStyle(nameCell).textAlign).not.toBe('end');
     });
   });
 

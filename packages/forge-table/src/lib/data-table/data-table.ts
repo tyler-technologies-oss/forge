@@ -26,6 +26,7 @@ import { svg } from 'lit/static-html.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import type { DataSource } from '@tylertech/forge-core';
 import type { IPopoverToggleEventData, PopoverComponent } from '@tylertech/forge/popover';
+import { formatAttribute } from './directives/format-attribute.js';
 import { lightDomRender } from './directives/light-dom-render.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
@@ -533,6 +534,8 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
           'group-start': groupStartColumnIds.has(cell.column.id)
         })}
         id=${cell.column.id}
+        data-align=${ifDefined(cell.column.columnDef.meta?.align)}
+        ${formatAttribute(cell.column.columnDef.meta?.formatAttribute)}
         ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation || cell.column.columnDef.id === SELECT_COLUMN_ID}>
         <div class="cell-content" part="body-cell-content cell-content">
           ${cell.column.columnDef.meta?.cellSlot
