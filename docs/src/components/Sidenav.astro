@@ -16,8 +16,8 @@ const navigation = buildNavigation(components);
 ---
 
 <forge-scaffold>
-  <div slot="header" class="flex flex-col gap-small pb-small">
-    <forge-toolbar no-border class="[[data-placement=dialog]_&]:hidden">
+  <div slot="header" class="flex flex-col gap-small pb-small [[data-placement=dialog]_&]:hidden">
+    <forge-toolbar no-border>
       <a
         slot="start"
         href={baseUrl}

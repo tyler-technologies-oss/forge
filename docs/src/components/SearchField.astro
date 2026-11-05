@@ -23,7 +23,7 @@
     aria-keyshortcuts="Meta+K Control+K"
     class="cursor-pointer"
   />
-  <forge-kbd slot="end" mod keys="K" dense class="[[data-placement=dialog]_&]:hidden"></forge-kbd>
+  <forge-kbd slot="end" mod keys="K" dense></forge-kbd>
 </forge-text-field>
 
 <forge-keyboard-shortcut key="meta+k" global allow-while-typing data-search-shortcut></forge-keyboard-shortcut>
@@ -300,8 +300,10 @@
     }
   };
 
+  // Search is off while the sidenav lives in the mobile menu dialog, since
+  // the search dialog would open nested inside it.
   const openSearch = (initialQuery?: string): void => {
-    if (!dialog || !input) {
+    if (!dialog || !input || trigger?.closest("[data-placement=dialog]")) {
       return;
     }
     if (initialQuery !== undefined) {
