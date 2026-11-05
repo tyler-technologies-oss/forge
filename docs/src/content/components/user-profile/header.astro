@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-app-bar theme-mode="scoped" title-text="Forge" class="w-[480px]">
+    <forge-user-profile slot="end" full-name="First Last" email="first.last@tylertech.com"></forge-user-profile>
+  </forge-app-bar>
+</ComponentHeader>

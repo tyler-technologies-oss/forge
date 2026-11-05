@@ -1,0 +1,125 @@
+---
+title: Process Stepper
+description: Process steppers display progress through a multi-step process and let users move to a step.
+status: beta
+source: core
+category: navigation
+storybookId: components-process-stepper--demo
+---
+
+import Header from "./header.astro";
+import Example from "../../../components/Example.astro";
+import Rules from "../../../components/Rules.astro";
+import Rule from "../../../components/Rule.astro";
+import AnatomyDemo from "../../../components/docs/AnatomyDemo.astro";
+import AnatomyMarker from "../../../components/docs/AnatomyMarker.astro";
+
+<Header />
+
+## Overview
+
+A process stepper shows where someone is in a multi-step process, such as a permit application, a checkout, or a record's review workflow. Each step has a state marker, a label, and optionally supporting text and details, so users can see what is done, what is happening now, and what remains. Steps can also act as navigation, taking users back to a step they have already completed.
+
+Process steppers are typically paired with a form or a record page, and are placed beside the content, or above it, in a vertical or horizontal layout.
+
+## Usage
+
+`forge-process-stepper` contains `forge-process-step` children. Set `orientation` to `vertical` (the default) or `horizontal`, `numbered` to show step numbers in not-started markers, and `readonly` to display progress without making steps interactive. On each step, set `state` to `not-started`, `current`, `in-progress`, `completed`, or `critical`, `href` to render the step as a link, and `disabled` to block interaction. The stepper dispatches `change` when a step is selected; read the step from its `selectedStep` property. Use a process stepper for progress through a process; to switch between peer content, use <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tabs</a> instead.
+
+## Slot locations
+
+<AnatomyDemo>
+  <forge-process-stepper readonly class="my-large w-full max-w-md">
+    <forge-process-step state="completed">Application received</forge-process-step>
+    <forge-process-step state="current">
+      <span class="relative inline-block">
+        Internal review
+        <AnatomyMarker label={1} title="Label" description="The step's name, rendered inside its button or link." placement="top-end" outside />
+      </span>
+      <span slot="support-text" class="relative inline-block">
+        In progress
+        <AnatomyMarker label={2} title="Support text" description="Short descriptive text alongside the label, such as Optional." placement="top-end" outside />
+      </span>
+      <div slot="detail" class="relative">
+        <p class="m-0 forge-typography--body2">Assigned to J. Rivera</p>
+        <AnatomyMarker label={3} title="Detail" description="Content under the label, like dates, fields, actions, or validation messages." placement="end" outside />
+      </div>
+    </forge-process-step>
+    <forge-process-step>Record issued</forge-process-step>
+  </forge-process-stepper>
+</AnatomyDemo>
+
+The `marker` slot replaces the generated state marker with your own content.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Keep step labels short and descriptive.",
+      "Mark exactly one step as `current`.",
+      "Use `support-text` for brief labels like Optional, and `detail` for richer content.",
+      "Use `critical` on a step that has an error, and explain it in the step's detail.",
+      "Give the stepper an accessible name with a visible title when it stands alone.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a process stepper to switch between peer sections of content — use tabs.",
+      "Don't use it for a single step or an unordered set of tasks.",
+      "Don't rely on the marker's color alone to convey state.",
+      "Don't add so many steps that the stepper no longer fits its space.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Set each step's `state` to show progress. Steps are buttons by default, and the stepper dispatches `change` when one is selected.
+
+<Example description="A vertical process stepper with completed, current, and not-started steps." />
+
+## Horizontal
+
+Set `orientation="horizontal"` to lay steps out across the page, for processes with few steps and short labels.
+
+<Example description="A horizontal process stepper." />
+
+## States
+
+A step's `state` sets its marker: `not-started`, `current`, `in-progress`, `completed`, or `critical`. Use `support-text` for additional context.
+
+<Example description="Steps in each of the five states." />
+
+## Disabled
+
+Set `disabled` on a step that users can't go to yet. It keeps the marker for its state, is dimmed, and ignores interaction.
+
+<Example description="A horizontal process stepper with disabled upcoming steps." />
+
+## With title
+
+Label the stepper with a visible title using `aria-labelledby`.
+
+<Example description="A horizontal process stepper labelled by a heading." />
+
+## With details
+
+Slot content into a step's `detail` slot to show dates, subtasks, or actions beneath its label.
+
+<Example description="Steps with label-values, checkboxes, and a button in their detail slots." />
+
+## Readonly
+
+Set `readonly` to show progress only. Steps render no button or link and can't be activated.
+
+<Example description="A read-only horizontal process stepper." />
+
+## Numbered
+
+Set `numbered` to show each not-started step's number in its marker. Steps with an icon marker, like completed steps, still show the icon.
+
+<Example description="A horizontal process stepper with numbered markers." />

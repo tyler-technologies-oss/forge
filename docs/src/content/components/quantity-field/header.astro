@@ -1,0 +1,12 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-quantity-field class="w-48">
+    <label slot="label" for="header-quantity">Quantity</label>
+    <input id="header-quantity" type="number" value="2" />
+  </forge-quantity-field>
+</ComponentHeader>
