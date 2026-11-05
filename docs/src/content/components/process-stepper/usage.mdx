@@ -80,46 +80,62 @@ The `marker` slot replaces the generated state marker with your own content.
 
 Set each step's `state` to show progress. Steps are buttons by default, and the stepper dispatches `change` when one is selected.
 
-<Example description="A vertical process stepper with completed, current, and not-started steps." />
+<Example description="A vertical process stepper with completed, current, and not-started steps."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/demo/demo.html"
+/>
 
 ## Horizontal
 
 Set `orientation="horizontal"` to lay steps out across the page, for processes with few steps and short labels.
 
-<Example description="A horizontal process stepper." />
+<Example description="A horizontal process stepper."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/horizontal/horizontal.html"
+/>
 
 ## States
 
 A step's `state` sets its marker: `not-started`, `current`, `in-progress`, `completed`, or `critical`. Use `support-text` for additional context.
 
-<Example description="Steps in each of the five states." />
+<Example description="Steps in each of the five states."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/states/states.html"
+/>
 
 ## Disabled
 
 Set `disabled` on a step that users can't go to yet. It keeps the marker for its state, is dimmed, and ignores interaction.
 
-<Example description="A horizontal process stepper with disabled upcoming steps." />
+<Example description="A horizontal process stepper with disabled upcoming steps."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/disabled/disabled.html"
+/>
 
 ## With title
 
 Label the stepper with a visible title using `aria-labelledby`.
 
-<Example description="A horizontal process stepper labelled by a heading." />
+<Example description="A horizontal process stepper labelled by a heading."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/with-title/with-title.html"
+/>
 
 ## With details
 
 Slot content into a step's `detail` slot to show dates, subtasks, or actions beneath its label.
 
-<Example description="Steps with label-values, checkboxes, and a button in their detail slots." />
+<Example description="Steps with label-values, checkboxes, and a button in their detail slots."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/with-details/with-details.html"
+/>
 
 ## Readonly
 
 Set `readonly` to show progress only. Steps render no button or link and can't be activated.
 
-<Example description="A read-only horizontal process stepper." />
+<Example description="A read-only horizontal process stepper."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/readonly/readonly.html"
+/>
 
 ## Numbered
 
 Set `numbered` to show each not-started step's number in its marker. Steps with an icon marker, like completed steps, still show the icon.
 
-<Example description="A horizontal process stepper with numbered markers." />
+<Example description="A horizontal process stepper with numbered markers."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/process-stepper/numbered/numbered.html"
+/>

@@ -52,46 +52,62 @@ Listboxes are form controls, so they are often placed inside a form or card, and
 
 Each `forge-option` has a `value`, and the listbox's `value` reflects the selected option.
 
-<Example description="A listbox with three options." />
+<Example description="A listbox with three options."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/demo/demo.html"
+/>
 
 ## Multiple
 
 Set `multiple` to let users select more than one option. `value` becomes an array.
 
-<Example description="A listbox that allows multiple selections." />
+<Example description="A listbox that allows multiple selections."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/multiple/multiple.html"
+/>
 
 ## Dense
 
 Set `dense` to reduce the height of each option and fit more of them in the same space.
 
-<Example description="A listbox with compact options." />
+<Example description="A listbox with compact options."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/dense/dense.html"
+/>
 
 ## With option groups
 
 Wrap related options in `forge-option-group`, and label each group with an element in its `label` slot.
 
-<Example description="A listbox whose options are organized into labeled groups." />
+<Example description="A listbox whose options are organized into labeled groups."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/option-groups/option-groups.html"
+/>
 
 ## With icons
 
 Place a `forge-icon` in an option's `start` slot to reinforce its meaning alongside the label.
 
-<Example description="A listbox with a leading icon on each option." />
+<Example description="A listbox with a leading icon on each option."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/leading-icons/leading-icons.html"
+/>
 
 ## Reorderable
 
 Set `reorderable` so users can drag options to change their order. Update the DOM in a `forge-listbox-drop` handler to apply the new order.
 
-<Example description="A listbox whose options can be reordered." />
+<Example description="A listbox whose options can be reordered."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/reorderable/reorderable.html"
+/>
 
 ## Drag and drop
 
 Link two listboxes by setting each one's `drag-link` and `drop-link` to the other's `id`, so users can move options between them. Handle `forge-listbox-drag-out` and `forge-listbox-drop` to move the option in the DOM.
 
-<Example description="Two linked listboxes that exchange options by dragging." />
+<Example description="Two linked listboxes that exchange options by dragging."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/dual-listbox/dual-listbox.html"
+/>
 
 ## Disabled
 
 Set `disabled` on a `forge-option` to prevent that option from being selected, or on the listbox to disable all of its options.
 
-<Example description="A listbox with one disabled option." />
+<Example description="A listbox with one disabled option."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/listbox/disabled/disabled.html"
+/>
