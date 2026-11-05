@@ -97,28 +97,3 @@ The autocomplete and date and time pickers wrap a `forge-text-field`. Add the cl
 ```
 
 <Canvas of={AIStylesStories.Pickers} />
-
-## Customization
-
-The gradient colors and field dimensions are controlled by CSS custom properties. Set them on a `forge-ai` component, or on any ancestor to change several at once.
-
-| Property                     | Default                                                | Description                                                                                 |
-| ---------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `--forge-ai-gradient-start`  | `#e9c2ec`                                              | The first color of the gradient. Used by every supported component.                         |
-| `--forge-ai-gradient-end`    | `#cbcdff`                                              | The last color of the gradient. Used by every supported component.                          |
-| `--forge-ai-background`      | The gradient colors blended with `--forge-theme-surface` | The background of fields. Accepts any CSS `background` value, such as a gradient or color. |
-| `--forge-ai-border-width`    | `var(--forge-border-thin)`                             | The width of a field's gradient outline, or the plain variant's underline.                  |
-| `--forge-ai-glow-width`      | `var(--forge-border-medium)`                           | The width of the glow around a field's outline.                                             |
-
-```css
-.my-ai-section {
-  --forge-ai-gradient-start: #ffd8a8;
-  --forge-ai-gradient-end: #a5d8ff;
-}
-```
-
-<Canvas of={AIStylesStories.Customization} />
-
-The stylesheet is declared in a `forge-ai` [cascade layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer), so any of your own unlayered CSS takes
-precedence over it regardless of specificity or the order the stylesheets are loaded. This makes it safe to override the Forge component tokens that the AI styles
-set, such as `--forge-field-background`, for a specific element.

@@ -128,15 +128,3 @@ export const Pickers: Story = {
     </forge-stack>
   `
 };
-
-export const Customization: Story = {
-  ...standaloneStoryParams,
-  render: () => html`
-    <forge-stack gap="24" style="max-width: 400px; --forge-ai-gradient-start: #ffd8a8; --forge-ai-gradient-end: #a5d8ff">
-      <forge-text-field class="forge-ai">
-        <label slot="label" for="ai-custom">Custom colors</label>
-        <input type="text" id="ai-custom" />
-      </forge-text-field>
-    </forge-stack>
-  `
-};
