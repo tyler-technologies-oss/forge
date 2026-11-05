@@ -1,383 +1,44 @@
 ---
 /**
- * SearchField - Site search in the sidenav, backed by the Pagefind index that
- * `pnpm build` writes to `dist/pagefind/`. The sidenav field is a trigger that
- * opens a search dialog, also bound to Cmd/Ctrl+K. The index doesn't exist
- * under `astro dev`, so the dialog reports that search needs a build there.
+ * SearchField - Opens the site search dialog (see SearchDialog). The `field`
+ * variant is the read-only text field in the sidenav, and `icon-button` is the
+ * compact trigger for the mobile header. SearchDialog handles the clicks and
+ * keys, so any number of these can be on the page.
  */
+interface Props {
+  variant?: "field" | "icon-button";
+}
+
+const { variant = "field" } = Astro.props;
 ---
 
-<forge-text-field
-  label-position="none"
-  variant="filled"
-  shape="rounded"
-  class="cursor-pointer"
-  data-search-trigger>
-  <forge-icon slot="start" name="search"></forge-icon>
-  <input
-    type="text"
-    readonly
-    placeholder="Search"
-    aria-label="Search the docs"
-    aria-haspopup="dialog"
-    aria-keyshortcuts="Meta+K Control+K"
-    class="cursor-pointer"
-  />
-  <forge-kbd slot="end" mod keys="K" dense></forge-kbd>
-</forge-text-field>
-
-<forge-keyboard-shortcut key="meta+k" global allow-while-typing data-search-shortcut></forge-keyboard-shortcut>
-<forge-keyboard-shortcut key="ctrl+k" global allow-while-typing data-search-shortcut></forge-keyboard-shortcut>
-
-<forge-dialog
-  label="Search the docs"
-  placement="top"
-  class="[--forge-dialog-width:640px] [--forge-dialog-max-width:calc(100vw-32px)] [--forge-dialog-height:70vh]"
-  data-search-dialog>
-  <forge-scaffold>
-    <div slot="header" class="border-b border-outline">
-      <forge-text-field label-position="none" variant="plain" density="extra-large" class="w-full [--forge-field-padding-inline-start:var(--forge-spacing-medium)]">
-        <forge-icon slot="start" name="search"></forge-icon>
-        <input
-          type="text"
-          placeholder="Search"
-          aria-label="Search the docs"
-          role="combobox"
-          aria-expanded="false"
-          aria-autocomplete="list"
-          aria-controls="search-results"
-          autocomplete="off"
-          data-search-input
-        />
-        <div slot="end" class="flex items-center">
-          <forge-button variant="text" dense hidden data-search-clear>Clear the query</forge-button>
-          <forge-divider vertical class="h-4" data-search-clear-divider hidden></forge-divider>
-          <forge-icon-button aria-label="Close search" data-search-close>
-            <forge-icon name="close"></forge-icon>
-          </forge-icon-button>
-        </div>
-      </forge-text-field>
-    </div>
-
-    <div slot="body" class="p-medium">
-      <div
-        id="search-results"
-        class="flex flex-col gap-medium [&_mark]:bg-transparent [&_mark]:text-primary [&_mark]:font-bold"
-        data-search-results>
-      </div>
-      <p class="text-medium text-center m-0 py-xlarge" data-search-status>Type to search the docs.</p>
-      <p class="sr-only" aria-live="polite" data-search-announcer></p>
-    </div>
-
-    <forge-toolbar no-border slot="footer" inverted class="[--forge-theme-surface:var(--forge-theme-surface-dim)]">
-      <div slot="start" class="flex items-center gap-large text-label2 text-medium">
-        <span class="flex items-center gap-xsmall">
-          <forge-kbd keys="↓ ↑" dense></forge-kbd>
-          Navigate
-        </span>
-        <span class="flex items-center gap-xsmall">
-          <forge-kbd keys="Enter" dense></forge-kbd>
-          Select
-        </span>
-        <span class="flex items-center gap-xsmall">
-          <forge-kbd keys="Esc" dense></forge-kbd>
-          Close
-        </span>
-      </div>
-    </forge-toolbar>
-  </forge-scaffold>
-</forge-dialog>
-
-<script>
-  import { navigate } from "astro:transitions/client";
-  import type { DialogComponent } from "@tylertech/forge/dialog";
-  import type { IListItemComponent } from "@tylertech/forge/list";
-
-  interface PagefindSubResult {
-    title: string;
-    url: string;
-    excerpt: string;
-    locations: number[];
-  }
-
-  interface PagefindPage {
-    url: string;
-    excerpt: string;
-    meta: Record<string, string | undefined>;
-    sub_results: PagefindSubResult[];
-  }
-
-  interface PagefindResult {
-    data(): Promise<PagefindPage>;
-  }
-
-  interface Pagefind {
-    options(options: Record<string, unknown>): Promise<void>;
-    debouncedSearch(term: string, options?: object, timeout?: number): Promise<{ results: PagefindResult[] } | null>;
-  }
-
-  interface SearchHit {
-    title: string;
-    url: string;
-    excerpt: string;
-    isSection: boolean;
-  }
-
-  const MAX_RESULTS = 10;
-  const EXCERPT_LENGTH = 18;
-  const DEBOUNCE_MS = 150;
-  const DEFAULT_SECTION = "Docs";
-  const PAGEFIND_URL = `${import.meta.env.BASE_URL}pagefind/pagefind.js`;
-
-  const STATUS = {
-    idle: "Type to search the docs.",
-    unavailable: "Search is available once the site is built.",
-    noResults: (query: string) => `No results for "${query}".`,
-  };
-
-  const trigger = document.querySelector<HTMLElement>("[data-search-trigger]");
-  const triggerInput = trigger?.querySelector("input");
-  const dialog = document.querySelector<DialogComponent>("[data-search-dialog]");
-  const input = document.querySelector<HTMLInputElement>("[data-search-input]");
-  const clearButton = document.querySelector<HTMLElement>("[data-search-clear]");
-  const clearDivider = document.querySelector<HTMLElement>("[data-search-clear-divider]");
-  const resultsContainer = document.querySelector<HTMLElement>("[data-search-results]");
-  const status = document.querySelector<HTMLElement>("[data-search-status]");
-  const announcer = document.querySelector<HTMLElement>("[data-search-announcer]");
-
-  let pagefindLoader: Promise<Pagefind | undefined> | undefined;
-  let items: IListItemComponent[] = [];
-  let hits: SearchHit[] = [];
-  let activeIndex = -1;
-
-  const importPagefind = async (): Promise<Pagefind | undefined> => {
-    try {
-      const pagefind: Pagefind = await import(/* @vite-ignore */ PAGEFIND_URL);
-      await pagefind.options({ excerptLength: EXCERPT_LENGTH });
-      return pagefind;
-    } catch {
-      return undefined;
-    }
-  };
-
-  const loadPagefind = (): Promise<Pagefind | undefined> => {
-    pagefindLoader ??= importPagefind();
-    return pagefindLoader;
-  };
-
-  /** Points at the section of the page with the most matches, when that's a heading anchor. */
-  const toHit = (page: PagefindPage): SearchHit => {
-    const title = page.meta.title ?? page.url;
-    const best = page.sub_results.reduce<PagefindSubResult | undefined>(
-      (top, sub) => (!top || sub.locations.length > top.locations.length ? sub : top),
-      undefined,
-    );
-
-    if (!best || best.url === page.url || best.title === title) {
-      return { title, url: page.url, excerpt: page.excerpt, isSection: false };
-    }
-    return { title: `${title} › ${best.title}`, url: best.url, excerpt: best.excerpt, isSection: true };
-  };
-
-  const showStatus = (message: string | null): void => {
-    if (!status) {
-      return;
-    }
-    status.hidden = message === null;
-    status.textContent = message ?? "";
-  };
-
-  const setActive = (index: number): void => {
-    activeIndex = index;
-    items.forEach((item, itemIndex) => {
-      item.active = itemIndex === index;
-    });
-
-    const activeItem = items[index];
-    if (!activeItem) {
-      input?.removeAttribute("aria-activedescendant");
-      return;
-    }
-    input?.setAttribute("aria-activedescendant", activeItem.querySelector("a")?.id ?? "");
-    activeItem.scrollIntoView({ block: "nearest" });
-  };
-
-  /** Pagefind excerpts are HTML-escaped, with matches wrapped in `<mark>`, so they're safe as markup. */
-  const createResultItem = (hit: SearchHit, index: number): IListItemComponent => {
-    const item = document.createElement("forge-list-item");
-    item.twoLine = true;
-
-    const icon = document.createElement("forge-icon");
-    icon.slot = "start";
-    icon.name = hit.isSection ? "pound" : "file_document";
-
-    const link = document.createElement("a");
-    link.id = `search-result-${index}`;
-    link.href = hit.url;
-    link.textContent = hit.title;
-
-    const excerpt = document.createElement("span");
-    excerpt.slot = "secondary-text";
-    excerpt.innerHTML = hit.excerpt;
-
-    item.append(icon, link, excerpt);
-    return item;
-  };
-
-  const renderResults = (sections: Map<string, SearchHit[]>): void => {
-    if (!resultsContainer) {
-      return;
-    }
-
-    const groups = [...sections].map(([section, sectionHits], groupIndex) => {
-      const group = document.createElement("section");
-      const headingId = `search-group-${groupIndex}`;
-
-      const heading = document.createElement("h2");
-      heading.id = headingId;
-      heading.className = "text-subheading2 m-0 mb-xsmall";
-      heading.textContent = section;
-
-      const list = document.createElement("forge-list");
-      list.setAttribute("aria-labelledby", headingId);
-      list.append(...sectionHits.map((hit) => createResultItem(hit, hits.indexOf(hit))));
-
-      group.append(heading, list);
-      return group;
-    });
-
-    resultsContainer.replaceChildren(...groups);
-    items = [...resultsContainer.querySelectorAll("forge-list-item")];
-    input?.setAttribute("aria-expanded", String(items.length > 0));
-    setActive(items.length ? 0 : -1);
-  };
-
-  const clearResults = (message: string | null): void => {
-    hits = [];
-    renderResults(new Map());
-    showStatus(message);
-  };
-
-  const runSearch = async (): Promise<void> => {
-    const query = input?.value.trim() ?? "";
-    const isEmpty = !input?.value;
-    if (clearButton && clearDivider) {
-      clearButton.hidden = isEmpty;
-      clearDivider.hidden = isEmpty;
-    }
-    if (!query) {
-      clearResults(STATUS.idle);
-      return;
-    }
-
-    const pagefind = await loadPagefind();
-    if (!pagefind) {
-      clearResults(STATUS.unavailable);
-      return;
-    }
-
-    const search = await pagefind.debouncedSearch(query, {}, DEBOUNCE_MS);
-    if (!search) {
-      return;
-    }
-
-    const pages = await Promise.all(search.results.slice(0, MAX_RESULTS).map((result) => result.data()));
-    if (query !== input?.value.trim()) {
-      return;
-    }
-
-    hits = pages.map(toHit);
-    const sections = new Map<string, SearchHit[]>();
-    pages.forEach((page, index) => {
-      const section = page.meta.section ?? DEFAULT_SECTION;
-      sections.set(section, [...(sections.get(section) ?? []), hits[index]]);
-    });
-
-    renderResults(sections);
-    showStatus(hits.length ? null : STATUS.noResults(query));
-    if (announcer) {
-      announcer.textContent = `${search.results.length} results`;
-    }
-  };
-
-  // Search is off while the sidenav lives in the mobile menu dialog, since
-  // the search dialog would open nested inside it.
-  const openSearch = (initialQuery?: string): void => {
-    if (!dialog || !input || trigger?.closest("[data-placement=dialog]")) {
-      return;
-    }
-    if (initialQuery !== undefined) {
-      input.value = initialQuery;
-      runSearch();
-    }
-    dialog.open = true;
-    loadPagefind();
-  };
-
-  const closeSearch = (): void => {
-    if (dialog) {
-      dialog.open = false;
-    }
-  };
-
-  const goTo = (url: string): void => {
-    closeSearch();
-    navigate(url);
-  };
-
-  const onInputKeydown = (event: KeyboardEvent): void => {
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      if (!items.length) {
-        return;
-      }
-      const step = event.key === "ArrowDown" ? 1 : -1;
-      setActive((activeIndex + step + items.length) % items.length);
-      return;
-    }
-
-    if (event.key === "Enter" && hits[activeIndex]) {
-      event.preventDefault();
-      goTo(hits[activeIndex].url);
-    }
-  };
-
-  /** Typing a character into the read-only trigger opens the dialog with it as the query. */
-  const onTriggerKeydown = (event: KeyboardEvent): void => {
-    const isCharacter = event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey;
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openSearch();
-    } else if (isCharacter) {
-      event.preventDefault();
-      openSearch(event.key);
-    }
-  };
-
-  trigger?.addEventListener("click", () => openSearch());
-  triggerInput?.addEventListener("keydown", onTriggerKeydown);
-
-  document.querySelectorAll("[data-search-shortcut]").forEach((shortcut) => {
-    shortcut.addEventListener("forge-keyboard-shortcut-activate", () => (dialog?.open ? closeSearch() : openSearch()));
-  });
-
-  input?.addEventListener("input", runSearch);
-  input?.addEventListener("keydown", onInputKeydown);
-  clearButton?.addEventListener("click", () => {
-    if (!input) {
-      return;
-    }
-    input.value = "";
-    runSearch();
-    input.focus();
-  });
-
-  dialog?.addEventListener("forge-dialog-open", () => input?.select());
-  document.querySelector("[data-search-close]")?.addEventListener("click", closeSearch);
-
-  resultsContainer?.addEventListener("click", (event) => {
-    if ((event.target as Element).closest("a")) {
-      closeSearch();
-    }
-  });
-</script>
+{
+  variant === "icon-button" ? (
+    <forge-icon-button
+      aria-label="Search the docs"
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Meta+K Control+K"
+      data-search-trigger>
+      <forge-icon name="search" />
+    </forge-icon-button>
+  ) : (
+    <forge-text-field
+      label-position="none"
+      variant="filled"
+      shape="rounded"
+      class="cursor-pointer"
+      data-search-trigger>
+      <forge-icon slot="start" name="search" />
+      <input
+        type="text"
+        readonly
+        placeholder="Search"
+        aria-label="Search the docs"
+        aria-haspopup="dialog"
+        aria-keyshortcuts="Meta+K Control+K"
+        class="cursor-pointer"
+      />
+      <forge-kbd slot="end" mod keys="K" dense />
+    </forge-text-field>
+  )
+}

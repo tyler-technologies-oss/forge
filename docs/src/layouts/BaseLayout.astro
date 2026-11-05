@@ -2,6 +2,8 @@
 import { ClientRouter } from "astro:transitions";
 import FoundryChatbot from "../components/FoundryChatbot.astro";
 import PendoAnalytics from "../components/PendoAnalytics.astro";
+import SearchDialog from "../components/SearchDialog.astro";
+import SearchField from "../components/SearchField.astro";
 import Sidenav from "../components/Sidenav.astro";
 import { getCollection } from "astro:content";
 import "../styles/global.css";
@@ -249,6 +251,14 @@ const components = await getCollection("components");
         });
       }
 
+      // Cmd/Ctrl+K still works while the menu is open, so close the menu
+      // rather than stacking search on top of it. The search dialog is
+      // persisted, so this only needs binding once.
+      document.querySelector("[data-search-dialog]")?.addEventListener("forge-dialog-open", () => {
+        const dialog = getNavDialog();
+        if (dialog) dialog.open = false;
+      });
+
       navQuery.addEventListener("change", () => {
         placeSidenav();
         rebindExpansionPanels();
@@ -292,13 +302,15 @@ const components = await getCollection("components");
             class="hidden h-full max-w-[150px] dark:block"
           />
         </a>
-        <forge-icon-button
-          slot="end"
-          aria-label="Open navigation"
-          aria-haspopup="dialog"
-          data-nav-open>
-          <forge-icon name="menu"></forge-icon>
-        </forge-icon-button>
+        <div slot="end" class="flex items-center gap-xxsmall">
+          <SearchField variant="icon-button" />
+          <forge-icon-button
+            aria-label="Open navigation"
+            aria-haspopup="dialog"
+            data-nav-open>
+            <forge-icon name="menu"></forge-icon>
+          </forge-icon-button>
+        </div>
       </forge-toolbar>
 
       <div
@@ -356,6 +368,8 @@ const components = await getCollection("components");
         <div slot="body" class="h-full overflow-hidden" data-nav-dialog-body></div>
       </forge-scaffold>
     </forge-dialog>
+
+    <SearchDialog />
 
     <FoundryChatbot />
 
