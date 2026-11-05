@@ -27,7 +27,16 @@
  */
 @theme {
   --container-content: 1256px;
-  --container-wide: 1920px; 
+  --container-wide: 1920px;
+}
+
+/*
+ * Below `nav` the sidenav moves into a dialog behind a menu button. Matches
+ * forge-app-layout's default 960px breakpoint, in rem so it sorts with
+ * Tailwind's built-in screens.
+ */
+@theme {
+  --breakpoint-nav: 60rem;
 }
 
 /*
