@@ -76,6 +76,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
     this.#disabled = value;
     if (oldValue !== value) {
+      this.toggleAttribute('disabled', value);
       this.#handleDisabledChange();
       toggleState(this._internals, 'disabled', value);
       this.requestUpdate('disabled', oldValue);

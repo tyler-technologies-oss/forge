@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
 import ViteFullReload from 'vite-plugin-full-reload';
-import ViteInlineForgeHtml from '../../plugins/vite/vite-inline-forge-html';
-import ViteTransformForgeInlineStyleImports from '../../plugins/vite/vite-inline-forge-style-import';
+import ViteInlineForgeHtml from '../../plugins/vite/vite-inline-forge-html.ts';
+import ViteTransformForgeInlineStyleImports from '../../plugins/vite/vite-inline-forge-style-import.ts';
 
 export default defineConfig({
   server: {
@@ -11,8 +10,10 @@ export default defineConfig({
     strictPort: false,
     port: 3450
   },
+  resolve: {
+    tsconfigPaths: true
+  },
   plugins: [
-    tsconfigPaths(),
     ViteInlineForgeHtml,
     ViteTransformForgeInlineStyleImports,
     ViteEjsPlugin({

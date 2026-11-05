@@ -110,6 +110,8 @@ forge-table {
           @include head-cell-sortable-button;
         }
 
+        @include head-cell-sort-overlay(forge-table-head__cell-sort-icon, forge-table-head__cell__sort-order);
+
         &.forge-table-head__cell--sorted-ascending {
           .forge-table-head__cell-sort-icon {
             @include head-cell-sort-icon-ascending;

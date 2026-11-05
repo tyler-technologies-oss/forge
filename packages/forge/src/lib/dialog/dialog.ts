@@ -50,6 +50,10 @@ export interface IDialogProperties {
   moveable: boolean;
   label: string;
   description: string;
+  labelledBy: string | string[] | null;
+  describedBy: string | string[] | null;
+  labelledByElements: Element[] | null;
+  describedByElements: Element[] | null;
 }
 
 /** @deprecated - This will be removed in the future. Please switch to using DialogComponent. */
@@ -474,6 +478,40 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
   }
   #description = '';
 
+  /**
+   * The id or ids of elements in the dialog's root node that label the dialog. Takes precedence over `label`.
+   *
+   * Use this to associate elements by id across the shadow boundary.
+   * @default null
+   * @attribute labelledby
+   */
+  @property({ attribute: 'labelledby' })
+  public labelledBy: string | string[] | null = null;
+
+  /**
+   * The id or ids of elements in the dialog's root node that describe the dialog. Takes precedence over `description`.
+   *
+   * Use this to associate elements by id across the shadow boundary.
+   * @default null
+   * @attribute describedby
+   */
+  @property({ attribute: 'describedby' })
+  public describedBy: string | string[] | null = null;
+
+  /**
+   * The elements that label the dialog. Takes precedence over `labelledBy` and `label`.
+   * @default null
+   */
+  @property({ attribute: false })
+  public labelledByElements: Element[] | null = null;
+
+  /**
+   * The elements that describe the dialog. Takes precedence over `describedBy` and `description`.
+   * @default null
+   */
+  @property({ attribute: false })
+  public describedByElements: Element[] | null = null;
+
   public connectedCallback(): void {
     super.connectedCallback();
 
@@ -515,6 +553,18 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
 
     if (this.open) {
       this.#applyOpen();
+    }
+  }
+
+  public updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    if (
+      changedProperties.has('labelledBy') ||
+      changedProperties.has('describedBy') ||
+      changedProperties.has('labelledByElements') ||
+      changedProperties.has('describedByElements')
+    ) {
+      this.#applyAriaRelationships();
     }
   }
 
@@ -571,6 +621,9 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     if (this.type !== 'dialog') {
       this._dialogElement.setAttribute('role', this.type);
     }
+
+    // Referenced elements may have been added or changed since the ids were last resolved
+    this.#applyAriaRelationships();
 
     const isModal = this.mode === 'modal' || this.mode === 'inline-modal';
 
@@ -747,6 +800,44 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
 
   #onTriggerClick(): void {
     this.open = !this.open;
+  }
+
+  #applyAriaRelationships(): void {
+    if (!this._dialogElement) {
+      return;
+    }
+
+    const labelledBy = this.#resolveElements(this.labelledByElements, this.labelledBy);
+    if (labelledBy.length) {
+      this._dialogElement.ariaLabelledByElements = labelledBy;
+    } else {
+      this._dialogElement.ariaLabelledByElements = null;
+      this._dialogElement.setAttribute('aria-labelledby', DIALOG_CONSTANTS.ids.ACCESSIBLE_LABEL);
+    }
+
+    const describedBy = this.#resolveElements(this.describedByElements, this.describedBy);
+    if (describedBy.length) {
+      this._dialogElement.ariaDescribedByElements = describedBy;
+    } else {
+      this._dialogElement.ariaDescribedByElements = null;
+      this._dialogElement.setAttribute('aria-describedby', DIALOG_CONSTANTS.ids.ACCESSIBLE_DESCRIPTION);
+    }
+  }
+
+  #resolveElements(elements: Element[] | null, ids: string | string[] | null): Element[] {
+    if (elements?.length) {
+      return elements;
+    }
+
+    if (!ids) {
+      return [];
+    }
+
+    const rootNode = this.getRootNode() as Document | ShadowRoot;
+    return (Array.isArray(ids) ? ids : ids.split(/\s+/))
+      .filter(Boolean)
+      .map(id => rootNode.getElementById(id))
+      .filter((element): element is HTMLElement => !!element);
   }
 
   #tryLocateTriggerElement(id: string | null): void {

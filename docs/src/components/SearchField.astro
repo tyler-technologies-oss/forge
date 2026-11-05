@@ -1,0 +1,44 @@
+---
+/**
+ * SearchField - Opens the site search dialog (see SearchDialog). The `field`
+ * variant is the read-only text field in the sidenav, and `icon-button` is the
+ * compact trigger for the mobile header. SearchDialog handles the clicks and
+ * keys, so any number of these can be on the page.
+ */
+interface Props {
+  variant?: "field" | "icon-button";
+}
+
+const { variant = "field" } = Astro.props;
+---
+
+{
+  variant === "icon-button" ? (
+    <forge-icon-button
+      aria-label="Search the docs"
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Meta+K Control+K"
+      data-search-trigger>
+      <forge-icon name="search" />
+    </forge-icon-button>
+  ) : (
+    <forge-text-field
+      label-position="none"
+      variant="filled"
+      shape="rounded"
+      class="cursor-pointer"
+      data-search-trigger>
+      <forge-icon slot="start" name="search" />
+      <input
+        type="text"
+        readonly
+        placeholder="Search"
+        aria-label="Search the docs"
+        aria-haspopup="dialog"
+        aria-keyshortcuts="Meta+K Control+K"
+        class="cursor-pointer"
+      />
+      <forge-kbd slot="end" mod keys="K" dense />
+    </forge-text-field>
+  )
+}

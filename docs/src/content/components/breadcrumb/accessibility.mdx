@@ -1,0 +1,29 @@
+## Screen reader behavior
+
+`forge-breadcrumb` automatically applies `role="navigation"`, and the trail inside it is exposed as a list: each `forge-breadcrumb-item` and `forge-breadcrumb-overflow-menu` has `role="listitem"`. The item marked `current` gets `aria-current="page"` and renders as plain text rather than a link, so screen readers announce it as the current page.
+
+## Labeling
+
+Give the breadcrumb an accessible name with `aria-label`, such as "Breadcrumb", so it can be told apart from other navigation landmarks on the page.
+
+```html
+<forge-breadcrumb aria-label="Breadcrumb">
+  <forge-breadcrumb-item href="/" home></forge-breadcrumb-item>
+  <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+</forge-breadcrumb>
+```
+
+The home icon is labeled "Home" by default through a tooltip. Slot text into a `home` item to provide a different label. The overflow button and the scroll buttons are labeled by their tooltips ("Previous breadcrumbs" and "Next breadcrumbs" for the scroll buttons); slot text into the overflow menu's `tooltip` slot to change its label, for example to match your app's language.
+
+## Keyboard interaction
+
+Linked items are links, and the overflow, child item, and scroll controls are buttons, so each is a normal tab stop.
+
+| Key         | Action                                                                                |
+| ----------- | ------------------------------------------------------------------------------------- |
+| Tab         | Moves focus to the next link or button in the breadcrumb.                             |
+| Shift + Tab | Moves focus to the previous link or button in the breadcrumb.                         |
+| Enter       | Follows the focused link, or opens the focused overflow or child item menu.           |
+| Space       | Activates the focused button, including the overflow, child item, and scroll buttons. |
+
+The popover menu closes when a link is selected or when focus moves out of it. The current item and any item without an `href` are not focusable.

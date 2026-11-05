@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.surface" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
+
+$_keys: (
+  surface,
+  surface-inverse,
+  surface-container,
+  surface-container-minimum,
+  surface-container-low,
+  surface-container-medium,
+  surface-container-high,
+  surface-dim,
+  surface-bright,
+  surface-bright-shadow,
+  on-surface,
+  on-surface-inverse,
+  on-surface-container,
+  on-surface-container-minimum,
+  on-surface-container-low,
+  on-surface-container-medium,
+  on-surface-container-high
+);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

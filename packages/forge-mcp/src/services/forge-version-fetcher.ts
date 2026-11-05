@@ -36,7 +36,9 @@ export async function fetchLatestForgeManifest(): Promise<PackageManifest | null
     return {
       packageName: '@tylertech/forge',
       manifestPath: manifestUrl,
-      content
+      content,
+      source: 'latest',
+      version: latest.version
     };
   } catch {
     return null;

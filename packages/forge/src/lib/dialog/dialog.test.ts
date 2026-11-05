@@ -631,6 +631,98 @@ describe('Dialog', () => {
     });
   });
 
+  describe('aria relationships', () => {
+    it('should associate elements by id when labelledBy is set', async () => {
+      const harness = await createFixture();
+      harness.element.labelledBy = 'dialog-title';
+
+      await harness.showAsync();
+
+      const title = harness.element.querySelector('#dialog-title');
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([title]);
+    });
+
+    it('should associate multiple elements when labelledBy is an array of ids', async () => {
+      const harness = await createFixture();
+      harness.element.labelledBy = ['dialog-title', 'dialog-desc'];
+
+      await harness.showAsync();
+
+      const title = harness.element.querySelector('#dialog-title');
+      const desc = harness.element.querySelector('#dialog-desc');
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([title, desc]);
+    });
+
+    it('should associate elements by id when labelledby attribute is set', async () => {
+      const harness = await createFixture();
+      harness.element.setAttribute('labelledby', 'dialog-title dialog-desc');
+
+      await harness.showAsync();
+
+      const title = harness.element.querySelector('#dialog-title');
+      const desc = harness.element.querySelector('#dialog-desc');
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([title, desc]);
+    });
+
+    it('should associate elements by id when describedBy is set', async () => {
+      const harness = await createFixture();
+      harness.element.describedBy = 'dialog-desc';
+
+      await harness.showAsync();
+
+      const desc = harness.element.querySelector('#dialog-desc');
+      expect(harness.nativeDialogElement.ariaDescribedByElements).toEqual([desc]);
+    });
+
+    it('should ignore ids that do not match an element', async () => {
+      const harness = await createFixture();
+      harness.element.labelledBy = ['missing', 'dialog-title'];
+
+      await harness.showAsync();
+
+      const title = harness.element.querySelector('#dialog-title');
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([title]);
+    });
+
+    it('should set labelledByElements and describedByElements as is', async () => {
+      const harness = await createFixture();
+      const title = harness.element.querySelector('#dialog-title') as HTMLElement;
+      const desc = harness.element.querySelector('#dialog-desc') as HTMLElement;
+      harness.element.labelledByElements = [title];
+      harness.element.describedByElements = [desc];
+
+      await harness.showAsync();
+
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([title]);
+      expect(harness.nativeDialogElement.ariaDescribedByElements).toEqual([desc]);
+    });
+
+    it('should prefer elements over ids', async () => {
+      const harness = await createFixture();
+      const desc = harness.element.querySelector('#dialog-desc') as HTMLElement;
+      harness.element.labelledBy = 'dialog-title';
+      harness.element.labelledByElements = [desc];
+
+      await harness.showAsync();
+
+      expect(harness.nativeDialogElement.ariaLabelledByElements).toEqual([desc]);
+    });
+
+    it('should fall back to label and description when relationships are cleared', async () => {
+      const harness = await createFixture();
+      harness.element.labelledBy = 'dialog-title';
+      harness.element.describedBy = 'dialog-desc';
+      await harness.showAsync();
+
+      harness.element.labelledBy = null;
+      harness.element.describedBy = null;
+      await frame();
+
+      expect(harness.nativeDialogElement.getAttribute('aria-labelledby')).toBe('forge-dialog-label');
+      expect(harness.nativeDialogElement.getAttribute('aria-describedby')).toBe('forge-dialog-description');
+    });
+  });
+
   describe('open state', () => {
     it('should be hidden by default', async () => {
       const harness = await createFixture();

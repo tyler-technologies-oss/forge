@@ -118,6 +118,23 @@ table.columnConfigurations = [
 ];
 ```
 
+## Interactive controls in sortable headers
+
+When a sortable column uses a `headerTemplate`, clicking anywhere in the header cell sorts the column. To render an interactive control (such as a button or
+link) in the header that should **not** trigger a sort, add the `forge-ignore` (or `data-forge-ignore`) attribute to the control, or to any ancestor of it
+within the header cell.
+
+```typescript
+const columnConfigurations: IColumnConfiguration[] = [
+  {
+    header: 'Name',
+    property: 'name',
+    sortable: true,
+    headerTemplate: () => `Name <forge-icon-button forge-ignore aria-label="Column help"><forge-icon name="help"></forge-icon></forge-icon-button>`
+  }
+];
+```
+
 ## Using column footers
 
 To add a footer row to the table, set the `include-footer` attribute (or `includeFooter` property) to `true` on the `<forge-table>` element. Then configure each column with either a `footer` string or a `footerTemplate` callback to control what each cell in the footer row renders.

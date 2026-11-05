@@ -39,6 +39,11 @@ const selectors = {
   ACCESSIBLE_DESCRIPTION: '#forge-dialog-description'
 };
 
+const ids = {
+  ACCESSIBLE_LABEL: 'forge-dialog-label',
+  ACCESSIBLE_DESCRIPTION: 'forge-dialog-description'
+};
+
 const events = {
   BEFORE_CLOSE: `${elementName}-before-close`,
   OPEN: `${elementName}-open`,
@@ -67,6 +72,7 @@ export const DIALOG_CONSTANTS = {
   classes,
   attributes,
   selectors,
+  ids,
   events,
   defaults
 };

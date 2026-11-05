@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-listbox class="w-64" value="2">
+    <forge-option value="1">Option 1</forge-option>
+    <forge-option value="2">Option 2</forge-option>
+    <forge-option value="3">Option 3</forge-option>
+  </forge-listbox>
+</ComponentHeader>

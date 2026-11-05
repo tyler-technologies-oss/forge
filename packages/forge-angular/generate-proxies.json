@@ -9,6 +9,7 @@
   "componentDependencies": {
     "forge-accordion": ["forge-expansion-panel"],
     "forge-app-launcher": ["forge-app-launcher-link"],
+    "forge-breadcrumb": ["forge-breadcrumb-item", "forge-breadcrumb-overflow-menu"],
     "forge-button-toggle-group": ["forge-button-toggle"],
     "forge-chip-field": ["forge-chip"],
     "forge-chip-set": ["forge-chip"],

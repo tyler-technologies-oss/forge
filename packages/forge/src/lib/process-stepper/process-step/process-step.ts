@@ -88,6 +88,8 @@ export class ProcessStepComponent extends BaseLitElement {
 
   static {
     IconRegistry.define([tylIconCheckCircle, tylIconCircleDotted, tylIconCircleHalfFull, tylIconAlertCircleOutline]);
+    // Oxc drops symbol keys on decorated class fields, so this can't use the `@property` decorator
+    this.createProperty(stepIndex, { attribute: false });
   }
 
   /**
@@ -117,7 +119,6 @@ export class ProcessStepComponent extends BaseLitElement {
   public disabled = false;
 
   /** @internal */
-  @property({ attribute: false })
   public [stepIndex] = 0;
 
   @state()

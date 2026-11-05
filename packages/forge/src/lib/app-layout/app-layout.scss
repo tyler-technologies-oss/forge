@@ -1,4 +1,5 @@
 @use '@tylertech/forge-tokens/sass/spacing';
+@use '../scaffold/core' as scaffold;
 
 /* stylelint-disable custom-property-pattern */
 
@@ -8,6 +9,11 @@
   --_mini-drawer-z-index: var(--forge-app-layout-mini-drawer-z-index, 3);
   display: block;
   height: 100%;
+}
+
+::slotted(:not([slot])) {
+  @include scaffold.slotted-base;
+  @include scaffold.body-inner;
 }
 
 forge-app-bar {

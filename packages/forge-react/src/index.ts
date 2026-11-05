@@ -78,6 +78,9 @@ import {
   ITooltipComponent,
   IViewComponent,
   IViewSwitcherComponent,
+  BreadcrumbComponent,
+  BreadcrumbItemComponent,
+  BreadcrumbOverflowMenuComponent,
   KbdComponent,
   KeyComponent,
   KeyItemComponent,
@@ -130,6 +133,9 @@ declare global {
       'forge-badge': CustomElementProps<IBadgeComponent>;
       'forge-banner': CustomElementProps<IBannerComponent>;
       'forge-bottom-sheet': CustomElementProps<IBottomSheetComponent>;
+      'forge-breadcrumb-item': CustomElementProps<BreadcrumbItemComponent>;
+      'forge-breadcrumb-overflow-menu': CustomElementProps<BreadcrumbOverflowMenuComponent>;
+      'forge-breadcrumb': CustomElementProps<BreadcrumbComponent>;
       'forge-busy-indicator': CustomElementProps<IBusyIndicatorComponent>;
       'forge-button-area': CustomElementProps<IButtonAreaComponent>;
       'forge-button-toggle-group': CustomElementProps<IButtonToggleGroupComponent>;

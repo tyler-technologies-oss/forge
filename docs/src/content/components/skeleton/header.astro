@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64 flex flex-col gap-small">
+    <forge-skeleton text></forge-skeleton>
+    <forge-skeleton text></forge-skeleton>
+    <forge-skeleton text class="w-3/5"></forge-skeleton>
+  </div>
+</ComponentHeader>

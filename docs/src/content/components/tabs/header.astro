@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-tab-bar active-tab="0">
+    <forge-tab selected>Overview</forge-tab>
+    <forge-tab>Activity</forge-tab>
+    <forge-tab>Settings</forge-tab>
+  </forge-tab-bar>
+</ComponentHeader>

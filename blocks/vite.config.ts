@@ -37,7 +37,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: false,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         'forge-register': path.resolve(process.cwd(), 'forge-register.ts'),
         'ready-transition': path.resolve(process.cwd(), 'ready-transition.ts'),

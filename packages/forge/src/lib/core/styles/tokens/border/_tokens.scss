@@ -1,0 +1,10 @@
+@use 'sass:map';
+
+@forward '@tylertech/forge-tokens/sass/tokens/border';
+@use '@tylertech/forge-tokens/sass/tokens/border' as tokens;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/border/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/border" from @tylertech/forge-tokens instead.';
+
+@function get($key) {
+  @return map.get(tokens.$tokens, $key);
+}

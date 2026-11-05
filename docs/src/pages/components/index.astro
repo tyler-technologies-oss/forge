@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageScaffold from "../../components/PageScaffold.astro";
+import ContentHeader from "../../components/ContentHeader.astro";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { getCollection } from "astro:content";
+
+const headers = import.meta.glob<AstroComponentFactory>(
+  "../../content/components/*/header.astro",
+  { eager: true, import: "default" },
+);
+
+const components = (await getCollection("components"))
+  .toSorted((a, b) => a.data.title.localeCompare(b.data.title))
+  .map(({ id, data }) => ({
+    id,
+    data,
+    Header: headers[`../../content/components/${id}/header.astro`],
+  }));
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Components">
+  <PageScaffold>
+    <ContentHeader
+      slot="header"
+      title="Components"
+      description="Explore Forge's library of reusable UI components. Each component is designed to be accessible, customizable, and consistent with the Forge design system."
+    />
+
+    <div class="mt-large flex flex-col gap-large">
+      <forge-text-field>
+        <forge-icon slot="start" name="search"></forge-icon>
+        <label for="component-filter">Filter components</label>
+        <input type="text" id="component-filter" autocomplete="off" />
+      </forge-text-field>
+
+      <ul
+        id="component-list"
+        class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-medium list-none m-0 p-0">
+        {
+          components.map(({ id, data, Header }) => (
+            <li
+              class="m-0"
+              data-filter-text={`${data.title} ${data.description}`.toLowerCase()}>
+              <forge-card class="p-0 h-full">
+                <forge-button-area class="h-full">
+                  <a
+                    slot="button"
+                    href={`${baseUrl}components/${id}/usage/`}
+                    aria-labelledby={`${id}-heading`}
+                  />
+                  <div class="h-full flex flex-col">
+                    {Header && <Header thumbnail />}
+                    <div class="flex flex-col gap-xxsmall p-medium">
+                      <h2 id={`${id}-heading`} class="text-heading3 m-0">
+                        {data.title}
+                      </h2>
+                      <p class="text-body1 text-medium line-clamp-2 m-0">
+                        {data.description}
+                      </p>
+                    </div>
+                  </div>
+                </forge-button-area>
+              </forge-card>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p id="component-filter-empty" class="text-medium m-0" hidden>
+        No components match your filter.
+      </p>
+    </div>
+  </PageScaffold>
+</BaseLayout>
+
+<script>
+  const initComponentFilter = (): void => {
+    const input = document.getElementById(
+      "component-filter",
+    ) as HTMLInputElement | null;
+    const emptyState = document.getElementById("component-filter-empty");
+    const items = document.querySelectorAll<HTMLElement>("#component-list > li");
+    if (!input || !emptyState) {
+      return;
+    }
+
+    input.addEventListener("input", () => {
+      const query = input.value.toLowerCase().trim();
+      let visibleCount = 0;
+      items.forEach((item) => {
+        const matches =
+          !query || (item.dataset.filterText ?? "").includes(query);
+        item.hidden = !matches;
+        if (matches) {
+          visibleCount++;
+        }
+      });
+      emptyState.hidden = visibleCount > 0;
+    });
+  };
+
+  document.addEventListener("astro:page-load", initComponentFilter);
+</script>

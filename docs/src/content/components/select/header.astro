@@ -1,0 +1,15 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64">
+    <forge-select label="Fruit" value="apple">
+      <forge-option value="apple">Apple</forge-option>
+      <forge-option value="banana">Banana</forge-option>
+      <forge-option value="cherry">Cherry</forge-option>
+    </forge-select>
+  </div>
+</ComponentHeader>

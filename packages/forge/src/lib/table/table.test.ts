@@ -2041,6 +2041,91 @@ describe('TableComponent', () => {
       expect(firstCell.innerHTML).toContain(TABLE_CONSTANTS.classes.TABLE_HEAD_CELL_SORT_ICON);
     });
 
+    it('should not nest interactive header template content within a button when column is sortable', async () => {
+      const harness = await createFixture();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].headerTemplate = () => '<a href="#help">Help</a>';
+
+      harness.component.columnConfigurations = testColumns;
+      await frame();
+
+      const firstCell = harness.getTableHeaderRow().cells.item(0) as HTMLTableCellElement;
+      const buttons = Array.from(firstCell.querySelectorAll('button'));
+      expect(buttons.length).toBe(1);
+      expect(buttons[0].querySelector('a, button, input, [tabindex]')).toBeNull();
+      expect(firstCell.querySelector('a')).not.toBeNull();
+    });
+
+    it('should emit sort event when pressing enter or space on sortable column with custom header template', async () => {
+      const harness = await createFixture();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].headerTemplate = () => '<span>Hello Goodbye</span>';
+
+      harness.component.columnConfigurations = testColumns;
+      await frame();
+
+      const callback = vi.fn();
+      harness.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const firstCell = harness.getTableHeaderRow().cells.item(0) as HTMLTableCellElement;
+      const sortButton = firstCell.querySelector('button') as HTMLButtonElement;
+      sortButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      sortButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+
+      expect(callback).toHaveBeenCalledTimes(2);
+    });
+
+    it('should label sort button with custom header template content', async () => {
+      const harness = await createFixture();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].headerTemplate = () => '<span>Hello Goodbye</span>';
+
+      harness.component.columnConfigurations = testColumns;
+      await frame();
+
+      const firstCell = harness.getTableHeaderRow().cells.item(0) as HTMLTableCellElement;
+      const sortButton = firstCell.querySelector('button') as HTMLButtonElement;
+      const labelId = sortButton.getAttribute('aria-labelledby') as string;
+      expect(labelId).toBeTruthy();
+      expect(firstCell.querySelector(`#${labelId}`)?.textContent).toContain('Hello Goodbye');
+    });
+
+    it('should not set aria-hidden on sortable header cell with empty header text', async () => {
+      const harness = await createFixture();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].header = '';
+
+      harness.component.columnConfigurations = testColumns;
+      await frame();
+
+      const firstCell = harness.getTableHeaderRow().cells.item(0) as HTMLTableCellElement;
+      expect(firstCell.hasAttribute('aria-hidden')).toBe(false);
+    });
+
+    it.each(['forge-ignore', 'data-forge-ignore'])('should not sort when clicking element with %s attribute in custom header template', async attr => {
+      const harness = await createFixture();
+      const testColumns = deepCopy(columns);
+      testColumns[0].sortable = true;
+      testColumns[0].headerTemplate = () => `<span>Hello</span><button ${attr}><span class="inner">Help</span></button>`;
+
+      harness.component.columnConfigurations = testColumns;
+      await frame();
+
+      const callback = vi.fn();
+      harness.component.addEventListener(TABLE_CONSTANTS.events.SORT, callback);
+
+      const firstCell = harness.getTableHeaderRow().cells.item(0) as HTMLTableCellElement;
+      clickTableCell(firstCell.querySelector('.inner') as HTMLElement);
+      expect(callback).not.toHaveBeenCalled();
+
+      clickTableCell(firstCell.querySelector('span') as HTMLElement);
+      expect(callback).toHaveBeenCalledOnce();
+    });
+
     it('should emit array of sorted columns with multiple column sort', async () => {
       const harness = await createFixture();
       harness.component.multiColumnSort = true;

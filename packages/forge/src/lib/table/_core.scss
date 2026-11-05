@@ -249,6 +249,31 @@
   }
 }
 
+// Styles for the sort button of a sortable column with a custom header template. The button overlays the cell so that
+// interactive content within the template is a sibling of the button instead of a descendant.
+@mixin head-cell-sort-overlay($sort-icon-class-name, $sort-order-class-name) {
+  .forge-table-head__cell-container {
+    position: relative;
+
+    > [data-cell-template] {
+      position: relative;
+      z-index: 1;
+    }
+
+    > .#{$sort-icon-class-name},
+    > .#{$sort-order-class-name} {
+      pointer-events: none;
+    }
+  }
+
+  .forge-table-head__cell-sort-button {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    padding: 0;
+  }
+}
+
 // The default table footer row styles.
 @mixin foot-row {
   height: variables.$tfoot-row-height;

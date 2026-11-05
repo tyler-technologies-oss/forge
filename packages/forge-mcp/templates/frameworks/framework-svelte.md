@@ -22,15 +22,13 @@ This will configure the default font family for your application, and load the r
 
 ## Importing Components
 
-To use Forge components in your Svelte application, import the components you need from the `@tylertech/forge` package.
+To use Forge components in your Svelte application, register the components you need with side-effect imports from their `@tylertech/forge/{component}` subpaths.
 
 ```svelte
 <script>
-  import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
-
-  // Only import the components you need
-  defineButtonComponent();
-  defineCardComponent();
+  // Only import the components you need (do not use definition functions)
+  import '@tylertech/forge/button';
+  import '@tylertech/forge/card';
 </script>
 
 <div>

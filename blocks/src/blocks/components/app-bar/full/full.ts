@@ -1,4 +1,4 @@
 import { IconRegistry } from '@tylertech/forge/icon';
-import { tylIconForgeLogo, tylIconHelp, tylIconMenu, tylIconNotifications } from '@tylertech/tyler-icons';
+import { tylIconAccountCircle, tylIconForgeLogo, tylIconHelp, tylIconMenu, tylIconNotifications, tylIconSettings } from '@tylertech/tyler-icons';
 
-IconRegistry.define([tylIconForgeLogo, tylIconHelp, tylIconMenu, tylIconNotifications]);
+IconRegistry.define([tylIconAccountCircle, tylIconForgeLogo, tylIconHelp, tylIconMenu, tylIconNotifications, tylIconSettings]);

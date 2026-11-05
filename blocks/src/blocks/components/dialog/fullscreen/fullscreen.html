@@ -3,23 +3,24 @@
   @type component
   @description Fullscreen usage example for the forge-dialog component.
   @tags dialog, fullscreen, storybook, component-example
+  @screenshot-click #open-dialog-button-fullscreen
 -->
 <div>
   <forge-button id="open-dialog-button-fullscreen" variant="raised">Open dialog</forge-button>
-  <forge-dialog id="dialog-fullscreen" fullscreen>
+  <forge-dialog id="dialog-fullscreen" label="Title text" description="Lorem ipsum dolor sit amet consectetur adipisicing elit." fullscreen>
     <forge-scaffold class="h-auto">
-      <forge-toolbar slot="header" no-divider>
-        <h1 class="forge-typography--heading4 m-0" id="dialog-title-fullscreen" slot="start">Title text</h1>
+      <forge-toolbar slot="header">
+        <h1 class="forge-typography--heading4 m-0" slot="start">Title text</h1>
         <forge-icon-button id="close-dialog-icon-button-fullscreen" slot="end" aria-label="Close dialog">
           <forge-icon name="close">
           </forge-icon>
         </forge-icon-button>
       </forge-toolbar>
-      <p slot="body" id="dialog-message-fullscreen" class="p-medium">
+      <p slot="body" class="p-medium">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sed pariatur error repellendus eos! Quas, optio esse ad illum quis blanditiis rerum quia.
         Corrupti, ad hic velit praesentium voluptatum dolores?
       </p>
-      <forge-toolbar slot="footer" no-divider>
+      <forge-toolbar slot="footer" inverted>
         <forge-button id="close-dialog-button-fullscreen" slot="end" variant="raised">Close</forge-button>
       </forge-toolbar>
     </forge-scaffold>
