@@ -1,0 +1,29 @@
+## Screen reader behavior
+
+The confirmation dialog applies `role="dialog"` and `aria-modal="true"` for you, and its title is rendered as a heading when one is slotted. When it opens, a screen reader announces the dialog's name and description.
+
+When `isBusy` is set, the primary button shows a progress indicator and both buttons are disabled. Use `busyLabel` to give that indicator a descriptive accessible name (the default is "Loading").
+
+## Labeling
+
+`aria-labelledby` and `aria-describedby` are set automatically from the `label` and `description` properties. If you don't set them, the dialog uses the text in the `title` and `message` slots. Set `label` and `description` when the slotted content isn't plain text or isn't the best announcement.
+
+```html
+<forge-confirmation-dialog label="Delete images" description="This permanently removes the selected images." busy-label="Deleting images">
+  <span slot="title">Delete selected images?</span>
+  <span slot="message">Images will be permanently removed from your account and all synced devices.</span>
+</forge-confirmation-dialog>
+```
+
+## Keyboard interaction
+
+The dialog is modal, so the rest of the page is inert while it's open. When a title is slotted, the close button is named "Close confirmation dialog" and receives focus when the dialog opens.
+
+| Key         | Action                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------- |
+| Tab         | Moves focus to the next control inside the dialog.                                                |
+| Shift + Tab | Moves focus to the previous control inside the dialog.                                            |
+| Enter/Space | Activates the focused button or the close button.                                                 |
+| Escape      | Dismisses the dialog as the secondary action (`detail.value` is `false`, reason `light-dismiss`). |
+
+Closing with the close button also counts as the secondary action. Make sure focus returns to a logical element, such as the trigger, after the dialog closes.
