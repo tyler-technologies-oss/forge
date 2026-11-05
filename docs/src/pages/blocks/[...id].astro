@@ -26,7 +26,7 @@ const { block } = Astro.props;
 const fileUrl = getBlockFileUrl(block);
 ---
 
-<BaseLayout title={block.name} description={block.description} wide>
+<BaseLayout title={block.name} description={block.description} wide searchable={false}>
   <PageScaffold class="block-detail">
     <ContentHeader slot="header" title={block.name} description={block.description} showBackButton />
 

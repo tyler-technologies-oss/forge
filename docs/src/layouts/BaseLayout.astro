@@ -20,6 +20,11 @@ interface Props {
    * edge to edge.
    */
   flush?: boolean;
+  /**
+   * Includes the page in the Pagefind search index. Pages that never call
+   * BaseLayout (like redirect stubs) are left out automatically.
+   */
+  searchable?: boolean;
 }
 
 const {
@@ -27,7 +32,20 @@ const {
   description = "Forge Design System Documentation",
   wide = false,
   flush = false,
+  searchable = true,
 } = Astro.props;
+
+const SEARCH_SECTIONS: Record<string, string> = {
+  about: "About",
+  components: "Components",
+  designing: "Designing",
+  developing: "Developing",
+  faq: "FAQ",
+  icons: "Icons",
+  tokens: "Tokens",
+};
+
+const searchSection = SEARCH_SECTIONS[Astro.url.pathname.split("/")[1]] ?? "Docs";
 
 const components = await getCollection("components");
 ---
@@ -208,12 +226,20 @@ const components = await getCollection("components");
         <Sidenav components={components} />
       </div>
 
-      <main class="py-small pe-small overflow-hidden flex gap-medium items-start" slot="body">
+      <main
+        class="py-small pe-small overflow-hidden flex gap-medium items-start"
+        slot="body"
+        data-pagefind-meta={`section:${searchSection}`}>
         <forge-card
           class:list={["body-card h-full min-w-0 flex-1", wide ? "max-w-wide" : "max-w-content", { flush }]}>
           <div class="h-full">
             <forge-scaffold>
-              <div slot="body" data-scroll-body data-flush={flush || undefined}>
+              <div
+                slot="body"
+                data-scroll-body
+                data-flush={flush || undefined}
+                data-pagefind-body={searchable || undefined}
+                data-pagefind-meta={`title:${title}`}>
                 <slot />
               </div>
             </forge-scaffold>

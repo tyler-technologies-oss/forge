@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { buildNavigation } from "../config/navigation";
 import NavItem from "./NavItem.astro";
+import SearchField from "./SearchField.astro";
 
 interface Props {
   components: CollectionEntry<"components">[];
@@ -15,23 +16,26 @@ const navigation = buildNavigation(components);
 ---
 
 <forge-scaffold>
-  <forge-toolbar no-border slot="header">
-    <a
-      slot="start"
-      href={baseUrl}
-      aria-label="Forge Design System home"
-      class="flex h-full">
-      <img
-        src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
-        alt=""
-        class="block h-full max-h-[100px] max-w-[150px]"
-      />
-    </a>
-    <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
-      <forge-icon name="brightness_3"></forge-icon>
-      <forge-icon slot="on" name="brightness_7"></forge-icon>
-    </forge-icon-button>
-  </forge-toolbar>
+  <div slot="header" class="flex flex-col gap-small pb-small">
+    <forge-toolbar no-border>
+      <a
+        slot="start"
+        href={baseUrl}
+        aria-label="Forge Design System home"
+        class="flex h-full">
+        <img
+          src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
+          alt=""
+          class="block h-full max-h-[100px] max-w-[150px]"
+        />
+      </a>
+      <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
+        <forge-icon name="brightness_3"></forge-icon>
+        <forge-icon slot="on" name="brightness_7"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+    <SearchField />
+  </div>
   <div slot="body">
     {
       navigation.map((section, index) => (
