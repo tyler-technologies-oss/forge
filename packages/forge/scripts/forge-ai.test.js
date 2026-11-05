@@ -5,15 +5,12 @@ import { describe, expect, it } from 'vitest';
 const css = compile('src/lib/forge-ai.scss', { loadPaths: ['node_modules'] }).css;
 const compileComponent = path => compile(path, { loadPaths: ['node_modules'] }).css;
 const componentStyles = {
-  field: 'src/lib/field/field.scss',
-  checkbox: 'src/lib/checkbox/checkbox.scss',
-  radio: 'src/lib/radio/radio/radio.scss',
-  switch: 'src/lib/switch/switch.scss'
+  field: 'src/lib/field/field.scss'
 };
 const componentPattern = Object.keys(componentStyles)
   .sort((a, b) => b.length - a.length)
   .join('|');
-const componentTemplates = ['src/lib/field/field.html', 'src/lib/checkbox/checkbox.html', 'src/lib/radio/radio/radio.html', 'src/lib/switch/switch.html'];
+const componentTemplates = ['src/lib/field/field.html'];
 
 const componentTokens = Object.entries(componentStyles).flatMap(([component, path]) =>
   [...compileComponent(path).matchAll(new RegExp(`var\\(--forge-${component}-([a-z-]+)`, 'g'))].map(([, name]) => `${component}-${name}`)

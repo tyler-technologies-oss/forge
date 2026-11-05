@@ -4,15 +4,12 @@ import { standaloneStoryParams } from '../utils.js';
 
 import '@tylertech/forge/forge-ai.scss';
 import '@tylertech/forge/autocomplete';
-import '@tylertech/forge/checkbox';
 import '@tylertech/forge/chip-field';
 import '@tylertech/forge/chips';
 import '@tylertech/forge/date-picker';
 import '@tylertech/forge/date-range-picker';
-import '@tylertech/forge/radio';
 import '@tylertech/forge/select';
 import '@tylertech/forge/stack';
-import '@tylertech/forge/switch';
 import '@tylertech/forge/text-field';
 import '@tylertech/forge/time-picker';
 
@@ -132,32 +129,6 @@ export const Pickers: Story = {
   `
 };
 
-export const Controls: Story = {
-  ...standaloneStoryParams,
-  render: () => html`
-    <forge-stack gap="24">
-      <forge-stack inline wrap gap="16">
-        <forge-checkbox class="forge-ai">Unchecked</forge-checkbox>
-        <forge-checkbox class="forge-ai" checked>Checked</forge-checkbox>
-        <forge-checkbox class="forge-ai" indeterminate>Indeterminate</forge-checkbox>
-      </forge-stack>
-
-      <forge-radio-group class="forge-ai" name="ai-radio">
-        <forge-stack inline wrap gap="16">
-          <forge-radio value="1">One</forge-radio>
-          <forge-radio value="2" checked>Two</forge-radio>
-          <forge-radio value="3">Three</forge-radio>
-        </forge-stack>
-      </forge-radio-group>
-
-      <forge-stack inline wrap gap="16">
-        <forge-switch class="forge-ai">Off</forge-switch>
-        <forge-switch class="forge-ai" on>On</forge-switch>
-      </forge-stack>
-    </forge-stack>
-  `
-};
-
 export const Customization: Story = {
   ...standaloneStoryParams,
   render: () => html`
@@ -166,11 +137,6 @@ export const Customization: Story = {
         <label slot="label" for="ai-custom">Custom colors</label>
         <input type="text" id="ai-custom" />
       </forge-text-field>
-
-      <forge-stack inline wrap gap="16">
-        <forge-checkbox class="forge-ai" checked>Checkbox</forge-checkbox>
-        <forge-switch class="forge-ai" on>Switch</forge-switch>
-      </forge-stack>
     </forge-stack>
   `
 };

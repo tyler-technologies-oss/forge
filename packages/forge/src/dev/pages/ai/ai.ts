@@ -5,8 +5,6 @@ import '@tylertech/forge/autocomplete';
 import '@tylertech/forge/button-toggle';
 import '@tylertech/forge/date-picker';
 import '@tylertech/forge/time-picker';
-import '@tylertech/forge/checkbox';
-import '@tylertech/forge/radio';
 import { IAutocompleteComponent } from '@tylertech/forge/autocomplete';
 import { ISelectComponent } from '@tylertech/forge/select';
 import { ISwitchComponent } from '@tylertech/forge/switch';
