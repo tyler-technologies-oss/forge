@@ -1,1 +1,0 @@
-const o={title:"Components/View All",tags:["hidden"],id:"view-all-components"},e={};e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:"{}",...e.parameters?.docs?.source}}};const r=["Placeholder"];export{e as Placeholder,r as __namedExportsOrder,o as default};

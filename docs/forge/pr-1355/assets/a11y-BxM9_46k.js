@@ -1,1 +1,0 @@
-function l(t="data-forge-live-announcer"){const e=document.createElement("div");return e.style.position="absolute",e.style.top="0",e.style.height="1px",e.style.width="1px",e.style.padding="1px",e.style.overflow="hidden",e.style.clip="rect(0px, 0px, 0px, 0px)",e.style.whiteSpace="nowrap",e.style.border="0px",t&&e.setAttribute(t,""),e}export{l as c};
