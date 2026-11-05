@@ -50,13 +50,13 @@ Example (A listbox with compact options.): `get_forge_blocks(blockId: "component
 
 Wrap related options in `forge-option-group`, and label each group with an element in its `label` slot.
 
-Example (A listbox whose options are organized into labeled groups.): `get_forge_blocks(blockId: "components/listbox/with-option-groups/with-option-groups")`
+Example (A listbox whose options are organized into labeled groups.): `get_forge_blocks(blockId: "components/listbox/option-groups/option-groups")`
 
 ## With icons
 
 Place a `forge-icon` in an option's `start` slot to reinforce its meaning alongside the label.
 
-Example (A listbox with a leading icon on each option.): `get_forge_blocks(blockId: "components/listbox/with-icons/with-icons")`
+Example (A listbox with a leading icon on each option.): `get_forge_blocks(blockId: "components/listbox/leading-icons/leading-icons")`
 
 ## Reorderable
 
@@ -68,7 +68,7 @@ Example (A listbox whose options can be reordered.): `get_forge_blocks(blockId: 
 
 Link two listboxes by setting each one's `drag-link` and `drop-link` to the other's `id`, so users can move options between them. Handle `forge-listbox-drag-out` and `forge-listbox-drop` to move the option in the DOM.
 
-Example (Two linked listboxes that exchange options by dragging.): `get_forge_blocks(blockId: "components/listbox/drag-and-drop/drag-and-drop")`
+Example (Two linked listboxes that exchange options by dragging.): `get_forge_blocks(blockId: "components/listbox/dual-listbox/dual-listbox")`
 
 ## Disabled
 
