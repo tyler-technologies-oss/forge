@@ -1,6 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { urlToBlockId, derivedBlockId, blockExists, cleanMdxBody, rewriteSiteLink } from "./build-forge-skill.mjs";
+import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import {
+  urlToBlockId,
+  derivedBlockId,
+  blockExists,
+  cleanMdxBody,
+  rewriteSiteLink,
+  buildRulesMd,
+  buildLlmsTxt,
+  findSubpathOnlyComponents,
+} from "./build-forge-skill.mjs";
 
 const url = (p) => `https://forge.tylerdev.io/blocks/v1/${p}`;
 
@@ -126,4 +138,68 @@ test("blockExists matches id, file, and file minus .html like get_forge_blocks",
   assert.ok(blockExists(manifest, "forms/login/login"));
   assert.ok(blockExists(manifest, "forms/login/login.html"));
   assert.ok(!blockExists(manifest, "src/blocks/forms/login"));
+});
+
+const RULES_TEMPLATE = [
+  "# Skill",
+  "Skill intro.",
+  "## Top-level rules (always apply)",
+  "1. See [layout](references/design/layout.md).",
+  "## Workflow",
+  "Step one.",
+  "## References",
+  "- [card](references/components/card.md)",
+].join("\n\n");
+
+test("buildRulesMd: should keep the rules through the tool list and make reference links absolute", () => {
+  const out = buildRulesMd(RULES_TEMPLATE);
+  assert.match(out, /^# Tyler Forge rules and workflow/);
+  assert.match(out, /\[layout\]\(https:\/\/tylerforge\.design\/skill\/forge-design\/references\/design\/layout\.md\)/);
+  assert.match(out, /## Workflow\n\nStep one\./);
+  assert.doesNotMatch(out, /## References|Skill intro|components\/card/);
+});
+
+test("buildRulesMd: should fail when the template no longer has the rules headings", () => {
+  assert.throws(() => buildRulesMd("# Skill\n\nNo rules here."), /Top-level rules/);
+});
+
+test("buildLlmsTxt: should list every page as an absolute link under its section", () => {
+  const page = (title, docsPath) => ({ title, description: `${title} page.`, docsPath });
+  const out = buildLlmsTxt({
+    components: [page("Card", "components/card.md"), page("Button", "components/button.md")],
+    design: [page("Color", "design/color.md")],
+    development: [page("Installation", "development/installation.md")],
+  });
+  assert.match(out, /^# Tyler Forge Design System\n\n> /);
+  assert.match(out, /\[Rules and workflow\]\(https:\/\/tylerforge\.design\/skill\/forge-design\/rules\.md\)/);
+  assert.match(out, /## Components\n\n- \[Button\]\(https:\/\/tylerforge\.design\/skill\/forge-design\/references\/components\/button\.md\): Button page\.\n- \[Card\]/);
+  assert.match(out, /## Guides\n\n- \[Forge UI anti-patterns\]\([^)]+\/references\/anti-patterns\.md\)/);
+});
+
+test("findSubpathOnlyComponents: should return components the root entry never imports", async () => {
+  const lib = await mkdtemp(path.join(tmpdir(), "forge-lib-"));
+  try {
+    const component = async (name, files) => {
+      await mkdir(path.join(lib, name), { recursive: true });
+      for (const [file, source] of Object.entries(files)) await writeFile(path.join(lib, name, file), source);
+    };
+    const tagConstant = (name) => `const elementName = \`\${COMPONENT_NAME_PREFIX}${name}\`;`;
+    await writeFile(path.join(lib, "index.ts"), "import { defineButton } from './button/index.js';\nexport * from './list/index.js';\n");
+    await component("button", { "index.ts": "", "button-constants.ts": tagConstant("button") });
+    await component("list", { "index.ts": "export * from '../profile-card/index.js';" });
+    await component("profile-card", { "index.ts": "", "profile-card-constants.ts": tagConstant("profile-card") });
+    await component("app-layout", { "index.ts": "", "app-layout-constants.ts": tagConstant("app-layout") });
+    await component("core", { "utils.ts": "" });
+    await component("list-dropdown", { "index.ts": "export * from './list-dropdown.js';" });
+
+    assert.deepEqual(await findSubpathOnlyComponents(lib), ["forge-app-layout"]);
+  } finally {
+    await rm(lib, { recursive: true, force: true });
+  }
+});
+
+test("findSubpathOnlyComponents: should match the components Forge publishes only as subpaths", async () => {
+  const tags = await findSubpathOnlyComponents();
+  for (const tag of ["forge-app-layout", "forge-structured-card", "forge-theme-toggle"]) assert.ok(tags.includes(tag), tag);
+  for (const tag of ["forge-button", "forge-card", "forge-split-button"]) assert.ok(!tags.includes(tag), tag);
 });
