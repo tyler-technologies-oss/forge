@@ -256,16 +256,16 @@
       "$value": "{color.radix-dark.text.1}"
     },
     "text-success": {
-      "$value": "{color.radix.green.a11}"
+      "$value": "{color.radix-dark.green.a11}"
     },
     "text-informational": {
-      "$value": "{color.radix.blue.a11}"
+      "$value": "{color.radix-dark.blue.a11}"
     },
     "text-warning": {
-      "$value": "{color.radix.amber.a11}"
+      "$value": "{color.radix-dark.amber.a11}"
     },
     "text-critical": {
-      "$value": "{color.radix.red.a11}"
+      "$value": "{color.radix-dark.red.a11}"
     },
     "text-high-inverse": {
       "$value": "{color.radix.text.5}"
