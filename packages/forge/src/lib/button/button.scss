@@ -107,6 +107,8 @@ forge-focus-indicator {
   .forge-button {
     &.#{$theme} {
       @include override(primary-color, theme.variable($theme), value);
+      @include override(text-color, theme.variable(on-#{$theme}-container-minimum), value);
+      @include override(link-color, theme.variable(on-#{$theme}-container-minimum), value);
 
       &.filled {
         @include override(filled-color, theme.variable(on-#{$theme}), value);

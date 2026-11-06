@@ -11,7 +11,7 @@
 $tokens: (
   // Shared
   primary-color: utils.module-val(button, primary-color, theme.variable(primary)),
-  text-color: utils.module-ref(button, text-color, primary-color),
+  text-color: utils.module-val(button, text-color, theme.variable(on-primary-container-minimum)),
   disabled-color: utils.module-val(button, disabled-color, theme.variable(surface-container)),
   padding: utils.module-val(button, padding, spacing.variable(medium)),
   display: utils.module-val(button, display, inline-grid),
@@ -69,7 +69,7 @@ $tokens: (
   raised-active-shadow: utils.module-val(button, raised-active-shadow, elevation.value(8)),
   raised-disabled-shadow: utils.module-val(button, raised-disabled-shadow, none),
   // Link
-  link-color: utils.module-ref(button, link-color, primary-color),
+  link-color: utils.module-val(button, link-color, theme.variable(on-primary-container-minimum)),
   link-text-decoration: utils.module-val(button, link-text-decoration, underline),
   link-height: utils.module-val(button, link-height, auto),
   link-padding: utils.module-val(button, link-padding, 0),

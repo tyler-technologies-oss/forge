@@ -32,7 +32,7 @@ export interface IButtonComponent extends IBaseButton {
  * @globalconfig dense
  *
  * @cssproperty --forge-button-primary-color - The primary color of the button.
- * @cssproperty --forge-button-text-color - The text color of the button. Inherits from primary color.
+ * @cssproperty --forge-button-text-color - The text color of the button.
  * @cssproperty --forge-button-disabled-color - The disabled color of the button.
  * @cssproperty --forge-button-padding - The padding of the button.
  * @cssproperty --forge-button-display - The display of the button.

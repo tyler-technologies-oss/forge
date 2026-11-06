@@ -39,7 +39,8 @@
   forge-button.action-button {
     @include button.provide-theme(
       (
-        primary-color: #{token(action-color)}
+        primary-color: #{token(action-color)},
+        text-color: #{token(action-color)}
       )
     );
   }
