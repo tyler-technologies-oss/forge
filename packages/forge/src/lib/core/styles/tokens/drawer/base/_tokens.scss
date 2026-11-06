@@ -6,7 +6,7 @@
 
 $tokens: (
   background: utils.module-val(drawer, background, theme.variable(surface-translucent)),
-  border-color: utils.module-val(drawer, border-color, theme.variable(outline)),
+  border-color: utils.module-val(drawer, border-color, theme.variable(outline-low)),
   width: utils.module-val(drawer, width, 256px),
   border-width: utils.module-val(drawer, border-width, border.variable(thin)),
   transition-duration: utils.module-val(drawer, transition-duration, animation.variable(duration-medium1)),

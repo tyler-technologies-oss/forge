@@ -14,7 +14,7 @@ $tokens: (
   // Divider
   divider-width: utils.module-val(toolbar, divider-width, border.variable(thin)),
   divider-style: utils.module-val(toolbar, divider-style, solid),
-  divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline)),
+  divider-color: utils.module-val(toolbar, divider-color, theme.variable(outline-low)),
   // Shape
   shape: utils.module-val(toolbar, shape, shape.variable(medium)),
   start-start-shape: utils.module-ref(toolbar, start-start-shape, shape),
