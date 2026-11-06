@@ -16,17 +16,17 @@
   @include theme.properties-dark;
 
   // Button
-  @include button.provide-theme(
-    (
-      tonal-background: color-palette-dark.$slate-6,
-      tonal-color: color-palette-dark.$slate-12,
-      outlined-border-color: color-palette-dark.$indigo-7,
-      filled-background: color-palette-dark.$indigo-9,
-      filled-color: color-palette-dark.$indigo-contrast,
-      raised-background: color-palette-dark.$indigo-9,
-      raised-color: color-palette-dark.$indigo-contrast
-    )
-  );
+  // @include button.provide-theme(
+  //   (
+  //     tonal-background: color-palette-dark.$slate-6,
+  //     tonal-color: color-palette-dark.$slate-12,
+  //     outlined-border-color: color-palette-dark.$indigo-7,
+  //     filled-background: color-palette-dark.$indigo-9,
+  //     filled-color: color-palette-dark.$indigo-contrast,
+  //     raised-background: color-palette-dark.$indigo-9,
+  //     raised-color: color-palette-dark.$indigo-contrast
+  //   )
+  // );
 
   // Icon Button
   @include icon-button.provide-theme(
