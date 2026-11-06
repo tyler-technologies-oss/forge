@@ -203,6 +203,11 @@ const sections: ApiSection<
 
 const activeSections = sections.filter((s) => s.data?.length);
 
+const cellClass = "px-medium py-small align-middle";
+
+const badgeClass =
+  "[--forge-badge-background:var(--forge-theme-surface-dim)]";
+
 function sectionId(sectionTitle: string): string {
   return `api-section-${sectionTitle.replace(/\s+/g, "-").toLowerCase()}`;
 }
@@ -229,15 +234,19 @@ function sectionId(sectionTitle: string): string {
         <span slot="title" id={sectionId(section.title)} class="text-heading3">
           {section.title}
         </span>
-        <div slot="body" class="api-table-wrapper">
-          <table class="forge-data-table">
+        <div slot="body" class="overflow-x-auto">
+          <table class="w-full border-collapse">
             <thead>
-              <tr>
-                {section.columns.map((col) => (
+              <tr class="border-b border-outline">
+                {section.columns.map((col, colIndex) => (
                   <th
                     class:list={[
-                      col.align === "end" ? "text-right" : "text-left",
+                      cellClass,
+                      "text-body1 font-medium text-high",
+                      col.align === "end" ? "text-end" : "text-start",
                       col.nowrap && "whitespace-nowrap",
+                      colIndex === section.columns.length - 1 &&
+                        "w-full min-w-[200px]",
                     ]}>
                     {col.header}
                   </th>
@@ -246,27 +255,27 @@ function sectionId(sectionTitle: string): string {
             </thead>
             <tbody>
               {section.data!.map((item, rowIndex) => (
-                <tr>
+                <tr class="border-b border-outline last:border-b-0">
                   {section.columns.map((col, colIndex) => {
                     const value = col.render(item);
                     const anchorId = `type-${api.tagName}-${section.title.replace(/\s+/g, "-").toLowerCase()}-${rowIndex}-${colIndex}`;
                     return (
                       <td
                         class:list={[
-                          "align-middle",
+                          cellClass,
                           col.nowrap && "whitespace-nowrap",
                         ]}>
                         {isCode(value) ? (
                           <forge-badge
                             theme="info-secondary"
-                            class="square-badge">
+                            class:list={["square-badge", badgeClass]}>
                             <code class="font-normal">{value.code}</code>
                           </forge-badge>
                         ) : isType(value) ? (
                           <span class="inline-flex items-center gap-xxsmall">
                             <forge-badge
                               theme="info-secondary"
-                              class="square-badge">
+                              class:list={["square-badge", badgeClass]}>
                               <code class="font-normal">{value.type}</code>
                             </forge-badge>
                             {value.values && (
@@ -312,7 +321,7 @@ function sectionId(sectionTitle: string): string {
                             )}
                           </span>
                         ) : (
-                          <span class="text-label1 text-medium">{value}</span>
+                          <span class="text-body2 text-high">{value}</span>
                         )}
                       </td>
                     );
@@ -334,34 +343,6 @@ function sectionId(sectionTitle: string): string {
    * Forge token — no raw sizes, no ad-hoc colors.
    */
   @reference "../styles/global.css";
-
-  .api-table-wrapper {
-    @apply overflow-x-auto;
-  }
-
-  /*
-   * `.forge-data-table` handles row height, cell padding, borders, hover, and
-   * header typography. The rules below are the only local overrides:
-   *   1. Kill the last-row bottom border so it lines up with the card edge.
-   *   2. Let the description column wrap while others stay nowrap.
-   */
-  .api-table-wrapper :global(.forge-data-table tbody tr:last-child td) {
-    border-block-end: none;
-  }
-
-  .api-table-wrapper :global(.forge-data-table td:last-child) {
-    min-width: 200px;
-    white-space: normal;
-  }
-
-  /*
-   * These tables are display-only — rows aren't clickable or selectable, so
-   * the hover row-highlight from .forge-data-table just adds noise. Null it
-   * out via the Forge custom property.
-   */
-  .api-table-wrapper :global(.forge-data-table) {
-    --forge-table-theme-row-hover-background: transparent;
-  }
 
   /*
    * Popover value list — forge-list handles row height, hover, and dividers.
