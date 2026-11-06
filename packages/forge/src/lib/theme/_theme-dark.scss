@@ -2,6 +2,7 @@
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/radix-color-palette-dark' as color-palette-dark;
 
+@use '../app-bar/app-bar' as app-bar;
 @use '../button';
 @use '../icon-button';
 @use '../popover';
@@ -14,6 +15,13 @@
 @mixin theme-properties {
   // Global Forge theme properties
   @include theme.properties-dark;
+
+  // App bar
+  @include app-bar.provide-theme(
+    (
+      elevation: inset 0 -1px 0 #{theme.variable(outline-low)} // App bars use a hairline instead of a shadow in dark theme
+    )
+  );
 
   // Button
   // @include button.provide-theme(
