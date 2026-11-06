@@ -168,8 +168,12 @@ describe('sass', () => {
     });
 
     it('should not scale a line height that is not numeric', () => {
-      const css = compile(`@use 'typography'; .a { @include typography.style(button); }`);
-      expect(css).toContain('line-height: var(--forge-typography-button-line-height, normal);');
+      const css = compile(`
+        @use 'tokens/typography' as raw with ($styles: (custom: (font-family: inherit, font-size: 1, font-weight: 400, line-height: normal, letter-spacing: normal, text-transform: inherit, text-decoration: inherit)));
+        @use 'typography';
+        .a { @include typography.style(custom); }
+      `);
+      expect(css).toContain('line-height: var(--forge-typography-custom-line-height, normal);');
     });
 
     it('should throw for an invalid style', () => {

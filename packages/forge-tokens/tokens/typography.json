@@ -20,6 +20,9 @@
       "medium": {
         "$value": 500
       },
+      "semibold": {
+        "$value": 600
+      },
       "bold": {
         "$value": 700
       }
@@ -111,7 +114,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -141,7 +144,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -171,7 +174,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -201,7 +204,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -231,7 +234,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -261,7 +264,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -291,7 +294,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -321,7 +324,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.light}",
+          "$value": "{typography.weight.regular}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -351,7 +354,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -381,7 +384,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -411,7 +414,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -441,7 +444,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -471,7 +474,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -501,7 +504,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -531,7 +534,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -561,7 +564,7 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": "{typography.weight.semibold}",
           "$type": "fontWeight"
         },
         "line-height": {
@@ -955,7 +958,7 @@
           "$type": "fontWeight"
         },
         "line-height": {
-          "$value": "{typography.scale.1250}",
+          "$value": "{typography.scale.1000}",
           "$type": "number"
         },
         "letter-spacing": {
@@ -977,7 +980,7 @@
           "$type": "fontFamily"
         },
         "font-size": {
-          "$value": "{typography.scale.0813}",
+          "$value": "{typography.scale.0875}",
           "$type": "number"
         },
         "font-weight": {
@@ -985,7 +988,7 @@
           "$type": "fontWeight"
         },
         "line-height": {
-          "$value": "{typography.scale.1250}",
+          "$value": "{typography.scale.1125}",
           "$type": "number"
         },
         "letter-spacing": {
@@ -1041,12 +1044,12 @@
           "$type": "number"
         },
         "font-weight": {
-          "$value": "{typography.weight.medium}",
+          "$value": 450,
           "$type": "fontWeight"
         },
         "line-height": {
-          "$value": "normal",
-          "$type": "string"
+          "$value": "{typography.scale.1125}",
+          "$type": "number"
         },
         "letter-spacing": {
           "$value": "0.0714285714em",
@@ -1075,7 +1078,7 @@
           "$type": "fontWeight"
         },
         "line-height": {
-          "$value": "{typography.scale.2000}",
+          "$value": "{typography.scale.1000}",
           "$type": "number"
         },
         "letter-spacing": {
