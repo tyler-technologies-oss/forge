@@ -120,6 +120,12 @@ forge-focus-indicator {
         @include override(tonal-background, theme.variable(#{$theme}-container), value);
         @include override(tonal-color, theme.variable(on-#{$theme}-container), value);
       }
+
+      &.outlined {
+        @include override(outlined-background, theme.variable(#{$theme}-container-minimum), value);
+        @include override(outlined-color, theme.variable(on-#{$theme}-container-minimum), value);
+        @include override(outlined-border-color, theme.variable(border-#{$theme}-default), value);
+      }
     }
   }
 }
@@ -141,6 +147,7 @@ forge-focus-indicator {
       @include provide-theme(
         (
           text-color: #{app-bar.token(theme-foreground)},
+          outlined-background: transparent,
           outlined-color: #{app-bar.token(theme-foreground)},
           outlined-border-color: #{app-bar.token(theme-foreground)},
           link-color: #{app-bar.token(theme-foreground)}

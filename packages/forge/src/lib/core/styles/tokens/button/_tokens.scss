@@ -44,11 +44,11 @@ $tokens: (
   // Text
   text-padding-inline: utils.module-val(button, text-padding-inline, spacing.variable(xsmall)),
   // Outlined
-  outlined-background: utils.module-val(button, outlined-background, transparent),
-  outlined-color: utils.module-ref(button, outlined-color, primary-color),
+  outlined-background: utils.module-val(button, outlined-background, theme.variable(primary-container-minimum)),
+  outlined-color: utils.module-val(button, outlined-color, theme.variable(on-primary-container-minimum)),
   outlined-border-width: utils.module-val(button, outlined-border-width, border.variable(thin)),
   outlined-border-style: utils.module-val(button, outlined-border-style, solid),
-  outlined-border-color: utils.module-ref(button, outlined-border-color, primary-color),
+  outlined-border-color: utils.module-val(button, outlined-border-color, theme.variable(border-primary-default)),
   // Tonal
   tonal-background: utils.module-val(button, tonal-background, theme.variable(secondary-container)),
   tonal-disabled-background: utils.module-ref(button, tonal-disabled-background, disabled-color),
