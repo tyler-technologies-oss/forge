@@ -174,7 +174,7 @@
       "$value": "{color.radix-dark.slate.4}"
     },
     "surface-dim": {
-      "$value": "{color.radix-dark.slate.2}"
+      "$value": "{color.radix-dark.slate.1}"
     },
     "surface-inverse": {
       "$value": "{color.radix-dark.slate.12}"
