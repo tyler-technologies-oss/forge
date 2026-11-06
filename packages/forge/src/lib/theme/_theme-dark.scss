@@ -7,7 +7,6 @@
 @use '../popover';
 @use '../tooltip';
 @use '../chips/chip';
-@use '../toast';
 
 ///
 /// Provides the CSS custom property definitions for the default Forge dark theme.
@@ -62,13 +61,6 @@
   @include chip.provide-theme(
     (
       field-border-color: theme.variable(outline) // Field type chips use a border color in dark theme to increase contrast
-    )
-  );
-
-  // Toast
-  @include toast.provide-theme(
-    (
-      action-color: theme.variable(on-surface-inverse) // Toast action button uses tertiary color in dark theme
     )
   );
 }

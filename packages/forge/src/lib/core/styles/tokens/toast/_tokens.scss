@@ -13,7 +13,7 @@ $tokens: (
   offset: utils.module-val(toast, offset, spacing.variable(medium)),
   shape: utils.module-val(toast, shape, shape.variable(medium)),
   elevation: utils.module-val(toast, elevation, elevation.value(6)),
-  action-color: utils.module-val(toast, action-color, theme.variable(secondary)),
+  action-color: utils.module-val(toast, action-color, theme.variable(on-surface-inverse-secondary)),
   min-width: utils.module-val(toast, min-width, 344px),
   max-width: utils.module-val(toast, max-width, 672px),
   min-height: utils.module-val(toast, min-height, 48px),
