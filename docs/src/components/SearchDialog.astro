@@ -14,12 +14,11 @@
 
   <forge-dialog
     label="Search the docs"
-    placement="top"
-    class="[--forge-dialog-width:640px] [--forge-dialog-max-width:calc(100vw-32px)] [--forge-dialog-height:70vh]"
+    class="[--forge-dialog-width:640px] [--forge-dialog-max-width:calc(100vw-32px)] [--forge-dialog-height:60vh] [--forge-dialog-shape:var(--forge-shape-extra-large)]"
     data-search-dialog>
     <forge-scaffold>
       <div slot="header" class="border-b border-outline">
-        <forge-text-field label-position="none" variant="plain" density="extra-large" class="w-full [--forge-field-padding-inline-start:var(--forge-spacing-medium)]">
+        <forge-text-field label-position="none" variant="plain" density="extra-large" class="w-full [--forge-field-padding-inline-start:var(--forge-spacing-medium)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-start-start:var(--forge-shape-extra-large)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-start-end:var(--forge-shape-extra-large)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-end-start:0px] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-end-end:0px]">
           <forge-icon slot="start" name="search"></forge-icon>
           <input
             type="text"
@@ -33,11 +32,18 @@
             data-search-input
           />
           <div slot="end" class="flex items-center">
-            <forge-button variant="text" dense hidden data-search-clear>Clear the query</forge-button>
-            <forge-divider vertical class="h-4" data-search-clear-divider hidden></forge-divider>
-            <forge-icon-button aria-label="Close search" data-search-close>
-              <forge-icon name="close"></forge-icon>
-            </forge-icon-button>
+            <forge-button
+              variant="text"
+              dense
+              hidden
+              class="[--forge-focus-indicator-shape-start-start:initial] [--forge-focus-indicator-shape-start-end:initial] [--forge-focus-indicator-shape-end-start:initial] [--forge-focus-indicator-shape-end-end:initial]"
+              data-search-clear>Clear the query</forge-button>
+            <forge-divider vertical class="h-4 px-[4px]" data-search-clear-divider hidden></forge-divider>
+            <div class="flex pr-[4px]">
+              <forge-icon-button aria-label="Close search" class="[--forge-focus-indicator-shape-start-start:initial] [--forge-focus-indicator-shape-start-end:initial] [--forge-focus-indicator-shape-end-start:initial] [--forge-focus-indicator-shape-end-end:initial]" data-search-close>
+                <forge-icon name="close"></forge-icon>
+              </forge-icon-button>
+            </div>
           </div>
         </forge-text-field>
       </div>
@@ -45,7 +51,7 @@
       <div slot="body" class="p-medium">
         <div
           id="search-results"
-          class="flex flex-col gap-medium [&_mark]:bg-transparent [&_mark]:text-primary [&_mark]:font-bold"
+          class="flex flex-col gap-medium [--forge-list-item-shape:var(--forge-shape-large)] [&_mark]:bg-transparent [&_mark]:text-primary [&_mark]:font-bold"
           data-search-results>
         </div>
         <p class="text-medium text-center m-0 py-xlarge" data-search-status>Type to search the docs.</p>
@@ -232,7 +238,7 @@
     resultsContainer.replaceChildren(...groups);
     items = [...resultsContainer.querySelectorAll("forge-list-item")];
     input?.setAttribute("aria-expanded", String(items.length > 0));
-    setActive(items.length ? 0 : -1);
+    setActive(-1);
   };
 
   const clearResults = (message: string | null): void => {
@@ -310,6 +316,10 @@
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       if (!items.length) {
+        return;
+      }
+      if (activeIndex === -1) {
+        setActive(event.key === "ArrowDown" ? 0 : items.length - 1);
         return;
       }
       const step = event.key === "ArrowDown" ? 1 : -1;
