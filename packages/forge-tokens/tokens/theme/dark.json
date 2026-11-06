@@ -42,7 +42,7 @@
       "$deprecated": "Use secondary tokens instead"
     },
     "on-primary": {
-      "$value": "{color.radix-dark.indigo.1}",
+      "$value": "{color.radix-dark.indigo.contrast}",
       "$deprecated": "Use secondary tokens instead"
     },
     "on-primary-container-minimum": {
