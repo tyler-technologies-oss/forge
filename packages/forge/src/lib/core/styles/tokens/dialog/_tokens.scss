@@ -9,7 +9,7 @@
 
 $tokens: (
   // Base
-  background: utils.module-val(dialog, background, theme.variable(surface-bright)),
+  background: utils.module-val(dialog, background, theme.variable(surface-elevated)),
   shape: utils.module-val(dialog, shape, shape.variable(medium)),
   elevation: utils.module-val(dialog, elevation, elevation.value(24)),
   spacing: utils.module-val(dialog, spacing, auto),
