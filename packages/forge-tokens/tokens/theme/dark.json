@@ -219,6 +219,9 @@
     "on-surface-inverse": {
       "$value": "{theme.text-high-inverse}"
     },
+    "on-surface-inverse-secondary": {
+      "$value": "{color.radix.iris.a11}"
+    },
     "on-surface-container-minimum": {
       "$value": "{theme.text-high}"
     },
