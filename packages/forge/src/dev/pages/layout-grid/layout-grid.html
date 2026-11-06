@@ -1,0 +1,50 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Layout grid',
+    includePath: './pages/layout-grid/layout-grid.ejs',
+    options: [
+      { type: 'text-field', label: 'Columns', id: 'columns-input', defaultValue: '3' },
+      { type: 'text-field', label: 'Rows', id: 'rows-input' },
+      { type: 'text-field', label: 'Min column width', id: 'min-column-width-input' },
+      { type: 'text-field', label: 'Gap', id: 'gap-input', defaultValue: 'm' },
+      {
+        type: 'select',
+        label: 'Align items',
+        id: 'align-items-select',
+        defaultValue: 'stretch',
+        options: [
+          { label: 'Stretch', value: 'stretch' },
+          { label: 'Start', value: 'start' },
+          { label: 'Center', value: 'center' },
+          { label: 'End', value: 'end' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Justify items',
+        id: 'justify-items-select',
+        defaultValue: 'stretch',
+        options: [
+          { label: 'Stretch', value: 'stretch' },
+          { label: 'Start', value: 'start' },
+          { label: 'Center', value: 'center' },
+          { label: 'End', value: 'end' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Flow',
+        id: 'flow-select',
+        defaultValue: 'row',
+        options: [
+          { label: 'Row', value: 'row' },
+          { label: 'Column', value: 'column' },
+          { label: 'Dense', value: 'dense' }
+        ]
+      },
+      { type: 'text-field', label: 'Item count', id: 'item-count-input', inputType: 'number', defaultValue: '9' }
+    ]
+  }
+})
+%>

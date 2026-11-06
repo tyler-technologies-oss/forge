@@ -17,6 +17,7 @@
     "forge-footer": ["forge-footer-item"],
     "forge-icon-button": ["forge-icon"],
     "forge-key": ["forge-key-item"],
+    "forge-layout-grid": ["forge-layout-grid-item"],
     "forge-list": ["forge-list-item"],
     "forge-listbox": ["forge-option"],
     "forge-meter-group": ["forge-meter"],

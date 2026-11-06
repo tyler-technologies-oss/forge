@@ -1,0 +1,9 @@
+@use '../core';
+
+:host {
+  @include core.item-host;
+}
+
+:host([hidden]) {
+  display: none;
+}

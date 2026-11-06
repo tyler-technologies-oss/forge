@@ -1,0 +1,12 @@
+@use '../core';
+
+:host {
+  @include core.tokens;
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@include core.child-placement('::slotted(&)');

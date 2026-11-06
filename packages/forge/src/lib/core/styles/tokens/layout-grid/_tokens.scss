@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+
+/* stylelint-disable custom-property-pattern */
+
+// The `--_layout-grid-*-attr` variables are set per instance from the element's attributes. They sit between the
+// public custom property and the default, so a consumer's `--forge-layout-grid-*` always wins.
+$tokens: (
+  columns: utils.module-val(layout-grid, columns, var(--_layout-grid-columns-attr, none)),
+  rows: utils.module-val(layout-grid, rows, var(--_layout-grid-rows-attr, none)),
+  gap: utils.module-val(layout-grid, gap, var(--_layout-grid-gap-attr, #{spacing.variable(medium)})),
+  column-gap: utils.module-val(layout-grid, column-gap, var(--_layout-grid-column-gap-attr, #{utils.module-var(layout-grid, gap)})),
+  row-gap: utils.module-val(layout-grid, row-gap, var(--_layout-grid-row-gap-attr, #{utils.module-var(layout-grid, gap)})),
+  align-items: utils.module-val(layout-grid, align-items, var(--_layout-grid-align-items-attr, stretch)),
+  justify-items: utils.module-val(layout-grid, justify-items, var(--_layout-grid-justify-items-attr, stretch)),
+  flow: utils.module-val(layout-grid, flow, var(--_layout-grid-flow-attr, row))
+) !default;
+
+/* stylelint-enable custom-property-pattern */
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

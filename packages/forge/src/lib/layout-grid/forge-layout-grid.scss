@@ -1,0 +1,18 @@
+@use './core';
+
+forge-layout-grid:not(:defined) {
+  display: grid;
+}
+
+.forge-layout-grid {
+  @include core.tokens;
+  @include core.host;
+
+  @for $i from 1 through core.$max-attribute-value {
+    &--columns-#{$i} {
+      @include core.override(columns, repeat($i, minmax(0, 1fr)), value);
+    }
+  }
+
+  @include core.child-placement('> &');
+}

@@ -35,6 +35,7 @@
   { "label": "Keyboard shortcut", "path": "/pages/keyboard-shortcut/keyboard-shortcut.html" },
   { "label": "Label", "path": "/pages/label/label.html", "tags": ["form"] },
   { "label": "Label value", "path": "/pages/label-value/label-value.html", "tags": ["readonly"] },
+  { "label": "Layout grid", "path": "/pages/layout-grid/layout-grid.html", "tags": ["layout", "css grid"] },
   { "label": "Linear progress", "path": "/pages/linear-progress/linear-progress.html" },
   { "label": "List", "path": "/pages/list/list.html" },
   { "label": "Listbox", "path": "/pages/listbox/listbox.html", "tags": ["form", "select", "options"] },

@@ -1,0 +1,67 @@
+.panel {
+  padding-block-start: 24px;
+}
+
+.hint {
+  margin-block: 0 16px;
+  color: var(--forge-theme-text-medium);
+}
+
+.examples section + section {
+  margin-block-start: 48px;
+}
+
+.examples h4 {
+  margin-block: 0 8px;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  min-block-size: 64px;
+  padding: 8px;
+  border: 2px dashed var(--forge-theme-outline);
+  border-radius: 8px;
+  background-color: var(--forge-theme-surface-container-low);
+  box-sizing: border-box;
+}
+
+.fill {
+  block-size: 100%;
+}
+
+// The dev harness sets `--forge-card-padding` on every nested card (`.content .card forge-card`), which overrides
+// `no-padding`. Restore it for this page's examples.
+.content .examples forge-card[no-padding] {
+  --forge-card-padding: 0;
+}
+
+.form-card {
+  max-inline-size: 768px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--forge-spacing-medium);
+}
+
+.form-body {
+  padding: 16px;
+}
+
+.card-body {
+  padding: 16px;
+
+  forge-badge {
+    margin-block-end: 8px;
+  }
+}
+
+.profile-fields {
+  margin-block-start: 16px;
+}
+
+.justify-end {
+  justify-self: end;
+}

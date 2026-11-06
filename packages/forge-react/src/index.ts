@@ -84,6 +84,8 @@ import {
   KbdComponent,
   KeyComponent,
   KeyItemComponent,
+  LayoutGridComponent,
+  LayoutGridItemComponent,
   MeterComponent,
   MeterGroupComponent,
   ProcessStepComponent,
@@ -174,6 +176,8 @@ declare global {
       'forge-key': CustomElementProps<KeyComponent>;
       'forge-keyboard-shortcut': CustomElementProps<IKeyboardShortcutComponent>;
       'forge-label-value': CustomElementProps<ILabelValueComponent>;
+      'forge-layout-grid-item': CustomElementProps<LayoutGridItemComponent>;
+      'forge-layout-grid': CustomElementProps<LayoutGridComponent>;
       'forge-linear-progress': CustomElementProps<ILinearProgressComponent>;
       'forge-list-item': CustomElementProps<IListItemComponent>;
       'forge-list': CustomElementProps<IListComponent>;

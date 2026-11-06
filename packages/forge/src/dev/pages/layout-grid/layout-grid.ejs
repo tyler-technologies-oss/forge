@@ -1,0 +1,309 @@
+<forge-tab-bar id="demo-tabs" active-tab-name="playground" clustered>
+  <forge-tab id="tab-playground" name="playground">Playground</forge-tab>
+  <forge-tab id="tab-examples" name="examples">Other examples</forge-tab>
+</forge-tab-bar>
+
+<forge-tab-panel for="tab-playground">
+  <div class="panel">
+    <p class="forge-typography--body2 hint">Use the options to configure this grid. Clear columns and set a min column width to see it reflow without breakpoints.</p>
+    <forge-layout-grid id="main-demo" columns="3" gap="m"></forge-layout-grid>
+  </div>
+</forge-tab-panel>
+
+<forge-tab-panel for="tab-examples">
+  <div class="panel examples">
+    <!-- Dashboard metrics -->
+    <section>
+      <h3 class="forge-typography--heading2">Dashboard metrics</h3>
+      <p class="forge-typography--body2 hint">
+        <code>columns="4" min-column-width="200"</code>: four across on wide screens, wrapping to fewer as space runs out.
+      </p>
+      <forge-layout-grid columns="4" min-column-width="200" gap="m">
+        <forge-count-card>
+          <forge-icon slot="icon" name="assignment"></forge-icon>
+          <span slot="label">Open permits</span>
+          <span slot="count">1,284</span>
+        </forge-count-card>
+        <forge-count-card>
+          <forge-icon slot="icon" name="schedule"></forge-icon>
+          <span slot="label">Pending review</span>
+          <span slot="count">96</span>
+        </forge-count-card>
+        <forge-count-card>
+          <forge-icon slot="icon" name="attach_money"></forge-icon>
+          <span slot="label">Fees collected</span>
+          <span slot="count">$48,920</span>
+        </forge-count-card>
+        <forge-count-card>
+          <forge-icon slot="icon" name="trending_up"></forge-icon>
+          <span slot="label">Approval rate</span>
+          <span slot="count">92%</span>
+        </forge-count-card>
+      </forge-layout-grid>
+    </section>
+
+    <!-- Dashboard widgets -->
+    <section>
+      <h3 class="forge-typography--heading2">Dashboard widgets</h3>
+      <p class="forge-typography--body2 hint">
+        <code>forge-layout-grid-item</code> with <code>column-span="2" row-span="2"</code> for a featured widget beside two smaller ones.
+      </p>
+      <forge-layout-grid columns="4" gap="m">
+        <forge-layout-grid-item column-span="2" row-span="2">
+          <forge-card class="fill">
+            <h4 class="forge-typography--heading3">Recent activity</h4>
+            <forge-list>
+              <forge-list-item>
+                <forge-icon slot="start" name="check_circle"></forge-icon>
+                <span>Permit #2291 approved</span>
+                <span slot="secondary-text">Building services · 10 minutes ago</span>
+              </forge-list-item>
+              <forge-list-item>
+                <forge-icon slot="start" name="description"></forge-icon>
+                <span>Inspection report uploaded</span>
+                <span slot="secondary-text">Code enforcement · 1 hour ago</span>
+              </forge-list-item>
+              <forge-list-item>
+                <forge-icon slot="start" name="warning"></forge-icon>
+                <span>Payment overdue on case #8812</span>
+                <span slot="secondary-text">Finance · 3 hours ago</span>
+              </forge-list-item>
+            </forge-list>
+          </forge-card>
+        </forge-layout-grid-item>
+        <forge-layout-grid-item column-span="2">
+          <forge-card class="fill">
+            <h4 class="forge-typography--heading3">Inspections today</h4>
+            <p class="forge-typography--body2">14 scheduled, 9 completed, 2 rescheduled.</p>
+          </forge-card>
+        </forge-layout-grid-item>
+        <forge-card>
+          <h4 class="forge-typography--heading3">Inbox</h4>
+          <p class="forge-typography--body2">6 unread messages</p>
+        </forge-card>
+        <forge-card>
+          <h4 class="forge-typography--heading3">Tasks</h4>
+          <p class="forge-typography--body2">3 due this week</p>
+        </forge-card>
+      </forge-layout-grid>
+    </section>
+
+    <!-- Form -->
+    <section>
+      <h3 class="forge-typography--heading2">Form with mixed column spans</h3>
+      <p class="forge-typography--body2 hint">
+        A six-column grid. Fields span with <code>data-column-span</code> directly on the Forge components, with no wrapper elements.
+      </p>
+      <forge-card no-padding class="form-card">
+        <forge-scaffold>
+          <forge-toolbar slot="header">
+            <h4 slot="start" class="forge-typography--heading3">New permit application</h4>
+          </forge-toolbar>
+          <form slot="body" id="permit-form" class="form-body">
+            <forge-layout-grid columns="6" column-gap="m" row-gap="l">
+              <forge-text-field label-position="block-start" data-column-span="full">
+                <label for="project-name">Project name</label>
+                <input type="text" id="project-name" />
+              </forge-text-field>
+              <forge-select label="Permit type" label-position="block-start" data-column-span="3">
+                <forge-option value="building">Building</forge-option>
+                <forge-option value="electrical">Electrical</forge-option>
+                <forge-option value="plumbing">Plumbing</forge-option>
+              </forge-select>
+              <forge-select label="Priority" label-position="block-start" data-column-span="3">
+                <forge-option value="standard">Standard</forge-option>
+                <forge-option value="expedited">Expedited</forge-option>
+              </forge-select>
+              <forge-text-field label-position="block-start" data-column-span="full">
+                <label for="street-address">Street address</label>
+                <input type="text" id="street-address" autocomplete="street-address" />
+              </forge-text-field>
+              <forge-text-field label-position="block-start" data-column-span="2">
+                <label for="city">City</label>
+                <input type="text" id="city" autocomplete="address-level2" />
+              </forge-text-field>
+              <forge-select label="State" label-position="block-start" data-column-span="2">
+                <forge-option value="ME">Maine</forge-option>
+                <forge-option value="OH">Ohio</forge-option>
+                <forge-option value="TX">Texas</forge-option>
+              </forge-select>
+              <forge-text-field label-position="block-start" data-column-span="2">
+                <label for="zip">ZIP code</label>
+                <input type="text" id="zip" autocomplete="postal-code" maxlength="10" />
+              </forge-text-field>
+              <forge-text-field label-position="block-start" data-column-span="full">
+                <label for="scope">Scope of work</label>
+                <textarea id="scope" rows="3"></textarea>
+              </forge-text-field>
+            </forge-layout-grid>
+          </form>
+          <forge-toolbar slot="footer" inverted>
+            <div slot="end" class="toolbar-actions">
+              <forge-button variant="tonal" type="button">Cancel</forge-button>
+              <forge-button variant="filled" type="submit" form="permit-form">Submit application</forge-button>
+            </div>
+          </forge-toolbar>
+        </forge-scaffold>
+      </forge-card>
+    </section>
+
+    <!-- Responsive cards -->
+    <section>
+      <h3 class="forge-typography--heading2">Responsive content cards</h3>
+      <p class="forge-typography--body2 hint">
+        <code>min-column-width="280"</code> with no column count: as many cards per row as fit.
+      </p>
+      <forge-layout-grid min-column-width="280" gap="m">
+        <forge-card no-padding>
+          <forge-scaffold>
+            <div slot="body" class="card-body">
+              <forge-badge theme="info-secondary">Building</forge-badge>
+              <h4 class="forge-typography--heading3">Residential remodel</h4>
+              <p class="forge-typography--body2">Interior renovation of a single-family home, including kitchen and two bathrooms.</p>
+            </div>
+            <forge-toolbar slot="footer" inverted no-border>
+              <forge-button slot="start">View details</forge-button>
+            </forge-toolbar>
+          </forge-scaffold>
+        </forge-card>
+        <forge-card no-padding>
+          <forge-scaffold>
+            <div slot="body" class="card-body">
+              <forge-badge theme="warning">Electrical</forge-badge>
+              <h4 class="forge-typography--heading3">Panel upgrade</h4>
+              <p class="forge-typography--body2">Replace a 100A service panel with 200A to support an EV charger.</p>
+            </div>
+            <forge-toolbar slot="footer" inverted no-border>
+              <forge-button slot="start">View details</forge-button>
+            </forge-toolbar>
+          </forge-scaffold>
+        </forge-card>
+        <forge-card no-padding>
+          <forge-scaffold>
+            <div slot="body" class="card-body">
+              <forge-badge theme="success">Plumbing</forge-badge>
+              <h4 class="forge-typography--heading3">Water heater replacement</h4>
+              <p class="forge-typography--body2">Swap a 40-gallon tank for a tankless unit in the utility room.</p>
+            </div>
+            <forge-toolbar slot="footer" inverted no-border>
+              <forge-button slot="start">View details</forge-button>
+            </forge-toolbar>
+          </forge-scaffold>
+        </forge-card>
+        <forge-card no-padding>
+          <forge-scaffold>
+            <div slot="body" class="card-body">
+              <forge-badge theme="info">Zoning</forge-badge>
+              <h4 class="forge-typography--heading3">Variance request</h4>
+              <p class="forge-typography--body2">Request to reduce the side setback for a detached garage by two feet.</p>
+            </div>
+            <forge-toolbar slot="footer" inverted no-border>
+              <forge-button slot="start">View details</forge-button>
+            </forge-toolbar>
+          </forge-scaffold>
+        </forge-card>
+      </forge-layout-grid>
+    </section>
+
+    <!-- Record summary -->
+    <section>
+      <h3 class="forge-typography--heading2">Record summary</h3>
+      <p class="forge-typography--body2 hint">
+        Label-value pairs in a three-column grid, with the notes spanning the full width.
+      </p>
+      <forge-card>
+        <forge-layout-grid columns="3" column-gap="l" row-gap="m">
+          <forge-label-value>
+            <span slot="label">Case number</span>
+            <span slot="value">BLD-2026-08812</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Status</span>
+            <span slot="value">Under review</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Submitted</span>
+            <span slot="value">Oct 28, 2026</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Applicant</span>
+            <span slot="value">Jordan Ellis</span>
+          </forge-label-value>
+          <forge-label-value>
+            <span slot="label">Inspector</span>
+            <span slot="value">Sam Ortiz</span>
+          </forge-label-value>
+          <forge-label-value empty>
+            <span slot="label">Completed</span>
+            <span slot="value">n/a</span>
+          </forge-label-value>
+          <forge-label-value data-column-span="full">
+            <span slot="label">Notes</span>
+            <span slot="value">Applicant requested an expedited review. Structural drawings were resubmitted on Oct 30 after initial comments.</span>
+          </forge-label-value>
+        </forge-layout-grid>
+      </forge-card>
+    </section>
+
+    <!-- Page layout -->
+    <section>
+      <h3 class="forge-typography--heading2">Settings page layout</h3>
+      <p class="forge-typography--body2 hint">
+        A track list, <code>columns="240px 1fr"</code>, for a fixed-width navigation column beside fluid content.
+      </p>
+      <forge-layout-grid columns="240px 1fr" gap="m" align-items="start">
+        <forge-card no-padding>
+          <forge-list navlist>
+            <forge-list-item selected>
+              <forge-icon slot="start" name="person"></forge-icon>
+              <a href="javascript: void(0);">Profile</a>
+            </forge-list-item>
+            <forge-list-item>
+              <forge-icon slot="start" name="notifications"></forge-icon>
+              <a href="javascript: void(0);">Notifications</a>
+            </forge-list-item>
+            <forge-list-item>
+              <forge-icon slot="start" name="settings"></forge-icon>
+              <a href="javascript: void(0);">Preferences</a>
+            </forge-list-item>
+          </forge-list>
+        </forge-card>
+        <forge-card>
+          <h4 class="forge-typography--heading3">Profile</h4>
+          <forge-layout-grid columns="2" gap="m" class="profile-fields">
+            <forge-text-field label-position="block-start">
+              <label for="settings-first-name">First name</label>
+              <input type="text" id="settings-first-name" value="Jordan" />
+            </forge-text-field>
+            <forge-text-field label-position="block-start">
+              <label for="settings-last-name">Last name</label>
+              <input type="text" id="settings-last-name" value="Ellis" />
+            </forge-text-field>
+            <forge-text-field label-position="block-start" data-column-span="full">
+              <label for="settings-email">Email</label>
+              <forge-icon slot="start" name="email"></forge-icon>
+              <input type="email" id="settings-email" value="jordan.ellis@example.gov" />
+            </forge-text-field>
+            <forge-button variant="raised" data-column-start="2" class="justify-end">Save changes</forge-button>
+          </forge-layout-grid>
+        </forge-card>
+      </forge-layout-grid>
+    </section>
+
+    <!-- CSS-only -->
+    <section>
+      <h3 class="forge-typography--heading2">CSS-only (legacy markup)</h3>
+      <p class="forge-typography--body2 hint">
+        <code>.forge-layout-grid</code> classes on a plain <code>div</code>, for apps that cannot use custom elements. The same <code>data-*</code> span attributes work.
+      </p>
+      <div class="forge-layout-grid forge-layout-grid--columns-4">
+        <div class="box" data-column-span="full">Header</div>
+        <div class="box">Sidebar</div>
+        <div class="box" data-column-span="3">Main content</div>
+        <div class="box" data-column-span="full">Footer</div>
+      </div>
+    </section>
+  </div>
+</forge-tab-panel>
+
+<script type="module" src="layout-grid.ts"></script>

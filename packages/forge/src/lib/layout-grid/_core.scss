@@ -1,0 +1,67 @@
+@use 'sass:string';
+@use './token-utils' as *;
+
+@forward './token-utils';
+
+$max-attribute-value: 12;
+
+@mixin host {
+  display: grid;
+  grid-template-columns: #{token(columns)};
+  grid-template-rows: #{token(rows)};
+  grid-auto-flow: #{token(flow)};
+  column-gap: #{token(column-gap)};
+  row-gap: #{token(row-gap)};
+  align-items: #{token(align-items)};
+  justify-items: #{token(justify-items)};
+}
+
+@mixin item-host {
+  display: block;
+  min-inline-size: 0;
+}
+
+///
+/// Generates placement rules for direct children that carry `data-column-span`, `data-row-span`,
+/// `data-column-start` or `data-row-start` attributes.
+///
+/// Longhands are used so a start line and a span can be combined on one element, and the `full` rules come last so
+/// they win over a start line.
+///
+/// @param {String} $selector - A selector template where `&` is replaced by the attribute selector, such as
+///   `'::slotted(&)'` inside a shadow root or `'> &'` for a CSS-only grid.
+///
+@mixin child-placement($selector) {
+  @for $i from 1 through $max-attribute-value {
+    #{_with-attribute($selector, '[data-column-start="#{$i}"]')} {
+      grid-column-start: $i;
+    }
+
+    #{_with-attribute($selector, '[data-row-start="#{$i}"]')} {
+      grid-row-start: $i;
+    }
+
+    #{_with-attribute($selector, '[data-column-span="#{$i}"]')} {
+      grid-column-end: span $i;
+    }
+
+    #{_with-attribute($selector, '[data-row-span="#{$i}"]')} {
+      grid-row-end: span $i;
+    }
+  }
+
+  #{_with-attribute($selector, '[data-column-span="full"]')} {
+    grid-column-start: 1;
+    grid-column-end: -1;
+  }
+
+  #{_with-attribute($selector, '[data-row-span="full"]')} {
+    grid-row-start: 1;
+    grid-row-end: -1;
+  }
+}
+
+@function _with-attribute($template, $attribute) {
+  $index: string.index($template, '&');
+  @return string.slice($template, 1, $index - 1) + $attribute + string.slice($template, $index + 1);
+}
