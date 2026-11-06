@@ -2,7 +2,7 @@
   "theme": {
     "$type": "color",
     "brand": {
-      "$value": "{color.radix-dark.slate.1}"
+      "$value": "{color.radix-dark.slate.3}"
     },
     "on-brand": {
       "$value": "{color.radix.white}"
