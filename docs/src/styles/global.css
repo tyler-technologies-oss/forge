@@ -39,6 +39,10 @@
   --breakpoint-nav: 60rem;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 /*
  * Base-layer typography defaults.
  *
