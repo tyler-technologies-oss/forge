@@ -138,7 +138,7 @@ $themes: primary, secondary, tertiary, success, error, warning, info;
 
 :host(:state(info-secondary)) {
   --forge-card-background: #{theme.variable(surface-dim)};
-  --forge-card-outline-color: #{theme.variable(outline)};
+  --forge-card-outline-color: #{theme.variable(outline-low)};
   --forge-card-outline-width: 1px;
   --forge-card-outline-style: solid;
 }

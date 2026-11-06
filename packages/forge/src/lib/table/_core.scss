@@ -47,7 +47,7 @@
 
     border-bottom-width: 1px;
     border-style: solid;
-    border-color: #{theme.variable(outline)};
+    border-color: #{theme.variable(outline-low)};
     border-width: 0;
 
     position: absolute;
@@ -77,7 +77,7 @@
 
   border-bottom-width: #{border.variable(thin)};
   border-bottom-style: solid;
-  border-bottom-color: #{theme.variable(outline)};
+  border-bottom-color: #{theme.variable(outline-low)};
 
   &:first-child:not(.#{$select-class-name}) {
     padding-left: #{spacing.variable(large)};
@@ -90,7 +90,7 @@
 
   border-bottom-width: #{border.variable(thin)};
   border-bottom-style: solid;
-  border-bottom-color: #{theme.variable(outline)};
+  border-bottom-color: #{theme.variable(outline-low)};
 }
 
 // Creates styles for container element that is placed within each cell.

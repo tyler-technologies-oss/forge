@@ -20,7 +20,7 @@ $tokens: (
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(surface-bright-shadow)),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
-  border-color: utils.module-val(popover, border-color, theme.variable(outline)),
+  border-color: utils.module-val(popover, border-color, theme.variable(outline-low)),
   overflow: utils.module-val(popover, overflow, initial),
   // Arrow
   arrow-size: utils.module-val(popover, arrow-size, 12px),

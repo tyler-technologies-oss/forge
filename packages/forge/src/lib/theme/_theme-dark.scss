@@ -68,7 +68,7 @@
   // Chips
   @include chip.provide-theme(
     (
-      field-border-color: theme.variable(outline) // Field type chips use a border color in dark theme to increase contrast
+      field-border-color: theme.variable(outline-low) // Field type chips use a border color in dark theme to increase contrast
     )
   );
 }

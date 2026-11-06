@@ -6,7 +6,7 @@
   &--scrollable {
     .forge-dialog__title,
     .forge-dialog__footer {
-      border-color: #{theme.variable(outline)};
+      border-color: #{theme.variable(outline-low)};
     }
   }
 

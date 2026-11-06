@@ -13,7 +13,7 @@ $tokens: (
   padding-inline: utils.module-val(kbd, padding-inline, spacing.variable(xxsmall)),
   border-width: utils.module-val(kbd, border-width, border.variable(thin)),
   border-style: utils.module-val(kbd, border-style, solid),
-  border-color: utils.module-val(kbd, border-color, theme.variable(outline)),
+  border-color: utils.module-val(kbd, border-color, theme.variable(outline-low)),
   gap: utils.module-val(kbd, gap, spacing.variable(xxxsmall))
 ) !default;
 

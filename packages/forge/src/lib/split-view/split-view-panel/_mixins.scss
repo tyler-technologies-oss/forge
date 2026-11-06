@@ -153,7 +153,7 @@
 
 @mixin handle() {
   color: #{theme.variable(text-medium)};
-  background-color: #{theme.variable(outline)};
+  background-color: #{theme.variable(outline-low)};
   position: relative;
   display: flex;
   flex-shrink: 0;

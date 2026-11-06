@@ -30,7 +30,7 @@ $tfoot-roomy-row-height: 56px !default;
 $row-padding: 0 #{spacing.variable(large)} !default;
 
 // The border style for the table cells.
-$border: 1px solid #{theme.variable(outline)} !default;
+$border: 1px solid #{theme.variable(outline-low)} !default;
 
 // The width of the table filter inputs.
 $filter-input-width: 80px !default;

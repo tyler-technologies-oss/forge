@@ -13,7 +13,7 @@ $tokens: (
   default-marker-size: utils.module-val(timeline-item, default-marker-size, spacing.variable(xsmall)),
   default-marker-shape: utils.module-val(timeline-item, default-marker-shape, shape.variable(full)),
   sidebar-margin: utils.module-val(timeline-item, sidebar-margin, spacing.variable(xsmall)),
-  line-color: utils.module-val(timeline-item, line-color, theme.variable(outline)),
+  line-color: utils.module-val(timeline-item, line-color, theme.variable(outline-low)),
   line-width: utils.module-val(timeline-item, line-width, spacing.variable(xxxsmall)),
   line-inset: utils.module-val(
       timeline-item,

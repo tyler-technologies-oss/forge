@@ -26,7 +26,7 @@ $tokens: (
   icon-transition-duration: utils.module-val(step, icon-transition-duration, animation.variable(duration-medium4)),
   icon-transition-easing: utils.module-val(step, icon-transition-easing, animation.variable(easing-standard)),
   // Line
-  line-color: utils.module-val(step, line-color, theme.variable(outline)),
+  line-color: utils.module-val(step, line-color, theme.variable(outline-low)),
   line-min-width: utils.module-val(step, line-min-width, 10px),
   line-min-width-clustered: utils.module-val(step, line-min-width-clustered, 25px),
   // Label

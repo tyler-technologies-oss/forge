@@ -98,7 +98,7 @@
 
         &[type='number'],
         &[type='text'] {
-          border-color: #{theme.variable(outline)};
+          border-color: #{theme.variable(outline-low)};
           color: #{theme.variable(on-surface)};
           background-color: transparent;
           padding: 4px 8px;

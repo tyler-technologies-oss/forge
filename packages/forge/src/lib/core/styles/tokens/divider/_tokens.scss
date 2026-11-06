@@ -4,7 +4,7 @@
 @use '@tylertech/forge-tokens/sass/border';
 
 $tokens: (
-  color: utils.module-val(divider, color, theme.variable(outline)),
+  color: utils.module-val(divider, color, theme.variable(outline-low)),
   width: utils.module-val(divider, width, border.variable(thin)),
   border-style: utils.module-val(divider, border-style, solid),
   margin: utils.module-val(divider, margin, 0)

@@ -20,7 +20,7 @@ $tokens: (
   // Border
   border-width: utils.module-val(tooltip, border-width, 0),
   border-style: utils.module-val(tooltip, border-style, solid),
-  border-color: utils.module-val(tooltip, border-color, theme.variable(outline)),
+  border-color: utils.module-val(tooltip, border-color, theme.variable(outline-low)),
   // Animation
   animation-timing: utils.module-val(tooltip, animation-timing, animation.variable(easing-decelerate)),
   animation-duration: utils.module-val(tooltip, animation-duration, animation.variable(duration-short3)),
