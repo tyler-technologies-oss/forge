@@ -1,7 +1,7 @@
 import { hasChildColumns, resolveColumnId } from '../columns/column-utils.js';
-import type { ColumnDef } from '../types.js';
+import type { ColumnDef, Row } from '../types.js';
 
-export class ColumnHierarchyHelper<TData> {
+export class ColumnHierarchyHelper<TData extends Row> {
   constructor(
     private getColumns: () => ColumnDef<TData>[],
     private getColumnOrder?: () => string[]

@@ -15,6 +15,7 @@ import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
 import { SELECT_COLUMN_ID } from '../data-table/constants.js';
+import type { DataTableFeatures } from '../data-table/table-features.js';
 import type { Row } from '../data-table/types.js';
 import { COLUMN_MENU_ACTION_EVENT, COLUMN_MENU_TAG_NAME } from './constants.js';
 import type { ColumnMenuAction, ColumnMenuActionEventDetail } from './types.js';
@@ -40,7 +41,7 @@ const DIVIDER_OPTION: IMenuOption = { value: undefined, label: '', divider: true
  * @event {CustomEvent<ColumnMenuActionEventDetail>} forge-data-table-column-menu-action - Dispatches after the user chooses an action.
  */
 @customElement(COLUMN_MENU_TAG_NAME)
-export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
+export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
   static {
     IconRegistry.define([
       tylIconMoreVert,
@@ -60,13 +61,13 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
    * The column that the menu actions apply to.
    */
   @property({ attribute: false })
-  public column: Column<TData, unknown> | undefined;
+  public column: Column<DataTableFeatures, TData> | undefined;
 
   /**
    * The table that owns the column. Required to reorder columns.
    */
   @property({ attribute: false })
-  public table: Table<TData> | undefined;
+  public table: Table<DataTableFeatures, TData> | undefined;
 
   /**
    * Whether the table allows its columns to be reordered. The move actions are only offered when this is set.
@@ -114,7 +115,7 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
     return groups.filter(group => group.length).flatMap((group, index) => (index ? [DIVIDER_OPTION, ...group] : group));
   };
 
-  #getMoveTarget(direction: MoveDirection): Column<TData, unknown> | undefined {
+  #getMoveTarget(direction: MoveDirection): Column<DataTableFeatures, TData> | undefined {
     const { column, table } = this;
     if (!column || !table || !canColumnBeReordered(column)) {
       return undefined;
@@ -132,7 +133,7 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
       return;
     }
 
-    const order: ColumnOrderState = table.getState().columnOrder.length ? [...table.getState().columnOrder] : table.getAllLeafColumns().map(({ id }) => id);
+    const order: ColumnOrderState = table.atoms.columnOrder.get().length ? [...table.atoms.columnOrder.get()] : table.getAllLeafColumns().map(({ id }) => id);
     const from = order.indexOf(column.id);
     const to = order.indexOf(target.id);
     if (from < 0 || to < 0) {
@@ -208,7 +209,7 @@ export class ColumnMenuElement<TData extends Row = unknown> extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [COLUMN_MENU_TAG_NAME]: ColumnMenuElement<unknown>;
+    [COLUMN_MENU_TAG_NAME]: ColumnMenuElement<any>;
   }
 
   interface HTMLElementEventMap {

@@ -25,6 +25,11 @@ component out of a release. To publish: remove `private`, add a changeset, and r
 - `src/lib/data-table/data-table.ts` — the `DataTableElement`. A plain `LitElement` that registers itself
   with `@customElement('forge-data-table')`, so importing the module is what defines the element. It does
   not use `BaseLitElement` or `defineCustomElement`, unlike most of Forge.
+- `src/lib/data-table/table-features.ts` — the TanStack Table v9 `tableFeatures({...})` registration (`dataTableFeatures` /
+  `DataTableFeatures`). v9 only exposes an API when its feature is registered, so using a new table, column, or row API
+  (pinning, pagination, faceting, ...) means adding the feature here first. Built-in filter and sort functions are registered
+  individually; the `'auto'` filter and sort resolution only finds registered ones. Every TanStack `Table`, `Column`, `Cell`
+  and `ColumnDef` type takes `DataTableFeatures` as its first generic.
 - Rows come from the `dataSource` property, a `DataSource` from `@tylertech/forge-core`. `willUpdate` calls its
   `fetch()` whenever the property changes and stores the result in internal state, so the first render is empty
   and rows arrive in a follow-up update. `await element.updateComplete` therefore does not wait for the fetch.

@@ -1,16 +1,16 @@
-import type { VisibilityState } from '@tanstack/lit-table';
+import type { ColumnVisibilityState } from '@tanstack/lit-table';
 import type { ReactiveController } from 'lit';
 import { resolveColumnId } from '../columns/column-utils.js';
 import type { DataTableElement } from '../data-table.js';
-import type { ColumnDef } from '../types.js';
+import type { ColumnDef, Row } from '../types.js';
 import { ColumnHierarchyHelper } from './column-hierarchy-helper.js';
 
 export interface ColumnVisibilityControllerOptions {
   selectColumnId: string;
-  onVisibilityChange(nextState: VisibilityState): void;
+  onVisibilityChange(nextState: ColumnVisibilityState): void;
 }
 
-export class ColumnVisibilityController<TData> implements ReactiveController {
+export class ColumnVisibilityController<TData extends Row> implements ReactiveController {
   private _hierarchyHelper: ColumnHierarchyHelper<TData>;
 
   constructor(
@@ -34,7 +34,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
       return;
     }
 
-    const nextState: VisibilityState = {
+    const nextState: ColumnVisibilityState = {
       ...this._host.columnVisibility,
       [columnId]: false
     };
@@ -59,7 +59,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
       return;
     }
 
-    const nextState: VisibilityState = {
+    const nextState: ColumnVisibilityState = {
       ...this._host.columnVisibility,
       [columnId]: true
     };
@@ -77,7 +77,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     }
 
     const currentVisibility = this._host.columnVisibility[columnId] ?? true;
-    const nextState: VisibilityState = {
+    const nextState: ColumnVisibilityState = {
       ...this._host.columnVisibility,
       [columnId]: !currentVisibility
     };
@@ -85,8 +85,8 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     this.setVisibilityState(nextState);
   }
 
-  public deriveVisibilityState(): VisibilityState | null {
-    const visibility: VisibilityState = { ...this._host.columnVisibility };
+  public deriveVisibilityState(): ColumnVisibilityState | null {
+    const visibility: ColumnVisibilityState = { ...this._host.columnVisibility };
     const validIds = new Set<string>();
     let hasChanges = false;
 
@@ -111,7 +111,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     columns: ColumnDef<TData>[],
     parentIndices: number[],
     validIds: Set<string>,
-    visibility: VisibilityState,
+    visibility: ColumnVisibilityState,
     callback: (id: string, shouldShow: boolean) => void
   ): void {
     columns.forEach((column, index) => {
@@ -131,7 +131,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     });
   }
 
-  public setVisibilityState(nextState: VisibilityState, options?: { notifyHost?: boolean }): void {
+  public setVisibilityState(nextState: ColumnVisibilityState, options?: { notifyHost?: boolean }): void {
     const notifyHost = options?.notifyHost ?? true;
 
     if (this._areVisibilityStatesEqual(this._host.columnVisibility, nextState)) {
@@ -154,7 +154,7 @@ export class ColumnVisibilityController<TData> implements ReactiveController {
     return column?.hideable ?? true;
   }
 
-  private _areVisibilityStatesEqual(a: VisibilityState, b: VisibilityState): boolean {
+  private _areVisibilityStatesEqual(a: ColumnVisibilityState, b: ColumnVisibilityState): boolean {
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
 

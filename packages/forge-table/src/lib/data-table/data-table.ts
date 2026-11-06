@@ -3,16 +3,14 @@ import {
   ColumnDef as TanstackColumnDef,
   ColumnFiltersState,
   ColumnOrderState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
+  FlexRender,
+  LitTable,
+  RowSelectionState,
   SortingState,
   TableController,
   Updater,
-  VisibilityState,
-  Cell,
-  Table
+  ColumnVisibilityState,
+  Cell
 } from '@tanstack/lit-table';
 import { VirtualizerController } from '@tanstack/lit-virtual';
 import { html, LitElement, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
@@ -33,6 +31,7 @@ import { ColumnVisibilityController } from './controllers/column-visibility-cont
 import { canColumnBeReordered, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
 import { COMPACT_ROW_HEIGHT, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID, VIRTUALIZER_OVERSCAN } from './constants.js';
 import { renderFilterField } from './templates/filter-fields.js';
+import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnDef, Row, RowSelectionType } from './types.js';
 import { toggleState } from '@tylertech/forge';
 
@@ -52,8 +51,8 @@ export type { ColumnDef, FilterType, FooterCallback, Row, RowSelectionType } fro
  * @tag forge-data-table
  */
 @customElement('forge-data-table')
-export class DataTableElement<TData extends Row = unknown> extends LitElement {
-  #tableController = new TableController<TData>(this);
+export class DataTableElement<TData extends Row = Row> extends LitElement {
+  #tableController = new TableController<DataTableFeatures, TData>(this);
   #tableContainerRef = createRef<HTMLElement>();
   #columnReorderController: ColumnReorderController<TData> | null = null;
   #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
@@ -85,7 +84,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
    * The current visibility state of the columns.
    */
   @property({ type: Object })
-  public columnVisibility: VisibilityState = {};
+  public columnVisibility: ColumnVisibilityState = {};
 
   /**
    * The current order of the columns.
@@ -208,11 +207,11 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   public fixedHeaders = false;
 
   @state() private _data: TData[] = [];
-  @state() private _columns: TanstackColumnDef<TData>[] = [];
-  @state() private _tableColumns: TanstackColumnDef<TData>[] = [];
+  @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
+  @state() private _tableColumns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
   @state() private _sorting: SortingState = [];
   @state() private _columnFilters: ColumnFiltersState = [];
-  @state() private _rowSelection: Record<string, boolean> = {};
+  @state() private _rowSelection: RowSelectionState = {};
   @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
   @state() private _columnMenuAnchorId: string | null = null;
   @state() private _columnMenuOpen = false;
@@ -291,7 +290,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
 
     if (needsRecreation) {
       this.removeController(this.#tableController);
-      this.#tableController = new TableController<TData>(this);
+      this.#tableController = new TableController<DataTableFeatures, TData>(this);
 
       if (changedProperties.has('rowSelection')) {
         const oldValue = changedProperties.get('rowSelection');
@@ -358,6 +357,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
   protected override render(): TemplateResult {
     // Update the table controller with the current state
     const table = this.#tableController.table({
+      features: dataTableFeatures,
       defaultColumn: {
         size: DEFAULT_COLUMN_WIDTH
       },
@@ -402,10 +402,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
         columnVisibility: this.columnVisibility,
         columnOrder: this.columnOrder,
         rowSelection: this._rowSelection
-      },
-      getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel: getSortedRowModel(),
-      getFilteredRowModel: getFilteredRowModel()
+      }
     });
     const tableStyle = this.#getColumnSizeStyles(table);
 
@@ -436,7 +433,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     `;
   }
 
-  #getGroupStartColumnIds(table: Table<TData>): ReadonlySet<string> {
+  #getGroupStartColumnIds(table: LitTable<DataTableFeatures, TData>): ReadonlySet<string> {
     const groupStartColumnIds = new Set<string>();
     table.getVisibleLeafColumns().forEach((column, index, columns) => {
       if (index > 0 && column.parent?.id !== columns[index - 1].parent?.id) {
@@ -446,7 +443,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     return groupStartColumnIds;
   }
 
-  #renderTableHeader(table: Table<TData>): TemplateResult {
+  #renderTableHeader(table: LitTable<DataTableFeatures, TData>): TemplateResult {
     const headerGroups = table.getHeaderGroups();
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
     return html`${headerGroups.map(
@@ -497,7 +494,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                       : canBeDragged
                         ? (evt: MouseEvent) => this.#onHeaderClick(evt, header.column)
                         : null}>
-                    <span class="cell-text">${header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</span>
+                    <span class="cell-text">${header.isPlaceholder ? null : FlexRender({ header })}</span>
                     ${this.sortable && header.column.getIsSorted()
                       ? html`
                           ${this._sorting.length > 1 ? html`<span class="sort-index" part="sort-index">${header.column.getSortIndex() + 1}</span>` : nothing}
@@ -524,7 +521,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     )}`;
   }
 
-  #renderCell(cell: Cell<TData, unknown>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
+  #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
     return html`
       <td
         part="body-cell cell"
@@ -540,13 +537,13 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
         <div class="cell-content" part="body-cell-content cell-content">
           ${cell.column.columnDef.meta?.cellSlot
             ? guard([cell.column], () => html`<slot ${lightDomRender(this, cell)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`)
-            : flexRender(cell.column.columnDef.cell, cell.getContext())}
+            : FlexRender({ cell })}
         </div>
       </td>
     `;
   }
 
-  #renderTableBody(table: Table<TData>): TemplateResult {
+  #renderTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
     return html`<tbody class="standard-tbody">
       ${repeat(
@@ -575,7 +572,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     </tbody>`;
   }
 
-  #renderTableFooter(table: Table<TData>): TemplateResult | typeof nothing {
+  #renderTableFooter(table: LitTable<DataTableFeatures, TData>): TemplateResult | typeof nothing {
     const hasFooterGroups = table
       .getFooterGroups()
       .flatMap(footerGroup => footerGroup.headers.flatMap(header => header.column.columnDef.footer))
@@ -596,7 +593,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
                   colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                   style=${styleMap({ width: this.#getColumnWidthStyle(header.column) })}
                   class=${classMap({ 'empty-footer': header.column.columnDef.footer === undefined })}>
-                  <div class="cell-content" part="footer-cell-content cell-content">${flexRender(header.column.columnDef.footer, header.getContext())}</div>
+                  <div class="cell-content" part="footer-cell-content cell-content">${FlexRender({ footer: header })}</div>
                 </th>
               `
             )}
@@ -606,7 +603,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     </tfoot>`;
   }
 
-  #renderColumnVisibilityPopover(table: Table<TData>): TemplateResult {
+  #renderColumnVisibilityPopover(table: LitTable<DataTableFeatures, TData>): TemplateResult {
     const anchorId = this._columnMenuAnchorId ?? undefined;
     const items = table.getAllLeafColumns().filter(column => column.id !== SELECT_COLUMN_ID && column.getCanHide());
 
@@ -629,7 +626,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     `;
   }
 
-  #renderColumnVisibilityItem(column: Column<TData, unknown>): TemplateResult {
+  #renderColumnVisibilityItem(column: Column<DataTableFeatures, TData>): TemplateResult {
     const isVisible = column.getIsVisible();
 
     return html`
@@ -644,7 +641,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     `;
   }
 
-  #onHeaderDragStart(evt: DragEvent, column: Column<TData>): void {
+  #onHeaderDragStart(evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
     this.#isDragging = true;
     this.#columnReorderController?.onDragStart(evt, column);
   }
@@ -654,7 +651,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this.#columnReorderController?.onDragEnd(evt);
   }
 
-  #onHeaderClick(evt: MouseEvent, column: Column<TData>): void {
+  #onHeaderClick(evt: MouseEvent, column: Column<DataTableFeatures, TData>): void {
     if (this.#isDragging) {
       this.#isDragging = false;
       return;
@@ -664,7 +661,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     }
   }
 
-  async #onHeaderContextMenu(evt: MouseEvent, column: Column<TData, unknown>): Promise<void> {
+  async #onHeaderContextMenu(evt: MouseEvent, column: Column<DataTableFeatures, TData>): Promise<void> {
     evt.preventDefault();
 
     const target = evt.currentTarget as HTMLElement | null;
@@ -694,7 +691,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     }
   }
 
-  #onColumnMenuItemClick(evt: Event, column: Column<TData, unknown>): void {
+  #onColumnMenuItemClick(evt: Event, column: Column<DataTableFeatures, TData>): void {
     const path = evt.composedPath();
     const interactedWithCheckbox = path.some(target => {
       if (!(target as HTMLElement)?.tagName) {
@@ -712,13 +709,13 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this.#toggleColumnVisibility(column);
   }
 
-  #onColumnMenuCheckboxChange(evt: Event, column: Column<TData, unknown>): void {
+  #onColumnMenuCheckboxChange(evt: Event, column: Column<DataTableFeatures, TData>): void {
     evt.stopPropagation();
 
     this.#toggleColumnVisibility(column);
   }
 
-  #toggleColumnVisibility(column: Column<TData, unknown>): void {
+  #toggleColumnVisibility(column: Column<DataTableFeatures, TData>): void {
     const columnId = column.id;
     if (!columnId) {
       return;
@@ -733,7 +730,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     this.#closeColumnMenu();
   }
 
-  #getColumnMenuLabel(column: Column<TData, unknown>): string {
+  #getColumnMenuLabel(column: Column<DataTableFeatures, TData>): string {
     const header = column.columnDef.header;
 
     if (typeof header === 'string' || typeof header === 'number') {
@@ -827,17 +824,17 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     }
   }
 
-  #onRowSelect(updaterOrValue: Updater<Record<string, boolean>>): void {
+  #onRowSelect(updaterOrValue: Updater<RowSelectionState>): void {
     this._rowSelection = typeof updaterOrValue === 'function' ? updaterOrValue(this._rowSelection) : updaterOrValue;
     this.dispatchEvent(new CustomEvent('forge-data-table-row-select', { detail: this._rowSelection, bubbles: true, composed: true }));
   }
 
-  #onColumnVisibilityChange(updaterOrValue: Updater<VisibilityState>): void {
+  #onColumnVisibilityChange(updaterOrValue: Updater<ColumnVisibilityState>): void {
     const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this.columnVisibility) : updaterOrValue;
     this.#columnVisibilityController.setVisibilityState(nextState);
   }
 
-  #emitColumnVisibilityChange(nextState: VisibilityState): void {
+  #emitColumnVisibilityChange(nextState: ColumnVisibilityState): void {
     this.dispatchEvent(new CustomEvent('forge-data-table-column-visibility', { detail: nextState, bubbles: true, composed: true }));
   }
 
@@ -864,7 +861,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     );
   }
 
-  #renderVirtualizedTableBody(table: Table<TData>): TemplateResult {
+  #renderVirtualizedTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
     if (!this.#tableContainerRef || !this._virtualizerController) {
       return this.#renderTableBody(table);
     }
@@ -927,7 +924,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     </tbody>`;
   }
 
-  #getColumnSizeStyles(table: Table<TData>): Record<string, string> {
+  #getColumnSizeStyles(table: LitTable<DataTableFeatures, TData>): Record<string, string> {
     if (!this.resizable) {
       return {};
     }
@@ -943,7 +940,7 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
     return colStyles;
   }
 
-  #getColumnWidthStyle(column: Column<TData, unknown>): string | null {
+  #getColumnWidthStyle(column: Column<DataTableFeatures, TData>): string | null {
     if (!this.resizable || !column.getCanResize()) {
       return null;
     }
@@ -984,14 +981,14 @@ export class DataTableElement<TData extends Row = unknown> extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-data-table': DataTableElement<unknown>;
+    'forge-data-table': DataTableElement<any>;
   }
 
   interface HTMLElementEventMap {
     'forge-data-table-sort': CustomEvent<SortingState>;
     'forge-data-table-filter': CustomEvent<ColumnFiltersState>;
-    'forge-data-table-row-select': CustomEvent<Record<string, boolean>>;
-    'forge-data-table-column-visibility': CustomEvent<VisibilityState>;
+    'forge-data-table-row-select': CustomEvent<RowSelectionState>;
+    'forge-data-table-column-visibility': CustomEvent<ColumnVisibilityState>;
     'forge-data-table-column-order': CustomEvent<ColumnOrderState>;
     'forge-data-table-row-click': CustomEvent<{ data: unknown; index: number }>;
   }

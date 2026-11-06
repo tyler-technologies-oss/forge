@@ -1,10 +1,11 @@
-import { createTable, getCoreRowModel, getSortedRowModel, type ColumnDef, type Table, type TableState } from '@tanstack/lit-table';
-import { html } from 'lit';
+import { TableController, type ColumnDef, type Table } from '@tanstack/lit-table';
+import { html, type ReactiveControllerHost } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import './column-menu.js';
 import type { ColumnMenuElement } from './column-menu.js';
+import { dataTableFeatures, type DataTableFeatures } from '../data-table/table-features.js';
 import type { ColumnMenuAction } from './types.js';
 
 interface TestData {
@@ -13,7 +14,7 @@ interface TestData {
   age: number;
 }
 
-const COLUMNS: ColumnDef<TestData>[] = [
+const COLUMNS: ColumnDef<DataTableFeatures, TestData>[] = [
   { id: 'id', header: 'ID', accessorKey: 'id' },
   { id: 'name', header: 'Name', accessorKey: 'name' },
   { id: 'age', header: 'Age', accessorKey: 'age', enableHiding: false }
@@ -24,31 +25,25 @@ const DATA: TestData[] = [
   { id: 2, name: 'Bob', age: 25 }
 ];
 
-function createTestTable(options: { enableSorting?: boolean; enableColumnResizing?: boolean; columns?: ColumnDef<TestData>[] } = {}): Table<TestData> {
-  const baseOptions = {
+function createTestTable(
+  options: { enableSorting?: boolean; enableColumnResizing?: boolean; columns?: ColumnDef<DataTableFeatures, TestData>[] } = {}
+): Table<DataTableFeatures, TestData> {
+  const host: ReactiveControllerHost = {
+    addController: () => {},
+    removeController: () => {},
+    requestUpdate: () => {},
+    updateComplete: Promise.resolve(true)
+  };
+  return new TableController<DataTableFeatures, TestData>(host).table({
+    features: dataTableFeatures,
     data: DATA,
     columns: options.columns ?? COLUMNS,
     enableSorting: options.enableSorting ?? true,
-    enableColumnResizing: options.enableColumnResizing ?? true,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    renderFallbackValue: null,
-    onStateChange: () => {}
-  };
-  const table = createTable<TestData>({ ...baseOptions, state: {} });
-  let state: TableState = { ...table.initialState };
-  table.setOptions(prev => ({
-    ...prev,
-    state,
-    onStateChange: updater => {
-      state = typeof updater === 'function' ? updater(state) : updater;
-      table.setOptions(current => ({ ...current, state }));
-    }
-  }));
-  return table;
+    enableColumnResizing: options.enableColumnResizing ?? true
+  });
 }
 
-async function renderMenu(table: Table<TestData>, columnId: string, reorderable = true): Promise<ColumnMenuElement<TestData>> {
+async function renderMenu(table: Table<DataTableFeatures, TestData>, columnId: string, reorderable = true): Promise<ColumnMenuElement<TestData>> {
   const screen = await render(
     html`<forge-data-table-column-menu .table=${table} .column=${table.getColumn(columnId)} .reorderable=${reorderable}></forge-data-table-column-menu>`
   );
@@ -107,7 +102,7 @@ describe('ColumnMenu', () => {
 
     await choose(await openMenu(element), 'Sort ascending');
 
-    expect(table.getState().sorting).toEqual([{ id: 'age', desc: false }]);
+    expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: false }]);
   });
 
   it('should sort the column descending when sort descending is chosen', async () => {
@@ -116,7 +111,7 @@ describe('ColumnMenu', () => {
 
     await choose(await openMenu(element), 'Sort descending');
 
-    expect(table.getState().sorting).toEqual([{ id: 'age', desc: true }]);
+    expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: true }]);
   });
 
   it('should omit sort actions when the table does not allow sorting', async () => {
@@ -164,7 +159,7 @@ describe('ColumnMenu', () => {
 
     await choose(await openMenu(element), 'Hide');
 
-    expect(table.getState().columnVisibility).toEqual({ name: false });
+    expect(table.atoms.columnVisibility.get()).toEqual({ name: false });
   });
 
   it('should disable hide when the column cannot be hidden', async () => {
@@ -216,7 +211,7 @@ describe('ColumnMenu', () => {
 
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action });
-    expect(table.getState().columnPinning).toEqual({ left: [], right: [] });
+    expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
   });
 
   it('should dispatch an action event for actions applied to the table', async () => {
@@ -231,7 +226,7 @@ describe('ColumnMenu', () => {
 
   it('should offer unpin when the column is pinned', async () => {
     const table = createTestTable();
-    table.getColumn('name')?.pin('left');
+    table.getColumn('name')?.pin('start');
     const element = await renderMenu(table, 'name');
 
     const items = await openMenu(element);

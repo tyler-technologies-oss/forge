@@ -1,5 +1,6 @@
-import type { Row } from '@tanstack/lit-table';
-import type { ColumnDef } from '../types.js';
+import type { Row as TanstackRow } from '@tanstack/lit-table';
+import type { DataTableFeatures } from '../table-features.js';
+import type { ColumnDef, Row } from '../types.js';
 
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/icon';
@@ -34,7 +35,7 @@ interface ExpandableRow {
   toggleExpanded(): void;
 }
 
-export function createExpanderColumn<TData = any>(options: ExpanderColumnOptions = {}): ColumnDef<TData> {
+export function createExpanderColumn<TData extends Row = Row>(options: ExpanderColumnOptions = {}): ColumnDef<TData> {
   const { id = 'expander', header = '', ariaLabel = 'Toggle row expansion', expandedIcon = 'chevron_down', collapsedIcon = 'chevron_right' } = options;
 
   return {
@@ -45,7 +46,7 @@ export function createExpanderColumn<TData = any>(options: ExpanderColumnOptions
     width: 56,
     stopRowClickPropagation: true,
     template: ({ row }) => {
-      const expandableRow = row as Row<TData> & ExpandableRow;
+      const expandableRow = row as TanstackRow<DataTableFeatures, TData> & ExpandableRow;
       const iconButton = document.createElement('forge-icon-button');
       const icon = document.createElement('forge-icon');
 

@@ -1,9 +1,10 @@
 import type { Cell } from '@tanstack/lit-table';
+import type { DataTableFeatures } from '../table-features.js';
 import { noChange } from 'lit';
 import { Directive, directive } from 'lit/directive.js';
 
 class LightDomRenderDirective extends Directive {
-  public render(host: HTMLElement, cell: Cell<any, any>): typeof noChange {
+  public render(host: HTMLElement, cell: Cell<DataTableFeatures, any>): typeof noChange {
     const slotName = `col-${cell.column.id}:row-${cell.row.id}`;
 
     const container = host.querySelector(`[slot="${slotName}"]`) ?? document.createElement('div');

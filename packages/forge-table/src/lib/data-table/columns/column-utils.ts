@@ -4,6 +4,7 @@ import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
 import type { ColumnDef, CustomFormatter, FooterCallback, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
+import type { DataTableFeatures } from '../table-features.js';
 
 export interface LeafColumn<TData extends Row> {
   column: ColumnDef<TData>;
@@ -31,7 +32,7 @@ export function hasChildColumns<TData extends Row>(column: ColumnDef<TData> | un
   return Array.isArray(column?.columns) && column.columns.length > 0;
 }
 
-export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], parentIndices: number[] = []): TanstackColumnDef<TData>[] {
+export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], parentIndices: number[] = []): TanstackColumnDef<DataTableFeatures, TData>[] {
   return columns.map((column, index) => {
     const indexPath = [...parentIndices, index];
     const columnId = resolveColumnId(column, indexPath);
@@ -42,7 +43,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
       header: column.header,
       footer:
         typeof column.footer === 'function'
-          ? (context: { column: Column<TData>; table: Table<TData> }) => {
+          ? (context: { column: Column<DataTableFeatures, TData>; table: Table<DataTableFeatures, TData> }) => {
               const propertyId = (column.property ?? context.column.id) as string;
               const filteredData = context.table.getFilteredRowModel().rows.map(r => r.original);
               return (column.footer as FooterCallback<TData>)({ property: propertyId, data: filteredData });
@@ -68,7 +69,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         enableResizing: hasHeader ? (column.resizable ?? true) : false,
         enableSorting: false,
         enableColumnFilter: false
-      } satisfies TanstackColumnDef<TData>;
+      } satisfies TanstackColumnDef<DataTableFeatures, TData>;
     } else {
       const leafColumn = {
         ...baseColumn,
@@ -81,7 +82,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
               : undefined,
         enableResizing: column.resizable ?? true,
         ...(typeof column.template === 'function' && { cell: column.template })
-      } satisfies TanstackColumnDef<TData>;
+      } satisfies TanstackColumnDef<DataTableFeatures, TData>;
 
       return leafColumn;
     }
@@ -116,12 +117,15 @@ export function getAllColumnIds<TData extends Row>(columns: ColumnDef<TData>[], 
   });
 }
 
-export function prependSelectColumn<TData extends Row>(columns: TanstackColumnDef<TData>[], rowSelection: RowSelectionType): TanstackColumnDef<TData>[] {
+export function prependSelectColumn<TData extends Row>(
+  columns: TanstackColumnDef<DataTableFeatures, TData>[],
+  rowSelection: RowSelectionType
+): TanstackColumnDef<DataTableFeatures, TData>[] {
   if (columns.some(column => column.id === SELECT_COLUMN_ID)) {
     return [...columns];
   }
 
-  const selectColumn: TanstackColumnDef<TData> = {
+  const selectColumn: TanstackColumnDef<DataTableFeatures, TData> = {
     id: SELECT_COLUMN_ID,
     enableResizing: false,
     enableColumnFilter: false,
@@ -149,7 +153,7 @@ export function prependSelectColumn<TData extends Row>(columns: TanstackColumnDe
   return [selectColumn, ...columns];
 }
 
-export function canColumnBeReordered<TData extends Row>(column: Column<TData>): boolean {
+export function canColumnBeReordered<TData extends Row>(column: Column<DataTableFeatures, TData>): boolean {
   if (column.columnDef.id === SELECT_COLUMN_ID) {
     return false;
   }

@@ -1,4 +1,4 @@
-import type { ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/lit-table';
+import type { ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
 import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
@@ -655,8 +655,8 @@ describe('DataTable', () => {
 
     it('should emit column visibility event when visibility changes', async () => {
       const harness = await createFixture();
-      const events: VisibilityState[] = [];
-      harness.element.addEventListener('forge-data-table-column-visibility', (evt: Event) => events.push((evt as CustomEvent<VisibilityState>).detail));
+      const events: ColumnVisibilityState[] = [];
+      harness.element.addEventListener('forge-data-table-column-visibility', (evt: Event) => events.push((evt as CustomEvent<ColumnVisibilityState>).detail));
 
       harness.element.hideColumn('name');
       await harness.element.updateComplete;

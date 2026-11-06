@@ -1,6 +1,8 @@
 import type { Column } from '@tanstack/lit-table';
 import { ReactiveController } from 'lit';
 import type { DataTableElement } from '../data-table.js';
+import type { DataTableFeatures } from '../table-features.js';
+import type { Row } from '../types.js';
 import { ColumnHierarchyHelper } from './column-hierarchy-helper.js';
 
 export interface ColumnReorderControllerOptions {
@@ -8,7 +10,7 @@ export interface ColumnReorderControllerOptions {
   onColumnOrderChange: (newColumnOrder: string[]) => void;
 }
 
-export class ColumnReorderController<TData> implements ReactiveController {
+export class ColumnReorderController<TData extends Row> implements ReactiveController {
   public movingColumn: string | null = null;
   public targetColumn: string | null = null;
   public dropSide: 'before' | 'after' | null = null;
@@ -35,7 +37,7 @@ export class ColumnReorderController<TData> implements ReactiveController {
     this._cleanup();
   }
 
-  public onDragStart(evt: DragEvent, column: Column<TData>): void {
+  public onDragStart(evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
     this.movingColumn = column.id;
     this.targetColumn = null;
     this.dropSide = null;
@@ -68,7 +70,7 @@ export class ColumnReorderController<TData> implements ReactiveController {
     this._host.requestUpdate();
   }
 
-  public onDragOver(evt: DragEvent, column: Column<TData>): void {
+  public onDragOver(evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
     evt.preventDefault();
 
     if (!this.movingColumn || !this.canDropOnTarget(column.id)) {
@@ -90,7 +92,7 @@ export class ColumnReorderController<TData> implements ReactiveController {
     this._host.requestUpdate();
   }
 
-  public onDrop(_evt: DragEvent, column: Column<TData>): void {
+  public onDrop(_evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
     const movingColumnId = this.movingColumn;
     if (!movingColumnId) {
       return;
@@ -169,7 +171,7 @@ export class ColumnReorderController<TData> implements ReactiveController {
 
   private _resolveDropTarget(
     evt: DragEvent,
-    column: Column<TData>
+    column: Column<DataTableFeatures, TData>
   ): { hoveredThEl: HTMLElement; dropSide: 'before' | 'after'; indicatorColumnId: string; indicatorSide: 'before' | 'after' } | null {
     if (!this.movingColumn) {
       return null;
@@ -317,7 +319,7 @@ export class ColumnReorderController<TData> implements ReactiveController {
     }
   }
 
-  private _createDragGhost(column: Column<TData>): HTMLElement {
+  private _createDragGhost(column: Column<DataTableFeatures, TData>): HTMLElement {
     const wrapper = document.createElement('div');
     wrapper.style.position = 'fixed';
     wrapper.style.top = '-9999px';

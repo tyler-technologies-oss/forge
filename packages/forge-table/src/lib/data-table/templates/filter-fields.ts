@@ -1,7 +1,9 @@
 import type { Column } from '@tanstack/lit-table';
 import { html, TemplateResult } from 'lit';
+import type { DataTableFeatures } from '../table-features.js';
+import type { Row } from '../types.js';
 
-export function renderFilterField<TData>(column: Column<TData, unknown>): TemplateResult {
+export function renderFilterField<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
   switch (column.columnDef.meta?.filterVariant) {
     case 'select':
       return renderSelectFilter(column);
@@ -14,7 +16,7 @@ export function renderFilterField<TData>(column: Column<TData, unknown>): Templa
   }
 }
 
-function renderSelectFilter<TData>(column: Column<TData, unknown>): TemplateResult {
+function renderSelectFilter<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
   return html`<forge-select
     density="small"
     .value=${column.getFilterValue() ?? ''}
@@ -25,7 +27,7 @@ function renderSelectFilter<TData>(column: Column<TData, unknown>): TemplateResu
   </forge-select>`;
 }
 
-function renderRangeFilter<TData>(column: Column<TData, unknown>): TemplateResult {
+function renderRangeFilter<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
   return html` <div class="range-filter-container">
     <forge-text-field density="small">
       <input
@@ -46,7 +48,7 @@ function renderRangeFilter<TData>(column: Column<TData, unknown>): TemplateResul
   </div>`;
 }
 
-function renderDateFilter<TData>(column: Column<TData, unknown>): TemplateResult {
+function renderDateFilter<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
   return html` <forge-date-picker
     @forge-date-picker-change=${(evt: CustomEvent<Date>) => column.setFilterValue(evt.detail)}
     .value=${column.getFilterValue() as any}>
@@ -56,7 +58,7 @@ function renderDateFilter<TData>(column: Column<TData, unknown>): TemplateResult
   </forge-date-picker>`;
 }
 
-function renderTextFilter<TData>(column: Column<TData, unknown>): TemplateResult {
+function renderTextFilter<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
   return html` <forge-text-field density="small">
     <input
       name="filter-${column.id}"

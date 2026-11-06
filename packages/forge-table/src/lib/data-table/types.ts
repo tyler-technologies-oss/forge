@@ -1,16 +1,12 @@
-import type { Cell, Column, RowData as TanstackRowData } from '@tanstack/lit-table';
+import type { Cell, Column, RowData } from '@tanstack/lit-table';
 import type { Formatter } from '@tylertech/forge-core';
-
-declare module '@tanstack/lit-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends TanstackRowData, TValue> extends ColumnDefMeta {}
-}
+import type { DataTableFeatures } from './table-features.js';
 
 export type ColumnAlign = 'start' | 'center' | 'end';
 
 export type FilterType = 'text' | 'number' | 'range' | 'select' | 'date' | 'date-range' | 'time';
 
-interface ColumnDefMeta {
+export interface ColumnDefMeta {
   filterVariant?: FilterType;
   cellSlot?: boolean;
   stopRowClickPropagation?: boolean;
@@ -19,15 +15,15 @@ interface ColumnDefMeta {
   formatAttribute?: string;
 }
 
-export type Row = unknown | object | unknown[];
+export type Row = RowData;
 
 export type RowSelectionType = 'off' | 'single' | 'multiple';
 
-export type FooterCallback<TData extends Row = unknown> = (props: { property: string; data: TData[] }) => string;
+export type FooterCallback<TData extends Row = Row> = (props: { property: string; data: TData[] }) => string;
 
-export type CustomFormatter<TData extends Row = unknown, TResult = unknown> = (row: TData, index: number) => TResult;
+export type CustomFormatter<TData extends Row = Row, TResult = unknown> = (row: TData, index: number) => TResult;
 
-export interface ColumnDef<TData extends Row = unknown> {
+export interface ColumnDef<TData extends Row = Row> {
   id?: string;
   header?: string;
   footer?: string | FooterCallback<TData>;
@@ -38,7 +34,9 @@ export interface ColumnDef<TData extends Row = unknown> {
   reorderable?: boolean;
   width?: number;
   format?: Formatter<unknown, unknown> | CustomFormatter<TData>;
-  template?: string | (<TValue>(props: { row: Row; column: Column<TData>; cell: Cell<TData, TValue> }) => string | HTMLElement);
+  template?:
+    | string
+    | (<TValue>(props: { row: Row; column: Column<DataTableFeatures, TData>; cell: Cell<DataTableFeatures, TData, TValue> }) => string | HTMLElement);
   useTemplateSlot?: boolean;
   filterType?: FilterType;
   stopRowClickPropagation?: boolean;
