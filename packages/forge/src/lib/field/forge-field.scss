@@ -40,7 +40,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     border-radius: #{token(shape)};
     outline-style: #{token(outline-style)};
     outline-width: #{token(outline-width)};
-    outline-color: #{theme.variable(outline-low)};
+    outline-color: #{theme.variable(outline)};
     outline-offset: calc(#{token(outline-width)} * -1);
 
     background: #{token(background)};
@@ -48,7 +48,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     @include core.disableable;
 
     &:hover:not(:has(#{$_input-selector}:disabled)) {
-      outline-color: #{theme.variable(outline-high)};
+      outline-color: #{theme.variable(outline-medium)};
     }
 
     #{$_input-selector} {
