@@ -300,6 +300,86 @@ describe('Structured Card', () => {
     });
   });
 
+  describe('empty footer', () => {
+    it('should not render a footer section when all footer slots are empty', async () => {
+      const harness = await createFixture(html`<div slot="body">Body</div>`);
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldFooterElement).toBeNull();
+    });
+
+    it('should render a footer section when footer content is dynamically added', async () => {
+      const harness = await createFixture(html`<div slot="body">Body</div>`);
+
+      const button = document.createElement('button');
+      button.slot = 'footer-primary-action';
+      button.textContent = 'Save';
+      harness.element.appendChild(button);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldFooterElement).not.toBeNull();
+    });
+
+    it('should remove the footer section when footer content is dynamically removed', async () => {
+      const harness = await createFixture(html`<button slot="footer-primary-action" id="save-btn">Save</button>`);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldFooterElement).not.toBeNull();
+
+      harness.element.querySelector('#save-btn')?.remove();
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldFooterElement).toBeNull();
+    });
+  });
+
+  describe('empty header', () => {
+    it('should not render a header section when all header slots are empty', async () => {
+      const harness = await createFixture(html`<div slot="body">Body</div>`);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldHeaderElement).toBeNull();
+    });
+
+    it('should render a header section when header content is dynamically added', async () => {
+      const harness = await createFixture(html`<div slot="body">Body</div>`);
+
+      const title = document.createElement('span');
+      title.slot = 'title';
+      title.textContent = 'Title';
+      harness.element.appendChild(title);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldHeaderElement).not.toBeNull();
+    });
+
+    it('should remove the header section when header content is dynamically removed', async () => {
+      const harness = await createFixture(html`<span slot="title" id="title-text">Title</span>`);
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldHeaderElement).not.toBeNull();
+
+      harness.element.querySelector('#title-text')?.remove();
+
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await harness.element.updateComplete;
+
+      expect(harness.scaffoldHeaderElement).toBeNull();
+    });
+  });
+
   describe('conditional title margin', () => {
     it('should apply margin to title when before-title slot is empty', async () => {
       const harness = await createFixture();
@@ -387,6 +467,14 @@ class StructuredCardHarness extends TestHarness<IStructuredCardComponent> {
 
   public get footerActionsElement(): HTMLElement | null {
     return getShadowElement(this.element, '.footer-actions') as HTMLElement | null;
+  }
+
+  public get scaffoldHeaderElement(): HTMLElement | null {
+    return this.contentScaffoldElement.shadowRoot?.querySelector('.header-full-content') ?? null;
+  }
+
+  public get scaffoldFooterElement(): HTMLElement | null {
+    return this.contentScaffoldElement.shadowRoot?.querySelector('.footer-full-content') ?? null;
   }
 
   public isElementHidden(element: HTMLElement | null): boolean {
