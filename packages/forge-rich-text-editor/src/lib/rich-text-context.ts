@@ -247,8 +247,10 @@ export class RichTextContextComponent extends LitElement {
     if (this.hasUpdated && changedProperties.has('content')) {
       try {
         const sanitized = this.#sanitizeContent(this.content) as Content;
-        this.#reportUnparsableDocument(sanitized);
-        this.editorContext.editor?.commands.setContent(sanitized);
+        if (!this.#holdsDocument(sanitized)) {
+          this.#reportUnparsableDocument(sanitized);
+          this.editorContext.editor?.commands.setContent(sanitized);
+        }
       } catch (error) {
         this.#handleEditorError('Failed to set content', error);
       }
@@ -635,6 +637,23 @@ export class RichTextContextComponent extends LitElement {
       ProseMirrorNode.fromJSON(schema, content);
     } catch (error) {
       this.#handleEditorError('Invalid document content', error);
+    }
+  }
+
+  /**
+   * Whether the editor already holds this document. Setting it again would move the cursor to the
+   * end, which breaks consumers that pass each `change` back as `content`.
+   */
+  #holdsDocument(content: unknown): boolean {
+    const editor = this._editor;
+    if (!editor || !content || typeof content !== 'object') {
+      return false;
+    }
+
+    try {
+      return ProseMirrorNode.fromJSON(editor.schema, content).eq(editor.state.doc);
+    } catch {
+      return false;
     }
   }
 
