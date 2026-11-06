@@ -1,5 +1,21 @@
 # @tylertech/forge
 
+## 3.26.0
+
+### Bug Fixes
+
+- 7065830: **structured-card**: stop reserving space for an empty header or footer
+
+### Dependencies
+
+- Updated dependencies [971e128]
+  - @tylertech/forge-tokens@0.2.0
+
+### Other Changes
+
+- 971e128: Added an optional `forge-ai.css` stylesheet that themes components with an AI gradient when the `forge-ai` class is applied. It styles field components (`forge-text-field`, `forge-select`, `forge-chip-field`, and the date, time, and autocomplete components) with a gradient outline and background. It is available from the package at `@tylertech/forge/dist/forge-ai.css` and from the CDN.
+- 971e128: The global design tokens and their Sass utilities now come from the new `@tylertech/forge-tokens` package, which is a new dependency. The `@tylertech/forge/sass/core/styles/*` modules (including `core/styles/tokens/*`) are deprecated. They continue to work and forward to the new package, but now warn at compile time and will be removed in the next major version. Import the equivalent modules from `@tylertech/forge-tokens/sass/*` instead, for example `@tylertech/forge-tokens/sass/theme`. The generated CSS is unchanged.
+
 ## 3.25.1
 
 ### Bug Fixes
