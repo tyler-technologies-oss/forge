@@ -21,7 +21,8 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Surface', background: 'surface' },
       { text: 'Surface dim (background)', background: 'surface-dim' },
       { text: 'Surface bright', background: 'surface-bright' },
-      { text: 'Surface inverse', background: 'surface-inverse', foreground: 'on-surface-inverse' }
+      { text: 'Surface inverse', background: 'surface-inverse', foreground: 'on-surface-inverse' },
+      { text: 'On surface inverse (secondary)', background: 'surface-inverse', foreground: 'on-surface-inverse-secondary' }
     ]
   },
   {
@@ -125,6 +126,14 @@ const SWATCH_GROUPS: ISwatchGroup[] = [
       { text: 'Medium', foreground: 'text-medium', noBorder: true },
       { text: 'Low', foreground: 'text-low', noBorder: true },
       { text: 'Lowest', foreground: 'text-lowest', noBorder: true }
+    ]
+  },
+  {
+    swatches: [
+      { text: 'Success', foreground: 'text-success', noBorder: true },
+      { text: 'Informational', foreground: 'text-informational', noBorder: true },
+      { text: 'Warning', foreground: 'text-warning', noBorder: true },
+      { text: 'Critical', foreground: 'text-critical', noBorder: true }
     ]
   },
   {
