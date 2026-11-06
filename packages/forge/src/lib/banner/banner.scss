@@ -1,5 +1,4 @@
 @use './core' as *;
-@use '../button';
 @use '../icon-button';
 @use '@tylertech/forge-tokens/sass/theme';
 
@@ -39,11 +38,11 @@
   }
 
   ::slotted(forge-button[slot='dismiss-button']) {
-    @include button.provide-theme(
-      (
-        primary-color: #{token(color)}
-      )
-    );
+    @include button-theme;
+  }
+
+  ::slotted(forge-button[slot='dismiss-button'][variant='outlined']) {
+    @include outlined-button-theme;
   }
 
   ::slotted(forge-icon-button[slot='dismiss-button']),
@@ -63,11 +62,11 @@
 //
 
 ::slotted(forge-button[slot='button']) {
-  @include button.provide-theme(
-    (
-      primary-color: #{token(color)}
-    )
-  );
+  @include button-theme;
+}
+
+::slotted(forge-button[slot='button'][variant='outlined']) {
+  @include outlined-button-theme;
 }
 
 //
@@ -97,6 +96,8 @@
     .forge-banner {
       @include override(background, theme.variable(#{$theme}-container), value);
       @include override(icon-color, theme.variable(on-#{$theme}-container), value);
+      @include override(button-background, theme.variable(#{$theme}-container-minimum), value);
+      @include override(button-border-color, theme.variable(border-#{$theme}-default), value);
     }
   }
 }
@@ -106,6 +107,8 @@
   .forge-banner {
     @include override(background, theme.variable(error-container), value);
     @include override(icon-color, theme.variable(on-error-container), value);
+    @include override(button-background, theme.variable(error-container-minimum), value);
+    @include override(button-border-color, theme.variable(border-error-default), value);
   }
 }
 
@@ -114,6 +117,8 @@
   .forge-banner {
     @include override(background, theme.variable(surface-container), value);
     @include override(icon-color, theme.variable(on-surface-container), value);
+    @include override(button-background, theme.variable(surface-translucent), value);
+    @include override(button-border-color, theme.variable(outline-low), value);
   }
 }
 

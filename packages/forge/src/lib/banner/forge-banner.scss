@@ -1,5 +1,4 @@
 @use './core';
-@use '../button';
 @use '../icon-button';
 
 .forge-banner {
@@ -16,11 +15,11 @@
   gap: #{core.token(gap)};
   padding-block: #{core.token(padding-block)};
 
-  @include button.provide-theme(
-    (
-      primary-color: #{token(color)}
-    )
-  );
+  @include core.button-theme;
+
+  :is(forge-button[variant='outlined'], .forge-button--outlined) {
+    @include core.outlined-button-theme;
+  }
 
   @include icon-button.provide-theme(
     (

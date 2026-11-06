@@ -1,3 +1,5 @@
+@use '@tylertech/forge-tokens/sass/theme';
+@use '../button';
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -51,4 +53,32 @@
 @mixin dismissed {
   grid-template-rows: 0fr;
   opacity: 0;
+}
+
+@mixin button-theme {
+  @include button.provide-theme(
+    (
+      primary-color: #{token(color)},
+      text-color: #{token(color)},
+      link-color: #{token(color)},
+      outlined-color: #{token(color)},
+      outlined-background: #{token(button-background)}
+    )
+  );
+}
+
+@mixin outlined-button-theme {
+  $border:
+    inset 0 0 0 1px #{theme.variable(outline-low)},
+    inset 0 0 0 1px #{token(button-border-color)};
+
+  @include button.provide-theme(
+    (
+      outlined-border-width: 0,
+      shadow: $border,
+      hover-shadow: $border,
+      active-shadow: $border,
+      disabled-shadow: inset 0 0 0 1px #{theme.variable(surface-container)}
+    )
+  );
 }
