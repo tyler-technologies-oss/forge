@@ -23,6 +23,12 @@ export type FooterCallback<TData extends Row = Row> = (props: { property: string
 
 export type CustomFormatter<TData extends Row = Row, TResult = unknown> = (row: TData, index: number) => TResult;
 
+export type TemplateFn<TData extends Row = Row, TValue = unknown> = (props: {
+  row: TData;
+  column: Column<DataTableFeatures, TData>;
+  cell: Cell<DataTableFeatures, TData, TValue>;
+}) => string | HTMLElement;
+
 export interface ColumnDef<TData extends Row = Row> {
   id?: string;
   header?: string;
@@ -34,9 +40,7 @@ export interface ColumnDef<TData extends Row = Row> {
   reorderable?: boolean;
   width?: number;
   format?: Formatter<unknown, unknown> | CustomFormatter<TData>;
-  template?:
-    | string
-    | (<TValue>(props: { row: Row; column: Column<DataTableFeatures, TData>; cell: Cell<DataTableFeatures, TData, TValue> }) => string | HTMLElement);
+  template?: string | TemplateFn;
   useTemplateSlot?: boolean;
   filterType?: FilterType;
   stopRowClickPropagation?: boolean;

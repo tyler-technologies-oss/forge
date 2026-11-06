@@ -37,6 +37,7 @@ import { toggleState } from '@tylertech/forge';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
+import '@tylertech/forge/icon-button';
 import '@tylertech/forge/list';
 import '@tylertech/forge/popover';
 import '@tylertech/forge/tooltip';
@@ -45,7 +46,9 @@ import '../column-menu/column-menu.js';
 import styles from './data-table.scss';
 
 export { createExpanderColumn, type ExpanderColumnOptions } from './features/expander.js';
-export type { ColumnDef, FilterType, FooterCallback, Row, RowSelectionType } from './types.js';
+export { actionCell as actionCellFactory, type ActionButtonConfig } from './templates/action-cell.js';
+export { linkCell as linkCellFactory, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
+export type { ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
 
 /**
  * @tag forge-data-table

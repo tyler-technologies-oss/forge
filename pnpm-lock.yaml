@@ -1120,6 +1120,9 @@ importers:
       '@tylertech/forge':
         specifier: workspace:*
         version: link:../forge
+      '@tylertech/forge-tokens':
+        specifier: workspace:*
+        version: link:../forge-tokens
       '@tylertech/stylelint-rules':
         specifier: 'catalog:'
         version: 5.1.2(postcss@8.5.30)(stylelint@16.26.1(typescript@5.9.3))

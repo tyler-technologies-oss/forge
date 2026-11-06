@@ -1,11 +1,12 @@
 @use '@tylertech/forge/sass/table/core';
-@use '@tylertech/forge/sass/theme';
-@use '@tylertech/forge/sass/core/styles/shape';
-@use '@tylertech/forge/sass/core/styles/spacing';
-@use '@tylertech/forge/sass/core/styles/border';
-@use '@tylertech/forge/sass/core/styles/animation';
 @use '@tylertech/forge/sass/core/styles/scrollbar';
-@use '@tylertech/forge/sass/core/styles/elevation';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/typography';
 
 :host {
   > * {
@@ -416,5 +417,23 @@ table.virtualized {
       align-items: center;
       box-sizing: border-box;
     }
+  }
+}
+
+//
+// Link Cell
+//
+
+.cell-content {
+  @include typography.anchor;
+}
+
+//
+// Action Cell
+//
+
+.action-cell {
+  forge-icon {
+    color: #{theme.variable(text-medium)};
   }
 }

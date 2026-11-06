@@ -62,7 +62,7 @@ pnpm run --filter @tylertech/forge-table dev     # scratch page at localhost:347
 
 ### Build through turbo, not just this package
 
-The SCSS pulls forge's styles from `@tylertech/forge/sass/*`, which is forge's **built, gitignored**
+The SCSS takes theme, shape, spacing, border, animation and elevation from `@tylertech/forge-tokens/sass/*` (a devDependency). Only the table core and scrollbar styles still come from `@tylertech/forge/sass/*`, which is forge's **built, gitignored**
 `sass/` directory — a copy of `src/lib/**/*.scss`. If forge has not been rebuilt since its SCSS changed,
 that copy is stale and this build fails with a confusing `Can't find stylesheet to import` pointing at a
 file inside `node_modules/@tylertech/forge/sass/`. Run `pnpm exec turbo run build --filter=@tylertech/forge-table`

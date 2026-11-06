@@ -5,7 +5,12 @@ import './data-table.scss';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
+import { actionCellFactory, linkCellFactory } from '@tylertech/forge-table';
 import type { ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconDelete, tylIconEdit } from '@tylertech/tyler-icons';
+
+IconRegistry.define([tylIconEdit, tylIconDelete]);
 
 interface RowData {
   id: number;
@@ -28,12 +33,23 @@ const FETCH_DELAY_MS = 250;
 const ratingFormatter = new NumberFormatter({ minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
+const actionsColumn: ColumnDef<RowData> = {
+  id: 'actions',
+  header: 'Actions',
+  resizable: false,
+  stopRowClickPropagation: true,
+  template: actionCellFactory([
+    { text: 'Edit', icon: 'edit', onClick: ({ original }) => console.log('edit', original) },
+    { text: 'Delete', icon: 'delete', onClick: ({ original }) => console.log('delete', original) }
+  ])
+};
+
 const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Id', property: 'id', filterType: 'number' },
   { header: 'First Name', property: 'firstName' },
   { header: 'Last Name', property: 'lastName' },
-  { header: 'Email', property: 'email' },
-  { header: 'Phone', property: 'phone' },
+  { header: 'Email', property: 'email', template: linkCellFactory({ type: 'email' }) },
+  { header: 'Phone', property: 'phone', template: linkCellFactory({ type: 'phone' }) },
   { header: 'Department', property: 'department' },
   { header: 'Position', property: 'position' },
   { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
@@ -41,7 +57,8 @@ const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
   { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
   { header: 'City', property: 'city' },
-  { header: 'State', property: 'state' }
+  { header: 'State', property: 'state' },
+  actionsColumn
 ];
 
 const groupedColumns: ColumnDef<RowData>[] = [
@@ -51,8 +68,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
     columns: [
       { header: 'First Name', property: 'firstName' },
       { header: 'Last Name', property: 'lastName' },
-      { header: 'Email', property: 'email' },
-      { header: 'Phone', property: 'phone' }
+      { header: 'Email', property: 'email', template: linkCellFactory({ type: 'email' }) },
+      { header: 'Phone', property: 'phone', template: linkCellFactory({ type: 'phone' }) }
     ]
   },
   {
@@ -72,7 +89,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
       { header: 'City', property: 'city' },
       { header: 'State', property: 'state' }
     ]
-  }
+  },
+  actionsColumn
 ];
 
 const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;

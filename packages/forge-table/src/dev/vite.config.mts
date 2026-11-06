@@ -10,6 +10,7 @@ const rootDir = resolve(devDir, '../..');
 const libDir = resolve(rootDir, 'src/lib');
 const forgeDevDir = resolve(rootDir, '../forge/src/dev');
 const forgeDistDir = resolve(rootDir, '../forge/dist');
+const forgeNodeModulesDir = resolve(rootDir, '../forge/node_modules');
 const FORGE_SASS_PREFIX = '@tylertech/forge/sass/';
 
 /**
@@ -50,7 +51,7 @@ const inlineScss = (): Plugin => {
         return null;
       }
       const path = id.slice(SCSS_VIRTUAL_PREFIX.length).replace(/\.js$/, '.scss');
-      const { css, loadedUrls } = compile(path, { loadPaths: [resolve(rootDir, 'node_modules')], importers: [forgeSassImporter] });
+      const { css, loadedUrls } = compile(path, { loadPaths: [resolve(rootDir, 'node_modules'), forgeNodeModulesDir], importers: [forgeSassImporter] });
       loadedUrls
         .filter(url => url.protocol === 'file:')
         .map(url => fileURLToPath(url))
