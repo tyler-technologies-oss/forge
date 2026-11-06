@@ -46,8 +46,14 @@ $_style-scale-groups: (
     $line-height: _relative($style, line-height, $line-height);
   }
 
+  $font-family: map.get($raw-style, font-family);
+  $font-family-token: font-family;
+  @if $font-family == raw.$font-family-mono {
+    $font-family-token: font-family-mono;
+  }
+
   @return (
-    font-family: utils.create-var(typography, font-family, map.get($raw-style, font-family)),
+    font-family: utils.create-var(typography, $font-family-token, $font-family),
     font-size: _relative($style, font-size, map.get($raw-style, font-size)),
     font-weight: map.get($raw-style, font-weight),
     line-height: $line-height,

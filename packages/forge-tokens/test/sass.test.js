@@ -176,6 +176,11 @@ describe('sass', () => {
       expect(css).toContain('line-height: var(--forge-typography-custom-line-height, normal);');
     });
 
+    it('should use the mono font family custom property for code styles', () => {
+      const css = compile(`@use 'typography'; .a { @include typography.style(code1); }`);
+      expect(css).toContain('var(--forge-typography-font-family-mono');
+    });
+
     it('should throw for an invalid style', () => {
       expect(() => compile(`@use 'typography'; .a { @include typography.style(not-a-style); }`)).toThrow(/Invalid typography style/);
     });

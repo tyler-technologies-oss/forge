@@ -23,6 +23,7 @@ const GLOBAL_FILES = [
     destination: '_typography.scss',
     variables: [
       { name: 'font-family', root: ['typography', 'font-family'], type: 'value', defaultable: true },
+      { name: 'font-family-mono', root: ['typography', 'font-family-mono'], type: 'value', defaultable: true },
       { name: 'font-size', root: ['typography', 'font-size'], type: 'value', defaultable: true },
       { name: 'scale', root: ['typography', 'scale'], quoteKeys: true },
       { name: 'styles', root: ['typography', 'style'], depth: 1, defaultable: true }

@@ -5,6 +5,7 @@
 // The base typography values that all typography styles are relative to.
 $base: (
   font-family: utils.create-var(typography, font-family, raw.$font-family),
+  font-family-mono: utils.create-var(typography, font-family-mono, raw.$font-family-mono),
   font-size: utils.create-var(typography, font-size, raw.$font-size)
 );
 

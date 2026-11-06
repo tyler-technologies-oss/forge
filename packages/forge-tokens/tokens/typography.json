@@ -4,6 +4,10 @@
       "$value": "'Roboto', sans-serif",
       "$type": "fontFamily"
     },
+    "font-family-mono": {
+      "$value": "'Cascadia Code', ui-monospace, monospace",
+      "$type": "fontFamily"
+    },
     "font-size": {
       "$value": "1rem",
       "$type": "dimension",
@@ -344,6 +348,36 @@
           "$type": "string"
         }
       },
+      "heading0": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.semibold}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0.01em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
       "heading1": {
         "font-family": {
           "$value": "{typography.font-family}",
@@ -573,6 +607,36 @@
         },
         "letter-spacing": {
           "$value": "-0.0027777778em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "subheading0": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0.01em",
           "$type": "dimension"
         },
         "text-transform": {
@@ -1023,6 +1087,276 @@
         },
         "letter-spacing": {
           "$value": "0.0089285714em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "helper1": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0.01em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "helper2": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0875}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1125}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "badge": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": 450,
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0.01em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "code1": {
+        "font-family": {
+          "$value": "{typography.font-family-mono}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "code2": {
+        "font-family": {
+          "$value": "{typography.font-family-mono}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0875}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1125}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "numbers1": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0750}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "numbers2": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.0875}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1125}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "numbers3": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.1000}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1375}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
+          "$type": "dimension"
+        },
+        "text-transform": {
+          "$value": "inherit",
+          "$type": "string"
+        },
+        "text-decoration": {
+          "$value": "inherit",
+          "$type": "string"
+        }
+      },
+      "numbers4": {
+        "font-family": {
+          "$value": "{typography.font-family}",
+          "$type": "fontFamily"
+        },
+        "font-size": {
+          "$value": "{typography.scale.1125}",
+          "$type": "number"
+        },
+        "font-weight": {
+          "$value": "{typography.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{typography.scale.1500}",
+          "$type": "number"
+        },
+        "letter-spacing": {
+          "$value": "0em",
           "$type": "dimension"
         },
         "text-transform": {
