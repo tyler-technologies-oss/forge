@@ -290,7 +290,7 @@
   forge-focus-indicator {
     @include focus-indicator.provide-theme(
       (
-        color: var(--forge-theme-primary-container)
+        color: #{theme.variable(on-primary)}
       )
     );
   }
