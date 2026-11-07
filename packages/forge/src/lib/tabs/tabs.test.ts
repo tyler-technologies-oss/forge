@@ -658,7 +658,7 @@ describe('Tabs', () => {
     });
 
     it('should hide scroll buttons when scrollable tabs are removed causing no overflow', async () => {
-      const ctx = await createFixture({ scrollButtons: true, clustered: true, width: '215px' });
+      const ctx = await createFixture({ scrollButtons: true, clustered: true, width: '185px' });
       expect(ctx.hasScrollButtons).toBe(true);
 
       ctx.tabs[0].remove();

@@ -1386,7 +1386,7 @@
           "$type": "number"
         },
         "letter-spacing": {
-          "$value": "0.0714285714em",
+          "$value": "0em",
           "$type": "dimension"
         },
         "text-transform": {
