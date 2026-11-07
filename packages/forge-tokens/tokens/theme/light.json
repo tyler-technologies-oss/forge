@@ -451,6 +451,9 @@
     "outline-high": {
       "$value": "{color.radix.slate.a12}"
     },
+    "focus-indicator": {
+      "$value": "{theme.primary}"
+    },
     "border-primary-subtle": {
       "$value": "{color.radix.indigo.a6}"
     },

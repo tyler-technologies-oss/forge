@@ -465,6 +465,9 @@
     "outline-high": {
       "$value": "{color.radix-dark.slate.a12}"
     },
+    "focus-indicator": {
+      "$value": "{color.radix-dark.indigo.a11}"
+    },
     "border-primary-subtle": {
       "$value": "{color.radix-dark.indigo.a6}"
     },
