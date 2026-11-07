@@ -21,7 +21,7 @@ $tokens: (
   text-font-weight: utils.module-val(option, text-font-weight, typography.variable(body2, font-weight)),
   text-line-height: utils.module-val(option, text-line-height, typography.scale('1500')),
   // Selected
-  selected-color: utils.module-val(option, selected-color, theme.variable(primary)),
+  selected-color: utils.module-val(option, selected-color, theme.variable(on-primary-container-minimum)),
   selected-background: utils.module-ref(option, selected-background, selected-color),
   selected-opacity: utils.module-val(option, selected-opacity, theme.emphasis(lowest)),
   selected-text-color: utils.module-val(option, selected-text-color, theme.variable(text-medium)),
