@@ -255,8 +255,8 @@
 
 @mixin date-today() {
   &:not([disabled]) {
-    color: #{theme.variable(primary)};
-    border-color: #{theme.variable(primary)};
+    color: #{theme.variable(on-primary-container-minimum)};
+    border-color: #{theme.variable(on-primary-container-minimum)};
   }
 
   .forge-calendar__date__inner {
