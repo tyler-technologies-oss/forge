@@ -71,7 +71,7 @@ $_marker-row-block-size: max(#{token(marker-size)}, #{token(marker-size)});
 }
 
 @mixin critical {
-  color: #{theme.variable(error)};
+  color: #{theme.variable(text-critical)};
 }
 
 @mixin marker {

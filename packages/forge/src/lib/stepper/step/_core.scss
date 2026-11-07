@@ -149,7 +149,7 @@
 }
 
 @mixin label-error {
-  color: #{token(error-color)};
+  color: #{token(error-label-color)};
 }
 
 @mixin optional-label {
@@ -169,7 +169,7 @@
 }
 
 @mixin optional-label-error {
-  color: #{token(error-color)};
+  color: #{token(error-label-color)};
 }
 
 @mixin line-clustered {
