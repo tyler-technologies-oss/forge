@@ -9,11 +9,6 @@ a.forge-skip-link {
 a.forge-skip-link {
   @include state-layer.standalone;
   @include focus-indicator.standalone;
-  @include focus-indicator.provide-theme(
-    (
-      color: #{core.token(background)}
-    )
-  );
 
   @include core.host;
   @include core.base;

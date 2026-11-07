@@ -15,7 +15,7 @@ $tokens: (
   elevation: utils.module-val(skip-link, elevation, elevation.value(6)),
   padding-block: utils.module-val(skip-link, padding-block, spacing.variable(xsmall)),
   padding-inline: utils.module-val(skip-link, padding-inline, spacing.variable(medium)),
-  focus-indicator-color: utils.module-ref(skip-link, focus-indicator-color, background),
+  focus-indicator-color: utils.module-val(skip-link, focus-indicator-color, theme.variable(focus-indicator)),
   transition-duration: utils.module-val(skip-link, transition-duration, animation.variable(duration-short4)),
   transition-timing-function: utils.module-val(skip-link, transition-timing-function, animation.variable(easing-standard))
 ) !default;
