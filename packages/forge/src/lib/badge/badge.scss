@@ -85,8 +85,8 @@
 // Map both "error" and "danger" for backwards compatibility with legacy "danger" theme
 :host(:not(:where([strong], :state(strong))):is([theme='error'], [theme='danger'])) {
   .forge-badge {
-    @include override(background, theme.variable(error-container-low), value);
-    @include override(color, theme.variable(error), value);
+    @include override(background, theme.variable(error-container), value);
+    @include override(color, theme.variable(on-error-container), value);
   }
 }
 :host(:where([strong], :state(strong)):is([theme='error'], [theme='danger'])) {
