@@ -62,13 +62,11 @@
 //
 
 :host(:state(invalid)) {
-  ::slotted(:where([slot='label'], [slot='support-text'])) {
-    color: #{theme.variable(error)};
+  ::slotted([slot='support-text']) {
+    color: #{theme.variable(text-critical)};
   }
 
   forge-icon-button {
-    color: #{theme.variable(error)};
-
     @include icon-button.provide-theme(
       (
         focus-indicator-color: theme.variable(error)

@@ -318,10 +318,6 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       //   outline-color: #{theme.variable(error-container-high)};
       // }
 
-      :not(#{$_input-selector}) {
-        color: #{theme.variable(on-error-container)};
-      }
-
       &.forge-field:has(#{$_input-selector}:focus) {
         @include focus-indicator.provide-theme(
           (
@@ -329,10 +325,6 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
             outward-offset: calc(#{token(outline-width)} * -1)
           )
         );
-      }
-
-      label {
-        color: #{theme.variable(error)};
       }
 
       &.forge-field--tonal {
