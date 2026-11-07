@@ -52,7 +52,7 @@
 :host(:state(required)) {
   ::slotted([slot='label'])::before {
     content: '*';
-    color: #{theme.variable(error)};
+    color: #{theme.variable(text-critical)};
     margin-inline-end: #{spacing.variable(xxsmall)};
   }
 }

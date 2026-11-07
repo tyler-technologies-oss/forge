@@ -155,7 +155,7 @@
 @mixin label-before {
   margin-inline-end: #{token(required-padding)};
 
-  color: theme.variable(error);
+  color: theme.variable(text-critical);
   content: #{token(required-content)};
 }
 
