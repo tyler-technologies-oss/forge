@@ -1,5 +1,4 @@
 @use './core' as *;
-@use '../icon-button';
 @use '@tylertech/forge-tokens/sass/theme';
 
 //
@@ -48,12 +47,6 @@
   ::slotted(forge-icon-button[slot='dismiss-button']),
   forge-icon-button[part='dismiss-button'] {
     color: #{token(icon-color)};
-
-    @include icon-button.provide-theme(
-      (
-        focus-indicator-color: #{token(color)}
-      )
-    );
   }
 }
 

@@ -1,5 +1,4 @@
 @use './core';
-@use '../icon-button';
 
 .forge-banner {
   @include core.tokens;
@@ -20,10 +19,4 @@
   :is(forge-button[variant='outlined'], .forge-button--outlined) {
     @include core.outlined-button-theme;
   }
-
-  @include icon-button.provide-theme(
-    (
-      focus-indicator-color: #{token(color)}
-    )
-  );
 }
