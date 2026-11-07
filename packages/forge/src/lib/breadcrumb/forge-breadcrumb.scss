@@ -39,7 +39,7 @@
     align-items: center;
     padding-inline: #{spacing.variable(xxsmall)};
     border-radius: #{shape.variable(small)};
-    color: #{theme.variable(primary)};
+    color: #{theme.variable(on-primary-container-minimum)};
     text-decoration: none;
 
     &:hover {

@@ -14,7 +14,7 @@
 }
 
 @mixin button {
-  color: #{theme.variable('primary')};
+  color: #{theme.variable('on-primary-container-minimum')};
 }
 
 @mixin list {
