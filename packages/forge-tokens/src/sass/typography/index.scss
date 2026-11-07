@@ -122,12 +122,12 @@
 
 @mixin anchor-base {
   text-decoration: var(--forge-typography-link-text-decoration, underline);
-  color: theme.variable(primary);
+  color: theme.variable(on-primary-container-minimum);
   cursor: pointer;
 }
 
 @mixin anchor-visited {
-  color: theme.variable(primary);
+  color: theme.variable(on-primary-container-minimum);
 }
 
 @mixin anchor-hover {
