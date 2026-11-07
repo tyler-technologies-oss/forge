@@ -9,7 +9,7 @@
 $tokens: (
   // Base
   background: utils.module-val(chip, background, transparent),
-  color: utils.module-val(chip, color, theme.variable(primary)),
+  color: utils.module-val(chip, color, theme.variable(on-primary-container-minimum)),
   shape: utils.module-val(chip, shape, shape.variable(full)),
   spacing: utils.module-val(chip, spacing, spacing.variable(xsmall)),
   height: utils.module-val(chip, height, 32px),
@@ -17,7 +17,7 @@ $tokens: (
   padding-block: utils.module-val(chip, padding-block, 0),
   cursor: utils.module-val(chip, cursor, pointer),
   icon-font-size: utils.module-val(chip, icon-font-size, 1.5rem),
-  focus-indicator-color: utils.module-ref(chip, focus-indicator-color, color),
+  focus-indicator-color: utils.module-val(chip, focus-indicator-color, theme.variable(focus-indicator)),
   // Disabled
   disabled-opacity: utils.module-val(chip, disabled-opacity, theme.emphasis(medium-low)),
   disabled-cursor: utils.module-val(chip, disabled-cursor, not-allowed),
@@ -35,16 +35,18 @@ $tokens: (
   remove-button-icon-size-dense: utils.module-val(chip, remove-button-icon-size-dense, 16px),
   remove-button-spacing-dense: utils.module-val(chip, remove-button-spacing-dense, #{0 spacing.variable(xxxsmall)}),
   // Selected
-  selected-background: utils.module-val(chip, selected-background, theme.variable(primary)),
-  selected-color: utils.module-val(chip, selected-color, theme.variable(on-primary)),
+  selected-background: utils.module-val(chip, selected-background, theme.variable(primary-container)),
+  selected-color: utils.module-val(chip, selected-color, theme.variable(on-primary-container)),
   // Invalid
-  invalid-color: utils.module-val(chip, invalid-color, theme.variable(error)),
-  invalid-selected-background: utils.module-val(chip, invalid-selected-background, theme.variable(error)),
-  invalid-selected-color: utils.module-val(chip, invalid-selected-color, theme.variable(on-error)),
+  invalid-color: utils.module-val(chip, invalid-color, theme.variable(on-error-container-minimum)),
+  invalid-border-tint: utils.module-val(chip, invalid-border-tint, theme.variable(error-container-low)),
+  invalid-selected-background: utils.module-val(chip, invalid-selected-background, theme.variable(error-container)),
+  invalid-selected-color: utils.module-val(chip, invalid-selected-color, theme.variable(on-error-container)),
   // Border
   border-width: utils.module-val(chip, border-width, border.variable(thin)),
   border-style: utils.module-val(chip, border-style, solid),
-  border-color: utils.module-ref(chip, border-color, color),
+  border-color: utils.module-val(chip, border-color, theme.variable(outline-low)),
+  border-tint: utils.module-val(chip, border-tint, theme.variable(primary-container-low)),
   // Field type
   field-background: utils.module-val(chip, field-background, theme.variable(surface-container-low)),
   field-color: utils.module-val(chip, field-color, theme.variable(on-surface-container-low)),

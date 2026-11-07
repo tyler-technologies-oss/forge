@@ -46,10 +46,11 @@
     @include focus-indicator.standalone;
     @include focus-indicator.provide-theme(
       (
-        color: #{chip-core.token(color)},
+        color: #{chip-core.token(focus-indicator-color)},
         shape: #{chip-core.token(shape)}
       )
     );
+    @include chip-core.border-overlay;
   }
 
   &--field {
@@ -62,12 +63,6 @@
 
   &--selected:not(:disabled) {
     @include chip-core.selected;
-
-    @include focus-indicator.provide-theme(
-      (
-        color: #{chip-core.token(background)}
-      )
-    );
 
     &.forge-chip--invalid {
       @include chip-core.invalid-selected;

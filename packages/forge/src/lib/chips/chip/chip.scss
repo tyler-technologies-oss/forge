@@ -44,12 +44,6 @@
 
 .remove {
   @include remove-button;
-
-  @include icon-button.provide-theme(
-    (
-      focus-indicator-color: #{token(color)}
-    )
-  );
 }
 
 //
@@ -147,14 +141,6 @@ $selected: '#{$selectable}[selected]';
 :host(#{$selected}) {
   .forge-chip {
     @include selected;
-  }
-
-  forge-focus-indicator {
-    @include focus-indicator.provide-theme(
-      (
-        color: #{token(background)}
-      )
-    );
   }
 }
 
@@ -265,23 +251,16 @@ $selected: '#{$selectable}[selected]';
 
 @each $theme in [secondary tertiary success warning error info] {
   :host([theme='#{$theme}']) {
-    @if $theme == secondary {
-      // Special case handling for secondary theme to increase contrast
-      .forge-chip {
-        @include override(color, theme.variable(text-high), value);
-        @include override(border-color, theme.variable($theme), value);
-      }
-    } @else {
-      .forge-chip {
-        @include override(color, theme.variable($theme), value);
-      }
+    .forge-chip {
+      @include override(color, theme.variable(on-#{$theme}-container-minimum), value);
+      @include override(border-tint, theme.variable(#{$theme}-container-low), value);
     }
   }
 
   :host([theme='#{$theme}']#{$selected}) {
     .forge-chip {
-      @include override(background, theme.variable($theme), value);
-      @include override(color, theme.variable(on-#{$theme}), value);
+      @include override(background, theme.variable(#{$theme}-container), value);
+      @include override(color, theme.variable(on-#{$theme}-container), value);
     }
   }
 
