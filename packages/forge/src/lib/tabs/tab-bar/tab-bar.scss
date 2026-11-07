@@ -139,6 +139,7 @@ forge-icon-button {
   @include tab.provide-theme(
     (
       active-color: #{app-bar.token(theme-foreground)},
+      indicator-color: #{app-bar.token(theme-foreground)},
       inactive-color: #{app-bar.token(theme-foreground-muted)}
     )
   );

@@ -5,7 +5,7 @@
 
 $tokens: (
   // Shared
-  active-color: utils.module-val(tab, active-color, theme.variable(primary)),
+  active-color: utils.module-val(tab, active-color, theme.variable(text-high)),
   inactive-color: utils.module-val(tab, inactive-color, theme.variable(text-medium)),
   height: utils.module-val(tab, height, 48px),
   stacked-height: utils.module-val(tab, stacked-height, 64px),
@@ -14,7 +14,7 @@ $tokens: (
   // Disabled
   disabled-opacity: utils.module-val(tab, disabled-opacity, 0.38),
   // Indicator
-  indicator-color: utils.module-ref(tab, indicator-color, active-color),
+  indicator-color: utils.module-val(tab, indicator-color, theme.variable(on-primary-container-minimum)),
   indicator-height: utils.module-val(tab, indicator-height, 3px),
   indicator-shape: utils.module-val(tab, indicator-shape, 3px 3px 0 0),
   // Indicator (vertical)
