@@ -166,6 +166,7 @@ $variants: (
 :host(#{$invalid}) {
   .forge-field {
     @include core.theme('error');
+    @include override(focus-indicator-color, theme.variable(error), value);
     @include core.invalid-label-color;
 
     .support-text {

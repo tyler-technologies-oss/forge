@@ -80,15 +80,9 @@ $elevations: (
 );
 
 @mixin theme($theme) {
-  @if $theme == default {
-    @include override(focus-indicator-color, theme.variable(focus-indicator), value);
-  } @else {
+  @include override(focus-indicator-color, theme.variable(focus-indicator), value);
+  @if $theme != default {
     @include override(filled-background, map.get($filled-backgrounds, $theme), value);
-    @if $theme == error {
-      @include override(focus-indicator-color, theme.variable(error), value);
-    } @else {
-      @include override(focus-indicator-color, theme.variable(focus-indicator), value);
-    }
     @include override(tonal-background, map.get($tonal-backgrounds, $theme), value);
     @include override(tonal-background-hover, map.get($tonal-backgrounds-hover, $theme), value);
   }
