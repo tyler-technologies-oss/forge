@@ -46,7 +46,6 @@
 forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(active-color)},
       shape: 8px
     )
   );

@@ -313,12 +313,6 @@ forge-state-layer {
       }
     }
   }
-
-  .forge-icon-button {
-    &.#{$theme} {
-      @include override(focus-indicator-color, theme.variable($theme), value);
-    }
-  }
 }
 
 @include theme(primary);

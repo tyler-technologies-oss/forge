@@ -19,7 +19,6 @@
     @include focus-indicator.standalone;
     @include focus-indicator.provide-theme(
       (
-        color: #{core.token(background)},
         shape-start-start: #{core.token(shape-start-start)},
         shape-start-end: #{core.token(shape-start-end)},
         shape-end-start: #{core.token(shape-end-start)},

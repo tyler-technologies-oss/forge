@@ -76,7 +76,7 @@ $tokens: (
   // Popover icon
   popover-icon-padding: utils.module-val(icon-button, popover-icon-padding, spacing.variable(xsmall)),
   // Focus indicator
-  focus-indicator-color: utils.module-val(icon-button, focus-indicator-color, theme.variable(primary))
+  focus-indicator-color: utils.module-val(icon-button, focus-indicator-color, theme.variable(focus-indicator))
 ) !default;
 
 @function get($key) {

@@ -83,7 +83,6 @@
 forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(primary-color)},
       outward-offset: 0px,
       shape: #{token(state-layer-shape)}
     )

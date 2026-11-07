@@ -24,11 +24,6 @@
     }
 
     @include focus-indicator.standalone;
-    @include focus-indicator.provide-theme(
-      (
-        color: #{core.token(primary-color)}
-      )
-    );
   }
 
   &:disabled {

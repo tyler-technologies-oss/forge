@@ -10,7 +10,6 @@
   @include focus-indicator.standalone($focus-target: 'input[type=radio]');
   @include focus-indicator.provide-theme(
     (
-      color: #{core.token(primary-color)},
       outward-offset: 0px,
       shape: #{core.token(state-layer-shape)}
     )

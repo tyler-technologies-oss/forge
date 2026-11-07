@@ -14,7 +14,7 @@ $tokens: (
   // Disabled
   disabled-cursor: utils.module-val(button-area, disabled-cursor, not-allowed),
   // Focus indicator
-  focus-indicator-color: utils.module-val(button-area, focus-indicator-color, theme.variable(primary)),
+  focus-indicator-color: utils.module-val(button-area, focus-indicator-color, theme.variable(focus-indicator)),
   focus-indicator-offset: utils.module-val(button-area, focus-indicator-offset, 4px)
 ) !default;
 

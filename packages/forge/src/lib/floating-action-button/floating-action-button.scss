@@ -68,7 +68,6 @@ $host-tokens: [display disabled-cursor];
 forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(background)},
       shape-start-start: #{token(shape-start-start)},
       shape-start-end: #{token(shape-start-end)},
       shape-end-start: #{token(shape-end-start)},

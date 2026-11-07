@@ -258,7 +258,6 @@
 @mixin focus-indicator-base {
   @include focus-indicator.provide-theme(
     (
-      color: #{token(primary-color)},
       shape: 16px
     )
   );

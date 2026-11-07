@@ -10,7 +10,7 @@ $tokens: (
   display: utils.module-val(focus-indicator, display, flex),
   width: utils.module-val(focus-indicator, width, border.variable(medium)),
   active-width: utils.module-val(focus-indicator, active-width, 6px),
-  color: utils.module-val(focus-indicator, color, theme.variable(primary)),
+  color: utils.module-val(focus-indicator, color, theme.variable(focus-indicator)),
   shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)),
   // Requires unit
   duration: utils.module-val(focus-indicator, duration, animation.variable(duration-long4)),

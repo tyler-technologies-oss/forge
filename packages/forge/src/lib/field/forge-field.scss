@@ -220,7 +220,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
       @include focus-indicator.provide-theme(
         (
-          color: #{theme.variable(primary)},
+          color: #{theme.variable(focus-indicator)},
           outward-offset: 0px
         )
       );
