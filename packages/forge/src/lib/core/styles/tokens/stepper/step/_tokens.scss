@@ -19,7 +19,7 @@ $tokens: (
   // Icon
   icon-fill: utils.module-val(step, icon-fill, unset),
   icon-fill-active: utils.module-ref(step, icon-fill-active, primary-color),
-  icon-text-color: utils.module-val(step, icon-text-color, theme.variable(primary)),
+  icon-text-color: utils.module-val(step, icon-text-color, theme.variable(on-primary-container-minimum)),
   icon-text-color-active: utils.module-val(step, icon-text-color-active, theme.variable(on-primary)),
   icon-content-size: utils.module-val(step, icon-content-size, 24px),
   icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
@@ -32,6 +32,7 @@ $tokens: (
   // Label
   label-color: utils.module-val(step, label-color, theme.variable(text-high)),
   sub-label-color: utils.module-val(step, sub-label-color, theme.variable(text-medium)),
+  selected-label-color: utils.module-val(step, selected-label-color, theme.variable(on-primary-container-minimum)),
   // Error
   error-color: utils.module-val(step, error-color, theme.variable(error)),
   error-text-color: utils.module-val(step, error-text-color, theme.variable(on-error)),

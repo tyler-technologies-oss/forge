@@ -48,11 +48,11 @@
 }
 
 @mixin icon-content-default-theme {
-  border-color: #{token(primary-color)};
+  border-color: #{token(icon-text-color)};
 }
 
 @mixin icon-content-default-theme-index {
-  color: #{token(primary-color)};
+  color: #{token(icon-text-color)};
 }
 
 @mixin icon-content() {
@@ -143,7 +143,7 @@
 }
 
 @mixin label-selected {
-  color: #{token(primary-color)};
+  color: #{token(selected-label-color)};
 
   font-weight: 500;
 }
@@ -165,8 +165,6 @@
 }
 
 @mixin optional-label-selected {
-  color: #{token(primary-color)};
-
   font-weight: 500;
 }
 
