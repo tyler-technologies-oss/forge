@@ -1,0 +1,186 @@
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
+@use '../mixins' as mixins;
+
+@include forge-focus-indicator.keyframes;
+
+:host {
+  --_accent-color: var(--forge-ai-artifact-card-accent-color, #{forge-theme.variable(primary)});
+  --_border-radius: var(--forge-ai-artifact-card-border-radius, 12px);
+
+  display: block;
+}
+
+:host([hidden]),
+:host([data-collapsed]) {
+  display: none;
+}
+
+/*
+ * Hover and press feedback come from the Forge state layer. The active ring is drawn outside the border
+ * with a spread shadow rather than a thicker border, so the card's layout never shifts between states.
+ */
+.artifact-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 64px;
+  gap: var(--forge-ai-artifact-card-gap, #{forge-spacing.variable(small)});
+  padding: var(--forge-ai-artifact-card-padding, #{forge-spacing.variable(xsmall)} #{forge-spacing.variable(small)});
+  border: 1px solid #{forge-theme.variable(outline)};
+  border-radius: var(--_border-radius);
+  background: var(--forge-ai-artifact-card-background, #{forge-theme.variable(surface)});
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  outline: none;
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+
+  @include forge-state-layer.standalone;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+:host([active]) .artifact-card {
+  border-color: color-mix(in srgb, var(--_accent-color) 40%, transparent);
+  background: #{forge-theme.variable(surface-container-minimum)};
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--_accent-color) 8%, transparent);
+}
+
+// Sentinel for the Forge focus ring; absolute so it adds no flex gap.
+.focus-indicator {
+  position: absolute;
+  display: none;
+}
+
+.artifact-card:focus-visible .focus-indicator {
+  @include forge-focus-indicator.tokens;
+  @include forge-focus-indicator.base;
+  @include forge-focus-indicator.inward;
+
+  display: block;
+
+  @include forge-focus-indicator.provide-theme(
+    (
+      shape: var(--_border-radius)
+    )
+  );
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: #{forge-spacing.variable(xlarge)};
+  height: #{forge-spacing.variable(xlarge)};
+  border: 1px solid #{forge-theme.variable(outline)};
+  border-radius: 6px;
+  background: #{forge-theme.variable(surface-container-minimum)};
+  color: #{forge-theme.variable(text-high)};
+}
+
+.icon svg,
+.icon ::slotted(*) {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  @include forge-typography.style(body1);
+  @include forge-typography.ellipse;
+
+  font-weight: 500;
+  color: #{forge-theme.variable(text-high)};
+}
+
+.subtitle {
+  @include forge-typography.style(label1);
+  @include forge-typography.ellipse;
+
+  color: #{forge-theme.variable(text-medium)};
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: #{forge-spacing.variable(xlarge)};
+  height: #{forge-spacing.variable(xlarge)};
+  color: #{forge-theme.variable(text-medium)};
+}
+
+.action svg,
+.action ::slotted(*) {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/*
+ * The default arrow promises the card opens something, which the active card already is. Its space is
+ * kept so the text doesn't reflow when a card becomes active. Slotted action icons stay visible.
+ */
+:host([active]) .arrow {
+  visibility: hidden;
+}
+
+.sr-only {
+  @include mixins.sr-only;
+}
+
+/*
+ * Inside a group the card becomes a list row: the group draws the border, corners, and dividers,
+ * so the row gives those up and shows active as a fill rather than a ring.
+ */
+.artifact-card--grouped {
+  min-height: #{forge-spacing.variable(xxxlarge)};
+  border: none;
+  border-radius: 0;
+}
+
+/*
+ * Square, because the group clips its rows to its own rounded corners. The group hands the top and bottom
+ * rows its inner radius so their rings follow the curve instead of being cut off.
+ */
+.artifact-card--grouped:focus-visible .focus-indicator {
+  @include forge-focus-indicator.provide-theme(
+    (
+      shape-start-start: var(--_forge-ai-artifact-card-group-start-radius, 0px),
+      shape-start-end: var(--_forge-ai-artifact-card-group-start-radius, 0px),
+      shape-end-start: var(--_forge-ai-artifact-card-group-end-radius, 0px),
+      shape-end-end: var(--_forge-ai-artifact-card-group-end-radius, 0px)
+    )
+  );
+}
+
+:host([active]) .artifact-card--grouped {
+  background: color-mix(in srgb, var(--_accent-color) 8%, transparent);
+  box-shadow: none;
+}

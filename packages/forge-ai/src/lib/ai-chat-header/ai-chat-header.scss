@@ -1,0 +1,149 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '@tylertech/forge/dist/icon/forge-icon';
+@use '@tylertech/forge/dist/scaffold/forge-scaffold';
+@use '@tylertech/forge/dist/toolbar/forge-toolbar';
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/dist/badge/forge-badge';
+@use '../utils/error-badge' as error-badge;
+
+:host {
+  display: block;
+}
+
+.ai-icon-button,
+.ai-icon-button > svg {
+  fill: #{forge-theme.variable(text-medium)};
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  min-height: 56px;
+  padding-inline: #{forge-spacing.variable(medium)} #{forge-spacing.variable(xsmall)};
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(medium)};
+  overflow: visible;
+  min-width: 0;
+
+  --_ai-chat-header-icon-shape: var(--forge-ai-chat-header-icon-shape, #{forge-shape.variable(round)});
+
+  ::slotted([slot='icon']) {
+    border-radius: var(--_ai-chat-header-icon-shape);
+    display: block;
+  }
+
+  .conversations-button {
+    @include error-badge.error-badge-anchor;
+
+    margin-inline: calc(#{forge-spacing.variable(xxsmall)} * -1) calc(#{forge-spacing.variable(small)} * -1);
+
+    &__error-badge {
+      @include error-badge.error-badge;
+    }
+  }
+
+  .title {
+    @include forge-typography.style(heading3);
+    color: var(--forge-ai-chat-header-title-color, currentColor);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+  }
+
+  forge-ai-agent-selector {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+forge-ai-dropdown-menu-item > svg[slot='start'].forge-icon {
+  width: 20px;
+  height: 20px;
+}
+
+forge-ai-modal {
+  --forge-ai-modal-width: fit-content;
+  --forge-ai-modal-height: fit-content;
+}
+
+.forge-scaffold {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+
+.forge-scaffold__header,
+.forge-scaffold__footer {
+  flex-shrink: 0;
+}
+
+.forge-scaffold__body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.agent-info-title {
+  @include forge-typography.style(heading4);
+  margin: 0;
+  margin-inline-start: #{forge-spacing.variable(medium)};
+}
+
+.agent-info-content {
+  padding: #{forge-spacing.variable(medium)};
+}
+
+.forge-scaffold__footer .forge-toolbar {
+  justify-content: flex-end;
+  align-items: center;
+  padding-inline: #{forge-spacing.variable(small)};
+}
+
+forge-ai-modal:state(fullscreen) {
+  .forge-scaffold {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .forge-scaffold__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .agent-info-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  forge-ai-agent-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.close-button {
+  margin-inline-end: #{forge-spacing.variable(xsmall)};
+}

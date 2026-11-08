@@ -1,0 +1,220 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/animation' as forge-animation;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
+@use '../utils/markdown-styles' as markdown;
+
+@include forge-focus-indicator.keyframes;
+
+$marker-size: #{forge-spacing.variable(medium-large)};
+// Hairline for the timeline connector; there is no Forge token for a 1px rule.
+$connector-width: 1px;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(small)};
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  padding-block: #{forge-spacing.variable(xxsmall)};
+  padding-inline: #{forge-spacing.variable(xsmall)};
+  border: none;
+  background-color: #{forge-theme.variable(surface-container-minimum)};
+  border-radius: #{forge-shape.variable(large)};
+  cursor: pointer;
+  text-align: start;
+  position: relative;
+  // Suppressed in favour of the Forge focus indicator below, which is themed and animated to match the
+  // rest of the library rather than relying on the UA ring.
+  outline: none;
+
+  @include forge-state-layer.standalone;
+}
+
+// Set explicitly rather than inherited: the summary text, the row labels and the detail cards all
+// pin to the same style so the timeline reads consistently no matter what base font the host page
+// applies.
+.status-text {
+  @include forge-typography.style(body1);
+}
+
+.chevron {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform #{forge-animation.variable(duration-short4)} #{forge-animation.variable(easing-standard)};
+}
+
+.summary[aria-expanded='true'] .chevron {
+  transform: rotate(0deg);
+}
+
+// Sentinel element for the Forge focus ring, mirroring `ai-tool-call-indicator`. Kept out of the
+// button's flex flow so its presence doesn't contribute gap whitespace; the button is positioned
+// relative, so the absolute indicator anchors to it.
+.focus-indicator {
+  position: absolute;
+  display: none;
+}
+
+:host {
+  .summary:focus .focus-indicator {
+    @include forge-focus-indicator.tokens;
+    @include forge-focus-indicator.base;
+    @include forge-focus-indicator.inward;
+
+    &::before {
+      content: '';
+    }
+
+    display: block;
+
+    // Matches the summary button's own `large` radius so the ring traces the button rather than
+    // cutting across its corners.
+    @include forge-focus-indicator.provide-theme(
+      (
+        shape: forge-shape.variable(large)
+      )
+    );
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(xsmall)};
+
+  // Agent labels and details render as markdown, so the timeline shares the one markdown style the
+  // message thread and assistant response use. Included on the wrapper rather than on each text
+  // container so a code chip or link is styled identically in the summary row, the step labels and the
+  // detail cards without restating the rules four times.
+  @include markdown.markdown-content;
+
+  &-count {
+    color: #{forge-theme.variable(text-medium)};
+    font-weight: 700;
+    // Uppercased here rather than in the label string so assistive technology reads "3 steps" instead of
+    // spelling out an apparent initialism.
+    text-transform: uppercase;
+  }
+}
+
+.timeline {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows #{forge-animation.variable(duration-medium2)} #{forge-animation.variable(easing-decelerate)};
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.timeline-content {
+  overflow: hidden;
+  min-height: 0;
+  padding-inline-start: #{forge-spacing.variable(small)};
+}
+
+.timeline-row {
+  position: relative;
+  padding-inline-start: #{forge-spacing.variable(large)};
+  padding-block-end: #{forge-spacing.variable(medium)};
+
+  &::before {
+    content: '';
+    position: absolute;
+    // Starts at the top edge of the marker dot, which the top-aligned marker keeps at a fixed
+    // offset regardless of how tall the row's content is.
+    inset-block-start: calc((#{$marker-size} - #{forge-spacing.variable(xsmall)}) / 2);
+    inset-block-end: calc(-1 * #{forge-spacing.variable(xsmall)});
+    inset-inline-start: calc((#{$marker-size} - #{$connector-width}) / 2);
+    width: $connector-width;
+    background-color: #{forge-theme.variable(outline)};
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.row-header {
+  display: flex;
+  // Top-aligned rather than centered so the marker stays beside the step label on rows with a tall
+  // detail card, instead of drifting to the vertical middle of the card.
+  align-items: flex-start;
+  gap: #{forge-spacing.variable(small)};
+  width: 100%;
+  min-height: $marker-size;
+  margin-inline-start: calc(-1 * #{forge-spacing.variable(large)});
+}
+
+.row-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: $marker-size;
+  height: $marker-size;
+  border-radius: #{forge-shape.variable(round)};
+
+  // Centered by the flex container above rather than absolutely positioned, so the dot's offset from
+  // the row top is derived from the marker and dot sizes instead of a hard-coded pixel value.
+  &::before {
+    content: '';
+    flex-shrink: 0;
+    width: #{forge-spacing.variable(xsmall)};
+    height: #{forge-spacing.variable(xsmall)};
+    border-radius: #{forge-shape.variable(round)};
+    background-color: currentColor;
+    // Lifts the dot above the connector line, which is positioned and would otherwise paint a
+    // hairline across it.
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.row-label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: #{forge-spacing.variable(xxxsmall)};
+}
+
+.row-name {
+  @include forge-typography.style(body1);
+
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  line-height: normal;
+  font-weight: 500;
+  color: #{forge-theme.variable(text-high)};
+}
+
+.step-card {
+  width: 100%;
+  &-title {
+    @include forge-typography.style(body1);
+
+    font-weight: 700;
+  }
+
+  &-result {
+    @include forge-typography.style(body1);
+  }
+}
+
+// The shared `strong` weight is 500, which reads as emphasis against normal body text but not against
+// a label that is already 500 (`.row-name`) or 700 (`.step-card-title`) — there it would render
+// identically, or lighter than its own container. Agent emphasis has to outweigh whatever it sits in.
+.row-name strong,
+.step-card-title strong {
+  font-weight: 700;
+}

@@ -1,0 +1,69 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: contents;
+}
+
+.slash-command-menu {
+  background-color: #{forge-theme.variable(surface-bright)};
+  border-radius: #{forge-shape.variable(medium)};
+  padding: #{forge-spacing.variable(xxsmall)} 0;
+  max-height: 300px;
+  overflow-y: auto;
+
+  @include forge-scrollbar.base;
+
+  &__header {
+    @include forge-typography.style(label1);
+    color: #{forge-theme.variable(text-medium)};
+    padding: #{forge-spacing.variable(xxsmall)} #{forge-spacing.variable(small)};
+    border-bottom: 1px solid #{forge-theme.variable(outline)};
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: #{forge-spacing.variable(small)};
+  }
+
+  &__group {
+    &:not(:first-child) {
+      margin-block-start: #{forge-spacing.variable(xxsmall)};
+    }
+  }
+
+  &__group-label {
+    @include forge-typography.style(label1);
+    color: #{forge-theme.variable(text-medium)};
+    padding: #{forge-spacing.variable(xxxsmall)} #{forge-spacing.variable(small)};
+  }
+
+  &__empty {
+    @include forge-typography.style(body1);
+    color: #{forge-theme.variable(text-medium)};
+    padding: #{forge-spacing.variable(medium)};
+    text-align: center;
+  }
+
+  &__divider {
+    height: 1px;
+    background-color: #{forge-theme.variable(outline)};
+    margin: #{forge-spacing.variable(xxsmall)} #{forge-spacing.variable(small)};
+  }
+
+  forge-ai-dropdown-menu-item {
+    --forge-list-item-padding: #{forge-spacing.variable(xxsmall)};
+
+    &.selected {
+      background: #{forge-theme.variable(surface-container-low)};
+    }
+  }
+}
+
+.ai-icon-button,
+.ai-icon-button > svg {
+  fill: var(--forge-theme-text-medium);
+}

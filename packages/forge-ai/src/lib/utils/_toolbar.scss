@@ -1,0 +1,37 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+
+@mixin toolbar-layout {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xxsmall)};
+}
+
+@mixin toolbar-icon-button {
+  color: #{forge-theme.variable(text-medium)};
+
+  &:hover {
+    color: #{forge-theme.variable(text-high)};
+  }
+}
+
+@mixin toolbar-container {
+  position: absolute;
+  bottom: -28px;
+  transition:
+    opacity 200ms ease-in-out,
+    transform 200ms ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xxsmall)};
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@mixin toolbar-container-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

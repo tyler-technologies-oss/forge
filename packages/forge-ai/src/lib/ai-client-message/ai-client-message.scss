@@ -1,0 +1,87 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/dist/inline-message/forge-inline-message';
+@use '@tylertech/forge/dist/button/forge-button';
+
+:host {
+  display: block;
+}
+
+.forge-inline-message {
+  --forge-inline-message-border-style: solid;
+
+  &__title {
+    font-weight: bold;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: #{forge-spacing.variable(xsmall)};
+    overflow-wrap: anywhere;
+  }
+
+  // Without a title, the icon (which spans both grid rows) and content (now the
+  // only row-1 occupant) fall out of sync unless both are re-centered together.
+  &:not(:has(.forge-inline-message__title)) {
+    .forge-inline-message__icon {
+      align-self: center;
+    }
+
+    .forge-inline-message__content {
+      grid-row: 1 / -1;
+      align-self: center;
+    }
+  }
+}
+
+:host([kind='info']) .forge-inline-message {
+  --forge-inline-message-background: #{forge-theme.variable(info-container-low)};
+  --forge-inline-message-color: #{forge-theme.variable(on-info-container-low)};
+  --forge-inline-message-icon-color: #{forge-theme.variable(on-info-container-low)};
+  --forge-inline-message-border-color: #{forge-theme.variable(info-container)};
+}
+
+:host([kind='warning']) .forge-inline-message {
+  --forge-inline-message-background: #{forge-theme.variable(warning-container-low)};
+  --forge-inline-message-color: #{forge-theme.variable(on-warning-container-low)};
+  --forge-inline-message-icon-color: #{forge-theme.variable(on-warning-container-low)};
+  --forge-inline-message-border-color: #{forge-theme.variable(warning-container)};
+}
+
+:host([kind='error']) .forge-inline-message {
+  --forge-inline-message-background: #{forge-theme.variable(error-container-low)};
+  --forge-inline-message-color: #{forge-theme.variable(on-error-container-low)};
+  --forge-inline-message-icon-color: #{forge-theme.variable(on-error-container-low)};
+  --forge-inline-message-border-color: #{forge-theme.variable(error-container)};
+}
+
+:host([kind='success']) .forge-inline-message {
+  --forge-inline-message-background: #{forge-theme.variable(success-container-low)};
+  --forge-inline-message-color: #{forge-theme.variable(on-success-container-low)};
+  --forge-inline-message-icon-color: #{forge-theme.variable(on-success-container-low)};
+  --forge-inline-message-border-color: #{forge-theme.variable(success-container)};
+}
+
+.client-message--text {
+  @include forge-typography.style(subheading2);
+
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(xxsmall)};
+  padding-block: #{forge-spacing.variable(small)};
+  color: #{forge-theme.variable(text-medium)};
+  font-style: italic;
+}
+
+.client-message__actions {
+  display: flex;
+  gap: #{forge-spacing.variable(xsmall)};
+  font-style: normal;
+
+  .forge-button {
+    --forge-button-outlined-color: currentColor;
+    --forge-button-outlined-border-color: currentColor;
+  }
+}

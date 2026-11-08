@@ -1,0 +1,23 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '../utils/toolbar' as toolbar;
+
+:host {
+  display: block;
+}
+
+.user-message-toolbar {
+  @include toolbar.toolbar-layout;
+}
+
+.forge-icon-button {
+  @include toolbar.toolbar-icon-button;
+}
+
+.timestamp {
+  @include forge-typography.style(label2);
+  color: #{forge-theme.variable(text-medium)};
+  padding-inline: #{forge-spacing.variable(xxsmall)};
+}

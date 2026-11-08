@@ -1,0 +1,148 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+
+:host {
+  --_ai-thinking-indicator-dot-color: var(--forge-ai-thinking-indicator-dot-color, #{forge-theme.variable(text-medium)});
+  --_ai-thinking-indicator-dot-size: var(--forge-ai-thinking-indicator-dot-size, 6px);
+  --_ai-thinking-indicator-gap: var(--forge-ai-thinking-indicator-gap, #{forge-spacing.variable(xxsmall)});
+  --_ai-thinking-indicator-animation-duration: var(--forge-ai-thinking-indicator-animation-duration, 2s);
+
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(small)};
+  height: calc(var(--_ai-thinking-indicator-dot-size) * 2);
+}
+
+.dots-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_ai-thinking-indicator-gap);
+}
+
+.dot {
+  width: var(--_ai-thinking-indicator-dot-size);
+  height: var(--_ai-thinking-indicator-dot-size);
+  background-color: var(--_ai-thinking-indicator-dot-color);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.8) translateY(0);
+  animation: thinking-animation var(--_ai-thinking-indicator-animation-duration) ease-in-out infinite;
+}
+
+.dot-1 {
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  animation-delay: 0.15s;
+}
+
+.dot-3 {
+  animation-delay: 0.3s;
+}
+
+@keyframes thinking-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(0);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: scale(1.2) translateY(-4px);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-2px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  80% {
+    opacity: 0.7;
+    transform: scale(0.9) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(0);
+  }
+}
+
+.status-text {
+  @include forge-typography.style(body1);
+  color: #{forge-theme.variable(text-medium)};
+  user-select: none;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #{forge-theme.variable(text-low)} 0%, #{forge-theme.variable(text-high)} 50%, #{forge-theme.variable(text-low)} 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: thinking-animation-reduced var(--_ai-thinking-indicator-animation-duration) ease-in-out infinite;
+  }
+
+  @keyframes thinking-animation-reduced {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .status-text {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: #{forge-theme.variable(text-medium)};
+  }
+}

@@ -1,0 +1,20 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/dist/expansion-panel/forge-expansion-panel';
+@use '@tylertech/forge/dist/icon/forge-icon';
+@use '../mixins' as mixins;
+
+:host {
+  width: 100%;
+  display: block;
+}
+
+.header-container {
+  @include mixins.ai-chain-of-thought-grid;
+  padding: 0;
+}
+
+.thought-content-container {
+  margin-block-start: #{forge-spacing.variable(medium)};
+}

@@ -1,0 +1,16 @@
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/dist/dialog/forge-dialog';
+
+:host {
+  display: contents;
+}
+
+.forge-dialog::backdrop {
+  position: fixed;
+}
+
+dialog.forge-dialog:not(.forge-dialog--fullscreen) {
+  height: var(--forge-ai-modal-height, 80vh);
+  width: var(--forge-ai-modal-width, 80vw);
+  border-radius: #{forge-shape.variable(large)};
+}

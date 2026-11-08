@@ -1,0 +1,73 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: block;
+  height: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+}
+
+.canvas {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  background-color: #{forge-theme.variable(surface)};
+  border-inline-start: var(--forge-ai-canvas-border-inline-start, 1px solid #{forge-theme.variable(outline)});
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{forge-spacing.variable(small)};
+  flex-shrink: 0;
+  min-height: 56px;
+  padding-inline: #{forge-spacing.variable(medium)};
+  box-sizing: border-box;
+  border-block-end: 1px solid #{forge-theme.variable(outline)};
+}
+
+.header-start {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.title {
+  @include forge-typography.style(heading1);
+
+  margin: 0;
+  color: #{forge-theme.variable(text-high)};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-end {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xxsmall)};
+  flex-shrink: 0;
+}
+
+.close-button,
+.close-button > svg {
+  fill: #{forge-theme.variable(text-medium)};
+}
+
+.body {
+  @include forge-scrollbar.base;
+
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--forge-ai-canvas-body-padding, #{forge-spacing.variable(medium)});
+  box-sizing: border-box;
+}

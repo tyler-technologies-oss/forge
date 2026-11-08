@@ -1,0 +1,57 @@
+@use '@tylertech/forge/sass/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/dist/inline-message/forge-inline-message';
+
+:host {
+  display: block;
+}
+
+.forge-inline-message {
+  --forge-inline-message-background: #{forge-theme.variable(error-container-low)};
+  --forge-inline-message-color: #{forge-theme.variable(on-error-container-low)};
+  --forge-inline-message-icon-color: #{forge-theme.variable(on-error-container-low)};
+  --forge-inline-message-border-color: #{forge-theme.variable(error-container)};
+  --forge-inline-message-border-style: solid;
+
+  &__title {
+    font-weight: bold;
+
+    &--empty {
+      display: none;
+    }
+  }
+
+  &__content {
+    overflow-wrap: anywhere;
+  }
+
+  // Without a title the content is the only cell in the text column, so collapse to a single row.
+  // The icon otherwise spans two rows and top-aligns, which would leave a trailing empty row.
+  &:has(.forge-inline-message__title--empty) {
+    grid-template-rows: auto;
+
+    .forge-inline-message__icon {
+      grid-row: auto;
+      align-self: center;
+    }
+  }
+}
+
+:host([density='small']) .forge-inline-message {
+  --forge-inline-message-padding: #{forge-spacing.variable(xsmall)};
+  --forge-inline-message-gap: #{forge-spacing.variable(xsmall)};
+  --forge-inline-message-content-gap: #{forge-spacing.variable(xxsmall)};
+
+  @include forge-typography.style(body2);
+
+  &__icon {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+::slotted(*) {
+  margin-block: 0;
+  overflow-wrap: anywhere;
+}

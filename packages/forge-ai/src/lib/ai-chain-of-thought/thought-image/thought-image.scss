@@ -1,0 +1,21 @@
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '../../mixins' as mixins;
+
+:host {
+  display: block;
+  @include mixins.fade-in;
+}
+
+.image-container {
+  --forge-card-outline-color: transparent;
+  display: grid;
+  place-content: center;
+  place-items: center;
+}
+
+::slotted(img[slot='image']) {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+  border-radius: #{forge-shape.variable(medium)};
+}

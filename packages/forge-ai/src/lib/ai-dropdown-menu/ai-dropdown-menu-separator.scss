@@ -1,0 +1,10 @@
+@use '@tylertech/forge/dist/divider/forge-divider';
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+
+:host {
+  display: contents;
+}
+
+.forge-divider {
+  margin: #{forge-spacing.variable(xsmall)} 0;
+}

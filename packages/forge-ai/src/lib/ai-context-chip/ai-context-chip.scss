@@ -1,0 +1,70 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: inline-flex;
+}
+
+.context-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  padding: #{forge-spacing.variable(xxxsmall)} #{forge-spacing.variable(xxsmall)};
+  background: #{forge-theme.variable(primary-container-minimum)};
+  max-width: 160px;
+  border: 1px solid #{forge-theme.variable(primary-container-low)};
+  border-radius: #{forge-shape.variable(large)};
+  color: #{forge-theme.variable(on-primary-container-minimum)};
+}
+
+.context-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  opacity: 0.5;
+}
+
+.context-content {
+  @include forge-typography.style(label1);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-sublabel {
+  @include forge-typography.style(label1);
+  color: #{forge-theme.variable(text-medium)};
+  flex-shrink: 0;
+}
+
+.context-chip.loading {
+  opacity: 0.7;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xxsmall)};
+}
+
+.remove-button {
+  flex-shrink: 0;
+  color: #{forge-theme.variable(text-high)};
+  height: 18px;
+  width: 18px;
+
+  svg {
+    height: 14px;
+    width: 14px;
+  }
+}

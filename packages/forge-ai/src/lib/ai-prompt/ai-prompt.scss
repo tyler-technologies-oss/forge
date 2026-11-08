@@ -1,0 +1,129 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/dist/card/forge-card';
+@use '@tylertech/forge/dist/field/forge-field';
+@use '@tylertech/forge/dist/divider/forge-divider';
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+
+:host {
+  display: block;
+}
+
+.input-container {
+  .forge-card {
+    --forge-card-padding: 0;
+    --forge-card-shape: #{forge-shape.variable(large)};
+
+    position: relative;
+
+    &:hover {
+      --forge-card-outline-color: #{forge-theme.variable(outline-high)};
+    }
+  }
+
+  .forge-field {
+    --forge-theme-outline-low: transparent;
+    --forge-field-height: auto;
+
+    position: static;
+    padding-inline-start: #{forge-spacing.variable(medium)};
+    min-height: 40px;
+    align-items: center;
+
+    &:hover {
+      outline: none;
+    }
+
+    &:has(textarea) *:not(textarea) {
+      margin-block-start: initial;
+    }
+
+    &::after {
+      border-radius: #{forge-shape.variable(large)};
+    }
+  }
+
+  textarea {
+    field-sizing: content;
+    resize: none;
+    max-height: 150px; // Limit to ~6 rows
+    overflow-y: auto;
+    outline: none;
+    padding: #{forge-spacing.variable(small)} 0;
+
+    @include forge-scrollbar.base;
+  }
+
+  .debug-button {
+    color: #{forge-theme.variable(on-error-container-low)};
+    --forge-icon-button-focus-indicator-color: #{forge-theme.variable(error)};
+    --forge-icon-button-tonal-background-color: #{forge-theme.variable(error-container-low)};
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: #{forge-spacing.variable(xxsmall)};
+  padding-inline-start: #{forge-spacing.variable(xsmall)};
+  gap: #{forge-spacing.variable(xxsmall)};
+  overflow: visible;
+}
+
+.actions-start-container,
+.actions-end-container {
+  display: flex;
+  align-items: center;
+}
+
+.send-button {
+  margin-inline-end: #{forge-spacing.variable(xsmall)};
+
+  svg {
+    height: 18px;
+    width: 18px;
+  }
+}
+
+:host(:state(stacked)) {
+  .vertical-divider {
+    display: none;
+  }
+}
+
+:host(:state(inline)) {
+  .forge-field {
+    --forge-field-height: 52px;
+    padding-inline: #{forge-spacing.variable(xxsmall)};
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    overflow-x: visible;
+    padding: #{forge-spacing.variable(xxsmall)};
+  }
+
+  ::slotted([slot='actions']) {
+    display: flex;
+    align-items: center;
+  }
+
+  .vertical-divider {
+    width: 1px;
+    height: 32px;
+    background-color: #{forge-theme.variable(outline)};
+    margin-inline-end: #{forge-spacing.variable(xsmall)};
+  }
+
+  .forge-divider {
+    display: none;
+  }
+
+  .send-button {
+    margin-inline-end: #{forge-spacing.variable(xxsmall)};
+  }
+}

@@ -1,0 +1,35 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/dist/field/forge-field';
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: block;
+  flex: 1;
+  width: 100%;
+}
+
+.edit-thread-field {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xxsmall)};
+
+  .forge-field {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-inline: #{forge-spacing.variable(xsmall)};
+    --forge-field-height: 24px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .edit-thread-actions {
+    display: flex;
+    align-items: center;
+    gap: #{forge-spacing.variable(xxsmall)};
+  }
+}

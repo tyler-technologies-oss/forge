@@ -1,0 +1,52 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/dist/button/forge-button';
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.disclaimer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #{forge-theme.variable(surface)};
+  border-radius: inherit;
+}
+
+.disclaimer-content {
+  @include forge-scrollbar.base;
+  @include forge-typography.style(body1);
+
+  flex: 1;
+  overflow-y: auto;
+  padding: #{forge-spacing.variable(medium)};
+  color: #{forge-theme.variable(on-surface)};
+}
+
+.disclaimer-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block-start: #{forge-spacing.variable(large)};
+  padding-block-end: #{forge-spacing.variable(medium)};
+
+  ::slotted([slot='icon']) {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+.disclaimer-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: #{forge-spacing.variable(small)};
+  padding: #{forge-spacing.variable(medium)};
+  border-block-start: 1px solid #{forge-theme.variable(outline)};
+}

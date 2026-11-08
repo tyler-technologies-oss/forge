@@ -1,0 +1,21 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/dist/icon/forge-icon';
+
+:host {
+  display: flex;
+}
+
+forge-ai-dropdown-menu {
+  display: flex;
+}
+
+.forge-icon {
+  color: #{forge-theme.variable(text-medium)};
+}
+
+forge-ai-dropdown-menu-item[value='delete'] {
+  color: #{forge-theme.variable(error)};
+  --forge-state-layer-color: #{forge-theme.variable(error)};
+  --forge-focus-indicator-color: #{forge-theme.variable(error)};
+  --forge-icon-color: #{forge-theme.variable(error)};
+}

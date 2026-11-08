@@ -1,0 +1,95 @@
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
+
+@include forge-focus-indicator.keyframes;
+
+$_inner-radius: calc(var(--forge-ai-artifact-card-group-border-radius, 12px) - 1px);
+
+:host {
+  display: block;
+}
+
+.artifact-card-group {
+  overflow: hidden;
+  border: 1px solid #{forge-theme.variable(outline)};
+  border-radius: var(--forge-ai-artifact-card-group-border-radius, 12px);
+  background: #{forge-theme.variable(surface)};
+}
+
+/*
+ * Every row carries a top divider and the list is pulled up by one pixel so the first visible row's
+ * divider hides under the group border, whichever row that is once cards are hidden or collapsed.
+ */
+.list {
+  margin-top: -1px;
+}
+
+::slotted(*) {
+  border-top: 1px solid #{forge-theme.variable(outline)};
+}
+
+/*
+ * Rows meeting the group's rounded corners get its inner radius for their focus rings. The bottom row only
+ * does when no toggle sits below it.
+ */
+.list ::slotted(:nth-child(1 of :not([hidden], [data-collapsed]))) {
+  --_forge-ai-artifact-card-group-start-radius: #{$_inner-radius};
+}
+
+.artifact-card-group:not(:has(.toggle)) ::slotted(:nth-last-child(1 of :not([hidden], [data-collapsed]))) {
+  --_forge-ai-artifact-card-group-end-radius: #{$_inner-radius};
+}
+
+.toggle {
+  @include forge-typography.style(body1);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  width: 100%;
+  min-height: #{forge-spacing.variable(xxlarge)};
+  padding: #{forge-spacing.variable(small)};
+  border: none;
+  border-top: 1px solid #{forge-theme.variable(outline)};
+  background: transparent;
+  color: #{forge-theme.variable(text-high)};
+  text-align: start;
+  cursor: pointer;
+  outline: none;
+
+  @include forge-state-layer.standalone;
+}
+
+.toggle svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+// Sentinel for the Forge focus ring; absolute so it adds no flex gap.
+.focus-indicator {
+  position: absolute;
+  display: none;
+}
+
+/* The toggle is always the bottom row, so its lower corners follow the group's inner radius */
+.toggle:focus-visible .focus-indicator {
+  @include forge-focus-indicator.tokens;
+  @include forge-focus-indicator.base;
+  @include forge-focus-indicator.inward;
+
+  display: block;
+
+  @include forge-focus-indicator.provide-theme(
+    (
+      shape-start-start: 0px,
+      shape-start-end: 0px,
+      shape-end-start: $_inner-radius,
+      shape-end-end: $_inner-radius
+    )
+  );
+}

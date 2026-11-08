@@ -1,0 +1,69 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/dist/label-value/forge-label-value';
+
+:host {
+  display: block;
+}
+
+.forge-label-value {
+  grid-template-rows: auto 1fr;
+
+  .forge-label-value__value {
+    align-self: start;
+  }
+}
+
+.agent-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(medium)};
+}
+
+.agent-info-header {
+  display: flex;
+  gap: #{forge-spacing.variable(medium)};
+
+  .forge-label-value {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.agent-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: #{forge-spacing.variable(medium)};
+}
+
+.agent-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: #{forge-spacing.variable(medium)};
+}
+
+.with-copy-button {
+  position: relative;
+
+  forge-ai-copy-button {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    transform: translateY(50%);
+  }
+
+  .forge-label-value__value {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+    align-items: center;
+    gap: #{forge-spacing.variable(xsmall)};
+  }
+
+  .value-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-inline-end: 36px;
+  }
+}

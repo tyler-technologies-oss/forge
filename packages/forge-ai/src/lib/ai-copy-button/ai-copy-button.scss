@@ -1,0 +1,10 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: inline-block;
+}
+
+.forge-icon-button {
+  color: #{forge-theme.variable(text-medium)};
+}

@@ -1,0 +1,16 @@
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+
+:host {
+  display: inline-block;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  --forge-button-color: #{forge-theme.variable(text-medium)};
+}
+
+.button-container > svg {
+  fill: #{forge-theme.variable(text-medium)};
+}

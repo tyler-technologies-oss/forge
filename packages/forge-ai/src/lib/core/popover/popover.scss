@@ -1,0 +1,145 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/core/styles/elevation' as forge-elevation;
+
+:host {
+  display: contents;
+  overflow: visible;
+}
+
+.ai-popover {
+  position: relative;
+  background: #{forge-theme.variable(surface-bright)};
+
+  border-radius: #{forge-shape.variable(medium)};
+  box-shadow: #{forge-theme.variable(surface-bright-shadow)};
+  box-sizing: border-box;
+
+  animation-duration: 150ms;
+  animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  animation-name: fadein, scalein;
+  transform-origin: center center;
+  overflow: visible;
+
+  &__arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #{forge-theme.variable(surface-bright)};
+    transform: rotate(45deg);
+    border: 1px solid #{forge-theme.variable(surface-container)};
+  }
+}
+
+// Add padding for arrow when present
+forge-ai-overlay[data-position-placement^='top'] .ai-popover:has(.ai-popover__arrow) {
+  margin-block-end: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='bottom'] .ai-popover:has(.ai-popover__arrow) {
+  margin-block-start: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='left'] .ai-popover:has(.ai-popover__arrow) {
+  margin-inline-end: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='right'] .ai-popover:has(.ai-popover__arrow) {
+  margin-inline-start: #{forge-spacing.variable(small)};
+}
+
+// Transform origin based on placement - target the overlay element that has the data attribute
+forge-ai-overlay[data-position-placement^='top'] {
+  &:not([data-position-placement*='-']) .ai-popover {
+    transform-origin: bottom center;
+  }
+
+  &[data-position-placement$='-start'] .ai-popover {
+    transform-origin: bottom left;
+  }
+
+  &[data-position-placement$='-end'] .ai-popover {
+    transform-origin: bottom right;
+  }
+
+  .ai-popover__arrow {
+    bottom: -6px;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='right'] {
+  &:not([data-position-placement*='-']) .ai-popover {
+    transform-origin: left center;
+  }
+
+  &[data-position-placement$='-start'] .ai-popover {
+    transform-origin: left top;
+  }
+
+  &[data-position-placement$='-end'] .ai-popover {
+    transform-origin: left bottom;
+  }
+
+  .ai-popover__arrow {
+    left: -6px;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='bottom'] {
+  &:not([data-position-placement*='-']) .ai-popover {
+    transform-origin: top center;
+  }
+
+  &[data-position-placement$='-start'] .ai-popover {
+    transform-origin: top left;
+  }
+
+  &[data-position-placement$='-end'] .ai-popover {
+    transform-origin: top right;
+  }
+
+  .ai-popover__arrow {
+    top: -6px;
+    clip-path: polygon(0 0, 0 100%, 100% 0);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='left'] {
+  &:not([data-position-placement*='-']) .ai-popover {
+    transform-origin: right center;
+  }
+
+  &[data-position-placement$='-start'] .ai-popover {
+    transform-origin: right top;
+  }
+
+  &[data-position-placement$='-end'] .ai-popover {
+    transform-origin: right bottom;
+  }
+
+  .ai-popover__arrow {
+    right: -6px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scalein {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}

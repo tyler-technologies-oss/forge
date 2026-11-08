@@ -1,0 +1,18 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '../mixins' as mixins;
+
+:host {
+  display: inline-block;
+}
+
+forge-ai-icon {
+  --forge-ai-icon-fill-color: currentColor;
+}
+
+:host(:state(disabled)) {
+  forge-ai-icon {
+    --forge-ai-icon-fill-color: var(--forge-theme-text-low);
+  }
+}

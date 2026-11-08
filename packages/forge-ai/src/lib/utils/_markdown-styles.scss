@@ -1,0 +1,155 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/table/core' as forge-table-core;
+@use '../mixins' as mixins;
+
+@mixin markdown-content {
+  @include forge-typography.style(body1);
+
+  font-size: var(--forge-ai-markdown-font-size, 0.875rem);
+  line-height: var(--forge-ai-markdown-line-height, 1.5rem);
+
+  color: #{forge-theme.variable(on-surface)};
+  overflow-wrap: break-word;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 1.75rem 0 #{forge-spacing.variable(small)};
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  a {
+    color: #{forge-theme.variable(primary)};
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #{forge-theme.variable(outline)};
+  }
+
+  code {
+    color: #{forge-theme.variable(on-surface-container-low)};
+    background-color: #{forge-theme.variable(surface-container-low)};
+    border-radius: #{forge-shape.variable(medium)};
+    padding: #{forge-spacing.variable(xxxsmall)} #{forge-spacing.variable(xxsmall)};
+    font-size: 0.75em;
+  }
+
+  pre {
+    border: 1px solid #{forge-theme.variable(outline)};
+    border-radius: #{forge-shape.variable(medium)};
+    margin: 0;
+    max-width: 100%;
+    overflow-x: auto;
+
+    @include mixins.scroll-region-focus-ring;
+
+    code {
+      display: block;
+      padding: #{forge-spacing.variable(xsmall)} #{forge-spacing.variable(small)};
+      color: #{forge-theme.variable(on-surface-container-minimum)};
+      background: #{forge-theme.variable(surface-container-minimum)};
+      white-space: pre;
+    }
+  }
+
+  [data-scroll-region='table'] {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: #{forge-shape.variable(large)};
+    margin-block: #{forge-spacing.variable(medium)};
+
+    @include mixins.scroll-region-focus-ring;
+
+    table {
+      margin-block: 0;
+    }
+  }
+
+  table {
+    @include forge-table-core.base;
+    background-color: #{forge-theme.variable(surface)};
+    border-radius: #{forge-shape.variable(large)};
+    overflow: hidden;
+    margin-block: #{forge-spacing.variable(medium)};
+
+    thead {
+      @include forge-table-core.head-cell;
+    }
+
+    tr {
+      @include forge-table-core.row-dense;
+      height: 32px;
+
+      &:nth-child(even) {
+        background-color: #{forge-theme.variable(surface-dim)};
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    th,
+    td {
+      @include forge-typography.style(label1);
+      padding-block: #{forge-spacing.variable(xsmall)};
+      padding-inline-start: #{forge-spacing.variable(xsmall)};
+      padding-inline-end: #{forge-spacing.variable(medium)};
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: #{forge-theme.variable(outline)};
+    }
+
+    th {
+      @include forge-typography.style(label2);
+      font-weight: 600;
+    }
+  }
+
+  > p:has(+ ol),
+  > p:has(+ ul) {
+    margin-block-end: #{forge-spacing.variable(small)};
+  }
+
+  > ul {
+    list-style-type: disc;
+    padding-inline-start: 1.6875rem;
+  }
+
+  > ol {
+    padding-inline-start: 1.75rem;
+  }
+
+  > ol,
+  > ul {
+    margin: #{forge-spacing.variable(xsmall)} 0;
+    margin-block-end: #{forge-spacing.variable(medium)};
+  }
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > p {
+    margin-block-end: #{forge-spacing.variable(medium)};
+    overflow-wrap: anywhere;
+
+    &:first-child {
+      margin-block-start: 0;
+    }
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}

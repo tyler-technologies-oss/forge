@@ -1,0 +1,6 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+
+:host {
+  display: block;
+  margin-block-end: #{forge-spacing.variable(small)};
+}

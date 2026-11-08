@@ -1,0 +1,137 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/list/list-item' as forge-list-item;
+@use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+
+:host {
+  display: block;
+  position: relative;
+  outline: none;
+
+  --_ai-dropdown-menu-item-selection-icon-size: var(--forge-ai-dropdown-menu-item-selection-icon-size, 16px);
+}
+
+@include forge-focus-indicator.keyframes;
+
+:host(:focus) {
+  .focus-indicator {
+    @include forge-focus-indicator.tokens;
+    @include forge-focus-indicator.base;
+    @include forge-focus-indicator.inward;
+
+    &::before {
+      content: '';
+    }
+
+    display: block;
+
+    @include forge-focus-indicator.provide-theme(
+      (
+        shape: forge-shape.variable(medium)
+      )
+    );
+  }
+}
+
+.ai-dropdown-menu-item {
+  @include forge-list-item.tokens;
+  @include forge-list-item.base;
+  @include forge-list-item.dense;
+  @include forge-state-layer.standalone;
+
+  margin: #{forge-spacing.variable(xxxsmall)} #{forge-spacing.variable(xxsmall)};
+  padding: 0 #{forge-spacing.variable(xsmall)};
+  border-radius: #{forge-shape.variable(medium)};
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  ::slotted([slot='start']),
+  ::slotted([slot='end']) {
+    @include forge-list-item.start-end-base;
+  }
+
+  &--with-selection {
+    @include forge-list-item.provide-theme(
+      (
+        padding: 0 forge-spacing.variable(xxsmall)
+      )
+    );
+  }
+
+  &--with-description {
+    @include forge-list-item.dense-two-line;
+  }
+
+  &--selected {
+    @include forge-list-item.selected;
+    @include forge-state-layer.provide-theme(
+      (
+        color: #{forge-list-item.token(selected-color)}
+      )
+    );
+
+    ::slotted([slot='start']),
+    ::slotted([slot='end']) {
+      color: #{forge-list-item.token(selected-color)};
+    }
+  }
+
+  &--disabled {
+    @include forge-list-item.disabled;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__text {
+    @include forge-list-item.text-container;
+    @include forge-list-item.dense-text;
+
+    font-weight: normal;
+  }
+
+  &__description {
+    @include forge-list-item.text;
+    @include forge-list-item.dense-text;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__selection-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: forge-spacing.variable(small);
+  }
+
+  &__selection-svg {
+    fill: currentColor;
+    width: var(--_ai-dropdown-menu-item-selection-icon-size);
+    height: var(--_ai-dropdown-menu-item-selection-icon-size);
+  }
+
+  &__submenu-arrow {
+    width: var(--_ai-dropdown-menu-item-selection-icon-size);
+    height: var(--_ai-dropdown-menu-item-selection-icon-size);
+    fill: currentColor;
+  }
+
+  // Add class for submenu arrow container styling
+  &__submenu-arrow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}

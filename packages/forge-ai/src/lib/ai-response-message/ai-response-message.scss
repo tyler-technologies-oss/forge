@@ -1,0 +1,11 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+
+span {
+  overflow-wrap: break-word;
+}

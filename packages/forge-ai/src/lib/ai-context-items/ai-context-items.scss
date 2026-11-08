@@ -1,0 +1,28 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.context-items {
+  display: grid;
+  gap: #{forge-spacing.variable(xxsmall)};
+  min-width: 0;
+  padding: #{forge-spacing.variable(xsmall)};
+  padding-block-end: 0;
+}
+
+.context-list {
+  @include forge-scrollbar.base;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: #{forge-spacing.variable(xsmall)};
+  padding-block-end: #{forge-spacing.variable(xxsmall)};
+  overflow-y: auto;
+  max-height: 75px;
+}

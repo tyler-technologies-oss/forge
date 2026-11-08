@@ -1,0 +1,52 @@
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '@tylertech/forge/dist/icon/forge-icon';
+
+:host {
+  display: block;
+}
+
+.ai-file-picker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.forge-button,
+.forge-icon-button {
+  transition: all 0.2s ease-in-out;
+
+  --forge-button-color: #{forge-theme.variable(text-medium)};
+  --forge-icon-button-color: #{forge-theme.variable(text-medium)};
+
+  &.ai-file-picker--drag-over {
+    --forge-button-background: #{forge-theme.variable(primary-container)};
+    --forge-button-border-color: #{forge-theme.variable(primary)};
+    --forge-icon-button-background: #{forge-theme.variable(primary-container)};
+    --forge-icon-button-color: #{forge-theme.variable(primary)};
+
+    transform: scale(1.02);
+  }
+
+  .custom-icon {
+    height: 18px;
+    width: 18px;
+  }
+
+  ::slotted(svg) {
+    fill: #{forge-theme.variable(text-medium)};
+  }
+
+  &.ai-file-picker--drag-over ::slotted(svg) {
+    fill: #{forge-theme.variable(primary)};
+  }
+}
+
+:host([disabled]) {
+  pointer-events: none;
+  opacity: 0.6;
+}

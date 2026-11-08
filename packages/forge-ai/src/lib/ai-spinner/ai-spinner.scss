@@ -1,0 +1,70 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+
+:host {
+  display: inline-block;
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    animation: rotate 1.4s linear infinite;
+  }
+
+  &--extra-small {
+    width: 16px;
+    height: 16px;
+  }
+
+  &--small {
+    width: 24px;
+    height: 24px;
+  }
+
+  &--medium {
+    width: 32px;
+    height: 32px;
+  }
+
+  &--large {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.track {
+  stroke: var(--forge-ai-spinner-track-color, #{forge-theme.variable(outline-low)});
+  opacity: 0.2;
+}
+
+.indicator {
+  stroke: var(--forge-ai-spinner-color, #{forge-theme.variable(primary)});
+  stroke-linecap: round;
+  stroke-dasharray: 125.6;
+  stroke-dashoffset: 125.6;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 125.6;
+    transform: rotate(0deg);
+  }
+  50% {
+    stroke-dashoffset: 31.4;
+    transform: rotate(240deg);
+  }
+  100% {
+    stroke-dashoffset: 125.6;
+    transform: rotate(720deg);
+  }
+}

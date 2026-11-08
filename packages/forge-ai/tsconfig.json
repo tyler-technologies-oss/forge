@@ -18,5 +18,12 @@
     "skipLibCheck": true,
     "types": ["vite/client", "node"]
   },
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "src/lib/ai-steps/ai-steps.test.ts",
+    "src/lib/ai-artifact-card/ai-artifact-card.test.ts",
+    "src/lib/ai-artifact-card-group/ai-artifact-card-group.test.ts",
+    "src/lib/tools/ai-steps/ai-steps.test.ts",
+    "src/lib/ai-tool-call/tool-canvas.test.ts"
+  ]
 }

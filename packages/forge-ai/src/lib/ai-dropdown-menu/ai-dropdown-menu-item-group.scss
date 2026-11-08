@@ -1,0 +1,19 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+
+.ai-dropdown-menu-item-group {
+  display: block;
+  margin-block: #{forge-spacing.variable(xsmall)};
+}
+
+::slotted([slot='label']) {
+  @include forge-typography.style(overline);
+
+  margin-inline: #{forge-spacing.variable(small)};
+  color: #{forge-theme.variable(text-medium)};
+}
+
+.ai-dropdown-menu-item-group__content {
+  display: block;
+}

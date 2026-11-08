@@ -1,0 +1,21 @@
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+
+:host {
+  display: block;
+}
+
+.reasoning {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-out;
+
+  &.expanded {
+    max-height: 500px; // Reasonable max height for content
+  }
+}
+
+.content {
+  @include forge-typography.style(body1);
+  padding: #{forge-spacing.variable(medium)};
+}

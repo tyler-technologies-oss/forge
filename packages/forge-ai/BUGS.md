@@ -19,3 +19,11 @@ Scratch list of bugs found during the forge-ai migration (TAI-438). These are in
 - [F1/F6] templates/storybook: generated stories import `@tylertech/forge-ai/<name>`; needs an alias to the built package in packages/forge `.storybook/main.ts` (F6).
 - [F5] package.json `test`: drop `--passWithNoTests` once tests land.
 - [F4] tsconfig `moduleResolution: bundler` makes dts emit extensionless relative imports in `.d.ts`, which break node16/nodenext consumers; decide (explicit `.js` extensions vs. accept) in F4.
+- [F2] src/lib/ai-tool-call-indicator/ai-tool-call-indicator.scss: `word-break: break-word` is deprecated (stylelint error under forge's rules); replaced with `overflow-wrap: anywhere` (minor behavior difference: affects min-content sizing). Verify visually.
+- [F2/F3] all source: `@tylertech/forge/sass/core/styles/*` and `@tylertech/forge/dist/*` SCSS imports still in place (290 Sass `if()` deprecation warnings during build, none are errors). F4 migrates.
+- [F3] ai-tool-call-indicator/ai-message-thread/ai-assistant-response import `forge-ai-tool-call` via side-effect imports; `ai-tool-call/index.ts` also re-exports the canvas helpers `resolveToolCanvas*`/`createToolCanvas`/`toolCanvasHostContext` (previously internal to ai-chatbot). Needed by the foundry composition layer; widen/narrow in review.
+- [F3] ai-sidebar.ts aria-label "Resize chatbot panel...", ai-dialog.ts aria-label "Move chatbot", ai-fab.ts default label "Launch chatbot", ai-data-table.ts CSV filename fallback 'chatbot-data-table': composition-flavored user-facing strings left unchanged (behavior). Consider neutral wording.
+- [F3] `--forge-ai-chatbot-icon-color` CSS var (ai-icon.scss) kept as public styling API despite the chatbot name.
+- [F3] dist `utils/index.mjs` cannot be imported in plain Node (`DOMPurify.addHook is not a function` outside a browser); browser-only module, expected.
+- [F5: convert] 5 WTR tests excluded by explicit file list from tsconfig, eslint (`wtrTests` in eslint.config.js), and vitest (`exclude`): ai-steps, ai-artifact-card, ai-artifact-card-group, tools/ai-steps, ai-tool-call/tool-canvas. Remove those entries when converting.
+- [F3/foundry] `tools/ai-steps/ai-steps.test.ts` had its `displayStepsTool` definition test removed; that test must land in foundry together with the `displayStepsTool` definition.

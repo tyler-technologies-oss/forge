@@ -1,0 +1,28 @@
+@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '../mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.button-header {
+  @include mixins.ai-chain-of-thought-grid;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: start;
+
+  svg {
+    fill: var(--forge-theme-text-medium);
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.button-header-text {
+  @include forge-typography.style(body2);
+  color: #{forge-theme.variable(text-medium)};
+  flex: 1;
+}
