@@ -1,1 +1,1 @@
-export * from './ai-disclaimer';
+export * from './ai-disclaimer.js';

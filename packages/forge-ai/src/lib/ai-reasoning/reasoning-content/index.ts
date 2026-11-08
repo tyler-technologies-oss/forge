@@ -1,1 +1,1 @@
-export { ReasoningContentComponent, ReasoningContentComponentTagName } from './reasoning-content';
+export { ReasoningContentComponent, ReasoningContentComponentTagName } from './reasoning-content.js';

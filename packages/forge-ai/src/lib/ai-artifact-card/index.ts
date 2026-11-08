@@ -1,1 +1,1 @@
-export { AiArtifactCardComponent, AiArtifactCardComponentTagName, type ForgeAiArtifactCardOpenEventData } from './ai-artifact-card';
+export { AiArtifactCardComponent, AiArtifactCardComponentTagName, type ForgeAiArtifactCardOpenEventData } from './ai-artifact-card.js';

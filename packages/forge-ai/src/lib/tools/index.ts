@@ -1,3 +1,3 @@
-export * from './ai-data-table';
-export * from './ai-paginator';
-export * from './ai-steps';
+export * from './ai-data-table/index.js';
+export * from './ai-paginator/index.js';
+export * from './ai-steps/index.js';

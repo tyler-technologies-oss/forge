@@ -1,1 +1,1 @@
-export * from './ai-fab';
+export * from './ai-fab.js';

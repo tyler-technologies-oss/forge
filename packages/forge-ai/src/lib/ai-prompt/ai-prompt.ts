@@ -8,7 +8,7 @@ import styles from './ai-prompt.scss?inline';
 
 import '../ai-slash-command-menu/ai-slash-command-menu.js';
 import '../core/tooltip/tooltip.js';
-import '../ai-context-items';
+import '../ai-context-items/index.js';
 
 const MAX_HISTORY_SIZE = 50;
 

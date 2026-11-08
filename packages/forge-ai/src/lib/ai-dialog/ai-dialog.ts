@@ -2,8 +2,8 @@ import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { Ref, createRef, ref } from 'lit/directives/ref.js';
-import type { AiModalComponent } from '../ai-modal';
-import '../ai-modal';
+import type { AiModalComponent } from '../ai-modal/index.js';
+import '../ai-modal/index.js';
 import { DragController } from '../core/drag-controller.js';
 
 import styles from './ai-dialog.scss?inline';

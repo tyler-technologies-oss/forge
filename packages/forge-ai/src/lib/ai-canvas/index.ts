@@ -1,1 +1,1 @@
-export * from './ai-canvas';
+export * from './ai-canvas.js';

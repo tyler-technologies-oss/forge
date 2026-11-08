@@ -1,1 +1,1 @@
-export * from './ai-empty-state';
+export * from './ai-empty-state.js';

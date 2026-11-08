@@ -5,7 +5,7 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import type { HeadingLevel } from '../types/index.js';
 
-import '../core/tooltip';
+import '../core/tooltip/index.js';
 
 import styles from './ai-canvas.scss?inline';
 

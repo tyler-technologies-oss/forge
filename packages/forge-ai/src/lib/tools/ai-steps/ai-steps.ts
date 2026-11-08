@@ -1,7 +1,7 @@
 import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { IToolRenderer, ToolCall } from '../../types/index.js';
-import type { AiStep } from '../../ai-steps';
+import type { AiStep } from '../../ai-steps/index.js';
 
 import '../../ai-steps/ai-steps.js';
 

@@ -1,1 +1,1 @@
-export * from './ai-icon';
+export * from './ai-icon.js';

@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 
 import type { Thread } from '../types/index.js';
-import type { DropdownMenuDensity } from '../ai-dropdown-menu';
+import type { DropdownMenuDensity } from '../ai-dropdown-menu/index.js';
 import '../ai-dropdown-menu/ai-dropdown-menu.js';
 import '../ai-dropdown-menu/ai-dropdown-menu-item.js';
 

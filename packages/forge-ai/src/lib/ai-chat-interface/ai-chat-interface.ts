@@ -1,7 +1,7 @@
 import { LitElement, TemplateResult, html, unsafeCSS, nothing } from 'lit';
 import { customElement, queryAssignedNodes } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import '../ai-gradient-container/ai-gradient-container';
+import '../ai-gradient-container/ai-gradient-container.js';
 
 import styles from './ai-chat-interface.scss?inline';
 

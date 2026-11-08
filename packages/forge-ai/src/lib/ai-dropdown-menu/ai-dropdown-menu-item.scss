@@ -1,10 +1,10 @@
-@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
-@use '@tylertech/forge/sass/core/styles/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
 @use '@tylertech/forge/sass/state-layer' as forge-state-layer;
 @use '@tylertech/forge/sass/list/list-item' as forge-list-item;
 @use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
-@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
 
 :host {
   display: block;

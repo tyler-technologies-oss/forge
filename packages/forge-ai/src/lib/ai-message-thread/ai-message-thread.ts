@@ -4,16 +4,16 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { when } from 'lit/directives/when.js';
 import type { MessageItem, AnyToolDefinition, ToolCall, AssistantResponse } from '../types/index.js';
 import { MarkdownStreamController } from '../utils/markdown-stream-controller.js';
-import type { ForgeAiAssistantResponseFeedbackEventData } from '../ai-assistant-response';
+import type { ForgeAiAssistantResponseFeedbackEventData } from '../ai-assistant-response/index.js';
 import type { FeatureToggle } from '../types/index.js';
 
-import '../ai-assistant-response';
-import '../ai-client-message';
-import '../ai-empty-state';
-import '../ai-error-message';
-import '../ai-response-message';
-import '../ai-thinking-indicator';
-import '../ai-user-message';
+import '../ai-assistant-response/index.js';
+import '../ai-client-message/index.js';
+import '../ai-empty-state/index.js';
+import '../ai-error-message/index.js';
+import '../ai-response-message/index.js';
+import '../ai-thinking-indicator/index.js';
+import '../ai-user-message/index.js';
 import '../ai-tool-call/ai-tool-call.js';
 import '../core/tooltip/tooltip.js';
 

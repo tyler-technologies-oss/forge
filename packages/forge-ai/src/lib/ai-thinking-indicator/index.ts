@@ -1,1 +1,1 @@
-export * from './ai-thinking-indicator';
+export * from './ai-thinking-indicator.js';

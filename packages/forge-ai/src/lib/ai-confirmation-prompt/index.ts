@@ -1,1 +1,1 @@
-export * from './ai-confirmation-prompt';
+export * from './ai-confirmation-prompt.js';

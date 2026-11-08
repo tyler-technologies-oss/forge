@@ -1,1 +1,1 @@
-export * from './ai-gradient-container';
+export * from './ai-gradient-container.js';

@@ -39,14 +39,6 @@ export default defineConfig({
       screenshotFailures: false
     },
     include: ['src/lib/**/*.test.ts'],
-    // F5: convert - existing tests are WTR/mocha/chai and do not run under Vitest yet
-    exclude: [
-      'src/lib/ai-steps/ai-steps.test.ts',
-      'src/lib/ai-artifact-card/ai-artifact-card.test.ts',
-      'src/lib/ai-artifact-card-group/ai-artifact-card-group.test.ts',
-      'src/lib/tools/ai-steps/ai-steps.test.ts',
-      'src/lib/ai-tool-call/tool-canvas.test.ts'
-    ],
     setupFiles: ['vitest.setup.ts'],
     onConsoleLog(log) {
       return log.includes('Lit is in dev mode') ? false : undefined;

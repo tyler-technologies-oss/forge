@@ -1,1 +1,1 @@
-export * from './ai-edit-thread';
+export * from './ai-edit-thread.js';

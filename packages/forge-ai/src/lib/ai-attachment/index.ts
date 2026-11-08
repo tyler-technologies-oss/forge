@@ -1,1 +1,1 @@
-export * from './ai-attachment';
+export * from './ai-attachment.js';

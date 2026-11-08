@@ -1,15 +1,15 @@
 import { LitElement, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import { DeleteThreadController } from '../utils/delete-thread-controller';
-import { InfiniteScrollController } from '../utils/infinite-scroll-controller';
+import { DeleteThreadController } from '../utils/delete-thread-controller.js';
+import { InfiniteScrollController } from '../utils/infinite-scroll-controller.js';
 import type { Thread } from '../types/index.js';
-import '../ai-modal/ai-modal';
-import '../ai-error-message';
-import '../ai-icon/ai-icon';
-import '../ai-spinner/ai-spinner';
-import '../ai-thread-actions-menu';
-import '../ai-edit-thread';
+import '../ai-modal/ai-modal.js';
+import '../ai-error-message/index.js';
+import '../ai-icon/ai-icon.js';
+import '../ai-spinner/ai-spinner.js';
+import '../ai-thread-actions-menu/index.js';
+import '../ai-edit-thread/index.js';
 
 import styles from './ai-conversations-panel.scss?inline';
 

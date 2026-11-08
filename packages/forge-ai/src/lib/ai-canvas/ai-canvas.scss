@@ -1,6 +1,6 @@
-@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
-@use '@tylertech/forge/sass/core/styles/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
 @use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
 @use '@tylertech/forge/dist/icon-button/forge-icon-button';
 

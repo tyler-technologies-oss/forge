@@ -18,6 +18,10 @@
     "test": {
       "outputs": []
     },
+    "@tylertech/forge-ai#test": {
+      "dependsOn": ["@tylertech/forge-tokens#build", "@tylertech/forge#build"],
+      "outputs": []
+    },
     "build:storybook": {
       "dependsOn": ["^build", "build", "@tylertech/forge-rich-text-editor#build"],
       "outputs": ["storybook-static/**"],

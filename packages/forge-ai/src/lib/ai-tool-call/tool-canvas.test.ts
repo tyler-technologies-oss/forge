@@ -1,4 +1,4 @@
-import { expect } from '@open-wc/testing';
+import { describe, expect, it } from 'vitest';
 import {
   createToolCanvas,
   requestCanvasClose,
@@ -28,15 +28,15 @@ function definition(canvas: ToolDefinition<ReportArgs>['canvas']): ToolDefinitio
 describe('tool-canvas', () => {
   describe('resolveToolCanvasIcon', () => {
     it('should return undefined when no icon is configured', () => {
-      expect(resolveToolCanvasIcon(toolCall, definition({}))).to.be.undefined;
+      expect(resolveToolCanvasIcon(toolCall, definition({}))).toBeUndefined();
     });
 
     it('should clone an element icon so each card gets its own node', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       const icon = resolveToolCanvasIcon(toolCall, definition({ icon: svg }));
 
-      expect(icon).to.be.instanceOf(SVGElement);
-      expect(icon).to.not.equal(svg);
+      expect(icon).toBeInstanceOf(SVGElement);
+      expect(icon).not.toBe(svg);
     });
 
     it('should resolve an icon from a function of the tool call', () => {
@@ -45,7 +45,7 @@ describe('tool-canvas', () => {
         definition({ icon: tc => (tc.args.kind === 'report' ? '<svg><circle r="1"/></svg>' : '<svg><rect/></svg>') })
       );
 
-      expect(icon?.querySelector('circle')).to.be.ok;
+      expect(icon?.querySelector('circle')).toBeTruthy();
     });
 
     it('should keep only allowlisted elements and attributes from markup', () => {
@@ -63,15 +63,15 @@ describe('tool-canvas', () => {
       const icon = resolveToolCanvasIcon(toolCall, definition({ icon: markup }));
       const names = [...(icon?.querySelectorAll('*') ?? [])].map(el => el.localName);
 
-      expect(icon?.getAttribute('viewBox')).to.equal('0 0 24 24');
-      expect(icon?.hasAttribute('onload')).to.be.false;
-      expect(icon?.hasAttribute('class')).to.be.false;
-      expect(names).to.deep.equal(['g', 'circle']);
-      expect(icon?.querySelector('g')?.getAttribute('transform')).to.equal('rotate(45)');
+      expect(icon?.getAttribute('viewBox')).toBe('0 0 24 24');
+      expect(icon?.hasAttribute('onload')).toBe(false);
+      expect(icon?.hasAttribute('class')).toBe(false);
+      expect(names).toEqual(['g', 'circle']);
+      expect(icon?.querySelector('g')?.getAttribute('transform')).toBe('rotate(45)');
     });
 
     it('should return undefined for markup without a root svg', () => {
-      expect(resolveToolCanvasIcon(toolCall, definition({ icon: '<div>nope</div>' }))).to.be.undefined;
+      expect(resolveToolCanvasIcon(toolCall, definition({ icon: '<div>nope</div>' }))).toBeUndefined();
     });
   });
 
@@ -79,9 +79,9 @@ describe('tool-canvas', () => {
     it('should fall back to displayName for the title and default action labels', () => {
       const def = definition({});
 
-      expect(resolveToolCanvasTitle(toolCall, def)).to.equal('Report');
-      expect(resolveToolCanvasActionLabel(toolCall, def, false)).to.equal('Open in canvas');
-      expect(resolveToolCanvasActionLabel(toolCall, def, true)).to.equal('Collapse canvas');
+      expect(resolveToolCanvasTitle(toolCall, def)).toBe('Report');
+      expect(resolveToolCanvasActionLabel(toolCall, def, false)).toBe('Open in canvas');
+      expect(resolveToolCanvasActionLabel(toolCall, def, true)).toBe('Collapse canvas');
     });
 
     it('should resolve action labels from a function of the tool call', () => {
@@ -89,8 +89,8 @@ describe('tool-canvas', () => {
         actionLabel: tc => ({ open: `Open ${tc.args.kind}`, collapse: `Collapse ${tc.args.kind}` })
       });
 
-      expect(resolveToolCanvasActionLabel(toolCall, def, false)).to.equal('Open report');
-      expect(resolveToolCanvasActionLabel(toolCall, def, true)).to.equal('Collapse report');
+      expect(resolveToolCanvasActionLabel(toolCall, def, false)).toBe('Open report');
+      expect(resolveToolCanvasActionLabel(toolCall, def, true)).toBe('Collapse report');
     });
   });
 
@@ -98,8 +98,8 @@ describe('tool-canvas', () => {
     it('should report unhandled when no host answers', () => {
       const target = document.createElement('div');
 
-      expect(requestCanvasOpen(target, { toolCallId: 'call-1', toolName: 'report' })).to.be.false;
-      expect(requestCanvasClose(target, { toolCallId: 'call-1' })).to.be.false;
+      expect(requestCanvasOpen(target, { toolCallId: 'call-1', toolName: 'report' })).toBe(false);
+      expect(requestCanvasClose(target, { toolCallId: 'call-1' })).toBe(false);
     });
 
     it('should report handled when a host marks the request', () => {
@@ -108,7 +108,7 @@ describe('tool-canvas', () => {
         evt.detail.handled = true;
       });
 
-      expect(requestCanvasOpen(target, { toolCallId: 'call-1', toolName: 'report' })).to.be.true;
+      expect(requestCanvasOpen(target, { toolCallId: 'call-1', toolName: 'report' })).toBe(true);
     });
   });
 
@@ -138,25 +138,25 @@ describe('tool-canvas', () => {
     }
 
     it('should expose a snapshot of the open state', () => {
-      expect(controls({ open: true }).canvas.isOpen).to.be.true;
-      expect(controls({ open: false }).canvas.isOpen).to.be.false;
+      expect(controls({ open: true }).canvas.isOpen).toBe(true);
+      expect(controls({ open: false }).canvas.isOpen).toBe(false);
     });
 
     it('should open when closed and close when open on toggle', () => {
       const { canvas, calls } = controls();
 
-      expect(canvas.toggle()).to.be.true;
-      expect(canvas.toggle()).to.be.true;
-      expect(calls).to.deep.equal(['open', 'close']);
+      expect(canvas.toggle()).toBe(true);
+      expect(canvas.toggle()).toBe(true);
+      expect(calls).toEqual(['open', 'close']);
     });
 
     it('should do nothing and return false when unavailable', () => {
       const { canvas, calls } = controls({ available: false });
 
-      expect(canvas.open()).to.be.false;
-      expect(canvas.close()).to.be.false;
-      expect(canvas.toggle()).to.be.false;
-      expect(calls).to.be.empty;
+      expect(canvas.open()).toBe(false);
+      expect(canvas.close()).toBe(false);
+      expect(canvas.toggle()).toBe(false);
+      expect(calls).toHaveLength(0);
     });
   });
 });

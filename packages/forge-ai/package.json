@@ -46,8 +46,9 @@
   "scripts": {
     "build": "rimraf dist && vite build && pnpm cem",
     "cem": "cem analyze --config custom-elements-manifest.config.mjs --litelement",
-    "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\" --allow-empty-input",
-    "test": "vitest run --browser.headless --passWithNoTests",
+    "lint": "tsc --noEmit && eslint . && stylelint \"src/lib/**/*.{css,scss}\" --allow-empty-input",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --browser.headless",
     "test:watch": "vitest",
     "format": "prettier --write \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",
     "format:check": "prettier --check \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",

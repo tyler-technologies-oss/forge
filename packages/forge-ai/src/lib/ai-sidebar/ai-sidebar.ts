@@ -5,8 +5,8 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { Ref, createRef, ref } from 'lit/directives/ref.js';
 import { when } from 'lit/directives/when.js';
 import { ResizeController } from '../core/resize-controller.js';
-import { readStoredNumber, removeStoredValue, writeStoredNumber } from '../utils/storage-utils';
-import type { StorageKind } from '../utils/storage-utils';
+import { readStoredNumber, removeStoredValue, writeStoredNumber } from '../utils/storage-utils.js';
+import type { StorageKind } from '../utils/storage-utils.js';
 import type { FeatureToggle } from '../types/index.js';
 
 import styles from './ai-sidebar.scss?inline';

@@ -1,1 +1,1 @@
-export * from './ai-thread-actions-menu';
+export * from './ai-thread-actions-menu.js';

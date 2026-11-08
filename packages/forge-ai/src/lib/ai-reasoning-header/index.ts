@@ -1,1 +1,1 @@
-export { AiReasoningHeaderComponent, AiReasoningHeaderComponentTagName } from './ai-reasoning-header';
+export { AiReasoningHeaderComponent, AiReasoningHeaderComponentTagName } from './ai-reasoning-header.js';

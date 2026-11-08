@@ -1,5 +1,5 @@
 @use '@tylertech/forge/dist/button/forge-button';
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
 
 :host {
   display: inline-block;

@@ -15,7 +15,7 @@ Source was migrated from the standalone `tyler-technologies-oss/forge-ai` repo. 
 ```bash
 pnpm --filter @tylertech/forge-ai build     # rimraf dist, Vite library build, custom elements manifest
 pnpm --filter @tylertech/forge-ai test      # Vitest browser mode (headless Chromium)
-pnpm --filter @tylertech/forge-ai lint      # eslint + stylelint
+pnpm --filter @tylertech/forge-ai lint      # tsc --noEmit + eslint + stylelint
 pnpm --filter @tylertech/forge-ai cem       # regenerate custom-elements.json
 pnpm --filter @tylertech/forge-ai plop      # scaffold a new component
 ```
@@ -117,11 +117,13 @@ Good for optional buttons, actions, and sections. See `ai-confirmation-prompt` a
 
 ## Testing
 
-Vitest browser mode in real Chromium, matching `packages/forge-rich-text-editor`.
+Vitest browser mode in real Chromium, matching `packages/forge-rich-text-editor`. Tests are `src/lib/**/*.test.ts`.
 
-- Use `renderFixture` from `src/testing/fixture.ts`, never `vitest-browser-lit`'s `render()` directly (it is synchronous, so shadow DOM may be empty at assertion time).
+- Use `renderFixture<T>(template, tagName)` from `src/testing/fixture.ts`. It renders via `vitest-browser-lit` and awaits the element's first `updateComplete`. Do not call `render()` directly (it is synchronous, so shadow DOM may be empty at assertion time).
+- Use Vitest `expect`, `vi.fn`/`vi.spyOn`. No chai, sinon, or `@open-wc/testing`.
 - Do not access private members in tests; assert through the public API.
 - Assert effects, not attributes.
-- `vitest.config.ts` maps `@tylertech/forge/sass/*` to forge source, so `@tylertech/forge` need not be built for tests. `@tylertech/forge-tokens` Sass is generated, so forge-tokens must be built first (turbo handles this via `^build` once wired in F4).
-- No coverage thresholds are enforced currently. Primitive test coverage is a known gap and is tracked separately.
+- Relative imports in tests and source need `.js` extensions (NodeNext resolution).
+- `vitest.config.ts` maps `@tylertech/forge/sass/*` to forge source. `@tylertech/forge` (CSS under `dist/`) and `@tylertech/forge-tokens` (generated Sass) must still be built: the root `turbo.json` entry `@tylertech/forge-ai#test` depends on `@tylertech/forge-tokens#build` and `@tylertech/forge#build`, so run tests through turbo (`pnpm turbo run test --filter=@tylertech/forge-ai`) on a fresh clone.
+- No coverage thresholds are enforced. Tests are intentionally thin for now: only the `ai-tool-call` module and a few components (steps, tools/ai-steps, artifact card/group, tool canvas) are covered. Full primitive coverage and thresholds are tracked in TAI-439.
 - Every new feature gets a test. Do not update existing tests unless the task requires it.

@@ -3,15 +3,6 @@ import { defineConfig } from 'eslint/config';
 import tylerPlugin from '@tylertech-eslint/eslint-plugin';
 import customRules from './plugins/eslint/index.mjs';
 
-// F5: convert - WTR/mocha tests excluded from tsconfig; remove once converted to Vitest
-const wtrTests = [
-  'src/lib/ai-steps/ai-steps.test.ts',
-  'src/lib/ai-artifact-card/ai-artifact-card.test.ts',
-  'src/lib/ai-artifact-card-group/ai-artifact-card-group.test.ts',
-  'src/lib/tools/ai-steps/ai-steps.test.ts',
-  'src/lib/ai-tool-call/tool-canvas.test.ts'
-];
-
 export default defineConfig([
   {
     name: 'TypeScript files',
@@ -45,5 +36,5 @@ export default defineConfig([
       '@typescript-eslint/no-unused-expressions': 'off'
     }
   },
-  { ignores: ['dist/**/*', ...wtrTests] }
+  { ignores: ['dist/**/*'] }
 ]);

@@ -2,7 +2,7 @@ import { LitElement, TemplateResult, html, unsafeCSS, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ContextItem } from '../types/index.js';
 
-import '../ai-context-chip';
+import '../ai-context-chip/index.js';
 import styles from './ai-context-items.scss?inline';
 
 declare global {

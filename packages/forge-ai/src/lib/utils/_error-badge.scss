@@ -1,4 +1,4 @@
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
 
 // Anchors a dot badge to the top inline-end corner of an icon button. Apply `error-badge-anchor` to
 // the button so the dot positions against it. The surface-colored ring keeps the dot legible where

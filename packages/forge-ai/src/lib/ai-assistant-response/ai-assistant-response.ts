@@ -4,12 +4,12 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import type { AssistantResponse, ToolCall, AnyToolDefinition, ResponseItem } from '../types/index.js';
 import { MarkdownStreamController } from '../utils/markdown-stream-controller.js';
-import type { ForgeAiResponseMessageToolbarFeedbackEventData } from '../ai-response-message-toolbar';
+import type { ForgeAiResponseMessageToolbarFeedbackEventData } from '../ai-response-message-toolbar/index.js';
 
-import '../ai-response-message-toolbar';
+import '../ai-response-message-toolbar/index.js';
 import '../ai-tool-call/ai-tool-call.js';
-import '../ai-tool-call-indicator';
-import '../ai-thinking-indicator';
+import '../ai-tool-call-indicator/index.js';
+import '../ai-thinking-indicator/index.js';
 
 import styles from './ai-assistant-response.scss?inline';
 

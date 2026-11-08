@@ -1,7 +1,7 @@
 import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import '../thought-base/thought-base';
+import '../thought-base/thought-base.js';
 
 import styles from './thought-image.scss?inline';
 

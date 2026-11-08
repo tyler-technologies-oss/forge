@@ -1,1 +1,1 @@
-export * from './ai-voice-input';
+export * from './ai-voice-input.js';

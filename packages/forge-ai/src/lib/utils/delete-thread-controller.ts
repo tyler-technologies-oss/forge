@@ -1,6 +1,6 @@
 import { ReactiveController, ReactiveControllerHost, html, nothing, TemplateResult } from 'lit';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
-import type { AiModalComponent } from '../ai-modal/ai-modal';
+import type { AiModalComponent } from '../ai-modal/ai-modal.js';
 import type { Thread } from '../types/index.js';
 
 export interface DeleteThreadControllerCallbacks {

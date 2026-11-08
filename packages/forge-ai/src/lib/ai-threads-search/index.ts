@@ -1,1 +1,1 @@
-export * from './ai-threads-search';
+export * from './ai-threads-search.js';

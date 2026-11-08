@@ -1,7 +1,7 @@
 import { toggleState } from '../utils/dom.js';
 import { LitElement, TemplateResult, html, unsafeCSS, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import '../ai-icon';
+import '../ai-icon/index.js';
 
 import styles from './ai-icon-button.scss?inline';
 

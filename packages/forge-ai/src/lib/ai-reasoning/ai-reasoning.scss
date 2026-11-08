@@ -1,5 +1,5 @@
-@use '@tylertech/forge/sass/typography' as forge-typography;
-@use '@tylertech/forge/sass/core/styles/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
 
 :host {
   display: block;

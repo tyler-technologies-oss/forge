@@ -1,7 +1,7 @@
 import { LitElement, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
-import '../ai-user-message-toolbar';
+import '../ai-user-message-toolbar/index.js';
 
 import styles from './ai-user-message.scss?inline';
 

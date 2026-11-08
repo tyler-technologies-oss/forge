@@ -2,7 +2,7 @@ import { LitElement, TemplateResult, html, unsafeCSS, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
-import '../ai-spinner';
+import '../ai-spinner/index.js';
 import '../core/tooltip/tooltip.js';
 import styles from './ai-attachment.scss?inline';
 

@@ -1,1 +1,1 @@
-export * from './ai-artifact-card-group';
+export * from './ai-artifact-card-group.js';

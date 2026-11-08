@@ -1,7 +1,7 @@
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 
-import { AI_ARTIFACT_CARD_COLLAPSED_ATTRIBUTE, type AiArtifactCardComponent } from '../ai-artifact-card/ai-artifact-card';
+import { AI_ARTIFACT_CARD_COLLAPSED_ATTRIBUTE, type AiArtifactCardComponent } from '../ai-artifact-card/ai-artifact-card.js';
 
 import styles from './ai-artifact-card-group.scss?inline';
 

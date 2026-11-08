@@ -16,7 +16,7 @@ import {
 } from './tool-canvas.js';
 import { shouldShowToolRenderer } from './utils.js';
 
-import '../ai-artifact-card';
+import '../ai-artifact-card/index.js';
 
 import styles from './ai-tool-call.scss?inline';
 

@@ -2,7 +2,7 @@ import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit
 import { customElement, property } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { toggleState } from '../utils/dom.js';
-import '../ai-gradient-container/ai-gradient-container';
+import '../ai-gradient-container/ai-gradient-container.js';
 
 import styles from './ai-icon.scss?inline';
 

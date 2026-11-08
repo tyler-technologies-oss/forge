@@ -1,1 +1,1 @@
-export * from './ai-assistant-response';
+export * from './ai-assistant-response.js';

@@ -1,1 +1,1 @@
-export { AiArtifactComponent, AiArtifactComponentTagName } from './ai-artifact';
+export { AiArtifactComponent, AiArtifactComponentTagName } from './ai-artifact.js';

@@ -1,1 +1,1 @@
-export { AiDialogComponent, AiDialogComponentTagName } from './ai-dialog';
+export { AiDialogComponent, AiDialogComponentTagName } from './ai-dialog.js';

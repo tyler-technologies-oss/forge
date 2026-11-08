@@ -1,8 +1,8 @@
 import { toggleState } from '../utils/dom.js';
 import { LitElement, TemplateResult, html, unsafeCSS, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import '../ai-icon';
-import '../ai-gradient-container/ai-gradient-container';
+import '../ai-icon/index.js';
+import '../ai-gradient-container/ai-gradient-container.js';
 
 import styles from './ai-fab.scss?inline';
 

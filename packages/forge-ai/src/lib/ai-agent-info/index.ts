@@ -1,1 +1,1 @@
-export * from './ai-agent-info';
+export * from './ai-agent-info.js';

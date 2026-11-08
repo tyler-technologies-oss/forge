@@ -1,5 +1,5 @@
-@use '@tylertech/forge/sass/core/styles/theme' as forge-theme;
-@use '@tylertech/forge/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
 
 :host {
   display: block;

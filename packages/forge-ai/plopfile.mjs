@@ -42,7 +42,7 @@ export default function (plop) {
           type: 'modify',
           path: 'src/lib/index.ts',
           pattern: /(\/\/ -- EXPORTS PLACEHOLDER \(DO NOT REMOVE\) --)/g,
-          template: "export * from './{{dashCase name}}';\n$1"
+          template: "export * from './{{dashCase name}}/index.js';\n$1"
         }
       ];
 

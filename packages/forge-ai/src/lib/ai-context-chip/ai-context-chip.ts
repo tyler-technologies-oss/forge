@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 
 import '../core/tooltip/tooltip.js';
-import '../ai-spinner';
+import '../ai-spinner/index.js';
 import styles from './ai-context-chip.scss?inline';
 
 declare global {

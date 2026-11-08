@@ -3,13 +3,13 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 
 import { formatRelativeTime } from '../utils/format.js';
-import { DeleteThreadController } from '../utils/delete-thread-controller';
-import { InfiniteScrollController } from '../utils/infinite-scroll-controller';
-import '../ai-thread-actions-menu';
-import '../ai-edit-thread';
-import '../ai-error-message';
-import '../ai-spinner';
-import '../ai-modal/ai-modal';
+import { DeleteThreadController } from '../utils/delete-thread-controller.js';
+import { InfiniteScrollController } from '../utils/infinite-scroll-controller.js';
+import '../ai-thread-actions-menu/index.js';
+import '../ai-edit-thread/index.js';
+import '../ai-error-message/index.js';
+import '../ai-spinner/index.js';
+import '../ai-modal/ai-modal.js';
 
 import type { Thread } from '../types/index.js';
 

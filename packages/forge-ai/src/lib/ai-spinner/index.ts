@@ -1,1 +1,1 @@
-export * from './ai-spinner';
+export * from './ai-spinner.js';

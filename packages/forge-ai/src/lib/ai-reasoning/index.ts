@@ -1,2 +1,2 @@
-export { AiReasoningComponent, AiReasoningComponentTagName } from './ai-reasoning';
-export { ReasoningContentComponent, ReasoningContentComponentTagName } from './reasoning-content';
+export { AiReasoningComponent, AiReasoningComponentTagName } from './ai-reasoning.js';
+export { ReasoningContentComponent, ReasoningContentComponentTagName } from './reasoning-content/index.js';

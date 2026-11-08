@@ -3,8 +3,8 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import type { IToolRenderer, ToolCall } from '../../types/index.js';
-import { buildCSVContent, downloadCSV, sanitizeFilename } from '../../utils/csv-utils';
-import { renderInlineMarkdown } from '../../utils/markdown';
+import { buildCSVContent, downloadCSV, sanitizeFilename } from '../../utils/csv-utils.js';
+import { renderInlineMarkdown } from '../../utils/markdown.js';
 
 import '../../ai-artifact/ai-artifact.js';
 import '../../ai-empty-state/ai-empty-state.js';
