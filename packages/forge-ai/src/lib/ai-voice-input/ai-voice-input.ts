@@ -70,7 +70,7 @@ export interface ForgeAiVoiceInputResultEvent {
 /**
  * @tag forge-ai-voice-input
  *
- * @event {CustomEvent<AiVoiceInputResultEvent>} forge-ai-voice-input-result - Fired when speech recognition produces a result.
+ * @event {CustomEvent<ForgeAiVoiceInputResultEvent>} forge-ai-voice-input-result - Fired when speech recognition produces a result.
  * The event detail contains the transcript and confidence score of the recognized speech.
  */
 @customElement(AiVoiceInputComponentTagName)

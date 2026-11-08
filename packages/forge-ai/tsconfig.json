@@ -18,5 +18,5 @@
     "skipLibCheck": true,
     "types": ["vite/client", "node"]
   },
-  "exclude": ["dist"]
+  "exclude": ["dist", "src/jsx-fixture"]
 }

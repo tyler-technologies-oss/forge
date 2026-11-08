@@ -24,7 +24,21 @@ import '@tylertech/forge-ai/ai-prompt';
 
 Documentation and examples are available in the [Forge Storybook](https://forge.tylerdev.io/).
 
-> React 19 JSX typings are coming in a future release.
+## React 19
+
+React 19 supports custom elements natively, so there is no wrapper package. Add a types-only import once to get typed `forge-ai-*` JSX tags, props, refs, and events:
+
+```ts
+import type {} from '@tylertech/forge-ai/jsx';
+```
+
+```tsx
+import '@tylertech/forge-ai/ai-prompt';
+
+<forge-ai-prompt placeholder="Ask" sendDisabled={false} onforge-ai-prompt-send={event => console.log(event.detail.value)} />;
+```
+
+Event props are `on` plus the event name exactly as dispatched (`onforge-ai-prompt-send`, not `onForgeAiPromptSend`). Prefer camelCase props: TypeScript does not check hyphenated JSX attributes, so a typo in a kebab-case attribute or an `on<event>` name compiles silently. The typings compile under `@types/react` 18, but React 18's runtime does not support these elements correctly (objects are stringified and events are not attached), so use React 19. See the AI/React page in the Forge Storybook.
 
 ## Development
 

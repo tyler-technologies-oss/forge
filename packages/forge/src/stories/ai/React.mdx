@@ -1,0 +1,101 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="AI/React" />
+
+# React
+
+`@tylertech/forge-ai` ships typings for using its elements directly in **React 19** JSX. There is no wrapper package: React 19 supports custom elements natively, so you render `<forge-ai-prompt>` and friends as-is.
+
+> **Use React 19.** The typings themselves compile under `@types/react` 18 (the package lists `@types/react ^19` as an optional peer dependency), but **React 18's runtime does not support these elements correctly**: it stringifies object props to attributes (`messageItems="[object Object]"`), does not attach `on<event>` props as event listeners, and renders `className` as a literal `className` attribute instead of `class`. Arrays, objects, and custom events do not work without a wrapper or manual `ref` code.
+
+## Setup
+
+Add a types-only import once, anywhere in your TypeScript program (for example, `src/forge-ai.d.ts` or your app entry):
+
+```ts
+import type {} from '@tylertech/forge-ai/jsx';
+```
+
+This augments React's `JSX.IntrinsicElements` with every `forge-ai-*` tag. The subpath is types-only: it emits no JavaScript and registers no elements.
+
+Alternatives that work equally well:
+
+- `/// <reference types="@tylertech/forge-ai/jsx" />` at the top of a `.d.ts` file
+- `"types": ["@tylertech/forge-ai/jsx"]` in `tsconfig.json` (note that setting `types` disables automatic inclusion of other `@types/*` packages, so list them too)
+
+The `import type {}` form is recommended: it is explicit, tree-shakes to nothing, and does not change how other `@types` are resolved. Verified with `moduleResolution` of `bundler`, `node16`, and `nodenext`. `moduleResolution: node`/`node10` is not supported by this package (for any subpath, not just `/jsx`) because it does not read the `exports` map.
+
+## Registering elements
+
+The typings do not load the components. Register each element with a side-effect import:
+
+```tsx
+import '@tylertech/forge-ai/ai-prompt';
+import '@tylertech/forge-ai/ai-message-thread';
+
+export function Chat() {
+  return <forge-ai-prompt placeholder="Ask a question..." />;
+}
+```
+
+## Properties and attributes
+
+React 19 assigns a prop as a **property** when the element has a matching property, otherwise as an **attribute**. Use the camelCase property names. They are fully type-checked and work for every value type (arrays, objects, Maps, booleans, strings):
+
+```tsx
+import type { MessageItem } from '@tylertech/forge-ai/types';
+
+const items: MessageItem[] = [];
+
+<forge-ai-message-thread messageItems={items} enableReactions />
+<forge-ai-prompt sendDisabled placeholder="Ask" />
+```
+
+Kebab-case attribute forms (`send-disabled`) are typed too, but TypeScript does **not** check hyphenated JSX attribute names for typos or types, so a misspelled `send-disabld` compiles silently. Prefer camelCase.
+
+Booleans that default to `true` (for example `cancelOnEscape` on `forge-ai-prompt`, or `removable` on `forge-ai-context-chip`) cannot be turned off with an attribute, because a present attribute is always `true`. Their kebab form is therefore not typed. Always use the camelCase property form and pass `false` (`<forge-ai-prompt cancelOnEscape={false} />`).
+
+Use either `class` or `className` for classes, not both.
+
+## Events
+
+React 19 attaches `on<name>` props on custom elements with `addEventListener(name, handler)`, where `<name>` is everything after `on`, with **no case conversion**. The event prop is therefore the event name exactly as dispatched, prefixed with `on`:
+
+```tsx
+<forge-ai-prompt onforge-ai-prompt-send={event => console.log(event.detail.value)} />
+```
+
+`onForgeAiPromptSend` does **not** work: it would listen for an event named `ForgeAiPromptSend`, which is never dispatched. The typings reject this form.
+
+> **Watch for typos in event names.** Hyphenated JSX attributes are not checked by TypeScript, so `onforge-ai-promt-send` compiles without error and never fires. Copy event names from the component API tables.
+
+Handlers are typed with the event's `CustomEvent<Detail>` type, so `event.detail` is checked. Events with no detail are typed `CustomEvent<void>`, and events the component library documents without a detail type fall back to `CustomEvent`.
+
+## Refs
+
+`ref` is typed to the element class, which gives you the full public API (methods and properties):
+
+```tsx
+import { useRef } from 'react';
+import type { AiPromptComponent } from '@tylertech/forge-ai/ai-prompt';
+
+const prompt = useRef<AiPromptComponent>(null);
+
+<forge-ai-prompt ref={prompt} />;
+
+prompt.current?.focus();
+```
+
+## Slots
+
+Use the standard `slot` attribute on children:
+
+```tsx
+<forge-ai-prompt>
+  <forge-ai-icon-button slot="actions" />
+</forge-ai-prompt>
+```
+
+## How the typings are produced
+
+`dist/jsx.d.ts` is generated at build time from `custom-elements.json` by a small CEM plugin. Prop and event types are imported from the package's own declarations, so they always match the component classes. Only elements with a tag in the manifest are included.

@@ -19,7 +19,7 @@
       "outputs": []
     },
     "@tylertech/forge-ai#test": {
-      "dependsOn": ["@tylertech/forge-tokens#build", "@tylertech/forge#build"],
+      "dependsOn": ["@tylertech/forge-tokens#build", "@tylertech/forge#build", "build"],
       "outputs": []
     },
     "build:storybook": {

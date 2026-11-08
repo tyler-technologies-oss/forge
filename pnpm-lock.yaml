@@ -148,6 +148,9 @@ catalogs:
       specifier: ^8.3.4
       version: 8.3.4
 
+overrides:
+  '@types/react-router-dom>@types/react': 17.0.93
+
 pnpmfileChecksum: sha256-uUEEHfOyb+QuJr33najRoTHewCySL45tZQb7rdT6/8g=
 
 patchedDependencies:
@@ -554,6 +557,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 25.5.0
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
       '@vitest/browser':
         specifier: ^4.1.2
         version: 4.1.11(vite@8.3.4(@types/node@25.5.0)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.0)(sass-embedded@1.106.1)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.9.1))(vitest@4.1.11)

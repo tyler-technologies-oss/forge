@@ -26,6 +26,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.mjs"
     },
+    "./jsx": {
+      "types": "./dist/jsx.d.ts"
+    },
     "./*": {
       "types": "./dist/*/index.d.ts",
       "default": "./dist/*/index.mjs"
@@ -48,7 +51,8 @@
     "cem": "cem analyze --config custom-elements-manifest.config.mjs --litelement",
     "lint": "tsc --noEmit && eslint . && stylelint \"src/lib/**/*.{css,scss}\" --allow-empty-input",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --browser.headless",
+    "test": "vitest run --browser.headless && pnpm test:types",
+    "test:types": "tsc -p src/jsx-fixture --noEmit",
     "test:watch": "vitest",
     "format": "prettier --write \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",
     "format:check": "prettier --check \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",
@@ -62,6 +66,14 @@
     "marked": "^18.0.7",
     "remend": "^1.3.0"
   },
+  "peerDependencies": {
+    "@types/react": "^19"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
     "@tylertech-eslint/eslint-plugin": "catalog:",
@@ -69,6 +81,7 @@
     "@tylertech/forge-tokens": "workspace:*",
     "@tylertech/stylelint-rules": "catalog:",
     "@types/node": "catalog:",
+    "@types/react": "19.2.14",
     "@vitest/browser": "^4.1.2",
     "@vitest/browser-playwright": "^4.1.2",
     "@vitest/coverage-v8": "^4.1.2",
@@ -77,8 +90,8 @@
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-prettier": "catalog:",
     "glob": "catalog:",
-    "plop": "catalog:",
     "playwright": "catalog:",
+    "plop": "catalog:",
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "sass": "catalog:",
