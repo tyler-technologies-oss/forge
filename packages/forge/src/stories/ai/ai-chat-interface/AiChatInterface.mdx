@@ -1,0 +1,15 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiChatInterfaceStories from './AiChatInterface.stories';
+
+<Meta of={AiChatInterfaceStories} />
+
+<Title />
+
+The AI Chat Interface provides a complete chat interface with header controls, message container, and prompt input. It automatically handles empty states and optional suggestions.
+
+<Canvas of={AiChatInterfaceStories.Demo} />
+
+## API
+
+<CustomArgTypes />

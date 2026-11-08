@@ -1,0 +1,33 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiAttachmentStories from './AiAttachment.stories';
+
+<Meta of={AiAttachmentStories} />
+
+<Title />
+
+The AI Attachment component displays file attachment information in AI chat interfaces. It shows file metadata including name, size, and type-specific icons, with support for image thumbnails and optional removal functionality.
+
+<Canvas of={AiAttachmentStories.Demo} />
+
+## Features
+
+- **File Type Icons**: Displays contextual icons based on MIME type (PDF, images, documents, videos, etc.)
+- **File Size Formatting**: Automatically formats file sizes in human-readable format (B, KB, MB, GB)
+- **Image Thumbnails**: Supports thumbnail previews for image files
+- **Removable**: Optional remove button for interactive attachment management
+- **Accessible**: Full ARIA implementation with proper labels and keyboard support
+- **Responsive**: Adapts to container width with text truncation for long filenames
+
+## Accessibility
+
+- Uses `role="group"` with descriptive `aria-label` for the attachment container
+- Remove button includes `aria-label` with the filename for context
+- Icons are marked with `aria-hidden="true"` to prevent redundant announcements
+- Thumbnail images have empty `alt` text as they're decorative
+- Full keyboard support with visible focus indicators
+- Hover states provide visual feedback for interactive elements
+
+## API
+
+<CustomArgTypes />

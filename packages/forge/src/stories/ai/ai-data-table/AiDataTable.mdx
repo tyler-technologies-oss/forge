@@ -1,0 +1,19 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiDataTableStories from './AiDataTable.stories';
+
+<Meta of={AiDataTableStories} />
+
+<Title />
+
+A tool renderer that displays tabular data with filtering, pagination, and CSV export. It is exported from `@tylertech/forge-ai/tools` and takes a `toolCall` whose `args` hold the `title`, `headers`, `rows`, and an optional `maxNumberOfRows`.
+
+<Canvas of={AiDataTableStories.Demo} />
+
+A filter input appears once there are more than five rows, and a paginator appears when the rows exceed the page size.
+
+<Canvas of={AiDataTableStories.CustomPageSize} />
+
+## API
+
+<CustomArgTypes />

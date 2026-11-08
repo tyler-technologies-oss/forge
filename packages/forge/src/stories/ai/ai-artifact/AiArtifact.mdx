@@ -1,0 +1,23 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiArtifactStories from './AiArtifact.stories';
+
+<Meta of={AiArtifactStories} />
+
+<Title />
+
+The `forge-ai-artifact` component provides a structured shell with a toolbar and actions for rendering various data types. It's designed to display content like code snippets, data tables, charts, or other artifacts with common actions such as copy, download, refresh, and export.
+
+## Use Cases
+
+- Code snippet displays with copy/download actions
+- Data table presentations with export functionality
+- Chart or visualization containers with refresh capabilities
+- Document previews with various action buttons
+- Any content that benefits from a consistent toolbar and action pattern
+
+<Canvas of={AiArtifactStories.Demo} />
+
+## API
+
+<CustomArgTypes />

@@ -1,0 +1,40 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiDropdownMenuStories from './AiDropdownMenu.stories';
+
+<Meta of={AiDropdownMenuStories} />
+
+# AI Dropdown Menu
+
+The AI Dropdown Menu is a flexible dropdown component designed for AI interfaces. It provides a configurable trigger button that can be displayed in square or circular variants, with comprehensive keyboard navigation and accessibility support.
+
+<Canvas of={AiDropdownMenuStories.Demo} />
+
+## Features
+
+- **Two Button Variants**: Square (default) and circular shapes
+- **Flexible Content**: Support for icons, text, and custom content via slots
+- **Keyboard Navigation**: Full arrow key navigation with Enter/Space selection
+- **Focus Management**: Automatically closes when focus leaves the component
+- **Accessibility**: Proper ARIA attributes and screen reader support
+- **Event Handling**: Emits selection events with value and selected item details
+
+## Keyboard Navigation
+
+- **Arrow Keys**: Navigate between menu items (wraps from first to last and vice versa)
+- **Enter/Space**: Select the focused item or toggle the dropdown
+- **Escape**: Close the dropdown and return focus to trigger
+- **Home/End**: Jump to first/last menu item
+- **Tab/Focus Loss**: Automatically closes dropdown when focus leaves the component
+
+## Accessibility
+
+- Uses proper ARIA roles (`listbox` and `option`)
+- Supports `aria-expanded`, `aria-haspopup`, `aria-selected`, and `aria-disabled`
+- Keyboard navigation follows WAI-ARIA guidelines
+- Screen reader friendly with appropriate labels and descriptions
+- For icon-only triggers with no visible text, set the `trigger-label` property to give the trigger button an accessible name (applied as `aria-label`)
+
+## API
+
+<CustomArgTypes />

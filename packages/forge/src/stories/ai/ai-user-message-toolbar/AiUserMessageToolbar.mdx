@@ -1,0 +1,54 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiUserMessageToolbarStories from './AiUserMessageToolbar.stories';
+
+<Meta of={AiUserMessageToolbarStories} />
+
+<Title />
+
+The User Message Toolbar provides action buttons for user-submitted messages. It displays a timestamp and includes resend, edit, and copy actions that emit structured events for easy integration.
+
+<Canvas of={AiUserMessageToolbarStories.Demo} />
+
+### Streaming State
+
+When the AI is streaming a response, the resend and edit buttons are hidden to prevent actions that could interrupt the stream.
+
+<Canvas of={AiUserMessageToolbarStories.Streaming} />
+
+### Action Types
+
+The toolbar provides the following actions:
+
+- **Timestamp** - Displays the message timestamp with a tooltip showing the full date
+- **Resend** - Resend the user message to get a new AI response
+- **Edit** - Edit the user message
+- **Copy** - Copy the message content
+
+### Event Handling
+
+The component emits three event types:
+
+```typescript
+toolbar.addEventListener('forge-ai-user-message-toolbar-copy', () => {
+  // Handle copy action
+});
+
+toolbar.addEventListener('forge-ai-user-message-toolbar-resend', () => {
+  // Handle resend action
+});
+
+toolbar.addEventListener('forge-ai-user-message-toolbar-edit', () => {
+  // Handle edit action (open edit mode)
+});
+```
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- All buttons have proper `aria-label` attributes for screen reader compatibility
+- Keyboard navigation supported through standard button focus behavior
+- Timestamp has a tooltip showing the full date and time

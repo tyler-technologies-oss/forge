@@ -1,0 +1,54 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiResponseMessageToolbarStories from './AiResponseMessageToolbar.stories';
+
+<Meta of={AiResponseMessageToolbarStories} />
+
+<Title />
+
+The Response Message Toolbar provides action buttons for AI-generated response messages. It includes resend, copy, and optional feedback (thumbs up/down) actions that emit structured events for easy integration.
+
+<Canvas of={AiResponseMessageToolbarStories.Demo} />
+
+### With Reactions
+
+Enable the reactions feature to show thumbs up/down buttons for user feedback.
+
+<Canvas of={AiResponseMessageToolbarStories.WithReactions} />
+
+### Action Types
+
+The toolbar provides the following actions:
+
+- **Resend** - Regenerate or resend the AI response
+- **Copy** - Copy the response content
+- **Thumbs Up/Down** - Provide feedback on the AI response (when `enable-reactions` is set)
+
+### Event Handling
+
+The component emits two event types:
+
+```typescript
+// Action events (resend, copy)
+toolbar.addEventListener('forge-ai-response-message-toolbar-action', event => {
+  const { action } = event.detail; // 'resend' | 'copy' | 'thumbs-up' | 'thumbs-down'
+  // Handle action
+});
+
+// Feedback events (thumbs up/down with optional feedback text)
+toolbar.addEventListener('forge-ai-response-message-toolbar-feedback', event => {
+  const { action, feedback } = event.detail;
+  // action: 'positive' | 'negative'
+  // feedback: optional string with user feedback
+});
+```
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- All buttons have proper `aria-label` attributes for screen reader compatibility
+- Keyboard navigation supported through standard button focus behavior
+- High contrast icons for better visibility

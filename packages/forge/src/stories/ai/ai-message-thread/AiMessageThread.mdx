@@ -1,0 +1,21 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiMessageThreadStories from './AiMessageThread.stories';
+
+<Meta of={AiMessageThreadStories} />
+
+<Title />
+
+The message thread component is a core building block for AI chat interfaces, responsible for displaying a chronological sequence of messages exchanged between the user and the AI. It manages the layout and rendering of individual message components, as well as system messages and thinking indicators.
+
+<Canvas of={AiMessageThreadStories.Demo} />
+
+Client-only messages - status updates that never go to the agent adapter, like session-expiry
+notices, upload progress, or agent-switch banners - render with a `kind` of `text`, `info`,
+`warning`, `error`, or `success`, and can carry an optional `header` and `actions`:
+
+<Canvas of={AiMessageThreadStories.WithClientMessages} />
+
+## API
+
+<CustomArgTypes />

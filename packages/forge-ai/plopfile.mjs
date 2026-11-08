@@ -12,6 +12,9 @@ function validateComponentName(value) {
 }
 
 export default function (plop) {
+  // Story titles drop the `ai-` prefix since they already live under the `AI/` group
+  plop.setHelper('storyTitle', name => plop.getHelper('titleCase')(plop.getHelper('sentenceCase')(name.replace(/^ai-/, ''))));
+
   // Scaffold out the file structure for a new component
   plop.setGenerator('component', {
     description: 'Create a new AI component',

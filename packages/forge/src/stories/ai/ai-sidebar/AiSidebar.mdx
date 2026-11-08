@@ -1,0 +1,99 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiSidebarStories from './AiSidebar.stories';
+
+<Meta of={AiSidebarStories} />
+
+<Title>AI Sidebar</Title>
+
+The AI Sidebar component is a container component that provides a drawer-style sidebar interface using Forge CSS-only drawer classes. This component serves as the foundational container for sidebar-based AI interfaces, offering positioning control and backdrop interaction.
+
+## Features
+
+- **Flexible positioning**: Supports both left and right sidebar positions
+- **Backdrop interaction**: Clicking the backdrop closes the sidebar
+- **CSS-based animations**: Smooth slide-in/slide-out transitions
+- **Responsive design**: Adapts to mobile viewports with full-width display
+- **Accessibility support**: Proper ARIA attributes for screen readers
+- **Event-driven API**: Emits events for open/close state changes and resizes
+- **Resizable**: Drag handle and keyboard resizing within min/max bounds
+- **Width persistence**: Remembers the resized width across page loads
+
+## When to Use
+
+Use the AI Sidebar component when you want:
+
+- A container for sidebar-based content (typically AI chat interfaces)
+- Control over sidebar positioning (left or right)
+- A foundational component for building custom sidebar compositions
+- Direct control over the sidebar behavior without built-in chat interface logic
+
+The sidebar is a presentational shell. For a complete sidebar chat solution that wires up an agent, use `@ai-foundry/chatbot`, which composes this container with the chat interface.
+
+## Basic Usage
+
+<Canvas>
+  <div style={{ position: 'relative', height: '400px', overflow: 'hidden' }}>
+    <forge-ai-sidebar>
+      <forge-ai-chat-interface>
+        <forge-ai-chat-header slot="header" show-minimize-button></forge-ai-chat-header>
+        <forge-ai-user-message>Hello! Can you help me understand how to use TypeScript generics?</forge-ai-user-message>
+        <forge-ai-response-message>
+          I'd be happy to help you understand TypeScript generics! Generics allow you to create reusable components that can work with different types while
+          maintain type safety.
+        </forge-ai-response-message>
+      </forge-ai-chat-interface>
+    </forge-ai-sidebar>
+  </div>
+</Canvas>
+
+## API
+
+### Properties
+
+<CustomArgTypes />
+
+### Methods
+
+- `show()`: Opens the sidebar
+- `close()`: Closes the sidebar
+- `toggle()`: Toggles the sidebar open/closed state
+
+### Events
+
+- `forge-ai-sidebar-open`: Fired when the sidebar is opened
+- `forge-ai-sidebar-close`: Fired when the sidebar is closed
+- `forge-ai-sidebar-resize`: Fired when a resize is committed (pointer release or keyboard step). `event.detail.width` contains the new width in pixels.
+
+## Resizing
+
+When `resizable` is `"on"` (the default), the sidebar can be resized by dragging the handle on its edge or by focusing the handle and pressing the left/right arrow keys. The width is clamped between 360px and 800px and never exceeds the viewport. Set `resizable="off"` to disable resizing.
+
+Set `width` to control the initial or current width programmatically:
+
+```html
+<forge-ai-sidebar width="520"></forge-ai-sidebar>
+```
+
+### Width Persistence
+
+The user's chosen width is remembered automatically. Each committed resize is written to both `sessionStorage` and `localStorage` under the key `forge-ai-sidebar-width`. On load the sidebar uses, in order:
+
+1. The `sessionStorage` value, so each tab keeps its own width across reloads
+2. The `localStorage` value, so a new tab starts at the most recently used width on the origin
+3. The built-in default
+
+Tabs opened from the page (links with `target="_blank"`, `window.open`) inherit the opener's session width and then track independently.
+
+The stored value is clamped to the current bounds when applied. Setting `width` explicitly overrides the stored value for that instance. Setting `resizable` to `"off"` resets the sidebar to its default width and clears both stored values. If storage is unavailable, the sidebar falls back to the default width silently.
+
+## Positioning
+
+The sidebar supports two positions:
+
+- **`right`** (default): Sidebar slides in from the right edge
+- **`left`**: Sidebar slides in from the left edge
+
+## Responsive Behavior
+
+On mobile viewports (≤768px), the sidebar automatically becomes full-width regardless of positioning, providing an optimal mobile experience.

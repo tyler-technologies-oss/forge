@@ -7,7 +7,6 @@ import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo.jsx';
 
 const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/blob`;
-const PACKAGE_PATH = 'packages/forge';
 const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
 
 export const extractTitle = (title: string) => {
@@ -34,8 +33,8 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
   tokenizedType.forEach(token => {
     const matchingType = getCustomElementType(token);
     if (matchingType) {
-      const { path, lineNumber } = matchingType;
-      const href = `${BASE_GITHUB_URL}/${branchName}/${PACKAGE_PATH}/${path}#L${lineNumber}`;
+      const { path, lineNumber, packagePath } = matchingType;
+      const href = `${BASE_GITHUB_URL}/${branchName}/${packagePath}/${path}#L${lineNumber}`;
       const tokenRegExp = new RegExp(`(?<!>)${token}`, 'g'); // Negative lookbehind to avoid replacing inside existing links
       typeText = typeText.replace(tokenRegExp, `<a href=${href} target="_blank" rel="noreferrer noopener">${token}</a>`);
     }
@@ -271,8 +270,8 @@ export default function CustomArgTypes() {
   const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
   const branch = getBranchName();
 
-  const GitHubLink = ({ modulePath, className }: { modulePath: string; className?: string }) => (
-    <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={className}>
+  const GitHubLink = ({ modulePath, packagePath, className }: { modulePath: string; packagePath: string; className?: string }) => (
+    <a href={`${BASE_GITHUB_URL}/${branch}/${packagePath}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={className}>
       <GitHubLogo />
     </a>
   );
@@ -281,7 +280,7 @@ export default function CustomArgTypes() {
     const module = getCustomElementsTagModule(tagName);
     return (
       <div className={(styles as any).container}>
-        {module?.path ? <GitHubLink modulePath={module.path} className={(styles as any).codeLink} /> : null}
+        {module?.path ? <GitHubLink modulePath={module.path} packagePath={module.packagePath} className={(styles as any).codeLink} /> : null}
         <ComponentArgTypes tagName={tagName} headingLevel="h3" />
       </div>
     );
@@ -300,7 +299,7 @@ export default function CustomArgTypes() {
               <HeaderMdx as="h3" id={headerId}>
                 {titleFromTagName(tagName)}
               </HeaderMdx>
-              {module.path ? <GitHubLink modulePath={module.path} /> : null}
+              {module.path ? <GitHubLink modulePath={module.path} packagePath={module.packagePath} /> : null}
             </div>
             <ComponentArgTypes tagName={tagName} headingLevel="h4" />
           </div>

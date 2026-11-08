@@ -1,0 +1,71 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as AiChainOfThoughtStories from './AiChainOfThought.stories';
+
+<Meta of={AiChainOfThoughtStories} />
+
+# AI Chain of Thought
+
+A structured container for displaying AI reasoning processes with expandable content. Uses `forge-ai-reasoning-header` and contains specialized utility components for different types of thought processes.
+
+## Usage
+
+```html
+<forge-ai-chain-of-thought>
+  <forge-ai-reasoning-header slot="heading">
+    <span slot="title">This is the default title</span>
+    <span slot="reasoning-title">Thinking...</span>
+  </forge-ai-reasoning-header>
+
+  <forge-ai-thought-search-result .sources="${sources}">
+    <span slot="title">Searching for information</span>
+    Found 3 relevant articles about the topic.
+  </forge-ai-thought-search-result>
+
+  <forge-ai-thought-image>
+    <span slot="title">Analyzing image</span>
+    <img src="image.jpg" slot="image" />
+  </forge-ai-thought-image>
+
+  <forge-ai-thought-detail>
+    <span slot="title">Final assessment</span>
+    Based on the analysis, here's my conclusion...
+  </forge-ai-thought-detail>
+</forge-ai-chain-of-thought>
+```
+
+## Utility Components
+
+### Search Results (`forge-ai-thought-search-result`)
+
+Displays search results with clickable source links.
+
+- `sources` property: Array of `{title, href}` objects
+- `title` slot: Description of the search
+
+### Image Analysis (`forge-ai-thought-image`)
+
+Shows image analysis with the analyzed image.
+
+- `image` slot: The image being analyzed
+- `title` slot: Description of the analysis
+
+### Detail Assessment (`forge-ai-thought-detail`)
+
+General-purpose component for text-based reasoning steps.
+
+- `title` slot: Step description
+- Default slot: Reasoning content
+
+## Key Points
+
+- **Expandable container**: Uses reasoning header for toggle functionality
+- **Specialized components**: Different utility components for different reasoning types
+- **Structured thinking**: Organizes AI reasoning into clear, visual steps
+
+## Demo
+
+<Canvas of={AiChainOfThoughtStories.Demo} />
+
+## Properties
+
+<ArgTypes of={AiChainOfThoughtStories} />

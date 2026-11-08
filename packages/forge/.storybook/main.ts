@@ -59,6 +59,18 @@ const config: StorybookConfig = {
           {
             find: '@tylertech/forge-rich-text-editor',
             replacement: fileURLToPath(new URL('../../forge-rich-text-editor/esm/index.js', import.meta.url))
+          },
+          // forge-ai is aliased the same way, to its built `dist/` (Vite library build, one `index.mjs` per
+          // component folder). It devDepends on forge, so forge cannot depend on it. Subpaths map to
+          // `dist/<subpath>/index.mjs`, mirroring the package `exports` map. Dotted specifiers such as
+          // `custom-elements.json` and `package.json` are excluded so they are not rewritten.
+          {
+            find: /^@tylertech\/forge-ai\/([^.]+)$/,
+            replacement: fileURLToPath(new URL('../../forge-ai/dist/', import.meta.url)) + '$1/index.mjs'
+          },
+          {
+            find: /^@tylertech\/forge-ai$/,
+            replacement: fileURLToPath(new URL('../../forge-ai/dist/index.mjs', import.meta.url))
           }
         ]
       }

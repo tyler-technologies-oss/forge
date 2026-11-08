@@ -1,0 +1,65 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiArtifactCardStories from './AiArtifactCard.stories';
+
+<Meta of={AiArtifactCardStories} />
+
+<Title />
+
+The AI Artifact Card component displays a compact, clickable card representing an artifact an agent produced — a
+query result, a report, a generated document. Activating it emits an event; the consumer decides what opens.
+
+The component is presentational. It holds no knowledge of what the artifact is, where it lives, or what happens
+when it is opened.
+
+<Canvas of={AiArtifactCardStories.Demo} />
+
+## Features
+
+- **Whole-card click target**: the entire card is a single native button, so clicking the icon, the text, or empty space all activate it
+- **Truncating text**: both lines truncate to a single line rather than wrapping or growing the card
+- **Trailing action glyph**: a built-in, decorative arrow signals that the card opens something; it hides on the active card, which is already open. Slot an `action-icon` to replace it with a glyph that stays visible while active
+- **Groups**: for several results at once, place cards in a `forge-ai-artifact-card-group`, which lists them as rows and collapses the extras
+- **Active state**: renders a ring when the artifact is the one currently being viewed
+- **Default icons**: a generic artifact glyph renders until you slot your own, so a card is never blank
+- **Themeable accent**: one custom property colors the active border and ring
+
+## Active state
+
+The card does not decide when it is active — the consumer sets the `active` attribute. This keeps the component
+usable whether selection state lives in a store, a router, or nowhere at all. An active card takes the accent
+color on its border and outer ring, and its arrow hides, since there is nothing left to open.
+
+<Canvas of={AiArtifactCardStories.Active} />
+
+## Collapsing on a second activation
+
+The card keeps emitting `forge-ai-artifact-card-open` while active, so a consumer can treat a second activation as
+"collapse" (for example, closing a canvas the card opened). When you do, set `action-label` so assistive technology
+hears what activation now does, and slot an `action-icon` that stays visible while active in place of the arrow.
+
+<Canvas of={AiArtifactCardStories.CollapsibleAction} />
+
+## Distinguishing card types
+
+Consumers commonly render more than one kind of artifact. Distinguish them with the icon and by leading the
+subtitle with the type ("Report · 4 charts", "Table · 1,284 rows") — the icon is decorative, so the subtitle is the
+only place the type reaches screen reader users:
+
+<Canvas of={AiArtifactCardStories.InTranscript} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The whole card is a single `<button>`, so its accessible name is composed from its text content; `action-label`
+  appends to that name when activation does something other than open
+- The icon and action glyph are decorative and marked `aria-hidden="true"`
+- The active card sets `aria-current="true"` on its button, so the state is announced; visually it is carried by the
+  added outer ring as well as the border color
+- Keyboard activation via Enter and Space comes from the native button; focus shows the Forge focus indicator on
+  keyboard focus only, not on mouse click
+- The card does not animate on mount, so consumers rendering a list of them do not replay motion on unrelated
+  state changes

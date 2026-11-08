@@ -2,13 +2,42 @@ import { ArgTypes, Args, type StoryObj } from '@storybook/web-components-vite';
 import { type ControlType } from '@storybook/addon-docs/blocks';
 import cem from '../../custom-elements.json' with { type: 'json' };
 import rteCem from '../../../forge-rich-text-editor/custom-elements.json' with { type: 'json' };
+import aiCem from '../../../forge-ai/custom-elements.json' with { type: 'json' };
 
-// The rich text editor ships in its own package with its own manifest, so tag lookups have to span
-// both or its docs page resolves no declaration. Read relatively for the same reason the Vite alias
-// in `.storybook/main.ts` reaches into that package directly: this package does not depend on it,
-// and the storybook turbo tasks already depend on its build.
-const cemModules: any[] = [...cem.modules, ...rteCem.modules];
-const cemForgeTypes = { ...cem.forgeTypes, ...rteCem.forgeTypes } as Record<string, { path: string; lineNumber: number }>;
+// The rich text editor and forge-ai ship in their own packages with their own manifests, so tag lookups
+// have to span all of them or their docs pages resolve no declaration. Read relatively for the same reason
+// the Vite aliases in `.storybook/main.ts` reach into those packages directly: this package does not depend
+// on them, and the storybook turbo tasks already depend on their builds.
+const PACKAGE_PATHS = { forge: 'packages/forge', rte: 'packages/forge-rich-text-editor', ai: 'packages/forge-ai' };
+
+/** Tags each manifest module with the repo-relative directory of the package that owns its source path. */
+function withPackagePath<T extends { modules: any[] }>(manifest: T, packagePath: string): any[] {
+  return manifest.modules.map((module: any) => ({ ...module, packagePath }));
+}
+
+const cemModules: any[] = [
+  ...withPackagePath(cem, PACKAGE_PATHS.forge),
+  ...withPackagePath(rteCem, PACKAGE_PATHS.rte),
+  ...withPackagePath(aiCem, PACKAGE_PATHS.ai)
+];
+
+interface ForgeTypeInfo {
+  path: string;
+  lineNumber: number;
+  packagePath: string;
+}
+
+function typesWithPackagePath(types: Record<string, { path: string; lineNumber: number }>, packagePath: string): Record<string, ForgeTypeInfo> {
+  return Object.fromEntries(Object.entries(types).map(([name, info]) => [name, { ...info, packagePath }]));
+}
+
+// Later spreads win on a name clash, so precedence is forge, then rich text editor, then forge-ai.
+// Shared names (e.g. `HeadingLevel`, `TooltipPlacement`) therefore link to forge's files on AI pages.
+const cemForgeTypes: Record<string, ForgeTypeInfo> = {
+  ...typesWithPackagePath(aiCem.forgeTypes, PACKAGE_PATHS.ai),
+  ...typesWithPackagePath(rteCem.forgeTypes, PACKAGE_PATHS.rte),
+  ...typesWithPackagePath(cem.forgeTypes, PACKAGE_PATHS.forge)
+};
 
 /** Global theme options for components that support a `theme` attribute. */
 export const GLOBAL_THEME_OPTIONS = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];
@@ -198,7 +227,7 @@ export function getCustomElementsTagDeclaration(tagName: string): Declaration {
 }
 
 /** Attempts to retrieve the Forge type information for the provided type string. */
-export function getCustomElementType(type: string): { path: string; lineNumber: number } | undefined {
+export function getCustomElementType(type: string): ForgeTypeInfo | undefined {
   return cemForgeTypes[type];
 }
 

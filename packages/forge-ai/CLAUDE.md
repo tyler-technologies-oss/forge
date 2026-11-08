@@ -20,7 +20,7 @@ pnpm --filter @tylertech/forge-ai cem       # regenerate custom-elements.json
 pnpm --filter @tylertech/forge-ai plop      # scaffold a new component
 ```
 
-Storybook lives in `packages/forge` (`pnpm storybook:forge`); this package has no Storybook of its own. Stories live in `packages/forge/src/stories/ai/`.
+Storybook lives in `packages/forge`; this package has no Storybook of its own. See [Storybook](#storybook).
 
 ## Architecture
 
@@ -78,8 +78,17 @@ src/lib/[component-name]/
 
 ### Storybook
 
+Stories live in `packages/forge/src/stories/ai/<component-name>/` (`<Name>.stories.ts` + `<Name>.mdx`), alongside the rest of forge's Storybook. Titles are `AI/<Name>` (no `Ai` prefix). `AI/Introduction` is the section landing page.
+
+- Run: `pnpm storybook:forge` from the repo root (or `pnpm turbo run storybook --filter=@tylertech/forge`). Build: `pnpm turbo run build:storybook --filter=@tylertech/forge`.
+- forge cannot depend on forge-ai (forge-ai devDepends on forge, turbo rejects the cycle), so `packages/forge/.storybook/main.ts` aliases `@tylertech/forge-ai` and `@tylertech/forge-ai/*` to the **built** `packages/forge-ai/dist`. The `storybook` and `build:storybook` turbo tasks depend on `@tylertech/forge-ai#build`. After changing component source, rebuild this package (`pnpm --filter @tylertech/forge-ai build`) to see it in a running Storybook.
+- Docs tables (`CustomArgTypes`) read `custom-elements.json`. `packages/forge/src/stories/utils.ts` merges the forge, rich-text-editor, and forge-ai manifests, so `cem` must have been run here (the build does it).
+- Stories import from public subpaths only (`@tylertech/forge-ai/<component>`, `/types`, `/utils`, `/tools`), never `src/`. Forge components used in stories come from `@tylertech/forge/<component>` side-effect imports.
+- Stories must be primitive-only: static data, no chatbot, agent adapters, or form factors (that lives in `@ai-foundry/chatbot`).
+- Scaffold: `pnpm --filter @tylertech/forge-ai plop story <component-name>` (or `plop component`, which asks about a story). It writes `<Name>.stories.ts` and `<Name>.mdx` to `packages/forge/src/stories/ai/<component-name>/` with title `AI/<Name>`.
 - Actions: `import { action } from 'storybook/actions';` (not `@storybook/addon-actions`).
-- MDX: `import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';` and the shared `CustomArgTypes` block (not `@storybook/blocks`).
+- MDX: `import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';` and `import CustomArgTypes from '../../blocks/CustomArgTypes';` (not `@storybook/blocks`).
+- Do not add `tags: ['autodocs']` to a CSF file that has an MDX page; Storybook 10 errors on that combination.
 
 ### Template reactivity: `readonly` vs `get`
 

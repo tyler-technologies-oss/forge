@@ -1,0 +1,22 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiClientMessageStories from './AiClientMessage.stories';
+
+<Meta of={AiClientMessageStories} />
+
+<Title />
+
+Renders a client-only status message - one that never goes to the agent - as either
+plain system-message text (`kind="text"`) or a Forge inline-message banner with a matching icon
+(`info` / `warning` / `error` / `success`). Used internally by `forge-ai-message-thread`; exported here
+mainly for isolated visual reference.
+
+<Canvas of={AiClientMessageStories.Demo} />
+
+## All kinds
+
+<Canvas of={AiClientMessageStories.AllKinds} />
+
+## API
+
+<CustomArgTypes />

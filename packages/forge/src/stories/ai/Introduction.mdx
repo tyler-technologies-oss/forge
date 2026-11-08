@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="AI/Introduction" />
+
+# Forge AI
+
+`@tylertech/forge-ai` is a library of presentational Web Components for building AI chat interfaces. It ships in its own package, separate from `@tylertech/forge`.
+
+The package contains **UI primitives only**: messages, prompts, tool-call indicators, dialogs, sidebars, canvases, and the small controllers and utilities they need. It does
+not contain chat orchestration. There is no chatbot element, agent adapter, or message state engine, and no floating, sidebar, or launcher form factors. That composition layer
+lives in `@ai-foundry/chatbot`, which composes these primitives.
+
+Each page in this section documents one primitive on its own, using static data.
+
+[![NPM Version](https://img.shields.io/npm/v/%40tylertech%2Fforge-ai?style=for-the-badge)](https://www.npmjs.com/package/@tylertech/forge-ai)
+[![NPM Downloads](https://img.shields.io/npm/dt/%40tylertech%2Fforge-ai?style=for-the-badge)](https://www.npmjs.com/package/@tylertech/forge-ai)
+
+## Installation
+
+```bash
+npm install @tylertech/forge-ai @tylertech/forge
+```
+
+## Importing components
+
+Import each component you use. Every component folder is a subpath of the package.
+
+```ts
+import '@tylertech/forge-ai/ai-chat-interface';
+import '@tylertech/forge-ai/ai-prompt';
+```
+
+> These are "side effect" imports that register the component with the browser.
+
+Shared data shapes (messages, tools, threads, agents, files) are exported from `@tylertech/forge-ai/types`:
+
+```ts
+import type { MessageItem, Thread, Agent } from '@tylertech/forge-ai/types';
+```
+
+Markdown rendering and other helpers are exported from `@tylertech/forge-ai/utils`, and the tool renderer elements (data table, paginator, steps) from `@tylertech/forge-ai/tools`.
+
+## Styling
+
+The components style themselves with Forge design tokens. For the correct fonts, colors, and spacing, load the Forge global stylesheet and theme in your application.
+See [Getting Started](?path=/docs/getting-started-installation--docs) for details.

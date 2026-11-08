@@ -1,0 +1,51 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiReasoningStories from './AiReasoning.stories';
+
+<Meta of={AiReasoningStories} />
+
+<Title />
+
+A container for displaying AI reasoning processes with streaming content. Designed to be composed with `forge-ai-reasoning-header` and multiple `forge-ai-reasoning-content` components that are added dynamically as reasoning steps stream in.
+
+## Usage
+
+```html
+<forge-ai-reasoning expanded="false">
+  <forge-ai-reasoning-header slot="header" expanded="false" reasoning="true">
+    <span slot="reasoning-title">Thinking...</span>
+    <span slot="title">AI Reasoning Process</span>
+  </forge-ai-reasoning-header>
+
+  <!-- Add multiple content components as steps stream in -->
+  <forge-ai-reasoning-content>Step 1: Analyzing the problem...</forge-ai-reasoning-content>
+  <forge-ai-reasoning-content>Step 2: Considering approaches...</forge-ai-reasoning-content>
+  <forge-ai-reasoning-content>Step 3: Recommending solution...</forge-ai-reasoning-content>
+</forge-ai-reasoning>
+```
+
+## Streaming Pattern
+
+```javascript
+const container = document.querySelector('forge-ai-reasoning');
+
+function addStep(text) {
+  const step = document.createElement('forge-ai-reasoning-content');
+  step.textContent = text;
+  container.appendChild(step);
+}
+```
+
+## Key Points
+
+- **Streaming design**: Add `forge-ai-reasoning-content` components dynamically as AI reasoning steps arrive
+- **Required header**: Must use `forge-ai-reasoning-header` in the header slot
+- **One step per component**: Each reasoning step gets its own content component with typing animation
+
+## Demo
+
+<Canvas of={AiReasoningStories.Demo} />
+
+## API
+
+<CustomArgTypes />

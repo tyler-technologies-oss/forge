@@ -1,0 +1,39 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiAgentSelectorStories from './AiAgentSelector.stories';
+
+<Meta of={AiAgentSelectorStories} />
+
+<Title />
+
+Agent selector dropdown for switching between AI agents. Displays the current agent name with a dropdown menu to select from available options. When no agents are provided, shows static title text. A search filter appears automatically when more than 5 agents are available.
+
+<Canvas of={AiAgentSelectorStories.Demo} />
+
+## Usage
+
+The agent selector is a **controlled component** - it emits a change event but does not update its own selection. The parent component must update `selectedAgentId` in response to the event.
+
+```ts
+function handleChange(e: CustomEvent<ForgeAiAgentSelectorChangeEventData>) {
+  const { agent, previousAgentId } = e.detail;
+  // Update your state with the new agent
+  this.selectedAgentId = agent?.id;
+}
+```
+
+The `@ai-foundry/chatbot` package wires the selector into its chat header and handles selection state for you.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+The agent selector supports full keyboard navigation:
+
+- **Enter / Space** - Open dropdown or select focused item
+- **Escape** - Close dropdown and return focus to trigger
+- **Arrow Down / Up** - Navigate through agent options
+- **Home** - Jump to default option
+- **End** - Jump to last agent

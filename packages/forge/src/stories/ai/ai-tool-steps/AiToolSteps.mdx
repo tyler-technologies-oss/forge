@@ -1,0 +1,19 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiToolStepsStories from './AiToolSteps.stories';
+
+<Meta of={AiToolStepsStories} />
+
+<Title />
+
+A tool renderer that maps a `displaySteps` tool call onto the presentational [`forge-ai-steps`](?path=/docs/ai-steps--docs) primitive. It is exported from `@tylertech/forge-ai/tools`. The `running` state is derived from the tool call's own status.
+
+<Canvas of={AiToolStepsStories.Demo} />
+
+While the tool call has not settled the timeline is held open.
+
+<Canvas of={AiToolStepsStories.Running} />
+
+## API
+
+<CustomArgTypes />

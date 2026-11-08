@@ -1,0 +1,69 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiEmptyStateStories from './AiEmptyState.stories';
+
+<Meta of={AiEmptyStateStories} />
+
+<Title />
+
+**_Design still being worked on, this is jsut a placeholder_** - The AI Empty State component provides a placeholder interface for when no content is available in AI chat applications. This component is designed to communicate to users that a particular area is empty or waiting for content.
+
+## Features
+
+- **Simple Display**: Minimal interface for empty state scenarios
+- **Consistent Styling**: Uses Forge design tokens for theming
+- **Flexible Usage**: Can be used in various contexts within AI chat interfaces
+- **Accessible**: Semantic HTML structure for screen readers
+
+## Basic Usage
+
+<Canvas of={AiEmptyStateStories.Demo} />
+
+## Use Cases
+
+The AI Empty State component can be used in various scenarios:
+
+### No Messages
+
+- Display when a chat thread has no messages
+- Show when starting a new conversation
+- Indicate an empty conversation history
+
+### No Search Results
+
+- Show when thread filtering returns no results
+- Display when search queries don't match any content
+- Communicate empty states in suggestion lists
+
+### Loading States
+
+- Temporary placeholder while content is being fetched
+- Indicate waiting for AI responses
+- Show during initialization processes
+
+## Styling
+
+The component uses:
+
+- **Block Display**: Full-width container behavior
+- **Forge Spacing**: Consistent padding using spacing tokens
+- **Theme Colors**: Text color adapts to current theme
+- **Minimal Design**: Clean, unobtrusive appearance
+
+## Future Enhancements
+
+This component is currently a basic implementation and can be extended with:
+
+- Custom message text and descriptions
+- Icon or illustration support
+- Action buttons (e.g., "Start New Chat", "Clear Filters")
+- Animation or loading indicators
+- Different variants for various empty state types
+- Customizable styling properties
+
+## Accessibility
+
+- Uses semantic HTML structure
+- Proper text contrast with theme colors
+- Screen reader compatible
+- Keyboard navigation not applicable (display-only component)

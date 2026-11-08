@@ -1,0 +1,21 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiConversationsPanelStories from './AiConversationsPanel.stories';
+
+<Meta of={AiConversationsPanelStories} />
+
+<Title />
+
+A panel listing previous conversations, with search, selection, rename and delete. It renders the `threads` it is given and reports user intent through events, so the host owns loading and persistence.
+
+<Canvas of={AiConversationsPanelStories.Demo} />
+
+## States
+
+The panel supports loading, empty, and error states, including errors while loading more threads.
+
+<Canvas of={AiConversationsPanelStories.ErrorState} />
+
+## API
+
+<CustomArgTypes />

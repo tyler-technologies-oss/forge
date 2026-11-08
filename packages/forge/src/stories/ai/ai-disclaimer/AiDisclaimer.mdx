@@ -1,0 +1,39 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiDisclaimerStories from './AiDisclaimer.stories';
+
+<Meta of={AiDisclaimerStories} />
+
+<Title />
+
+Displays terms of service, privacy policies, or other disclosures requiring user acknowledgment. Features optional icon, scrollable content, and pinned footer with action buttons.
+
+<Canvas of={AiDisclaimerStories.Demo} />
+
+## Usage
+
+Use it to gate access to the AI assistant, for example inside a dialog or sidebar. Place content in the default slot, optionally provide an icon, and handle the agree/disagree events.
+
+```html
+<forge-ai-dialog open>
+  <forge-ai-disclaimer @forge-ai-disclaimer-agree="${handleAgree}" @forge-ai-disclaimer-disagree="${handleDisagree}">
+    <svg slot="icon" viewBox="0 0 24 24"><!-- icon path --></svg>
+    <h2>Terms of Service</h2>
+    <p>By using this AI assistant, you agree to our terms...</p>
+  </forge-ai-disclaimer>
+</forge-ai-dialog>
+```
+
+### Custom Button Text
+
+```html
+<forge-ai-disclaimer>
+  <span slot="disagree-button-text">Decline</span>
+  <span slot="agree-button-text">Accept</span>
+  <p>Content here...</p>
+</forge-ai-disclaimer>
+```
+
+## API
+
+<CustomArgTypes />

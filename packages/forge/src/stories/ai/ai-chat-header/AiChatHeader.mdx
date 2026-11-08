@@ -1,0 +1,21 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiChatHeaderStories from './AiChatHeader.stories';
+
+<Meta of={AiChatHeaderStories} />
+
+<Title />
+
+The AI Chat Header provides a consistent header interface for AI chat applications, featuring expand and minimize controls with customizable title content.
+
+<Canvas of={AiChatHeaderStories.Demo} />
+
+## Conversations Button
+
+Set `showConversationsButton` to show the hamburger menu that toggles a conversations panel. Set `hasConversationsError` alongside it when the panel's thread load has failed — the button picks up an error badge so the failure remains visible while the panel is closed.
+
+<Canvas of={AiChatHeaderStories.ConversationsError} />
+
+## API
+
+<CustomArgTypes />

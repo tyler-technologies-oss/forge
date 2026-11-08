@@ -1,0 +1,42 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiModalStories from './AiModal.stories';
+
+<Meta of={AiModalStories} />
+
+<Title />
+
+The AI Modal component provides a basic modal dialog implementation using the native HTML `<dialog>` element. This component is designed to be a simple, foundational modal that can be extended for more specific use cases.
+
+## Basic Usage
+
+The AI Modal renders content within a standard HTML dialog element and provides programmatic control through the `open` property and `show()`/`close()` methods.
+
+<Canvas of={AiModalStories.Demo} />
+
+## Opening and Closing
+
+The modal can be controlled in several ways:
+
+- **Property**: Set the `open` property to `true` or `false`
+- **Attribute**: Add or remove the `open` attribute
+- **Methods**: Call `show()` to open or `close()` to close the modal
+
+## Content
+
+All content is provided through slots, giving you complete control over the modal's internal structure and styling. The component provides no default content - everything must be provided by the consumer.
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+This component uses the native HTML `<dialog>` element, which provides built-in accessibility features including:
+
+- Proper focus management
+- Keyboard navigation (Escape key to close)
+- Screen reader compatibility
+- Backdrop interaction handling
+
+The dialog is labelled via the `label` property (default: `"AI Assistant"`), which is applied as the dialog's `aria-label` so screen readers announce a meaningful name when the modal opens. Set `label` to match the content shown in your modal.

@@ -1,0 +1,15 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiAgentInfoStories from './AiAgentInfo.stories';
+
+<Meta of={AiAgentInfoStories} />
+
+<Title />
+
+Displays agent metadata including agent name, version, agent ID, and session ID. The agent ID and session ID fields include copy-to-clipboard functionality. Provide an `AgentInfo` object via the `agentInfo` property. Only populated fields will be displayed.
+
+<Canvas of={AiAgentInfoStories.Demo} />
+
+## API
+
+<CustomArgTypes />

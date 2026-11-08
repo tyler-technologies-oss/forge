@@ -1,0 +1,37 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiToolCallIndicatorStories from './AiToolCallIndicator.stories';
+
+<Meta of={AiToolCallIndicatorStories} />
+
+<Title />
+
+The AI Tool Call Indicator is an expandable timeline summarizing the tool calls made during an assistant response. Collapsed, it shows an activity summary ("Running tools…" or "Used N tools · Xs"). Expanded, it lists each tool call with a status marker, using each tool's registered `displayName` when one is provided via the `tools` map.
+
+<Canvas of={AiToolCallIndicatorStories.Demo} />
+
+## Debug mode
+
+When `debugMode` is enabled, expanding an individual tool call also reveals its inputs, outputs, and — for failed calls — the error result, all under the tool's friendly name.
+
+<Canvas of={AiToolCallIndicatorStories.DebugMode} />
+
+## Error status
+
+The indicator never receives an "error" signal directly — it only renders whatever `ToolCall.status` it's given. A failed call is a `status: 'error'` entry whose `result` carries the error, and in debug mode the error result is revealed under the tool's friendly name:
+
+<Canvas of={AiToolCallIndicatorStories.FailedToolCall} />
+
+## Running
+
+The indicator shows the running summary while any call's `status` is not `complete` or `error` (for example `pending`, `parsing`, or `executing`). A call whose tool renders its own UI early (`renderOnStart`) counts as settled, so it does not keep the spinner running.
+
+<Canvas of={AiToolCallIndicatorStories.Running} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+Both the summary button and each expandable row are real `<button>` elements with `aria-expanded`/`aria-controls`, so the timeline and detail cards are operable and announced correctly by assistive technology.
