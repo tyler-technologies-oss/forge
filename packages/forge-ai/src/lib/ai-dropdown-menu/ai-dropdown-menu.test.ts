@@ -446,7 +446,7 @@ describe('ForgeAiDropdownMenu', () => {
       expect(el.value).toBeNull();
     });
 
-    it.skip('should not dispatch a change event when a disabled item is clicked (BUG: dropdown _onItemClick does not check item.disabled)', async () => {
+    it('should not dispatch a change event when a disabled item is clicked', async () => {
       const el = await createMenu(html`
         <forge-ai-dropdown-menu>
           <forge-ai-dropdown-menu-item value="x" disabled>Disabled</forge-ai-dropdown-menu-item>
@@ -750,7 +750,7 @@ describe('ForgeAiDropdownMenu', () => {
       expect(sub.shadowRoot!.querySelector('forge-ai-popover')!.anchor).toBe(el.querySelector('forge-ai-dropdown-menu-item'));
     });
 
-    it.skip('should dispatch the submenu child selection from the submenu (BUG: _selectItem calls _triggerButton.focus() but submenus render no trigger, throws TypeError)', async () => {
+    it('should dispatch the submenu child selection from the submenu', async () => {
       const el = await createMenu(submenuTemplate());
       const sub = el.querySelector<ForgeAiDropdownMenuComponent>('forge-ai-dropdown-menu')!;
       await openMenu(el);
@@ -775,7 +775,7 @@ describe('ForgeAiDropdownMenu', () => {
       await userEvent.keyboard('{ArrowDown}');
     }
 
-    it.skip('should open and focus the first item when ArrowDown is pressed on the trigger (BUG: keydown listener is on the host so event.target is retargeted and never equals the trigger)', async () => {
+    it('should open and focus the first item when ArrowDown is pressed on the trigger', async () => {
       const el = await createMenu();
       getTrigger(el).focus();
 
@@ -1124,7 +1124,7 @@ describe('ForgeAiDropdownMenu', () => {
       expect(document.activeElement).toBe(sub.querySelectorAll('forge-ai-dropdown-menu-item')[1]);
     });
 
-    it.skip('should close the submenu and return focus to the parent item on ArrowLeft (BUG: sub popover toggle event bubbles through slot to root popover, root _onPopoverToggle closes root menu)', async () => {
+    it('should close the submenu and return focus to the parent item on ArrowLeft', async () => {
       const el = await createMenu(nested);
       const sub = el.querySelector<ForgeAiDropdownMenuComponent>('forge-ai-dropdown-menu')!;
       const parentItem = el.querySelector<ForgeAiDropdownMenuItemComponent>('forge-ai-dropdown-menu-item')!;
@@ -1147,7 +1147,7 @@ describe('ForgeAiDropdownMenu', () => {
   });
 
   describe('submenu close propagation', () => {
-    it.skip('should keep the root menu open when a submenu closes (BUG: forge-ai-popover-toggle from the submenu bubbles to the root popover listener)', async () => {
+    it('should keep the root menu open when a submenu closes', async () => {
       const el = await createMenu(html`
         <forge-ai-dropdown-menu>
           <forge-ai-dropdown-menu-item value="parent">

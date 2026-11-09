@@ -122,8 +122,11 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
   @queryAssignedNodes({ flatten: true })
   private _defaultSlottedNodes!: Node[];
 
+  @queryAssignedElements({ slot: 'submenu', selector: 'forge-ai-dropdown-menu' })
+  private _slottedSubmenu!: Element[];
+
   @queryAssignedElements({ selector: 'forge-ai-dropdown-menu' })
-  private _childSubmenu!: Element[];
+  private _legacySubmenu!: Element[];
 
   @state()
   private _submenuOpen = false;
@@ -143,6 +146,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
     this.addEventListener('mouseleave', this._onMouseLeave);
     this.addEventListener('keydown', this._onKeyDown);
     this.addEventListener('click', this._onItemClick);
+    this.addEventListener('forge-ai-dropdown-menu-close', this._onSubmenuClose);
   }
 
   public override disconnectedCallback(): void {
@@ -151,6 +155,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
     this.removeEventListener('mouseleave', this._onMouseLeave);
     this.removeEventListener('keydown', this._onKeyDown);
     this.removeEventListener('click', this._onItemClick);
+    this.removeEventListener('forge-ai-dropdown-menu-close', this._onSubmenuClose);
     this._clearAllTimeouts();
   }
 
@@ -233,7 +238,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
   };
 
   private _onItemClick = (event: Event): void => {
-    if (this.disabled) {
+    if (this.disabled || this._isFromSubmenu(event)) {
       return;
     }
 
@@ -249,6 +254,18 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
       }
     }
     // For non-submenu items, let the click bubble up normally to be handled by parent dropdown
+  };
+
+  private _isFromSubmenu(event: Event): boolean {
+    const submenu = this._childSubmenu[0];
+    return !!submenu && event.composedPath().includes(submenu);
+  }
+
+  private _onSubmenuClose = (event: Event): void => {
+    if (event.target === this._childSubmenu[0]) {
+      this._clearAllTimeouts();
+      this._submenuOpen = false;
+    }
   };
 
   private _onKeyDown = (event: KeyboardEvent): void => {
@@ -339,6 +356,10 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
     return this.selectionMode !== 'none';
   }
 
+  private get _childSubmenu(): Element[] {
+    return this._slottedSubmenu.length > 0 ? this._slottedSubmenu : this._legacySubmenu;
+  }
+
   private get _hasSubmenu(): boolean {
     return this._childSubmenu.length > 0;
   }
@@ -348,6 +369,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
    */
   public get labelText(): string {
     return this._defaultSlottedNodes
+      .filter(node => !(node instanceof Element && node.matches('forge-ai-dropdown-menu')))
       .map(node => node.textContent?.trim() || '')
       .join(' ')
       .trim();
@@ -380,6 +402,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
   }
 
   #handleSlotChange(_evt: Event): void {
+    this._updateSubmenuAttributes();
     this.requestUpdate();
   }
 
@@ -407,7 +430,7 @@ export class ForgeAiDropdownMenuItemComponent extends LitElement {
         ${this.#endIconSlot} ${when(this._hasSubmenu, () => html`<div class="ai-dropdown-menu-item__submenu-arrow-container">${this._submenuArrowIcon}</div>`)}
       </div>
       <div class="focus-indicator"></div>
-      <slot name="submenu"></slot>
+      <slot name="submenu" @slotchange=${this.#handleSlotChange}></slot>
     `;
   }
 }

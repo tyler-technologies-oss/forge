@@ -18,6 +18,8 @@ const meta = {
         .mimeType=${args.mimeType}
         .thumbnail=${args.thumbnail}
         ?removable=${args.removable}
+        ?uploading=${args.uploading}
+        .progress=${args.progress}
         @forge-ai-attachment-remove=${handleRemove}>
       </forge-ai-attachment>
     `;
@@ -55,6 +57,14 @@ const meta = {
     removable: {
       control: 'boolean',
       description: 'Whether the attachment can be removed'
+    },
+    uploading: {
+      control: 'boolean',
+      description: 'Whether the attachment is uploading'
+    },
+    progress: {
+      control: { type: 'range', min: 0, max: 100, step: 1 },
+      description: 'Upload progress from 0 to 100, shown while uploading'
     }
   },
   args: {
@@ -62,7 +72,9 @@ const meta = {
     size: 1048576,
     mimeType: 'application/pdf',
     thumbnail: '',
-    removable: true
+    removable: true,
+    uploading: false,
+    progress: undefined
   }
 } satisfies Meta;
 
@@ -71,3 +83,10 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const Uploading: Story = {
+  args: {
+    uploading: true,
+    progress: 40
+  }
+};

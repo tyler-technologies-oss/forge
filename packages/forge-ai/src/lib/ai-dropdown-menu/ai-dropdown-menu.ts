@@ -162,7 +162,7 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
   private _selectionManager!: SelectionManager;
 
   @query('.forge-button,.forge-icon-button')
-  private _triggerButton!: HTMLButtonElement;
+  private _triggerButton!: HTMLButtonElement | null;
 
   @query('forge-ai-popover')
   private _popover!: ForgeAiPopoverComponent;
@@ -232,6 +232,7 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
       } else if (changedProperties.get('open') === true) {
         // Was open, now closed
         this.removeAttribute('data-handles-escape');
+        this._navigationController?.onClose();
         this._dispatchOpenCloseEvent('close');
       }
     }
@@ -299,13 +300,21 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
       const result = this._selectionManager.selectItem(selectedItem);
 
       if (result.shouldClose) {
-        this.open = false;
-        this._triggerButton.focus();
+        this._closeAfterSelection();
       }
 
       // Update component value to stay in sync
       this.value = this._selectionManager.value;
     }
+  }
+
+  private _closeAfterSelection(): void {
+    this.open = false;
+    if (this._isSubmenu) {
+      (this.parentElement?.closest('forge-ai-dropdown-menu') as ForgeAiDropdownMenuComponent | null)?._closeAfterSelection();
+      return;
+    }
+    this._triggerButton?.focus();
   }
 
   private _dispatchSelectionEvent(detail: DropdownChangeEventDetail): void {
@@ -328,7 +337,13 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
   }
 
   private _onPopoverToggle(event: CustomEvent): void {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
     this.open = event.detail.open;
+    if (event.detail.open) {
+      this._navigationController?.onShown();
+    }
   }
 
   private _onItemClick(event: Event): void {
@@ -336,7 +351,7 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
     const clickedElement = event.target as Element;
     const menuItem = clickedElement.closest('forge-ai-dropdown-menu-item') as ForgeAiDropdownMenuItemComponent;
 
-    if (!menuItem) {
+    if (!menuItem || menuItem.disabled) {
       return;
     }
 

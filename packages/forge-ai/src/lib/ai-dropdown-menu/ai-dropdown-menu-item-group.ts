@@ -40,7 +40,7 @@ export class ForgeAiDropdownMenuItemGroupComponent extends LitElement {
     return this._labelSlottedNodes.length > 0;
   }
 
-  readonly #labelSlot = html`<slot name="label"></slot>`;
+  readonly #labelSlot = html`<slot name="label" @slotchange=${this.#handleSlotChange}></slot>`;
   readonly #contentSlot = html`<slot></slot>`;
 
   get #conditionalLabel(): TemplateResult {
@@ -66,7 +66,7 @@ export class ForgeAiDropdownMenuItemGroupComponent extends LitElement {
         role="${ifDefined(this._hasLabel ? 'group' : undefined)}"
         aria-labelledby="${ifDefined(this._hasLabel ? `${this._groupId}-label` : undefined)}">
         ${this.#conditionalLabel}
-        <div class="ai-dropdown-menu-item-group__content" @slotchange=${this.#handleSlotChange}>${this.#contentSlot}</div>
+        <div class="ai-dropdown-menu-item-group__content">${this.#contentSlot}</div>
       </div>
     `;
   }

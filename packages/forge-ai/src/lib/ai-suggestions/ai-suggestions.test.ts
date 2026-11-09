@@ -178,7 +178,7 @@ describe('AiSuggestionsComponent', () => {
       expect(el.shadowRoot!.querySelector('forge-ai-tooltip')).toBeNull();
     });
 
-    it.skip('should render a tooltip for an overflowing suggestion (BUG: overflow check queries .suggestion but buttons use .action-title, and nowrap/ellipsis CSS was removed so text never overflows)', async () => {
+    it('should render a tooltip for an overflowing suggestion', async () => {
       const longText = 'This is a very long suggestion text that is certain to overflow the available width of its button '.repeat(3);
       const el = await renderFixture<AiSuggestionsComponent>(
         html`<div style="width: 120px">

@@ -63,6 +63,25 @@
 }
 
 .uploading {
-  opacity: 0.6;
   pointer-events: none;
+
+  > :not(.progress) {
+    opacity: 0.6;
+  }
+}
+
+.progress {
+  position: absolute;
+  inset-inline: #{forge-spacing.variable(xsmall)};
+  inset-block-end: 0;
+  block-size: #{forge-border.variable(thick)};
+  overflow: hidden;
+  border-radius: #{forge-shape.variable(full)};
+  background: #{forge-theme.variable(surface-container-low)};
+}
+
+.progress-fill {
+  inline-size: var(--_progress, 0%);
+  block-size: 100%;
+  background: var(--forge-ai-attachment-progress-color, #{forge-theme.variable(primary)});
 }

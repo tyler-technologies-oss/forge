@@ -14,6 +14,12 @@ export class KeyboardNavigationController {
   }
 
   public handleKeyDown(event: KeyboardEvent, itemCount: number): boolean {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.callbacks.onClose();
+      return true;
+    }
+
     if (itemCount === 0) {
       return false;
     }
@@ -48,11 +54,6 @@ export class KeyboardNavigationController {
           return true;
         }
         return false;
-
-      case 'Escape':
-        event.preventDefault();
-        this.callbacks.onClose();
-        return true;
 
       default:
         return false;

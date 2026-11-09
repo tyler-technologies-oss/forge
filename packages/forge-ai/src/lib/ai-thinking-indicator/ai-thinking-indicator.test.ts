@@ -192,7 +192,7 @@ describe('AiThinkingIndicatorComponent', () => {
     });
   });
 
-  it.skip('should start cycling status text when show-text is enabled after connect (BUG: cycling only starts in connectedCallback if showText was already set)', async () => {
+  it('should start cycling status text when show-text is enabled after connect', async () => {
     const el = await createElement();
     await vi.advanceTimersByTimeAsync(0);
 

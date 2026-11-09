@@ -383,7 +383,7 @@ describe('AiSlashCommandMenu', () => {
       expect(el.handleKeyDown(key('Enter'))).toBe(false);
     });
 
-    it.skip('should dispatch close on Escape when there are no matching commands (BUG: KeyboardNavigationController.handleKeyDown returns early when itemCount is 0 so Escape is ignored)', async () => {
+    it('should dispatch close on Escape when there are no matching commands', async () => {
       const el = await createMenu({ filterQuery: 'zzz' });
       const spy = vi.fn();
       el.addEventListener('forge-ai-slash-command-menu-close', spy);

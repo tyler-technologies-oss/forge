@@ -499,7 +499,7 @@ describe('ForgeAiTooltipComponent', () => {
   });
 
   describe('toggle event', () => {
-    it.skip('should dispatch forge-ai-tooltip-toggle when the overlay toggles (BUG: listens for "ai-overlay-toggle" but overlay dispatches "forge-ai-overlay-toggle")', async () => {
+    it('should dispatch forge-ai-tooltip-toggle when the overlay toggles', async () => {
       const { el } = await renderTooltip();
       const onToggle = vi.fn<(evt: CustomEvent<TooltipToggleEventDetail>) => void>();
       el.addEventListener('forge-ai-tooltip-toggle', onToggle);

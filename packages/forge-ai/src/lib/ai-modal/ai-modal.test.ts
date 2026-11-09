@@ -136,7 +136,7 @@ describe('AiModalComponent', () => {
       expect(onClose.mock.calls[0][0].detail).toEqual({ reason: 'escape' });
     });
 
-    it.skip('should close with reason "backdrop" when the backdrop is clicked (BUG: backdrop click reports "programmatic" because close() resets the reason)', async () => {
+    it('should close with reason "backdrop" when the backdrop is clicked', async () => {
       const el = await renderModal(html`<forge-ai-modal open><p>Hi</p></forge-ai-modal>`);
       const onClose = vi.fn<(evt: CustomEvent<{ reason: CloseReason }>) => void>();
       el.addEventListener('forge-ai-modal-close', onClose);
@@ -197,7 +197,7 @@ describe('AiModalComponent', () => {
       expect(onKeydown).toHaveBeenCalledOnce();
     });
 
-    it.skip('should not dispatch forge-ai-modal-close on initial render when closed (BUG: spurious close event on first update)', async () => {
+    it('should not dispatch forge-ai-modal-close on initial render when closed', async () => {
       await page.viewport(1280, 800);
       const onClose = vi.fn();
       document.addEventListener('forge-ai-modal-close', onClose);

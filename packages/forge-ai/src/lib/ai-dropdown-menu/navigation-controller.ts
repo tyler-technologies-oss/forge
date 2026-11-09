@@ -67,7 +67,7 @@ export class DropdownNavigationController {
   /**
    * Handles keyboard events for the dropdown menu
    */
-  public handleKeyDown(event: KeyboardEvent, isOpen: boolean, triggerButton: HTMLElement): boolean {
+  public handleKeyDown(event: KeyboardEvent, isOpen: boolean, triggerButton: HTMLElement | null): boolean {
     // If this event is coming from a submenu, don't handle it here
     const target = event.target as Element;
     if (target && target !== this._host) {
@@ -80,11 +80,7 @@ export class DropdownNavigationController {
     switch (event.key) {
       case 'Enter':
       case ' ':
-        if (event.target === triggerButton) {
-          event.preventDefault();
-          this._onOpen();
-          return true;
-        } else if (isOpen && this._selectedIndex >= 0) {
+        if (isOpen && this._selectedIndex >= 0) {
           event.preventDefault();
           this._onItemSelect(this._selectedIndex);
           return true;
@@ -95,7 +91,7 @@ export class DropdownNavigationController {
         if (isOpen) {
           event.preventDefault();
           this._onClose();
-          triggerButton.focus();
+          triggerButton?.focus();
           return true;
         }
         break;
@@ -105,7 +101,7 @@ export class DropdownNavigationController {
           event.preventDefault();
           this._moveSelection(1);
           return true;
-        } else if (event.target === triggerButton) {
+        } else if (triggerButton && event.composedPath()[0] === triggerButton) {
           event.preventDefault();
           this._openedViaKeyboard = true;
           this._onOpen();
@@ -243,11 +239,23 @@ export class DropdownNavigationController {
    */
   public onOpen(): void {
     this._selectedIndex = -1;
+    this.clearItemFocus();
+  }
+
+  /**
+   * Clears pending keyboard-open state when the dropdown closes
+   */
+  public onClose(): void {
+    this._openedViaKeyboard = false;
+  }
+
+  /**
+   * Focuses the first item once the popover is visible, when opened via keyboard
+   */
+  public onShown(): void {
     if (this._openedViaKeyboard) {
-      this.focusFirstItem();
       this._openedViaKeyboard = false;
-    } else {
-      this.clearItemFocus();
+      this.focusFirstItem();
     }
   }
 

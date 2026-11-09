@@ -63,12 +63,7 @@ export class AiAssistantResponseComponent extends LitElement {
   public showThinking = false;
 
   #internals = this.attachInternals();
-  #markdownController!: MarkdownStreamController;
-
-  public override connectedCallback(): void {
-    super.connectedCallback();
-    this.#markdownController = new MarkdownStreamController(this);
-  }
+  readonly #markdownController = new MarkdownStreamController(this);
 
   public override willUpdate(): void {
     this.#updateEmptyState();

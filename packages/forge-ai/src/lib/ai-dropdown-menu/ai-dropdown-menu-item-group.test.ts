@@ -57,7 +57,7 @@ describe('ForgeAiDropdownMenuItemGroup', () => {
   });
 
   describe('with a label', () => {
-    it.skip('should render the label wrapper and expose a labelled group (BUG: label slot is not inside the @slotchange host div, so _hasLabel never updates after first render)', async () => {
+    it('should render the label wrapper and expose a labelled group', async () => {
       const el = await renderFixture<ForgeAiDropdownMenuItemGroupComponent>(
         html`<forge-ai-dropdown-menu-item-group><span slot="label">Recent</span></forge-ai-dropdown-menu-item-group>`,
         GROUP_TAG
@@ -72,7 +72,7 @@ describe('ForgeAiDropdownMenuItemGroup', () => {
       expect(el.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="label"]')!.assignedNodes()).toHaveLength(1);
     });
 
-    it.skip('should remove the labelled group when the label is removed (BUG: same label slotchange bug)', async () => {
+    it('should remove the labelled group when the label is removed', async () => {
       const el = await renderFixture<ForgeAiDropdownMenuItemGroupComponent>(
         html`<forge-ai-dropdown-menu-item-group><span slot="label">Recent</span></forge-ai-dropdown-menu-item-group>`,
         GROUP_TAG
@@ -86,7 +86,7 @@ describe('ForgeAiDropdownMenuItemGroup', () => {
       expect(el.shadowRoot!.querySelector('[role="group"]')).toBeNull();
     });
 
-    it.skip('should give each group a unique label id (BUG: depends on label wrapper rendering, see label slotchange bug)', async () => {
+    it('should give each group a unique label id', async () => {
       const a = await renderFixture<ForgeAiDropdownMenuItemGroupComponent>(
         html`<forge-ai-dropdown-menu-item-group><span slot="label">A</span></forge-ai-dropdown-menu-item-group>`,
         GROUP_TAG

@@ -1,4 +1,4 @@
-import { LitElement, PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { generateUniqueId, toggleState } from '../utils/dom.js';
 import '../core/tooltip/tooltip.js';
@@ -61,7 +61,10 @@ export class AiCopyButtonComponent extends LitElement {
     super.disconnectedCallback();
     if (this.#copiedTimeout) {
       clearTimeout(this.#copiedTimeout);
+      this.#copiedTimeout = undefined;
     }
+    this.#copied = false;
+    this.requestUpdate();
   }
 
   readonly #copyIcon = html`
@@ -106,7 +109,12 @@ export class AiCopyButtonComponent extends LitElement {
 
   public override render(): TemplateResult {
     return html`
-      <button id=${this.#buttonId} class="forge-icon-button forge-icon-button--medium" @click=${this.#handleCopy} aria-label=${this.#tooltipText}>
+      <button
+        id=${this.#buttonId}
+        class="forge-icon-button forge-icon-button--medium"
+        @click=${this.#handleCopy}
+        aria-label=${this.#tooltipText}
+        aria-disabled=${this.disabled ? 'true' : nothing}>
         ${this.#currentIcon}
       </button>
       <forge-ai-tooltip for=${this.#buttonId} placement="bottom">${this.#tooltipText}</forge-ai-tooltip>

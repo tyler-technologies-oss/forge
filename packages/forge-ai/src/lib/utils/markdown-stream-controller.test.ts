@@ -127,7 +127,7 @@ describe('MarkdownStreamController', () => {
       expect(renderMarkdown).toHaveBeenCalledOnce();
     });
 
-    it.skip('should not serve stale HTML for same-length content that differs after the first 50 characters (BUG: cache key only hashes length and the first 50 chars)', async () => {
+    it('should not serve stale HTML for same-length content that differs after the first 50 characters', async () => {
       const host = await createHost();
       const prefix = 'x'.repeat(60);
 

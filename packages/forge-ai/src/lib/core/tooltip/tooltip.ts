@@ -265,6 +265,9 @@ export class ForgeAiTooltipComponent extends LitElement {
   }
 
   private _onOverlayToggle = (event: CustomEvent): void => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
     this.open = event.detail.open;
 
     this.dispatchEvent(
@@ -324,7 +327,7 @@ export class ForgeAiTooltipComponent extends LitElement {
               flip
               shift
               .open=${this.open}
-              @ai-overlay-toggle=${this._onOverlayToggle}>
+              @forge-ai-overlay-toggle=${this._onOverlayToggle}>
               <div class="ai-tooltip">
                 <div class="ai-tooltip__arrow"></div>
                 ${this.#tooltipContent}

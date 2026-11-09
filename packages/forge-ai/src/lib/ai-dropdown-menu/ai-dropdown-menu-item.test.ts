@@ -266,7 +266,7 @@ describe('ForgeAiDropdownMenuItem', () => {
       </forge-ai-dropdown-menu-item>
     `;
 
-    it.skip('should set aria-haspopup when a submenu is provided via slot="submenu" (BUG: submenu query only inspects the default slot, so the documented slot="submenu" API is not detected)', async () => {
+    it('should set aria-haspopup when a submenu is provided via slot="submenu"', async () => {
       const el = await createItem(slottedSubmenu);
       await settle(el);
 
@@ -274,14 +274,14 @@ describe('ForgeAiDropdownMenuItem', () => {
       expect(el.getAttribute('aria-expanded')).toBe('false');
     });
 
-    it.skip('should show a submenu arrow when a submenu is provided via slot="submenu" (BUG: documented slot="submenu" API is not detected)', async () => {
+    it('should show a submenu arrow when a submenu is provided via slot="submenu"', async () => {
       const el = await createItem(slottedSubmenu);
       await settle(el);
 
       expect(el.shadowRoot!.querySelector('.ai-dropdown-menu-item__submenu-arrow')).not.toBeNull();
     });
 
-    it.skip('should exclude slot="submenu" content from labelText (BUG: labelText reads the default slot; slotless nested menu leaks "Parent Child")', async () => {
+    it('should exclude slot="submenu" content from labelText', async () => {
       const el = await createItem(slottedSubmenu);
       await settle(el);
 

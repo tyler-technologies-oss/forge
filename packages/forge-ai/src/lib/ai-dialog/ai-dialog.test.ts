@@ -269,14 +269,14 @@ describe('AiDialogComponent', () => {
     });
 
     describe('modal mode', () => {
-      it.skip('should render a forge-ai-modal instead of the popover when expanded (BUG: modal fires spurious close on first update, dialog.close() resets expanded)', async () => {
+      it('should render a forge-ai-modal instead of the popover when expanded', async () => {
         const el = await renderDialog(html`<forge-ai-dialog expanded label="Helper"></forge-ai-dialog>`);
 
         expect(popoverOf(el)).toBeNull();
         expect(modalOf(el)!.label).toBe('Helper');
       });
 
-      it.skip('should open the modal when open is set while expanded (BUG: modal fires spurious close on first update, dialog.close() resets expanded)', async () => {
+      it('should open the modal when open is set while expanded', async () => {
         const el = await renderDialog(html`<forge-ai-dialog expanded></forge-ai-dialog>`);
 
         el.open = true;
@@ -310,7 +310,7 @@ describe('AiDialogComponent', () => {
         expect(el.open).toBe(false);
       });
 
-      it.skip('should project slotted content into the modal when expanded (BUG: modal fires spurious close on first update, dialog.close() resets expanded)', async () => {
+      it('should project slotted content into the modal when expanded', async () => {
         const el = await renderDialog(html`<forge-ai-dialog expanded><p id="content">Hi</p></forge-ai-dialog>`);
 
         expect(el.shadowRoot!.querySelector<HTMLSlotElement>('forge-ai-modal slot')!.assignedElements()).toEqual([el.querySelector('#content')]);

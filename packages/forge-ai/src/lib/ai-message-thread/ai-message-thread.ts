@@ -103,23 +103,24 @@ export class AiMessageThreadComponent extends LitElement {
   @query('.message-thread')
   private _messageThreadContainer!: HTMLElement;
 
-  #markdownController!: MarkdownStreamController;
+  readonly #markdownController = new MarkdownStreamController(this);
+  readonly #resizeObserver = new ResizeObserver(() => this.#checkScrollState());
   #canAutoScroll = true;
-  #resizeObserver?: ResizeObserver;
 
   public override connectedCallback(): void {
     super.connectedCallback();
-    this.#markdownController = new MarkdownStreamController(this);
-    this.#resizeObserver = new ResizeObserver(() => this.#checkScrollState());
+    if (this.hasUpdated) {
+      this.#resizeObserver.observe(this._messageThreadContainer);
+    }
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.#resizeObserver?.disconnect();
+    this.#resizeObserver.disconnect();
   }
 
   public override firstUpdated(): void {
-    this.#resizeObserver?.observe(this._messageThreadContainer);
+    this.#resizeObserver.observe(this._messageThreadContainer);
   }
 
   public override updated(changedProperties: PropertyValues<this>): void {

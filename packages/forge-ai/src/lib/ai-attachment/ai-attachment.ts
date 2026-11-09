@@ -1,6 +1,7 @@
 import { LitElement, TemplateResult, html, unsafeCSS, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import '../ai-spinner/index.js';
 import '../core/tooltip/tooltip.js';
@@ -37,6 +38,7 @@ export const AiAttachmentComponentTagName: keyof HTMLElementTagNameMap = 'forge-
  * @cssproperty --forge-ai-attachment-border-color - Border color of the attachment
  * @cssproperty --forge-ai-attachment-padding - Padding inside the attachment
  * @cssproperty --forge-ai-attachment-gap - Gap between elements
+ * @cssproperty --forge-ai-attachment-progress-color - Color of the upload progress indicator
  */
 @customElement(AiAttachmentComponentTagName)
 export class AiAttachmentComponent extends LitElement {
@@ -51,9 +53,11 @@ export class AiAttachmentComponent extends LitElement {
   @property({ type: Boolean })
   public removable = false;
 
+  /** Whether the file is uploading. Dims the attachment and shows a spinner and, when `progress` is set, a progress bar. */
   @property({ type: Boolean })
   public uploading = false;
 
+  /** Upload progress from 0 to 100. Rendered as a progress bar while `uploading`. */
   @property({ type: Number })
   public progress?: number;
 
@@ -78,6 +82,27 @@ export class AiAttachmentComponent extends LitElement {
     return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="file-icon" aria-hidden="true">
       <path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m9 16v-2H6v2zm3-4v-2H6v2z" />
     </svg>`;
+  }
+
+  get #progressBar(): TemplateResult | typeof nothing {
+    if (!this.uploading || this.progress === undefined || Number.isNaN(this.progress)) {
+      return nothing;
+    }
+
+    const value = Math.min(100, Math.max(0, this.progress));
+
+    return html`
+      <div
+        class="progress"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow=${value}
+        aria-label="Uploading ${this.filename}"
+        style=${styleMap({ '--_progress': `${value}%` })}>
+        <div class="progress-fill"></div>
+      </div>
+    `;
   }
 
   get #removeButton(): TemplateResult | typeof nothing {
@@ -125,7 +150,7 @@ export class AiAttachmentComponent extends LitElement {
           <div class="attachment-filename">${this.filename}</div>
           <div class="attachment-size">${this.#formattedSize}</div>
         </div>
-        ${this.#removeButton}
+        ${this.#removeButton} ${this.#progressBar}
       </div>
     `;
   }

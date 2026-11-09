@@ -7,6 +7,7 @@
 
 :host {
   display: block;
+  container-type: inline-size;
   width: 100%;
   max-inline-size: var(--forge-ai-suggestions-inline-size, 768px);
 }
@@ -29,7 +30,14 @@
     display: flex;
     justify-content: start;
     text-box-trim: both;
-    text-wrap: wrap;
+    max-inline-size: var(--forge-ai-suggestion-max-width, 82.5cqi);
+    min-inline-size: 0;
+
+    .suggestion-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     &:hover,
     &:focus-within,

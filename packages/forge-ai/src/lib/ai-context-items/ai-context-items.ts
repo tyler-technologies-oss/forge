@@ -54,7 +54,7 @@ export class AiContextItemsComponent extends LitElement {
             .sublabel=${item.sublabel}
             .type=${item.type}
             ?loading=${item.loading ?? false}
-            ?removable=${item.removable ?? true}
+            .removable=${item.removable ?? true}
             @forge-ai-context-chip-remove=${this.#handleChipRemove}>
           </forge-ai-context-chip>
         `

@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, html, nothing, unsafeCSS } from 'lit';
+import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import styles from './ai-thinking-indicator.scss?inline';
@@ -91,7 +91,9 @@ export class AiThinkingIndicatorComponent extends LitElement {
 
   public override connectedCallback(): void {
     super.connectedCallback();
-    this.#startCycling();
+    if (this.hasUpdated) {
+      this.#syncCycling();
+    }
   }
 
   public override disconnectedCallback(): void {
@@ -99,14 +101,25 @@ export class AiThinkingIndicatorComponent extends LitElement {
     this.#stopCycling();
   }
 
+  public override updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('showText')) {
+      this.#syncCycling();
+    }
+  }
+
+  #syncCycling(): void {
+    this.#stopCycling();
+    if (this.showText) {
+      this.#startCycling();
+    }
+  }
+
   #startCycling(): void {
     this.#initialDelayTimeout = window.setTimeout(() => {
-      if (this.showText) {
+      this.#getNextMessage();
+      this.#cycleInterval = window.setInterval(() => {
         this.#getNextMessage();
-        this.#cycleInterval = window.setInterval(() => {
-          this.#getNextMessage();
-        }, this.cycleInterval);
-      }
+      }, this.cycleInterval);
     }, this.initialDelay);
   }
 

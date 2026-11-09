@@ -205,7 +205,7 @@ describe('AiReasoningHeaderComponent', () => {
     });
   });
 
-  it.skip('should point aria-controls at an element that exists (BUG: aria-controls="content" references no id in the header shadow root)', async () => {
+  it('should point aria-controls at an element that exists', async () => {
     const el = await createHeader();
 
     const controls = el.shadowRoot!.querySelector('button')!.getAttribute('aria-controls');

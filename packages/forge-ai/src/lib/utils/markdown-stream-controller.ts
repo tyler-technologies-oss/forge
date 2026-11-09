@@ -26,8 +26,7 @@ export class MarkdownStreamController implements ReactiveController {
   }
 
   #getCacheKey(messageId: string, content: string, { streaming = true }: RenderMarkdownOptions): string {
-    const hash = content.length + ':' + content.slice(0, 50);
-    return `${messageId}:${hash}:${streaming}`;
+    return `${messageId}:${streaming}:${content}`;
   }
 
   public getCachedHtml(messageId: string, content: string, options: RenderMarkdownOptions = {}): string {

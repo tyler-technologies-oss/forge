@@ -557,7 +557,7 @@ describe('AiMessageThreadComponent', () => {
   });
 
   describe('lifecycle', () => {
-    it.skip('should keep tracking resizes after being disconnected and reconnected (BUG: ResizeObserver is disconnected on disconnect and only observed in firstUpdated)', async () => {
+    it('should keep tracking resizes after being disconnected and reconnected', async () => {
       const el = await createElement(manyUserItems(40));
       await settle(el);
       const parent = el.parentElement!;
@@ -574,6 +574,18 @@ describe('AiMessageThreadComponent', () => {
       await vi.waitFor(() => {
         expect(scrollButton(el)!.classList.contains('scroll-to-bottom-button--hidden')).toBe(true);
       });
+    });
+
+    it('should not register another host controller when reconnected', async () => {
+      const el = await createElement([msgItem({ content: 'Persist' })]);
+      const addController = vi.spyOn(el, 'addController');
+      const parent = el.parentElement!;
+
+      el.remove();
+      parent.append(el);
+      await el.updateComplete;
+
+      expect(addController).not.toHaveBeenCalled();
     });
 
     it('should keep rendering after being disconnected and reconnected', async () => {

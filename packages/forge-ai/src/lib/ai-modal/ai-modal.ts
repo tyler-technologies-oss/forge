@@ -118,7 +118,7 @@ export class AiModalComponent extends LitElement {
           this._dialog.showModal();
           this.dispatchEvent(new CustomEvent('forge-ai-modal-open', { bubbles: true, composed: true }));
         }
-      } else {
+      } else if (changedProperties.get('open') === true) {
         if (this._dialog?.open) {
           this._dialog.close();
         }
@@ -145,7 +145,9 @@ export class AiModalComponent extends LitElement {
   }
 
   #handleDialogClose(): void {
-    this.#closeReason = 'escape';
+    if (this.open) {
+      this.#closeReason = 'escape';
+    }
     this.open = false;
   }
 
@@ -154,7 +156,7 @@ export class AiModalComponent extends LitElement {
     if (event.target === this._dialog) {
       event.stopPropagation();
       this.#closeReason = 'backdrop';
-      this.close();
+      this.open = false;
     }
   }
 

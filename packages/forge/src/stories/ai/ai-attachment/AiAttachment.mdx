@@ -10,11 +10,14 @@ The AI Attachment component displays file attachment information in AI chat inte
 
 <Canvas of={AiAttachmentStories.Demo} />
 
+<Canvas of={AiAttachmentStories.Uploading} />
+
 ## Features
 
 - **File Type Icons**: Displays contextual icons based on MIME type (PDF, images, documents, videos, etc.)
 - **File Size Formatting**: Automatically formats file sizes in human-readable format (B, KB, MB, GB)
 - **Image Thumbnails**: Supports thumbnail previews for image files
+- **Upload Progress**: While `uploading`, a `progress` value from 0 to 100 renders an accessible progress bar
 - **Removable**: Optional remove button for interactive attachment management
 - **Accessible**: Full ARIA implementation with proper labels and keyboard support
 - **Responsive**: Adapts to container width with text truncation for long filenames

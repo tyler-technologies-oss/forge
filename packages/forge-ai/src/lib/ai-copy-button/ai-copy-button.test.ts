@@ -207,7 +207,7 @@ describe('AiCopyButtonComponent', () => {
     });
   });
 
-  it.skip('should expose the disabled state on the inner button (BUG: disabled never sets disabled/aria-disabled on the button)', async () => {
+  it('should expose the disabled state on the inner button', async () => {
     const el = await createElement(html`<forge-ai-copy-button value="hello" disabled></forge-ai-copy-button>`);
 
     const inner = button(el);
@@ -215,7 +215,22 @@ describe('AiCopyButtonComponent', () => {
     expect(inner.disabled || inner.getAttribute('aria-disabled') === 'true').toBe(true);
   });
 
-  it.skip('should accept clicks again after disconnecting and reconnecting during the Copied! window (BUG: copied state is not reset on disconnect)', async () => {
+  it('should render the Copy label and icon after reconnecting during the Copied! window', async () => {
+    const el = await createElement();
+    await clickAndFlush(el);
+    expect(button(el).getAttribute('aria-label')).toBe('Copied!');
+    const parent = el.parentElement!;
+
+    el.remove();
+    parent.append(el);
+    await el.updateComplete;
+
+    expect(button(el).getAttribute('aria-label')).toBe('Copy');
+    expect(el.shadowRoot!.querySelector('forge-ai-tooltip')!.textContent!.trim()).toBe('Copy');
+    expect(el.shadowRoot!.querySelector('svg path')!.getAttribute('d')).toContain('M19 21H8V7h11');
+  });
+
+  it('should accept clicks again after disconnecting and reconnecting during the Copied! window', async () => {
     const el = await createElement();
     await clickAndFlush(el);
     const parent = el.parentElement!;

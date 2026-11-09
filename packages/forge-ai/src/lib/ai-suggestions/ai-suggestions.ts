@@ -36,7 +36,7 @@ export const AiSuggestionsComponentTagName: keyof HTMLElementTagNameMap = 'forge
  * @event {CustomEvent<ForgeAiSuggestionsEventData>} forge-ai-suggestions-select - Fired when a suggestion is selected.
  *
  * @cssproperty --forge-ai-suggestions-inline-size - The maximum inline size of the suggestions container.
- * @cssproperty --forge-ai-suggestion-max-width - The maximum width of the suggestion buttons in inline layout.
+ * @cssproperty --forge-ai-suggestion-max-width - The maximum width of the suggestion buttons. Defaults to `82.5cqi` (82.5% of the component width).
  */
 @customElement(AiSuggestionsComponentTagName)
 export class AiSuggestionsComponent extends LitElement {
@@ -96,7 +96,7 @@ export class AiSuggestionsComponent extends LitElement {
   #checkOverflows(): void {
     setTimeout(() => {
       let hasChanges = false;
-      const buttons = this.shadowRoot?.querySelectorAll('.suggestion');
+      const buttons = this.shadowRoot?.querySelectorAll('.action-title');
 
       buttons?.forEach(button => {
         const textSpan = button.querySelector('.suggestion-text') as HTMLElement;

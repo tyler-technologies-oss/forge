@@ -394,4 +394,18 @@ describe('AiAssistantResponseComponent', () => {
       expect(indicator(el)).toBeTruthy();
     });
   });
+
+  describe('lifecycle', () => {
+    it('should not register another host controller when reconnected', async () => {
+      const el = await createElement(response());
+      const addController = vi.spyOn(el, 'addController');
+      const parent = el.parentElement!;
+
+      el.remove();
+      parent.append(el);
+      await el.updateComplete;
+
+      expect(addController).not.toHaveBeenCalled();
+    });
+  });
 });

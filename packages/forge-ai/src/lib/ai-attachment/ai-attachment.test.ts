@@ -188,12 +188,45 @@ describe('AiAttachmentComponent', () => {
     });
   });
 
-  it.skip('should render upload progress when uploading with a progress value (BUG: progress property is never rendered)', async () => {
+  it('should render upload progress when uploading with a progress value', async () => {
     const el = await createElement(html`<forge-ai-attachment filename="a.pdf" uploading progress="40"></forge-ai-attachment>`);
 
     const bar = el.shadowRoot!.querySelector('[role="progressbar"]');
 
     expect(bar).toBeTruthy();
     expect(bar!.getAttribute('aria-valuenow')).toBe('40');
+  });
+
+  it('should size the progress fill from the progress value', async () => {
+    const el = await createElement(html`<forge-ai-attachment filename="a.pdf" uploading progress="40"></forge-ai-attachment>`);
+
+    const bar = el.shadowRoot!.querySelector<HTMLElement>('[role="progressbar"]')!;
+    const fill = bar.querySelector<HTMLElement>('.progress-fill')!;
+
+    expect(bar.style.getPropertyValue('--_progress')).toBe('40%');
+    expect(fill.getBoundingClientRect().width / bar.getBoundingClientRect().width).toBeCloseTo(0.4, 1);
+  });
+
+  it('should not render upload progress when not uploading', async () => {
+    const el = await createElement(html`<forge-ai-attachment filename="a.pdf" progress="40"></forge-ai-attachment>`);
+
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')).toBeNull();
+  });
+
+  it('should not render upload progress when progress is undefined', async () => {
+    const el = await createElement(html`<forge-ai-attachment filename="a.pdf" uploading></forge-ai-attachment>`);
+
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')).toBeNull();
+  });
+
+  it('should clamp progress between 0 and 100', async () => {
+    const el = await createElement(html`<forge-ai-attachment filename="a.pdf" uploading progress="150"></forge-ai-attachment>`);
+
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.getAttribute('aria-valuenow')).toBe('100');
+
+    el.progress = -5;
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.getAttribute('aria-valuenow')).toBe('0');
   });
 });

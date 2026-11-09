@@ -77,7 +77,7 @@ describe('AiContextItemsComponent', () => {
       expect(a.loading).toBe(false);
     });
 
-    it.skip('should pass removable false to the chip (BUG: ?removable binding cannot turn off a default-true boolean attribute property)', async () => {
+    it('should pass removable false to the chip', async () => {
       const el = await createElement(items);
       const [, b] = getChips(el);
 
@@ -122,7 +122,7 @@ describe('AiContextItemsComponent', () => {
       expect(event.composed).toBe(true);
     });
 
-    it.skip('should not render remove buttons for non-removable items (BUG: ?removable binding cannot turn off a default-true boolean attribute property)', async () => {
+    it('should not render remove buttons for non-removable items', async () => {
       const el = await createElement(items);
       const [, b] = getChips(el);
 
