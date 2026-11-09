@@ -48,7 +48,13 @@ export default defineConfig({
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: '.vitest-coverage',
       include: ['src/lib/**/*.ts'],
-      exclude: ['**/*.test.ts', '**/index.ts', '**/*.scss']
+      exclude: ['**/*.test.ts', '**/index.ts', '**/*.scss'],
+      thresholds: {
+        statements: 97,
+        branches: 91,
+        functions: 98,
+        lines: 97
+      }
     }
   }
 });
