@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use 'sass:map';
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/theme';
@@ -73,6 +74,10 @@ $content-colors: (
   warning: theme.variable(on-warning-container),
   info: theme.variable(on-info-container)
 );
+// Themes other than error and warning render as the default theme. Field color themes are deprecated in favor of
+// validation states.
+$neutral-themes: (primary, secondary, tertiary, success, info);
+
 $elevations: (
   default: unset,
   raised: elevation.value(1),
@@ -80,6 +85,10 @@ $elevations: (
 );
 
 @mixin theme($theme) {
+  @if list.index($neutral-themes, $theme) {
+    $theme: default;
+  }
+
   @include override(focus-indicator-color, theme.variable(focus-indicator), value);
   @if $theme != default {
     @include override(filled-background, map.get($filled-backgrounds, $theme), value);
@@ -153,6 +162,10 @@ $elevations: (
 }
 
 @mixin inset-label-color($theme) {
+  @if list.index($neutral-themes, $theme) {
+    $theme: default;
+  }
+
   @include override(label-color, map.get($inset-label-colors, $theme), value);
 }
 

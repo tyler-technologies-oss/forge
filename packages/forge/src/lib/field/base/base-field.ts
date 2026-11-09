@@ -42,7 +42,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @property {boolean} [disabled=false] - Whether the field is disabled.
  * @property {boolean} [floatLabel=false] - Whether the label should float above the field. Only applies when the label is inset.
  * @property {FieldVariant} [variant="outlined"] - The variant of the field.
- * @property {FieldTheme} [theme="default"] - The theme of the field.
+ * @property {FieldTheme} [theme="default"] - The theme of the field. Only `error` and `warning` change the field's colors; other themes render as `default`.
  * @property {FieldShape} [shape="default"] - The shape of the field.
  * @property {FieldDensity} [density="default"] - The density of the field.
  * @property {boolean} [dense=false] - Whether the field is dense.
@@ -58,7 +58,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @attribute {boolean} [disabled=false] - Whether the field is disabled.
  * @attribute {boolean} [float-label=false] - Whether the label should float above the field. Only applies when the label is inset.
  * @attribute {FieldVariant} [variant="outlined"] - The variant of the field.
- * @attribute {FieldTheme} [theme="default"] - The theme of the field.
+ * @attribute {FieldTheme} [theme="default"] - The theme of the field. Only `error` and `warning` change the field's colors; other themes render as `default`.
  * @attribute {FieldShape} [shape="default"] - The shape of the field.
  * @attribute {FieldDensity} [density="default"] - The density of the field.
  * @attribute {boolean} [dense=false] - Whether the field is dense.

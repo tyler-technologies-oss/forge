@@ -63,7 +63,7 @@ declare global {
  * @property {boolean} [optional=false] - Whether the field is optional.
  * @property {boolean} [disabled=false] - Whether the field is disabled.
  * @property {FieldVariant} [variant="outlined"] - The variant of the field.
- * @property {FieldTheme} [theme="default"] - The theme of the field.
+ * @property {FieldTheme} [theme="default"] - The theme of the field. Only `error` and `warning` change the field's colors; other themes render as `default`.
  * @property {FieldShape} [shape="default"] - The border radius of the field's corners.
  * @property {FieldDensity} [density="default"] - The density of the field.
  * @property {boolean} [dense=false] - Whether the field is at the "extra-small" density level.
@@ -86,7 +86,7 @@ declare global {
  * @attribute {boolean} [optional=false] - Whether the field is optional.
  * @attribute {boolean} [disabled=false] - Whether the field is disabled.
  * @attribute {FieldVariant} [variant="outlined"] - The variant of the field.
- * @attribute {FieldTheme} [theme="default"] - The theme of the field.
+ * @attribute {FieldTheme} [theme="default"] - The theme of the field. Only `error` and `warning` change the field's colors; other themes render as `default`.
  * @attribute {FieldShape} [shape="default"] - The border radius of the field's corners.
  * @attribute {Density} [density="default"] - The density of the field.
  * @attribute {boolean} [dense=false] - Whether the field is at the "extra-small" density level.
