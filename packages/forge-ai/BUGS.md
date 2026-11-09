@@ -78,3 +78,17 @@ Findings from reviewing `.github/workflows/*` for forge-ai. No workflow files we
 7. **PR build** (`build.yml`) runs root `format:check`, `lint`, `build`, `test` in the Playwright 1.59.0 container, which matches the vitest browser tests. `paths-ignore` skips `.changeset/**`, `docs/**`, `blocks/**`. No forge-ai change needed.
 8. **Archive the old repo** after 0.16.0 publishes, and make sure its `deploy.yml` (publishes docs to `gh-pages` under `docs/v1`) cannot run again. Its Storybook becomes stale; point to the new docs in the archived README.
 9. **Dependency review** (`dependency_enforcement.yml`) fails on high severity advisories in runtime and development scopes. Confirm on the PR that the new `@types/react` and `@lit/context` entries pass.
+
+## TAI-439
+
+### group C
+
+Each is pinned by an `it.skip('... (BUG: ...)')` test expecting the correct behavior.
+
+- `src/lib/ai-thinking-indicator/ai-thinking-indicator.ts:92,102-111`: `#startCycling` only runs from `connectedCallback` and checks `showText` once inside the initial-delay timeout. Setting `showText = true` after the timer fired never starts cycling, so no status text appears. Repro: render without `show-text`, wait a tick, set `el.showText = true`; `.status-text` never renders.
+- `src/lib/ai-copy-button/ai-copy-button.ts:109`: the `disabled` property only gates `#handleCopy` and toggles a `:state(disabled)`; the inner `<button>` never gets `disabled`/`aria-disabled`, so assistive tech and keyboard users still see an enabled control. Repro: `<forge-ai-copy-button value="x" disabled>`, inspect the inner button.
+- `src/lib/ai-copy-button/ai-copy-button.ts:60-64`: `disconnectedCallback` clears the reset timeout but not `#copied`. Disconnecting during the 3s "Copied!" window and reconnecting leaves the button stuck in the copied state, ignoring clicks. Fix: reset `#copied` on disconnect. Repro: click copy, `el.remove()`, re-append, click again; `clipboard.writeText` is not called a second time.
+- `src/lib/ai-attachment/ai-attachment.ts:57-58`: `progress` is a public property but is never rendered (no progress bar/percent). Repro: `<forge-ai-attachment uploading progress="40">`.
+- `src/lib/ai-reasoning-header/ai-reasoning-header.ts:57`: button has `aria-controls="content"` but no element with that id exists in the header shadow root (the controlled region lives in the parent `forge-ai-reasoning` shadow root), so the reference is dangling. Fix: remove `aria-controls` or reference a valid id. Repro: render `forge-ai-reasoning-header`, `shadowRoot.getElementById('content')` is null.
+- `src/lib/ai-message-thread/ai-message-thread.ts:110-123`: `disconnectedCallback` disconnects the `ResizeObserver` but it is only observed in `firstUpdated`, so after a disconnect/reconnect (e.g. DOM move) the scroll container is no longer observed and resize-driven scroll state stops updating. `connectedCallback` also creates a new `MarkdownStreamController` (registered as another host controller) on every reconnect. The same new-controller-per-connect leak exists in `src/lib/ai-assistant-response/ai-assistant-response.ts:70`.
+- `src/lib/utils/markdown-stream-controller.ts:28-31`: the cache key is `id + content.length + first 50 chars + streaming`, so two same-length strings that differ after character 50 return stale cached HTML. Fix: key on the full content or a hash of it. Repro: `getCachedHtml('m1', 'x'.repeat(60) + 'A')` then `getCachedHtml('m1', 'x'.repeat(60) + 'B')` returns the first result.
