@@ -40,8 +40,8 @@ $outline-colors: (
   secondary: theme.variable(on-secondary-container),
   tertiary: theme.variable(tertiary),
   success: theme.variable(success),
-  error: theme.variable(error),
-  warning: theme.variable(warning),
+  error: theme.variable(border-error-strongest),
+  warning: theme.variable(border-warning-strongest),
   info: theme.variable(info)
 );
 $outline-colors-hover: (

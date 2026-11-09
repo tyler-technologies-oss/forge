@@ -8,7 +8,7 @@
 @use './token-utils' as *;
 
 $focus: ':not([disabled]):focus-within';
-$invalid: ':not([disabled])[invalid]';
+$invalid: ':not([disabled]):is([invalid], [theme=error])';
 
 $first-slotted-element: '::slotted(:is([data-forge-field-input], *:first-of-type:is(input, textarea)))';
 $last-slotted-element: '::slotted(:is([data-forge-field-input], *:last-of-type:is(input, textarea)))';
