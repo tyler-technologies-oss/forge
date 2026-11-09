@@ -1,5 +1,17 @@
 # @tylertech/forge-plugin
 
+## 1.7.0
+
+### Documentation
+
+- 37771d9: point bug reports and feature requests at the FORGE Jira forms
+- 37771d9: remove the Customization development guide
+
+### Other Changes
+
+- 630dc0d: Added docs pages for breadcrumb, confirmation-dialog, count-card, footer, listbox, process-stepper, quantity-field, responsive-toolbar, and user-profile.
+- 3ce0717: Fixed listbox example block IDs in the forge-design skill to point at existing blocks.
+
 ## 1.6.0
 
 ### Documentation
