@@ -8,7 +8,8 @@
 
 $tokens: (
   // Base
-  background: utils.module-val(toolbar, background, theme.variable(surface)),
+  background: utils.module-val(toolbar, background, var(--forge-theme-surface-elevated-translucent, #{theme.variable(surface)})),
+  backdrop-filter: utils.module-val(toolbar, backdrop-filter, none),
   height: utils.module-val(toolbar, height, 56px),
   min-height: utils.module-ref(toolbar, min-height, height),
   // Divider

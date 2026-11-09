@@ -105,6 +105,8 @@ declare global {
  * @cssproperty --forge-field-tonal-background - The background of the field surface in the tonal variant.
  * @cssproperty --forge-field-tonal-background-hover - The background of the field surface in the tonal variant on hover.
  * @cssproperty --forge-field-filled-background - The background of the field surface in the filled and raised variants.
+ * @cssproperty --forge-field-default-outline-color - The outline color of the default (no `theme`) field.
+ * @cssproperty --forge-field-default-outline-color-hover - The outline color of the default (no `theme`) field while hovered.
  * @cssproperty --forge-field-outline-style - The style of the field outline.
  * @cssproperty --forge-field-outline-width - The width of the field outline.
  * @cssproperty --forge-field-shape - The border radius of the field's corners.

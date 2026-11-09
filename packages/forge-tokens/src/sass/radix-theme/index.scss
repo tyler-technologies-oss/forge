@@ -1,0 +1,21 @@
+@use '../utils';
+@use '../tokens/theme-radix-light' as light;
+@use '../tokens/theme-radix-dark' as dark;
+
+///
+/// Emits custom property declarations for all Radix light theme tokens.
+///
+@mixin properties {
+  @each $token-name, $token-value in light.$tokens {
+    @include utils.declare-var(theme, $token-name, $token-value);
+  }
+}
+
+///
+/// Emits custom property declarations for all Radix dark theme tokens.
+///
+@mixin properties-dark {
+  @each $token-name, $token-value in dark.$tokens {
+    @include utils.declare-var(theme, $token-name, $token-value);
+  }
+}

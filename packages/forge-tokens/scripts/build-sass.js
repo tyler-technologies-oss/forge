@@ -10,6 +10,8 @@ StyleDictionary.registerFormat({ name: FORMAT_NAME, format: sassFormat });
 
 const GLOBAL_FILES = [
   { destination: '_color-palette.scss', variables: [{ type: 'variables', root: ['color', 'palette'] }] },
+  { destination: '_radix-color-palette.scss', variables: [{ type: 'variables', root: ['color', 'radix'] }] },
+  { destination: '_radix-color-palette-dark.scss', variables: [{ type: 'variables', root: ['color', 'radix-dark'] }] },
   { destination: '_color-emphasis.scss', variables: [{ name: 'emphasis', root: ['color', 'emphasis'] }] },
   { destination: '_animation.scss', variables: [{ name: 'tokens', root: ['animation'], defaultable: true }] },
   { destination: '_border.scss', variables: [{ name: 'tokens', root: ['border'], defaultable: true }] },
@@ -30,7 +32,9 @@ const GLOBAL_FILES = [
 
 const THEME_FILES = [
   { mode: 'light', source: 'tokens/theme/light.json', destination: '_theme-light.scss' },
-  { mode: 'dark', source: 'tokens/theme/dark.json', destination: '_theme-dark.scss' }
+  { mode: 'dark', source: 'tokens/theme/dark.json', destination: '_theme-dark.scss' },
+  { mode: 'light', source: 'tokens/theme/radix-light.json', destination: '_theme-radix-light.scss' },
+  { mode: 'dark', source: 'tokens/theme/radix-dark.json', destination: '_theme-radix-dark.scss' }
 ];
 
 const createConfig = ({ source, files }) => ({

@@ -1,0 +1,227 @@
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/radix-theme';
+@use '@tylertech/forge-tokens/sass/theme';
+
+@use '../badge/token-utils' as badge;
+@use '../button/token-utils' as button;
+@use '../card/token-utils' as card;
+@use '../chips/chip/token-utils' as chip;
+@use '../field/token-utils' as field;
+@use '../file-picker/token-utils' as file-picker;
+@use '../floating-action-button/token-utils' as fab;
+@use '../popover/token-utils' as popover;
+@use '../switch/token-utils' as switch;
+@use '../toast/token-utils' as toast;
+@use '../toolbar/token-utils' as toolbar;
+
+$_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
+
+@mixin _badge {
+  @include badge.provide-theme(
+    (
+      background: var(--forge-theme-surface-container),
+      color: var(--forge-theme-on-surface-container),
+      font-weight: 500
+    )
+  );
+}
+
+@mixin _button {
+  @include button.provide-theme(
+    (
+      tonal-background: var(--forge-theme-secondary-container),
+      tonal-color: var(--forge-theme-on-secondary-container)
+    )
+  );
+}
+
+@mixin _card {
+  @include card.provide-theme(
+    (
+      raised-background: var(--forge-theme-surface-elevated),
+      outline-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _field {
+  @include field.provide-theme(
+    (
+      background: var(--forge-theme-control-bg),
+      filled-background: var(--forge-theme-control-bg-filled),
+      default-outline-color: var(--forge-theme-outline),
+      default-outline-color-hover: var(--forge-theme-outline-medium),
+      placeholder-color: var(--forge-theme-text-low)
+    )
+  );
+}
+
+@mixin _file-picker {
+  @include file-picker.provide-theme(
+    (
+      background: var(--forge-theme-control-bg-filled),
+      border-color: var(--forge-theme-outline)
+    )
+  );
+}
+
+@mixin _fab {
+  @include fab.provide-theme(
+    (
+      background: var(--forge-theme-secondary-container-highest),
+      color: var(--forge-theme-on-secondary-container-highest),
+      shape: var(--forge-shape-extra-large)
+    )
+  );
+}
+
+@mixin _popover {
+  @include popover.provide-theme(
+    (
+      background: var(--forge-theme-surface-elevated)
+    )
+  );
+}
+
+@mixin _switch {
+  @include switch.provide-theme(
+    (
+      handle-off-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _toolbar {
+  @include toolbar.provide-theme(
+    (
+      backdrop-filter: blur(20px)
+    )
+  );
+}
+
+@mixin _radio {
+  --forge-radio-unchecked-border-color: var(--forge-theme-outline-medium);
+}
+
+@mixin _scrollbar {
+  --forge-scrollbar-track-container: transparent;
+  --forge-scrollbar-track-container-hover: transparent;
+  --forge-scrollbar-thumb-container: var(--forge-theme-surface-container-highest);
+  --forge-scrollbar-thumb-container-hover: var(--forge-theme-surface-container-maximum);
+}
+
+@mixin _drawer {
+  --forge-drawer-background: var(--forge-theme-surface-translucent);
+}
+
+///
+/// Provides the component token definitions for the opt-in Forge Radix themes.
+///
+/// Custom properties resolve their `var()` references on the element that declares them. The tokens are therefore declared both on
+/// `:root` (for components nested in other components' shadow roots) and on each component element (so that `--forge-theme-*`
+/// overrides made on an ancestor still apply to the component).
+///
+@mixin component-properties {
+  @include _badge;
+  @include _button;
+  @include _card;
+  @include _field;
+  @include _file-picker;
+  @include _fab;
+  @include _popover;
+  @include _switch;
+  @include _toolbar;
+  @include _radio;
+  @include _scrollbar;
+  @include _drawer;
+
+  --forge-card-background: var(--forge-theme-surface-bright);
+}
+
+///
+/// Provides the element-scoped overrides for the opt-in Forge Radix themes. Emit at the top level of a stylesheet, not inside `:root`.
+///
+@mixin scoped-properties {
+  :where(forge-badge) {
+    @include _badge;
+  }
+
+  :where(forge-button) {
+    @include _button;
+  }
+
+  :where(forge-card) {
+    @include _card;
+  }
+
+  :where(#{$_field-elements}) {
+    @include _field;
+  }
+
+  :where(forge-file-picker) {
+    @include _file-picker;
+  }
+
+  :where(forge-fab) {
+    @include _fab;
+  }
+
+  :where(forge-popover) {
+    @include _popover;
+    --forge-theme-surface: var(--forge-theme-surface-elevated);
+  }
+
+  :where(forge-switch) {
+    @include _switch;
+  }
+
+  :where(forge-toolbar) {
+    @include _toolbar;
+  }
+
+  :where(forge-radio) {
+    @include _radio;
+  }
+
+  :where(forge-drawer) {
+    @include _drawer;
+  }
+
+  :where(forge-modal-drawer) {
+    --forge-drawer-background: var(--forge-theme-surface-elevated);
+  }
+}
+
+///
+/// Provides the CSS custom property definitions for the opt-in Forge Radix light theme.
+///
+@mixin theme-properties {
+  @include radix-theme.properties;
+  @include component-properties;
+}
+
+///
+/// Provides the CSS custom property definitions for the opt-in Forge Radix dark theme.
+///
+@mixin theme-properties-dark {
+  @include radix-theme.properties-dark;
+  @include component-properties;
+
+  @include popover.provide-theme(
+    (
+      border-width: border.variable(thin)
+    )
+  );
+
+  @include chip.provide-theme(
+    (
+      field-border-color: theme.variable(outline)
+    )
+  );
+
+  @include toast.provide-theme(
+    (
+      action-color: theme.variable(on-surface-inverse)
+    )
+  );
+}

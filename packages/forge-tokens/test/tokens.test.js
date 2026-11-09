@@ -25,6 +25,11 @@ function* walkTokens(node, path = [], inheritedType = undefined) {
   }
 }
 
+const THEME_PAIRS = [
+  { light: 'theme/light.json', dark: 'theme/dark.json' },
+  { light: 'theme/radix-light.json', dark: 'theme/radix-dark.json' }
+];
+const THEME_FILES = new Set(THEME_PAIRS.flatMap(({ light, dark }) => [light, dark]));
 const files = getJsonFiles(TOKENS_DIR).map(file => ({ file, name: file.slice(TOKENS_DIR.length + 1), tree: JSON.parse(readFileSync(file, 'utf-8')) }));
 const allTokens = files.flatMap(({ name, tree }) => [...walkTokens(tree)].map(entry => ({ ...entry, file: name })));
 
@@ -40,12 +45,16 @@ describe('design tokens', () => {
   });
 
   it('should only reference tokens that exist', () => {
-    const light = new Set(allTokens.filter(({ file }) => file !== 'theme/dark.json').map(({ path }) => path.join('.')));
-    const dark = new Set(allTokens.filter(({ file }) => file !== 'theme/light.json').map(({ path }) => path.join('.')));
+    const shared = allTokens.filter(({ file }) => !THEME_FILES.has(file));
+    const sets = new Map(
+      THEME_PAIRS.flatMap(pair =>
+        Object.values(pair).map(theme => [theme, new Set([...shared, ...allTokens.filter(({ file }) => file === theme)].map(({ path }) => path.join('.')))])
+      )
+    );
     const missing = [];
 
     for (const { file, path, token } of allTokens) {
-      const known = file === 'theme/dark.json' ? dark : light;
+      const known = sets.get(file) ?? new Set(allTokens.map(({ path }) => path.join('.')));
       const values = typeof token.$value === 'string' ? [token.$value] : (JSON.stringify(token.$value).match(REFERENCE_PATTERN) ?? []);
       for (const value of values) {
         for (const [, reference] of String(value).matchAll(REFERENCE_PATTERN)) {
@@ -59,8 +68,8 @@ describe('design tokens', () => {
     expect(missing).toEqual([]);
   });
 
-  it('should define the same theme tokens for the light and dark themes', () => {
+  it.each(THEME_PAIRS)('should define the same theme tokens for $light and $dark', ({ light, dark }) => {
     const names = file => allTokens.filter(token => token.file === file).map(({ path }) => path.join('.'));
-    expect(names('theme/dark.json').sort()).toEqual(names('theme/light.json').sort());
+    expect(names(dark).sort()).toEqual(names(light).sort());
   });
 });
