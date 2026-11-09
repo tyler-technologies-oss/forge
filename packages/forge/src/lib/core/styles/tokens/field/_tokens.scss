@@ -42,7 +42,7 @@ $tokens: (
   multiline-min-block-size: utils.module-ref(field, multiline-min-block-size, height),
   multiline-max-block-size: utils.module-val(field, multiline-max-block-size, initial),
   status-icon-display: utils.module-val(field, status-icon-display, flex),
-  status-icon-size: utils.module-val(field, status-icon-size, typography.font-size-relative('1250')),
+  status-icon-size: utils.module-val(field, status-icon-size, typography.font-size-relative('1125')),
   status-icon-error-color: utils.module-val(field, status-icon-error-color, theme.variable(text-critical)),
   status-icon-warning-color: utils.module-val(field, status-icon-warning-color, theme.variable(text-warning)),
   popover-icon-transition-duration: utils.module-val(field, popover-icon-transition-duration, animation.variable(duration-short3)),
