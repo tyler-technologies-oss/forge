@@ -34,7 +34,7 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      outDir: 'dist',
+      outDirs: 'dist',
       include: ['src/lib'],
       exclude: ['node_modules/**', '**/*.test.ts', 'src/testing/**'],
       compilerOptions: {

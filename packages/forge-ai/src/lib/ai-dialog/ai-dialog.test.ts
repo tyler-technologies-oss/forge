@@ -2,13 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { html } from 'lit';
 import { page } from 'vitest/browser';
 import { renderFixture } from '../../testing/fixture.js';
+import { settle } from '../../testing/settle.js';
 import type { AiDialogComponent } from './ai-dialog.js';
 import type { AiReasoningHeaderComponent } from '../ai-reasoning-header/index.js';
 
 import './ai-dialog.js';
 import '../ai-reasoning-header/ai-reasoning-header.js';
-
-const nextFrames = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 50));
 
 describe('AiDialogComponent', () => {
   it('should label the drag handle without referencing a chatbot', async () => {
@@ -27,12 +26,12 @@ describe('AiDialogComponent', () => {
       >`,
       'forge-ai-dialog'
     );
-    await nextFrames();
+    await settle(el);
     expect(el.open).toBe(true);
 
     const header = el.querySelector<AiReasoningHeaderComponent>('forge-ai-reasoning-header')!;
     header.shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
-    await nextFrames();
+    await settle(el);
 
     expect(header.expanded).toBe(true);
     expect(el.open).toBe(true);
@@ -41,10 +40,10 @@ describe('AiDialogComponent', () => {
   it('should stay open when a slotted descendant dispatches a plain toggle CustomEvent', async () => {
     await page.viewport(1280, 800);
     const el = await renderFixture<AiDialogComponent>(html`<forge-ai-dialog open><div id="child"></div></forge-ai-dialog>`, 'forge-ai-dialog');
-    await nextFrames();
+    await settle(el);
 
     el.querySelector('#child')!.dispatchEvent(new CustomEvent('toggle', { bubbles: true, composed: true }));
-    await nextFrames();
+    await settle(el);
 
     expect(el.open).toBe(true);
   });

@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { html } from 'lit';
 import { renderFixture } from '../../../testing/fixture.js';
+import { settle } from '../../../testing/settle.js';
 import type { ForgeAiOverlayComponent } from './overlay.js';
 import type { AiReasoningHeaderComponent } from '../../ai-reasoning-header/index.js';
 
 import './overlay.js';
 import '../../ai-reasoning-header/ai-reasoning-header.js';
-
-const nextFrames = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 50));
 
 describe('ForgeAiOverlayComponent', () => {
   it('should stay open when a slotted descendant dispatches a bubbling toggle event', async () => {
@@ -17,12 +16,12 @@ describe('ForgeAiOverlayComponent', () => {
       >`,
       'forge-ai-overlay'
     );
-    await nextFrames();
+    await settle(el);
     expect(el.open).toBe(true);
 
     const header = el.querySelector<AiReasoningHeaderComponent>('forge-ai-reasoning-header')!;
     header.shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
-    await nextFrames();
+    await settle(el);
 
     expect(header.expanded).toBe(true);
     expect(el.open).toBe(true);
@@ -33,10 +32,10 @@ describe('ForgeAiOverlayComponent', () => {
       html`<forge-ai-overlay open dismiss-mode="manual"><div id="child"></div></forge-ai-overlay>`,
       'forge-ai-overlay'
     );
-    await nextFrames();
+    await settle(el);
 
     el.querySelector('#child')!.dispatchEvent(new CustomEvent('toggle', { bubbles: true, composed: true }));
-    await nextFrames();
+    await settle(el);
 
     expect(el.open).toBe(true);
   });

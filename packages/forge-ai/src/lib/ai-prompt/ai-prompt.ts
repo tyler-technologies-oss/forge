@@ -322,7 +322,6 @@ export class AiPromptComponent extends LitElement {
     }
 
     if (this.slashCommands.length === 0) {
-      this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       return;
     }
 
@@ -335,8 +334,6 @@ export class AiPromptComponent extends LitElement {
       this._slashMenuOpen = false;
       this._slashMenuQuery = '';
     }
-
-    this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
   }
 
   private _handleKeyDown(event: KeyboardEvent): void {

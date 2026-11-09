@@ -148,10 +148,12 @@ User-facing strings that referred to a "chatbot" now use neutral wording, becaus
 
 ## Fixed
 
+- `forge-ai-prompt` dispatched two `input` events per keystroke (the native textarea `input` crossing the shadow boundary, plus a synthetic copy). It now dispatches one: the native, composed `InputEvent` (with `inputType` and `data`), whose `target` is the host. For bubble-phase listeners `value` is already updated when it fires. Capture-phase listeners on the host run before the inner textarea handler and still see the previous `value`; read `(event.composedPath()[0] as HTMLTextAreaElement).value` there, or listen in the bubble phase. A host `input` listener that counted keystrokes or ran side effects per event now runs once per keystroke instead of twice.
 - Clicking a `forge-ai-reasoning-header` (or any descendant that dispatched a bubbling `toggle` event) inside an open `forge-ai-dialog` or `forge-ai-overlay` (and therefore popovers, tooltips and dropdown menus) closed the dialog or overlay. The header event is renamed (see above), and `forge-ai-dialog` and `forge-ai-overlay` now ignore native `toggle` events that did not originate from their own popover element.
 
 ## Dependency changes
 
+- `marked` `^18.1.1`, `dompurify` `^3.4.17`, `remend` `^1.4.0`. These are all within the same major as before. Sanitization and rendering (scroll-region wrappers, forced `target="_blank"`/`rel` on anchors, removal of scripts, `javascript:` URLs, event handlers, iframes, `<style>` and forms) are covered by `utils/markdown.test.ts`.
 - Removed `@ag-ui/client` and `@ag-ui/core` (the AG-UI adapter is gone).
 - Removed `uuid` (only `generateId` used it, and that helper moved out with the composition layer).
 - Added `@types/react` `^19` as an optional peer dependency, used only by the `/jsx` typings. Nothing changes if you do not use React.
