@@ -30,6 +30,8 @@ export const AiToolCallComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai
 
 /**
  * @tag forge-ai-tool-call
+ *
+ * @event {CustomEvent<void>} forge-ai-message-thread-scroll-request - Fired when the rendered content changes size and the containing message thread should scroll to keep it in view.
  */
 @customElement(AiToolCallComponentTagName)
 export class AiToolCallComponent extends LitElement {

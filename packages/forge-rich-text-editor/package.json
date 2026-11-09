@@ -49,7 +49,8 @@
   "scripts": {
     "build": "node scripts/build.js",
     "lint": "eslint . && stylelint \"src/lib/**/*.{css,scss}\"",
-    "test": "vitest run --browser.headless",
+    "test": "vitest run --browser.headless && pnpm test:plugins",
+    "test:plugins": "node --test \"plugins/**/*.test.mjs\"",
     "vitest": "vitest",
     "cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js",
     "format": "prettier --write \"**/*.{ts,js,html,md,mdx,css,scss,yaml,json}\"",

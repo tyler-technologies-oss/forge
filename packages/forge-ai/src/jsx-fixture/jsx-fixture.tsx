@@ -30,7 +30,14 @@ export function ValidUsage(): ReactElement {
       </forge-ai-prompt>
       <forge-ai-message-thread messageItems={messages} enableReactions onforge-ai-message-thread-copy={event => void event.detail} />
       <forge-ai-button disabled>Label</forge-ai-button>
-      <forge-ai-sidebar open onforge-ai-sidebar-close={event => void event.type} />
+      <forge-ai-sidebar
+        open
+        onforge-ai-sidebar-close={event => void event.type}
+        onforge-ai-sidebar-resize={event => void (event.detail.width satisfies number)}
+      />
+      <forge-ai-chat-header onforge-ai-chat-header-agent-change={event => void event.detail.previousAgentId} />
+      <forge-ai-paginator onforge-ai-paginator-page-change={event => void (event.detail.currentPage satisfies number)} />
+      <forge-ai-prompt-button disabled>Label</forge-ai-prompt-button>
     </div>
   );
 }
@@ -54,6 +61,8 @@ export function InvalidUsage(): ReactElement {
       <forge-ai-message-thread messageItems="not an array" />
       {/* @ts-expect-error handler detail has no such property */}
       <forge-ai-prompt onforge-ai-prompt-send={event => event.detail.nope} />
+      {/* @ts-expect-error sidebar resize detail has no such property */}
+      <forge-ai-sidebar onforge-ai-sidebar-resize={event => event.detail.nope} />
       {/* @ts-expect-error PascalCase handler name is not a real event prop */}
       <forge-ai-prompt onForgeAiPromptSend={() => undefined} />
       {/* @ts-expect-error readonly property cannot be set */}

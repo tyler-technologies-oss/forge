@@ -38,7 +38,7 @@ export class AiFabComponent extends LitElement {
 
   /** Accessible label for the button, announced by screen readers. */
   @property({ type: String })
-  public label = 'Launch chatbot';
+  public label = 'Open AI assistant';
 
   readonly #internals: ElementInternals;
 

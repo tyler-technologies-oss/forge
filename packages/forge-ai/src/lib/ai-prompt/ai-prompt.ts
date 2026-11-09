@@ -24,7 +24,7 @@ declare global {
     'forge-ai-prompt-stop': CustomEvent<void>;
     'forge-ai-prompt-debug-toggle': CustomEvent<void>;
     'forge-ai-prompt-command': CustomEvent<ForgeAiPromptCommandEventData>;
-    'forge-ai-prompt-context-remove': CustomEvent<{ id: string; item: ContextItem }>;
+    'forge-ai-prompt-context-remove': CustomEvent<ForgeAiPromptContextRemoveEventData>;
   }
 }
 
@@ -44,6 +44,11 @@ export interface ForgeAiPromptCommandEventData {
   timestamp: Date;
 }
 
+export interface ForgeAiPromptContextRemoveEventData {
+  id: string;
+  item: ContextItem;
+}
+
 export type AiPromptVariant = 'stacked' | 'inline';
 
 export const AiPromptComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-prompt';
@@ -61,6 +66,8 @@ export const AiPromptComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-p
  * @event {CustomEvent<ForgeAiPromptAttachmentEventData>} forge-ai-prompt-attachment - Fired when files are pasted into the textarea.
  * @event {CustomEvent<void>} forge-ai-prompt-stop - Fired when the stop button is clicked. Cancelable - if cancelled, running state remains true.
  * @event {CustomEvent<void>} forge-ai-prompt-debug-toggle - Fired when the debug icon button is clicked.
+ * @event {CustomEvent<ForgeAiPromptCommandEventData>} forge-ai-prompt-command - Fired when a slash command is selected.
+ * @event {CustomEvent<ForgeAiPromptContextRemoveEventData>} forge-ai-prompt-context-remove - Fired when a context item is removed.
  */
 @customElement(AiPromptComponentTagName)
 export class AiPromptComponent extends LitElement {
@@ -467,7 +474,7 @@ export class AiPromptComponent extends LitElement {
     this._slashMenuQuery = '';
   }
 
-  #handleContextItemRemove(evt: CustomEvent<{ id: string; item: ContextItem }>): void {
+  #handleContextItemRemove(evt: CustomEvent<ForgeAiPromptContextRemoveEventData>): void {
     this.dispatchEvent(
       new CustomEvent('forge-ai-prompt-context-remove', {
         detail: { id: evt.detail.id, item: evt.detail.item },

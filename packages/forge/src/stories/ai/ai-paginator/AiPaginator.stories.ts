@@ -2,6 +2,7 @@ import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 
 import '@tylertech/forge-ai/tools';
+import type { ForgeAiPaginatorPageChangeEventData } from '@tylertech/forge-ai/tools';
 
 const component = 'forge-ai-paginator';
 
@@ -19,7 +20,7 @@ const meta = {
     disabled: false
   },
   render: args => {
-    const handlePageChange = (event: CustomEvent): void => {
+    const handlePageChange = (event: CustomEvent<ForgeAiPaginatorPageChangeEventData>): void => {
       (event.target as HTMLElement & { currentPage: number }).currentPage = event.detail.currentPage;
     };
 
@@ -28,7 +29,7 @@ const meta = {
         .currentPage=${args.currentPage}
         .totalPages=${args.totalPages}
         ?disabled=${args.disabled}
-        @page-change=${handlePageChange}></forge-ai-paginator>
+        @forge-ai-paginator-page-change=${handlePageChange}></forge-ai-paginator>
     `;
   }
 } satisfies Meta;

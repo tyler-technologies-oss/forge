@@ -22,7 +22,6 @@ interface StepsData {
  * `forge-ai-steps` primitive, so the primitive stays unaware of tool calls.
  *
  * @tag forge-ai-tool-steps
- * @internal
  */
 @customElement('forge-ai-tool-steps')
 export class StepsToolElement extends LitElement implements IToolRenderer<StepsData> {

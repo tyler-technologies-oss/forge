@@ -7,6 +7,14 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-ai-reasoning-header': AiReasoningHeaderComponent;
   }
+
+  interface HTMLElementEventMap {
+    'forge-ai-reasoning-header-toggle': CustomEvent<ForgeAiReasoningHeaderToggleEventData>;
+  }
+}
+
+export interface ForgeAiReasoningHeaderToggleEventData {
+  expanded: boolean;
 }
 
 export const AiReasoningHeaderComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-reasoning-header';
@@ -17,7 +25,7 @@ export const AiReasoningHeaderComponentTagName: keyof HTMLElementTagNameMap = 'f
  * @slot title - Content for the header when in regular (non-reasoning) state
  * @slot reasoning-title - Content for the header when in reasoning state
  *
- * @event {CustomEvent<{ expanded: boolean }>} toggle - Fired when the header is clicked and the expanded state changes
+ * @event {CustomEvent<ForgeAiReasoningHeaderToggleEventData>} forge-ai-reasoning-header-toggle - Fired when the header is clicked and the expanded state changes
  */
 @customElement(AiReasoningHeaderComponentTagName)
 export class AiReasoningHeaderComponent extends LitElement {
@@ -36,7 +44,7 @@ export class AiReasoningHeaderComponent extends LitElement {
 
     // Dispatch custom event for parent components
     this.dispatchEvent(
-      new CustomEvent('toggle', {
+      new CustomEvent<ForgeAiReasoningHeaderToggleEventData>('forge-ai-reasoning-header-toggle', {
         detail: { expanded: this.expanded },
         bubbles: true,
         composed: true

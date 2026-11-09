@@ -77,7 +77,7 @@ export const AiThreadsSearchComponentTagName: keyof HTMLElementTagNameMap = 'for
  * @event {CustomEvent<ForgeAiThreadsSearchQueryEventData>} forge-ai-threads-search-query - Fired when search query changes (debounced).
  * @event {CustomEvent<ForgeAiThreadsSearchLoadMoreEventData>} forge-ai-threads-search-load-more - Fired when the user scrolls near the bottom or clicks "Load more" for pagination.
  * @event {CustomEvent<ForgeAiThreadsSearchSelectEventData>} forge-ai-threads-search-select - Fired when a thread is selected.
- * @event {CustomEvent} forge-ai-threads-search-new-chat - Fired when new chat button clicked.
+ * @event {CustomEvent<void>} forge-ai-threads-search-new-chat - Fired when new chat button clicked.
  * @event {CustomEvent<ForgeAiThreadsSearchRenameEventData>} forge-ai-threads-search-rename - Fired when thread renamed. Cancelable - if prevented, call onSuccess() to commit or onError() to revert.
  * @event {CustomEvent<ForgeAiThreadsSearchDeleteEventData>} forge-ai-threads-search-delete - Fired when thread delete confirmed. Cancelable - if prevented, call onSuccess() to commit deletion or onError() to revert.
  * @event {CustomEvent<ForgeAiThreadsSearchDeleteConfirmEventData>} forge-ai-threads-search-delete-confirm - Fired before showing the built-in delete confirmation. Cancelable - if prevented, this component shows no confirmation UI; the host must show its own and call confirmThreadDelete() once accepted.

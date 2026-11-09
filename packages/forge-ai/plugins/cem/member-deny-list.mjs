@@ -1,6 +1,6 @@
 const MEMBER_DENY_LIST = [
   /^\[.*\]$/, // All Symbol members
-  /^#|_/ // All private members
+  /^[#_]/ // All private members (leading # or _)
 ];
 
 /**

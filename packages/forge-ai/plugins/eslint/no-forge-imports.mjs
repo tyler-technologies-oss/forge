@@ -6,7 +6,7 @@
 const BLOCKED_PACKAGES = [
   {
     name: '@tylertech/forge',
-    suggestion: ' Use CSS-only components from "@tylertech/forge" instead.'
+    suggestion: ' Forge is a build-time (SCSS/CSS) dependency only; it cannot be imported in component TypeScript.'
   },
   {
     name: '@tylertech/forge-core',
@@ -14,7 +14,7 @@ const BLOCKED_PACKAGES = [
   },
   {
     name: '@tylertech/tyler-icons',
-    suggestion: 'Use inline SVGs for icons instead.'
+    suggestion: ' Use inline SVGs for icons instead.'
   }
 ];
 

@@ -11,12 +11,22 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-ai-context-items-remove': CustomEvent<{ id: string; item: ContextItem }>;
+    'forge-ai-context-items-remove': CustomEvent<ForgeAiContextItemsRemoveEventData>;
   }
+}
+
+export interface ForgeAiContextItemsRemoveEventData {
+  id: string;
+  item: ContextItem;
 }
 
 export const AiContextItemsComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-context-items';
 
+/**
+ * @tag forge-ai-context-items
+ *
+ * @event {CustomEvent<ForgeAiContextItemsRemoveEventData>} forge-ai-context-items-remove - Fired when a context item is removed.
+ */
 @customElement(AiContextItemsComponentTagName)
 export class AiContextItemsComponent extends LitElement {
   public static override styles = unsafeCSS(styles);
@@ -24,7 +34,7 @@ export class AiContextItemsComponent extends LitElement {
   @property({ attribute: false })
   public items: ContextItem[] = [];
 
-  #handleChipRemove(evt: CustomEvent<{ id: string; item: ContextItem }>): void {
+  #handleChipRemove(evt: CustomEvent<ForgeAiContextItemsRemoveEventData>): void {
     this.dispatchEvent(
       new CustomEvent('forge-ai-context-items-remove', {
         detail: { id: evt.detail.id, item: evt.detail.item },

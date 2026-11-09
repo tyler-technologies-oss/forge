@@ -17,6 +17,9 @@ export const AiIconComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-ico
 /**
  * @tag forge-ai-icon
  *
+ * @cssproperty --forge-ai-icon-color - The fill color of the icon. Defaults to the theme tertiary color.
+ * @cssproperty --forge-ai-chatbot-icon-color - Deprecated. Fallback for `--forge-ai-icon-color`.
+ *
  * @state no-border - The icon is displayed without a border.
  * @state border - The icon is displayed with a border.
  */

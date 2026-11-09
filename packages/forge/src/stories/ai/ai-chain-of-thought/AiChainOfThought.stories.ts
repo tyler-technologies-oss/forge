@@ -29,7 +29,7 @@ const snowboardingSources = [
 
 const createPrompt = (): TemplateResult => {
   const handleVoiceInput = (event: CustomEvent<ForgeAiVoiceInputResultEvent>): void => {
-    const prompt = document.querySelector('forge-ai-prompt') as any;
+    const prompt = (event.target as HTMLElement).closest('forge-ai-prompt');
     if (prompt) {
       prompt.value = event.detail.transcript;
     }

@@ -35,7 +35,7 @@ const meta = {
     disabled: false,
     extended: false,
     content: 'AI Assistant',
-    label: 'Launch chatbot'
+    label: 'Open AI assistant'
   }
 } satisfies Meta;
 

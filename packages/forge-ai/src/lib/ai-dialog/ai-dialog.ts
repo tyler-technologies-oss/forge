@@ -131,7 +131,7 @@ export class AiDialogComponent extends LitElement {
         <button
           ${ref(this.#dragHandleRef)}
           id="drag-handle"
-          aria-label="Move chatbot"
+          aria-label="Move dialog"
           class="forge-icon-button forge-icon-button--small ai-icon-button drag-handle"
           tabindex="0"
           @pointerdown=${this.#dragController?.handlePointerDown}
@@ -296,6 +296,10 @@ export class AiDialogComponent extends LitElement {
   }
 
   #handlePopoverToggle(event: ToggleEvent): void {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     // Sync internal open state when popover is toggled externally
     const wasOpen = this.open;
     this.open = event.newState === 'open';

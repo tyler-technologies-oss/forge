@@ -54,6 +54,7 @@ export type AiFilePickerVariant = 'button' | 'icon-button';
  *
  * @event {CustomEvent<ForgeAiFilePickerChangeEventData>} forge-ai-file-picker-change - Fired when a file is selected via click or drag & drop.
  * The event detail contains the selected file and timestamp.
+ * @event {CustomEvent<ForgeAiFilePickerErrorEventData>} forge-ai-file-picker-error - Fired when a selected file is rejected (too large or a duplicate).
  */
 @customElement('forge-ai-file-picker')
 export class AiFilePickerComponent extends LitElement {

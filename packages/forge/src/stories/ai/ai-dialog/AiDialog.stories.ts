@@ -1,6 +1,8 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
+import { createRef, ref } from 'lit/directives/ref.js';
 
+import type { AiDialogComponent } from '@tylertech/forge-ai/ai-dialog';
 import '@tylertech/forge-ai/ai-dialog';
 import '@tylertech/forge-ai/ai-chat-interface';
 import '@tylertech/forge-ai/ai-chat-header';
@@ -34,20 +36,21 @@ const meta = {
     label: 'AI Assistant'
   },
   render: args => {
+    const dialogRef = createRef<AiDialogComponent>();
+
     const handleExpandClick = (): void => {
-      const dialogEl = document.querySelector('forge-ai-dialog') as any;
+      const dialogEl = dialogRef.value;
       if (dialogEl) {
         dialogEl.expanded = !dialogEl.expanded;
       }
     };
 
     const handleMinimizeClick = (): void => {
-      const dialogEl = document.querySelector('forge-ai-dialog') as any;
-      dialogEl?.close();
+      dialogRef.value?.close();
     };
 
     const dialog = html`
-      <forge-ai-dialog ?open=${args.open} ?expanded=${args.expanded} label=${args.label}>
+      <forge-ai-dialog ${ref(dialogRef)} ?open=${args.open} ?expanded=${args.expanded} label=${args.label}>
         <forge-ai-chat-interface>
           <forge-ai-chat-header
             slot="header"
@@ -69,13 +72,7 @@ const meta = {
     `;
 
     const fab = html`
-      <forge-ai-fab
-        style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;"
-        @click=${() => {
-          const dialogEl = document.querySelector('forge-ai-dialog');
-          dialogEl?.show();
-        }}>
-      </forge-ai-fab>
+      <forge-ai-fab style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;" @click=${() => dialogRef.value?.show()}> </forge-ai-fab>
     `;
 
     return html`

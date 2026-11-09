@@ -41,9 +41,9 @@ export const AiSidebarComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-
  *
  * @slot - Default slot for sidebar content (typically ai-chat-interface)
  *
- * @fires forge-ai-sidebar-open - Fired when the sidebar is opened
- * @fires forge-ai-sidebar-close - Fired when the sidebar is closed
- * @fires forge-ai-sidebar-resize - Fired when a resize is committed via pointer release or keyboard step
+ * @event {CustomEvent<void>} forge-ai-sidebar-open - Fired when the sidebar is opened
+ * @event {CustomEvent<void>} forge-ai-sidebar-close - Fired when the sidebar is closed
+ * @event {CustomEvent<ForgeAiSidebarResizeEventData>} forge-ai-sidebar-resize - Fired when a resize is committed via pointer release or keyboard step
  */
 @customElement(AiSidebarComponentTagName)
 export class AiSidebarComponent extends LitElement {
@@ -163,7 +163,7 @@ export class AiSidebarComponent extends LitElement {
                 class=${classMap(handleClasses)}
                 role="slider"
                 aria-orientation="vertical"
-                aria-label="Resize chatbot panel, use left and right arrow keys"
+                aria-label="Resize sidebar, use left and right arrow keys"
                 aria-valuemin="${MIN_WIDTH}"
                 aria-valuemax="${MAX_WIDTH}"
                 aria-valuenow=${this.width}

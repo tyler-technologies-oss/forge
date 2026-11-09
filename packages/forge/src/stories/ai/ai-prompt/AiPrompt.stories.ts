@@ -3,7 +3,6 @@ import { html } from 'lit';
 import { action } from 'storybook/actions';
 
 import '@tylertech/forge-ai/ai-prompt';
-import '@tylertech/forge-ai/ai-prompt/prompt-button';
 import '@tylertech/forge-ai/ai-voice-input';
 import '@tylertech/forge-ai/ai-file-picker';
 import { AiPromptVariant } from '@tylertech/forge-ai/ai-prompt';
@@ -74,14 +73,14 @@ const meta = {
         <forge-ai-file-picker slot="actions-start"></forge-ai-file-picker>
         ${args.showAdditionalAction
           ? html`
-              <forge-prompt-button slot="actions-start">
+              <forge-ai-prompt-button slot="actions-start">
                 <forge-icon name="web_alt" slot="leading"></forge-icon>
                 Web search
-              </forge-prompt-button>
-              <forge-prompt-button slot="actions-start">
+              </forge-ai-prompt-button>
+              <forge-ai-prompt-button slot="actions-start">
                 GPT-4
                 <forge-icon name="chevron_down" slot="trailing"></forge-icon>
-              </forge-prompt-button>
+              </forge-ai-prompt-button>
             `
           : ''}
         <forge-ai-voice-input slot="actions-end"></forge-ai-voice-input>

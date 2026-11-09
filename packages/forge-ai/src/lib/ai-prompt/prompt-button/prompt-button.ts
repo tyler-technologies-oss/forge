@@ -5,14 +5,14 @@ import styles from './prompt-button.scss?inline';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-prompt-button': PromptButtonComponent;
+    'forge-ai-prompt-button': PromptButtonComponent;
   }
 }
 
-export const PromptButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge-prompt-button';
+export const PromptButtonComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-prompt-button';
 
 /**
- * @tag forge-prompt-button
+ * @tag forge-ai-prompt-button
  */
 @customElement(PromptButtonComponentTagName)
 export class PromptButtonComponent extends LitElement {

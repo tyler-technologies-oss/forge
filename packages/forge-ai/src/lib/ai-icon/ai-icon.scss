@@ -2,7 +2,7 @@
 @use '@tylertech/forge-tokens/sass/theme' as forge-theme;
 
 :host {
-  --_ai-icon-fill-color: var(--forge-ai-chatbot-icon-color, #{forge-theme.variable(tertiary)});
+  --_ai-icon-fill-color: var(--forge-ai-icon-color, var(--forge-ai-chatbot-icon-color, #{forge-theme.variable(tertiary)}));
   box-sizing: border-box;
   display: grid;
   place-items: center;

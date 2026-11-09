@@ -8,8 +8,24 @@ declare global {
   interface HTMLElementTagNameMap {
     'forge-ai-paginator': AiPaginator;
   }
+
+  interface HTMLElementEventMap {
+    'forge-ai-paginator-page-change': CustomEvent<ForgeAiPaginatorPageChangeEventData>;
+  }
 }
 
+export interface ForgeAiPaginatorPageChangeEventData {
+  currentPage: number;
+  previousPage: number;
+}
+
+/**
+ * A compact previous/next paginator.
+ *
+ * @tag forge-ai-paginator
+ *
+ * @event {CustomEvent<ForgeAiPaginatorPageChangeEventData>} forge-ai-paginator-page-change - Fired when the previous or next button is clicked.
+ */
 @customElement('forge-ai-paginator')
 export class AiPaginator extends LitElement {
   public static styles = unsafeCSS(styles);
@@ -54,7 +70,7 @@ export class AiPaginator extends LitElement {
 
   #dispatchPageChange(newPage: number): void {
     this.dispatchEvent(
-      new CustomEvent('page-change', {
+      new CustomEvent<ForgeAiPaginatorPageChangeEventData>('forge-ai-paginator-page-change', {
         detail: {
           currentPage: newPage,
           previousPage: this.currentPage

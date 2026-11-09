@@ -1,5 +1,6 @@
 import { LitElement, TemplateResult, html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import type { ForgeAiReasoningHeaderToggleEventData } from '../ai-reasoning-header/index.js';
 
 import styles from './ai-chain-of-thought.scss?inline';
 
@@ -24,7 +25,7 @@ export class AiChainOfThoughtComponent extends LitElement {
 
   public override render(): TemplateResult {
     return html`
-      <slot name="heading" @toggle=${this._handleHeaderToggle}></slot>
+      <slot name="heading" @forge-ai-reasoning-header-toggle=${this._handleHeaderToggle}></slot>
       <div class="forge-expansion-panel thought-content-container ${this.expanded ? 'forge-expansion-panel--open' : ''}">
         <div class="forge-expansion-panel__content " id="chain-content" aria-hidden=${!this.expanded}>
           <slot></slot>
@@ -33,7 +34,7 @@ export class AiChainOfThoughtComponent extends LitElement {
     `;
   }
 
-  private _handleHeaderToggle(event: CustomEvent): void {
+  private _handleHeaderToggle(event: CustomEvent<ForgeAiReasoningHeaderToggleEventData>): void {
     this.expanded = event.detail.expanded;
   }
 }

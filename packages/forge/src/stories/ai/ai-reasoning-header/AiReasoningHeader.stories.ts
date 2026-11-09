@@ -34,7 +34,10 @@ const meta = {
     reasoningText: 'AI is analyzing the problem...'
   },
   render: (args: any) => html`
-    <forge-ai-reasoning-header .expanded=${args.expanded} .reasoning=${args.reasoning} @toggle=${action('toggle')}>
+    <forge-ai-reasoning-header
+      .expanded=${args.expanded}
+      .reasoning=${args.reasoning}
+      @forge-ai-reasoning-header-toggle=${action('forge-ai-reasoning-header-toggle')}>
       <span slot="reasoning-title">${args.reasoningText}</span>
       <span slot="title">${args.titleText}</span>
     </forge-ai-reasoning-header>

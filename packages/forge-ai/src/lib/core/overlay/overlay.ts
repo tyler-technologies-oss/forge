@@ -23,7 +23,7 @@ export type OverlayPlacement = Placement;
 export type OverlayOffset = number | { mainAxis?: number; crossAxis?: number; alignmentAxis?: number };
 
 /**
- * @summary A low-level overlay component for internal use within AI components.
+ * @summary A low-level overlay component that positions content relative to an anchor. Used by `forge-ai-popover` and `forge-ai-tooltip`.
  *
  * @slot - The default slot for overlay content.
  *
@@ -224,6 +224,10 @@ export class ForgeAiOverlayComponent extends LitElement {
   }
 
   private _onToggle = (event: ToggleEvent): void => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     this.open = event.newState === 'open';
 
     // Dispatch a custom event for consumers to listen to

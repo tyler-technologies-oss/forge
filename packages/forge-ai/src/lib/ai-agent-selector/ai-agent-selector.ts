@@ -43,7 +43,7 @@ const MIN_AGENTS_FOR_FILTER = 5;
  * @property {string} titleText - Fallback text when no agent is selected
  * @property {boolean} disabled - Disables the selector (e.g., during streaming)
  *
- * @event forge-ai-agent-selector-change - Fired when an agent is selected
+ * @event {CustomEvent<ForgeAiAgentSelectorChangeEventData>} forge-ai-agent-selector-change - Fired when an agent is selected
  */
 @customElement(AiAgentSelectorComponentTagName)
 export class AiAgentSelectorComponent extends LitElement {

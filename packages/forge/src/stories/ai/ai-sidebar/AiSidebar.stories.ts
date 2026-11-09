@@ -1,10 +1,13 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { action } from 'storybook/actions';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconMenu, tylIconSettings, tylIconPerson, tylIconDashboard, tylIconAnalytics, tylIconNotifications, tylIconChat } from '@tylertech/tyler-icons';
 
+import type { AiSidebarComponent } from '@tylertech/forge-ai/ai-sidebar';
+import type { AiChatHeaderComponent } from '@tylertech/forge-ai/ai-chat-header';
 import '@tylertech/forge-ai/ai-sidebar';
 import '@tylertech/forge-ai/ai-chat-interface';
 import '@tylertech/forge-ai/ai-prompt';
@@ -56,16 +59,15 @@ const meta = {
     const handleClose = action('forge-ai-sidebar-close');
     const handleResize = action('forge-ai-sidebar-resize');
 
-    const handleExpandClick = (): void => {
-      const chatInterface = document.querySelector('forge-ai-chat-interface') as any;
-      if (chatInterface) {
-        chatInterface.expanded = !chatInterface.expanded;
-      }
+    const sidebarRef = createRef<AiSidebarComponent>();
+
+    const handleExpandClick = (event: Event): void => {
+      const header = event.currentTarget as AiChatHeaderComponent;
+      header.expanded = !header.expanded;
     };
 
     const handleMinimizeClick = (): void => {
-      const sidebarEl = document.querySelector('forge-ai-sidebar') as any;
-      sidebarEl?.close();
+      sidebarRef.value?.close();
     };
 
     return html`
@@ -74,14 +76,7 @@ const meta = {
 
         <forge-toolbar slot="body-header">
           <h2 class="forge-typography--heading4">Page Title</h2>
-          <forge-ai-button
-            slot="end"
-            @click=${() => {
-              const sidebar = document.querySelector('forge-ai-sidebar');
-              sidebar?.toggle();
-            }}
-            >Ask AI Assistant</forge-ai-button
-          >
+          <forge-ai-button slot="end" @click=${() => sidebarRef.value?.toggle()}>Ask AI Assistant</forge-ai-button>
         </forge-toolbar>
 
         <main slot="body" style="padding: 24px;">
@@ -91,6 +86,7 @@ const meta = {
         </main>
 
         <forge-ai-sidebar
+          ${ref(sidebarRef)}
           slot="body-right"
           ?open=${args.open}
           resizable=${args.resizable}

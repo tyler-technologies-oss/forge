@@ -1,1 +1,1 @@
-export { AiReasoningHeaderComponent, AiReasoningHeaderComponentTagName } from './ai-reasoning-header.js';
+export { AiReasoningHeaderComponent, AiReasoningHeaderComponentTagName, type ForgeAiReasoningHeaderToggleEventData } from './ai-reasoning-header.js';

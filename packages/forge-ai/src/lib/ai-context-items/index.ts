@@ -1,1 +1,1 @@
-export { AiContextItemsComponent, AiContextItemsComponentTagName } from './ai-context-items.js';
+export { AiContextItemsComponent, AiContextItemsComponentTagName, type ForgeAiContextItemsRemoveEventData } from './ai-context-items.js';

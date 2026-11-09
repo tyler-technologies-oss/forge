@@ -9,6 +9,7 @@ import { renderInlineMarkdown } from '../../utils/markdown.js';
 import '../../ai-artifact/ai-artifact.js';
 import '../../ai-empty-state/ai-empty-state.js';
 import '../ai-paginator/ai-paginator.js';
+import type { ForgeAiPaginatorPageChangeEventData } from '../ai-paginator/ai-paginator.js';
 import '../../core/tooltip/tooltip.js';
 
 import styles from './ai-data-table.scss?inline';
@@ -33,7 +34,6 @@ const MIN_ROWS_FOR_FILTER = 5;
  * Data table component tool renderer for displaying tabular data with pagination and filtering.
  *
  * @tag forge-ai-tool-data-table
- * @internal
  */
 @customElement('forge-ai-tool-data-table')
 export class DataTableToolElement extends LitElement implements IToolRenderer<TableData> {
@@ -112,7 +112,7 @@ export class DataTableToolElement extends LitElement implements IToolRenderer<Ta
     return this._filterValue.trim() !== '' && this.#filteredRows.length === 0;
   }
 
-  #handlePageChange(event: CustomEvent): void {
+  #handlePageChange(event: CustomEvent<ForgeAiPaginatorPageChangeEventData>): void {
     this._currentPage = event.detail.currentPage;
   }
 
@@ -128,7 +128,7 @@ export class DataTableToolElement extends LitElement implements IToolRenderer<Ta
     }
 
     const csvContent = buildCSVContent(data.headers, data.rows);
-    const filename = sanitizeFilename(data.title || '', 'chatbot-data-table');
+    const filename = sanitizeFilename(data.title || '', 'data-table');
     downloadCSV(csvContent, filename);
   }
 
@@ -253,7 +253,7 @@ export class DataTableToolElement extends LitElement implements IToolRenderer<Ta
     return html`<forge-ai-paginator
       current-page="${this._currentPage}"
       total-pages="${this.#totalPages}"
-      @page-change=${this.#handlePageChange}></forge-ai-paginator>`;
+      @forge-ai-paginator-page-change=${this.#handlePageChange}></forge-ai-paginator>`;
   }
 
   public override render(): TemplateResult {

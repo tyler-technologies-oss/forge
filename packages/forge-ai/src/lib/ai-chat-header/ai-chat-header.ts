@@ -74,10 +74,12 @@ export interface AgentInfo {
  *
  * @cssproperty --forge-ai-chat-header-title-color - The color of the title text. Defaults to `currentColor`.
  *
- * @event forge-ai-chat-header-expand - Fired when the expand button is clicked
- * @event forge-ai-chat-header-minimize - Fired when the minimize button is clicked
- * @event forge-ai-chat-header-clear - Fired when the clear chat option is selected
- * @event forge-ai-chat-header-export - Fired when the export option is selected
+ * @event {CustomEvent<void>} forge-ai-chat-header-expand - Fired when the expand button is clicked
+ * @event {CustomEvent<void>} forge-ai-chat-header-minimize - Fired when the minimize button is clicked
+ * @event {CustomEvent<void>} forge-ai-chat-header-clear - Fired when the clear chat option is selected
+ * @event {CustomEvent<void>} forge-ai-chat-header-export - Fired when the export option is selected
+ * @event {CustomEvent<ForgeAiChatHeaderAgentChangeEventData>} forge-ai-chat-header-agent-change - Fired when an agent is selected
+ * @event {CustomEvent<void>} forge-ai-chat-header-conversations-toggle - Fired when the conversations button is clicked
  */
 @customElement(AiChatHeaderComponentTagName)
 export class AiChatHeaderComponent extends LitElement {

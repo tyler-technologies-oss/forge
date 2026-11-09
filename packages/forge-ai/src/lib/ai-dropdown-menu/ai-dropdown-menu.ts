@@ -59,6 +59,10 @@ export type DropdownMenuDensity = 'small' | 'medium' | 'large';
  * - **forge-ai-dropdown-menu-open**: Fired when dropdown opens
  * - **forge-ai-dropdown-menu-close**: Fired when dropdown closes
  *
+ * @event {CustomEvent<DropdownChangeEventDetail>} forge-ai-dropdown-menu-change - Fired when the selection changes.
+ * @event {CustomEvent<{ timestamp: number }>} forge-ai-dropdown-menu-open - Fired when the dropdown opens.
+ * @event {CustomEvent<{ timestamp: number }>} forge-ai-dropdown-menu-close - Fired when the dropdown closes.
+ *
  * @cssproperty --forge-ai-dropdown-menu-min-width - Minimum width of the dropdown menu.
  * @cssproperty --forge-ai-dropdown-menu-max-width - Maximum width of the dropdown menu.
  * @cssproperty --forge-ai-dropdown-menu-max-height - Maximum height of the dropdown menu.
@@ -315,14 +319,12 @@ export class ForgeAiDropdownMenuComponent extends LitElement {
   }
 
   private _dispatchOpenCloseEvent(type: 'open' | 'close'): void {
-    const eventName = type === 'open' ? 'forge-ai-dropdown-menu-open' : 'forge-ai-dropdown-menu-close';
-    this.dispatchEvent(
-      new CustomEvent(eventName, {
-        detail: { timestamp: Date.now() },
-        bubbles: true,
-        composed: true
-      })
-    );
+    const init = { detail: { timestamp: Date.now() }, bubbles: true, composed: true };
+    if (type === 'open') {
+      this.dispatchEvent(new CustomEvent('forge-ai-dropdown-menu-open', init));
+    } else {
+      this.dispatchEvent(new CustomEvent('forge-ai-dropdown-menu-close', init));
+    }
   }
 
   private _onPopoverToggle(event: CustomEvent): void {
