@@ -7,6 +7,19 @@
 <h3 class="forge-typography--label">External icon (lazy)</h3>
 <forge-icon name="code" lazy external></forge-icon>
 
+<h3 class="forge-typography--label">Themes</h3>
+<% const themes = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'text-medium', 'text-low']; %>
+<% for (const background of ['surface', 'surface-container']) { %>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 8px; background: var(--forge-theme-<%= background %>);">
+  <% for (const theme of themes) { %>
+  <span style="display: inline-flex; flex-direction: column; align-items: center; gap: 4px;" class="forge-typography--label1">
+    <forge-icon name="face" theme="<%= theme %>"></forge-icon>
+    <%= theme %>
+  </span>
+  <% } %>
+</div>
+<% } %>
+
 <h3 class="forge-typography--label">Custom</h3>
 <forge-icon name="palette" style="font-size: 48px; color: deepPink;" external></forge-icon>
 
