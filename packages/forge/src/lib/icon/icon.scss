@@ -29,7 +29,13 @@ svg {
 // Theme
 //
 
-@each $theme in [primary secondary tertiary success error warning text-medium text-low] {
+@each $theme in [primary secondary tertiary success error warning info] {
+  :host([theme='#{$theme}']) {
+    @include override(color, theme.variable(on-#{$theme}-container-minimum), value);
+  }
+}
+
+@each $theme in [text-medium text-low] {
   :host([theme='#{$theme}']) {
     @include override(color, theme.variable($theme), value);
   }
