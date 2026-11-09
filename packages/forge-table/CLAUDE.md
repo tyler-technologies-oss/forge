@@ -44,6 +44,15 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   children) into TanStack's `columnPinning` state and computes each cell's sticky offset and `pinned*` classes. TanStack only partitions
   and orders the columns, so the element renders a `<colgroup>` with every column's model size (the offsets are sums of those sizes) and
   `table.has-pinned-columns` switches to `table-layout: fixed`. The row selection column is pinned ahead of start-pinned columns.
+  `aggregation.ts` backs `ColumnDef.aggregate` (a built-in name such as `'sum'` or a TanStack `AggregationFnDef`). It registers the built-in
+  `aggregationFn_*` definitions and resolves the option; `mapColumns` passes it to TanStack as `aggregationFn` only when set, because the
+  feature's default `'auto'` would otherwise aggregate every column. The result of `column.getAggregationValue()` (over the filtered rows,
+  ignoring pagination) is the column's footer unless `footer` is a string; a footer callback also receives it as `aggregate`. Columns with a
+  `Formatter` aggregate the raw property, not the formatted string, and the footer then runs the formatter over the result (each end of an
+  `extent` range). `count`, `uniqueCount` and custom aggregation functions are not formatted, and a `CustomFormatter` function is never
+  applied because it takes a row, not a value. A footer cell that shows an aggregate (`ColumnDefMeta.aggregated`: `aggregate` set and `footer`
+  not a string) also gets the column's `align` and format attribute, so it right-aligns and styles like the body cells; other footer cells
+  are never aligned. Grouped-row aggregation (`columnGroupingFeature`) is not registered.
   `filter/index.ts` is only side-effect imports that register `forge-select` and `forge-text-field`; it is
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.

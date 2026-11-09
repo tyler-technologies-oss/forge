@@ -6,7 +6,7 @@ import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
 import { actionCell, linkCell } from '@tylertech/forge-table';
-import type { ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
+import type { ColumnAggregation, ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconDelete, tylIconEdit } from '@tylertech/tyler-icons';
 
@@ -29,6 +29,10 @@ interface RowData {
 }
 
 const FETCH_DELAY_MS = 250;
+
+const NUMERIC_AGGREGATION_PROPERTIES = new Set(['salary', 'performanceRating', 'bonusRate']);
+const DATE_AGGREGATION_PROPERTIES = new Set(['startDate']);
+const DATE_AGGREGATIONS = new Set(['min', 'max', 'extent', 'count']);
 
 const ratingFormatter = new NumberFormatter({ minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -353,6 +357,31 @@ showFooterToggle.addEventListener('forge-switch-change', ({ detail: selected }) 
   };
 
   updateColumnFooters(dataTable.columns);
+  dataTable.columns = [...dataTable.columns];
+});
+
+const aggregationSelect = document.querySelector('#opt-aggregation') as ISelectComponent;
+aggregationSelect.addEventListener('change', ({ detail }) => {
+  const aggregate = detail === 'off' ? undefined : (detail as ColumnAggregation<RowData>);
+  const applyAggregate = (columns: ColumnDef<RowData>[]): void => {
+    columns.forEach(column => {
+      if (column.columns) {
+        applyAggregate(column.columns);
+        return;
+      }
+
+      const property = column.property as string;
+      const isAggregated = NUMERIC_AGGREGATION_PROPERTIES.has(property) || (DATE_AGGREGATION_PROPERTIES.has(property) && DATE_AGGREGATIONS.has(detail));
+      if (aggregate && isAggregated) {
+        column.aggregate = aggregate;
+      } else {
+        delete column.aggregate;
+      }
+    });
+  };
+
+  applyAggregate(flatColumns);
+  applyAggregate(groupedColumns);
   dataTable.columns = [...dataTable.columns];
 });
 

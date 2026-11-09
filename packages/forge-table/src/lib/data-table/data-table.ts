@@ -50,7 +50,7 @@ import styles from './data-table.scss';
 export { createExpanderColumn, type ExpanderColumnOptions } from './features/expander.js';
 export { actionCell, type ActionButtonConfig } from './templates/action-cell.js';
 export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
-export type { ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
+export type { ColumnAggregation, ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
 
 /**
  * @tag forge-data-table
@@ -565,7 +565,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation || cell.column.columnDef.id === SELECT_COLUMN_ID}>
         <div class="cell-content" part="body-cell-content cell-content">
           ${cell.column.columnDef.meta?.cellSlot
-            ? guard([cell.column], () => html`<slot ${lightDomRender(this, cell)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`)
+            ? guard(
+                [cell.column],
+                () => html`<slot ${lightDomRender(this, cell as Cell<DataTableFeatures, any>)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`
+              )
             : FlexRender({ cell })}
         </div>
       </td>
@@ -621,7 +624,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                   part="tfoot-cell cell"
                   colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                   style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
-                  class=${classMap({ ...getPinnedColumnClasses(header.column), 'empty-footer': header.column.columnDef.footer === undefined })}>
+                  class=${classMap({ ...getPinnedColumnClasses(header.column), 'empty-footer': header.column.columnDef.footer === undefined })}
+                  data-align=${ifDefined(header.column.columnDef.meta?.aggregated ? header.column.columnDef.meta.align : undefined)}
+                  ${formatAttribute(header.column.columnDef.meta?.aggregated ? header.column.columnDef.meta.formatAttribute : undefined)}>
                   <div class="cell-content" part="footer-cell-content cell-content">${FlexRender({ footer: header })}</div>
                 </th>
               `

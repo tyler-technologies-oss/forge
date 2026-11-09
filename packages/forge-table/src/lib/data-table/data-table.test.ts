@@ -1,3 +1,4 @@
+import { constructAggregationFn } from '@tanstack/lit-table';
 import type { ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
 import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
@@ -2119,6 +2120,118 @@ describe('DataTable', () => {
       await harness.setData([TEST_DATA[0]]);
 
       expect(harness.footerCells[0].textContent?.trim()).toBe('Total: 1');
+    });
+
+    it('should render the aggregated value in the footer when a column has an aggregate', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('90');
+    });
+
+    it('should render a range in the footer when the aggregate is extent', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', aggregate: 'extent' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('25 – 35');
+    });
+
+    it('should aggregate with a custom aggregation function', async () => {
+      const aggregate = constructAggregationFn({ aggregate: ({ rows }) => `${rows.length} people` });
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', aggregate }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('3 people');
+    });
+
+    it('should aggregate only the filtered rows', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'age', header: 'Age', property: 'age', aggregate: 'mean' }
+      ];
+      const harness = await createFixture({ columns, filterable: true, manualFilter: false });
+
+      await harness.typeIntoFilter(0, 'Alice');
+
+      expect(harness.footerCells[1].textContent?.trim()).toBe('30');
+    });
+
+    it('should update the aggregated value when data changes', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      await harness.setData([TEST_DATA[0]]);
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('30');
+    });
+
+    it('should aggregate the raw property value when the column has a formatter', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', format: new NumberFormatter(), aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('90');
+    });
+
+    it('should apply the column formatter to the aggregated value', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', format: new CurrencyFormatter(), aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe(new CurrencyFormatter().format(90));
+    });
+
+    it('should apply the column formatter to each end of an extent range', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', format: new CurrencyFormatter(), aggregate: 'extent' }];
+      const harness = await createFixture({ columns });
+
+      const formatter = new CurrencyFormatter();
+      expect(harness.footerCells[0].textContent?.trim()).toBe(`${formatter.format(25)} – ${formatter.format(35)}`);
+    });
+
+    it('should not apply the column formatter to a count', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', format: new CurrencyFormatter(), aggregate: 'count' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('3');
+    });
+
+    it.each([
+      ['NumberFormatter', () => new NumberFormatter()],
+      ['CurrencyFormatter', () => new CurrencyFormatter()]
+    ])('should align the aggregated footer cell to end when a %s is used', async (_name, createFormatter) => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', format: createFormatter(), aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.footerCells[0]).textAlign).toBe('end');
+    });
+
+    it('should align the aggregated footer cell when align is set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', aggregate: 'sum', align: 'center' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.footerCells[0]).textAlign).toBe('center');
+    });
+
+    it('should not align a static footer cell when align is set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', footer: 'Total', aggregate: 'sum', align: 'end' }];
+      const harness = await createFixture({ columns });
+
+      expect(getComputedStyle(harness.footerCells[0]).textAlign).not.toBe('end');
+    });
+
+    it('should prefer a static footer over the aggregated value', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', footer: 'Total', aggregate: 'sum' }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('Total');
+    });
+
+    it('should pass the aggregated value to the footer callback', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'age', header: 'Age', property: 'age', aggregate: 'sum', footer: ({ aggregate }) => `Total: ${aggregate}` }
+      ];
+      const harness = await createFixture({ columns });
+
+      expect(harness.footerCells[0].textContent?.trim()).toBe('Total: 90');
     });
 
     it('should apply correct colspan to footer cells', async () => {

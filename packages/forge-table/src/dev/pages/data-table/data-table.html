@@ -53,6 +53,23 @@ include('./src/partials/page.ejs', {
           { label: 'Multiple', value: 'multiple' }
         ]
       },
+      section('Aggregation'),
+      {
+        type: 'select',
+        label: 'Column aggregation',
+        id: 'opt-aggregation',
+        defaultValue: 'off',
+        options: [
+          { label: 'Off', value: 'off' },
+          { label: 'Sum', value: 'sum' },
+          { label: 'Mean', value: 'mean' },
+          { label: 'Median', value: 'median' },
+          { label: 'Min', value: 'min' },
+          { label: 'Max', value: 'max' },
+          { label: 'Extent', value: 'extent' },
+          { label: 'Count', value: 'count' }
+        ]
+      },
       section('Sorting'),
       { type: 'switch', label: 'Sortable', id: 'opt-sortable' },
       { type: 'switch', label: 'Manual sort', id: 'opt-manual-sort' },

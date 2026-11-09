@@ -1,10 +1,11 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
 import { html } from 'lit';
 import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
-import type { ColumnDef, CustomFormatter, FooterCallback, Row, RowSelectionType } from '../types.js';
+import type { ColumnDef, CustomFormatter, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
 import type { DataTableFeatures } from '../table-features.js';
+import { createAggregationFn, formatAggregationValue } from '../features/aggregation.js';
 
 export interface LeafColumn<TData extends Row> {
   column: ColumnDef<TData>;
@@ -32,6 +33,33 @@ export function hasChildColumns<TData extends Row>(column: ColumnDef<TData> | un
   return Array.isArray(column?.columns) && column.columns.length > 0;
 }
 
+interface FooterContext<TData extends Row> {
+  column: Column<DataTableFeatures, TData>;
+  table: Table<DataTableFeatures, TData>;
+}
+
+function getRawValueReader<TData extends Row>(column: ColumnDef<TData>): ((row: TData) => unknown) | undefined {
+  return column.format instanceof Formatter && column.property ? row => row[column.property as keyof TData] : undefined;
+}
+
+function mapFooter<TData extends Row>(column: ColumnDef<TData>): TanstackColumnDef<DataTableFeatures, TData>['footer'] {
+  const { footer, aggregate } = column;
+  if (typeof footer === 'string' || (typeof footer !== 'function' && !aggregate)) {
+    return footer;
+  }
+
+  return ({ column: tableColumn, table }: FooterContext<TData>) => {
+    const value = aggregate ? tableColumn.getAggregationValue() : undefined;
+    if (typeof footer !== 'function') {
+      return formatAggregationValue(value, aggregate, column.format instanceof Formatter ? column.format : undefined);
+    }
+
+    const propertyId = (column.property ?? tableColumn.id) as string;
+    const data = table.getFilteredRowModel().rows.map(row => row.original);
+    return footer({ property: propertyId, data, aggregate: value });
+  };
+}
+
 export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], parentIndices: number[] = []): TanstackColumnDef<DataTableFeatures, TData>[] {
   return columns.map((column, index) => {
     const indexPath = [...parentIndices, index];
@@ -41,14 +69,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
     const baseColumn = {
       id: columnId,
       header: column.header,
-      footer:
-        typeof column.footer === 'function'
-          ? (context: { column: Column<DataTableFeatures, TData>; table: Table<DataTableFeatures, TData> }) => {
-              const propertyId = (column.property ?? context.column.id) as string;
-              const filteredData = context.table.getFilteredRowModel().rows.map(r => r.original);
-              return (column.footer as FooterCallback<TData>)({ property: propertyId, data: filteredData });
-            }
-          : column.footer,
+      footer: mapFooter(column),
       enableHiding: column.hideable ?? true,
       size: column.width ?? DEFAULT_COLUMN_WIDTH,
       meta: {
@@ -57,7 +78,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         stopRowClickPropagation: column.stopRowClickPropagation,
         reorderable: column.reorderable,
         align: column.align,
-        formatAttribute: getFormatterAttribute(column.format)
+        formatAttribute: getFormatterAttribute(column.format),
+        aggregated: !!column.aggregate && typeof column.footer !== 'string'
       }
     };
 
@@ -81,6 +103,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
               ? (row: TData, i: number = 0) => (column.format as CustomFormatter<TData>)(row, i)
               : undefined,
         enableResizing: column.resizable ?? true,
+        ...(column.aggregate && { aggregationFn: createAggregationFn(column.aggregate, getRawValueReader(column)) }),
         ...(typeof column.template === 'function' && { cell: column.template })
       } satisfies TanstackColumnDef<DataTableFeatures, TData>;
 

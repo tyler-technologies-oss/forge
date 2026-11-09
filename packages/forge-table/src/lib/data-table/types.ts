@@ -1,5 +1,6 @@
-import type { Cell, Column, RowData } from '@tanstack/lit-table';
+import type { AggregationFnDef, Cell, Column, RowData } from '@tanstack/lit-table';
 import type { Formatter } from '@tylertech/forge-core';
+import type { BuiltInColumnAggregation } from './features/aggregation.js';
 import type { DataTableFeatures } from './table-features.js';
 
 export type ColumnAlign = 'start' | 'center' | 'end';
@@ -15,13 +16,16 @@ export interface ColumnDefMeta {
   reorderable?: boolean;
   align?: ColumnAlign;
   formatAttribute?: string;
+  aggregated?: boolean;
 }
 
 export type Row = RowData;
 
 export type RowSelectionType = 'off' | 'single' | 'multiple';
 
-export type FooterCallback<TData extends Row = Row> = (props: { property: string; data: TData[] }) => string;
+export type ColumnAggregation<TData extends Row = Row> = BuiltInColumnAggregation | AggregationFnDef<DataTableFeatures, TData>;
+
+export type FooterCallback<TData extends Row = Row> = (props: { property: string; data: TData[]; aggregate?: unknown }) => string;
 
 export type CustomFormatter<TData extends Row = Row, TResult = unknown> = (row: TData, index: number) => TResult;
 
@@ -35,6 +39,7 @@ export interface ColumnDef<TData extends Row = Row> {
   id?: string;
   header?: string;
   footer?: string | FooterCallback<TData>;
+  aggregate?: ColumnAggregation<TData>;
   property?: string & keyof TData;
   hidden?: boolean;
   hideable?: boolean;

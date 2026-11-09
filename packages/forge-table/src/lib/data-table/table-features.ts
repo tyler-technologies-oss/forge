@@ -15,6 +15,7 @@ import {
   filterFn_includesString,
   filterFn_weakEquals,
   metaHelper,
+  rowAggregationFeature,
   rowExpandingFeature,
   rowSelectionFeature,
   rowSortingFeature,
@@ -23,6 +24,7 @@ import {
   sortFn_text,
   tableFeatures
 } from '@tanstack/lit-table';
+import { dataTableAggregationFns } from './features/aggregation.js';
 import type { ColumnDefMeta } from './types.js';
 
 export const dataTableFeatures = tableFeatures({
@@ -32,11 +34,13 @@ export const dataTableFeatures = tableFeatures({
   columnSizingFeature,
   columnResizingFeature,
   columnVisibilityFeature,
+  rowAggregationFeature,
   rowExpandingFeature,
   rowSelectionFeature,
   rowSortingFeature,
   filteredRowModel: createFilteredRowModel(),
   sortedRowModel: createSortedRowModel(),
+  aggregationFns: dataTableAggregationFns,
   filterFns: {
     arrIncludes: filterFn_arrIncludes,
     equals: filterFn_equals,
