@@ -3,6 +3,7 @@
 @use './token-utils' as *;
 @use './core.animation' as animation;
 @use './core.layout' as layout;
+@use '../icon';
 @forward './core.animation';
 @forward './core.layout';
 @forward './core.shape';
@@ -220,6 +221,11 @@
 @mixin start {
   @include disableable;
   @include layout.item-padding(start, outer);
+  @include icon.provide-theme(
+    (
+      font-size: #{token(icon-size)}
+    )
+  );
 
   display: flex;
   grid-area: start;
@@ -235,6 +241,11 @@
 @mixin end {
   @include disableable;
   @include layout.item-padding(end, outer);
+  @include icon.provide-theme(
+    (
+      font-size: #{token(icon-size)}
+    )
+  );
 
   display: flex;
   grid-area: end;

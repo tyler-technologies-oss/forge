@@ -158,7 +158,8 @@ declare global {
  * @cssproperty --forge-field-multiline-min-block-size - The minimum block size the field can be resized to when multiline.
  * @cssproperty --forge-field-multiline-max-block-size - The maximum block size the field can be resized to when multiline.
  * @cssproperty --forge-field-status-icon-display - The display of the status icon. Set to `none` to hide it.
- * @cssproperty --forge-field-status-icon-size - The size of the status icon.
+ * @cssproperty --forge-field-icon-size - The size of icons in the start, end, and status icon slots.
+ * @cssproperty --forge-field-status-icon-size - The size of the status icon. Defaults to the icon size.
  * @cssproperty --forge-field-status-icon-error-color - The color of the error status icon.
  * @cssproperty --forge-field-status-icon-warning-color - The color of the warning status icon.
  * @cssproperty --forge-field-popover-icon-transition-duration - The duration of the popover icon animation.
