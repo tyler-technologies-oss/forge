@@ -5,7 +5,7 @@ import './data-table.scss';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { actionCell, linkCell } from '@tylertech/forge-table';
+import { actionCell, linkCell, meterCell, ratingCell } from '@tylertech/forge-table';
 import type { ColumnAggregation, ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconDelete, tylIconEdit } from '@tylertech/tyler-icons';
@@ -35,8 +35,9 @@ const NUMERIC_AGGREGATION_PROPERTIES = new Set(['salary', 'performanceRating', '
 const DATE_AGGREGATION_PROPERTIES = new Set(['startDate']);
 const DATE_AGGREGATIONS = new Set(['min', 'max', 'extent', 'count']);
 
-const ratingFormatter = new NumberFormatter({ minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+const performanceMeter = meterCell({ min: 0, max: 5, low: 3, high: 4, optimum: 5 });
 
 const actionsColumn: ColumnDef<RowData> = {
   id: 'actions',
@@ -50,19 +51,20 @@ const actionsColumn: ColumnDef<RowData> = {
 };
 
 const flatColumns: ColumnDef<RowData>[] = [
-  { header: 'Id', property: 'id', filterType: 'number' },
-  { header: 'First Name', property: 'firstName' },
-  { header: 'Last Name', property: 'lastName' },
+  // { header: 'Id', property: 'id', filterType: 'number' },
+  // { header: 'First Name', property: 'firstName' },
+  // { header: 'Last Name', property: 'lastName' },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
   { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
-  { header: 'Department', property: 'department' },
-  { header: 'Position', property: 'position' },
+  // { header: 'Department', property: 'department' },
+  // { header: 'Position', property: 'position' },
   { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
-  { header: 'Performance rating', property: 'performanceRating', filterType: 'number', format: ratingFormatter },
+  { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
+  { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
   { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
   { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
-  { header: 'City', property: 'city' },
-  { header: 'State', property: 'state' },
+  // { header: 'City', property: 'city' },
+  // { header: 'State', property: 'state' },
   { header: 'Notes', property: 'notes', editable: true },
   actionsColumn
 ];
@@ -84,7 +86,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
       { header: 'Department', property: 'department' },
       { header: 'Position', property: 'position' },
       { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
-      { header: 'Performance rating', property: 'performanceRating', filterType: 'number', format: ratingFormatter },
+      { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
+      { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
       { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
       { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() }
     ]
