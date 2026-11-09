@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use './core' as *;
 @use '../theme';
 @use '../typography';
@@ -254,7 +255,11 @@ forge-state-layer {
   :host(:not(:state(toggle))) {
     .forge-icon-button.#{$theme} {
       &.icon {
-        @include override(icon-color, theme.variable($theme), value);
+        @if list.index((primary, secondary, tertiary), $theme) {
+          @include override(icon-color, theme.variable(text-high), value);
+        } @else {
+          @include override(icon-color, theme.variable(on-#{$theme}-container-minimum), value);
+        }
       }
 
       &.outlined {
