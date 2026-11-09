@@ -1,6 +1,6 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
 import { html } from 'lit';
-import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
+import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
 import type { ColumnDef, CustomFormatter, FooterCallback, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
@@ -127,6 +127,7 @@ export function prependSelectColumn<TData extends Row>(
 
   const selectColumn: TanstackColumnDef<DataTableFeatures, TData> = {
     id: SELECT_COLUMN_ID,
+    size: SELECT_COLUMN_WIDTH,
     enableResizing: false,
     enableColumnFilter: false,
     enableSorting: false,

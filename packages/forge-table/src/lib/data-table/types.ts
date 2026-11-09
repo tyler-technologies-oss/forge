@@ -4,6 +4,8 @@ import type { DataTableFeatures } from './table-features.js';
 
 export type ColumnAlign = 'start' | 'center' | 'end';
 
+export type ColumnPin = 'start' | 'end';
+
 export type FilterType = 'text' | 'number' | 'range' | 'select' | 'date' | 'date-range' | 'time';
 
 export interface ColumnDefMeta {
@@ -46,4 +48,5 @@ export interface ColumnDef<TData extends Row = Row> {
   stopRowClickPropagation?: boolean;
   columns?: ColumnDef<TData>[];
   align?: ColumnAlign;
+  pin?: ColumnPin;
 }

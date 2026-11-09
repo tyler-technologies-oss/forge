@@ -3,6 +3,7 @@ import {
   ColumnDef as TanstackColumnDef,
   ColumnFiltersState,
   ColumnOrderState,
+  ColumnPinningState,
   FlexRender,
   LitTable,
   RowSelectionState,
@@ -30,6 +31,7 @@ import { ColumnReorderController } from './controllers/column-reorder-controller
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
 import { canColumnBeReordered, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
 import { COMPACT_ROW_HEIGHT, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID, VIRTUALIZER_OVERSCAN } from './constants.js';
+import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
 import { renderFilterField } from './templates/filter-fields.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnDef, Row, RowSelectionType } from './types.js';
@@ -214,6 +216,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @state() private _tableColumns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
   @state() private _sorting: SortingState = [];
   @state() private _columnFilters: ColumnFiltersState = [];
+  @state() private _columnPinning: ColumnPinningState = { start: [], end: [] };
   @state() private _rowSelection: RowSelectionState = {};
   @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
   @state() private _columnMenuAnchorId: string | null = null;
@@ -325,6 +328,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
   }
 
+  #updateColumnPinning(): void {
+    this._columnPinning = getColumnPinningState(this.columns, this.rowSelection !== 'off');
+  }
+
   #updateRenderColumns(): void {
     this._tableColumns = this.rowSelection === 'off' ? [...this._columns] : prependSelectColumn(this._columns, this.rowSelection);
   }
@@ -344,6 +351,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
 
     if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
+      this.#updateColumnPinning();
       this.#updateRenderColumns();
     }
 
@@ -398,12 +406,14 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
       onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
       onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
+      onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
       getRowCanExpand: () => this.expandable,
       state: {
         sorting: this._sorting,
         columnFilters: this._columnFilters,
         columnVisibility: this.columnVisibility,
         columnOrder: this.columnOrder,
+        columnPinning: this._columnPinning,
         rowSelection: this._rowSelection
       }
     });
@@ -419,12 +429,14 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             filterable: this.filterable,
             'fixed-headers': this.fixedHeaders,
             hover: this.hover,
+            'has-pinned-columns': table.getIsSomeColumnsPinned(),
             resizable: this.resizable,
             'row-selection': this.rowSelection !== 'off',
             striped: this.striped,
             virtualized: this.virtualized
           })}
           style=${styleMap(tableStyle)}>
+          ${this.#renderColumnGroup(table)}
           <thead>
             ${this.#renderTableHeader(table)}
           </thead>
@@ -444,6 +456,18 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       }
     });
     return groupStartColumnIds;
+  }
+
+  #renderColumnGroup(table: LitTable<DataTableFeatures, TData>): TemplateResult | typeof nothing {
+    if (!table.getIsSomeColumnsPinned()) {
+      return nothing;
+    }
+
+    return html`<colgroup>
+      ${[...table.getStartVisibleLeafColumns(), ...table.getCenterVisibleLeafColumns(), ...table.getEndVisibleLeafColumns()].map(
+        column => html`<col style=${styleMap({ width: this.#getColumnWidthStyle(column) })} />`
+      )}
+    </colgroup>`;
   }
 
   #renderTableHeader(table: LitTable<DataTableFeatures, TData>): TemplateResult {
@@ -467,8 +491,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                 id=${headerId}
                 part="head-cell cell"
                 colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
-                style=${styleMap({ width: this.#getColumnWidthStyle(header.column) })}
+                style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
                 class=${classMap({
+                  ...getPinnedColumnClasses(header.column),
                   'sort-asc': header.column.getIsSorted() === 'asc',
                   'sort-desc': header.column.getIsSorted() === 'desc',
                   'select-column': this.rowSelection && header.column.columnDef.id === SELECT_COLUMN_ID,
@@ -528,8 +553,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     return html`
       <td
         part="body-cell cell"
-        style=${styleMap({ width: this.#getColumnWidthStyle(cell.column) })}
+        style=${styleMap({ width: this.#getColumnWidthStyle(cell.column), ...getPinnedColumnStyle(cell.column) })}
         class=${classMap({
+          ...getPinnedColumnClasses(cell.column),
           'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
           'group-start': groupStartColumnIds.has(cell.column.id)
         })}
@@ -594,8 +620,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                 <th
                   part="tfoot-cell cell"
                   colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
-                  style=${styleMap({ width: this.#getColumnWidthStyle(header.column) })}
-                  class=${classMap({ 'empty-footer': header.column.columnDef.footer === undefined })}>
+                  style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
+                  class=${classMap({ ...getPinnedColumnClasses(header.column), 'empty-footer': header.column.columnDef.footer === undefined })}>
                   <div class="cell-content" part="footer-cell-content cell-content">${FlexRender({ footer: header })}</div>
                 </th>
               `
@@ -837,6 +863,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     this.#columnVisibilityController.setVisibilityState(nextState);
   }
 
+  #onColumnPinningChange(updaterOrValue: Updater<ColumnPinningState>): void {
+    const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this._columnPinning) : updaterOrValue;
+    this._columnPinning = pinSelectColumn(nextState, this.rowSelection !== 'off');
+  }
+
   #emitColumnVisibilityChange(nextState: ColumnVisibilityState): void {
     this.dispatchEvent(new CustomEvent('forge-data-table-column-visibility', { detail: nextState, bubbles: true, composed: true }));
   }
@@ -944,11 +975,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #getColumnWidthStyle(column: Column<DataTableFeatures, TData>): string | null {
-    if (!this.resizable || !column.getCanResize()) {
-      return null;
+    if (this.resizable && column.getCanResize()) {
+      return `var(${this.#getColumnSizeVarName(column.id)})`;
     }
 
-    return `var(${this.#getColumnSizeVarName(column.id)})`;
+    return column.table.getIsSomeColumnsPinned() ? `${column.getSize()}px` : null;
   }
 
   #getColumnSizeVarName(columnId: string): string {

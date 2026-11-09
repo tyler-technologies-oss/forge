@@ -971,6 +971,152 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Column Pinning', () => {
+    const getHeaderIds = (harness: DataTableHarness): (string | null)[] => harness.headerCells.map(cell => cell.getAttribute('data-column-id'));
+    const getInset = (cell: Element | null | undefined, property: 'insetInlineStart' | 'insetInlineEnd'): string => getComputedStyle(cell as Element)[property];
+
+    const PINNED_COLUMNS: ColumnDef<TestData>[] = [
+      { id: 'id', header: 'ID', property: 'id', width: 100 },
+      { id: 'name', header: 'Name', property: 'name', width: 150, pin: 'start' },
+      { id: 'age', header: 'Age', property: 'age', width: 80, pin: 'start' },
+      { id: 'email', header: 'Email', property: 'email', width: 120, pin: 'end' }
+    ];
+
+    it('should not make any column sticky when no column is pinned', async () => {
+      const harness = await createFixture();
+
+      expect(harness.tableElement?.querySelector('colgroup')).toBeNull();
+      expect(harness.headerCells.every(cell => getComputedStyle(cell).position !== 'sticky')).toBe(true);
+    });
+
+    it('should render start pinned columns first and end pinned columns last', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      expect(getHeaderIds(harness)).toEqual(['name', 'age', 'id', 'email']);
+      expect(harness.getBodyRowByIndex(0)?.querySelectorAll('td')[0].id).toBe('name');
+      expect(harness.getBodyRowByIndex(0)?.querySelectorAll('td')[3].id).toBe('email');
+    });
+
+    it('should make pinned header and body cells sticky', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      const stickyCells = [...harness.headerCells, ...harness.bodyCells].filter(cell => getComputedStyle(cell).position === 'sticky');
+
+      expect(stickyCells.length).toBe((harness.bodyRows.length + 1) * 3);
+      expect(stickyCells.some(cell => cell.getAttribute('data-column-id') === 'id' || cell.id === 'id')).toBe(false);
+    });
+
+    it('should offset pinned columns by the widths of the pinned columns before them', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      expect(getInset(harness.getHeaderCellById('name'), 'insetInlineStart')).toBe('0px');
+      expect(getInset(harness.getHeaderCellById('age'), 'insetInlineStart')).toBe('150px');
+      expect(getInset(harness.getHeaderCellById('email'), 'insetInlineEnd')).toBe('0px');
+      expect(getInset(harness.getBodyCellByRowAndColumn(0, 1), 'insetInlineStart')).toBe('150px');
+    });
+
+    it('should apply the column width to pinned columns so that offsets match the rendered layout', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      expect(harness.getHeaderCellById('name')?.getBoundingClientRect().width).toBe(150);
+      expect(harness.getHeaderCellById('age')?.getBoundingClientRect().width).toBe(80);
+    });
+
+    it('should ignore hidden columns when calculating offsets', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS, columnVisibility: { name: false } });
+
+      expect(getHeaderIds(harness)).toEqual(['age', 'id', 'email']);
+      expect(getInset(harness.getHeaderCellById('age'), 'insetInlineStart')).toBe('0px');
+    });
+
+    it('should mark only the pinned column next to the scrollable columns as the edge', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      expect(harness.getHeaderCellById('name')?.classList.contains('pinned-edge')).toBe(false);
+      expect(harness.getHeaderCellById('age')?.classList.contains('pinned-edge')).toBe(true);
+      expect(harness.getHeaderCellById('id')?.classList.contains('pinned-edge')).toBe(false);
+      expect(harness.getHeaderCellById('email')?.classList.contains('pinned-edge')).toBe(true);
+    });
+
+    it('should pin the child columns of a pinned column group', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'id', header: 'ID', property: 'id' },
+        {
+          id: 'person',
+          header: 'Person',
+          pin: 'end',
+          columns: [
+            { id: 'name', header: 'Name', property: 'name', width: 100 },
+            { id: 'age', header: 'Age', property: 'age', width: 60, pin: 'start' }
+          ]
+        },
+        { id: 'email', header: 'Email', property: 'email' }
+      ];
+      const harness = await createFixture({ columns });
+
+      const bodyIds = [...(harness.getBodyRowByIndex(0)?.querySelectorAll('td') ?? [])].map(cell => cell.id);
+
+      expect(bodyIds).toEqual(['age', 'id', 'email', 'name']);
+    });
+
+    it('should pin the row selection column ahead of start pinned columns', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS, rowSelection: 'multiple' });
+
+      expect(getHeaderIds(harness)[0]).toBe('SELECT_COLUMN_ID');
+      expect(getInset(harness.getHeaderCellById('SELECT_COLUMN_ID'), 'insetInlineStart')).toBe('0px');
+      expect(getInset(harness.getHeaderCellById('name'), 'insetInlineStart')).toBe('40px');
+    });
+
+    const chooseMenuAction = async (harness: DataTableHarness, columnId: string, label: string): Promise<void> => {
+      const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
+      (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
+      const item = await vi.waitFor(() => {
+        const match = [...document.querySelectorAll('forge-list-item')].find(i => i.textContent?.trim() === label);
+        expect(match).toBeTruthy();
+        return match as HTMLElement;
+      });
+      await userEvent.click(item.querySelector('button') as HTMLElement);
+      await settle(harness.element);
+    };
+
+    it('should pin and unpin a column from its column menu', async () => {
+      const harness = await createFixture({ columns: TEST_COLUMNS });
+
+      await chooseMenuAction(harness, 'email', 'Pin');
+      expect(getHeaderIds(harness)).toEqual(['email', 'id', 'name', 'age']);
+
+      await chooseMenuAction(harness, 'email', 'Unpin');
+      expect(getHeaderIds(harness)).toEqual(['id', 'name', 'age', 'email']);
+    });
+
+    it('should keep the row selection column first when a column is pinned from the menu', async () => {
+      const harness = await createFixture({ columns: TEST_COLUMNS, rowSelection: 'multiple' });
+
+      await chooseMenuAction(harness, 'email', 'Pin');
+
+      expect(getHeaderIds(harness).slice(0, 2)).toEqual(['SELECT_COLUMN_ID', 'email']);
+    });
+
+    it('should pin footer cells', async () => {
+      const columns: ColumnDef<TestData>[] = PINNED_COLUMNS.map(column => ({ ...column, footer: column.header }));
+      const harness = await createFixture({ columns });
+
+      const pinnedFooterCells = harness.footerCells.filter(cell => getComputedStyle(cell).position === 'sticky');
+
+      expect(pinnedFooterCells.length).toBe(3);
+    });
+
+    it('should update pinned columns when the columns change', async () => {
+      const harness = await createFixture({ columns: PINNED_COLUMNS });
+
+      harness.element.columns = TEST_COLUMNS;
+      await settle(harness.element);
+
+      expect(getHeaderIds(harness)).toEqual(['id', 'name', 'age', 'email']);
+      expect(harness.tableElement?.querySelector('colgroup')).toBeNull();
+    });
+  });
+
   describe('Sorting', () => {
     describe('Single Column Sorting', () => {
       it('should enable sorting when sortable is true', async () => {

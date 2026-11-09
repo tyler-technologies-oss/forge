@@ -40,11 +40,15 @@ component out of a release. To publish: remove `private`, add a changeset, and r
 - `src/lib/data-table/directives/light-dom-render.ts` — renders custom cell templates into the light DOM
   and projects them through named slots (`col-<id>:row-<id>`).
 - `src/lib/data-table/features/` — opt-in pieces. `expander.ts` is re-exported from the main entry.
+  `column-pinning.ts` holds the column pinning logic: it turns `ColumnDef.pin` (`'start' | 'end'`, cascading from a column group to its
+  children) into TanStack's `columnPinning` state and computes each cell's sticky offset and `pinned*` classes. TanStack only partitions
+  and orders the columns, so the element renders a `<colgroup>` with every column's model size (the offsets are sums of those sizes) and
+  `table.has-pinned-columns` switches to `table-layout: fixed`. The row selection column is pinned ahead of start-pinned columns.
   `filter/index.ts` is only side-effect imports that register `forge-select` and `forge-text-field`; it is
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.
-  Takes the TanStack `column` and `table` as properties; sort, move and hide are applied directly, while pin and
-  maximize only dispatch `forge-data-table-column-menu-action`. It assigns `forge-menu`'s `options` in
+  Takes the TanStack `column` and `table` as properties; sort, move, hide and pin (to the start) are applied directly, while
+  maximize only dispatches `forge-data-table-column-menu-action` (every action dispatches it). It assigns `forge-menu`'s `options` in
   `firstUpdated` because `forge-menu` drops an `options` value that Lit sets during the first render.
 - `src/dev/` — a dev page on **localhost:3470**, written like forge's own dev pages (`pages/data-table/data-table.{html,ejs,ts,scss}`;
   the options drawer is the `options` array in the `.html`). It reuses forge's page shell (`packages/forge/src/dev/src`: scaffold, app bar,

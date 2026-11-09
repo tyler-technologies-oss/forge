@@ -17,6 +17,7 @@
 .table-container {
   position: relative;
   overflow-x: auto;
+  overscroll-behavior-inline: none;
 }
 
 table {
@@ -384,6 +385,62 @@ table.fixed-headers {
     top: 0;
     background-color: #{theme.variable(surface)};
     z-index: 1;
+  }
+}
+
+//
+// Pinned columns
+//
+
+table.has-pinned-columns {
+  table-layout: fixed;
+  width: fit-content;
+
+  :where(th, td).pinned {
+    position: sticky;
+    z-index: 1;
+  }
+
+  th.pinned {
+    z-index: 2;
+  }
+
+  td.pinned {
+    background-color: #{theme.variable(surface)};
+  }
+
+  :where(th, td).pinned-edge {
+    &.pinned-start {
+      box-shadow: inset -1px 0 0 #{theme.variable(outline)};
+    }
+
+    &.pinned-end {
+      box-shadow: inset 1px 0 0 #{theme.variable(outline)};
+    }
+  }
+
+  &.striped tbody tr:nth-child(odd) td.pinned {
+    background-color: #{theme.variable(surface-container-minimum)};
+  }
+
+  &.hover {
+    tbody tr:hover td.pinned {
+      background-color: #{theme.variable(surface-container-minimum)};
+    }
+
+    &.striped tbody tr:nth-child(odd):hover td.pinned {
+      background-color: #{theme.variable(surface-container-low)};
+    }
+  }
+
+  &.row-selection {
+    tbody tr.selected td.pinned {
+      background-color: #{theme.variable(primary-container-low)};
+    }
+
+    &.hover tbody tr.selected:hover td.pinned {
+      background-color: #{theme.variable(primary-container-minimum)};
+    }
   }
 }
 

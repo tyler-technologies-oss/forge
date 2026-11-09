@@ -6,7 +6,6 @@ import { userEvent } from 'vitest/browser';
 import './column-menu.js';
 import type { ColumnMenuElement } from './column-menu.js';
 import { dataTableFeatures, type DataTableFeatures } from '../data-table/table-features.js';
-import type { ColumnMenuAction } from './types.js';
 
 interface TestData {
   id: number;
@@ -198,20 +197,49 @@ describe('ColumnMenu', () => {
     expect(isDisabled(await openMenu(element), 'Move right')).toBe(true);
   });
 
-  it.each<[string, ColumnMenuAction]>([
-    ['Pin', 'pin'],
-    ['Maximize', 'maximize']
-  ])('should dispatch an action event without changing the table when %s is chosen', async (label, action) => {
+  it('should dispatch an action event without changing the table when Maximize is chosen', async () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'name');
     const listener = vi.fn();
     element.addEventListener('forge-data-table-column-menu-action', listener);
 
-    await choose(await openMenu(element), label);
+    await choose(await openMenu(element), 'Maximize');
 
     expect(listener).toHaveBeenCalledTimes(1);
-    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action });
+    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'maximize' });
     expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
+  });
+
+  it('should pin the column to the start when pin is chosen', async () => {
+    const table = createTestTable();
+    const element = await renderMenu(table, 'name');
+    const listener = vi.fn();
+    element.addEventListener('forge-data-table-column-menu-action', listener);
+
+    await choose(await openMenu(element), 'Pin');
+
+    expect(table.atoms.columnPinning.get()).toEqual({ start: ['name'], end: [] });
+    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'pin' });
+  });
+
+  it('should unpin the column when unpin is chosen', async () => {
+    const table = createTestTable();
+    table.getColumn('name')?.pin('end');
+    const element = await renderMenu(table, 'name');
+    const listener = vi.fn();
+    element.addEventListener('forge-data-table-column-menu-action', listener);
+
+    await choose(await openMenu(element), 'Unpin');
+
+    expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
+    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'unpin' });
+  });
+
+  it('should disable pin when the column cannot be pinned', async () => {
+    const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enablePinning: false } : column));
+    const element = await renderMenu(createTestTable({ columns }), 'name');
+
+    expect(isDisabled(await openMenu(element), 'Pin')).toBe(true);
   });
 
   it('should dispatch an action event for actions applied to the table', async () => {

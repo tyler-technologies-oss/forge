@@ -8,7 +8,8 @@ import {
   tylIconArrowLeftRight,
   tylIconArrowUpward,
   tylIconMoreVert,
-  tylIconPushPin,
+  tylIconPin,
+  tylIconPinOff,
   tylIconVisibilityOff
 } from '@tylertech/tyler-icons';
 import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
@@ -33,8 +34,8 @@ const DIVIDER_OPTION: IMenuOption = { value: undefined, label: '', divider: true
 /**
  * A menu button with actions for a single table column.
  *
- * Sorting, moving, and hiding are applied directly to the table through the TanStack `column` and `table`.
- * Pinning and maximizing are only announced through the `forge-data-table-column-menu-action` event.
+ * Sorting, moving, hiding, and pinning are applied directly to the table through the TanStack `column` and `table`.
+ * Maximizing is only announced through the `forge-data-table-column-menu-action` event.
  *
  * @tag forge-data-table-column-menu
  *
@@ -51,7 +52,8 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       tylIconArrowUpward,
       tylIconArrowDownward,
       tylIconVisibilityOff,
-      tylIconPushPin
+      tylIconPin,
+      tylIconPinOff
     ]);
   }
 
@@ -107,7 +109,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       column.getCanSort() ? [item('sort-ascending', 'Sort ascending', 'arrow_upward'), item('sort-descending', 'Sort descending', 'arrow_downward')] : [],
       [
         item('hide', 'Hide', 'visibility_off', !column.getCanHide()),
-        item(isPinned ? 'unpin' : 'pin', isPinned ? 'Unpin' : 'Pin', 'push_pin'),
+        item(isPinned ? 'unpin' : 'pin', isPinned ? 'Unpin' : 'Pin', isPinned ? 'pin_off' : 'pin', !column.getCanPin()),
         ...(column.getCanResize() ? [item('maximize', 'Maximize', 'arrow_left_right')] : [])
       ]
     ];
@@ -165,6 +167,12 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
         break;
       case 'hide':
         column.toggleVisibility(false);
+        break;
+      case 'pin':
+        column.pin('start');
+        break;
+      case 'unpin':
+        column.pin(false);
         break;
     }
   }
