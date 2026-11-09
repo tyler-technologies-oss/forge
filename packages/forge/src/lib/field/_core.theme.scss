@@ -162,11 +162,7 @@ $elevations: (
 }
 
 @mixin inset-label-color($theme) {
-  @if list.index($neutral-themes, $theme) {
-    $theme: default;
-  }
-
-  @include override(label-color, map.get($inset-label-colors, $theme), value);
+  @include override(label-color, map.get($inset-label-colors, default), value);
 }
 
 @mixin invalid-support-text-color {
