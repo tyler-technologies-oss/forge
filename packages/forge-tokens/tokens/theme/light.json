@@ -516,6 +516,15 @@
     },
     "border-info-strong": {
       "$value": "{color.radix.blue.a8}"
+    },
+    "border-neutral-subtle": {
+      "$value": "{color.radix.slate.a6}"
+    },
+    "border-neutral-default": {
+      "$value": "{color.radix.slate.a7}"
+    },
+    "border-neutral-strong": {
+      "$value": "{color.radix.slate.a8}"
     }
   }
 }
