@@ -78,6 +78,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         filterVariant: column.filterType,
         stopRowClickPropagation: column.stopRowClickPropagation,
         reorderable: column.reorderable,
+        renamable: column.renamable,
         align: column.align,
         formatAttribute: getFormatterAttribute(column.format),
         aggregated: !!column.aggregate && typeof column.footer !== 'string',
@@ -141,6 +142,22 @@ export function getAllColumnIds<TData extends Row>(columns: ColumnDef<TData>[], 
       }
     }
     return [columnId];
+  });
+}
+
+export function applyColumnHeaders<TData extends Row>(
+  columns: TanstackColumnDef<DataTableFeatures, TData>[],
+  headers: Readonly<Record<string, string>>
+): TanstackColumnDef<DataTableFeatures, TData>[] {
+  if (!Object.keys(headers).length) {
+    return [...columns];
+  }
+
+  return columns.map(column => {
+    const header = column.id ? headers[column.id] : undefined;
+    const withHeader = header === undefined ? column : { ...column, header };
+    const children = 'columns' in withHeader ? withHeader.columns : undefined;
+    return children ? { ...withHeader, columns: applyColumnHeaders([...children], headers) } : withHeader;
   });
 }
 

@@ -76,6 +76,16 @@ table {
             text-overflow: ellipsis;
             min-width: 0;
           }
+
+          .rename-field {
+            flex: 0 0 auto;
+            background-color: #{theme.variable(surface-container-minimum)};
+          }
+
+          .rename-input {
+            field-sizing: content;
+            min-inline-size: 4ch;
+          }
         }
 
         .cell-container[draggable='true'] {
@@ -441,6 +451,12 @@ table.fixed-headers {
     background-color: #{theme.variable(surface)};
     z-index: 1;
   }
+}
+
+// A header being renamed grows with its text, so it overlays the neighboring headers instead of clipping
+table thead th.renaming,
+table.has-pinned-columns thead th.pinned.renaming {
+  z-index: 3;
 }
 
 //

@@ -15,6 +15,7 @@ export interface ColumnDefMeta {
   cellSlot?: boolean;
   stopRowClickPropagation?: boolean;
   reorderable?: boolean;
+  renamable?: boolean;
   align?: ColumnAlign;
   formatAttribute?: string;
   aggregated?: boolean;
@@ -47,6 +48,7 @@ export interface ColumnDef<TData extends Row = Row> {
   hideable?: boolean;
   resizable?: boolean;
   reorderable?: boolean;
+  renamable?: boolean;
   width?: number;
   format?: Formatter<unknown, unknown> | CustomFormatter<TData>;
   template?: string | TemplateFn;

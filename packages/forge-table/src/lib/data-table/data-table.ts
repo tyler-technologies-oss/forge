@@ -26,7 +26,15 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { svg } from 'lit/static-html.js';
-import { canColumnBeReordered, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
+import {
+  applyColumnHeaders,
+  canColumnBeReordered,
+  getAllColumnIds,
+  getAllLeafColumns,
+  mapColumns,
+  prependSelectColumn,
+  resolveColumnId
+} from './columns/column-utils.js';
 import { COMPACT_ROW_HEIGHT, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID, VIRTUALIZER_OVERSCAN } from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
@@ -34,6 +42,7 @@ import { formatAttribute } from './directives/format-attribute.js';
 import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
+import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderFilterField } from './templates/filter-fields.js';
 import { isCellEditable } from './templates/input-cell.js';
 import type { ColumnDef, Row, RowSelectionType } from './types.js';
@@ -43,6 +52,7 @@ import '@tylertech/forge/date-picker';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/list';
 import '@tylertech/forge/popover';
+import '@tylertech/forge/text-field';
 import '@tylertech/forge/tooltip';
 import '../column-menu/column-menu.js';
 
@@ -72,6 +82,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   private _columnVisibilityPopover?: PopoverComponent;
   #internals: ElementInternals;
   #isDragging = false;
+  #sortingBeforeClick: SortingState | null = null;
 
   public static override styles = unsafeCSS(styles);
 
@@ -225,6 +236,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
   @state() private _columnMenuAnchorId: string | null = null;
   @state() private _columnMenuOpen = false;
+  @state() private _columnHeaders: Record<string, string> = {};
+  @state() private _renamingColumnId: string | null = null;
 
   constructor() {
     super();
@@ -279,6 +292,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       this.#columnVisibilityController.setVisibilityState(derivedVisibility, { notifyHost: false });
     }
 
+    this._columnHeaders = {};
+    this._renamingColumnId = null;
     this.#closeColumnMenu();
   }
 
@@ -337,7 +352,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #updateRenderColumns(): void {
-    this._tableColumns = this.rowSelection === 'off' ? [...this._columns] : prependSelectColumn(this._columns, this.rowSelection);
+    const columns = applyColumnHeaders(this._columns, this._columnHeaders);
+    this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
   }
 
   // eslint-disable-next-line @tylertech-eslint/require-private-modifier
@@ -356,6 +372,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
     if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
       this.#updateColumnPinning();
+    }
+
+    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || changedProperties.has('_columnHeaders' as never)) {
       this.#updateRenderColumns();
     }
 
@@ -365,6 +384,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
     if (changedProperties.has('virtualized') || changedProperties.has('_data' as never)) {
       this.#setVirtualized();
+    }
+  }
+
+  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
+  protected override updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('_renamingColumnId' as never) && this._renamingColumnId) {
+      const input = this.shadowRoot?.querySelector<HTMLInputElement>('.rename-input');
+      input?.focus();
+      input?.select();
     }
   }
 
@@ -486,8 +514,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             const hasHeader = !!header.column.columnDef.header?.length;
             const isParent = (header.column.columns?.length ?? 0) > 0;
             const canAcceptDrop = this.reorderable && header.column.columnDef.id !== SELECT_COLUMN_ID && ((isParent && !header.isPlaceholder) || hasHeader);
-            const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && canColumnBeReordered(header.column);
+            const isRenaming = this._renamingColumnId === header.column.id;
+            const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && !isRenaming && canColumnBeReordered(header.column);
             const headerId = this.#getColumnHeaderId(header.column.id);
+            const canRename = !header.isPlaceholder && !isRenaming && this.#canRenameColumn(header.column);
+            const sortClickHandler =
+              this.sortable && !canBeDragged
+                ? header.column.getToggleSortingHandler()
+                : canBeDragged
+                  ? (evt: MouseEvent) => this.#onHeaderClick(evt, header.column)
+                  : null;
             const canShowColumnMenu =
               header.column.columnDef.id !== SELECT_COLUMN_ID && header.column.getCanHide() && !header.isPlaceholder && !header.column.columns.length;
             return html`
@@ -502,7 +538,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                   'sort-desc': header.column.getIsSorted() === 'desc',
                   'select-column': this.rowSelection && header.column.columnDef.id === SELECT_COLUMN_ID,
                   'group-header': isGroupHeader,
-                  'group-start': isGroupStart
+                  'group-start': isGroupStart,
+                  renaming: isRenaming
                 })}
                 data-column-id=${header.column.id}
                 @dragover=${canAcceptDrop ? (evt: DragEvent) => this.#columnReorderController?.onDragOver(evt, header.column) : nothing}
@@ -521,12 +558,18 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                   <div
                     part="head-cell-content cell-content"
                     class="cell-content"
-                    @click=${this.sortable && !canBeDragged
-                      ? header.column.getToggleSortingHandler()
-                      : canBeDragged
-                        ? (evt: MouseEvent) => this.#onHeaderClick(evt, header.column)
-                        : null}>
-                    <span class="cell-text">${header.isPlaceholder ? null : FlexRender({ header })}</span>
+                    @click=${canRename && sortClickHandler
+                      ? (evt: MouseEvent) => {
+                          if (evt.detail === 1) {
+                            this.#sortingBeforeClick = this._sorting;
+                          }
+                          sortClickHandler(evt);
+                        }
+                      : sortClickHandler}
+                    @dblclick=${canRename ? () => this.#onHeaderDoubleClick(header.column) : nothing}>
+                    ${isRenaming
+                      ? this.#renderRenameInput(header.column)
+                      : html`<span class="cell-text">${header.isPlaceholder ? null : FlexRender({ header })}</span>`}
                     ${this.sortable && header.column.getIsSorted()
                       ? html`
                           ${this._sorting.length > 1 ? html`<span class="sort-index" part="sort-index">${header.column.getSortIndex() + 1}</span>` : nothing}
@@ -534,7 +577,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                         `
                       : null}
                   </div>
-                  <forge-data-table-column-menu .table=${table} .column=${header.column} .reorderable=${this.reorderable}></forge-data-table-column-menu>
+                  <forge-data-table-column-menu
+                    .table=${table}
+                    .column=${header.column}
+                    .reorderable=${this.reorderable}
+                    @forge-data-table-column-menu-action=${(evt: CustomEvent<ColumnMenuActionEventDetail>) =>
+                      this.#onColumnMenuAction(evt, header.column)}></forge-data-table-column-menu>
                 </div>
                 ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(header.column)}</div>` : nothing}
                 ${this.resizable && header.column.getCanResize() && !header.isPlaceholder
@@ -551,6 +599,82 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         </tr>
       `
     )}`;
+  }
+
+  #renderRenameInput(column: Column<DataTableFeatures, TData>): TemplateResult {
+    const { header } = column.columnDef;
+    const value = typeof header === 'string' ? header : column.id;
+    return html`
+      <forge-text-field class="rename-field" density="extra-small" variant="plain">
+        <input
+          type="text"
+          class="rename-input"
+          aria-label="Column name"
+          .value=${value}
+          size=${Math.max(value.length, 1)}
+          @input=${(evt: InputEvent) => {
+            const input = evt.currentTarget as HTMLInputElement;
+            input.size = Math.max(input.value.length, 1);
+          }}
+          @click=${(evt: Event) => evt.stopPropagation()}
+          @keydown=${(evt: KeyboardEvent) => this.#onRenameKeydown(evt, column)}
+          @blur=${(evt: FocusEvent) => this.#commitRename(column, (evt.currentTarget as HTMLInputElement).value)} />
+      </forge-text-field>
+    `;
+  }
+
+  #onColumnMenuAction(evt: CustomEvent<ColumnMenuActionEventDetail>, column: Column<DataTableFeatures, TData>): void {
+    if (evt.detail.action === 'rename' && this.#canRenameColumn(column)) {
+      this._renamingColumnId = column.id;
+    }
+  }
+
+  #canRenameColumn(column: Column<DataTableFeatures, TData>): boolean {
+    return !!column.columnDef.meta?.renamable && typeof column.columnDef.header === 'string';
+  }
+
+  #onHeaderDoubleClick(column: Column<DataTableFeatures, TData>): void {
+    // The two clicks of a double click each toggled sorting, so put it back before editing the name
+    if (this.#sortingBeforeClick && this.#sortingBeforeClick !== this._sorting) {
+      this.#onSort(this.#sortingBeforeClick);
+    }
+    this.#sortingBeforeClick = null;
+    this._renamingColumnId = column.id;
+  }
+
+  #onRenameKeydown(evt: KeyboardEvent, column: Column<DataTableFeatures, TData>): void {
+    evt.stopPropagation();
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+      this.#commitRename(column, (evt.currentTarget as HTMLInputElement).value);
+      this.#focusColumnMenu(column.id);
+    } else if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this._renamingColumnId = null;
+      this.#focusColumnMenu(column.id);
+    }
+  }
+
+  #commitRename(column: Column<DataTableFeatures, TData>, value: string): void {
+    if (this._renamingColumnId !== column.id) {
+      return;
+    }
+
+    this._renamingColumnId = null;
+
+    const header = value.trim();
+    if (!header || header === column.columnDef.header) {
+      return;
+    }
+
+    this._columnHeaders = { ...this._columnHeaders, [column.id]: header };
+    this.dispatchEvent(new CustomEvent('forge-data-table-column-rename', { detail: { columnId: column.id, header }, bubbles: true, composed: true }));
+  }
+
+  async #focusColumnMenu(columnId: string): Promise<void> {
+    await this.updateComplete;
+    const menu = this.shadowRoot?.getElementById(this.#getColumnHeaderId(columnId))?.querySelector('forge-data-table-column-menu');
+    menu?.focus();
   }
 
   #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
@@ -1037,6 +1161,7 @@ declare global {
     'forge-data-table-row-select': CustomEvent<RowSelectionState>;
     'forge-data-table-column-visibility': CustomEvent<ColumnVisibilityState>;
     'forge-data-table-column-order': CustomEvent<ColumnOrderState>;
+    'forge-data-table-column-rename': CustomEvent<{ columnId: string; header: string }>;
     'forge-data-table-row-click': CustomEvent<{ data: unknown; index: number }>;
   }
 }

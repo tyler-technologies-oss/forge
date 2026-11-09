@@ -8,8 +8,8 @@ Lit-based data table Web Component for `@tylertech/forge`, built on
 
 Lifted out of the base `@tylertech/forge` package into its own so consumers of the main library do not
 pay for TanStack. `@tylertech/forge` is a **peerDependency** — the table renders Forge elements
-(`forge-checkbox`, `forge-popover`, `forge-list`, `forge-tooltip`, `forge-date-picker`, and with the
-filter feature `forge-select` and `forge-text-field`) and does not bundle them.
+(`forge-checkbox`, `forge-popover`, `forge-list`, `forge-text-field` (column rename), `forge-tooltip`, `forge-date-picker`, and with the
+filter feature `forge-select`) and does not bundle them.
 
 The element is **`forge-data-table`**, not `forge-table`: `forge-table` is an existing, unrelated element
 in the base package. The package name and the tag intentionally differ.
@@ -57,8 +57,14 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.
   Takes the TanStack `column` and `table` as properties; sort, move, hide and pin (to the start) are applied directly, while
-  maximize only dispatches `forge-data-table-column-menu-action` (every action dispatches it). It assigns `forge-menu`'s `options` in
+  rename (offered when `ColumnDef.renamable` is set and the header is a string) and maximize only dispatch `forge-data-table-column-menu-action` (every action dispatches it). It assigns `forge-menu`'s `options` in
   `firstUpdated` because `forge-menu` drops an `options` value that Lit sets during the first render.
+  The data table owns renaming: `ColumnDef.renamable` (carried as `meta.renamable`) opts a column in, the action swaps the header text for an inline `forge-text-field` (Enter or blur commits,
+  Escape cancels, blank or unchanged is ignored), and renames live in an override map applied over the mapped columns (`applyColumnHeaders`), so
+  `columns` is never mutated and the overrides reset when `columns` is set. A commit dispatches `forge-data-table-column-rename`. The input is
+  focused in `updated()`, not a `ref` callback, because the callback runs before the new template is attached.
+  Double-clicking the header text of a renamable column also starts it; the two clicks of the double click each toggle sorting, so the sorting
+  captured at the first click is restored before editing begins.
 - `src/dev/` — a dev page on **localhost:3470**, written like forge's own dev pages (`pages/data-table/data-table.{html,ejs,ts,scss}`;
   the options drawer is the `options` array in the `.html`). It reuses forge's page shell (`packages/forge/src/dev/src`: scaffold, app bar,
   options drawer, theme toggle) through the `$src` alias and the EJS `views` list in `vite.config.mts`. `vite.config.mts` aliases this package to `src/lib` and

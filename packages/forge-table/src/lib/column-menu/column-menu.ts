@@ -7,6 +7,7 @@ import {
   tylIconArrowForward,
   tylIconArrowLeftRight,
   tylIconArrowUpward,
+  tylIconEdit,
   tylIconMoreVert,
   tylIconPin,
   tylIconPinOff,
@@ -35,7 +36,7 @@ const DIVIDER_OPTION: IMenuOption = { value: undefined, label: '', divider: true
  * A menu button with actions for a single table column.
  *
  * Sorting, moving, hiding, and pinning are applied directly to the table through the TanStack `column` and `table`.
- * Maximizing is only announced through the `forge-data-table-column-menu-action` event.
+ * Maximizing and renaming are only announced through the `forge-data-table-column-menu-action` event, because the owner of the header decides how to present them.
  *
  * @tag forge-data-table-column-menu
  *
@@ -51,6 +52,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       tylIconArrowLeftRight,
       tylIconArrowUpward,
       tylIconArrowDownward,
+      tylIconEdit,
       tylIconVisibilityOff,
       tylIconPin,
       tylIconPinOff
@@ -106,6 +108,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       this.reorderable
         ? [item('move-left', 'Move left', 'arrow_back', !this.#getMoveTarget(-1)), item('move-right', 'Move right', 'arrow_forward', !this.#getMoveTarget(1))]
         : [],
+      column.columnDef.meta?.renamable && typeof column.columnDef.header === 'string' ? [item('rename', 'Rename', 'edit')] : [],
       column.getCanSort() ? [item('sort-ascending', 'Sort ascending', 'arrow_upward'), item('sort-descending', 'Sort descending', 'arrow_downward')] : [],
       [
         item('hide', 'Hide', 'visibility_off', !column.getCanHide()),
@@ -194,6 +197,10 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
         composed: true
       })
     );
+  }
+
+  public override focus(options?: FocusOptions): void {
+    this.shadowRoot?.querySelector('forge-icon-button')?.focus(options);
   }
 
   // eslint-disable-next-line @tylertech-eslint/require-private-modifier

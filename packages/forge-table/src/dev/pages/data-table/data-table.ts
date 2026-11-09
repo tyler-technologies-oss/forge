@@ -70,20 +70,20 @@ const actionsColumn: ColumnDef<RowData> = {
 
 const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Id', property: 'id', filterType: 'number' },
-  { header: 'First Name', property: 'firstName' },
-  { header: 'Last Name', property: 'lastName' },
+  { header: 'First Name', property: 'firstName', renamable: true },
+  { header: 'Last Name', property: 'lastName', renamable: true },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
   { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
-  { header: 'Department', property: 'department' },
-  { header: 'Position', property: 'position' },
+  { header: 'Department', property: 'department', renamable: true },
+  { header: 'Position', property: 'position', renamable: true },
   { header: 'Tags', id: 'tags', template: tagsBadges },
   { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
   { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
   { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
   { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
   { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
-  { header: 'City', property: 'city' },
-  { header: 'State', property: 'state' },
+  { header: 'City', property: 'city', renamable: true },
+  { header: 'State', property: 'state', renamable: true },
   { header: 'Notes', property: 'notes', editable: true },
   actionsColumn
 ];
@@ -93,8 +93,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
   {
     header: 'Personal Info',
     columns: [
-      { header: 'First Name', property: 'firstName' },
-      { header: 'Last Name', property: 'lastName' },
+      { header: 'First Name', property: 'firstName', renamable: true },
+      { header: 'Last Name', property: 'lastName', renamable: true },
       { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
       { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) }
     ]
@@ -102,8 +102,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
   {
     header: 'Employment',
     columns: [
-      { header: 'Department', property: 'department' },
-      { header: 'Position', property: 'position' },
+      { header: 'Department', property: 'department', renamable: true },
+      { header: 'Position', property: 'position', renamable: true },
       { header: 'Tags', id: 'tags', template: tagsBadges },
       { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
       { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
@@ -115,8 +115,8 @@ const groupedColumns: ColumnDef<RowData>[] = [
   {
     header: 'Location',
     columns: [
-      { header: 'City', property: 'city' },
-      { header: 'State', property: 'state' }
+      { header: 'City', property: 'city', renamable: true },
+      { header: 'State', property: 'state', renamable: true }
     ]
   },
   { header: 'Notes', property: 'notes', editable: true },

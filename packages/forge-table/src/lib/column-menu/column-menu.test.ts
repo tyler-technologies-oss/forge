@@ -19,6 +19,8 @@ const COLUMNS: ColumnDef<DataTableFeatures, TestData>[] = [
   { id: 'age', header: 'Age', accessorKey: 'age', enableHiding: false }
 ];
 
+const RENAMABLE_COLUMNS: ColumnDef<DataTableFeatures, TestData>[] = COLUMNS.map(column => ({ ...column, meta: { renamable: true } }));
+
 const DATA: TestData[] = [
   { id: 1, name: 'Alice', age: 30 },
   { id: 2, name: 'Bob', age: 25 }
@@ -130,6 +132,33 @@ describe('ColumnMenu', () => {
     const element = await renderMenu(createTestTable(), 'name', false);
 
     expect(getLabels(await openMenu(element))).toEqual(['Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+  });
+
+  it('should offer the rename action after the move actions when the column is renamable', async () => {
+    const element = await renderMenu(createTestTable({ columns: RENAMABLE_COLUMNS }), 'name');
+
+    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Rename', 'Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+  });
+
+  it('should dispatch an action event without changing the table when Rename is chosen', async () => {
+    const table = createTestTable({ columns: RENAMABLE_COLUMNS });
+    const element = await renderMenu(table, 'name');
+    const listener = vi.fn();
+    element.addEventListener('forge-data-table-column-menu-action', listener);
+
+    await choose(await openMenu(element), 'Rename');
+
+    expect(listener).toHaveBeenCalledOnce();
+    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'rename' });
+    expect(table.getColumn('name')?.columnDef.header).toBe('Name');
+  });
+
+  it('should focus the menu button when focused', async () => {
+    const element = await renderMenu(createTestTable(), 'name');
+
+    element.focus();
+
+    expect(element.shadowRoot?.activeElement).toBe(element.shadowRoot?.querySelector('forge-icon-button'));
   });
 
   it('should omit the maximize action when the table does not allow resizing', async () => {

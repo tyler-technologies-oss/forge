@@ -232,6 +232,18 @@ class DataTableHarness {
   }
 }
 
+async function chooseMenuAction(harness: DataTableHarness, columnId: string, label: string): Promise<void> {
+  const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
+  (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
+  const item = await vi.waitFor(() => {
+    const match = [...document.querySelectorAll('forge-list-item')].find(i => i.textContent?.trim() === label);
+    expect(match).toBeTruthy();
+    return match as HTMLElement;
+  });
+  await userEvent.click(item.querySelector('button') as HTMLElement);
+  await settle(harness.element);
+}
+
 async function createFixture(
   options: {
     data?: TestData[];
@@ -1101,18 +1113,6 @@ describe('DataTable', () => {
       expect(getInset(harness.getHeaderCellById('name'), 'insetInlineStart')).toBe('40px');
     });
 
-    const chooseMenuAction = async (harness: DataTableHarness, columnId: string, label: string): Promise<void> => {
-      const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
-      (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
-      const item = await vi.waitFor(() => {
-        const match = [...document.querySelectorAll('forge-list-item')].find(i => i.textContent?.trim() === label);
-        expect(match).toBeTruthy();
-        return match as HTMLElement;
-      });
-      await userEvent.click(item.querySelector('button') as HTMLElement);
-      await settle(harness.element);
-    };
-
     it('should pin and unpin a column from its column menu', async () => {
       const harness = await createFixture({ columns: TEST_COLUMNS });
 
@@ -1148,6 +1148,210 @@ describe('DataTable', () => {
 
       expect(getHeaderIds(harness)).toEqual(['id', 'name', 'age', 'email']);
       expect(harness.tableElement?.querySelector('colgroup')).toBeNull();
+    });
+  });
+
+  describe('Column Renaming', () => {
+    const RENAMABLE_COLUMNS: ColumnDef<TestData>[] = TEST_COLUMNS.map(column => ({ ...column, renamable: true }));
+
+    const getHeaderText = (harness: DataTableHarness, columnId: string): string | undefined =>
+      harness.getHeaderCellById(columnId)?.querySelector('.cell-text')?.textContent?.trim();
+
+    const getRenameInput = (harness: DataTableHarness, columnId: string): HTMLInputElement | null =>
+      harness.getHeaderCellById(columnId)?.querySelector<HTMLInputElement>('.rename-input') ?? null;
+
+    const doubleClickHeaderText = async (harness: DataTableHarness, columnId: string): Promise<void> => {
+      const target = harness.getHeaderCellById(columnId)?.querySelector('.cell-text') as HTMLElement;
+      const init = { bubbles: true, composed: true };
+      target.dispatchEvent(new MouseEvent('click', { ...init, detail: 1 }));
+      target.dispatchEvent(new MouseEvent('click', { ...init, detail: 2 }));
+      target.dispatchEvent(new MouseEvent('dblclick', { ...init, detail: 2 }));
+      await settle(harness.element);
+    };
+
+    const startRename = async (harness: DataTableHarness, columnId: string): Promise<HTMLInputElement> => {
+      await chooseMenuAction(harness, columnId, 'Rename');
+      return vi.waitFor(() => {
+        const input = getRenameInput(harness, columnId);
+        expect(input).toBeTruthy();
+        return input as HTMLInputElement;
+      });
+    };
+
+    it('should only offer a rename action for renamable columns', async () => {
+      const columns: ColumnDef<TestData>[] = TEST_COLUMNS.map(column => ({ ...column, renamable: column.id === 'name' }));
+      const harness = await createFixture({ columns });
+      const getMenuLabels = async (columnId: string): Promise<Array<string | undefined>> => {
+        const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu') as HTMLElement;
+        (menu.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
+        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBeGreaterThan(0));
+        const labels = [...document.querySelectorAll('forge-list-item')].map(item => item.textContent?.trim());
+        await userEvent.keyboard('{Escape}');
+        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBe(0));
+        return labels;
+      };
+
+      expect(await getMenuLabels('id')).not.toContain('Rename');
+      expect(await getMenuLabels('name')).toContain('Rename');
+    });
+
+    it('should show an input with the current header when rename is chosen', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+
+      const input = await startRename(harness, 'name');
+
+      expect(input.value).toBe('Name');
+      await vi.waitFor(() => expect(harness.shadowRoot.activeElement).toBe(input));
+    });
+
+    it('should size the input to fit the whole name without scrolling', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'A fairly long column name', property: 'name', width: 60, renamable: true },
+        { id: 'age', header: 'Age', property: 'age' }
+      ];
+      const harness = await createFixture({ columns });
+
+      const input = await startRename(harness, 'name');
+      expect(input.scrollWidth).toBeLessThanOrEqual(input.clientWidth);
+
+      await userEvent.fill(input, 'An even longer name than the one before it');
+      expect(input.scrollWidth).toBeLessThanOrEqual(input.clientWidth);
+    });
+
+    it('should begin editing the name when the header text is double clicked', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+
+      await doubleClickHeaderText(harness, 'name');
+
+      const input = await vi.waitFor(() => {
+        const match = getRenameInput(harness, 'name');
+        expect(match).toBeTruthy();
+        return match as HTMLInputElement;
+      });
+      expect(input.value).toBe('Name');
+      await vi.waitFor(() => expect(harness.shadowRoot.activeElement).toBe(input));
+    });
+
+    it('should leave sorting unchanged when the header text is double clicked', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS, sortable: true });
+
+      await doubleClickHeaderText(harness, 'name');
+
+      expect(getRenameInput(harness, 'name')).toBeTruthy();
+      expect(harness.getHeaderCellById('name')?.classList.contains('sort-asc')).toBe(false);
+      expect(harness.getHeaderCellById('name')?.classList.contains('sort-desc')).toBe(false);
+    });
+
+    it('should keep an existing sort when the header text is double clicked', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS, sortable: true });
+      await harness.clickHeaderCell(1);
+      expect(harness.getHeaderCellById('name')?.classList.contains('sort-asc')).toBe(true);
+
+      await doubleClickHeaderText(harness, 'name');
+
+      expect(getRenameInput(harness, 'name')).toBeTruthy();
+      expect(harness.getHeaderCellById('name')?.classList.contains('sort-asc')).toBe(true);
+    });
+
+    it('should not begin editing when a header that is not renamable is double clicked', async () => {
+      const harness = await createFixture({ columns: TEST_COLUMNS });
+
+      await doubleClickHeaderText(harness, 'name');
+
+      expect(getRenameInput(harness, 'name')).toBeNull();
+    });
+
+    it('should rename the column when Enter is pressed', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-data-table-column-rename', listener);
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, 'Full name');
+      await userEvent.keyboard('{Enter}');
+      await settle(harness.element);
+
+      expect(getRenameInput(harness, 'name')).toBeNull();
+      expect(getHeaderText(harness, 'name')).toBe('Full name');
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', header: 'Full name' });
+    });
+
+    it('should return focus to the column menu after renaming', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, 'Full name');
+      await userEvent.keyboard('{Enter}');
+      await settle(harness.element);
+
+      const menu = harness.getHeaderCellById('name')?.querySelector('forge-data-table-column-menu');
+      await vi.waitFor(() => expect(harness.shadowRoot.activeElement).toBe(menu));
+    });
+
+    it('should rename the column when the input loses focus', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, 'Full name');
+      input.blur();
+      await settle(harness.element);
+
+      expect(getHeaderText(harness, 'name')).toBe('Full name');
+    });
+
+    it('should keep the original header when Escape is pressed', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-data-table-column-rename', listener);
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, 'Full name');
+      await userEvent.keyboard('{Escape}');
+      await settle(harness.element);
+
+      expect(getRenameInput(harness, 'name')).toBeNull();
+      expect(getHeaderText(harness, 'name')).toBe('Name');
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should keep the original header when the new name is blank', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-data-table-column-rename', listener);
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, '   ');
+      await userEvent.keyboard('{Enter}');
+      await settle(harness.element);
+
+      expect(getHeaderText(harness, 'name')).toBe('Name');
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should not sort the column when clicking the rename input', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS, sortable: true });
+
+      const input = await startRename(harness, 'name');
+      await userEvent.click(input);
+      await settle(harness.element);
+
+      expect(harness.getHeaderCellById('name')?.classList.contains('sort-asc')).toBe(false);
+      expect(getRenameInput(harness, 'name')).toBe(input);
+    });
+
+    it('should discard renames when the columns change', async () => {
+      const harness = await createFixture({ columns: RENAMABLE_COLUMNS });
+
+      const input = await startRename(harness, 'name');
+      await userEvent.fill(input, 'Full name');
+      await userEvent.keyboard('{Enter}');
+      await settle(harness.element);
+
+      harness.element.columns = [...TEST_COLUMNS];
+      await settle(harness.element);
+
+      expect(getHeaderText(harness, 'name')).toBe('Name');
     });
   });
 
