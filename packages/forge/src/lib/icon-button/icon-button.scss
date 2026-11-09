@@ -291,7 +291,7 @@ forge-state-layer {
         }
 
         &:is(.filled, .raised) {
-          @include override(icon-color, theme.variable($theme), value);
+          @include override(icon-color, theme.variable(on-#{$theme}-container), value);
           @include override(background-color, theme.variable(#{$theme}-container), value);
         }
       }
@@ -302,13 +302,13 @@ forge-state-layer {
   :host(:state(toggle):state(pressed)) {
     .forge-icon-button.#{$theme} {
       &:is(.icon, .outlined) {
-        @include override(toggle-on-icon-color, theme.variable($theme), value);
+        @include override(toggle-on-icon-color, theme.variable(on-#{$theme}-container), value);
       }
 
       &.outlined {
-        @include override(icon-color, theme.variable($theme), value);
+        @include override(icon-color, theme.variable(on-#{$theme}-container), value);
         @include override(outlined-toggle-on-background-color, theme.variable(#{$theme}-container), value);
-        @include override(outlined-toggle-on-icon-color, theme.variable($theme), value);
+        @include override(outlined-toggle-on-icon-color, theme.variable(on-#{$theme}-container), value);
       }
 
       @if $theme != 'primary' {

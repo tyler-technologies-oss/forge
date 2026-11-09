@@ -57,18 +57,18 @@ $tokens: (
   density-large-size: utils.module-ref(icon-button, density-large-size, size),
   // Toggle (on)
   toggle-on-background-color: utils.module-val(icon-button, toggle-on-background-color, theme.variable(primary-container)),
-  toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(primary)),
+  toggle-on-icon-color: utils.module-val(icon-button, toggle-on-icon-color, theme.variable(on-primary-container)),
   // Toggle (on) outlined
   outlined-toggle-on-background-color: utils.module-val(icon-button, outlined-toggle-on-background-color, theme.variable(primary-container)),
-  outlined-toggle-on-icon-color: utils.module-val(icon-button, outlined-toggle-on-icon-color, theme.variable(primary)),
+  outlined-toggle-on-icon-color: utils.module-val(icon-button, outlined-toggle-on-icon-color, theme.variable(on-primary-container)),
   // Toggle tonal
   tonal-toggle-background-color: utils.module-val(icon-button, tonal-toggle-background-color, theme.variable(surface-container-low)),
   // Toggle (on) tonal
   tonal-toggle-on-background-color: utils.module-val(icon-button, tonal-toggle-on-background-color, theme.variable(primary-container)),
-  tonal-toggle-on-icon-color: utils.module-val(icon-button, tonal-toggle-on-icon-color, theme.variable(primary)),
+  tonal-toggle-on-icon-color: utils.module-val(icon-button, tonal-toggle-on-icon-color, theme.variable(on-primary-container)),
   // Toggle filled
   filled-toggle-background-color: utils.module-val(icon-button, filled-toggle-background-color, theme.variable(surface-container-low)),
-  filled-toggle-icon-color: utils.module-val(icon-button, filled-toggle-icon-color, theme.variable(primary)),
+  filled-toggle-icon-color: utils.module-val(icon-button, filled-toggle-icon-color, theme.variable(on-primary-container-minimum)),
   // Toggle (on) filled
   filled-toggle-on-background-color: utils.module-val(icon-button, filled-toggle-on-background-color, theme.variable(primary)),
   filled-toggle-on-icon-color: utils.module-val(icon-button, filled-toggle-on-icon-color, theme.variable(on-primary)),
