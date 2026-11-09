@@ -5,8 +5,7 @@
  * One <forge-structured-card> per API section (Properties, Events, Slots,
  * CSS Parts, CSS Custom Properties, Methods). Properties + attributes are
  * merged into a single row so authors see the JS name and the HTML attribute
- * side by side. The default is stacked under the type so the description
- * column gets as much width as possible.
+ * side by side.
  */
 import { CODE_THEMES } from "../config/code-themes";
 import type {
@@ -44,6 +43,7 @@ const importSnippet = buildImportSnippet();
 interface CodeCell {
   kind: "code";
   code: string;
+  wrap?: boolean;
 }
 
 interface TypeCell {
@@ -51,7 +51,6 @@ interface TypeCell {
   type: string;
   members: string[];
   values?: string[];
-  defaultValue?: string;
 }
 
 type Cell = string | CodeCell | TypeCell;
@@ -106,13 +105,13 @@ function splitUnion(typeText: string): string[] {
  * matches a known Forge type alias. The badges render the union members; the
  * popover renders the values.
  */
-function typeCell(typeText: string, defaultValue?: string): Cell {
+function typeCell(typeText: string): Cell {
   const members = splitUnion(typeText);
   if (!members.length) {
     return EMPTY_CELL;
   }
   const values = resolveTypeValues(typeText);
-  return { kind: "type", type: typeText, members, values, defaultValue };
+  return { kind: "type", type: typeText, members, values };
 }
 
 /** Split after each `<` so generics like `CustomEvent<Detail>` can wrap. */
@@ -129,8 +128,8 @@ function eventDetailType(typeText: string): string {
   return typeText.trim().match(/^CustomEvent<(.+)>$/)?.[1] ?? typeText;
 }
 
-function codeCell(code: string): CodeCell {
-  return { kind: "code", code };
+function codeCell(code: string, wrap = false): CodeCell {
+  return { kind: "code", code, wrap };
 }
 
 interface TableColumn<T> {
@@ -176,9 +175,13 @@ const sections: ApiSection<
       },
       {
         header: "Type",
+        render: (i) => typeCell((i as ComponentPropAttr).type),
+      },
+      {
+        header: "Default",
         render: (i) => {
-          const { type, default: defaultValue } = i as ComponentPropAttr;
-          return typeCell(type, defaultValue);
+          const { default: defaultValue } = i as ComponentPropAttr;
+          return defaultValue ? codeCell(defaultValue, true) : EMPTY_CELL;
         },
       },
       {
@@ -343,80 +346,81 @@ function sectionId(sectionTitle: string): string {
                         ) : value.kind === "code" ? (
                           <forge-badge
                             theme="info-secondary"
-                            class:list={["square-badge", badgeClass]}>
-                            <code class="font-normal">{value.code}</code>
+                            class:list={[
+                              "square-badge",
+                              value.wrap ? wrappingBadgeClass : badgeClass,
+                            ]}>
+                            <code
+                              class:list={[
+                                "font-normal",
+                                value.wrap && "whitespace-normal",
+                              ]}>
+                              {value.code}
+                            </code>
                           </forge-badge>
                         ) : (
-                          <span class="flex flex-col items-start gap-xxsmall">
-                            <span class="flex flex-wrap items-center gap-xxsmall">
-                              {value.members.map((member, memberIndex) => (
-                                <span class="inline-flex items-center gap-xxsmall">
-                                  {memberIndex > 0 && (
-                                    <span class="text-label2 text-medium">|</span>
-                                  )}
-                                  <forge-badge
-                                    theme="info-secondary"
-                                    class:list={["square-badge", wrappingBadgeClass]}>
-                                    <code class="font-normal whitespace-normal">
-                                      {genericSegments(member).map(
-                                        (segment, segmentIndex) => (
-                                          <>
-                                            {segmentIndex > 0 && <wbr />}
-                                            {segment}
-                                          </>
-                                        )
-                                      )}
-                                    </code>
-                                  </forge-badge>
-                                </span>
-                              ))}
-                              {value.values && (
-                                <>
-                                  <forge-icon-button
-                                    dense
-                                    id={anchorId}
-                                    aria-label={`Show values for ${value.type}`}>
-                                    <forge-icon name="info_outline" external />
-                                  </forge-icon-button>
-                                  <forge-popover
-                                    anchor={anchorId}
-                                    placement="right">
-                                    <forge-toolbar
-                                      no-border
-                                      class="bg-primary-container-minimum">
-                                      <forge-badge
-                                        slot="start"
-                                        theme="info-secondary"
-                                        class="square-badge">
-                                        <code class="font-normal">
-                                          {value.type}
-                                        </code>
-                                      </forge-badge>
-                                      <forge-icon-button
-                                        slot="end"
-                                        dense
-                                        aria-label="Close"
-                                        data-popover-close>
-                                        <forge-icon name="close" />
-                                      </forge-icon-button>
-                                    </forge-toolbar>
-
-                                    <forge-list
-                                      noninteractive
-                                      class="type-values-list">
-                                      {value.values.map((v) => (
-                                        <forge-list-item>{v}</forge-list-item>
-                                      ))}
-                                    </forge-list>
-                                  </forge-popover>
-                                </>
-                              )}
-                            </span>
-                            {value.defaultValue && (
-                              <span class="text-label2 text-medium">
-                                Default:{" "}
-                                <code class="text-high">{value.defaultValue}</code>
+                          <span class="flex flex-wrap items-center gap-xxsmall">
+                            {value.members.map((member, memberIndex) => (
+                              <span class="inline-flex items-center gap-xxsmall">
+                                {memberIndex > 0 && (
+                                  <span class="text-label2 text-medium">|</span>
+                                )}
+                                <forge-badge
+                                  theme="info-secondary"
+                                  class:list={["square-badge", wrappingBadgeClass]}>
+                                  <code class="font-normal whitespace-normal">
+                                    {genericSegments(member).map(
+                                      (segment, segmentIndex) => (
+                                        <>
+                                          {segmentIndex > 0 && <wbr />}
+                                          {segment}
+                                        </>
+                                      )
+                                    )}
+                                  </code>
+                                </forge-badge>
                               </span>
+                            ))}
+                            {value.values && (
+                              <>
+                                <forge-icon-button
+                                  dense
+                                  id={anchorId}
+                                  aria-label={`Show values for ${value.type}`}>
+                                  <forge-icon name="info_outline" external />
+                                </forge-icon-button>
+                                <forge-popover
+                                  anchor={anchorId}
+                                  placement="right">
+                                  <forge-toolbar
+                                    no-border
+                                    class="bg-primary-container-minimum">
+                                    <forge-badge
+                                      slot="start"
+                                      theme="info-secondary"
+                                      class="square-badge">
+                                      <code class="font-normal">
+                                        {value.type}
+                                      </code>
+                                    </forge-badge>
+                                    <forge-icon-button
+                                      slot="end"
+                                      dense
+                                      aria-label="Close"
+                                      data-popover-close>
+                                      <forge-icon name="close" />
+                                    </forge-icon-button>
+                                  </forge-toolbar>
+
+                                  <forge-list
+                                    noninteractive
+                                    class="type-values-list">
+                                    {value.values.map((v) => (
+                                      <forge-list-item>{v}</forge-list-item>
+                                    ))}
+                                  </forge-list>
+                                </forge-popover>
+                              </>
                             )}
                           </span>
                         )}
