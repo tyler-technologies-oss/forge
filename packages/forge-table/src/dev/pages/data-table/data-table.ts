@@ -26,6 +26,7 @@ interface RowData {
   startDate: Date;
   city: string;
   state: string;
+  notes: string;
 }
 
 const FETCH_DELAY_MS = 250;
@@ -62,6 +63,7 @@ const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
   { header: 'City', property: 'city' },
   { header: 'State', property: 'state' },
+  { header: 'Notes', property: 'notes', editable: true },
   actionsColumn
 ];
 
@@ -94,6 +96,7 @@ const groupedColumns: ColumnDef<RowData>[] = [
       { header: 'State', property: 'state' }
     ]
   },
+  { header: 'Notes', property: 'notes', editable: true },
   actionsColumn
 ];
 
@@ -115,7 +118,8 @@ const employees: RowData[] = [
     bonusRate: 0.12,
     startDate: new Date(2019, 2, 18),
     city: 'San Francisco',
-    state: 'CA'
+    state: 'CA',
+    notes: 'Excellent performance'
   },
   {
     id: 2,
@@ -130,7 +134,8 @@ const employees: RowData[] = [
     bonusRate: 0.08,
     startDate: new Date(2020, 6, 6),
     city: 'New York',
-    state: 'NY'
+    state: 'NY',
+    notes: 'Strong marketing skills'
   },
   {
     id: 3,
@@ -145,7 +150,8 @@ const employees: RowData[] = [
     bonusRate: 0.15,
     startDate: new Date(2017, 10, 2),
     city: 'Austin',
-    state: 'TX'
+    state: 'TX',
+    notes: 'Leads the engineering team'
   },
   {
     id: 4,
@@ -160,7 +166,8 @@ const employees: RowData[] = [
     bonusRate: 0.05,
     startDate: new Date(2021, 0, 25),
     city: 'Chicago',
-    state: 'IL'
+    state: 'IL',
+    notes: 'Top sales performer'
   },
   {
     id: 5,
@@ -175,7 +182,8 @@ const employees: RowData[] = [
     bonusRate: 0.0425,
     startDate: new Date(2023, 8, 11),
     city: 'Seattle',
-    state: 'WA'
+    state: 'WA',
+    notes: 'Promising junior developer'
   },
   {
     id: 6,
@@ -190,7 +198,8 @@ const employees: RowData[] = [
     bonusRate: 0.07,
     startDate: new Date(2018, 4, 14),
     city: 'Boston',
-    state: 'MA'
+    state: 'MA',
+    notes: 'HR department lead'
   },
   {
     id: 7,
@@ -205,7 +214,8 @@ const employees: RowData[] = [
     bonusRate: 0.135,
     startDate: new Date(2016, 11, 5),
     city: 'Denver',
-    state: 'CO'
+    state: 'CO',
+    notes: 'Senior developer with high performance'
   },
   {
     id: 8,
@@ -220,7 +230,8 @@ const employees: RowData[] = [
     bonusRate: 0.06,
     startDate: new Date(2022, 3, 29),
     city: 'Atlanta',
-    state: 'GA'
+    state: 'GA',
+    notes: 'Financial analyst with solid performance'
   }
 ];
 

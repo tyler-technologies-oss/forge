@@ -6,6 +6,7 @@ import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
 import type { DataTableFeatures } from '../table-features.js';
 import { createAggregationFn, formatAggregationValue } from '../features/aggregation.js';
+import { createCellEditablePredicate, inputCell } from '../templates/input-cell.js';
 
 export interface LeafColumn<TData extends Row> {
   column: ColumnDef<TData>;
@@ -79,7 +80,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         reorderable: column.reorderable,
         align: column.align,
         formatAttribute: getFormatterAttribute(column.format),
-        aggregated: !!column.aggregate && typeof column.footer !== 'string'
+        aggregated: !!column.aggregate && typeof column.footer !== 'string',
+        canEdit: createCellEditablePredicate(column)
       }
     };
 
@@ -104,7 +106,9 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
               : undefined,
         enableResizing: column.resizable ?? true,
         ...(column.aggregate && { aggregationFn: createAggregationFn(column.aggregate, getRawValueReader(column)) }),
-        ...(typeof column.template === 'function' && { cell: column.template })
+        ...(column.editable
+          ? { cell: inputCell(typeof column.template === 'function' ? column.template : undefined) }
+          : typeof column.template === 'function' && { cell: column.template })
       } satisfies TanstackColumnDef<DataTableFeatures, TData>;
 
       return leafColumn;

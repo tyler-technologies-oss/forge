@@ -1,41 +1,42 @@
 import {
+  Cell,
   Column,
-  ColumnDef as TanstackColumnDef,
   ColumnFiltersState,
   ColumnOrderState,
   ColumnPinningState,
+  ColumnVisibilityState,
   FlexRender,
   LitTable,
   RowSelectionState,
   SortingState,
   TableController,
-  Updater,
-  ColumnVisibilityState,
-  Cell
+  ColumnDef as TanstackColumnDef,
+  Updater
 } from '@tanstack/lit-table';
 import { VirtualizerController } from '@tanstack/lit-virtual';
-import { html, LitElement, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
-import { repeat } from 'lit/directives/repeat.js';
-import { guard } from 'lit/directives/guard.js';
-import { styleMap } from 'lit/directives/style-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
-import { svg } from 'lit/static-html.js';
-import { createRef, ref } from 'lit/directives/ref.js';
+import { toggleState } from '@tylertech/forge';
 import type { DataSource } from '@tylertech/forge-core';
 import type { IPopoverToggleEventData, PopoverComponent } from '@tylertech/forge/popover';
-import { formatAttribute } from './directives/format-attribute.js';
-import { lightDomRender } from './directives/light-dom-render.js';
-import { ColumnReorderController } from './controllers/column-reorder-controller.js';
-import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
+import { html, LitElement, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { guard } from 'lit/directives/guard.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { createRef, ref } from 'lit/directives/ref.js';
+import { repeat } from 'lit/directives/repeat.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { svg } from 'lit/static-html.js';
 import { canColumnBeReordered, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
 import { COMPACT_ROW_HEIGHT, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID, VIRTUALIZER_OVERSCAN } from './constants.js';
+import { ColumnReorderController } from './controllers/column-reorder-controller.js';
+import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
+import { formatAttribute } from './directives/format-attribute.js';
+import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
-import { renderFilterField } from './templates/filter-fields.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
+import { renderFilterField } from './templates/filter-fields.js';
+import { isCellEditable } from './templates/input-cell.js';
 import type { ColumnDef, Row, RowSelectionType } from './types.js';
-import { toggleState } from '@tylertech/forge';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -550,6 +551,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
+    const editable = isCellEditable(cell as Cell<DataTableFeatures, any>);
     return html`
       <td
         part="body-cell cell"
@@ -557,12 +559,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         class=${classMap({
           ...getPinnedColumnClasses(cell.column),
           'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
+          'editable-cell': editable,
           'group-start': groupStartColumnIds.has(cell.column.id)
         })}
         id=${cell.column.id}
         data-align=${ifDefined(cell.column.columnDef.meta?.align)}
         ${formatAttribute(cell.column.columnDef.meta?.formatAttribute)}
-        ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation || cell.column.columnDef.id === SELECT_COLUMN_ID}>
+        ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
+        cell.column.columnDef.id === SELECT_COLUMN_ID ||
+        editable}>
         <div class="cell-content" part="body-cell-content cell-content">
           ${cell.column.columnDef.meta?.cellSlot
             ? guard(

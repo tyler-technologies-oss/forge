@@ -2,6 +2,7 @@ import type { AggregationFnDef, Cell, Column, RowData } from '@tanstack/lit-tabl
 import type { Formatter } from '@tylertech/forge-core';
 import type { BuiltInColumnAggregation } from './features/aggregation.js';
 import type { DataTableFeatures } from './table-features.js';
+import type { CellEditablePredicate } from './templates/input-cell.js';
 
 export type ColumnAlign = 'start' | 'center' | 'end';
 
@@ -17,6 +18,7 @@ export interface ColumnDefMeta {
   align?: ColumnAlign;
   formatAttribute?: string;
   aggregated?: boolean;
+  canEdit?: CellEditablePredicate;
 }
 
 export type Row = RowData;
@@ -54,4 +56,5 @@ export interface ColumnDef<TData extends Row = Row> {
   columns?: ColumnDef<TData>[];
   align?: ColumnAlign;
   pin?: ColumnPin;
+  editable?: boolean;
 }

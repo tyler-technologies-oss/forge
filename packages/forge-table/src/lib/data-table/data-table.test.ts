@@ -2255,6 +2255,66 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Editable Columns', () => {
+    it('should render an input with the cell value when the column is editable', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: true }];
+      const harness = await createFixture({ columns });
+
+      const inputs = harness.shadowRoot.querySelectorAll<HTMLInputElement>('tbody td input');
+      expect(Array.from(inputs).map(input => input.value)).toEqual(['Alice', 'Bob', 'Charlie']);
+    });
+
+    it('should label the input with the column header', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: true }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.shadowRoot.querySelector('tbody td input')?.getAttribute('aria-label')).toBe('Name');
+    });
+
+    it('should not render an input when the column is not editable', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: false }];
+      const harness = await createFixture({ columns });
+
+      expect(harness.shadowRoot.querySelector('tbody td input')).toBeNull();
+      expect(harness.bodyCells[0].textContent?.trim()).toBe('Alice');
+    });
+
+    it('should render an input only in rows where the editable function returns true', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: row => row.age > 28 }];
+      const harness = await createFixture({ columns });
+
+      const hasInput = harness.bodyCells.map(cell => !!cell.querySelector('input'));
+      expect(hasInput).toEqual([true, false, true]);
+    });
+
+    it('should cover the entire cell with the input', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: true }];
+      const harness = await createFixture({ columns });
+
+      const cell = harness.bodyCells[0].getBoundingClientRect();
+      const input = harness.shadowRoot.querySelector('tbody td input') as HTMLInputElement;
+      const inputRect = input.getBoundingClientRect();
+
+      expect(inputRect.left).toBeCloseTo(cell.left, 0);
+      expect(inputRect.top).toBeCloseTo(cell.top, 0);
+      expect(inputRect.width).toBeCloseTo(cell.width, 0);
+      expect(inputRect.height).toBeCloseTo(cell.height - 1, 0);
+    });
+
+    it('should show the focus indicator only when the input is focused', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: true }];
+      const harness = await createFixture({ columns });
+      const input = harness.shadowRoot.querySelector('tbody td input') as HTMLInputElement;
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(getComputedStyle(wrapper, '::after').display).not.toBe('block');
+
+      await userEvent.click(input);
+
+      expect(getComputedStyle(wrapper, '::after').display).toBe('block');
+    });
+  });
+
   describe('Styling Options', () => {
     it('should apply striped custom state when striped is true', async () => {
       const harness = await createFixture({ striped: true });
