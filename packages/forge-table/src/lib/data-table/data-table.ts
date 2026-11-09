@@ -46,8 +46,8 @@ import '../column-menu/column-menu.js';
 import styles from './data-table.scss';
 
 export { createExpanderColumn, type ExpanderColumnOptions } from './features/expander.js';
-export { actionCell as actionCellFactory, type ActionButtonConfig } from './templates/action-cell.js';
-export { linkCell as linkCellFactory, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
+export { actionCell, type ActionButtonConfig } from './templates/action-cell.js';
+export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
 export type { ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
 
 /**
