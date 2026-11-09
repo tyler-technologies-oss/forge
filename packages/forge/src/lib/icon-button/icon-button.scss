@@ -253,8 +253,14 @@ forge-state-layer {
   // Non-toggle
   :host(:not(:state(toggle))) {
     .forge-icon-button.#{$theme} {
-      &:is(.icon, .outlined) {
+      &.icon {
         @include override(icon-color, theme.variable($theme), value);
+      }
+
+      &.outlined {
+        @include override(background-color, theme.variable(#{$theme}-container-minimum), value);
+        @include override(icon-color, theme.variable(on-#{$theme}-container-minimum), value);
+        @include override(outlined-border-color, theme.variable(border-#{$theme}-default), value);
       }
 
       @if $theme != 'primary' {
@@ -331,6 +337,8 @@ forge-state-layer {
   @include provide-theme(
     (
       icon-color: #{app-bar.token(theme-foreground)},
+      outlined-icon-color: #{app-bar.token(theme-foreground)},
+      outlined-border-color: #{app-bar.token(theme-foreground)},
       focus-indicator-color: #{app-bar.token(theme-foreground)}
     )
   );

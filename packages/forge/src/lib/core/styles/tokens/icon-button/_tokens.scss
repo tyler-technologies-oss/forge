@@ -6,6 +6,7 @@
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
 
 $tokens: (
   // General
@@ -30,9 +31,10 @@ $tokens: (
   shape-end-end: utils.module-ref(icon-button, shape-end-end, shape),
   shape-squared: utils.module-val(icon-button, shape-squared, shape.variable(medium)),
   // Outlined
-  outlined-border-width: utils.module-val(icon-button, outlined-border-width, 1px),
+  outlined-icon-color: utils.module-val(icon-button, outlined-icon-color, theme.variable(text-medium)),
+  outlined-border-width: utils.module-val(icon-button, outlined-border-width, border.variable(thin)),
   outlined-border-style: utils.module-val(icon-button, outlined-border-style, solid),
-  outlined-border-color: utils.module-ref(icon-button, outlined-border-color, icon-color),
+  outlined-border-color: utils.module-val(icon-button, outlined-border-color, theme.variable(border-neutral-default)),
   // Tonal
   tonal-icon-color: utils.module-val(icon-button, tonal-icon-color, theme.variable(on-primary-container)),
   tonal-background-color: utils.module-val(icon-button, tonal-background-color, theme.variable(primary-container)),

@@ -74,6 +74,8 @@
 }
 
 @mixin outlined {
+  @include override(icon-color, outlined-icon-color);
+
   border-width: #{token(outlined-border-width)};
   border-style: #{token(outlined-border-style)};
   border-color: #{token(outlined-border-color)};
