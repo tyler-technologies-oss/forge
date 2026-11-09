@@ -7,7 +7,7 @@ import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import './data-table.js';
 import type { ColumnDef, DataTableElement } from './data-table.js';
-import { createExpanderColumn } from './data-table.js';
+import { badgeCell, createExpanderColumn } from './data-table.js';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -498,6 +498,39 @@ describe('DataTable', () => {
       const slot = cell?.querySelector('slot');
       expect(slot).not.toBeNull();
       expect(slot?.getAttribute('name')).toMatch(/^col-slotted:row-/);
+    });
+
+    describe('Badge Cell', () => {
+      it('should render a badge with the cell value when no options callback is provided', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', template: badgeCell() }];
+        const harness = await createFixture({ columns });
+
+        const badges = harness.getBodyCellByRowAndColumn(0, 0)?.querySelectorAll('.forge-badge');
+        expect(badges).toHaveLength(1);
+        expect(badges?.[0].textContent).toBe('Alice');
+      });
+
+      it('should render a badge with the theme, strong and icon from a single config', async () => {
+        const template = badgeCell({ badges: ({ cell }) => ({ text: `${cell.getValue()}!`, theme: 'success', strong: true, icon: 'check' }) });
+        const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', template }];
+        const harness = await createFixture({ columns });
+
+        const badge = harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('.forge-badge');
+        expect(badge?.textContent).toBe('Alice!');
+        expect(badge?.classList.contains('forge-badge--success')).toBe(true);
+        expect(badge?.classList.contains('forge-badge--strong')).toBe(true);
+        expect(badge?.querySelector('forge-icon')?.getAttribute('name')).toBe('check');
+      });
+
+      it('should render one badge per config when an array is returned', async () => {
+        const template = badgeCell({ badges: ({ row }) => [{ text: row.original.name }, { text: `${row.original.age}`, theme: 'warning' }] });
+        const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', template }];
+        const harness = await createFixture({ columns });
+
+        const badges = harness.getBodyCellByRowAndColumn(0, 0)?.querySelectorAll('.forge-badge');
+        expect(Array.from(badges ?? []).map(badge => badge.textContent)).toEqual(['Alice', '30']);
+        expect(badges?.[1].classList.contains('forge-badge--warning')).toBe(true);
+      });
     });
 
     it('should handle column width', async () => {

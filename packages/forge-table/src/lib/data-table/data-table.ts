@@ -52,6 +52,8 @@ export { createExpanderColumn, type ExpanderColumnOptions } from './features/exp
 export { actionCell, type ActionButtonConfig } from './templates/action-cell.js';
 export { ratingCell, type RatingOptions } from './templates/rating-cell.js';
 export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
+export { badgeCell, type BadgeCellConfig, type BadgeCellFn, type BadgeCellOptions } from './templates/badge-cell.js';
+export { meterCell, type MeterCellOptions } from './templates/meter-cell.js';
 export type { ColumnAggregation, ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
 
 /**

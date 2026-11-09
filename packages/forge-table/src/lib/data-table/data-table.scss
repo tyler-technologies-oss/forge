@@ -1,6 +1,9 @@
+@use 'sass:list';
 @use '@tylertech/forge/sass/table/core';
 @use '@tylertech/forge/sass/core/styles/scrollbar';
 @use '@tylertech/forge/sass/focus-indicator';
+@use '@tylertech/forge/sass/badge/core' as badge;
+@use '@tylertech/forge/sass/badge/forge-badge';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/spacing';
@@ -544,6 +547,74 @@ table.virtualized {
 .action-cell {
   forge-icon {
     color: #{theme.variable(text-medium)};
+  }
+}
+
+//
+// Badge Cell
+//
+
+.badge-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: #{spacing.variable(xxsmall)};
+  vertical-align: middle;
+}
+
+$_badge-themes: (
+  primary: (
+    primary-container,
+    on-primary-container,
+    primary,
+    on-primary
+  ),
+  secondary: (
+    secondary-container,
+    on-secondary-container,
+    secondary,
+    on-secondary
+  ),
+  tertiary: (
+    tertiary-container,
+    on-tertiary-container,
+    tertiary,
+    on-tertiary
+  ),
+  success: (
+    success-container,
+    on-success-container,
+    success,
+    on-success
+  ),
+  warning: (
+    warning-container,
+    on-warning-container,
+    warning,
+    on-warning
+  ),
+  error: (
+    error-container-low,
+    error,
+    error,
+    on-error
+  ),
+  info: (
+    info-container,
+    on-info-container,
+    info,
+    on-info
+  )
+);
+
+@each $name, $colors in $_badge-themes {
+  .forge-badge--#{$name} {
+    @include badge.override(background, theme.variable(list.nth($colors, 1)), value);
+    @include badge.override(color, theme.variable(list.nth($colors, 2)), value);
+
+    &.forge-badge--strong {
+      @include badge.override(background, theme.variable(list.nth($colors, 3)), value);
+      @include badge.override(color, theme.variable(list.nth($colors, 4)), value);
+    }
   }
 }
 

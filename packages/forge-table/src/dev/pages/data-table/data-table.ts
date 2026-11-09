@@ -3,14 +3,15 @@ import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
 import './data-table.scss';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
+import type { BadgeTheme } from '@tylertech/forge/badge';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { actionCell, linkCell, meterCell, ratingCell } from '@tylertech/forge-table';
+import { actionCell, badgeCell, linkCell, meterCell, ratingCell } from '@tylertech/forge-table';
 import type { ColumnAggregation, ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
 import { IconRegistry } from '@tylertech/forge';
-import { tylIconDelete, tylIconEdit } from '@tylertech/tyler-icons';
+import { tylIconDelete, tylIconEdit, tylIconStar } from '@tylertech/tyler-icons';
 
-IconRegistry.define([tylIconEdit, tylIconDelete]);
+IconRegistry.define([tylIconEdit, tylIconDelete, tylIconStar]);
 
 interface RowData {
   id: number;
@@ -37,7 +38,24 @@ const DATE_AGGREGATIONS = new Set(['min', 'max', 'extent', 'count']);
 
 const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
+const TOP_PERFORMER_RATING = 4.5;
+
+const DEPARTMENT_THEMES: Record<string, BadgeTheme> = {
+  Engineering: 'primary',
+  Marketing: 'tertiary',
+  Sales: 'success',
+  HR: 'warning',
+  Finance: 'info'
+};
+
 const performanceMeter = meterCell({ min: 0, max: 5, low: 3, high: 4, optimum: 5 });
+
+const tagsBadges = badgeCell({
+  badges: ({ row }) => [
+    { text: row.original.department, theme: DEPARTMENT_THEMES[row.original.department] },
+    ...(row.original.performanceRating >= TOP_PERFORMER_RATING ? [{ text: 'Top performer', theme: 'success' as const, strong: true, icon: 'star' }] : [])
+  ]
+});
 
 const actionsColumn: ColumnDef<RowData> = {
   id: 'actions',
@@ -51,20 +69,21 @@ const actionsColumn: ColumnDef<RowData> = {
 };
 
 const flatColumns: ColumnDef<RowData>[] = [
-  // { header: 'Id', property: 'id', filterType: 'number' },
-  // { header: 'First Name', property: 'firstName' },
-  // { header: 'Last Name', property: 'lastName' },
+  { header: 'Id', property: 'id', filterType: 'number' },
+  { header: 'First Name', property: 'firstName' },
+  { header: 'Last Name', property: 'lastName' },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
   { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
-  // { header: 'Department', property: 'department' },
-  // { header: 'Position', property: 'position' },
+  { header: 'Department', property: 'department' },
+  { header: 'Position', property: 'position' },
+  { header: 'Tags', id: 'tags', template: tagsBadges },
   { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
   { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
   { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
   { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
   { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
-  // { header: 'City', property: 'city' },
-  // { header: 'State', property: 'state' },
+  { header: 'City', property: 'city' },
+  { header: 'State', property: 'state' },
   { header: 'Notes', property: 'notes', editable: true },
   actionsColumn
 ];
@@ -85,6 +104,7 @@ const groupedColumns: ColumnDef<RowData>[] = [
     columns: [
       { header: 'Department', property: 'department' },
       { header: 'Position', property: 'position' },
+      { header: 'Tags', id: 'tags', template: tagsBadges },
       { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
       { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
       { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
