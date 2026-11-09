@@ -463,6 +463,9 @@
     "border-primary-strong": {
       "$value": "{color.radix.indigo.a8}"
     },
+    "border-primary-strongest": {
+      "$value": "{color.radix.indigo.a11}"
+    },
     "border-secondary-subtle": {
       "$value": "{color.radix.iris.a6}"
     },
@@ -471,6 +474,9 @@
     },
     "border-secondary-strong": {
       "$value": "{color.radix.iris.a8}"
+    },
+    "border-secondary-strongest": {
+      "$value": "{color.radix.iris.a11}"
     },
     "border-tertiary-subtle": {
       "$value": "{color.radix.iris.a6}"
@@ -481,6 +487,9 @@
     "border-tertiary-strong": {
       "$value": "{color.radix.iris.a8}"
     },
+    "border-tertiary-strongest": {
+      "$value": "{color.radix.iris.a11}"
+    },
     "border-success-subtle": {
       "$value": "{color.radix.green.a6}"
     },
@@ -489,6 +498,9 @@
     },
     "border-success-strong": {
       "$value": "{color.radix.green.a8}"
+    },
+    "border-success-strongest": {
+      "$value": "{color.radix.green.a11}"
     },
     "border-error-subtle": {
       "$value": "{color.radix.red.a6}"
@@ -499,6 +511,9 @@
     "border-error-strong": {
       "$value": "{color.radix.red.a8}"
     },
+    "border-error-strongest": {
+      "$value": "{color.radix.red.a11}"
+    },
     "border-warning-subtle": {
       "$value": "{color.radix.amber.a6}"
     },
@@ -507,6 +522,9 @@
     },
     "border-warning-strong": {
       "$value": "{color.radix.amber.a8}"
+    },
+    "border-warning-strongest": {
+      "$value": "{color.radix.amber.a11}"
     },
     "border-info-subtle": {
       "$value": "{color.radix.blue.a6}"
@@ -517,6 +535,9 @@
     "border-info-strong": {
       "$value": "{color.radix.blue.a8}"
     },
+    "border-info-strongest": {
+      "$value": "{color.radix.blue.a11}"
+    },
     "border-neutral-subtle": {
       "$value": "{color.radix.slate.a6}"
     },
@@ -525,6 +546,9 @@
     },
     "border-neutral-strong": {
       "$value": "{color.radix.slate.a8}"
+    },
+    "border-neutral-strongest": {
+      "$value": "{color.radix.slate.a11}"
     }
   }
 }

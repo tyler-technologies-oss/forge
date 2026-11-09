@@ -477,6 +477,9 @@
     "border-primary-strong": {
       "$value": "{color.radix-dark.indigo.a8}"
     },
+    "border-primary-strongest": {
+      "$value": "{color.radix-dark.indigo.a11}"
+    },
     "border-secondary-subtle": {
       "$value": "{color.radix-dark.iris.a6}"
     },
@@ -485,6 +488,9 @@
     },
     "border-secondary-strong": {
       "$value": "{color.radix-dark.iris.a8}"
+    },
+    "border-secondary-strongest": {
+      "$value": "{color.radix-dark.iris.a11}"
     },
     "border-tertiary-subtle": {
       "$value": "{color.radix-dark.iris.a6}"
@@ -495,6 +501,9 @@
     "border-tertiary-strong": {
       "$value": "{color.radix-dark.iris.a8}"
     },
+    "border-tertiary-strongest": {
+      "$value": "{color.radix-dark.iris.a11}"
+    },
     "border-success-subtle": {
       "$value": "{color.radix-dark.green.a6}"
     },
@@ -503,6 +512,9 @@
     },
     "border-success-strong": {
       "$value": "{color.radix-dark.green.a8}"
+    },
+    "border-success-strongest": {
+      "$value": "{color.radix-dark.green.a11}"
     },
     "border-error-subtle": {
       "$value": "{color.radix-dark.red.a6}"
@@ -513,6 +525,9 @@
     "border-error-strong": {
       "$value": "{color.radix-dark.red.a8}"
     },
+    "border-error-strongest": {
+      "$value": "{color.radix-dark.red.a11}"
+    },
     "border-warning-subtle": {
       "$value": "{color.radix-dark.amber.a6}"
     },
@@ -521,6 +536,9 @@
     },
     "border-warning-strong": {
       "$value": "{color.radix-dark.amber.a8}"
+    },
+    "border-warning-strongest": {
+      "$value": "{color.radix-dark.amber.a11}"
     },
     "border-info-subtle": {
       "$value": "{color.radix-dark.blue.a6}"
@@ -531,6 +549,9 @@
     "border-info-strong": {
       "$value": "{color.radix-dark.blue.a8}"
     },
+    "border-info-strongest": {
+      "$value": "{color.radix-dark.blue.a11}"
+    },
     "border-neutral-subtle": {
       "$value": "{color.radix-dark.slate.a6}"
     },
@@ -539,6 +560,9 @@
     },
     "border-neutral-strong": {
       "$value": "{color.radix-dark.slate.a8}"
+    },
+    "border-neutral-strongest": {
+      "$value": "{color.radix-dark.slate.a11}"
     }
   }
 }
