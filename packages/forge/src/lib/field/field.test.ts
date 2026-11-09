@@ -486,6 +486,61 @@ describe('Field', () => {
     });
   });
 
+  describe('status icon', () => {
+    it('should not show a status icon by default', async () => {
+      const harness = await createFixture();
+      expect(harness.visibleStatusIcon).toBeNull();
+    });
+
+    it('should show the error icon when invalid', async () => {
+      const harness = await createFixture({ invalid: true });
+      expect(harness.visibleStatusIcon).toBe('error');
+    });
+
+    it('should show the error icon when the theme is error', async () => {
+      const harness = await createFixture({ theme: 'error' });
+      expect(harness.visibleStatusIcon).toBe('error');
+    });
+
+    it('should show the warning icon when the theme is warning', async () => {
+      const harness = await createFixture({ theme: 'warning' });
+      expect(harness.visibleStatusIcon).toBe('warning');
+    });
+
+    it('should show the error icon when invalid with the warning theme', async () => {
+      const harness = await createFixture({ invalid: true, theme: 'warning' });
+      expect(harness.visibleStatusIcon).toBe('error');
+    });
+
+    it('should not show a status icon for other themes', async () => {
+      const harness = await createFixture({ theme: 'success' });
+      expect(harness.visibleStatusIcon).toBeNull();
+    });
+
+    it('should not show a status icon when disabled', async () => {
+      const harness = await createFixture({ invalid: true, disabled: true });
+      expect(harness.visibleStatusIcon).toBeNull();
+    });
+
+    it('should hide the status icon when invalid is removed', async () => {
+      const harness = await createFixture({ invalid: true });
+      harness.element.invalid = false;
+      await frame();
+      expect(harness.visibleStatusIcon).toBeNull();
+    });
+
+    it('should hide the status icon when the display token is none', async () => {
+      const harness = await createFixture({ invalid: true });
+      harness.element.style.setProperty('--forge-field-status-icon-display', 'none');
+      expect(harness.visibleStatusIcon).toBeNull();
+    });
+
+    it('should hide the status icon from assistive technology', async () => {
+      const harness = await createFixture({ invalid: true });
+      expect(harness.statusIconElement.getAttribute('aria-hidden')).toBe('true');
+    });
+  });
+
   describe('label position', () => {
     it('should render label before container when label position is inline start', async () => {
       const harness = await createFixture({ labelPosition: 'inline-start' });
@@ -579,6 +634,7 @@ class FieldHarness extends TestHarness<IFieldComponent> {
   public containerElement: HTMLElement;
   public inputContainerElement: HTMLElement;
   public popoverIconElement: HTMLElement;
+  public statusIconElement: HTMLElement;
 
   constructor(el: IFieldComponent) {
     super(el);
@@ -590,6 +646,18 @@ class FieldHarness extends TestHarness<IFieldComponent> {
     this.containerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.CONTAINER);
     this.inputContainerElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.INPUT_CONTAINER);
     this.popoverIconElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.POPOVER_ICON);
+    this.statusIconElement = getShadowElement(this.element, FIELD_CONSTANTS.selectors.STATUS_ICON);
+  }
+
+  public get visibleStatusIcon(): 'error' | 'warning' | null {
+    if (getComputedStyle(this.statusIconElement).display === 'none') {
+      return null;
+    }
+    const visible = Array.from(this.statusIconElement.querySelectorAll('svg')).find(svg => getComputedStyle(svg).display !== 'none');
+    if (!visible) {
+      return null;
+    }
+    return visible.classList.contains('status-icon__error') ? 'error' : 'warning';
   }
 
   public async clickElement(el: HTMLElement): Promise<void> {

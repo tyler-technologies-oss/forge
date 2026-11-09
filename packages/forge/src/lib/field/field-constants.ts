@@ -34,6 +34,7 @@ const selectors = {
   LABEL: '#label',
   LABEL_SLOT: 'slot[name=label]',
   POPOVER_ICON: '#popover-icon',
+  STATUS_ICON: '#status-icon',
   LABEL_ELEMENTS: `:where(label, ${LABEL_CONSTANTS.elementName})`,
   POPOVER_TARGET: '.popover-target'
 };
@@ -44,6 +45,7 @@ const parts = {
   SURFACE: 'surface',
   START: 'start',
   INPUT: 'input',
+  STATUS_ICON: 'status-icon',
   END: 'end',
   POPOVER_ICON: 'popover-icon',
   ACCESSORY: 'accessory',

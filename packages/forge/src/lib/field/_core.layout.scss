@@ -52,8 +52,8 @@
 
   flex-grow: 1;
 
-  grid-template-areas: 'start center end popover-icon accessory';
-  grid-template-columns: auto 1fr auto auto auto;
+  grid-template-areas: 'start center status-icon end popover-icon accessory';
+  grid-template-columns: auto 1fr auto auto auto auto;
 }
 
 //

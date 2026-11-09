@@ -97,6 +97,10 @@ export interface IBaseField extends IWithLabelAwareness {
  * @cssproperty --forge-field-multiline-max-inline-size - The maximum inline size the field can be resized to when multiline.
  * @cssproperty --forge-field-multiline-min-block-size - The minimum block size the field can be resized to when multiline.
  * @cssproperty --forge-field-multiline-max-block-size - The maximum block size the field can be resized to when multiline.
+ * @cssproperty --forge-field-status-icon-display - The display of the status icon. Set to `none` to hide it.
+ * @cssproperty --forge-field-status-icon-size - The size of the status icon.
+ * @cssproperty --forge-field-status-icon-error-color - The color of the error status icon.
+ * @cssproperty --forge-field-status-icon-warning-color - The color of the warning status icon.
  * @cssproperty --forge-field-popover-icon-transition-duration - The duration of the popover icon animation.
  * @cssproperty --forge-field-popover-icon-transition-timing - The timing function of the popover icon animation.
  * @cssproperty --forge-field-popover-icon-open-rotation - The rotation of the popover icon when open.
@@ -112,6 +116,7 @@ export interface IBaseField extends IWithLabelAwareness {
  * @csspart label - The label element.
  * @csspart input - The element containing the input slot.
  * @csspart start - The element containing the start slot.
+ * @csspart status-icon - The element containing the error and warning status icons.
  * @csspart end - The element containing the end slot.
  * @csspart popover-icon - The popover icon element.
  * @csspart accessory - The element containing the accessory slot.

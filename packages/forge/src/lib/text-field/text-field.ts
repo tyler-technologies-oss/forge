@@ -51,6 +51,7 @@ declare global {
  * @csspart container - The container element surrounding the input.
  * @csspart input - The element containing te input slot.
  * @csspart start - The element containing the start slot.
+ * @csspart status-icon - The element containing the error and warning status icons.
  * @csspart end - The element containing the end slot.
  * @csspart popover-icon - The popover icon element.
  * @csspart accessory - The element containing the accessory slot.

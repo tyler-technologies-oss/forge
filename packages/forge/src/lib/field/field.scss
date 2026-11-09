@@ -9,6 +9,7 @@
 
 $focus: ':not([disabled]):focus-within';
 $invalid: ':not([disabled]):is([invalid], [theme=error])';
+$warning: ':not([disabled], [invalid])[theme=warning]';
 
 $first-slotted-element: '::slotted(:is([data-forge-field-input], *:first-of-type:is(input, textarea)))';
 $last-slotted-element: '::slotted(:is([data-forge-field-input], *:last-of-type:is(input, textarea)))';
@@ -213,6 +214,10 @@ $variants: (
     @include core.popover-target;
   }
 
+  .status-icon {
+    display: none;
+  }
+
   .popover-icon {
     display: none;
 
@@ -264,6 +269,54 @@ $variants: (
 :host([popover-icon][popover-expanded]) {
   .popover-icon {
     @include core.popover-icon-expanded;
+  }
+}
+
+//
+// Status icon
+//
+
+:host(:is(#{$invalid}, #{$warning})) {
+  .forge-field {
+    .status-icon {
+      @include core.status-icon;
+    }
+
+    .input {
+      #{$last-slotted-element} {
+        @include core.item-padding(end, inner);
+      }
+    }
+
+    &:is(.has-end, .has-accessory) {
+      .status-icon {
+        @include core.item-padding(end, inner);
+      }
+    }
+  }
+}
+
+:host(:is(#{$invalid}, #{$warning})[multiline]) {
+  .forge-field .status-icon {
+    @include core.multiline-container-child;
+  }
+}
+
+:host(:is(#{$invalid}, #{$warning})[popover-icon]) {
+  .status-icon {
+    @include core.item-padding(end, inner);
+  }
+}
+
+:host(#{$invalid}) {
+  .forge-field .status-icon .status-icon__error {
+    @include core.status-icon-visible(error);
+  }
+}
+
+:host(#{$warning}) {
+  .forge-field .status-icon .status-icon__warning {
+    @include core.status-icon-visible(warning);
   }
 }
 
@@ -503,6 +556,7 @@ $variants: (
 
     .label,
     .start,
+    .status-icon,
     .end,
     .popover-icon {
       @include core.multiline-container-child;
