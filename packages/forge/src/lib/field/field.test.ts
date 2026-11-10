@@ -568,6 +568,31 @@ describe('Field', () => {
     });
   });
 
+  describe('plain', () => {
+    it('should not show a border when invalid', async () => {
+      const harness = await createFixture({ variant: 'plain', invalid: true });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).toBe(TRANSPARENT);
+    });
+
+    it('should not show a border with the error theme', async () => {
+      const harness = await createFixture({ variant: 'plain', theme: 'error' });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).toBe(TRANSPARENT);
+    });
+
+    it('should not show a border with the warning theme', async () => {
+      const harness = await createFixture({ variant: 'plain', theme: 'warning' });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).toBe(TRANSPARENT);
+    });
+
+    it('should still show the status icon when invalid', async () => {
+      const harness = await createFixture({ variant: 'plain', invalid: true });
+      expect(harness.visibleStatusIcon).toBe('error');
+    });
+  });
+
   describe('tonal', () => {
     it('should not show a border by default', async () => {
       const harness = await createFixture({ variant: 'tonal' });

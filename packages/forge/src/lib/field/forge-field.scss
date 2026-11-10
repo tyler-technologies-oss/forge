@@ -233,6 +233,15 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         )
       );
     }
+
+    // Offset the focus indicator to separate it from the plain field text
+    &--plain:has(#{$_input-selector}:focus) {
+      @include focus-indicator.provide-theme(
+        (
+          outward-offset: #{spacing.variable(xxsmall)}
+        )
+      );
+    }
   }
 }
 
@@ -355,6 +364,14 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
           (
             color: #{theme.variable(error)},
             outward-offset: calc(#{token(outline-width)} * -1)
+          )
+        );
+      }
+
+      &.forge-field--plain:has(#{$_input-selector}:focus) {
+        @include focus-indicator.provide-theme(
+          (
+            outward-offset: #{spacing.variable(xxsmall)}
           )
         );
       }

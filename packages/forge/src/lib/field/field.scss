@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use './core';
 @use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '../focus-indicator';
 @use '../state-layer';
@@ -184,6 +185,14 @@ $variants: (
     .support-text {
       @include core.invalid-support-text-color;
     }
+  }
+}
+
+/* Plain fields never draw a border, the status icon and support text carry invalid and warning states */
+:host(#{map.get($variants, plain)}:is(#{$invalid}, #{$warning})) {
+  .forge-field {
+    @include override(outline-color, transparent, value);
+    @include override(outline-color-hover, transparent, value);
   }
 }
 
@@ -752,12 +761,12 @@ forge-focus-indicator {
   );
 }
 
-/* Provide an inline offset to the focus indicator to separate it from the plain field text */
+/* Offset the focus indicator to separate it from the plain field text */
 :host(#{map.get($variants, plain)}) {
   forge-focus-indicator {
     @include focus-indicator.provide-theme(
       (
-        offset-inline: -4px
+        outward-offset: #{spacing.variable(xxsmall)}
       )
     );
   }
