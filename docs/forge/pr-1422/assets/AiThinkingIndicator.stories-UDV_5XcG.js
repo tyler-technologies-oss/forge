@@ -1,4 +1,0 @@
-import{n as e,r as t}from"./rolldown-runtime-sJBDdmOt.js";import{a as n}from"./lit-html-SpIZ5SkX.js";import{g as r}from"./iframe-BbUsXXnT.js";import{t as i}from"./ai-thinking-indicator-ChrmcsO8.js";var a=t({Demo:()=>s,__namedExportsOrder:()=>c,default:()=>o}),o,s,c;function l(){return(l=e((()=>{r(),i(),o={title:`AI/Components/Messages/Thinking Indicator`,component:`forge-ai-thinking-indicator`,argTypes:{showText:{control:`boolean`},initialDelay:{control:`number`},cycleInterval:{control:`number`}},args:{showText:!1,initialDelay:0,cycleInterval:5e3},render:e=>n`
-    <forge-ai-thinking-indicator ?show-text=${e.showText} initial-delay=${e.initialDelay} cycle-interval=${e.cycleInterval}>
-    </forge-ai-thinking-indicator>
-  `},s={},s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`{}`,...s.parameters?.docs?.source}}},c=[`Demo`]})))()}export{s as n,l as r,a as t};

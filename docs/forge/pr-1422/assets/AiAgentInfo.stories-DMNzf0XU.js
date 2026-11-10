@@ -1,0 +1,5 @@
+import{n as e,r as t}from"./rolldown-runtime-sJBDdmOt.js";import{a as n}from"./lit-html-SpIZ5SkX.js";import{g as r}from"./iframe-CbV23-8Y.js";import{t as i}from"./ai-agent-info2-woSjcprr.js";function a(){return(a=e((()=>{i()})))()}var o=t({Demo:()=>u,__namedExportsOrder:()=>d,default:()=>l}),s,c,l,u,d;function f(){return(f=e((()=>{r(),a(),s=`forge-ai-agent-info`,c=n`<style>
+  .agent-info-story {
+    max-inline-size: 400px;
+  }
+</style>`,l={title:`AI/Components/Agents/Agent Info`,component:s,render:({name:e,identifier:t,version:r,threadId:i})=>n`${c}<forge-ai-agent-info class="agent-info-story" .agentInfo=${{name:e,identifier:t,version:r,threadId:i}}></forge-ai-agent-info>`,argTypes:{name:{control:`text`},identifier:{control:`text`},version:{control:`text`},threadId:{control:`text`}},args:{name:`Staff Assistant`,identifier:`agent-49ff3a19-6986-43e9-a255-7bcdd40cbdc0`,version:`1.3.5`,threadId:`7cbc1ec3-6fd1-4c13-a737-fc3d9f9ec2baf`}},u={},u.parameters={...u.parameters,docs:{...u.parameters?.docs,source:{originalSource:`{}`,...u.parameters?.docs?.source}}},d=[`Demo`]})))()}export{u as n,f as r,o as t};

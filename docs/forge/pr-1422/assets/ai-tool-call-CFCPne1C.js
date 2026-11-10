@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{n as t,t as n}from"./ai-tool-call2-bfR1ACt5.js";import"./utils-CxMT1tHj.js";function r(e){return`elementTag`in e}function i(e){return r(e)?{elementTag:e.elementTag}:{render:e.render}}function a(){return(a=e((()=>{})))()}function o(){return(o=e((()=>{t(),n()})))()}export{i as n,a as r,o as t};

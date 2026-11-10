@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./ai-empty-state2-CyNJ3gvR.js";function n(){return(n=e((()=>{t()})))()}export{n as t};

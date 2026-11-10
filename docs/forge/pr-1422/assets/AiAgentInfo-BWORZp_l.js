@@ -1,7 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-CqthO5_N.js";import{a as r}from"./chunk-W22LQPXL-DaWckgVw.js";import{h as i,n as a,p as o,u as s}from"./blocks-Dp_o0sTV.js";import{n as c,t as l}from"./CustomArgTypes-_m-okSqZ.js";import{n as u,r as d,t as f}from"./AiAgentInfo.stories-BRfpUoy5.js";function p(e){let n={code:`code`,h2:`h2`,p:`p`,...t(),...e.components};return(0,h.jsxs)(h.Fragment,{children:[(0,h.jsx)(s,{of:f}),`
-`,(0,h.jsx)(o,{}),`
-`,(0,h.jsx)(n.p,{children:`A compact read-out of an agent's details. Use it to show users which agent and version they are talking to, with copy buttons for IDs that support requests may need.`}),`
-`,(0,h.jsxs)(n.p,{children:[`Pass an `,(0,h.jsx)(n.code,{children:`AgentInfo`}),` object to `,(0,h.jsx)(n.code,{children:`agentInfo`}),`. Only these fields render, and only when set: `,(0,h.jsx)(n.code,{children:`name`}),` (Agent name), `,(0,h.jsx)(n.code,{children:`version`}),`, `,(0,h.jsx)(n.code,{children:`identifier`}),` (Agent ID) and `,(0,h.jsx)(n.code,{children:`threadId`}),` (Session ID). The two ID fields include a copy-to-clipboard button.`]}),`
-`,(0,h.jsx)(a,{of:u}),`
-`,(0,h.jsx)(n.h2,{id:`api`,children:`API`}),`
-`,(0,h.jsx)(l,{})]})}function m(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,h.jsx)(n,{...e,children:(0,h.jsx)(p,{...e})}):p(e)}var h;function g(){return(g=e((()=>{h=r(),n(),i(),c(),d()})))()}g();export{m as default};
