@@ -68,6 +68,8 @@ function manyUserItems(count: number): MessageItem[] {
   return Array.from({ length: count }, (_, i) => msgItem({ id: `m${i}`, content: `Message ${i}` }));
 }
 
+const SMOOTH_SCROLL_TIMEOUT = 5000;
+
 const frame = (): Promise<void> => new Promise(resolve => requestAnimationFrame(() => resolve()));
 
 describe('AiMessageThreadComponent', () => {
@@ -454,7 +456,7 @@ describe('AiMessageThreadComponent', () => {
       await vi.waitFor(() => {
         const c = container(el);
         expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
-      });
+      }, SMOOTH_SCROLL_TIMEOUT);
       await el.updateComplete;
 
       expect(scrollButton(el)!.classList.contains('scroll-to-bottom-button--hidden')).toBe(true);
@@ -507,7 +509,7 @@ describe('AiMessageThreadComponent', () => {
       await vi.waitFor(() => {
         const c = container(el);
         expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
-      });
+      }, SMOOTH_SCROLL_TIMEOUT);
     });
 
     it('should scroll to the bottom when thinking is toggled on with auto-scroll on', async () => {
@@ -519,7 +521,7 @@ describe('AiMessageThreadComponent', () => {
         const c = container(el);
         expect(c.scrollHeight).toBeGreaterThan(c.clientHeight);
         expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
-      });
+      }, SMOOTH_SCROLL_TIMEOUT);
 
       el.showThinking = true;
       await el.updateComplete;
@@ -528,7 +530,7 @@ describe('AiMessageThreadComponent', () => {
         const c = container(el);
         expect(el.shadowRoot!.querySelector('.thinking-indicator')).toBeTruthy();
         expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
-      });
+      }, SMOOTH_SCROLL_TIMEOUT);
     });
 
     it('should not auto-scroll when auto-scroll is off', async () => {
