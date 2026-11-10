@@ -8,7 +8,6 @@ export * from './ai-tool-call-indicator/index.js';
 export * from './ai-artifact/index.js';
 export * from './ai-artifact-card/index.js';
 export * from './ai-artifact-card-group/index.js';
-export * from './ai-attachment/index.js';
 export * from './ai-canvas/index.js';
 export * from './ai-chain-of-thought/index.js';
 export * from './ai-chat-header/index.js';

@@ -5,7 +5,7 @@
 - `@tylertech/forge-ai` is now presentational primitives only and lives in the Forge monorepo (`packages/forge-ai`). The package name is unchanged.
 - The chat composition layer (chatbot, adapters, runner, floating/sidebar/launcher form factors) is removed. Composition is now the consumer's responsibility; build it from these primitives.
 - `forge-ai-threads` and `forge-ai-embedded-chat` are removed.
-- `forge-ai-button`, `forge-ai-icon-button`, `forge-prompt-button` and `forge-ai-confirmation-prompt` are removed (see [Removed: unused elements](#removed-unused-elements)).
+- `forge-ai-button`, `forge-ai-icon-button`, `forge-prompt-button`, `forge-ai-confirmation-prompt` and `forge-ai-attachment` are removed (see [Removed: unused elements](#removed-unused-elements)).
 - `forge-ai-chatbot-tool-call` is now `forge-ai-tool-call`. The paginator event `page-change` is now `forge-ai-paginator-page-change`, and the `toggle` event on `forge-ai-reasoning-header` is now `forge-ai-reasoning-header-toggle` (fixing reasoning headers closing parent dialogs).
 - New subpaths: `/types`, `/ai-tool-call`, and `/jsx`. Many types moved to `/types`.
 - `@ag-ui/client`, `@ag-ui/core`, and `uuid` are no longer dependencies.
@@ -95,18 +95,19 @@ Notes: rich values (arrays, objects) are passed as properties by React 19, so `m
 - `@tylertech/forge-ai/utils` now exports `generateUniqueId`, `toggleState`, `formatRelativeTime`, and `MarkdownStreamController` in addition to the existing markdown, storage, CSV, and controller utilities.
 - `@tylertech/forge-ai/core` now exports the overlay, popover, and tooltip components alongside `DragController` and `ResizeController`.
 
-Removed subpaths: `@tylertech/forge-ai/ai-chatbot`, `/ai-chatbot-launcher`, `/ai-floating-chat`, `/ai-sidebar-chat`, `/ai-threads`, `/ai-embedded-chat`, `/ai-button`, `/ai-icon-button`, `/ai-confirmation-prompt`, `/ai-prompt/prompt-button`. `PromptButtonComponent` and `PromptButtonComponentTagName` are no longer exported from `/ai-prompt`.
+Removed subpaths: `@tylertech/forge-ai/ai-chatbot`, `/ai-chatbot-launcher`, `/ai-floating-chat`, `/ai-sidebar-chat`, `/ai-threads`, `/ai-embedded-chat`, `/ai-button`, `/ai-icon-button`, `/ai-confirmation-prompt`, `/ai-attachment`, `/ai-prompt/prompt-button`. `PromptButtonComponent` and `PromptButtonComponentTagName` are no longer exported from `/ai-prompt`.
 
 Importing `@tylertech/forge-ai/core` registers `forge-ai-overlay`, `forge-ai-popover`, and `forge-ai-tooltip` as a side effect.
 
 ## Removed: unused elements
 
-| Removed tag                    | Removed class                                                           | Replacement                                 |
-| ------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------- |
-| `forge-ai-button`              | `AiButtonComponent`, `AiButtonComponentTagName`                         | `forge-button` from `@tylertech/forge`      |
-| `forge-ai-icon-button`         | `AiIconButtonComponent`, `AiIconButtonComponentTagName`                 | `forge-icon-button` from `@tylertech/forge` |
-| `forge-prompt-button`          | `PromptButtonComponent`, `PromptButtonComponentTagName`                 | `forge-button` from `@tylertech/forge`      |
-| `forge-ai-confirmation-prompt` | `AiConfirmationPromptComponent`, `AiConfirmationPromptComponentTagName` | None                                        |
+| Removed tag                    | Removed class                                                                               | Replacement                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `forge-ai-button`              | `AiButtonComponent`, `AiButtonComponentTagName`                                             | `forge-button` from `@tylertech/forge`             |
+| `forge-ai-icon-button`         | `AiIconButtonComponent`, `AiIconButtonComponentTagName`                                     | `forge-icon-button` from `@tylertech/forge`        |
+| `forge-prompt-button`          | `PromptButtonComponent`, `PromptButtonComponentTagName`                                     | `forge-button` from `@tylertech/forge`             |
+| `forge-ai-confirmation-prompt` | `AiConfirmationPromptComponent`, `AiConfirmationPromptComponentTagName`                     | None                                               |
+| `forge-ai-attachment`          | `AiAttachmentComponent`, `AiAttachmentComponentTagName`, `ForgeAiAttachmentRemoveEventData` | `forge-ai-context-items` / `forge-ai-context-chip` |
 
 ## Renamed
 
