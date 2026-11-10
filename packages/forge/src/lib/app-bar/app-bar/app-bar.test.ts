@@ -203,7 +203,7 @@ describe('App Bar', () => {
     const rootEl = getRootEl(el);
 
     const defaultStyle = getComputedStyle(rootEl);
-    expect(defaultStyle.getPropertyValue('--forge-theme-primary')).toBe('#ffffff');
+    expect(defaultStyle.getPropertyValue('--forge-theme-primary')).toBe('oklch(100% 0 0deg)');
 
     expect(el.themeMode).toBe('inherit');
     expect(el.hasAttribute(APP_BAR_CONSTANTS.attributes.THEME_MODE)).toBe(false);

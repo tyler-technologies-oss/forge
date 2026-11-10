@@ -2,7 +2,7 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/shape';
-@use '@tylertech/forge-tokens/sass/color-emphasis';
+@use '@tylertech/forge-tokens/sass/radix-color-palette' as palette;
 @use '../focus-indicator';
 @use '../state-layer';
 @use '../field';
@@ -14,7 +14,7 @@
   @include core.provide-theme(
     (
       theme-foreground: #{core.token(foreground)},
-      theme-foreground-muted: rgba(white, color-emphasis.value(medium))
+      theme-foreground-muted: #{palette.$white-alpha-9}
     )
   );
 
@@ -22,13 +22,16 @@
     @include theme.provide(
       (
         primary: #{core.token(foreground)},
-        on-primary: rgba(black, color-emphasis.value(highest)),
-        text-high: rgba(white, color-emphasis.value(highest)),
-        text-medium: rgba(white, color-emphasis.value(medium)),
-        text-low: rgba(white, color-emphasis.value(medium-low)),
-        outline-high: rgba(white, color-emphasis.value(highest)),
-        outline-medium: rgba(white, color-emphasis.value(medium)),
-        outline-low: rgba(white, color-emphasis.value(medium-low))
+        on-primary: #{palette.$black-alpha-12},
+        on-primary-container-minimum: #{core.token(foreground)},
+        border-primary-default: #{palette.$white-alpha-7},
+        text-high: #{palette.$white-alpha-12},
+        text-medium: #{palette.$white-alpha-9},
+        text-low: #{palette.$white-alpha-6},
+        outline-high: #{palette.$white-alpha-12},
+        outline-medium: #{palette.$white-alpha-10},
+        outline: #{palette.$white-alpha-8},
+        outline-low: #{palette.$white-alpha-6}
       )
     );
   }
@@ -139,14 +142,14 @@
       .forge-field {
         @include field.provide-theme(
           (
-            background: rgba(white, color-emphasis.value(lowest))
+            background: #{palette.$white-alpha-2}
           )
         );
 
         &:hover {
           @include field.provide-theme(
             (
-              background: rgba(white, color-emphasis.value(lower))
+              background: #{palette.$white-alpha-3}
             )
           );
         }

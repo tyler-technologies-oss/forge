@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/radix-color-palette' as palette;
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/animation';
@@ -21,7 +22,7 @@ $tokens: (
   transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard)),
   // Scoped theming tokens for app bar children to optionally inherit
   theme-foreground: utils.module-ref(app-bar, theme-foreground, foreground),
-  theme-foreground-muted: utils.module-val(app-bar, theme-foreground-muted, rgb(white, theme.emphasis(medium)))
+  theme-foreground-muted: utils.module-val(app-bar, theme-foreground-muted, palette.$white-alpha-9)
 ) !default;
 
 @function get($key) {
