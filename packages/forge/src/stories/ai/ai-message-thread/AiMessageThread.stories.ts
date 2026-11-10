@@ -9,7 +9,7 @@ import { type ClientMessageAction, type MessageItem, type ToolDefinition } from 
 const component = 'forge-ai-message-thread';
 
 const meta = {
-  title: 'AI/Message Thread',
+  title: 'AI/Components/Message Thread',
   component,
   argTypes: {
     enableReactions: {

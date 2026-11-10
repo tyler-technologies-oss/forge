@@ -6,7 +6,7 @@ import '@tylertech/forge-ai/ai-thinking-indicator';
 const component = 'forge-ai-thinking-indicator';
 
 const meta = {
-  title: 'AI/Thinking Indicator',
+  title: 'AI/Components/Thinking Indicator',
   component,
   argTypes: {
     showText: { control: 'boolean' },

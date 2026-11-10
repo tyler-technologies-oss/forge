@@ -8,7 +8,7 @@ import type { AiStep, AiStepsComponent } from '@tylertech/forge-ai/ai-steps';
 const component = 'forge-ai-steps';
 
 const meta = {
-  title: 'AI/Steps',
+  title: 'AI/Components/Steps',
   component,
   argTypes: {
     running: {

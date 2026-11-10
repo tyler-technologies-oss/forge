@@ -42,10 +42,14 @@ Every component folder is a subpath export. Importing a subpath registers its el
 
 ## React 19
 
-React 19 supports custom elements natively, so there is no wrapper package. Add a types-only import once to get typed `forge-ai-*` JSX tags, props, refs, and events:
+React 19 supports custom elements natively, so there is no wrapper package. Add the types-only subpath to `tsconfig.json` to get typed `forge-ai-*` JSX tags, props, refs, and events (setting `types` disables automatic inclusion of other `@types/*` packages, so list those too):
 
-```ts
-import type {} from '@tylertech/forge-ai/jsx';
+```json
+{
+  "compilerOptions": {
+    "types": ["@tylertech/forge-ai/jsx"]
+  }
+}
 ```
 
 ```tsx

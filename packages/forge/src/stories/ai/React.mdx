@@ -10,20 +10,21 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## Setup
 
-Add a types-only import once, anywhere in your TypeScript program (for example, `src/forge-ai.d.ts` or your app entry):
+Add the typings to `compilerOptions.types` in your `tsconfig.json`:
 
-```ts
-import type {} from '@tylertech/forge-ai/jsx';
+```json
+{
+  "compilerOptions": {
+    "types": ["@tylertech/forge-ai/jsx"]
+  }
+}
 ```
 
 This augments React's `JSX.IntrinsicElements` with every `forge-ai-*` tag. The subpath is types-only: it emits no JavaScript and registers no elements.
 
-Alternatives that work equally well:
+Setting `types` turns off automatic inclusion of other `@types/*` packages, so list the ones you need too (for example `"types": ["node", "@tylertech/forge-ai/jsx"]`).
 
-- `/// <reference types="@tylertech/forge-ai/jsx" />` at the top of a `.d.ts` file
-- `"types": ["@tylertech/forge-ai/jsx"]` in `tsconfig.json` (note that setting `types` disables automatic inclusion of other `@types/*` packages, so list them too)
-
-The `import type {}` form is recommended: it is explicit, tree-shakes to nothing, and does not change how other `@types` are resolved. Verified with `moduleResolution` of `bundler`, `node16`, and `nodenext`. `moduleResolution: node`/`node10` is not supported by this package (for any subpath, not just `/jsx`) because it does not read the `exports` map.
+Verified with `moduleResolution` of `bundler`, `node16`, and `nodenext`. `moduleResolution: node`/`node10` is not supported by this package (for any subpath, not just `/jsx`) because it does not read the `exports` map.
 
 ## Registering elements
 
@@ -95,7 +96,3 @@ Use the standard `slot` attribute on children:
   <forge-ai-icon-button slot="actions" />
 </forge-ai-prompt>
 ```
-
-## How the typings are produced
-
-`dist/jsx.d.ts` is generated at build time from `custom-elements.json` by a small CEM plugin. Prop and event types are imported from the package's own declarations, so they always match the component classes. Only elements with a tag in the manifest are included.

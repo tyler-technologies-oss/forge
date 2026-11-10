@@ -56,10 +56,14 @@ The `forge-ai-chatbot-*` DOM events fired by those elements no longer exist here
 The `@tylertech/forge-ai-react` wrapper package is not carried forward and will be deprecated on npm. React 19 supports custom elements natively, so `@tylertech/forge-ai` now ships JSX typings instead. The typings compile under `@types/react` 18, but React 18's runtime does not support these elements correctly, so use React 19.
 
 1. Remove `@tylertech/forge-ai-react`.
-2. Add a types-only import once in your app (for example `src/forge-ai.d.ts`):
+2. Add the types-only subpath to `compilerOptions.types` in `tsconfig.json` (this disables automatic inclusion of other `@types/*` packages, so list those too):
 
-```ts
-import type {} from '@tylertech/forge-ai/jsx';
+```json
+{
+  "compilerOptions": {
+    "types": ["@tylertech/forge-ai/jsx"]
+  }
+}
 ```
 
 3. Register elements with side-effect imports and use the tags directly. Event props are `on` plus the event name exactly as dispatched (React 19 calls `addEventListener` with the name after `on`, no case conversion).

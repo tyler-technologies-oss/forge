@@ -84,7 +84,7 @@ const sampleThreads: Thread[] = [
 ];
 
 const meta = {
-  title: 'AI/Conversations Panel',
+  title: 'AI/Components/Conversations Panel',
   component,
   argTypes: {
     threads: {

@@ -9,7 +9,7 @@ import '@tylertech/forge/button';
 const component = 'forge-ai-modal';
 
 const meta = {
-  title: 'AI/Modal',
+  title: 'AI/Components/Modal',
   render: args => {
     const modalRef = createRef<AiModalComponent>();
 

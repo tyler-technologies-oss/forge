@@ -27,7 +27,7 @@ IconRegistry.define([tylIconMenu, tylIconSettings, tylIconPerson, tylIconDashboa
 const component = 'forge-ai-sidebar';
 
 const meta = {
-  title: 'AI/Sidebar',
+  title: 'AI/Components/Sidebar',
   component,
   argTypes: {
     open: {

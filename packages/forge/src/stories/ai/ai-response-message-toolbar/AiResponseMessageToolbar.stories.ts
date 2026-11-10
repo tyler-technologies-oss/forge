@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-response-message-toolbar';
 const component = 'forge-ai-response-message-toolbar';
 
 const meta = {
-  title: 'AI/Response Message Toolbar',
+  title: 'AI/Components/Response Message Toolbar',
   component,
   argTypes: {
     enableReactions: {

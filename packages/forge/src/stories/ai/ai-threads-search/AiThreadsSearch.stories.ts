@@ -27,7 +27,7 @@ const generateThreads = (count: number, startIndex = 0): Thread[] => {
 const component = 'forge-ai-threads-search';
 
 const meta = {
-  title: 'AI/Threads Search',
+  title: 'AI/Components/Threads Search',
   component,
   argTypes: {
     threads: {

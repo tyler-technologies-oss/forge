@@ -15,7 +15,7 @@ import '@tylertech/forge-ai/ai-prompt';
 const component = 'forge-ai-chat-interface';
 
 const meta = {
-  title: 'AI/Chat Interface',
+  title: 'AI/Components/Chat Interface',
   component,
   render: () => html`
     <forge-ai-chat-interface>

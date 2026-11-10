@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-attachment';
 const component = 'forge-ai-attachment';
 
 const meta = {
-  title: 'AI/Attachment',
+  title: 'AI/Components/Attachment',
   render: args => {
     const handleRemove = action('forge-ai-attachment-remove');
 

@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-user-message-toolbar';
 const component = 'forge-ai-user-message-toolbar';
 
 const meta = {
-  title: 'AI/User Message Toolbar',
+  title: 'AI/Components/User Message Toolbar',
   component,
   argTypes: {
     timestamp: {

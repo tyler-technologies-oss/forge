@@ -8,7 +8,7 @@ import '@tylertech/forge-ai/ai-voice-input';
 const component = 'forge-ai-voice-input';
 
 const meta = {
-  title: 'AI/Voice Input',
+  title: 'AI/Components/Voice Input',
   component,
   render: () => {
     const handleResult = (event: CustomEvent<ForgeAiVoiceInputResultEvent>): void => {

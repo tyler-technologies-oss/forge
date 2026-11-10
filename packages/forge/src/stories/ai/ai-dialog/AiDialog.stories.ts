@@ -14,7 +14,7 @@ import '@tylertech/forge-ai/ai-fab';
 const component = 'forge-ai-dialog';
 
 const meta = {
-  title: 'AI/Dialog',
+  title: 'AI/Components/Dialog',
   component,
   argTypes: {
     open: {

@@ -6,7 +6,7 @@ import '@tylertech/forge-ai/ai-icon';
 const component = 'forge-ai-icon';
 
 const meta = {
-  title: 'AI/Icon',
+  title: 'AI/Components/Icon',
   component,
   argTypes: {
     outline: {

@@ -10,7 +10,7 @@ import '@tylertech/forge-ai/ai-chat-header';
 const component = 'forge-ai-reasoning';
 
 const meta = {
-  title: 'AI/Reasoning',
+  title: 'AI/Components/Reasoning',
   component,
   argTypes: {
     expanded: {

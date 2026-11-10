@@ -60,7 +60,7 @@ const createPrompt = (): TemplateResult => {
 };
 
 const meta = {
-  title: 'AI/Chain of Thought',
+  title: 'AI/Components/Chain of Thought',
   component,
   argTypes: {
     expanded: {

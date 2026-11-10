@@ -16,7 +16,7 @@ const tableIcon = html`<forge-icon slot="icon" name="table"></forge-icon>`;
 const chartIcon = html`<forge-icon slot="icon" name="bar_chart"></forge-icon>`;
 
 const meta = {
-  title: 'AI/Artifact Card',
+  title: 'AI/Components/Artifact Card',
   render: args => html`
     <forge-ai-artifact-card
       title-text=${args.titleText}

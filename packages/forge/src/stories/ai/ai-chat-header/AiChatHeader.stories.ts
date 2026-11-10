@@ -20,7 +20,7 @@ const infoAction = action('forge-ai-chat-header-info');
 IconRegistry.define([tylIconHistory, tylIconSettings]);
 
 const meta = {
-  title: 'AI/Chat Header',
+  title: 'AI/Components/Chat Header',
   component,
   argTypes: {
     titleText: {

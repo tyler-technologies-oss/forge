@@ -41,7 +41,7 @@ function renderCards(count: number, activeIndex = -1): TemplateResult[] {
 }
 
 const meta = {
-  title: 'AI/Artifact Card Group',
+  title: 'AI/Components/Artifact Card Group',
   render: args => html`
     <forge-ai-artifact-card-group
       style="max-width: 480px;"

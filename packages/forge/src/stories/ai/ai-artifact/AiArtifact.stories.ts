@@ -11,7 +11,7 @@ IconRegistry.define([tylIconContentCopy, tylIconRefresh, tylIconDownload, tylIco
 const component = 'forge-ai-artifact';
 
 const meta = {
-  title: 'AI/Artifact',
+  title: 'AI/Components/Artifact',
   component,
   render: () => html`
     <forge-ai-artifact>

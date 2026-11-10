@@ -8,7 +8,7 @@ const component = 'forge-ai-icon-button';
 const clickAction = action('click');
 
 const meta = {
-  title: 'AI/Icon Button',
+  title: 'AI/Components/Icon Button',
   component,
   render: args => html` <forge-ai-icon-button .disabled=${args.disabled} @click=${clickAction}></forge-ai-icon-button> `,
   argTypes: {

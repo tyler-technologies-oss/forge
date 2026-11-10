@@ -15,7 +15,7 @@ IconRegistry.define([tylIconChevronDown, tylIconWebAlt]);
 const component = 'forge-ai-prompt';
 
 const meta = {
-  title: 'AI/Prompt',
+  title: 'AI/Components/Prompt',
   component,
   argTypes: {
     variant: {

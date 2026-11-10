@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-reasoning-header';
 const component = 'forge-ai-reasoning-header';
 
 const meta = {
-  title: 'AI/Reasoning Header',
+  title: 'AI/Components/Reasoning Header',
   component,
   argTypes: {
     expanded: {

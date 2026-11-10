@@ -6,7 +6,7 @@ import '@tylertech/forge-ai/ai-user-message';
 const component = 'forge-ai-user-message';
 
 const meta = {
-  title: 'AI/User Message',
+  title: 'AI/Components/User Message',
   component,
   render: () => html` <forge-ai-user-message> Hello! Can you help me understand how to use TypeScript generics? </forge-ai-user-message> `
 } satisfies Meta;
