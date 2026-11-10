@@ -56,7 +56,11 @@ Text color sets emphasis. Use the emphasis tokens on surfaces, and the matching 
 
 ## Borders and dividers
 
-Use `--forge-theme-outline` for borders and dividers. `outline-low` and `outline-medium` give a quieter line, and `outline-high` a stronger one. Cards are flat with a 1px outline border, and use the raised variant only when they need to lift above other content.
+There are two border families, each with its own job.
+
+**Structure and controls** use the `outline` tokens. Use `--forge-theme-outline-low` for dividers and the edges of surfaces such as cards, drawers, and tables, `--forge-theme-outline` for a control's border at rest, `--forge-theme-outline-medium` for a control's border on hover or when it needs more emphasis, and `--forge-theme-outline-high` for the strongest neutral line. Cards are flat with a 1px `outline-low` border, and use the raised variant only when they need to lift above other content.
+
+**Tinted and role-based surfaces** use the `border-{role}` tokens, where the role is `neutral`, `info`, `success`, `warning`, `error`, `primary`, `secondary`, or `tertiary`. Each role has the same four steps: `subtle`, `default`, `strong`, and `strongest`. Use these when a component's border follows its theme, like an outlined banner, inline message, or badge, so switching the theme only swaps the role. `border-neutral-subtle` matches `outline-low`, and `border-neutral-strong` matches `outline`.
 
 ## Gradients
 
@@ -74,7 +78,7 @@ Forge designs rarely use gradients. When one is needed, keep it subtle by moving
     variant="do"
     rules={[
       'Use a theme token for every color, so the design adapts to dark mode and custom themes.',
-      'Pick tokens by role: surface for backgrounds, text emphasis for text, outline for borders.',
+      'Pick tokens by role: surface for backgrounds, text emphasis for text, outline for structural borders, and border-{role} for tinted or themed borders.',
       'Reserve primary for the most important action or state in a view.',
       'Pair status colors with text or an icon.'
     ]}
