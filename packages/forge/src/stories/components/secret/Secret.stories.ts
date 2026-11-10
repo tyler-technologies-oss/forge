@@ -26,8 +26,10 @@ const meta = {
     return el;
   },
   component,
+  decorators: [story => html`<div style="padding-block-start: var(--forge-spacing-xlarge)">${story()}</div>`],
   parameters: {
-    actions: { disable: true }
+    actions: { disable: true },
+    docs: { source: { excludeDecorators: true } }
   },
   argTypes: {
     ...generateCustomElementArgTypes({
