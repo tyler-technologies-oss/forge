@@ -1,8 +1,11 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge-tokens/sass/animation';
+@use '../focus-indicator';
 
 @mixin styles() {
+  @include focus-indicator.keyframes;
+
   * {
     box-sizing: border-box;
   }
@@ -16,6 +19,7 @@
 
     &__gradient {
       @include gradient;
+      @include focus-indicator.standalone(inward);
 
       &-color {
         @include gradient-color;
@@ -42,7 +46,13 @@
       position: relative;
 
       &-thumb {
-        outline: none;
+        @include focus-indicator.standalone;
+        @include focus-indicator.provide-theme(
+          (
+            shape: 50%
+          )
+        );
+
         height: 16px;
         width: 16px;
         background-color: white;
@@ -98,7 +108,7 @@
 
         &[type='number'],
         &[type='text'] {
-          border-color: #{theme.variable(outline-low)};
+          border-color: #{theme.variable(outline)};
           color: #{theme.variable(on-surface)};
           background-color: transparent;
           padding: 4px 8px;
@@ -107,7 +117,7 @@
           border-radius: 4px;
           box-sizing: border-box;
           outline: none;
-          transition-property: box-shadow, border-colo;
+          transition-property: box-shadow, border-color;
           transition-duration: #{animation.variable(duration-short4)};
           transition-timing-function: #{animation.variable(easing-standard)};
 
@@ -116,8 +126,8 @@
           }
 
           &:focus {
-            border-color: #{theme.variable(primary)};
-            box-shadow: 0 0 0 1px inset #{theme.variable(primary)};
+            border-color: #{theme.variable(focus-indicator)};
+            box-shadow: 0 0 0 1px inset #{theme.variable(focus-indicator)};
           }
         }
 
@@ -197,7 +207,6 @@
 
 @mixin gradient() {
   position: relative;
-  outline: none;
 }
 
 @mixin gradient-color() {
