@@ -53,8 +53,13 @@ const THEME_DESCRIPTIONS = {
   '--forge-theme-surface-elevated': 'The background color for elevated surfaces such as cards, menus, and popovers that sit above the default surface.',
   '--forge-theme-surface-elevated-translucent':
     'A translucent version of the elevated surface background color, for elevated surfaces that let the content behind them show through.',
+  '--forge-theme-surface-elevated-ring':
+    'The color of the hairline ring drawn around elevated surfaces such as popovers, dialogs, and raised cards, so their edge stays visible in both themes.',
+  '--forge-theme-surface-transparent':
+    'The surface color at 0% opacity. Use it to fade to or clear a surface without the gray cast of plain transparent, such as the readonly field background.',
   '--forge-theme-on-surface': 'The color for content, such as text and icons, placed on a surface. Also the base color for hover and focus state layers.',
   '--forge-theme-on-surface-inverse': 'The color for content, such as text and icons, placed on an inverse surface.',
+  '--forge-theme-on-surface-inverse-secondary': 'The secondary accent color for content placed on an inverse surface, such as the action button in a toast.',
   '--forge-theme-text-high': 'The high emphasis text color. Use it for headings, input values, and other primary content.',
   '--forge-theme-text-high-inverse': 'The high emphasis text color for use on dark or inverse backgrounds.',
   '--forge-theme-text-medium': 'The medium emphasis text color. Use it for body text, labels, and secondary content.',
