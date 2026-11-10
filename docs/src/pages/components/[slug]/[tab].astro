@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { component, currentTab } = Astro.props;
-const { title, description, status, source, storybookId } = component.data;
+const { title, description, status, source, storybookId, playgroundHeight } = component.data;
 
 const api = getComponentApi(component.id);
 const { Content: MdxContent } = await render(component);
@@ -106,7 +106,7 @@ function formatTabLabel(tab: string): string {
         <div class="tab-panel" data-tab="playground" class:list={[{ active: currentTab === "playground" }]} data-pagefind-ignore>
           <StorybookEmbed
             storyId={storybookId}
-            height="500px"
+            height={playgroundHeight}
             title={`${title} playground`}
           />
         </div>
