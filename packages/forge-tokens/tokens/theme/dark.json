@@ -16,6 +16,12 @@
     "control-bg-tonal": {
       "$value": "{color.radix-dark.slate.a3}"
     },
+    "control-bg-tonal-error": {
+      "$value": "{color.radix-dark.red.a3}"
+    },
+    "control-bg-tonal-warning": {
+      "$value": "{color.radix-dark.amber.a3}"
+    },
     "primary": {
       "$value": "{color.radix-dark.indigo.9}",
       "$deprecated": "Use secondary tokens instead"
