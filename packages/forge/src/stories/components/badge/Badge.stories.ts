@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, GLOBAL_THEME_OPTIONS, getCssVariableArgs } from '../../utils.js';
+import { standaloneStoryParams, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs } from '../../utils.js';
 import { tylIconNotifications, tylIconAlert } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { classMap } from 'lit/directives/class-map.js';
@@ -27,7 +27,40 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       controls: {
-        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS, 'info-primary', 'info-secondary'] }
+        theme: { control: 'select', options: ['default', 'info', 'success', 'warning', 'error'] },
+        variant: { control: 'select', options: ['tonal', 'outlined'] },
+        color: {
+          control: 'select',
+          options: [
+            undefined,
+            'gray',
+            'gold',
+            'bronze',
+            'brown',
+            'yellow',
+            'amber',
+            'orange',
+            'tomato',
+            'red',
+            'ruby',
+            'crimson',
+            'pink',
+            'plum',
+            'purple',
+            'violet',
+            'iris',
+            'indigo',
+            'blue',
+            'cyan',
+            'teal',
+            'jade',
+            'green',
+            'grass',
+            'lime',
+            'mint',
+            'sky'
+          ]
+        }
       }
     })
   },
@@ -50,15 +83,11 @@ export const Themed: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <div style="display: flex; gap: 8px;">
-      <forge-badge theme="default">Default</forge-badge>
-      <forge-badge theme="primary">Primary</forge-badge>
-      <forge-badge theme="secondary">Secondary</forge-badge>
-      <forge-badge theme="tertiary">Tertiary</forge-badge>
-      <forge-badge theme="success">Success</forge-badge>
-      <forge-badge theme="error">Error</forge-badge>
-      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge>Default</forge-badge>
       <forge-badge theme="info">Info</forge-badge>
-      <forge-badge theme="info-secondary">Info (secondary)</forge-badge>
+      <forge-badge theme="success">Success</forge-badge>
+      <forge-badge theme="warning">Warning</forge-badge>
+      <forge-badge theme="error">Error</forge-badge>
     </div>
   `
 };
@@ -70,15 +99,11 @@ export const Strong: Story = {
   },
   render: () => html`
     <div style="display: flex; gap: 8px;">
-      <forge-badge strong theme="default">Default</forge-badge>
-      <forge-badge strong theme="primary">Primary</forge-badge>
-      <forge-badge strong theme="secondary">Secondary</forge-badge>
-      <forge-badge strong theme="tertiary">Tertiary</forge-badge>
-      <forge-badge strong theme="success">Success</forge-badge>
-      <forge-badge strong theme="error">Error</forge-badge>
-      <forge-badge strong theme="warning">Warning</forge-badge>
+      <forge-badge strong>Default</forge-badge>
       <forge-badge strong theme="info">Info</forge-badge>
-      <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
+      <forge-badge strong theme="success">Success</forge-badge>
+      <forge-badge strong theme="warning">Warning</forge-badge>
+      <forge-badge strong theme="error">Error</forge-badge>
     </div>
   `
 };

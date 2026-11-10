@@ -54,6 +54,30 @@
   width: #{token(dot-width)};
 }
 
+///
+/// Maps one accent (a semantic role or a Radix hue) onto every badge appearance: tonal, outlined, and strong.
+///
+@mixin accent($bg-subtle, $bg-default, $border, $text, $solid, $on-solid) {
+  @include override(background, $bg-default, value);
+  @include override(color, $text, value);
+  @include override(outlined-background, $bg-subtle, value);
+  @include override(outlined-border-color, $border, value);
+  @include override(strong-background, $solid, value);
+  @include override(strong-color, $on-solid, value);
+}
+
+// The outlined border is an inset ring so outlined badges are the same size as tonal ones
+@mixin outlined {
+  @include override(background, outlined-background);
+
+  box-shadow: inset 0 0 0 #{token(outlined-border-width)} #{token(outlined-border-color)};
+}
+
+@mixin strong {
+  @include override(background, strong-background);
+  @include override(color, strong-color);
+}
+
 @mixin hide {
   transform: scale(0);
 }

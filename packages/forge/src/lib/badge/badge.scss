@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use './core' as *;
 @use '@tylertech/forge-tokens/sass/theme';
 
@@ -65,61 +66,80 @@
 // Themes
 //
 
-// General theme overrides
-@each $theme in [primary secondary tertiary success warning] {
-  :host([theme='#{$theme}']) {
+// The default theme is neutral. The deprecated primary, secondary, tertiary, and info-secondary themes render as default.
+$_semantic-themes: (
+  info: (
+    role: info,
+    hue: blue,
+    selector: ':is([theme=info], [theme=info-primary])'
+  ),
+  success: (
+    role: success,
+    hue: green,
+    selector: '[theme=success]'
+  ),
+  warning: (
+    role: warning,
+    hue: amber,
+    selector: '[theme=warning]'
+  ),
+  error: (
+    role: error,
+    hue: red,
+    selector: ':is([theme=error], [theme=critical], [theme=danger])'
+  )
+);
+
+@each $name, $theme in $_semantic-themes {
+  $role: map.get($theme, role);
+
+  :host(#{map.get($theme, selector)}) {
     .forge-badge {
-      @include override(background, theme.variable(#{$theme}-container), value);
-      @include override(color, theme.variable(on-#{$theme}-container), value);
+      @include accent(
+        theme.variable(bg-#{$role}-subtle),
+        theme.variable(bg-#{$role}-default),
+        theme.variable(border-#{$role}-subtle),
+        theme.variable(on-#{$role}-container-low),
+        // Strong badges use the accent solid step so white text passes WCAG AA in both themes
+        theme.color-variable(map.get($theme, hue), solid),
+        theme.color-variable(map.get($theme, hue), contrast)
+      );
     }
   }
+}
 
-  :host(:where([strong], :state(strong))[theme='#{$theme}']) {
+//
+// Color
+//
+
+// Categorical hues come after the themes so that color takes precedence over theme
+@each $hue in theme.$accent-hues {
+  :host([color='#{$hue}']) {
     .forge-badge {
-      @include override(background, theme.variable($theme), value);
-      @include override(color, theme.variable(on-#{$theme}), value);
+      @include accent(
+        theme.color-variable($hue, a2),
+        theme.color-variable($hue, a3),
+        theme.color-variable($hue, a6),
+        theme.color-variable($hue, a12),
+        theme.color-variable($hue, solid),
+        theme.color-variable($hue, contrast)
+      );
     }
   }
 }
 
-// Map both "error" and "danger" for backwards compatibility with legacy "danger" theme
-:host(:not(:where([strong], :state(strong))):is([theme='error'], [theme='danger'])) {
+//
+// Variants
+//
+
+:host([variant='outlined']:not([strong], :state(strong))) {
   .forge-badge {
-    @include override(background, theme.variable(error-container), value);
-    @include override(color, theme.variable(on-error-container), value);
-  }
-}
-:host(:where([strong], :state(strong)):is([theme='error'], [theme='danger'])) {
-  .forge-badge {
-    @include override(background, theme.variable(error), value);
-    @include override(color, theme.variable(on-error), value);
+    @include outlined;
   }
 }
 
-// Map both "info" and "info-primary" for backwards compatibility with "info" theme
-:host(:not(:where([strong], :state(strong))):is([theme='info'], [theme='info-primary'])) {
+:host(:is([strong], :state(strong))) {
   .forge-badge {
-    @include override(background, theme.variable(info-container), value);
-    @include override(color, theme.variable(on-info-container), value);
-  }
-}
-:host(:where([strong], :state(strong)):is([theme='info'], [theme='info-primary'])) {
-  .forge-badge {
-    @include override(background, theme.variable(info), value);
-    @include override(color, theme.variable(on-info), value);
-  }
-}
-
-// Support "info-secondary" separately since it is not a core theme
-:host(:not(:where([strong], :state(strong)))[theme='info-secondary']) {
-  .forge-badge {
-    @include override(background, theme.variable(surface-container-low), value);
-    @include override(color, theme.variable(on-surface-container-low), value);
-  }
-}
-:host(:where([strong], :state(strong))[theme='info-secondary']) {
-  .forge-badge {
-    @include override(background, theme.variable(surface-inverse), value);
-    @include override(color, theme.variable(on-surface-inverse), value);
+    @include strong;
   }
 }

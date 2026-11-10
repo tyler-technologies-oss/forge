@@ -31,7 +31,7 @@ Badges are used to highlight an item's status for quick recognition. They are no
 
 ## Theme
 
-Badges default to a neutral theme. Use a semantic theme — `success`, `warning`, `error`, `info` — to reinforce the meaning of the status being shown, or `primary`/`secondary`/`tertiary` to match the badge to its surrounding context.
+Badges default to a neutral theme. Use a semantic theme — `info`, `success`, `warning`, or `error` — to reinforce the meaning of the status being shown. `critical` is an alias for `error`. The `primary`, `secondary`, `tertiary`, and `info-secondary` themes are deprecated and render as the neutral default, and `info-primary` renders as `info`. To label a category rather than a status, use `color` instead.
 
 Example (Every theme in its default, muted appearance.): `get_forge_blocks(blockId: "components/badge/themed/themed")`
 
@@ -40,6 +40,26 @@ Example (Every theme in its default, muted appearance.): `get_forge_blocks(block
 Set the `strong` attribute for a bolder fill when a badge needs to stand out. Reserve it for views where only a few badges are visible at once — overusing strong across a dense view defeats the emphasis.
 
 Example (The same themes rendered with strong for more visual weight.): `get_forge_blocks(blockId: "components/badge/strong/strong")`
+
+## Outlined
+
+Set `variant="outlined"` for a lighter background with a border in the same color. Outlined and strong are mutually exclusive: setting `variant="outlined"` turns off `strong`, and setting `strong` resets the variant to `tonal`.
+
+```html
+<forge-badge theme="success" variant="outlined">Approved</forge-badge>
+```
+
+## Color
+
+Set `color` to a Radix hue when a badge labels a category, like a department or tag, rather than a status. The available hues are `gray`, `gold`, `bronze`, `brown`, `yellow`, `amber`, `orange`, `tomato`, `red`, `ruby`, `crimson`, `pink`, `plum`, `purple`, `violet`, `iris`, `indigo`, `blue`, `cyan`, `teal`, `jade`, `green`, `grass`, `lime`, `mint`, and `sky`. Colors work with the tonal, outlined, and strong appearances and meet WCAG AA contrast in both themes. When both are set, `color` controls the appearance.
+
+```html
+<forge-badge color="plum">Design</forge-badge>
+<forge-badge color="teal" variant="outlined">Engineering</forge-badge>
+<forge-badge color="amber" strong>Marketing</forge-badge>
+```
+
+Don't use color to convey status — use a theme so the meaning stays consistent across the product.
 
 ## With an icon
 
