@@ -40,16 +40,96 @@ function buildImportSnippet(): string | undefined {
 
 const importSnippet = buildImportSnippet();
 
-type Cell = string | { code: string } | { type: string; values?: string[] };
+interface CodeCell {
+  kind: "code";
+  code: string;
+  wrap?: boolean;
+}
+
+interface TypeCell {
+  kind: "type";
+  type: string;
+  members: string[];
+  values?: string[];
+}
+
+type Cell = string | CodeCell | TypeCell;
+
+const EMPTY_CELL = "—";
+const TYPE_OPENERS = "<([{";
+const TYPE_CLOSERS = ">)]}";
+
+/**
+ * Split a type into its top-level union members so each one can wrap onto its
+ * own line. Members nested in generics, tuples, objects or template literals
+ * stay intact, and function types are never split because a `|` after `=>`
+ * belongs to the return type.
+ */
+function splitUnion(typeText: string): string[] {
+  const members: string[] = [];
+  let depth = 0;
+  let inTemplate = false;
+  let start = 0;
+
+  for (let index = 0; index < typeText.length; index++) {
+    const char = typeText[index];
+    if (char === "`") {
+      inTemplate = !inTemplate;
+      continue;
+    }
+    if (inTemplate) {
+      continue;
+    }
+    if (char === ">" && typeText[index - 1] === "=") {
+      if (depth === 0) {
+        return [typeText.trim()];
+      }
+      continue;
+    }
+    if (TYPE_OPENERS.includes(char)) {
+      depth++;
+    } else if (TYPE_CLOSERS.includes(char)) {
+      depth--;
+    } else if (char === "|" && depth === 0) {
+      members.push(typeText.slice(start, index).trim());
+      start = index + 1;
+    }
+  }
+
+  members.push(typeText.slice(start).trim());
+  return members.filter(Boolean);
+}
 
 /**
  * Build a type cell, attaching resolved literal values when the CEM type name
- * matches a known Forge type alias. The badge renders the type name; the
- * hover popover renders the values.
+ * matches a known Forge type alias. The badges render the union members; the
+ * popover renders the values.
  */
-function typeCell(typeText: string): { type: string; values?: string[] } {
+function typeCell(typeText: string): Cell {
+  const members = splitUnion(typeText);
+  if (!members.length) {
+    return EMPTY_CELL;
+  }
   const values = resolveTypeValues(typeText);
-  return values ? { type: typeText, values } : { type: typeText };
+  return { kind: "type", type: typeText, members, values };
+}
+
+/** Split after each `<` so generics like `CustomEvent<Detail>` can wrap. */
+function genericSegments(member: string): string[] {
+  return member.split(/(?<=<)/);
+}
+
+/**
+ * Unwrap `CustomEvent<Detail>` to `Detail`. Native events (`PointerEvent`,
+ * `ToggleEvent`) are shown as-is, since the event object itself carries the
+ * data.
+ */
+function eventDetailType(typeText: string): string {
+  return typeText.trim().match(/^CustomEvent<(.+)>$/)?.[1] ?? typeText;
+}
+
+function codeCell(code: string, wrap = false): CodeCell {
+  return { kind: "code", code, wrap };
 }
 
 interface TableColumn<T> {
@@ -63,14 +143,6 @@ interface ApiSection<T> {
   title: string;
   data: T[] | undefined;
   columns: TableColumn<T>[];
-}
-
-function isCode(v: Cell): v is { code: string } {
-  return typeof v === "object" && v !== null && "code" in v;
-}
-
-function isType(v: Cell): v is { type: string; values?: string[] } {
-  return typeof v === "object" && v !== null && "type" in v;
 }
 
 const sections: ApiSection<
@@ -88,16 +160,16 @@ const sections: ApiSection<
       {
         header: "Property",
         render: (i) => {
-          const p = (i as ComponentPropAttr).property;
-          return p ? { code: p } : "—";
+          const { property } = i as ComponentPropAttr;
+          return property ? codeCell(property) : EMPTY_CELL;
         },
         nowrap: true,
       },
       {
         header: "Attribute",
         render: (i) => {
-          const a = (i as ComponentPropAttr).attribute;
-          return a ? { code: a } : "—";
+          const { attribute } = i as ComponentPropAttr;
+          return attribute ? codeCell(attribute) : EMPTY_CELL;
         },
         nowrap: true,
       },
@@ -108,10 +180,9 @@ const sections: ApiSection<
       {
         header: "Default",
         render: (i) => {
-          const d = (i as ComponentPropAttr).default;
-          return d ? { code: d } : "—";
+          const { default: defaultValue } = i as ComponentPropAttr;
+          return defaultValue ? codeCell(defaultValue, true) : EMPTY_CELL;
         },
-        nowrap: true,
       },
       {
         header: "Description",
@@ -125,10 +196,13 @@ const sections: ApiSection<
     columns: [
       {
         header: "Name",
-        render: (i) => ({ code: (i as ComponentEvent).name }),
+        render: (i) => codeCell((i as ComponentEvent).name),
         nowrap: true,
       },
-      { header: "Type", render: (i) => typeCell((i as ComponentEvent).type) },
+      {
+        header: "Detail",
+        render: (i) => typeCell(eventDetailType((i as ComponentEvent).type)),
+      },
       {
         header: "Description",
         render: (i) => (i as ComponentEvent).description,
@@ -141,7 +215,7 @@ const sections: ApiSection<
     columns: [
       {
         header: "Name",
-        render: (i) => ({ code: (i as ComponentSlot).name || "(default)" }),
+        render: (i) => codeCell((i as ComponentSlot).name || "(default)"),
         nowrap: true,
       },
       {
@@ -156,7 +230,7 @@ const sections: ApiSection<
     columns: [
       {
         header: "Name",
-        render: (i) => ({ code: `::part(${(i as ComponentCssPart).name})` }),
+        render: (i) => codeCell(`::part(${(i as ComponentCssPart).name})`),
         nowrap: true,
       },
       {
@@ -171,7 +245,7 @@ const sections: ApiSection<
     columns: [
       {
         header: "Name",
-        render: (i) => ({ code: (i as ComponentCssProperty).name }),
+        render: (i) => codeCell((i as ComponentCssProperty).name),
         nowrap: true,
       },
       {
@@ -186,7 +260,7 @@ const sections: ApiSection<
     columns: [
       {
         header: "Name",
-        render: (i) => ({ code: (i as ComponentMethod).name }),
+        render: (i) => codeCell((i as ComponentMethod).name),
         nowrap: true,
       },
       {
@@ -207,6 +281,8 @@ const cellClass = "px-medium py-small align-middle";
 
 const badgeClass =
   "[--forge-badge-background:var(--forge-theme-surface-dim)]";
+
+const wrappingBadgeClass = `${badgeClass} [--forge-badge-height:auto]`;
 
 function sectionId(sectionTitle: string): string {
   return `api-section-${sectionTitle.replace(/\s+/g, "-").toLowerCase()}`;
@@ -265,19 +341,46 @@ function sectionId(sectionTitle: string): string {
                           cellClass,
                           col.nowrap && "whitespace-nowrap",
                         ]}>
-                        {isCode(value) ? (
+                        {typeof value === "string" ? (
+                          <span class="text-body1 text-high">{value}</span>
+                        ) : value.kind === "code" ? (
                           <forge-badge
                             theme="info-secondary"
-                            class:list={["square-badge", badgeClass]}>
-                            <code class="font-normal">{value.code}</code>
+                            class:list={[
+                              "square-badge",
+                              value.wrap ? wrappingBadgeClass : badgeClass,
+                            ]}>
+                            <code
+                              class:list={[
+                                "font-normal",
+                                value.wrap && "whitespace-normal",
+                              ]}>
+                              {value.code}
+                            </code>
                           </forge-badge>
-                        ) : isType(value) ? (
-                          <span class="inline-flex items-center gap-xxsmall">
-                            <forge-badge
-                              theme="info-secondary"
-                              class:list={["square-badge", badgeClass]}>
-                              <code class="font-normal">{value.type}</code>
-                            </forge-badge>
+                        ) : (
+                          <span class="flex flex-wrap items-center gap-xxsmall">
+                            {value.members.map((member, memberIndex) => (
+                              <span class="inline-flex items-center gap-xxsmall">
+                                {memberIndex > 0 && (
+                                  <span class="text-label2 text-medium">|</span>
+                                )}
+                                <forge-badge
+                                  theme="info-secondary"
+                                  class:list={["square-badge", wrappingBadgeClass]}>
+                                  <code class="font-normal whitespace-normal">
+                                    {genericSegments(member).map(
+                                      (segment, segmentIndex) => (
+                                        <>
+                                          {segmentIndex > 0 && <wbr />}
+                                          {segment}
+                                        </>
+                                      )
+                                    )}
+                                  </code>
+                                </forge-badge>
+                              </span>
+                            ))}
                             {value.values && (
                               <>
                                 <forge-icon-button
@@ -320,8 +423,6 @@ function sectionId(sectionTitle: string): string {
                               </>
                             )}
                           </span>
-                        ) : (
-                          <span class="text-body2 text-high">{value}</span>
                         )}
                       </td>
                     );
