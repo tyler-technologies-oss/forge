@@ -6,6 +6,7 @@
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/radix-color-palette' as color-palette;
 
 $tokens: (
   // Base
@@ -18,8 +19,8 @@ $tokens: (
   background: utils.module-val(popover, background, theme.variable(surface-elevated)),
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(surface-bright-shadow)),
-  ring-width: utils.module-val(popover, ring-width, 0),
-  ring-color: utils.module-val(popover, ring-color, transparent),
+  ring-width: utils.module-val(popover, ring-width, border.variable(thin)),
+  ring-color: utils.module-val(popover, ring-color, color-mix(in oklab, #{color-palette.$slate-a3}, #{color-palette.$slate-3} 25%)),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
   border-color: utils.module-val(popover, border-color, theme.variable(outline-low)),
@@ -33,8 +34,8 @@ $tokens: (
   arrow-right-rotation: utils.module-val(popover, arrow-right-rotation, 225deg),
   arrow-bottom-rotation: utils.module-val(popover, arrow-bottom-rotation, 315deg),
   arrow-left-rotation: utils.module-val(popover, arrow-left-rotation, 45deg),
-  arrow-border-width: utils.module-val(popover, arrow-border-width, border.variable(thin)),
-  arrow-ring-width: utils.module-val(popover, arrow-ring-width, 0),
+  arrow-border-width: utils.module-val(popover, arrow-border-width, 0px),
+  arrow-ring-width: utils.module-ref(popover, arrow-ring-width, ring-width),
   // Animation
   animation-enter-duration: utils.module-val(popover, animation-enter-duration, animation.variable(duration-short3)),
   animation-enter-timing: utils.module-val(popover, animation-enter-timing, animation.variable(easing-decelerate)),

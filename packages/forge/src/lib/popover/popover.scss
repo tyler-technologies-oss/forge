@@ -42,9 +42,9 @@
     #{declare(slidein-y)}: 0;
     #{declare(zoomin-origin)}: 50% 50% 0;
     #{declare(arrow-clip-path)}: polygon(
-      calc(#{token(border-width)} * -1) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(#{token(border-width)} * -1),
-      calc(100% + #{token(border-width)}) calc(100% + #{token(border-width)})
+      calc((#{token(border-width)} + #{token(ring-width)}) * -1) calc((#{token(border-width)} + #{token(ring-width)}) * -1),
+      calc(100% + #{token(border-width)} + #{token(ring-width)}) calc((#{token(border-width)} + #{token(ring-width)}) * -1),
+      calc(100% + #{token(border-width)} + #{token(ring-width)}) calc(100% + #{token(border-width)} + #{token(ring-width)})
     );
   }
 

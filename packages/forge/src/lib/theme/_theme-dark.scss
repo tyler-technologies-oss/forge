@@ -1,5 +1,4 @@
 @use '@tylertech/forge-tokens/sass/theme';
-@use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/radix-color-palette-dark' as color-palette-dark;
 
 @use '../app-bar/app-bar' as app-bar;
@@ -23,7 +22,6 @@
   // Popover
   @include popover.provide-theme(
     (
-      ring-width: border.variable(thin),
       ring-color: color-mix(in oklab, #{color-palette-dark.$slate-a5}, #{color-palette-dark.$slate-6} 25%) // Popovers use a hairline ring in dark theme to increase contrast
     )
   );

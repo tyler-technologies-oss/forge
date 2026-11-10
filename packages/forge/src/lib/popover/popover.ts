@@ -111,7 +111,7 @@ declare global {
  * @cssproperty --forge-popover-arrow-bottom-rotation - The rotation of the arrow when the popover is placed on the bottom.
  * @cssproperty --forge-popover-arrow-left-rotation - The rotation of the arrow when the popover is placed on the left.
  * @cssproperty --forge-popover-arrow-border-width - The border width of the popover surface and arrow when an arrow is applied.
- * @cssproperty --forge-popover-arrow-ring-width - The ring width of the popover surface when an arrow is applied.
+ * @cssproperty --forge-popover-arrow-ring-width - The ring width of the popover surface and arrow when an arrow is applied.
  * @cssproperty --forge-popover-arrow-clip-path - The clip path to use for the arrow element.
  * @cssproperty --forge-popover-animation-timing - The animation timing function to use for the popover animation.
  * @cssproperty --forge-popover-zoom-duration - The duration of the zoom animation.
