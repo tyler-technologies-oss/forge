@@ -18,6 +18,7 @@ import {
   DialogType
 } from './dialog-constants.js';
 import './dialog.js';
+import '../toolbar/toolbar.js';
 
 // Animation duration + buffer for open/close transitions
 const ANIMATION_TIMEOUT = 500;
@@ -1307,6 +1308,16 @@ describe('Dialog', () => {
   });
 
   describe('surface', () => {
+    it('should make slotted toolbars transparent', async () => {
+      const harness = await createFixture({ open: true });
+      const toolbar = document.createElement('forge-toolbar');
+      harness.element.append(toolbar);
+      await toolbar.updateComplete;
+      const toolbarRoot = toolbar.shadowRoot?.querySelector('.forge-toolbar') as HTMLElement;
+
+      expect(getComputedStyle(toolbarRoot).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    });
+
     it('should draw a hairline ring around the surface', async () => {
       const harness = await createFixture({ open: true });
       harness.element.style.setProperty('--forge-dialog-ring-color', RING_TEST_COLOR);

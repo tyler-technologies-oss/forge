@@ -30,7 +30,8 @@ export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
  *
  * @cssproperty --forge-toolbar-height - Controls the height.
  * @cssproperty --forge-toolbar-min-height - Controls the minimum height. Defaults to the toolbar height.
- * @cssproperty --forge-theme-surface - Controls the background-color of the toolbar.
+ * @cssproperty --forge-toolbar-background - Controls the background of the toolbar. Toolbars inside cards, dialogs, and popovers default to `transparent` so they match the surface they sit on.
+ * @cssproperty --forge-toolbar-backdrop-filter - Controls the backdrop filter of the toolbar. Defaults to `none`. Pair a blur with a translucent background, such as `--forge-theme-surface-translucent`, for sticky toolbars over scrolling content.
  * @cssproperty --forge-toolbar-divider-width - Controls the divider width.
  * @cssproperty --forge-toolbar-divider-style - Controls the divider style.
  * @cssproperty --forge-toolbar-divider-color - Controls the divider color.

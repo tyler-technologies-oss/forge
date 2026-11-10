@@ -2,11 +2,20 @@
 
 @forward './token-utils';
 
+@use '../toolbar';
+
 @mixin host {
   display: block;
 }
 
 @mixin base {
+  // Toolbars show the card surface so they match the body when the card background is translucent
+  @include toolbar.provide-theme(
+    (
+      background: transparent
+    )
+  );
+
   background: #{token(background)};
 
   border-color: #{token(outline-color)};

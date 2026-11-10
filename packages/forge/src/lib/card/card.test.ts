@@ -4,6 +4,7 @@ import { html } from 'lit';
 import type { ICardComponent } from './card.js';
 
 import './card.js';
+import '../toolbar/toolbar.js';
 
 const RING_TEST_COLOR = 'rgb(1, 2, 3)';
 
@@ -47,6 +48,15 @@ describe('Card', () => {
     const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
 
     expect(getComputedStyle(rootEl).boxShadow).not.toContain(RING_TEST_COLOR);
+  });
+
+  it('should make slotted toolbars transparent', async () => {
+    const screen = render(html`<forge-card><forge-toolbar></forge-toolbar></forge-card>`);
+    const toolbar = screen.container.querySelector('forge-toolbar') as HTMLElement;
+    await (toolbar as HTMLElement & { updateComplete: Promise<boolean> }).updateComplete;
+    const toolbarRoot = toolbar.shadowRoot?.querySelector('.forge-toolbar') as HTMLElement;
+
+    expect(getComputedStyle(toolbarRoot).backgroundColor).toBe('rgba(0, 0, 0, 0)');
   });
 
   it('should have padding by default', async () => {

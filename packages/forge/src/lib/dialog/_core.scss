@@ -2,6 +2,8 @@
 
 @forward './token-utils';
 
+@use '../toolbar';
+
 //
 // Host
 //
@@ -52,6 +54,12 @@
   inset: 0;
 
   display: flex;
+
+  @include toolbar.provide-theme(
+    (
+      background: transparent
+    )
+  );
 
   background: #{token(background)};
   box-shadow:

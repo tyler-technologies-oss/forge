@@ -2,6 +2,7 @@
 @use './animations';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '../overlay';
+@use '../toolbar';
 
 @layer base, animation, preset, reduced-motion;
 
@@ -50,6 +51,11 @@
 
   .forge-popover {
     @include base;
+    @include toolbar.provide-theme(
+      (
+        background: transparent
+      )
+    );
   }
 
   //
