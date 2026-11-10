@@ -14,6 +14,12 @@ themeSelect.addEventListener('change', ({ detail }: CustomEvent<string>) => {
   getAllInlineMessages().forEach(el => el.setAttribute('theme', detail));
 });
 
+const variantSelect = document.getElementById('opt-variant') as ISelectComponent;
+variantSelect.addEventListener('change', ({ detail }: CustomEvent<string>) => {
+  getAllInlineMessages().forEach(el => el.setAttribute('variant', detail));
+  document.querySelectorAll('.forge-inline-message').forEach(el => el.classList.toggle('forge-inline-message--outlined', detail === 'outlined'));
+});
+
 function getAllInlineMessages(): NodeListOf<HTMLElement> {
   return document.querySelectorAll(INLINE_MESSAGE_CONSTANTS.elementName);
 }

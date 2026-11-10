@@ -53,13 +53,20 @@
 // Theme
 //
 
+@mixin role-theme($role) {
+  @include override(background, theme.variable(bg-#{$role}-default), value);
+  @include override(color, theme.variable(on-#{$role}-container-low), value);
+  @include override(icon-color, theme.variable(on-#{$role}-container-low), value);
+  @include override(border-color, theme.variable(border-#{$role}-default), value);
+  @include override(outlined-background, theme.variable(bg-#{$role}-subtle), value);
+  @include override(outlined-border-color, theme.variable(border-#{$role}-subtle), value);
+}
+
 // The default theme is neutral. The deprecated primary, secondary, tertiary, and info-secondary themes render as default.
 @each $theme in [info success warning] {
   :host([theme='#{$theme}']) {
     .forge-inline-message {
-      @include override(background, theme.variable(#{$theme}-container-low), value);
-      @include override(icon-color, theme.variable(on-#{$theme}-container-low), value);
-      @include override(border-color, theme.variable(border-#{$theme}-default), value);
+      @include role-theme($theme);
     }
   }
 }
@@ -67,8 +74,16 @@
 // "critical" and the legacy "danger" render as "error"
 :host(:is([theme='error'], [theme='critical'], [theme='danger'])) {
   .forge-inline-message {
-    @include override(background, theme.variable(error-container-low), value);
-    @include override(icon-color, theme.variable(on-error-container-low), value);
-    @include override(border-color, theme.variable(border-error-default), value);
+    @include role-theme(error);
+  }
+}
+
+//
+// Outlined
+//
+
+:host([variant='outlined']) {
+  .forge-inline-message {
+    @include outlined;
   }
 }

@@ -47,6 +47,17 @@ Leave `theme` unset for a neutral message. Set it to `info`, `success`, `warning
 
 Example (Every inline message theme, each paired with an icon.): `get_forge_blocks(blockId: "components/inline-message/themed/themed")`
 
+## Variant
+
+The default `tonal` variant uses a tinted background. Set `variant="outlined"` for a lighter background with a border in the same color, which suits messages that sit on a busy or tinted surface. Both variants work with every theme. For the CSS-only inline message, add the `forge-inline-message--outlined` class.
+
+```html
+<forge-inline-message theme="info" variant="outlined">
+  <forge-icon slot="icon" name="info"></forge-icon>
+  <span>Your changes are saved as a draft until you publish.</span>
+</forge-inline-message>
+```
+
 ## Accessibility
 
 ### Live-region behavior

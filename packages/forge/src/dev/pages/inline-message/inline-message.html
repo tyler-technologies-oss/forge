@@ -16,6 +16,16 @@ include('./src/partials/page.ejs', {
           { label: 'Warning', value: 'warning' },
           { label: 'Error', value: 'error' }
         ]
+      },
+      {
+        type: 'select',
+        label: 'Variant',
+        defaultValue: 'tonal',
+        id: 'opt-variant',
+        options: [
+          { label: 'Tonal (default)', value: 'tonal' },
+          { label: 'Outlined', value: 'outlined' }
+        ]
       }
     ]
   }

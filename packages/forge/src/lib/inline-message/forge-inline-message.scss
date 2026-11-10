@@ -16,6 +16,10 @@
     grid-template-columns: 1fr;
   }
 
+  &--outlined {
+    @include core.outlined;
+  }
+
   &__title {
     @include core.title;
   }
