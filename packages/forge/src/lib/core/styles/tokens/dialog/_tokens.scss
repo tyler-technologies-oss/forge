@@ -4,6 +4,7 @@
 @use '@tylertech/forge-tokens/sass/animation';
 @use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '../backdrop/tokens' as backdrop;
 
@@ -12,6 +13,8 @@ $tokens: (
   background: utils.module-val(dialog, background, theme.variable(surface-elevated)),
   shape: utils.module-val(dialog, shape, shape.variable(medium)),
   elevation: utils.module-val(dialog, elevation, elevation.value(24)),
+  ring-width: utils.module-val(dialog, ring-width, border.variable(thin)),
+  ring-color: utils.module-val(dialog, ring-color, theme.variable(surface-elevated-ring)),
   spacing: utils.module-val(dialog, spacing, auto),
   block-start-spacing: utils.module-ref(dialog, block-start-spacing, spacing),
   block-end-spacing: utils.module-ref(dialog, block-end-spacing, spacing),

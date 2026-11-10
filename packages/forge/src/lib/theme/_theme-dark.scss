@@ -1,8 +1,6 @@
 @use '@tylertech/forge-tokens/sass/theme';
-@use '@tylertech/forge-tokens/sass/radix-color-palette-dark' as color-palette-dark;
 
 @use '../app-bar/app-bar' as app-bar;
-@use '../popover';
 @use '../chips/chip';
 
 ///
@@ -16,13 +14,6 @@
   @include app-bar.provide-theme(
     (
       elevation: inset 0 -1px 0 #{theme.variable(outline-low)} // App bars use a hairline instead of a shadow in dark theme
-    )
-  );
-
-  // Popover
-  @include popover.provide-theme(
-    (
-      ring-color: color-mix(in oklab, #{color-palette-dark.$slate-a5}, #{color-palette-dark.$slate-6} 25%) // Popovers use a hairline ring in dark theme to increase contrast
     )
   );
 

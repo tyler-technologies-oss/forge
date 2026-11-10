@@ -21,6 +21,7 @@ import './dialog.js';
 
 // Animation duration + buffer for open/close transitions
 const ANIMATION_TIMEOUT = 500;
+const RING_TEST_COLOR = 'rgb(1, 2, 3)';
 
 class DialogHarness extends TestHarness<IDialogComponent> {
   public triggerElement: HTMLButtonElement;
@@ -1302,6 +1303,15 @@ describe('Dialog', () => {
       expect(topValue).toBeCloseTo(8, 0);
       expect(leftValue).toBeCloseTo(8, 0);
       expect(harness.surfaceElement.classList.contains(DIALOG_CONSTANTS.classes.MOVED)).toBe(true);
+    });
+  });
+
+  describe('surface', () => {
+    it('should draw a hairline ring around the surface', async () => {
+      const harness = await createFixture({ open: true });
+      harness.element.style.setProperty('--forge-dialog-ring-color', RING_TEST_COLOR);
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toContain(RING_TEST_COLOR);
     });
   });
 

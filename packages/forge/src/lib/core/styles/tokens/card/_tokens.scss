@@ -20,7 +20,9 @@ $tokens: (
   // Raised
   raised-background: utils.module-val(card, raised-background, theme.variable(surface-elevated)),
   raised-elevation: utils.module-val(card, raised-elevation, elevation.value(1)),
-  raised-outline-width: utils.module-val(card, raised-outline-width, 0)
+  raised-outline-width: utils.module-val(card, raised-outline-width, 0),
+  raised-ring-width: utils.module-val(card, raised-ring-width, border.variable(thin)),
+  raised-ring-color: utils.module-val(card, raised-ring-color, theme.variable(surface-elevated-ring))
 ) !default;
 
 @function get($key) {

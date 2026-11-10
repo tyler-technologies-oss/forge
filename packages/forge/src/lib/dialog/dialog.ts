@@ -90,6 +90,8 @@ export interface IDialogComponent extends IDialogProperties, BaseLitElement, IDi
  * @cssproperty --forge-dialog-background - The background color of the dialog.
  * @cssproperty --forge-dialog-shape - The shape of the dialog.
  * @cssproperty --forge-dialog-elevation - The elevation of the dialog.
+ * @cssproperty --forge-dialog-ring-width - The width of the hairline ring drawn outside the dialog surface.
+ * @cssproperty --forge-dialog-ring-color - The color of the hairline ring drawn outside the dialog surface.
  * @cssproperty --forge-dialog-spacing - The spacing between elements inside the dialog.
  * @cssproperty --forge-dialog-block-start-spacing - The spacing at the start of the dialog block.
  * @cssproperty --forge-dialog-block-end-spacing - The spacing at the end of the dialog block.

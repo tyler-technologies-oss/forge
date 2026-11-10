@@ -28,4 +28,8 @@
   @include override(background, raised-background);
   @include override(elevation, raised-elevation);
   @include override(outline-width, raised-outline-width);
+
+  box-shadow:
+    0 0 0 #{token(raised-ring-width)} #{token(raised-ring-color)},
+    #{token(elevation)};
 }

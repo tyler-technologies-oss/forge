@@ -6,7 +6,6 @@
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/animation';
-@use '@tylertech/forge-tokens/sass/radix-color-palette' as color-palette;
 
 $tokens: (
   // Base
@@ -20,7 +19,7 @@ $tokens: (
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(surface-bright-shadow)),
   ring-width: utils.module-val(popover, ring-width, border.variable(thin)),
-  ring-color: utils.module-val(popover, ring-color, color-mix(in oklab, #{color-palette.$slate-a3}, #{color-palette.$slate-3} 25%)),
+  ring-color: utils.module-val(popover, ring-color, theme.variable(surface-elevated-ring)),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
   border-color: utils.module-val(popover, border-color, theme.variable(outline-low)),

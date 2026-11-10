@@ -5,6 +5,8 @@ import type { ICardComponent } from './card.js';
 
 import './card.js';
 
+const RING_TEST_COLOR = 'rgb(1, 2, 3)';
+
 describe('Card', () => {
   it('should instantiate component with shadow dom', async () => {
     const screen = render(html`<forge-card></forge-card>`);
@@ -27,6 +29,24 @@ describe('Card', () => {
     expect(el.raised).toBe(false);
     expect(el.hasAttribute('raised')).toBe(false);
     expect(el.matches(':state(raised)')).toBe(false);
+  });
+
+  it('should draw a hairline ring when raised', async () => {
+    const screen = render(html`<forge-card raised style="--forge-card-raised-ring-color: ${RING_TEST_COLOR}"></forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
+
+    expect(getComputedStyle(rootEl).boxShadow).toContain(RING_TEST_COLOR);
+  });
+
+  it('should not draw a hairline ring when not raised', async () => {
+    const screen = render(html`<forge-card style="--forge-card-raised-ring-color: ${RING_TEST_COLOR}"></forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
+
+    expect(getComputedStyle(rootEl).boxShadow).not.toContain(RING_TEST_COLOR);
   });
 
   it('should have padding by default', async () => {

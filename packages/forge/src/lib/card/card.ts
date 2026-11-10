@@ -36,6 +36,8 @@ export const CARD_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-card';
  * @cssproperty --forge-card-shape - The shape (border-radius) of the card.
  * @cssproperty --forge-card-overflow - The overflow of the card.
  * @cssproperty --forge-card-raised-elevation - The elevation/shadow of the card when raised.
+ * @cssproperty --forge-card-raised-ring-width - The width of the hairline ring drawn outside the card when raised.
+ * @cssproperty --forge-card-raised-ring-color - The color of the hairline ring drawn outside the card when raised.
  * @cssproperty --forge-card-raised-outline-width - The outline width of the card when raised.
  *
  * @csspart root - The root container element.
