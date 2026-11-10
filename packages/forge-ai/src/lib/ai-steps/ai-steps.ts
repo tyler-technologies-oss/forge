@@ -4,7 +4,7 @@ import { join } from 'lit/directives/join.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { when } from 'lit/directives/when.js';
 
-import { renderInlineMarkdown } from '../utils/markdown.js';
+import { renderInlineMarkdown, type RenderInlineMarkdownOptions } from '../utils/markdown.js';
 import styles from './ai-steps.scss?inline';
 
 declare global {
@@ -99,13 +99,16 @@ export class AiStepsComponent extends LitElement {
    * Unclosed syntax is left as literal characters — `renderInlineMarkdown` skips the partial-syntax
    * repair that `renderMarkdown` applies, so a label caught mid-stream briefly shows its `**` rather
    * than guessing at an emphasis the agent has not finished writing.
+   *
+   * The summary sits inside a `<button>`, so it renders links as text: a nested link would take the
+   * click and open a tab as well as toggling the timeline.
    */
-  #renderInline(value: string): TemplateResult {
-    return html`${unsafeHTML(renderInlineMarkdown(value))}`;
+  #renderInline(value: string, options?: RenderInlineMarkdownOptions): TemplateResult {
+    return html`${unsafeHTML(renderInlineMarkdown(value, options))}`;
   }
 
   get #summaryLabel(): TemplateResult {
-    const stepLabels = this.steps.map(step => html`<span>${this.#renderInline(step.label)}</span>`);
+    const stepLabels = this.steps.map(step => html`<span>${this.#renderInline(step.label, { links: false })}</span>`);
     const visibleLabels = stepLabels.slice(0, 2);
     const remaining = stepLabels.length - visibleLabels.length;
     return remaining > 0 ? html`${join(visibleLabels, html`, `)} +${remaining} more` : html`${join(visibleLabels, html`, `)}`;

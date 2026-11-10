@@ -138,6 +138,18 @@ User-facing strings that referred to a "chatbot" now use neutral wording, becaus
 | `forge-ai-sidebar`         | resize handle label `Resize chatbot panel, use left and right arrow keys` | `Resize sidebar, use left and right arrow keys` |
 | `forge-ai-tool-data-table` | CSV filename fallback `chatbot-data-table.csv`                            | `data-table.csv`                                |
 
+## Markdown rendering
+
+`renderMarkdown` and `renderInlineMarkdown` (and the components that use them) now harden media handling.
+
+- Images from any origin other than the one serving forge-ai render as links instead of images. `data:image/*` and same-origin images still render inline.
+- `<video>`/`<audio>` in rendered markdown render as links instead of players.
+- Inline `style` attributes are stripped, as are `srcset`, `poster` and `background` attributes.
+- `picture`, `source`, `track`, svg `image`/`feImage` and `mglyph` elements are removed.
+- CSS functions that could load another origin are dropped from svg/mathml presentation attributes.
+- forge-ai's DOMPurify hooks (`target="_blank"` and `rel` on links, image/media handling) are attached only during forge-ai's own sanitize calls. Links rendered by forge-ai still get `target`/`rel`, but the host's own `DOMPurify.sanitize` calls no longer receive them.
+- New `renderInlineMarkdown(content, { links: false })` option renders links as text, for use inside interactive elements such as a `<button>`.
+
 ## Public API and typing changes
 
 - `forge-ai-tool-data-table` and `forge-ai-tool-steps` are no longer marked `@internal`. They are part of the public `@tylertech/forge-ai/tools` surface and appear in the Custom Elements Manifest and JSX typings.

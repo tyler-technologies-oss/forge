@@ -343,7 +343,7 @@ export class AiMessageThreadComponent extends LitElement {
           </forge-ai-client-message>
         `;
       } else if (msg.status === 'error') {
-        const renderedHtml = this.#markdownController.getCachedHtml(msg.id, content);
+        const renderedHtml = this.#markdownController.getCachedHtml(msg.id, content, { streaming: false });
         return html`
           <forge-ai-error-message>
             <span slot="title">Error</span>
@@ -352,7 +352,8 @@ export class AiMessageThreadComponent extends LitElement {
         `;
       } else {
         return when(content.trim().length, () => {
-          const renderedHtml = this.#markdownController.getCachedHtml(msg.id, content);
+          const streaming = msg.status === 'streaming' || msg.status === 'pending';
+          const renderedHtml = this.#markdownController.getCachedHtml(msg.id, content, { streaming });
           return html`<forge-ai-response-message>${unsafeHTML(renderedHtml)}</forge-ai-response-message>`;
         });
       }

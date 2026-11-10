@@ -93,7 +93,8 @@ export class AiAssistantResponseComponent extends LitElement {
     if (!content.trim()) {
       return nothing;
     }
-    const renderedHtml = this.#markdownController.getCachedHtml(child.messageId, content);
+    const streaming = this.response.status === 'streaming' && child.status === 'streaming';
+    const renderedHtml = this.#markdownController.getCachedHtml(child.messageId, content, { streaming });
     return html`<div class="text-chunk">${unsafeHTML(renderedHtml)}</div>`;
   }
 

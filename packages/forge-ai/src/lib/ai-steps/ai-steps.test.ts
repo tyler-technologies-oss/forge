@@ -210,6 +210,18 @@ describe('AiStepsComponent', () => {
     expect(textOf(el.shadowRoot!.querySelector('.status-text'))).toBe('Searched the orders table, Filtered by region +2 more');
   });
 
+  it('should render links in the summary button as text', async () => {
+    const step = createStep({
+      label: 'Opened [parcel 4471](https://example.com/parcel/4471) ![map](https://external.invalid/m.png)'
+    });
+    const el = await createSteps(html`<forge-ai-steps .steps=${[step]}></forge-ai-steps>`);
+
+    const summary = el.shadowRoot!.querySelector('.status-text')!;
+    expect(summary.querySelector('a, img')).toBeNull();
+    expect(textOf(summary)).toBe('Opened parcel 4471 map (external.invalid)');
+    expect(el.shadowRoot!.querySelector('.row-name a')).not.toBeNull();
+  });
+
   it('should list every step label in the summary when there are two or fewer', async () => {
     const steps = [createStep({ label: 'Searched the orders table' }), createStep({ label: 'Filtered by region' })];
     const el = await createSteps(html`<forge-ai-steps .steps=${steps}></forge-ai-steps>`);

