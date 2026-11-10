@@ -121,6 +121,28 @@ describe('ColorPickerComponent', () => {
       });
     });
 
+    describe('opacity track', () => {
+      it('should fill the opacity track with the selected color when the value is set', async () => {
+        const harness = await createFixture();
+
+        harness.element.value = '#2f6fb3';
+
+        const track = getComputedStyle(harness.opacitySliderElement).backgroundImage;
+        expect(track).toContain('rgba(47, 111, 179, 0)');
+        expect(track).toContain('rgb(47, 111, 179)');
+      });
+
+      it('should update the opacity track when the hue changes', async () => {
+        const harness = await createFixture();
+        harness.element.value = '#2f6fb3';
+        const before = getComputedStyle(harness.opacitySliderElement).backgroundImage;
+
+        harness.element.hsva = { ...harness.element.hsva, h: 0 };
+
+        expect(getComputedStyle(harness.opacitySliderElement).backgroundImage).not.toBe(before);
+      });
+    });
+
     describe('rgba', () => {
       it('when rgba is set should update value and hsva', async () => {
         const harness = await createFixture();
