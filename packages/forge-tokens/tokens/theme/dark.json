@@ -483,6 +483,54 @@
     "focus-indicator": {
       "$value": "{color.radix-dark.indigo.a11}"
     },
+    "bg-primary-subtle": {
+      "$value": "{color.radix-dark.indigo.a2}"
+    },
+    "bg-primary-default": {
+      "$value": "{color.radix-dark.indigo.a3}"
+    },
+    "bg-secondary-subtle": {
+      "$value": "{color.radix-dark.iris.a2}"
+    },
+    "bg-secondary-default": {
+      "$value": "{color.radix-dark.iris.a3}"
+    },
+    "bg-tertiary-subtle": {
+      "$value": "{color.radix-dark.iris.a2}"
+    },
+    "bg-tertiary-default": {
+      "$value": "{color.radix-dark.iris.a3}"
+    },
+    "bg-success-subtle": {
+      "$value": "{color.radix-dark.green.a2}"
+    },
+    "bg-success-default": {
+      "$value": "{color.radix-dark.green.a3}"
+    },
+    "bg-error-subtle": {
+      "$value": "{color.radix-dark.red.a2}"
+    },
+    "bg-error-default": {
+      "$value": "{color.radix-dark.red.a3}"
+    },
+    "bg-warning-subtle": {
+      "$value": "{color.radix-dark.amber.a2}"
+    },
+    "bg-warning-default": {
+      "$value": "{color.radix-dark.amber.a3}"
+    },
+    "bg-info-subtle": {
+      "$value": "{color.radix-dark.blue.a2}"
+    },
+    "bg-info-default": {
+      "$value": "{color.radix-dark.blue.a3}"
+    },
+    "bg-neutral-subtle": {
+      "$value": "{color.radix-dark.slate.a2}"
+    },
+    "bg-neutral-default": {
+      "$value": "{color.radix-dark.slate.a3}"
+    },
     "border-primary-subtle": {
       "$value": "{color.radix-dark.indigo.a6}"
     },
