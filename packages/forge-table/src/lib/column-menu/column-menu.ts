@@ -1,36 +1,40 @@
 import type { Column, ColumnOrderState, Table } from '@tanstack/lit-table';
 import { IconRegistry } from '@tylertech/forge';
-import type { IMenuComponent, IMenuOption, IMenuSelectEventData } from '@tylertech/forge/menu';
 import {
   tylIconArrowBack,
   tylIconArrowDownward,
+  tylIconArrowExpandHorizontal,
   tylIconArrowForward,
   tylIconArrowLeftRight,
   tylIconArrowUpward,
+  tylIconDockLeft,
+  tylIconDockRight,
   tylIconEdit,
   tylIconMoreVert,
   tylIconPin,
   tylIconPinOff,
+  tylIconSort,
   tylIconVisibilityOff
 } from '@tylertech/tyler-icons';
-import { html, LitElement, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { html, LitElement, nothing, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
 import { SELECT_COLUMN_ID } from '../data-table/constants.js';
 import type { DataTableFeatures } from '../data-table/table-features.js';
 import type { Row } from '../data-table/types.js';
 import { COLUMN_MENU_ACTION_EVENT, COLUMN_MENU_TAG_NAME } from './constants.js';
-import type { ColumnMenuAction, ColumnMenuActionEventDetail } from './types.js';
+import type { ColumnMenuActionEventDetail } from './types.js';
 
+import '@tylertech/forge/dropdown-menu';
+import '@tylertech/forge/dropdown-menu/dropdown-menu-item';
+import '@tylertech/forge/dropdown-menu/dropdown-menu-item-checkbox';
+import '@tylertech/forge/dropdown-menu/dropdown-menu-item-radio';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
-import '@tylertech/forge/menu';
 
 import styles from './column-menu.scss';
 
 type MoveDirection = -1 | 1;
-
-const DIVIDER_OPTION: IMenuOption = { value: undefined, label: '', divider: true };
 
 /**
  * A menu button with actions for a single table column.
@@ -55,7 +59,11 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       tylIconEdit,
       tylIconVisibilityOff,
       tylIconPin,
-      tylIconPinOff
+      tylIconPinOff,
+      tylIconDockLeft,
+      tylIconDockRight,
+      tylIconSort,
+      tylIconArrowExpandHorizontal
     ]);
   }
 
@@ -85,40 +93,94 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
   @property({ attribute: 'button-label' })
   public buttonLabel = 'Column options';
 
-  @query('forge-menu')
-  private _menu?: IMenuComponent;
-
-  #getOptions = (): IMenuOption[] => {
-    const { column } = this;
-    if (!column) {
-      return [];
-    }
-
-    const isPinned = !!column.getIsPinned();
-
-    const item = (value: ColumnMenuAction, label: string, leadingIcon: string, disabled = false): IMenuOption<ColumnMenuAction> => ({
-      value,
-      label,
-      leadingIcon,
-      leadingIconType: 'component',
-      disabled
-    });
-
-    const groups: Array<Array<IMenuOption<ColumnMenuAction>>> = [
-      this.reorderable
-        ? [item('move-left', 'Move left', 'arrow_back', !this.#getMoveTarget(-1)), item('move-right', 'Move right', 'arrow_forward', !this.#getMoveTarget(1))]
-        : [],
-      column.columnDef.meta?.renamable && typeof column.columnDef.header === 'string' ? [item('rename', 'Rename', 'edit')] : [],
-      column.getCanSort() ? [item('sort-ascending', 'Sort ascending', 'arrow_upward'), item('sort-descending', 'Sort descending', 'arrow_downward')] : [],
-      [
-        item('hide', 'Hide', 'visibility_off', !column.getCanHide()),
-        item(isPinned ? 'unpin' : 'pin', isPinned ? 'Unpin' : 'Pin', isPinned ? 'pin_off' : 'pin', !column.getCanPin()),
-        ...(column.getCanResize() ? [item('maximize', 'Maximize', 'arrow_left_right')] : [])
-      ]
-    ];
-
-    return groups.filter(group => group.length).flatMap((group, index) => (index ? [DIVIDER_OPTION, ...group] : group));
-  };
+  public render(): TemplateResult {
+    return html`
+      <forge-icon-button id="button" aria-label=${this.buttonLabel} dense shape="squared">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+      <forge-dropdown-menu class="menu" trigger="button" dense>
+        ${this.reorderable
+          ? html`
+              <forge-dropdown-menu-item>
+                <forge-icon slot="start" name="arrow_left_right"></forge-icon>
+                <span>Move</span>
+                <forge-dropdown-menu-item-radio slot="submenu" .disabled="${!this.#getMoveTarget(-1)}" @click="${() => this.#move(-1)}">
+                  <forge-icon slot="start" name="arrow_back"></forge-icon>
+                  <span>Move left</span>
+                </forge-dropdown-menu-item-radio>
+                <forge-dropdown-menu-item-radio slot="submenu" .disabled="${!this.#getMoveTarget(1)}" @click="${() => this.#move(1)}">
+                  <forge-icon slot="start" name="arrow_forward"></forge-icon>
+                  <span>Move right</span>
+                </forge-dropdown-menu-item-radio>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.getCanSort()
+          ? html`
+              <forge-dropdown-menu-item>
+                <forge-icon slot="start" name="sort"></forge-icon>
+                <span>Sort</span>
+                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(true)}">
+                  <forge-icon slot="start" name="arrow_upward"></forge-icon>
+                  <span>Ascending</span>
+                </forge-dropdown-menu-item-radio>
+                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(false)}">
+                  <forge-icon slot="start" name="arrow_downward"></forge-icon>
+                  <span>Descending</span>
+                </forge-dropdown-menu-item-radio>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.columnDef.meta?.renamable && typeof this.column?.columnDef.header === 'string'
+          ? html`
+              <forge-dropdown-menu-item>
+                <forge-icon slot="start" name="edit"></forge-icon>
+                <span>Rename</span>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.getCanHide()
+          ? html`
+              <forge-dropdown-menu-item @click="${() => this.column?.toggleVisibility(false)}">
+                <forge-icon slot="start" name="visibility_off"></forge-icon>
+                <span>Hide</span>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.getCanPin()
+          ? html`
+              <forge-dropdown-menu-item>
+                <forge-icon slot="start" name="pin"></forge-icon>
+                <span>Pin</span>
+                <forge-dropdown-menu-item-checkbox
+                  slot="submenu"
+                  ?checked="${this.column.getIsPinned() === 'start'}"
+                  @click="${() => this.column?.pin('start')}">
+                  <forge-icon slot="start" name="dock_left"></forge-icon>
+                  <span>Start</span>
+                </forge-dropdown-menu-item-checkbox>
+                <forge-dropdown-menu-item-checkbox slot="submenu" ?checked="${this.column.getIsPinned() === 'end'}" @click="${() => this.column?.pin('end')}">
+                  <forge-icon slot="start" name="dock_right"></forge-icon>
+                  <span>End</span>
+                </forge-dropdown-menu-item-checkbox>
+                <forge-dropdown-menu-item slot="submenu" .disabled="${!this.column.getIsPinned()}" @click="${() => this.column?.pin(false)}">
+                  <forge-icon slot="start" name="pin_off"></forge-icon>
+                  <span>Unpin</span>
+                </forge-dropdown-menu-item>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.getCanResize()
+          ? html`
+              <forge-dropdown-menu-item>
+                <forge-icon slot="start" name="arrow_expand_horizontal"></forge-icon>
+                <span>Maximize</span>
+              </forge-dropdown-menu-item>
+            `
+          : nothing}
+      </forge-dropdown-menu>
+    `;
+  }
 
   #getMoveTarget(direction: MoveDirection): Column<DataTableFeatures, TData> | undefined {
     const { column, table } = this;
@@ -149,76 +211,8 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
     table.setColumnOrder(order);
   }
 
-  #applyAction(action: ColumnMenuAction): void {
-    const { column } = this;
-    if (!column) {
-      return;
-    }
-
-    switch (action) {
-      case 'move-left':
-        this.#move(-1);
-        break;
-      case 'move-right':
-        this.#move(1);
-        break;
-      case 'sort-ascending':
-        column.toggleSorting(false);
-        break;
-      case 'sort-descending':
-        column.toggleSorting(true);
-        break;
-      case 'hide':
-        column.toggleVisibility(false);
-        break;
-      case 'pin':
-        column.pin('start');
-        break;
-      case 'unpin':
-        column.pin(false);
-        break;
-    }
-  }
-
-  #onMenuSelect(evt: CustomEvent<IMenuSelectEventData<ColumnMenuAction>>): void {
-    evt.stopPropagation();
-
-    const { column } = this;
-    const action = evt.detail.value;
-    if (!column || !action) {
-      return;
-    }
-
-    this.#applyAction(action);
-    this.dispatchEvent(
-      new CustomEvent<ColumnMenuActionEventDetail>(COLUMN_MENU_ACTION_EVENT, {
-        detail: { columnId: column.id, action },
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-
   public override focus(options?: FocusOptions): void {
     this.shadowRoot?.querySelector('forge-icon-button')?.focus(options);
-  }
-
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected override firstUpdated(): void {
-    if (this._menu) {
-      this._menu.options = this.#getOptions;
-    }
-  }
-
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected override render(): TemplateResult {
-    return html`
-      <forge-menu placement="bottom-start" dense @forge-menu-select=${this.#onMenuSelect}>
-        <forge-icon-button aria-label=${this.buttonLabel} dense shape="squared">
-          <forge-icon name="more_vert"></forge-icon>
-        </forge-icon-button>
-      </forge-menu>
-    `;
   }
 }
 
