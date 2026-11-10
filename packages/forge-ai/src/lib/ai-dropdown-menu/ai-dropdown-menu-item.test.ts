@@ -293,10 +293,11 @@ describe('ForgeAiDropdownMenuItem', () => {
     const submenu = (el: ForgeAiDropdownMenuItemComponent): ForgeAiDropdownMenuComponent => el.querySelector('forge-ai-dropdown-menu')!;
 
     it('should open the submenu after the open delay on hover', async () => {
-      vi.useFakeTimers();
+      const el = await createItem(submenuItem(html``));
+      await settle(el);
+      await settle(submenu(el));
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
       try {
-        const el = await createItem(submenuItem(html``));
-        await vi.advanceTimersByTimeAsync(0);
         el.submenuOpenDelay = 50;
         await el.updateComplete;
 
@@ -314,10 +315,11 @@ describe('ForgeAiDropdownMenuItem', () => {
     });
 
     it('should close the submenu after the close delay on mouseleave', async () => {
-      vi.useFakeTimers();
+      const el = await createItem(submenuItem(html``));
+      await settle(el);
+      await settle(submenu(el));
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
       try {
-        const el = await createItem(submenuItem(html``));
-        await vi.advanceTimersByTimeAsync(0);
         el.submenuOpenDelay = 0;
         el.submenuCloseDelay = 80;
         await el.updateComplete;
@@ -325,6 +327,7 @@ describe('ForgeAiDropdownMenuItem', () => {
         await vi.advanceTimersByTimeAsync(5);
         await el.updateComplete;
         expect(submenu(el).open).toBe(true);
+        await settle(submenu(el));
 
         el.dispatchEvent(new MouseEvent('mouseleave'));
         await vi.advanceTimersByTimeAsync(79);
