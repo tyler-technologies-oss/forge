@@ -1,5 +1,6 @@
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
 
 .forge-label {
   &,
@@ -30,4 +31,8 @@
   @include typography.style(label1);
 
   margin-block-start: #{spacing.variable(xsmall)};
+
+  &--invalid {
+    color: #{theme.variable(text-critical)};
+  }
 }

@@ -359,6 +359,10 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
           background: #{theme.variable(error-container-minimum)};
         }
       }
+
+      + .forge-support-text {
+        @include core.invalid-support-text-color;
+      }
     }
   }
 }

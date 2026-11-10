@@ -35,6 +35,7 @@ declare global {
  * @cssclass forge-label-inline - Alias for `forge-label`.
  * @cssclass forge-label--large - Uses the large typography style typically applied to inset field labels.
  * @cssclass forge-support-text - Applies the support text typography style and a top margin.
+ * @cssclass forge-support-text--invalid - Applies the critical text color for invalid fields. Support text that directly follows an invalid `.forge-field` gets this color automatically.
  */
 @customElement({
   name: LABEL_CONSTANTS.elementName
