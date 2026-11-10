@@ -53,7 +53,7 @@ IconRegistry.define([
 const appBar = document.querySelector('forge-app-bar#forge-app-bar-example') as IAppBarComponent;
 const appBarSearch = appBar.querySelector('forge-app-bar-search#app-bar-search') as IAppBarSearchComponent;
 const appBarProfileButton = appBar.querySelector('forge-app-bar-profile-button') as IAppBarProfileButtonComponent;
-const appBarTabs = appBar.querySelector('forge-tab-bar') as ITabBarComponent;
+const appBarTabs = appBar.querySelector('forge-tab-bar[slot="bottom"]') as ITabBarComponent;
 
 const appBarHelpButton = appBar.querySelector('forge-app-bar-help-button') as IAppBarHelpButtonComponent;
 appBarHelpButton.options = [
