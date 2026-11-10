@@ -1,0 +1,5 @@
+@mixin host {
+  display: block;
+  outline: none;
+  isolation: isolate;
+}

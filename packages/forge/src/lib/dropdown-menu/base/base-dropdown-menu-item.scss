@@ -1,0 +1,58 @@
+@use '../../option/option/core' as option-core;
+@use '../../option/option/token-utils' as option;
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-option {
+  @include option.tokens;
+}
+
+.forge-option {
+  @include option-core.base;
+}
+
+.label {
+  @include option-core.label;
+}
+
+slot[name='secondary'],
+slot[name='tertiary'] {
+  &::slotted(*) {
+    @include option-core.secondary-text;
+  }
+}
+
+.disabled {
+  @include option-core.disabled;
+}
+
+.two-line {
+  @include option-core.two-line;
+}
+
+.three-line {
+  @include option-core.three-line;
+}
+
+.dense {
+  @include option-core.dense;
+
+  .label {
+    @include option-core.dense-label;
+  }
+
+  &.two-line {
+    @include option-core.dense-two-line;
+  }
+
+  &.three-line {
+    @include option-core.dense-three-line;
+  }
+}
