@@ -193,6 +193,9 @@
     "surface-translucent": {
       "$value": "{color.radix.slate.surface}"
     },
+    "surface-transparent": {
+      "$value": "oklch(1 0 0 / 0%)"
+    },
     "surface-elevated": {
       "$value": "{color.radix.white}"
     },
