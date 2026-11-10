@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-response-message';
 const component = 'forge-ai-response-message';
 
 const meta = {
-  title: 'AI/Components/Response Message',
+  title: 'AI/Components/Messages/Response Message',
   component,
   render: () => {
     const onAction = action('forge-ai-response-message-action');

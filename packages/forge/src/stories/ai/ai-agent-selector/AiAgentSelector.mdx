@@ -6,23 +6,22 @@ import * as AiAgentSelectorStories from './AiAgentSelector.stories';
 
 <Title />
 
-Agent selector dropdown for switching between AI agents. Displays the current agent name with a dropdown menu to select from available options. When no agents are provided, shows static title text. A search filter appears automatically when more than 5 agents are available.
+A dropdown for switching between AI agents. Use it when users can choose which agent handles their conversation.
+
+Pass the available `agents` (`{ id, name, description? }`) and the current `selectedAgentId`. The first menu option is always the default (unselected) agent, labeled with `titleText`. With no `agents`, the component shows `titleText` as static text. A search filter appears when there are more than 5 agents.
 
 <Canvas of={AiAgentSelectorStories.Demo} />
 
 ## Usage
 
-The agent selector is a **controlled component** - it emits a change event but does not update its own selection. The parent component must update `selectedAgentId` in response to the event.
+The selector is controlled: it emits `forge-ai-agent-selector-change` but does not update its own selection. Set `selectedAgentId` in response. `agent` is `undefined` when the default option is chosen.
 
 ```ts
-function handleChange(e: CustomEvent<ForgeAiAgentSelectorChangeEventData>) {
+selector.addEventListener('forge-ai-agent-selector-change', e => {
   const { agent, previousAgentId } = e.detail;
-  // Update your state with the new agent
-  this.selectedAgentId = agent?.id;
-}
+  selector.selectedAgentId = agent?.id;
+});
 ```
-
-The `@ai-foundry/chatbot` package wires the selector into its chat header and handles selection state for you.
 
 ## API
 
@@ -30,7 +29,7 @@ The `@ai-foundry/chatbot` package wires the selector into its chat header and ha
 
 ## Accessibility
 
-The agent selector supports full keyboard navigation:
+The selector supports full keyboard navigation:
 
 - **Enter / Space** - Open dropdown or select focused item
 - **Escape** - Close dropdown and return focus to trigger

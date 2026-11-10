@@ -27,7 +27,7 @@ function createToolCall(args: { title?: string; headers: string[]; rows: (string
 }
 
 const meta = {
-  title: 'AI/Components/Data Table',
+  title: 'AI/Components/Tools & Reasoning/Data Table',
   component,
   render: () => html` <forge-ai-tool-data-table .toolCall=${createToolCall({ title: 'Permits by department', headers, rows })}></forge-ai-tool-data-table> `
 } satisfies Meta;

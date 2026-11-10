@@ -6,8 +6,27 @@ import * as AiErrorMessageStories from './AiErrorMessage.stories';
 
 <Title />
 
-The AI Error Message component displays error messages using a banner-style format with consistent styling based on Forge design tokens.
+A banner that tells the user something went wrong, such as a failed request. Provide the message in the default slot and an optional heading in the `title` slot.
 
 <Canvas of={AiErrorMessageStories.Demo} />
+
+## Usage
+
+```html
+<forge-ai-error-message>
+  <span slot="title">Error</span>
+  Failed to connect to the server.
+</forge-ai-error-message>
+```
+
+Without a title, the banner collapses to a single row next to the icon.
+
+### Dense
+
+Set `density="small"` for compact surfaces such as lists and panels.
+
+<Canvas of={AiErrorMessageStories.Dense} />
+
+## API
 
 <CustomArgTypes />

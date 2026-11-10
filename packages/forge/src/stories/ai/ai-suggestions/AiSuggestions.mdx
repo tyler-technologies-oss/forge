@@ -6,9 +6,18 @@ import * as AiSuggestionsStories from './AiSuggestions.stories';
 
 <Title />
 
-The AI Suggestions component displays interactive suggestion chips that users can select to quickly input common queries or responses.
+A list of suggested prompts the user can pick from, such as on an empty chat. Pass `suggestions` as `{ text, value }` objects and listen for `forge-ai-suggestions-select`. The event detail carries the chosen `text` and `value`.
 
 <Canvas of={AiSuggestionsStories.Demo} />
+
+Use `variant="inline"` for a single scrolling row, or `variant="block"` for a stacked list. Text that doesn't fit is truncated and shown in a tooltip.
+
+```ts
+suggestions.suggestions = [{ text: 'Summarize a document', value: 'summarize' }];
+suggestions.addEventListener('forge-ai-suggestions-select', evt => {
+  const { text, value } = evt.detail;
+});
+```
 
 ## API
 

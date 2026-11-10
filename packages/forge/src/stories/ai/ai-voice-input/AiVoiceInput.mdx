@@ -6,9 +6,15 @@ import * as AiVoiceInputStories from './AiVoiceInput.stories';
 
 <Title />
 
-The `forge-ai-voice-input` component provides voice input functionality for AI interactions.
+A microphone button that dictates speech into text using the browser's Speech Recognition API. Listen for `forge-ai-voice-input-result` to receive the transcript. The button is disabled in browsers without speech recognition support.
 
 <Canvas of={AiVoiceInputStories.Demo} />
+
+```ts
+voiceInput.addEventListener('forge-ai-voice-input-result', evt => {
+  const { transcript, confidence } = evt.detail;
+});
+```
 
 ## API
 

@@ -6,49 +6,30 @@ import * as AiResponseMessageToolbarStories from './AiResponseMessageToolbar.sto
 
 <Title />
 
-The Response Message Toolbar provides action buttons for AI-generated response messages. It includes resend, copy, and optional feedback (thumbs up/down) actions that emit structured events for easy integration.
+A row of icon buttons for acting on an assistant response: resend, copy, and optional thumbs up/down feedback. The toolbar only emits events; your app performs the action.
 
 <Canvas of={AiResponseMessageToolbarStories.Demo} />
 
-### With Reactions
+## Reactions
 
-Enable the reactions feature to show thumbs up/down buttons for user feedback.
+Set `enable-reactions` to show thumbs up/down buttons. Thumbs down opens a popover for optional written feedback. Use `feedback-type` and `feedback-reason` to restore a previously saved reaction.
 
 <Canvas of={AiResponseMessageToolbarStories.WithReactions} />
 
-### Action Types
+## Events
 
-The toolbar provides the following actions:
+`forge-ai-response-message-toolbar-action` fires when resend or copy is pressed. `forge-ai-response-message-toolbar-feedback` fires for a thumbs up, or for a thumbs down once its feedback is submitted.
 
-- **Resend** - Regenerate or resend the AI response
-- **Copy** - Copy the response content
-- **Thumbs Up/Down** - Provide feedback on the AI response (when `enable-reactions` is set)
-
-### Event Handling
-
-The component emits two event types:
-
-```typescript
-// Action events (resend, copy)
-toolbar.addEventListener('forge-ai-response-message-toolbar-action', event => {
-  const { action } = event.detail; // 'resend' | 'copy' | 'thumbs-up' | 'thumbs-down'
-  // Handle action
+```ts
+toolbar.addEventListener('forge-ai-response-message-toolbar-action', evt => {
+  const { action } = evt.detail; // 'resend' | 'copy'
 });
 
-// Feedback events (thumbs up/down with optional feedback text)
-toolbar.addEventListener('forge-ai-response-message-toolbar-feedback', event => {
-  const { action, feedback } = event.detail;
-  // action: 'positive' | 'negative'
-  // feedback: optional string with user feedback
+toolbar.addEventListener('forge-ai-response-message-toolbar-feedback', evt => {
+  const { action, feedback } = evt.detail; // action: 'positive' | 'negative'
 });
 ```
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility
-
-- All buttons have proper `aria-label` attributes for screen reader compatibility
-- Keyboard navigation supported through standard button focus behavior
-- High contrast icons for better visibility

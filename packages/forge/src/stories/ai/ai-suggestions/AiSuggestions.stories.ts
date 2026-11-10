@@ -8,7 +8,7 @@ import { Suggestion, AiSuggestionsVariant } from '@tylertech/forge-ai/ai-suggest
 const component = 'forge-ai-suggestions';
 
 const meta = {
-  title: 'AI/Components/Suggestions',
+  title: 'AI/Components/Chat/Suggestions',
   component,
   argTypes: {
     variant: {

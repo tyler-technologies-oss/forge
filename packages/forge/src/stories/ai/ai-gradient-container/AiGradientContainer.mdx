@@ -6,9 +6,19 @@ import * as AiGradientContainerStories from './AiGradientContainer.stories';
 
 <Title />
 
-The AI Gradient Container provides a themed background container with configurable gradient intensity levels for AI interfaces.
+A container that wraps its content in the signature AI gradient border. Use it to give AI-related surfaces a consistent look.
 
 <Canvas of={AiGradientContainerStories.Demo} />
+
+## Usage
+
+Choose the border intensity with `variant`: `low`, `medium` (default), `high` or `disabled`. Use `--forge-ai-gradient-container-radius` to change the corner radius.
+
+```html
+<forge-ai-gradient-container variant="high">
+  <div>Content</div>
+</forge-ai-gradient-container>
+```
 
 ## API
 

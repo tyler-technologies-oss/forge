@@ -7,7 +7,7 @@ import '@tylertech/forge-ai/ai-suggestions';
 const component = 'forge-ai-empty-state';
 
 const meta = {
-  title: 'AI/Components/Empty State',
+  title: 'AI/Components/Chat/Empty State',
   component,
   argTypes: {
     showSuggestions: {

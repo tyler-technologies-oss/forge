@@ -6,9 +6,21 @@ import * as AiDialogStories from './AiDialog.stories';
 
 <Title />
 
-The AI Dialog provides a modal dialog container optimized for AI chat interfaces. It automatically switches between modal and fullscreen modes based on viewport size.
+A dialog container for hosting an AI chat experience. On wide viewports it is a draggable, non-modal panel anchored to the bottom-right of the screen. When `expanded`, or on viewports 768px wide or narrower, it becomes a full modal dialog.
 
 <Canvas of={AiDialogStories.Demo} />
+
+## Usage
+
+Place your chat content in the default slot and control visibility with `open`, or the `show()`, `close()` and `toggle()` methods.
+
+```html
+<forge-ai-dialog label="Support assistant">
+  <forge-ai-chat-interface>...</forge-ai-chat-interface>
+</forge-ai-dialog>
+```
+
+Listen for `forge-ai-dialog-close` to react when the dialog is dismissed (including with the Escape key), and `forge-ai-dialog-fullscreen-change` to adapt your content when the dialog switches between panel and fullscreen layouts.
 
 ## API
 
@@ -16,4 +28,4 @@ The AI Dialog provides a modal dialog container optimized for AI chat interfaces
 
 ## Accessibility
 
-The dialog is labelled via the `label` property (default: `"AI Assistant"`), which is applied as the dialog's `aria-label` so screen readers announce a meaningful name when it opens. Set `label` to match the title of the slotted chat interface.
+The `label` property (default: `"AI Assistant"`) is applied as the dialog's `aria-label`. Set it to describe the slotted content.

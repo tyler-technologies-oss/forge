@@ -7,7 +7,7 @@ import type { AgentInfo } from '@tylertech/forge-ai/ai-agent-info';
 const component = 'forge-ai-agent-info';
 
 const meta = {
-  title: 'AI/Components/Agent Info',
+  title: 'AI/Components/Agents/Agent Info',
   component,
   render: ({ name, identifier, version, threadId }: AgentInfo) => {
     const agentInfo: AgentInfo = { name, identifier, version, threadId };

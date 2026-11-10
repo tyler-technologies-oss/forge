@@ -11,7 +11,7 @@ import { smallAgentList, largeAgentList } from './mock-agents.js';
 const component = 'forge-ai-agent-selector';
 
 const meta = {
-  title: 'AI/Components/Agent Selector',
+  title: 'AI/Components/Agents/Agent Selector',
   component,
   argTypes: {
     agentListSize: {

@@ -1,0 +1,33 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiThreadActionsMenuStories from './AiThreadActionsMenu.stories';
+
+<Meta of={AiThreadActionsMenuStories} />
+
+<Title />
+
+A three-dot button that opens a menu of actions for one conversation, with optional Rename and Delete items. [`forge-ai-conversations-panel`](?path=/docs/ai-components-conversations-conversations-panel--docs) and [`forge-ai-threads-search`](?path=/docs/ai-components-conversations-threads-search--docs) use it on each row. Use it directly only when building your own conversation list.
+
+<Canvas of={AiThreadActionsMenuStories.Demo} />
+
+## Usage
+
+Set `thread`, then turn on the items you support with `show-rename` and `show-delete`. Both are off by default, so with neither the menu has no items.
+
+```html
+<forge-ai-thread-actions-menu show-rename show-delete></forge-ai-thread-actions-menu>
+```
+
+The menu only reports what the user chose. It does not rename or delete anything, so handle the events in your app.
+
+- `forge-ai-thread-actions-menu-rename` fires with the thread `id`. Typically you respond by showing [`forge-ai-edit-thread`](?path=/docs/ai-components-conversations-edit-thread--docs).
+- `forge-ai-thread-actions-menu-delete-click` fires with the thread `id`. Typically you respond by asking the user to confirm the delete.
+- `forge-ai-thread-actions-menu-open` fires with the thread `id`, and `forge-ai-thread-actions-menu-close` fires with no detail.
+
+To replace the three-dot icon, put your own icon in the `trigger-icon` slot.
+
+<Canvas of={AiThreadActionsMenuStories.RenameOnly} />
+
+## API
+
+<CustomArgTypes />

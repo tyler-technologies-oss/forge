@@ -14,12 +14,12 @@ import '@tylertech/forge-ai/ai-prompt';
 import '@tylertech/forge-ai/ai-chat-header';
 import '@tylertech/forge-ai/ai-user-message';
 import '@tylertech/forge-ai/ai-response-message';
-import '@tylertech/forge-ai/ai-button';
 
 import '@tylertech/forge/scaffold';
 import '@tylertech/forge/app-bar';
 import '@tylertech/forge/card';
 import '@tylertech/forge/toolbar';
+import '@tylertech/forge/button';
 
 // Register icons
 IconRegistry.define([tylIconMenu, tylIconSettings, tylIconPerson, tylIconDashboard, tylIconAnalytics, tylIconNotifications, tylIconChat]);
@@ -27,7 +27,7 @@ IconRegistry.define([tylIconMenu, tylIconSettings, tylIconPerson, tylIconDashboa
 const component = 'forge-ai-sidebar';
 
 const meta = {
-  title: 'AI/Components/Sidebar',
+  title: 'AI/Components/Containers/Sidebar',
   component,
   argTypes: {
     open: {
@@ -76,7 +76,7 @@ const meta = {
 
         <forge-toolbar slot="body-header">
           <h2 class="forge-typography--heading4">Page Title</h2>
-          <forge-ai-button slot="end" @click=${() => sidebarRef.value?.toggle()}>Ask AI Assistant</forge-ai-button>
+          <forge-button slot="end" variant="filled" @click=${() => sidebarRef.value?.toggle()}>Ask AI Assistant</forge-button>
         </forge-toolbar>
 
         <main slot="body" style="padding: 24px;">

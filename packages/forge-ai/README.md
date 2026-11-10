@@ -2,12 +2,12 @@
 
 A library of presentational [Tyler Forge™](https://github.com/tyler-technologies-oss/forge) Web Components for building AI chat interfaces, built with [Lit](https://lit.dev/).
 
-This package contains UI primitives only (messages, prompts, tool calls, dialogs, and so on). Chat orchestration and agent adapters live in `@ai-foundry/chatbot`.
+The components are UI building blocks (messages, prompts, tool calls, dialogs, and so on). They do not include chat orchestration or agent adapters; compose them with your own chat logic.
 
 ## Installation
 
 ```bash
-npm install @tylertech/forge-ai
+npm install @tylertech/forge-ai @tylertech/forge
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import '@tylertech/forge-ai/ai-prompt';
 <forge-ai-prompt></forge-ai-prompt>
 ```
 
-Documentation and examples are in the [Forge Storybook](https://forge.tylerdev.io/forge/v3/?path=/docs/ai-introduction--docs) under the **AI** section.
+Documentation and examples are in the [Forge Storybook](https://forge.tylerdev.io/forge/v3/?path=/docs/ai-introduction--docs) under **AI/Introduction**.
 
 ### Subpaths
 

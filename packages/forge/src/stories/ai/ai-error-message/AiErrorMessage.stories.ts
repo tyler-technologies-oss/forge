@@ -6,7 +6,7 @@ import '@tylertech/forge-ai/ai-error-message';
 const component = 'forge-ai-error-message';
 
 const meta = {
-  title: 'AI/Components/Error Message',
+  title: 'AI/Components/Messages/Error Message',
   component,
   argTypes: {
     density: {

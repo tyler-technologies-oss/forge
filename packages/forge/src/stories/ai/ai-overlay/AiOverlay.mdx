@@ -1,0 +1,36 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiOverlayStories from './AiOverlay.stories';
+
+<Meta of={AiOverlayStories} />
+
+<Title />
+
+A low-level building block that shows content in the browser's top layer, positioned next to an anchor element. It has no styling of its own. For most cases use [`forge-ai-popover`](?path=/docs/ai-components-primitives-popover--docs) or [`forge-ai-tooltip`](?path=/docs/ai-components-primitives-tooltip--docs), which are built on it. Use the overlay directly only when you need custom positioned content.
+
+It is exported from `@tylertech/forge-ai/core`.
+
+<Canvas of={AiOverlayStories.Demo} />
+
+## Usage
+
+Set `anchor` to the element to position against, and `open` to show or hide the overlay.
+
+```ts
+import '@tylertech/forge-ai/core';
+
+overlay.anchor = button;
+overlay.placement = 'bottom-start';
+overlay.open = true;
+```
+
+- `placement` is where the overlay sits relative to the anchor, such as `top`, `bottom-start` or `right-end`. It defaults to `bottom-start`.
+- `flip` (on by default) moves the overlay to the opposite side when there is not enough room, and `shift` keeps it inside the viewport.
+- `offset` moves the overlay away from the anchor. Pass a number, or an object with `mainAxis`, `crossAxis` and `alignmentAxis`.
+- `auto-size` sets `--ai-overlay-available-width` and `--ai-overlay-available-height` so slotted content can shrink to fit the space available.
+- With `dismiss-mode="auto"` (default) the overlay closes on an outside click or Escape. With `manual` it only closes when you set `open` to `false`.
+- `forge-ai-overlay-toggle` fires when the overlay opens or closes, with `open`, `newState` and `oldState` in its detail.
+
+## API
+
+<CustomArgTypes />

@@ -6,25 +6,26 @@ import * as AiModalStories from './AiModal.stories';
 
 <Title />
 
-The AI Modal component provides a basic modal dialog implementation using the native HTML `<dialog>` element. This component is designed to be a simple, foundational modal that can be extended for more specific use cases.
-
-## Basic Usage
-
-The AI Modal renders content within a standard HTML dialog element and provides programmatic control through the `open` property and `show()`/`close()` methods.
+A simple modal dialog built on the native `<dialog>` element. It has no default content, so you provide everything through the default slot.
 
 <Canvas of={AiModalStories.Demo} />
 
-## Opening and Closing
+## Usage
 
-The modal can be controlled in several ways:
+Open and close the modal with the `open` property or attribute, or the `show()` and `close()` methods.
 
-- **Property**: Set the `open` property to `true` or `false`
-- **Attribute**: Add or remove the `open` attribute
-- **Methods**: Call `show()` to open or `close()` to close the modal
+```html
+<forge-ai-modal label="Settings">
+  <h3>Title</h3>
+  <p>Content</p>
+</forge-ai-modal>
+```
 
-## Content
+The modal closes on Escape or a backdrop click. The `forge-ai-modal-close` event includes a `reason` of `backdrop`, `escape` or `programmatic`.
 
-All content is provided through slots, giving you complete control over the modal's internal structure and styling. The component provides no default content - everything must be provided by the consumer.
+### Sizing
+
+By default the modal goes fullscreen on viewports 768px wide or narrower. Set `size-strategy="fixed"` to keep the size on all viewports, or set `fullscreen` explicitly. In non-fullscreen mode use `--forge-ai-modal-width` and `--forge-ai-modal-height` to change the size.
 
 ## API
 
@@ -32,11 +33,4 @@ All content is provided through slots, giving you complete control over the moda
 
 ## Accessibility
 
-This component uses the native HTML `<dialog>` element, which provides built-in accessibility features including:
-
-- Proper focus management
-- Keyboard navigation (Escape key to close)
-- Screen reader compatibility
-- Backdrop interaction handling
-
-The dialog is labelled via the `label` property (default: `"AI Assistant"`), which is applied as the dialog's `aria-label` so screen readers announce a meaningful name when the modal opens. Set `label` to match the content shown in your modal.
+Focus management, Escape handling and screen reader support come from the native `<dialog>` element. Set `label` (default: `"AI Assistant"`) to describe the modal content; it is applied as the dialog's `aria-label`.

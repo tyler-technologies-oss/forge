@@ -4,37 +4,50 @@ import * as AiDropdownMenuStories from './AiDropdownMenu.stories';
 
 <Meta of={AiDropdownMenuStories} />
 
-# AI Dropdown Menu
+<Title />
 
-The AI Dropdown Menu is a flexible dropdown component designed for AI interfaces. It provides a configurable trigger button that can be displayed in square or circular variants, with comprehensive keyboard navigation and accessibility support.
+A button that opens a menu of choices, such as a model picker or an actions menu. Items can act as plain actions, a single (radio) selection, or a multiple (checkbox) selection, and can be grouped or nested in submenus.
 
 <Canvas of={AiDropdownMenuStories.Demo} />
 
-## Features
+## Usage
 
-- **Two Button Variants**: Square (default) and circular shapes
-- **Flexible Content**: Support for icons, text, and custom content via slots
-- **Keyboard Navigation**: Full arrow key navigation with Enter/Space selection
-- **Focus Management**: Automatically closes when focus leaves the component
-- **Accessibility**: Proper ARIA attributes and screen reader support
-- **Event Handling**: Emits selection events with value and selected item details
+Add `forge-ai-dropdown-menu-item` elements to the default slot and set `selection-mode` to `none` (default), `single` or `multi`. The `forge-ai-dropdown-menu-change` event reports the new `value` and the selected item(s) for the active mode.
 
-## Keyboard Navigation
+```html
+<forge-ai-dropdown-menu selection-mode="single">
+  <span slot="trigger-content">Select model</span>
+  <forge-ai-dropdown-menu-item value="small">Small</forge-ai-dropdown-menu-item>
+  <forge-ai-dropdown-menu-item value="large">Large</forge-ai-dropdown-menu-item>
+</forge-ai-dropdown-menu>
+```
 
-- **Arrow Keys**: Navigate between menu items (wraps from first to last and vice versa)
-- **Enter/Space**: Select the focused item or toggle the dropdown
-- **Escape**: Close the dropdown and return focus to trigger
-- **Home/End**: Jump to first/last menu item
-- **Tab/Focus Loss**: Automatically closes dropdown when focus leaves the component
+The trigger can be a text `button` (default), an `icon-button`, or an `icon-button-squared`. Use `density` to change its size.
 
-## Accessibility
+### Groups and separators
 
-- Uses proper ARIA roles (`listbox` and `option`)
-- Supports `aria-expanded`, `aria-haspopup`, `aria-selected`, and `aria-disabled`
-- Keyboard navigation follows WAI-ARIA guidelines
-- Screen reader friendly with appropriate labels and descriptions
-- For icon-only triggers with no visible text, set the `trigger-label` property to give the trigger button an accessible name (applied as `aria-label`)
+Organize items with `forge-ai-dropdown-menu-item-group` (label via the `label` slot) and `forge-ai-dropdown-menu-separator`.
+
+<Canvas of={AiDropdownMenuStories.WithGroups} />
+
+### Nested menus
+
+Place a `forge-ai-dropdown-menu` in an item's `submenu` slot. Use the item's `submenu-trigger` (`hover`, `click` or `both`) to choose how it opens.
+
+<Canvas of={AiDropdownMenuStories.WithNestedMenus} />
+
+## Keyboard
+
+- Arrow Up and Down move between items
+- Enter and Space select the focused item
+- Arrow Right and Left open and close submenus
+- Home and End jump to the first and last item
+- Escape closes the menu, and it also closes when focus leaves
 
 ## API
 
 <CustomArgTypes />
+
+## Accessibility
+
+Menu roles follow the selection mode (`menuitem`, `menuitemradio`, `menuitemcheckbox`). For icon-only triggers, set `trigger-label` so the button has an accessible name.

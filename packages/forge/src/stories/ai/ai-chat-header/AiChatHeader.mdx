@@ -6,13 +6,23 @@ import * as AiChatHeaderStories from './AiChatHeader.stories';
 
 <Title />
 
-The AI Chat Header provides a consistent header interface for AI chat applications, featuring expand and minimize controls with customizable title content.
+The header for a chat panel: an icon, a title, and optional controls for expanding, minimizing, clearing and exporting the conversation. Place it in the `header` slot of `forge-ai-chat-interface`.
+
+Each control emits an event for you to handle, such as `forge-ai-chat-header-expand`, `-minimize`, `-clear` and `-export`.
 
 <Canvas of={AiChatHeaderStories.Demo} />
 
-## Conversations Button
+## Agents
 
-Set `showConversationsButton` to show the hamburger menu that toggles a conversations panel. Set `hasConversationsError` alongside it when the panel's thread load has failed — the button picks up an error badge so the failure remains visible while the panel is closed.
+Pass `agents` and `selectedAgentId` to replace the title with a `forge-ai-agent-selector`. Selection emits `forge-ai-chat-header-agent-change`; update `selectedAgentId` in response. Set `disable-agent-selector` to lock it, for example while a response streams.
+
+## Agent info
+
+Set `agentInfo` to add an "Info" option to the menu that opens a dialog with the agent's details. Use `options`, `export-option` and `clear-option` (`enabled` or `off`) to control which menu items appear.
+
+## Conversations button
+
+Set `show-conversations-button` to show a menu button that emits `forge-ai-chat-header-conversations-toggle`, typically to toggle a conversations panel. Set `has-conversations-error` when loading threads failed, so the button shows an error badge while the panel is closed.
 
 <Canvas of={AiChatHeaderStories.ConversationsError} />
 

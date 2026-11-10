@@ -6,45 +6,41 @@ import * as AiReasoningStories from './AiReasoning.stories';
 
 <Title />
 
-A container for displaying AI reasoning processes with streaming content. Designed to be composed with `forge-ai-reasoning-header` and multiple `forge-ai-reasoning-content` components that are added dynamically as reasoning steps stream in.
+A collapsible container for showing a model's reasoning as it streams in. Pair it with a `forge-ai-reasoning-header` in the `header` slot and add one `forge-ai-reasoning-content` per reasoning step. Each step types itself out when added.
 
-## Usage
+<Canvas of={AiReasoningStories.Demo} />
+
+The header's toggle event updates the container's `expanded` state automatically.
 
 ```html
-<forge-ai-reasoning expanded="false">
-  <forge-ai-reasoning-header slot="header" expanded="false" reasoning="true">
+<forge-ai-reasoning expanded>
+  <forge-ai-reasoning-header slot="header" expanded reasoning>
     <span slot="reasoning-title">Thinking...</span>
-    <span slot="title">AI Reasoning Process</span>
+    <span slot="title">Reasoning</span>
   </forge-ai-reasoning-header>
-
-  <!-- Add multiple content components as steps stream in -->
-  <forge-ai-reasoning-content>Step 1: Analyzing the problem...</forge-ai-reasoning-content>
-  <forge-ai-reasoning-content>Step 2: Considering approaches...</forge-ai-reasoning-content>
-  <forge-ai-reasoning-content>Step 3: Recommending solution...</forge-ai-reasoning-content>
+  <forge-ai-reasoning-content>Analyzing the problem...</forge-ai-reasoning-content>
 </forge-ai-reasoning>
 ```
 
-## Streaming Pattern
+Append steps as they arrive:
 
-```javascript
-const container = document.querySelector('forge-ai-reasoning');
-
-function addStep(text) {
-  const step = document.createElement('forge-ai-reasoning-content');
-  step.textContent = text;
-  container.appendChild(step);
-}
+```ts
+const step = document.createElement('forge-ai-reasoning-content');
+step.textContent = text;
+reasoning.appendChild(step);
 ```
 
-## Key Points
+Set `reasoning` on the header while steps are streaming, then clear it when done.
 
-- **Streaming design**: Add `forge-ai-reasoning-content` components dynamically as AI reasoning steps arrive
-- **Required header**: Must use `forge-ai-reasoning-header` in the header slot
-- **One step per component**: Each reasoning step gets its own content component with typing animation
+## Header
 
-## Demo
+`forge-ai-reasoning-header` is the clickable header that toggles the section. Put it in the `header` slot. While `reasoning` is set it shows the `reasoning-title` slot; otherwise it shows the `title` slot. It fires `forge-ai-reasoning-header-toggle` when the user expands or collapses it, with `detail.expanded`. The parent `forge-ai-reasoning` listens for it automatically.
 
-<Canvas of={AiReasoningStories.Demo} />
+```ts
+header.addEventListener('forge-ai-reasoning-header-toggle', evt => {
+  console.log(evt.detail.expanded);
+});
+```
 
 ## API
 

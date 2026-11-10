@@ -15,12 +15,11 @@ const component = 'forge-ai-chat-header';
 const expandAction = action('forge-ai-chat-header-expand');
 const minimizeAction = action('forge-ai-chat-header-minimize');
 const clearChatAction = action('forge-ai-chat-header-clear');
-const infoAction = action('forge-ai-chat-header-info');
 
 IconRegistry.define([tylIconHistory, tylIconSettings]);
 
 const meta = {
-  title: 'AI/Components/Chat Header',
+  title: 'AI/Components/Chat/Chat Header',
   component,
   argTypes: {
     titleText: {
@@ -105,8 +104,7 @@ const meta = {
         heading-level="2"
         @forge-ai-chat-header-expand=${expandAction}
         @forge-ai-chat-header-minimize=${minimizeAction}
-        @forge-ai-chat-header-clear=${clearChatAction}
-        @forge-ai-chat-header-info=${infoAction}>
+        @forge-ai-chat-header-clear=${clearChatAction}>
         ${getCustomIcon()}
       </forge-ai-chat-header>
     `;
@@ -150,8 +148,7 @@ export const WithHeaderActions: Story = {
         heading-level="2"
         @forge-ai-chat-header-expand=${expandAction}
         @forge-ai-chat-header-minimize=${minimizeAction}
-        @forge-ai-chat-header-clear=${clearChatAction}
-        @forge-ai-chat-header-info=${infoAction}>
+        @forge-ai-chat-header-clear=${clearChatAction}>
         <forge-icon-button slot="header-actions" density="medium" aria-label="History">
           <forge-icon name="history"></forge-icon>
         </forge-icon-button>

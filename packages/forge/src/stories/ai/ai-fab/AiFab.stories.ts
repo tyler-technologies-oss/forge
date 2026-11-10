@@ -8,7 +8,7 @@ const component = 'forge-ai-fab';
 const clickAction = action('click');
 
 const meta = {
-  title: 'AI/Components/FAB',
+  title: 'AI/Components/Primitives/FAB',
   component,
   render: args => html`
     <forge-ai-fab .disabled=${args.disabled} .extended=${args.extended} .label=${args.label} @click=${clickAction}> ${args.content} </forge-ai-fab>

@@ -7,7 +7,7 @@ import { AiGradientContainerVariant } from '@tylertech/forge-ai/ai-gradient-cont
 const component = 'forge-ai-gradient-container';
 
 const meta = {
-  title: 'AI/Components/Gradient Container',
+  title: 'AI/Components/Containers/Gradient Container',
   component,
   argTypes: {
     variant: {

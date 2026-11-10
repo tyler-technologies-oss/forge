@@ -1,3 +1,13 @@
+const STORY_GROUPS = ['Chat', 'Messages', 'Input & Context', 'Agents', 'Conversations', 'Tools & Reasoning', 'Artifacts', 'Containers', 'Primitives'];
+
+const GROUP_PROMPT = {
+  type: 'list',
+  name: 'group',
+  message: 'Storybook group',
+  choices: STORY_GROUPS,
+  default: 'Primitives'
+};
+
 const STORIES_DESTINATION = '../forge/src/stories/ai/{{dashCase name}}';
 
 function transformComponentName(value) {
@@ -31,7 +41,8 @@ export default function (plop) {
         name: 'hasStorybook',
         message: 'Do you want to create a Storybook page?',
         default: true
-      }
+      },
+      { ...GROUP_PROMPT, when: answers => answers.hasStorybook }
     ],
     actions(answers) {
       const actions = [
@@ -72,7 +83,8 @@ export default function (plop) {
         message: 'Component name',
         transform: transformComponentName,
         validate: validateComponentName
-      }
+      },
+      GROUP_PROMPT
     ],
     actions: [
       {

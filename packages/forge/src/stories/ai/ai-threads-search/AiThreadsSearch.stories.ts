@@ -20,14 +20,14 @@ const generateThreads = (count: number, startIndex = 0): Thread[] => {
     id: `thread-${startIndex + i + 1}`,
     title: `${topics[i % topics.length]}`,
     createdAt: new Date(Date.now() - (i + startIndex) * 86400000).toISOString(),
-    messageCount: Math.floor(Math.random() * 20) + 1
+    messageCount: (((i + startIndex) * 7) % 20) + 1
   }));
 };
 
 const component = 'forge-ai-threads-search';
 
 const meta = {
-  title: 'AI/Components/Threads Search',
+  title: 'AI/Components/Conversations/Threads Search',
   component,
   argTypes: {
     threads: {

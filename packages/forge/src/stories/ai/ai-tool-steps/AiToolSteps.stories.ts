@@ -17,7 +17,7 @@ function createToolCall(status: ToolCall['status']): ToolCall {
 }
 
 const meta = {
-  title: 'AI/Components/Tool Steps',
+  title: 'AI/Components/Tools & Reasoning/Tool Steps',
   component,
   render: () => html`<forge-ai-tool-steps .toolCall=${createToolCall('complete')}></forge-ai-tool-steps>`
 } satisfies Meta;

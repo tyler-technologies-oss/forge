@@ -6,7 +6,7 @@ Lit-based presentational Web Components for AI chat interfaces, published as `@t
 
 This package contains **presentational primitives only**: messages, prompts, tool-call indicators, dialogs, sidebars, canvases, and similar building blocks, plus the small controllers and utilities they need.
 
-It does **not** contain composition or chat logic. There is no chatbot element, no agent adapter or runner, no message state engine, and no form factors (floating, sidebar, launcher). That layer lives in `@ai-foundry/chatbot` (the `foundry-chatbot` repo), which composes these primitives. Do not add chat orchestration here.
+It does **not** contain composition or chat logic. There is no chatbot element, no agent adapter or runner, no message state engine, and no form factors (floating, sidebar, launcher). That layer is the consumer's responsibility. Do not add chat orchestration here.
 
 Source was migrated from the standalone `tyler-technologies-oss/forge-ai` repo. See `MIGRATION.md` for what changed and `BUGS.md` for the migration bug triage and follow-ups (deleted before the PR).
 
@@ -80,14 +80,15 @@ src/lib/[component-name]/
 
 ### Storybook
 
-Stories live in `packages/forge/src/stories/ai/<component-name>/` (`<Name>.stories.ts` + `<Name>.mdx`), alongside the rest of forge's Storybook. Titles are `AI/<Name>` (no `Ai` prefix). `AI/Introduction` is the section landing page.
+Stories live in `packages/forge/src/stories/ai/<component-name>/` (`<Name>.stories.ts` + `<Name>.mdx`), alongside the rest of forge's Storybook. Titles are `AI/Components/<Group>/<Name>` (no `Ai` prefix); groups are Chat, Messages, Input & Context, Agents, Conversations, Tools & Reasoning, Artifacts, Containers, Primitives, ordered in `packages/forge/.storybook/preview.ts`. `AI/Introduction` and `AI/React` are the top-level pages. Document parent components only: sub-components (for example `forge-ai-reasoning-header`, `forge-ai-reasoning-content`, `forge-ai-thought-*`, dropdown menu items) are covered in their parent's page, with no standalone page.
 
 - Run: `pnpm storybook:forge` from the repo root (or `pnpm turbo run storybook --filter=@tylertech/forge`). Build: `pnpm turbo run build:storybook --filter=@tylertech/forge`.
 - forge cannot depend on forge-ai (forge-ai devDepends on forge, turbo rejects the cycle), so `packages/forge/.storybook/main.ts` aliases `@tylertech/forge-ai` and `@tylertech/forge-ai/*` to the **built** `packages/forge-ai/dist`. The `storybook` and `build:storybook` turbo tasks depend on `@tylertech/forge-ai#build`. After changing component source, rebuild this package (`pnpm --filter @tylertech/forge-ai build`) to see it in a running Storybook.
 - Docs tables (`CustomArgTypes`) read `custom-elements.json`. `packages/forge/src/stories/utils.ts` merges the forge, rich-text-editor, and forge-ai manifests, so `cem` must have been run here (the build does it).
 - Stories import from public subpaths only (`@tylertech/forge-ai/<component>`, `/types`, `/utils`, `/tools`), never `src/`. Forge components used in stories come from `@tylertech/forge/<component>` side-effect imports.
-- Stories must be primitive-only: static data, no chatbot, agent adapters, or form factors (that lives in `@ai-foundry/chatbot`).
-- Scaffold: `pnpm --filter @tylertech/forge-ai plop story <component-name>` (or `plop component`, which asks about a story). It writes `<Name>.stories.ts` and `<Name>.mdx` to `packages/forge/src/stories/ai/<component-name>/` with title `AI/<Name>`.
+- Stories must be primitive-only: static data, no chatbot, agent adapters, or form factors.
+- Docs and stories must not reference internal or proprietary products or packages. Keep docs consumer-focused: no implementation or tooling trivia.
+- Scaffold: `pnpm --filter @tylertech/forge-ai plop story <component-name>` (or `plop component`, which asks about a story). It writes `<Name>.stories.ts` and `<Name>.mdx` to `packages/forge/src/stories/ai/<component-name>/` with title `AI/Components/<Group>/<Name>`; plop asks for the group.
 - Actions: `import { action } from 'storybook/actions';` (not `@storybook/addon-actions`).
 - MDX: `import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';` and `import CustomArgTypes from '../../blocks/CustomArgTypes';` (not `@storybook/blocks`).
 - Do not add `tags: ['autodocs']` to a CSF file that has an MDX page; Storybook 10 errors on that combination.
@@ -124,7 +125,7 @@ get #conditionalContent(): TemplateResult {
 }
 ```
 
-Good for optional buttons, actions, and sections. See `ai-confirmation-prompt` and similar components for reference.
+Good for optional buttons, actions, and sections. See `ai-chat-interface` and similar components for reference.
 
 ## Testing
 

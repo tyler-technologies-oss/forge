@@ -14,7 +14,7 @@ const component = 'forge-ai-dropdown-menu';
 const changeAction = action('forge-ai-dropdown-menu-change');
 
 const meta = {
-  title: 'AI/Components/Dropdown Menu',
+  title: 'AI/Components/Primitives/Dropdown Menu',
   component,
   argTypes: {
     variant: {

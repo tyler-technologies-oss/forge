@@ -7,7 +7,7 @@ import type { ForgeAiPaginatorPageChangeEventData } from '@tylertech/forge-ai/to
 const component = 'forge-ai-paginator';
 
 const meta = {
-  title: 'AI/Components/Paginator',
+  title: 'AI/Components/Primitives/Paginator',
   component,
   argTypes: {
     currentPage: { control: { type: 'number', min: 1 }, description: 'The current page (1-based)' },

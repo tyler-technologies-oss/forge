@@ -4,7 +4,7 @@ import { action } from 'storybook/actions';
 import '@tylertech/forge-ai/ai-disclaimer';
 
 const meta: Meta = {
-  title: 'AI/Components/Disclaimer',
+  title: 'AI/Components/Chat/Disclaimer',
   component: 'forge-ai-disclaimer',
   parameters: {
     layout: 'centered',

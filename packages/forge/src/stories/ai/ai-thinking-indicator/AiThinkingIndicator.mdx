@@ -6,23 +6,13 @@ import * as AiThinkingIndicatorStories from './AiThinkingIndicator.stories';
 
 <Title />
 
-The AI Thinking Indicator is a specialized loading component designed for AI chat interfaces. It displays three animated dots that sequentially appear from left to right, then bounce in a wave pattern to indicate that the system is processing or awaiting a response.
+Three animated dots that show the assistant is working. Show it between sending a prompt and the first streamed content.
 
 <Canvas of={AiThinkingIndicatorStories.Demo} />
 
-## Usage
+Set `show-text` to add a status message that cycles through words like "Thinking..." and "Analyzing...". Use `initial-delay` to wait before the first message appears and `cycle-interval` to change how often it rotates (milliseconds).
 
-Use the AI Thinking Indicator when:
-
-- The AI is processing a user's request
-- Waiting for a response from an AI service
-- During any period where the user should know the system is actively working
-
-The component provides a smooth, engaging animation that keeps users informed without being distracting.
-
-## Accessibility
-
-The component respects the user's `prefers-reduced-motion` setting and provides a simplified animation for users who prefer reduced motion.
+The animation is simplified when the user prefers reduced motion.
 
 ## API
 

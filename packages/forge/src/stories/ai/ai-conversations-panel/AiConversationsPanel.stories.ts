@@ -21,7 +21,7 @@ const generateThreads = (count: number, startIndex = 0): Thread[] => {
     const topic = topics[index % topics.length];
     const verb = actions[Math.floor(index / topics.length) % actions.length];
     const daysAgo = Math.floor(index / 5) + 1;
-    const messageCount = Math.floor(Math.random() * 20) + 1;
+    const messageCount = ((index * 7) % 20) + 1;
 
     return {
       id: `thread-${index + 1}`,
@@ -84,7 +84,7 @@ const sampleThreads: Thread[] = [
 ];
 
 const meta = {
-  title: 'AI/Components/Conversations Panel',
+  title: 'AI/Components/Conversations/Conversations Panel',
   component,
   argTypes: {
     threads: {

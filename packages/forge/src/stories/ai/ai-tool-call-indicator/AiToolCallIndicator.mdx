@@ -6,32 +6,28 @@ import * as AiToolCallIndicatorStories from './AiToolCallIndicator.stories';
 
 <Title />
 
-The AI Tool Call Indicator is an expandable timeline summarizing the tool calls made during an assistant response. Collapsed, it shows an activity summary ("Running tools…" or "Used N tools · Xs"). Expanded, it lists each tool call with a status marker, using each tool's registered `displayName` when one is provided via the `tools` map.
+A compact summary of the tool calls an assistant made while answering. Collapsed, it reads "Running tools..." or "Used N tools · Xs". Expanded, it lists each call with a status marker. Use it to show tool activity without cluttering the conversation.
 
 <Canvas of={AiToolCallIndicatorStories.Demo} />
 
-## Debug mode
+Pass `toolCalls`, plus an optional `tools` map keyed by tool name so each row shows the tool's `displayName` instead of its raw name.
 
-When `debugMode` is enabled, expanding an individual tool call also reveals its inputs, outputs, and — for failed calls — the error result, all under the tool's friendly name.
+## Status
 
-<Canvas of={AiToolCallIndicatorStories.DebugMode} />
+The indicator renders whatever `status` each tool call has. It shows the running summary while any call is not `complete` or `error`. A call whose tool renders its own UI early (`renderOnStart`) counts as settled.
 
-## Error status
+<Canvas of={AiToolCallIndicatorStories.Running} />
 
-The indicator never receives an "error" signal directly — it only renders whatever `ToolCall.status` it's given. A failed call is a `status: 'error'` entry whose `result` carries the error, and in debug mode the error result is revealed under the tool's friendly name:
+A failed call is a `status: 'error'` entry.
 
 <Canvas of={AiToolCallIndicatorStories.FailedToolCall} />
 
-## Running
+## Debug mode
 
-The indicator shows the running summary while any call's `status` is not `complete` or `error` (for example `pending`, `parsing`, or `executing`). A call whose tool renders its own UI early (`renderOnStart`) counts as settled, so it does not keep the spinner running.
+Set `debug-mode` to let users expand each call and see its input, output, or error.
 
-<Canvas of={AiToolCallIndicatorStories.Running} />
+<Canvas of={AiToolCallIndicatorStories.DebugMode} />
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility
-
-Both the summary button and each expandable row are real `<button>` elements with `aria-expanded`/`aria-controls`, so the timeline and detail cards are operable and announced correctly by assistive technology.

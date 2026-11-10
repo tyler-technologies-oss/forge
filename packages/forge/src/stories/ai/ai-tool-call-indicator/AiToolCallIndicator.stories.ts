@@ -37,7 +37,7 @@ const toolCalls: ToolCall[] = [
 ];
 
 const meta = {
-  title: 'AI/Components/Tool Call Indicator',
+  title: 'AI/Components/Tools & Reasoning/Tool Call Indicator',
   component
 } satisfies Meta;
 

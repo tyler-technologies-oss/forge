@@ -6,45 +6,33 @@ import * as AiArtifactCardStories from './AiArtifactCard.stories';
 
 <Title />
 
-The AI Artifact Card component displays a compact, clickable card representing an artifact an agent produced — a
-query result, a report, a generated document. Activating it emits an event; the consumer decides what opens.
+A compact, clickable card for something an agent produced, such as a query result, report or generated document. Use it in a conversation to let users open the artifact.
 
-The component is presentational. It holds no knowledge of what the artifact is, where it lives, or what happens
-when it is opened.
+The card is presentational. Activating it emits `forge-ai-artifact-card-open` with the card's `assetId`, and your code decides what opens.
 
 <Canvas of={AiArtifactCardStories.Demo} />
 
-## Features
+## Usage
 
-- **Whole-card click target**: the entire card is a single native button, so clicking the icon, the text, or empty space all activate it
-- **Truncating text**: both lines truncate to a single line rather than wrapping or growing the card
-- **Trailing action glyph**: a built-in, decorative arrow signals that the card opens something; it hides on the active card, which is already open. Slot an `action-icon` to replace it with a glyph that stays visible while active
-- **Groups**: for several results at once, place cards in a `forge-ai-artifact-card-group`, which lists them as rows and collapses the extras
-- **Active state**: renders a ring when the artifact is the one currently being viewed
-- **Default icons**: a generic artifact glyph renders until you slot your own, so a card is never blank
-- **Themeable accent**: one custom property colors the active border and ring
+- `title-text` and `subtitle-text` each truncate to one line.
+- Slot an `icon` to replace the default artifact glyph.
+- For several results at once, place cards in a `forge-ai-artifact-card-group`.
 
 ## Active state
 
-The card does not decide when it is active — the consumer sets the `active` attribute. This keeps the component
-usable whether selection state lives in a store, a router, or nowhere at all. An active card takes the accent
-color on its border and outer ring, and its arrow hides, since there is nothing left to open.
+Set `active` on the card for the artifact currently being viewed. It gets an accent border and ring, and its arrow hides since there is nothing left to open. You control when a card is active.
 
 <Canvas of={AiArtifactCardStories.Active} />
 
 ## Collapsing on a second activation
 
-The card keeps emitting `forge-ai-artifact-card-open` while active, so a consumer can treat a second activation as
-"collapse" (for example, closing a canvas the card opened). When you do, set `action-label` so assistive technology
-hears what activation now does, and slot an `action-icon` that stays visible while active in place of the arrow.
+An active card still emits `forge-ai-artifact-card-open`, so you can treat a second activation as "collapse". Set `action-label` so assistive technology hears what activation now does, and slot an `action-icon`, which stays visible while active.
 
 <Canvas of={AiArtifactCardStories.CollapsibleAction} />
 
 ## Distinguishing card types
 
-Consumers commonly render more than one kind of artifact. Distinguish them with the icon and by leading the
-subtitle with the type ("Report · 4 charts", "Table · 1,284 rows") — the icon is decorative, so the subtitle is the
-only place the type reaches screen reader users:
+When you render more than one kind of artifact, lead the subtitle with the type ("Report · 4 charts"). The icon is decorative, so the subtitle is the only place the type reaches screen reader users.
 
 <Canvas of={AiArtifactCardStories.InTranscript} />
 
@@ -54,12 +42,6 @@ only place the type reaches screen reader users:
 
 ## Accessibility
 
-- The whole card is a single `<button>`, so its accessible name is composed from its text content; `action-label`
-  appends to that name when activation does something other than open
-- The icon and action glyph are decorative and marked `aria-hidden="true"`
-- The active card sets `aria-current="true"` on its button, so the state is announced; visually it is carried by the
-  added outer ring as well as the border color
-- Keyboard activation via Enter and Space comes from the native button; focus shows the Forge focus indicator on
-  keyboard focus only, not on mouse click
-- The card does not animate on mount, so consumers rendering a list of them do not replay motion on unrelated
-  state changes
+- The whole card is one native `<button>`. Its accessible name is the card text, with `action-label` appended when set.
+- The icon and action glyph are `aria-hidden`.
+- The active card sets `aria-current="true"`; visually it also gets the outer ring, not just a color change.

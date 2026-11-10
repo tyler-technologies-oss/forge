@@ -6,80 +6,42 @@ import * as AiStepsStories from './AiSteps.stories';
 
 <Title />
 
-The AI Steps component is an expandable timeline summarizing the steps an agent took while producing a response. Collapsed, it shows a step count and the first couple of step labels. Expanded, it lists each step as a row with a status marker, rendering a detail card for any step that carries a `detail`.
-
-This is a presentational primitive — it renders whatever `steps` it is given and knows nothing about tool calls. Labels and details are always supplied by the agent, never derived by the component or configured by the consumer, and are rendered as sanitized inline markdown so the agent controls its own emphasis.
+An expandable timeline of the steps an agent took to produce a response. Collapsed, it shows a step count and the first couple of labels. Expanded, it lists every step with a status marker, and a detail card for steps that have a `detail`. Use it to show your work without dumping every intermediate message.
 
 <Canvas of={AiStepsStories.Demo} />
 
+Pass `steps` as `{ label, detail?, status? }` objects. `status` is `pending`, `running`, or `complete` (the default). An empty `steps` array renders nothing.
+
 ## Running and complete
 
-While `running` is `true` the timeline is held open and the summary row is hidden, so the user can watch the agent work.
+While `running` is set, the timeline stays open and the summary is hidden so the user can watch progress.
 
 <Canvas of={AiStepsStories.Running} />
 
-When `running` flips back to `false` the timeline auto-collapses, leaving the summary row as the way back in. An element that mounts with `running` already `false` renders expanded instead, so a finished run read back from history is legible without interaction.
+When `running` turns off, the timeline collapses to its summary. An element that first renders with `running` off starts expanded, so a finished run is readable without interaction.
 
 <Canvas of={AiStepsStories.Complete} />
 
 ## Steps without detail
 
-Steps with no `detail` skip the detail card and render as just a marker and label.
+Steps with no `detail` render as just a marker and label.
 
 <Canvas of={AiStepsStories.NoDetail} />
 
-## No steps
+## Formatting
 
-An empty `steps` array renders nothing at all — no count, no summary row, no timeline. This is the state a real run starts in, since `renderOnStart` mounts the element before the agent has written its first label.
-
-## Formatting within a label
-
-`label` and `detail` are rendered as sanitized inline markdown, so the agent decides which part of its own step matters rather than the component or the consumer prescribing it.
-
-```ts
-const steps = [
-  { label: 'Matched **8,412** incidents' },
-  { label: '*Approximated* the ~~cached~~ district totals' },
-  { label: 'Filtered `incidents` by `crime_category`', detail: 'Leaving **412** rows.' }
-];
-```
-
-| Syntax        | Renders as       | Use it for                              |
-| ------------- | ---------------- | --------------------------------------- |
-| `` `value` `` | inline code chip | columns, tables, query fragments        |
-| `**value**`   | bold             | a figure or outcome worth pulling out   |
-| `*value*`     | italic           | hedging — approximations, assumptions   |
-| `~~value~~`   | strikethrough    | something skipped, stale, or superseded |
-| `[text](url)` | link             | a record the user can open              |
-
-Emphasis works at any position and any number of times per label, and it carries into the collapsed summary so a step reads the same open or closed.
-
-Three caveats:
-
-- **Escaping.** Literal `*`, `_` and `` ` `` characters need a backslash. A hand-written `label: 'Cost * quantity'` would otherwise start an emphasis run.
-- **Links** are forced to `target="_blank"` with `rel="noreferrer noopener"`, and unsafe protocols such as `javascript:` are stripped.
-- **Partial syntax stays literal.** While a label is still streaming in, an unclosed `**` renders as two asterisks rather than the component guessing at an emphasis the agent has not finished writing.
+`label` and `detail` are rendered as sanitized inline markdown: `` `code` ``, `**bold**`, `*italic*`, `~~strikethrough~~` and links. Escape literal `*`, `_` and backtick characters with a backslash. Unclosed syntax stays literal while text is still streaming. In the collapsed summary, links appear as plain text, and images or media from other origins render as links.
 
 <Canvas of={AiStepsStories.WithMarkdownLabels} />
 
 ## Streaming
 
-The story below works through its steps one at a time. Each step is announced with just its `label` at `status: 'running'`, waits there, then flips to `complete` and gains its `detail` — so the detail card under the label is the part that streams in. Each tick re-assigns the whole `steps` array, which is how an agent's partial JSON accumulates. The timeline stays expanded with no summary row while running, then auto-collapses once it finishes.
+Re-assign `steps` as new data arrives. This example adds each step's label first, then its detail once the step completes.
 
 <Canvas of={AiStepsStories.Streaming} />
 
-## Use as an agent tool
-
-Steps are agent-controlled rather than consumer-configured. The `forge-ai-tool-steps` element (from `@tylertech/forge-ai/tools`) maps a `displaySteps` tool call onto this primitive, deriving `running` from the tool call's own status. The `displaySteps` tool definition and the chat composition that drives it live in `@ai-foundry/chatbot`.
+To drive this from a model's tool call, see [`forge-ai-tool-steps`](?path=/docs/ai-components-tools-reasoning-tool-steps--docs).
 
 ## API
 
 <CustomArgTypes />
-
-## Accessibility
-
-The summary row is a real `<button>` with `aria-expanded` and `aria-controls` pointing at the timeline region, so the collapsed and expanded states are operable and announced correctly by assistive technology. The timeline itself carries `aria-hidden` while collapsed so its rows are not announced out of context.
-
-The summary button uses the Forge focus indicator and state layer, matching the treatment on `forge-ai-tool-call-indicator`, so keyboard focus is visible and themed rather than relying on the browser's default ring.
-
-The step count is written in lower case and uppercased with `text-transform`, so screen readers announce "3 steps" instead of spelling out `S-T-E-P-S` as an initialism.

@@ -6,23 +6,16 @@ import * as AiArtifactCardGroupStories from './AiArtifactCardGroup.stories';
 
 <Title />
 
-The AI Artifact Card Group presents several `forge-ai-artifact-card` elements as one list — for example, when an
-agent returns more than one result for a single request. Past a set count, the extra cards collapse behind a toggle.
+Lists several `forge-ai-artifact-card` elements as one container, for example when an agent returns more than one result for a request. Cards past `visible-count` (3 by default) collapse behind a toggle.
 
 <Canvas of={AiArtifactCardGroupStories.Demo} />
 
-## Features
+## Usage
 
-- **One container**: the group draws the border, corners, and dividers; cards inside it switch to a row style on
-  their own, with no extra attributes
-- **Collapsing**: cards past `visible-count` (3 by default) are hidden until the user expands the list
-- **Cards keep their API**: each row still emits `forge-ai-artifact-card-open`, so open handling is the same as for
-  a single card
-- **Translatable toggle**: both toggle labels are properties; `{count}` in `show-more-text` becomes the number of
-  collapsed cards
-- **Respects `hidden`**: a card you hide yourself stays hidden and is not counted; collapsing uses its own marker
-
-## When every card fits
+- Place only `forge-ai-artifact-card` elements in the group. They switch to a row style automatically, and each still emits `forge-ai-artifact-card-open`.
+- The toggle emits `forge-ai-artifact-card-group-toggle` with `{ expanded }`.
+- Customize the toggle text with `show-more-text` (`{count}` becomes the number of collapsed cards) and `show-less-text`.
+- Cards you set `hidden` on stay hidden and are not counted.
 
 With `visible-count` cards or fewer, no toggle renders.
 
@@ -30,7 +23,7 @@ With `visible-count` cards or fewer, no toggle renders.
 
 ## Active row
 
-Set `active` on the card for the result currently being viewed. In a group it shows as a light accent fill on the row.
+Set `active` on the card for the result currently being viewed. In a group it shows as a light accent fill.
 
 <Canvas of={AiArtifactCardGroupStories.ActiveRow} />
 
@@ -40,8 +33,6 @@ Set `active` on the card for the result currently being viewed. In a group it sh
 
 ## Accessibility
 
-- The group is exposed as a list and each card as a list item, so screen readers announce the number of visible
-  results; the toggle's label carries the count of collapsed ones
-- The toggle is a native button with `aria-expanded`
-- Collapsed cards are removed from layout, so they leave the tab order and the accessibility tree
-- Focus stays on the toggle after expanding or collapsing
+- The group is a list and each card a list item, so screen readers announce the number of visible results. The toggle label includes the number of collapsed ones.
+- The toggle is a native button with `aria-expanded`, and keeps focus after expanding or collapsing.
+- Collapsed cards are removed from the tab order and accessibility tree.

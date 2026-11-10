@@ -6,7 +6,9 @@ import * as AiAgentInfoStories from './AiAgentInfo.stories';
 
 <Title />
 
-Displays agent metadata including agent name, version, agent ID, and session ID. The agent ID and session ID fields include copy-to-clipboard functionality. Provide an `AgentInfo` object via the `agentInfo` property. Only populated fields will be displayed.
+A compact read-out of an agent's details. Use it to show users which agent and version they are talking to, with copy buttons for IDs that support requests may need.
+
+Pass an `AgentInfo` object to `agentInfo`. Only these fields render, and only when set: `name` (Agent name), `version`, `identifier` (Agent ID) and `threadId` (Session ID). The two ID fields include a copy-to-clipboard button.
 
 <Canvas of={AiAgentInfoStories.Demo} />
 

@@ -9,7 +9,7 @@ import { type ClientMessageAction, type MessageItem, type ToolDefinition } from 
 const component = 'forge-ai-message-thread';
 
 const meta = {
-  title: 'AI/Components/Message Thread',
+  title: 'AI/Components/Chat/Message Thread',
   component,
   argTypes: {
     enableReactions: {
@@ -27,7 +27,7 @@ const meta = {
     autoScroll: {
       control: { type: 'select' },
       options: ['off', 'on'],
-      description: 'Automatically emit scroll-request when content changes',
+      description: 'Automatically scroll to the latest content when it changes',
       defaultValue: 'on'
     }
   },

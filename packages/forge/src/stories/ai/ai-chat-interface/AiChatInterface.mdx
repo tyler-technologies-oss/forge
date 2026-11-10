@@ -6,7 +6,9 @@ import * as AiChatInterfaceStories from './AiChatInterface.stories';
 
 <Title />
 
-The AI Chat Interface provides a complete chat interface with header controls, message container, and prompt input. It automatically handles empty states and optional suggestions.
+The layout for a chat: a header, a scrolling message area, and a prompt. Use it as the frame you place messages and a `forge-ai-prompt` in.
+
+Messages go in the default slot. The `header`, `suggestions`, `attachments`, `prompt` and `disclaimer` slots take the matching components. Call `scrollToBottom()` to scroll the message area to the latest message.
 
 <Canvas of={AiChatInterfaceStories.Demo} />
 

@@ -8,7 +8,7 @@ import { type ClientMessageAction, type ClientMessageKind } from '@tylertech/for
 const component = 'forge-ai-client-message';
 
 const meta = {
-  title: 'AI/Components/Client Message',
+  title: 'AI/Components/Messages/Client Message',
   component,
   argTypes: {
     kind: {

@@ -1,10 +1,39 @@
 import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
 import * as AiFabStories from './AiFab.stories';
 
 <Meta of={AiFabStories} />
 
-# AI FAB
+<Title />
 
-The AI FAB is a specialized floating action button component built on top of Tyler Forge's FAB component, designed specifically for AI-themed interfaces. It provides enhanced styling with a signature gradient border and consistent integration with AI chat widgets.
+A floating action button with a gradient border that opens an AI assistant. It shows the AI icon by default and can expand to include a text label.
 
 <Canvas of={AiFabStories.Demo} />
+
+## Usage
+
+```html
+<forge-ai-fab label="Open support assistant"></forge-ai-fab>
+
+<forge-ai-fab extended>Ask AI</forge-ai-fab>
+```
+
+Set `extended` to show the default slot content next to the icon. Use the `icon` slot to replace the default AI icon.
+
+### Branding
+
+Override the `--forge-ai-fab-background`, `--forge-ai-fab-text-color` and `--forge-ai-fab-outline-color` custom properties to match your brand.
+
+<Canvas of={AiFabStories.Branded} />
+
+### Disabled
+
+<Canvas of={AiFabStories.Disabled} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+Use `label` (default: `"Open AI assistant"`) to set the button's `aria-label`.

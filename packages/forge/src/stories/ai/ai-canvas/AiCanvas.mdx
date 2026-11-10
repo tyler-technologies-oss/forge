@@ -1,0 +1,35 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiCanvasStories from './AiCanvas.stories';
+
+<Meta of={AiCanvasStories} />
+
+<Title />
+
+A side panel that presents content, such as a document or generated artifact, next to a conversation. It renders a titled header, an actions area, a close button, and a scrollable body. Your app decides when the canvas is shown and how it is laid out.
+
+<Canvas of={AiCanvasStories.Demo} />
+
+## Usage
+
+```html
+<forge-ai-canvas title-text="Quarterly summary">
+  <p>Panel content goes here.</p>
+</forge-ai-canvas>
+```
+
+The canvas fills the height of its container. Set `title-text` to give the panel a visible heading and an accessible name. To replace the heading with your own content, use the `title` slot.
+
+### Closing
+
+The close button fires `forge-ai-canvas-close`, which has no detail. The canvas does not hide itself, so remove or hide it in your handler.
+
+### Actions
+
+Add buttons to the `actions` slot to show them before the close button.
+
+<Canvas of={AiCanvasStories.WithActions} />
+
+## API
+
+<CustomArgTypes />

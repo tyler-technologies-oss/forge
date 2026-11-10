@@ -6,11 +6,13 @@ import * as AiDataTableStories from './AiDataTable.stories';
 
 <Title />
 
-A tool renderer that displays tabular data with filtering, pagination, and CSV export. It is exported from `@tylertech/forge-ai/tools` and takes a `toolCall` whose `args` hold the `title`, `headers`, `rows`, and an optional `maxNumberOfRows`.
+Renders tabular data returned by an agent tool, with filtering, pagination and CSV download. Use it as the renderer for a tool that returns a table.
+
+Import `@tylertech/forge-ai/tools`, then set `toolCall` on `forge-ai-tool-data-table`. `toolCall.args` holds the `title`, `headers`, `rows` and an optional `maxNumberOfRows` (default 10).
 
 <Canvas of={AiDataTableStories.Demo} />
 
-A filter input appears once there are more than five rows, and a paginator appears when the rows exceed the page size.
+A filter input appears with more than 5 rows, and a paginator appears when the rows exceed `maxNumberOfRows`.
 
 <Canvas of={AiDataTableStories.CustomPageSize} />
 

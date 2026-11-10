@@ -8,6 +8,7 @@ import '@tylertech/forge-ai/ai-file-picker';
 import { AiPromptVariant } from '@tylertech/forge-ai/ai-prompt';
 import { IconRegistry } from '@tylertech/forge/icon';
 import '@tylertech/forge/icon';
+import '@tylertech/forge/button';
 import { tylIconChevronDown, tylIconWebAlt } from '@tylertech/tyler-icons';
 
 IconRegistry.define([tylIconChevronDown, tylIconWebAlt]);
@@ -15,7 +16,7 @@ IconRegistry.define([tylIconChevronDown, tylIconWebAlt]);
 const component = 'forge-ai-prompt';
 
 const meta = {
-  title: 'AI/Components/Prompt',
+  title: 'AI/Components/Chat/Prompt',
   component,
   argTypes: {
     variant: {
@@ -73,14 +74,14 @@ const meta = {
         <forge-ai-file-picker slot="actions-start"></forge-ai-file-picker>
         ${args.showAdditionalAction
           ? html`
-              <forge-ai-prompt-button slot="actions-start">
+              <forge-button slot="actions-start" variant="outlined">
                 <forge-icon name="web_alt" slot="leading"></forge-icon>
                 Web search
-              </forge-ai-prompt-button>
-              <forge-ai-prompt-button slot="actions-start">
+              </forge-button>
+              <forge-button slot="actions-start" variant="outlined">
                 GPT-4
                 <forge-icon name="chevron_down" slot="trailing"></forge-icon>
-              </forge-ai-prompt-button>
+              </forge-button>
             `
           : ''}
         <forge-ai-voice-input slot="actions-end"></forge-ai-voice-input>

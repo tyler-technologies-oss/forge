@@ -6,10 +6,9 @@ import * as AiClientMessageStories from './AiClientMessage.stories';
 
 <Title />
 
-Renders a client-only status message - one that never goes to the agent - as either
-plain system-message text (`kind="text"`) or a Forge inline-message banner with a matching icon
-(`info` / `warning` / `error` / `success`). Used internally by `forge-ai-message-thread`; exported here
-mainly for isolated visual reference.
+A status message that comes from the app rather than the agent, such as "Switched to Research Assistant" or a session-expired notice. Use it in a conversation for notices that are not part of the agent's reply.
+
+Set `content`, and choose a `kind`. `text` renders plain system-message text, and `info`, `warning`, `error` and `success` render an inline-message banner with a matching icon. An optional `header` titles the banner, and `actions` adds buttons (`{ id, label, onClick }`).
 
 <Canvas of={AiClientMessageStories.Demo} />
 

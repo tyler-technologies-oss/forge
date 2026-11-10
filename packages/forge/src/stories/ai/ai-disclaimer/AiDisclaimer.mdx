@@ -6,33 +6,37 @@ import * as AiDisclaimerStories from './AiDisclaimer.stories';
 
 <Title />
 
-Displays terms of service, privacy policies, or other disclosures requiring user acknowledgment. Features optional icon, scrollable content, and pinned footer with action buttons.
+A panel for terms of service, privacy notices, or other disclosures that the user must accept before continuing. It shows scrollable content with an optional icon and a pinned footer with Agree and Disagree buttons.
 
 <Canvas of={AiDisclaimerStories.Demo} />
 
 ## Usage
 
-Use it to gate access to the AI assistant, for example inside a dialog or sidebar. Place content in the default slot, optionally provide an icon, and handle the agree/disagree events.
-
-```html
-<forge-ai-dialog open>
-  <forge-ai-disclaimer @forge-ai-disclaimer-agree="${handleAgree}" @forge-ai-disclaimer-disagree="${handleDisagree}">
-    <svg slot="icon" viewBox="0 0 24 24"><!-- icon path --></svg>
-    <h2>Terms of Service</h2>
-    <p>By using this AI assistant, you agree to our terms...</p>
-  </forge-ai-disclaimer>
-</forge-ai-dialog>
-```
-
-### Custom Button Text
+Place the disclosure content in the default slot and handle the agree and disagree events. It works well inside a dialog or sidebar to gate access to an assistant.
 
 ```html
 <forge-ai-disclaimer>
-  <span slot="disagree-button-text">Decline</span>
-  <span slot="agree-button-text">Accept</span>
-  <p>Content here...</p>
+  <svg slot="icon" viewBox="0 0 24 24"><!-- icon path --></svg>
+  <h2>Terms of Service</h2>
+  <p>By using this AI assistant, you agree to our terms...</p>
 </forge-ai-disclaimer>
 ```
+
+```js
+const disclaimer = document.querySelector('forge-ai-disclaimer');
+disclaimer.addEventListener('forge-ai-disclaimer-agree', () => {
+  /* grant access */
+});
+disclaimer.addEventListener('forge-ai-disclaimer-disagree', () => {
+  /* dismiss */
+});
+```
+
+### Custom button text
+
+Use the `agree-button-text` and `disagree-button-text` slots to replace the default labels.
+
+<Canvas of={AiDisclaimerStories.CustomButtonText} />
 
 ## API
 

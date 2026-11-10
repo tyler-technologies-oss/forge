@@ -1,0 +1,34 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as AiTooltipStories from './AiTooltip.stories';
+
+<Meta of={AiTooltipStories} />
+
+<Title />
+
+A short label that appears next to an element on hover or focus. Use it to name icon-only buttons or add a brief hint. It is built on [`forge-ai-overlay`](?path=/docs/ai-components-primitives-overlay--docs) and exported from `@tylertech/forge-ai/core`.
+
+<Canvas of={AiTooltipStories.Demo} />
+
+## Usage
+
+Give the anchor element an `id` and point the tooltip at it with `for`. Set the content with `text`, or slot in markup instead.
+
+```html
+<button id="save">Save</button>
+<forge-ai-tooltip for="save" text="Save your changes"></forge-ai-tooltip>
+```
+
+- `placement` is where the tooltip sits relative to the anchor. It defaults to `top`, and the tooltip flips or shifts to stay in view.
+- `trigger` is `hover` (default), `focus`, `click` or `manual`. The default also shows on keyboard focus, and Escape closes an open tooltip.
+- `delay` (default 500ms) and `hide-delay` (default 0) control how long the tooltip waits before showing and hiding.
+- Call `show()`, `hide()` or `toggle()`, or set `open`, to control it from code.
+- `forge-ai-tooltip-toggle` fires when the tooltip opens or closes, with `open`, `newState` and `oldState` in its detail.
+
+When closed, the tooltip content is hidden visually but remains available to screen readers.
+
+<Canvas of={AiTooltipStories.ClickTrigger} />
+
+## API
+
+<CustomArgTypes />
