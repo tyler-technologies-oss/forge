@@ -16,6 +16,10 @@
 
   @include core.button-theme;
 
+  &--outlined {
+    @include core.outlined;
+  }
+
   :is(forge-button[variant='outlined'], .forge-button--outlined) {
     @include core.outlined-button-theme;
   }

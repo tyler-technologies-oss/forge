@@ -49,12 +49,23 @@ Banners should be displayed at the top of the screen, below the app bar. The ban
 
 ## Theme
 
-Set `theme` to `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info` (the default), or `info-secondary` to match the message's severity.
+Leave `theme` unset for a neutral banner. Set it to `info`, `success`, `warning`, or `error` to match the message's meaning. `critical` is an alias for `error`. The `primary`, `secondary`, `tertiary`, and `info-secondary` themes are deprecated and render as the neutral default.
 
 <Example
   description="Every banner theme, ordered from most to least urgent."
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/banner/themed/themed.html"
 />
+
+## Variant
+
+The default `tonal` variant uses a tinted background. Set `variant="outlined"` for a lighter background with a rounded border in the same color, which suits a banner placed inside the page content rather than edge to edge below the app bar. Both variants work with every theme. For the CSS-only banner, add the `forge-banner--outlined` class.
+
+```html
+<forge-banner theme="warning" variant="outlined">
+  <forge-icon slot="icon" name="warning"></forge-icon>
+  <span>Scheduled maintenance starts at 10 PM.</span>
+</forge-banner>
+```
 
 ## With an icon and action
 

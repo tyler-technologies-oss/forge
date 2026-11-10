@@ -23,7 +23,17 @@
   background: #{token(background)};
   color: #{token(color)};
 
+  border-radius: #{token(shape)};
+
   opacity: 1;
+}
+
+// The outlined border is an inset ring so tonal and outlined banners are the same size
+@mixin outlined {
+  @include override(background, outlined-background);
+  @include override(shape, outlined-shape);
+
+  box-shadow: inset 0 0 0 #{token(outlined-border-width)} #{token(outlined-border-color)};
 }
 
 @mixin inner {

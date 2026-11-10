@@ -3,14 +3,20 @@
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
-  background: utils.module-val(banner, background, theme.variable(info-container)),
+  background: utils.module-val(banner, background, theme.variable(bg-neutral-default)),
   color: utils.module-val(banner, color, theme.variable(text-high)),
-  icon-color: utils.module-val(banner, icon-color, theme.variable(on-info-container)),
-  button-background: utils.module-val(banner, button-background, theme.variable(info-container-minimum)),
-  button-border-color: utils.module-val(banner, button-border-color, theme.variable(border-info-default)),
+  icon-color: utils.module-val(banner, icon-color, theme.variable(text-medium)),
+  button-background: utils.module-val(banner, button-background, theme.variable(surface-translucent)),
+  button-border-color: utils.module-val(banner, button-border-color, theme.variable(border-neutral-default)),
+  shape: utils.module-val(banner, shape, 0),
+  outlined-background: utils.module-val(banner, outlined-background, theme.variable(bg-neutral-subtle)),
+  outlined-border-width: utils.module-val(banner, outlined-border-width, border.variable(thin)),
+  outlined-border-color: utils.module-val(banner, outlined-border-color, theme.variable(border-neutral-subtle)),
+  outlined-shape: utils.module-val(banner, outlined-shape, shape.variable(medium)),
   gap: utils.module-val(banner, gap, spacing.variable(small)),
   padding-inline: utils.module-val(banner, padding-inline, spacing.variable(large)),
   padding-block: utils.module-val(banner, padding-block, spacing.variable(small)),

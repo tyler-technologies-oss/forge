@@ -8,7 +8,7 @@ import '@tylertech/forge/banner';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon';
-import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
+import { customElementStoryRenderer, generateCustomElementArgTypes, standaloneStoryParams } from '../../utils.js';
 import { BANNER_CONSTANTS } from '@tylertech/forge/banner';
 
 const component = 'forge-banner';
@@ -31,7 +31,7 @@ const meta = {
       tagName: component,
       exclude: ['canDismiss'],
       controls: {
-        theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'info-secondary'] }
+        theme: { control: 'select', options: ['default', 'info', 'success', 'warning', 'error'] }
       }
     })
   },
@@ -56,8 +56,8 @@ export const Themed: Story = {
       <forge-banner theme="error">Error</forge-banner>
       <forge-banner theme="warning">Warning</forge-banner>
       <forge-banner theme="success">Success</forge-banner>
-      <forge-banner theme="info">Info (default)</forge-banner>
-      <forge-banner theme="info-secondary">Info (secondary)</forge-banner>
+      <forge-banner theme="info">Info</forge-banner>
+      <forge-banner>Default</forge-banner>
     </div>
   `
 };

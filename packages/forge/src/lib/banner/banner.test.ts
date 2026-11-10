@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import type { IBannerComponent } from './banner.js';
-import { BannerTheme, BANNER_CONSTANTS } from './banner-constants.js';
+import { BannerTheme, BannerVariant, BANNER_CONSTANTS } from './banner-constants.js';
 import { frame, task } from '../core/utils/utils.js';
 
 import './banner.js';
@@ -63,7 +63,19 @@ describe('Banner', () => {
       const screen = render(html`<forge-banner>Test</forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;
 
-      const themes: BannerTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
+      const themes: BannerTheme[] = [
+        'default',
+        'info',
+        'success',
+        'warning',
+        'error',
+        'critical',
+        'primary',
+        'secondary',
+        'tertiary',
+        'info-secondary',
+        'danger'
+      ];
       for (const theme of themes) {
         el.theme = theme;
         await frame();
@@ -304,6 +316,64 @@ describe('Banner', () => {
 
       expect(el.theme).toBe(BANNER_CONSTANTS.defaults.THEME);
     });
+
+    it('should default the theme to default', async () => {
+      const screen = render(html`<forge-banner></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      expect(el.theme).toBe('default');
+    });
+
+    it('should use a different background for the info theme than the default', async () => {
+      expect(await getBannerBackground('info')).not.toBe(await getBannerBackground());
+    });
+
+    (['primary', 'secondary', 'tertiary', 'info-secondary'] as BannerTheme[]).forEach(theme => {
+      it(`should render the deprecated ${theme} theme as default`, async () => {
+        expect(await getBannerBackground(theme)).toBe(await getBannerBackground());
+      });
+    });
+
+    it('should default the variant to tonal', async () => {
+      const screen = render(html`<forge-banner></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      expect(el.variant).toBe('tonal');
+    });
+
+    it('should set the variant attribute when the variant property is set', async () => {
+      const screen = render(html`<forge-banner></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      el.variant = 'outlined';
+      expect(el.getAttribute(BANNER_CONSTANTS.attributes.VARIANT)).toBe('outlined');
+    });
+
+    it('should set the variant property when the variant attribute is set', async () => {
+      const screen = render(html`<forge-banner variant="outlined"></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      expect(el.variant).toBe('outlined');
+    });
+
+    it('should keep the same height in the tonal and outlined variants', async () => {
+      expect((await getBannerStyle(undefined, 'outlined')).height).toBe((await getBannerStyle()).height);
+    });
+
+    it('should draw an inset border ring only in the outlined variant', async () => {
+      expect((await getBannerStyle()).boxShadow).toBe('none');
+      expect((await getBannerStyle(undefined, 'outlined')).boxShadow).toContain('inset');
+    });
+
+    it('should use a lighter background in the outlined variant', async () => {
+      expect((await getBannerStyle('info', 'outlined')).backgroundColor).not.toBe((await getBannerStyle('info')).backgroundColor);
+    });
+
+    it('should tint the text with the theme color', async () => {
+      expect((await getBannerStyle('success')).color).not.toBe((await getBannerStyle()).color);
+    });
+
+    (['critical', 'danger'] as BannerTheme[]).forEach(theme => {
+      it(`should render the ${theme} theme as error`, async () => {
+        expect(await getBannerBackground(theme)).toBe(await getBannerBackground('error'));
+      });
+    });
   });
 
   describe('deprecated', () => {
@@ -330,3 +400,15 @@ describe('Banner', () => {
     });
   });
 });
+
+async function getBannerBackground(theme?: BannerTheme): Promise<string> {
+  return (await getBannerStyle(theme)).backgroundColor;
+}
+
+async function getBannerStyle(theme?: BannerTheme, variant?: BannerVariant): Promise<CSSStyleDeclaration> {
+  const screen = render(html`<forge-banner theme=${theme ?? nothing} variant=${variant ?? nothing}>Test</forge-banner>`);
+  const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+  await frame();
+  const root = el.shadowRoot?.querySelector('.forge-banner') as HTMLElement;
+  return getComputedStyle(root);
+}

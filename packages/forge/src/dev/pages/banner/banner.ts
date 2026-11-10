@@ -29,6 +29,12 @@ banner.addEventListener(BANNER_CONSTANTS.events.DISMISSED, evt => {
 const themeSelect = document.querySelector('#opt-theme') as ISelectComponent;
 themeSelect.addEventListener('change', ({ detail: theme }) => (banner.theme = theme));
 
+const variantSelect = document.querySelector('#opt-variant') as ISelectComponent;
+variantSelect.addEventListener('change', ({ detail: variant }) => {
+  banner.variant = variant;
+  document.querySelectorAll('.forge-banner').forEach(el => el.classList.toggle('forge-banner--outlined', variant === 'outlined'));
+});
+
 const dismissedToggle = document.querySelector('#opt-dismissed') as ISwitchComponent;
 dismissedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (banner.dismissed = selected));
 
