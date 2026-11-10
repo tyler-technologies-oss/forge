@@ -29,8 +29,9 @@ describe('FooterItem', () => {
   });
 
   it('should be accessible', async () => {
+    // Footer items use the inverse text color, so render them on the inverse surface the footer provides
     const screen = render(html`
-      <div role="list">
+      <div role="list" style="background: var(--forge-theme-surface-inverse, oklch(0.2411 0.0097 248.23));">
         <forge-footer-item><a href="#">Link</a></forge-footer-item>
       </div>
     `);
