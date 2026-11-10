@@ -5,8 +5,13 @@ const { thumbnail = false } = Astro.props;
 ---
 
 <ComponentHeader fit="cover" {thumbnail}>
-  <forge-page-state>
-    <forge-icon slot="graphic" name="search"></forge-icon>
+  <forge-page-state
+    class="[--forge-page-state-spacing:var(--forge-spacing-large)] [--forge-page-state-graphic-height:128px] [--forge-page-state-mobile-graphic-height:128px] [--forge-page-state-graphic-spacing:0]">
+    <img
+      slot="graphic"
+      src="https://cdn.forge.tylertech.com/v1/images/spot-hero/no-search-results-spot-hero.svg"
+      alt=""
+    />
     <span slot="title">No results found</span>
     <span slot="message">Try adjusting your search or filters.</span>
   </forge-page-state>

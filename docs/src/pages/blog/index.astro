@@ -8,7 +8,7 @@ const title = "Blog";
 const description = "News, release announcements, and articles from the Tyler Forge team.";
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} searchable={false}>
   <PageScaffold class="content-page">
     <ContentHeader slot="header" title={title} description={description} />
     <ComingSoon icon="newspaper_variant_outline" label="Blog" message="Blog posts are coming soon." />

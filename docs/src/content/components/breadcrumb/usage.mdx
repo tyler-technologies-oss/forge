@@ -1,0 +1,104 @@
+---
+title: Breadcrumb
+description: Breadcrumbs show the user's location within a hierarchy and provide links back to parent pages.
+status: stable
+source: core
+category: navigation
+storybookId: components-breadcrumb--demo
+---
+
+import Header from './header.astro';
+import Example from '../../../components/Example.astro';
+import Rules from '../../../components/Rules.astro';
+import Rule from '../../../components/Rule.astro';
+
+<Header />
+
+## Overview
+
+Breadcrumbs show where the user is within a hierarchy of pages and give them a quick way back to any parent level. They work as secondary navigation: they orient users who arrived deep in an app, such as from a search result or a shared link, and save them from retracing their steps.
+
+Breadcrumbs usually sit near the top of the page content, directly above the page title, and pair well with an app bar or page header.
+
+## Usage
+
+`forge-breadcrumb` lays out a trail of `forge-breadcrumb-item` children, each with an `href` to the page it represents. Mark the last item with `current` to show the page the user is on, set `home` on the first item to render a home icon in place of its text, and set `scroll-buttons` on the breadcrumb to keep a long trail on a single line. Wrap middle items in `forge-breadcrumb-overflow-menu` to collapse them into a popover. Use breadcrumbs for hierarchical navigation; to switch between peer views of the same content, use <a href={`${import.meta.env.BASE_URL}components/tabs/usage/`}>tabs</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Order items from the top of the hierarchy to the current page, with the current page last.",
+      "Use short labels that match the titles of the pages they link to.",
+      "Collapse middle items into an overflow menu when there are more than five items or too many for one line.",
+      "Place the overflow menu after the first item and keep one or two items after it.",
+      "Give the breadcrumb an accessible name with aria-label.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use breadcrumbs as the only navigation in an app.",
+      "Don't include the current page unless the page has no visible title or its title is unclear.",
+      "Don't use breadcrumbs to show steps in a process — use a stepper instead.",
+      "Don't nest child items more than one level deep.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Each `forge-breadcrumb-item` links to a page with `href`. The item marked `current` renders as non-interactive text.
+
+<Example
+  description="A breadcrumb with a home item, two linked parents, and the current page."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/demo/demo.html"
+/>
+
+## Overflow menu
+
+Slot items into `forge-breadcrumb-overflow-menu` to collapse them behind an overflow button that opens a popover.
+
+<Example
+  description="Middle items collapsed into an overflow menu between the home item and the last two items."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/overflow-menu/overflow-menu.html"
+/>
+
+## Child items
+
+Slot `forge-breadcrumb-item` elements into an item's `children` slot to show sibling pages in a popover menu. When child items are present, the item's button toggles the menu instead of navigating, so its own `href` is ignored. Child items are supported one level deep.
+
+<Example
+  description="A breadcrumb item that opens a menu of related pages."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/child-items/child-items.html"
+/>
+
+## With icons
+
+Slot an icon into an item's `start` slot to place it before the item's text. This works for items in the trail, in the overflow menu, and in an item's child items.
+
+<Example
+  description="Breadcrumb items with a leading folder icon."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/with-icons/with-icons.html"
+/>
+
+## Without links
+
+An item without an `href` renders as non-interactive text. Use this for levels of the hierarchy that don't have a page of their own.
+
+<Example
+  description="Breadcrumb items that have no links."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/without-links/without-links.html"
+/>
+
+## Scroll buttons
+
+Set `scroll-buttons` to keep the trail on a single line instead of wrapping. When the items overflow, previous and next buttons appear and the trail starts scrolled to the end so the current page stays visible.
+
+<Example
+  description="A long trail in a narrow container with scroll buttons."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/breadcrumb/scroll-buttons/scroll-buttons.html"
+/>

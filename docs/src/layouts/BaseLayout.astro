@@ -2,6 +2,8 @@
 import { ClientRouter } from "astro:transitions";
 import FoundryChatbot from "../components/FoundryChatbot.astro";
 import PendoAnalytics from "../components/PendoAnalytics.astro";
+import SearchDialog from "../components/SearchDialog.astro";
+import SearchField from "../components/SearchField.astro";
 import Sidenav from "../components/Sidenav.astro";
 import { getCollection } from "astro:content";
 import "../styles/global.css";
@@ -20,6 +22,11 @@ interface Props {
    * edge to edge.
    */
   flush?: boolean;
+  /**
+   * Includes the page in the Pagefind search index. Pages that never call
+   * BaseLayout (like redirect stubs) are left out automatically.
+   */
+  searchable?: boolean;
 }
 
 const {
@@ -27,7 +34,20 @@ const {
   description = "Forge Design System Documentation",
   wide = false,
   flush = false,
+  searchable = true,
 } = Astro.props;
+
+const SEARCH_SECTIONS: Record<string, string> = {
+  about: "About",
+  components: "Components",
+  designing: "Designing",
+  developing: "Developing",
+  faq: "FAQ",
+  icons: "Icons",
+  tokens: "Tokens",
+};
+
+const searchSection = SEARCH_SECTIONS[Astro.url.pathname.split("/")[1]] ?? "Docs";
 
 const components = await getCollection("components");
 ---
@@ -105,8 +125,55 @@ const components = await getCollection("components");
 
     <!-- Update sidenav state on SPA navigation -->
     <script>
+      import type { DialogComponent } from "@tylertech/forge/dialog";
+
+      const navQuery = window.matchMedia("(min-width: 60rem)");
+
       function getSidenav() {
-        return document.querySelector('[slot="left"][data-sidenav]');
+        return document.querySelector<HTMLElement>("[data-sidenav]");
+      }
+
+      function getNavDialog() {
+        return document.querySelector<DialogComponent>("[data-nav-dialog]");
+      }
+
+      // Below the `nav` breakpoint the persisted sidenav moves into the menu
+      // dialog, so there's only ever one copy of it (and of its ids and
+      // scripts). On SPA navigation Astro puts it back in the scaffold, so
+      // this runs again on every page load.
+      function placeSidenav() {
+        const sidenav = getSidenav();
+        const scaffold = document.querySelector("[data-app-scaffold]");
+        const dialogBody = document.querySelector("[data-nav-dialog-body]");
+        if (!sidenav || !scaffold || !dialogBody) return;
+
+        if (navQuery.matches) {
+          const dialog = getNavDialog();
+          if (dialog) dialog.open = false;
+          sidenav.slot = "left";
+          delete sidenav.dataset.placement;
+          if (sidenav.parentElement !== scaffold) scaffold.prepend(sidenav);
+          return;
+        }
+
+        sidenav.removeAttribute("slot");
+        sidenav.dataset.placement = "dialog";
+        if (sidenav.parentElement !== dialogBody) dialogBody.append(sidenav);
+      }
+
+      function bindNavMenu() {
+        const dialog = getNavDialog();
+        if (!dialog) return;
+
+        const setOpen = (open: boolean) => {
+          dialog.open = open;
+        };
+
+        document.querySelector("[data-nav-open]")?.addEventListener("click", () => setOpen(true));
+        document.querySelector("[data-nav-close]")?.addEventListener("click", () => setOpen(false));
+        dialog.addEventListener("click", (event) => {
+          if ((event.target as Element).closest("a[href]")) setOpen(false);
+        });
       }
 
       function getSidenavScrollEl() {
@@ -184,7 +251,22 @@ const components = await getCollection("components");
         });
       }
 
+      // Cmd/Ctrl+K still works while the menu is open, so close the menu
+      // rather than stacking search on top of it. The search dialog is
+      // persisted, so this only needs binding once.
+      document.querySelector("[data-search-dialog]")?.addEventListener("forge-dialog-open", () => {
+        const dialog = getNavDialog();
+        if (dialog) dialog.open = false;
+      });
+
+      navQuery.addEventListener("change", () => {
+        placeSidenav();
+        rebindExpansionPanels();
+      });
+
       document.addEventListener("astro:page-load", () => {
+        placeSidenav();
+        bindNavMenu();
         updateNavSelection();
         rebindExpansionPanels();
 
@@ -199,21 +281,60 @@ const components = await getCollection("components");
   </head>
   <body
     class="gradient-bg m-0 h-svh overflow-hidden text-high forge-typography opacity-0 transition-opacity duration-short-4 ease-standard [&.ready]:opacity-100">
-    <forge-scaffold>
+    <forge-scaffold data-app-scaffold>
+      <forge-toolbar
+        slot="header"
+        no-divider
+        class="nav:hidden [--forge-toolbar-background:transparent]">
+        <a
+          slot="start"
+          href={import.meta.env.BASE_URL}
+          aria-label="Forge Design System home"
+          class="flex h-full">
+          <img
+            src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
+            alt=""
+            class="block h-full max-w-[150px] dark:hidden"
+          />
+          <img
+            src="https://forge.tylerdev.io/forge/v3/forge-logo-full-white.svg"
+            alt=""
+            class="hidden h-full max-w-[150px] dark:block"
+          />
+        </a>
+        <div slot="end" class="flex items-center gap-xxsmall">
+          <SearchField variant="icon-button" />
+          <forge-icon-button
+            aria-label="Open navigation"
+            aria-haspopup="dialog"
+            data-nav-open>
+            <forge-icon name="menu"></forge-icon>
+          </forge-icon-button>
+        </div>
+      </forge-toolbar>
+
       <div
-        class="w-[250px] p-medium overflow-hidden"
+        class="w-[250px] p-medium overflow-hidden max-nav:[&[slot=left]]:hidden data-[placement=dialog]:size-full data-[placement=dialog]:box-border data-[placement=dialog]:px-large data-[placement=dialog]:pt-0"
         slot="left"
         data-sidenav
         transition:persist>
         <Sidenav components={components} />
       </div>
 
-      <main class="py-small pe-small overflow-hidden flex gap-medium items-start" slot="body">
+      <main
+        class="p-small max-nav:px-0 max-nav:pt-0 nav:ps-0 overflow-hidden flex gap-medium items-start"
+        slot="body"
+        data-pagefind-meta={`section:${searchSection}`}>
         <forge-card
           class:list={["body-card h-full min-w-0 flex-1", wide ? "max-w-wide" : "max-w-content", { flush }]}>
           <div class="h-full">
             <forge-scaffold>
-              <div slot="body" data-scroll-body data-flush={flush || undefined}>
+              <div
+                slot="body"
+                data-scroll-body
+                data-flush={flush || undefined}
+                data-pagefind-body={searchable || undefined}
+                data-pagefind-meta={`title:${title}`}>
                 <slot />
               </div>
             </forge-scaffold>
@@ -227,6 +348,28 @@ const components = await getCollection("components");
         )}
       </main>
     </forge-scaffold>
+
+    <forge-dialog
+      preset="top-sheet"
+      fullscreen-threshold="0"
+      label="Site navigation"
+      class="[--forge-dialog-width:100%] [--forge-dialog-height:100%] [--forge-dialog-shape:0] [--forge-dialog-background:transparent] [&::part(surface)]:block"
+      data-nav-dialog>
+      <forge-scaffold
+        class="h-full bg-linear-to-b from-(--forge-theme-primary-container-minimum)/75 to-(--forge-theme-primary-container)/75 backdrop-blur-xl">
+        <forge-toolbar
+          slot="header"
+          no-divider
+          class="[--forge-toolbar-background:transparent]">
+          <forge-icon-button slot="end" aria-label="Close navigation" data-nav-close>
+            <forge-icon name="close"></forge-icon>
+          </forge-icon-button>
+        </forge-toolbar>
+        <div slot="body" class="h-full overflow-hidden" data-nav-dialog-body></div>
+      </forge-scaffold>
+    </forge-dialog>
+
+    <SearchDialog />
 
     <FoundryChatbot />
 

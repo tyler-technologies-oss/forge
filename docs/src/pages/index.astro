@@ -79,7 +79,7 @@ const links: HomeLink[] = [
 const visibleLinks = links.filter(({ hidden }) => !hidden);
 ---
 
-<BaseLayout title="Home" flush>
+<BaseLayout title="Home" flush searchable={false}>
   <div class="flex flex-col min-h-full">
     <section
       class="h-[400px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">

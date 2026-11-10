@@ -222,8 +222,9 @@ if (!code && !blockUrl && Astro.slots.has("default")) {
     {
       blockUrl ? (
         <div
-          class="example-panel active tonal-card flex items-center justify-center"
-          data-panel="preview">
+          class="example-panel active tonal-card-p-0 flex items-center justify-center"
+          data-panel="preview"
+          data-pagefind-ignore>
           <iframe
             src={blockUrl}
             title={title ?? "Block preview"}
@@ -236,7 +237,8 @@ if (!code && !blockUrl && Astro.slots.has("default")) {
       ) : (
         <div
           class="example-panel active tonal-card flex flex-wrap items-center justify-center gap-medium"
-          data-panel="preview">
+          data-panel="preview"
+          data-pagefind-ignore>
           <slot />
         </div>
       )

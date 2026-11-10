@@ -88,6 +88,17 @@
       "docsPath": "components/banner.md"
     },
     {
+      "name": "breadcrumb",
+      "title": "Breadcrumb",
+      "description": "Breadcrumbs show the user's location within a hierarchy and provide links back to parent pages.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-breadcrumb--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/breadcrumb.md"
+    },
+    {
       "name": "busy-indicator",
       "title": "Busy Indicator",
       "description": "A busy indicator blocks interaction with a fullscreen or inline region while a longer-running process completes.",
@@ -209,6 +220,28 @@
       "docsPath": "components/color-picker.md"
     },
     {
+      "name": "confirmation-dialog",
+      "title": "Confirmation Dialog",
+      "description": "A confirmation dialog is a modal that presents a brief message or alert and asks the user to make a primary or secondary decision.",
+      "status": "stable",
+      "source": "core",
+      "category": "feedback",
+      "storybookId": "components-confirmation-dialog--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/confirmation-dialog.md"
+    },
+    {
+      "name": "count-card",
+      "title": "Count Card",
+      "description": "A count card displays a count or key metric with an icon and label, for dashboards and summary views.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-count-card--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/count-card.md"
+    },
+    {
       "name": "date-picker",
       "title": "Date Picker",
       "description": "A date input component with an integrated calendar popup for selecting single dates.",
@@ -295,6 +328,17 @@
       "storybookId": "components-file-picker--demo",
       "hasAccessibilityDocs": true,
       "docsPath": "components/file-picker.md"
+    },
+    {
+      "name": "footer",
+      "title": "Footer",
+      "description": "Footers display secondary links, legal text, and branding at the bottom of an app or page.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-footer--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/footer.md"
     },
     {
       "name": "icon",
@@ -406,6 +450,17 @@
       "docsPath": "components/list.md"
     },
     {
+      "name": "listbox",
+      "title": "Listbox",
+      "description": "Listboxes display a persistent list of options from which users select one or more.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-listbox--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/listbox.md"
+    },
+    {
       "name": "menu",
       "title": "Menu",
       "description": "Menus display a list of contextual actions or options in a popup, triggered from a button, icon, or list item.",
@@ -461,6 +516,28 @@
       "docsPath": "components/popover.md"
     },
     {
+      "name": "process-stepper",
+      "title": "Process Stepper",
+      "description": "Process steppers display progress through a multi-step process and let users move to a step.",
+      "status": "beta",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-process-stepper--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/process-stepper.md"
+    },
+    {
+      "name": "quantity-field",
+      "title": "Quantity Field",
+      "description": "The quantity field pairs a numeric input with increment and decrement buttons so users can adjust a quantity with a click or by typing.",
+      "status": "stable",
+      "source": "core",
+      "category": "forms",
+      "storybookId": "components-quantity-field--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/quantity-field.md"
+    },
+    {
       "name": "radio",
       "title": "Radio",
       "description": "The Forge Radio component is used to create a form input where only one out of a set of values should be selected.",
@@ -470,6 +547,17 @@
       "storybookId": "components-radio--demo",
       "hasAccessibilityDocs": true,
       "docsPath": "components/radio.md"
+    },
+    {
+      "name": "responsive-toolbar",
+      "title": "Responsive Toolbar",
+      "description": "The responsive toolbar switches between two sets of end actions, such as inline buttons and an overflow menu, depending on whether its title leaves enough room.",
+      "status": "stable",
+      "source": "core",
+      "category": "layout",
+      "storybookId": "components-responsive-toolbar--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/responsive-toolbar.md"
     },
     {
       "name": "scaffold",
@@ -712,6 +800,17 @@
       "storybookId": "components-tree--demo",
       "hasAccessibilityDocs": true,
       "docsPath": "components/tree.md"
+    },
+    {
+      "name": "user-profile",
+      "title": "User Profile",
+      "description": "The user profile shows a sign-in button when signed out, or an avatar that opens a popover with the user's details, links, and sign-out action when signed in.",
+      "status": "stable",
+      "source": "core",
+      "category": "navigation",
+      "storybookId": "components-user-profile--demo",
+      "hasAccessibilityDocs": true,
+      "docsPath": "components/user-profile.md"
     },
     {
       "name": "view-switcher",

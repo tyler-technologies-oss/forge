@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { buildNavigation } from "../config/navigation";
 import NavItem from "./NavItem.astro";
+import SearchField from "./SearchField.astro";
 
 interface Props {
   components: CollectionEntry<"components">[];
@@ -15,29 +16,37 @@ const navigation = buildNavigation(components);
 ---
 
 <forge-scaffold>
-  <forge-toolbar no-border slot="header">
-    <a
-      slot="start"
-      href={baseUrl}
-      aria-label="Forge Design System home"
-      class="flex h-full">
-      <img
-        src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
-        alt=""
-        class="block h-full max-h-[100px] max-w-[150px]"
-      />
-    </a>
-    <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
-      <forge-icon name="brightness_3"></forge-icon>
-      <forge-icon slot="on" name="brightness_7"></forge-icon>
-    </forge-icon-button>
-  </forge-toolbar>
-  <div slot="body">
+  <div slot="header" class="flex flex-col gap-small pb-small [[data-placement=dialog]_&]:hidden">
+    <forge-toolbar no-border>
+      <a
+        slot="start"
+        href={baseUrl}
+        aria-label="Forge Design System home"
+        class="flex h-full">
+        <img
+          src="https://forge.tylerdev.io/forge/v3/forge-logo-full-color.svg"
+          alt=""
+          class="block h-full max-h-[100px] max-w-[150px] dark:hidden"
+        />
+        <img
+          src="https://forge.tylerdev.io/forge/v3/forge-logo-full-white.svg"
+          alt=""
+          class="hidden h-full max-h-[100px] max-w-[150px] dark:block"
+        />
+      </a>
+      <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
+        <forge-icon name="brightness_3"></forge-icon>
+        <forge-icon slot="on" name="brightness_7"></forge-icon>
+      </forge-icon-button>
+    </forge-toolbar>
+    <SearchField />
+  </div>
+  <div slot="body" class="overflow-x-hidden">
     {
       navigation.map((section, index) => (
         <>
-          {index > 0 && <forge-divider class="my-xxxsmall" />}
-          <forge-list navlist>
+          {index > 0 && <forge-divider class="my-xxxsmall [[data-placement=dialog]_&]:hidden" />}
+          <forge-list navlist class="[[data-placement=dialog]_&]:not-first-of-type:mt-large">
             {section.items.map((item) => (
               <NavItem item={item} baseUrl={baseUrl} />
             ))}
@@ -46,30 +55,99 @@ const navigation = buildNavigation(components);
       ))
     }
   </div>
+  <forge-toolbar slot="footer" no-border class="hidden [[data-placement=dialog]_&]:block">
+    <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
+      <forge-icon name="brightness_3"></forge-icon>
+      <forge-icon slot="on" name="brightness_7"></forge-icon>
+    </forge-icon-button>
+  </forge-toolbar>
 </forge-scaffold>
 
 <script>
   import type { IconButtonComponent } from "@tylertech/forge/icon-button";
   import { getCurrentTheme, setTheme } from "../scripts/theme";
 
-  const button = document.querySelector<IconButtonComponent>("[data-theme-toggle]");
+  // One toggle sits in the desktop header, the other in the mobile menu footer.
+  const buttons = document.querySelectorAll<IconButtonComponent>("[data-theme-toggle]");
 
   const syncThemeToggle = (): void => {
-    if (button) {
+    buttons.forEach((button) => {
       button.pressed = getCurrentTheme() === "dark";
-    }
+    });
   };
 
   // The sidenav is `transition:persist`ed, so this only needs binding once. Observing the
-  // attribute keeps the button in sync with theme changes made elsewhere (OS preference, block viewer).
-  button?.addEventListener("forge-icon-button-toggle", ({ detail }) => {
-    setTheme(detail ? "dark" : "light");
+  // attribute keeps the buttons in sync with theme changes made elsewhere (OS preference, block viewer).
+  buttons.forEach((button) => {
+    button.addEventListener("forge-icon-button-toggle", ({ detail }) => {
+      setTheme(detail ? "dark" : "light");
+    });
   });
   new MutationObserver(syncThemeToggle).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ["data-forge-theme"],
   });
   syncThemeToggle();
+
+  const TOOLTIP_DELAY_MS = 300;
+  const tooltips = new WeakMap<Element, HTMLElement>();
+
+  const isTruncated = (label: HTMLElement): boolean => {
+    const container = label.assignedSlot?.parentElement;
+    if (!container || container.clientWidth === 0) {
+      return false;
+    }
+    const range = document.createRange();
+    range.selectNodeContents(label);
+    const textWidth = range.getBoundingClientRect().width;
+    return container.scrollWidth > container.clientWidth || textWidth > container.clientWidth + 1;
+  };
+
+  const syncTooltip = (item: Element): void => {
+    const label = item.querySelector<HTMLElement>(":scope > a, :scope > button");
+    const existing = tooltips.get(item);
+    if (!label || !isTruncated(label)) {
+      existing?.remove();
+      tooltips.delete(item);
+      return;
+    }
+    const text = label.textContent?.trim() ?? "";
+    if (existing) {
+      existing.textContent = text;
+      return;
+    }
+    const tooltip = document.createElement("forge-tooltip");
+    tooltip.placement = "right";
+    tooltip.delay = TOOLTIP_DELAY_MS;
+    tooltip.textContent = text;
+    tooltip.anchorElement = item.querySelector(":scope > forge-expansion-panel, :scope > [slot='additional-content']") ? label : (item as HTMLElement);
+    tooltips.set(item, tooltip);
+    item.closest("[slot='body']")?.append(tooltip);
+  };
+
+  const body = document.querySelector("[data-sidenav] [slot='body']");
+  const syncAllTooltips = (): void => {
+    body?.querySelectorAll("forge-list-item").forEach(syncTooltip);
+  };
+
+  if (body) {
+    new ResizeObserver(syncAllTooltips).observe(body);
+    body.addEventListener("forge-expansion-panel-animation-complete", syncAllTooltips);
+    new MutationObserver(() => requestAnimationFrame(syncAllTooltips)).observe(body, {
+      attributes: true,
+      attributeFilter: ["open"],
+      subtree: true,
+    });
+    body.addEventListener("mouseover", ({ target }) => {
+      const item = (target as Element).closest("forge-list-item");
+      if (item) {
+        syncTooltip(item);
+      }
+    });
+    Promise.all([customElements.whenDefined("forge-list-item"), document.fonts.ready]).then(() => {
+      requestAnimationFrame(syncAllTooltips);
+    });
+  }
 </script>
 
 <style lang="scss">
@@ -102,5 +180,10 @@ const navigation = buildNavigation(components);
 
   forge-list {
     @include nav-list-item();
+  }
+
+  // The mobile menu has more room per row, so give touch targets more height.
+  :global([data-placement="dialog"]) forge-list {
+    --forge-list-item-height: 40px;
   }
 </style>

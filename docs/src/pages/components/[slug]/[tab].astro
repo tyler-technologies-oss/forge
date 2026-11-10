@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { component, currentTab } = Astro.props;
-const { title, description, status, source, storybookId } = component.data;
+const { title, description, status, source, storybookId, playgroundHeight } = component.data;
 
 const api = getComponentApi(component.id);
 const { Content: MdxContent } = await render(component);
@@ -43,14 +43,15 @@ const AccessibilityContent = accessibilityEntry
   : undefined;
 
 function formatTabLabel(tab: string): string {
-  return tab.charAt(0).toUpperCase() + tab.slice(1);
+  return tab === "api" ? "API" : tab.charAt(0).toUpperCase() + tab.slice(1);
 }
 ---
 
 <BaseLayout
   title={`${title} - ${formatTabLabel(currentTab)}`}
   description={description}
-  wide={currentTab === "playground"}>
+  wide={currentTab === "playground"}
+  searchable={currentTab !== "playground"}>
   <div slot="aside" class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
     <TableOfContents client:load contentSelector="[data-tab='usage'] .mdx-content" />
   </div>
@@ -79,13 +80,21 @@ function formatTabLabel(tab: string): string {
     storybookId={storybookId}>
 
     <div slot="content" class="tab-panels relative">
-      <div class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
+      <div
+        class="tab-panel"
+        data-tab="usage"
+        class:list={[{ active: currentTab === "usage" }]}
+        data-pagefind-ignore={currentTab !== "usage" || undefined}>
         <article class="mdx-content text-high">
           <MdxContent components={mdxComponents} />
         </article>
       </div>
 
-      <div class="tab-panel" data-tab="api" class:list={[{ active: currentTab === "api" }]}>
+      <div
+        class="tab-panel"
+        data-tab="api"
+        class:list={[{ active: currentTab === "api" }]}
+        data-pagefind-ignore={currentTab !== "api" || undefined}>
         {api ? (
           <ApiReference api={api} source={source} />
         ) : (
@@ -94,16 +103,20 @@ function formatTabLabel(tab: string): string {
       </div>
 
       {storybookId && (
-        <div class="tab-panel" data-tab="playground" class:list={[{ active: currentTab === "playground" }]}>
+        <div class="tab-panel" data-tab="playground" class:list={[{ active: currentTab === "playground" }]} data-pagefind-ignore>
           <StorybookEmbed
             storyId={storybookId}
-            height="500px"
+            height={playgroundHeight}
             title={`${title} playground`}
           />
         </div>
       )}
 
-      <div class="tab-panel" data-tab="accessibility" class:list={[{ active: currentTab === "accessibility" }]}>
+      <div
+        class="tab-panel"
+        data-tab="accessibility"
+        class:list={[{ active: currentTab === "accessibility" }]}
+        data-pagefind-ignore={currentTab !== "accessibility" || undefined}>
         {AccessibilityContent ? (
           <article class="mdx-content text-high">
             <AccessibilityContent components={mdxComponents} />

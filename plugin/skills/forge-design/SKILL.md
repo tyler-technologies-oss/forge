@@ -104,6 +104,7 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Banner](references/components/banner.md) — Banners inform users of important, page-level information — such as errors, warnings, or success messages — without interrupting their workflow.
 - [Busy Indicator](references/components/busy-indicator.md) — A busy indicator blocks interaction with a fullscreen or inline region while a longer-running process completes.
 - [Circular Progress](references/components/circular-progress.md) — Circular progress indicators display progress along a circular track, for both determinate and indeterminate waits.
+- [Confirmation Dialog](references/components/confirmation-dialog.md) — A confirmation dialog is a modal that presents a brief message or alert and asks the user to make a primary or secondary decision.
 - [Dialog](references/components/dialog.md) — Dialogs are modal windows that interrupt the user to convey critical information or request a decision.
 - [Inline Message](references/components/inline-message.md) — Inline messages provide contextual feedback about a specific action or state, inside the component they refer to.
 - [Linear Progress](references/components/linear-progress.md) — Linear progress indicators display progress by animating along a horizontal track, for both determinate and indeterminate waits.
@@ -124,6 +125,8 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Date Range Picker](references/components/date-range-picker.md) — A date input component with an integrated calendar popup for selecting date ranges with separate "from" and "to" date values.
 - [File Picker](references/components/file-picker.md) — Lets a user upload one or more files via drag-and-drop or a system file chooser, with visual cues for valid and invalid drops.
 - [Label](references/components/label.md) — Labels attach an accessible caption and Forge typography to a specific set of label-aware Forge components, in place of a plain HTML label element.
+- [Listbox](references/components/listbox.md) — Listboxes display a persistent list of options from which users select one or more.
+- [Quantity Field](references/components/quantity-field.md) — The quantity field pairs a numeric input with increment and decrement buttons so users can adjust a quantity with a click or by typing.
 - [Radio](references/components/radio.md) — The Forge Radio component is used to create a form input where only one out of a set of values should be selected.
 - [Select](references/components/select.md) — Select components are comboboxes that present a list of options to users for single or multi-selection.
 - [Slider](references/components/slider.md) — Sliders allow users to make selections from a range of values.
@@ -136,8 +139,11 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Accordion](references/components/accordion.md) — Wraps a set of expansion panels so that opening one automatically closes any other open panel.
 - [App Layout](references/components/app-layout.md) — The app layout provides a complete application shell with an app bar, responsive navigation drawer, and a body area for page content.
 - [Card](references/components/card.md) — Cards group related content and actions about a single topic into one surface.
+- [Count Card](references/components/count-card.md) — A count card displays a count or key metric with an icon and label, for dashboards and summary views.
 - [Divider](references/components/divider.md) — A thin line that visually separates groups of related content, horizontally or vertically.
 - [Expansion Panel](references/components/expansion-panel.md) — Expansion panels show summary content and reveal additional detail on tap, for progressive disclosure inside a card, list, or table.
+- [Footer](references/components/footer.md) — Footers display secondary links, legal text, and branding at the bottom of an app or page.
+- [Responsive Toolbar](references/components/responsive-toolbar.md) — The responsive toolbar switches between two sets of end actions, such as inline buttons and an overflow menu, depending on whether its title leaves enough room.
 - [Scaffold](references/components/scaffold.md) — The scaffold lays out a header, scrollable body, and footer using named slots, for full pages or smaller sections alike.
 - [Split View](references/components/split-view.md) — Split view lays out two or more panels side by side, at least one of which a user can resize by dragging.
 - [Stack](references/components/stack.md) — A layout utility that manages spacing and alignment of its immediate children along a single vertical or horizontal axis.
@@ -148,12 +154,15 @@ Each reference below is a separate file under `references/`. Load only the ones 
 
 - [App Bar](references/components/app-bar.md) — App bars are headers used to display branding, navigation, and actions at the top of an application.
 - [App Launcher](references/components/app-launcher.md) — The app launcher lets a user switch between related apps, browse every available app, and jump to custom links, from the app bar's end slot.
+- [Breadcrumb](references/components/breadcrumb.md) — Breadcrumbs show the user's location within a hierarchy and provide links back to parent pages.
 - [Drawer](references/components/drawer.md) — Drawers support persistent navigation or supplementary content pinned to the left or right edge of the screen.
 - [Menu](references/components/menu.md) — Menus display a list of contextual actions or options in a popup, triggered from a button, icon, or list item.
 - [Paginator](references/components/paginator.md) — The paginator divides a logically sorted collection into pages, so users can navigate and mentally orient within the set.
+- [Process Stepper](references/components/process-stepper.md) — Process steppers display progress through a multi-step process and let users move to a step.
 - [Skip Link](references/components/skip-link.md) — Skip links let a user bypass repetitive content and navigate directly to a section of the page, meeting WCAG's bypass-blocks requirement.
 - [Stepper](references/components/stepper.md) — Steppers break a multi-step process into a numbered sequence, showing progress toward completion.
 - [Tabs](references/components/tabs.md) — Tabs organize and switch between groups of related content that sit at the same level of hierarchy.
+- [User Profile](references/components/user-profile.md) — The user profile shows a sign-in button when signed out, or an avatar that opens a popover with the user's details, links, and sign-out action when signed in.
 - [View Switcher](references/components/view-switcher.md) — A view switcher shows one of several views at a time, animating between them along a shared axis as the active index changes.
 
 #### Utilities
