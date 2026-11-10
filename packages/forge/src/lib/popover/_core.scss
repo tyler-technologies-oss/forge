@@ -13,7 +13,9 @@
   background: #{token(background)};
 
   border-radius: #{token(border-radius)};
-  box-shadow: #{token(box-shadow)};
+  box-shadow:
+    0 0 0 #{token(ring-width)} #{token(ring-color)},
+    #{token(box-shadow)};
   border-width: #{token(border-width)};
   border-style: #{token(border-style)};
   border-color: #{token(border-color)};

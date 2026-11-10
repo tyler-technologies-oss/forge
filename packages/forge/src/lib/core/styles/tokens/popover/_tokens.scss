@@ -18,6 +18,8 @@ $tokens: (
   background: utils.module-val(popover, background, theme.variable(surface-elevated)),
   border-radius: utils.module-val(popover, border-radius, shape.variable(medium)),
   box-shadow: utils.module-val(popover, box-shadow, theme.variable(surface-bright-shadow)),
+  ring-width: utils.module-val(popover, ring-width, 0),
+  ring-color: utils.module-val(popover, ring-color, transparent),
   border-width: utils.module-val(popover, border-width, 0),
   border-style: utils.module-val(popover, border-style, solid),
   border-color: utils.module-val(popover, border-color, theme.variable(outline-low)),
@@ -32,6 +34,7 @@ $tokens: (
   arrow-bottom-rotation: utils.module-val(popover, arrow-bottom-rotation, 315deg),
   arrow-left-rotation: utils.module-val(popover, arrow-left-rotation, 45deg),
   arrow-border-width: utils.module-val(popover, arrow-border-width, border.variable(thin)),
+  arrow-ring-width: utils.module-val(popover, arrow-ring-width, 0),
   // Animation
   animation-enter-duration: utils.module-val(popover, animation-enter-duration, animation.variable(duration-short3)),
   animation-enter-timing: utils.module-val(popover, animation-enter-timing, animation.variable(easing-decelerate)),
