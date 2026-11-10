@@ -177,7 +177,7 @@ const detailEl = document.getElementById('pattern-detail') as HTMLElement;
 const summaryEl = document.getElementById('pattern-detail-summary') as HTMLElement;
 let selectedId: string | null = null;
 
-const tagBadge = (pattern: IPattern): string => (pattern.tag ? `<forge-badge theme="tertiary">${pattern.tag}</forge-badge>` : '');
+const tagBadge = (pattern: IPattern): string => (pattern.tag ? `<forge-badge color="iris">${pattern.tag}</forge-badge>` : '');
 
 const renderList = () => {
   listEl.innerHTML = PATTERNS.map(

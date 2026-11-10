@@ -192,7 +192,7 @@ const meta = {
                 <h2 class="${TYPOGRAPHY.heading5}">Cory Ander</h2>
               </forge-stack>
               <forge-stack inline alignment="center" gap="8">
-                <forge-badge theme="secondary">Interview pending</forge-badge>
+                <forge-badge theme="warning">Interview pending</forge-badge>
                 <forge-badge theme="info">Internal</forge-badge>
               </forge-stack>
             </forge-stack>
@@ -346,10 +346,10 @@ const meta = {
                   <forge-stack gap="8">
                     <div class="label-value-grid">
                       <span class="${TYPOGRAPHY.label1}">Background check</span>
-                      <forge-badge theme="info-secondary">Initiated</forge-badge>
+                      <forge-badge>Initiated</forge-badge>
 
                       <span class="${TYPOGRAPHY.label1}">Reference check</span>
-                      <forge-badge theme="tertiary">Sent</forge-badge>
+                      <forge-badge theme="info">Sent</forge-badge>
                     </div>
                   </forge-stack>
                 </forge-stack>
