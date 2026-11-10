@@ -89,9 +89,9 @@ Every other form field keeps a visible label and doesn't use a placeholder.
 
 ## Disabled and readonly
 
-Set `disabled` to exclude the field from the form.
+Set `disabled` to exclude the field from the form. Set `readonly` on the `<input>` when people need to see or copy a value but not change it. A readonly field uses a lighter border, stays focusable, and is still submitted with the form.
 
-Example (A disabled field.): `get_forge_blocks(blockId: "components/text-field/disabled-and-readonly/disabled-and-readonly")`
+Example (A disabled field and a readonly field.): `get_forge_blocks(blockId: "components/text-field/disabled-and-readonly/disabled-and-readonly")`
 
 ## Accessibility
 

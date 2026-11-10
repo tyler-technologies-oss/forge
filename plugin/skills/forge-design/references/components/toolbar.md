@@ -39,6 +39,23 @@ Set `inverted` to move the toolbar's divider from the bottom edge to the top —
 
 Example (An inverted toolbar's divider sits on top instead of the bottom.): `get_forge_blocks(blockId: "components/toolbar/inverted/inverted")`
 
+## Background
+
+Inside a card, dialog, or popover, the toolbar's background is transparent so it always matches the surface it sits on. Anywhere else it uses `--forge-theme-surface-elevated`. To give one toolbar its own background, set `--forge-toolbar-background` on that toolbar.
+
+When a toolbar sticks to the top of content that scrolls under it, give it a translucent background and a blur so the content behind stays out of the way of the toolbar text:
+
+```css
+forge-toolbar.sticky-header {
+  position: sticky;
+  top: 0;
+  --forge-toolbar-background: var(--forge-theme-surface-translucent);
+  --forge-toolbar-backdrop-filter: blur(20px);
+}
+```
+
+You don't need this inside a `forge-scaffold`: its header and footer sit outside the scrolling body.
+
 ## Common patterns
 
 Page titles are `h2` styled with `forge-typography--heading4`, since the app bar title is the page's `h1`. Dialog titles also use `forge-typography--heading4`. Card and drawer titles use `forge-typography--heading3`.
