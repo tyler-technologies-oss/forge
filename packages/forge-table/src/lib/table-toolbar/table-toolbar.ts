@@ -85,7 +85,8 @@ export class TableToolbarElement extends LitElement {
     if (!this.isConnected) {
       return;
     }
-    if (changedProperties.has('table') && !changedProperties.has('tableElement')) {
+    const elementAssigned = changedProperties.has('tableElement') && this.tableElement !== null;
+    if (changedProperties.has('table') && !elementAssigned) {
       this.tableElement = this.#findTable();
     }
     if (changedProperties.has('tableElement') || this.tableElement !== this.#observedTable) {
@@ -103,7 +104,7 @@ export class TableToolbarElement extends LitElement {
           ${map(
             this.features,
             feature => html`
-              <forge-icon-button shape="squared">
+              <forge-icon-button shape="squared" @click=${() => this.#onFeatureClick(feature)}>
                 <forge-icon .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>
               </forge-icon-button>
               <forge-tooltip type="label" placement="top"> ${TABLE_TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
@@ -112,6 +113,12 @@ export class TableToolbarElement extends LitElement {
         </div>
       </forge-toolbar>
     `;
+  }
+
+  #onFeatureClick(feature: TableToolbarFeature): void {
+    if (feature === 'export') {
+      this.tableElement?.exportToCsv();
+    }
   }
 
   #getColumnOptions(): ColumnOption[] {

@@ -41,6 +41,7 @@ import { ColumnVisibilityController } from './controllers/column-visibility-cont
 import { formatAttribute } from './directives/format-attribute.js';
 import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
+import { buildCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderFilterField } from './templates/filter-fields.js';
@@ -72,6 +73,7 @@ export type { ColumnAggregation, ColumnDef, FilterType, FooterCallback, Row, Row
 @customElement('forge-data-table')
 export class DataTableElement<TData extends Row = Row> extends LitElement {
   #tableController = new TableController<DataTableFeatures, TData>(this);
+  #table: LitTable<DataTableFeatures, TData> | null = null;
   #tableContainerRef = createRef<HTMLElement>();
   #columnReorderController: ColumnReorderController<TData> | null = null;
   #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
@@ -449,6 +451,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         rowSelection: this._rowSelection
       }
     });
+    this.#table = table;
     const tableStyle = this.#getColumnSizeStyles(table);
 
     return html`
@@ -1147,6 +1150,20 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
    */
   public toggleColumnVisibility(columnId: string): void {
     this.#columnVisibilityController.toggleColumnVisibility(columnId);
+  }
+
+  /**
+   * Downloads the table's data as a CSV file.
+   *
+   * The file contains the visible columns and the rows as currently displayed, so it reflects the column order, hidden columns,
+   * column renames, sorting and filtering.
+   * @param {string} filename - The name of the downloaded file.
+   */
+  public exportToCsv(filename = DEFAULT_CSV_FILENAME): void {
+    if (!this.#table) {
+      return;
+    }
+    downloadCsv(buildCsv(this.#table), filename);
   }
 }
 

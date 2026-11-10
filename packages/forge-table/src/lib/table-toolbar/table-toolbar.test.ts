@@ -21,7 +21,7 @@ const TEST_DATA: TestData[] = [
 ];
 
 const TEST_COLUMNS: ColumnDef<TestData>[] = [
-  { id: 'id', header: 'ID', property: 'id', hideable: false },
+  { id: 'id', header: 'ID', property: 'id' },
   { id: 'name', header: 'Name', property: 'name' },
   { id: 'age', header: 'Age', property: 'age' }
 ];
@@ -31,15 +31,13 @@ interface Fixture {
   table: DataTableElement<TestData>;
 }
 
-async function createFixture(options: { rowSelection?: 'off' | 'single' | 'multiple'; withTable?: boolean } = {}): Promise<Fixture> {
-  const { rowSelection = 'multiple', withTable = true } = options;
+async function createFixture(options: { features?: string; withTable?: boolean } = {}): Promise<Fixture> {
+  const { features, withTable = true } = options;
   const screen = await render(html`
-    <forge-data-table-toolbar>
-      <span slot="start">People</span>
-      <forge-icon-button slot="selection-actions" aria-label="Delete selected"></forge-icon-button>
-      <forge-icon-button slot="end" aria-label="Export"></forge-icon-button>
+    <forge-data-table-toolbar features=${features ?? ''}>
+      <span slot="title">People</span>
     </forge-data-table-toolbar>
-    <forge-data-table .columns=${TEST_COLUMNS} .dataSource=${new DataSource<TestData>(() => TEST_DATA)} row-selection=${rowSelection}></forge-data-table>
+    <forge-data-table .columns=${TEST_COLUMNS} .dataSource=${new DataSource<TestData>(() => TEST_DATA)}></forge-data-table>
   `);
   const toolbar = screen.container.querySelector('forge-data-table-toolbar') as TableToolbarElement;
   const table = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
@@ -52,21 +50,12 @@ async function createFixture(options: { rowSelection?: 'off' | 'single' | 'multi
   return { toolbar, table };
 }
 
-async function openColumnsMenu(toolbar: TableToolbarElement): Promise<HTMLElement[]> {
-  await userEvent.click(toolbar.shadowRoot?.querySelector('#columns-button') as HTMLElement);
-  const getCheckboxes = (): HTMLElement[] => Array.from(toolbar.shadowRoot?.querySelectorAll<HTMLElement>('.column-list forge-checkbox') ?? []);
-  await vi.waitFor(() => expect(getCheckboxes().length).toBeGreaterThan(0));
-  return getCheckboxes();
+function getButtons(toolbar: TableToolbarElement): HTMLElement[] {
+  return Array.from(toolbar.shadowRoot?.querySelectorAll<HTMLElement>('forge-icon-button') ?? []);
 }
 
-function getSelectionSummary(toolbar: TableToolbarElement): string | undefined {
-  return toolbar.shadowRoot?.querySelector('.selection-summary')?.textContent?.trim();
-}
-
-async function selectRow(table: DataTableElement<TestData>, index: number): Promise<void> {
-  const checkbox = table.shadowRoot?.querySelectorAll('tbody forge-checkbox')[index] as HTMLElement;
-  checkbox.click();
-  await table.updateComplete;
+function getTooltipLabels(toolbar: TableToolbarElement): (string | undefined)[] {
+  return Array.from(toolbar.shadowRoot?.querySelectorAll('forge-tooltip') ?? []).map(tooltip => tooltip.textContent?.trim());
 }
 
 describe('TableToolbar', () => {
@@ -79,8 +68,6 @@ describe('TableToolbar', () => {
       await toolbar.updateComplete;
 
       expect(toolbar.tableElement).toBe(table);
-      await selectRow(table, 0);
-      await vi.waitFor(() => expect(getSelectionSummary(toolbar)).toBe('1 selected'));
     });
 
     it('should connect to the data table with the id given by the table attribute', async () => {
@@ -88,6 +75,18 @@ describe('TableToolbar', () => {
       table.id = 'people';
 
       toolbar.setAttribute('table', 'people');
+      await toolbar.updateComplete;
+
+      expect(toolbar.tableElement).toBe(table);
+    });
+
+    it('should connect to the data table when table is set in the markup before the first update', async () => {
+      const screen = await render(html`
+        <forge-data-table-toolbar table="people"></forge-data-table-toolbar>
+        <forge-data-table id="people" .columns=${TEST_COLUMNS}></forge-data-table>
+      `);
+      const toolbar = screen.container.querySelector('forge-data-table-toolbar') as TableToolbarElement;
+      const table = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
       await toolbar.updateComplete;
 
       expect(toolbar.tableElement).toBe(table);
@@ -103,137 +102,67 @@ describe('TableToolbar', () => {
     });
   });
 
-  it('should render the start and end slots', async () => {
-    const { toolbar } = await createFixture();
-
-    expect(toolbar.querySelector('[slot="start"]')?.textContent).toBe('People');
-    expect(toolbar.shadowRoot?.querySelector('slot[name="start"]')).not.toBeNull();
-    expect(toolbar.shadowRoot?.querySelector('slot[name="end"]')).not.toBeNull();
-  });
-
-  it('should render an accessible columns button', async () => {
-    const { toolbar } = await createFixture();
-
-    expect(toolbar.shadowRoot?.querySelector('#columns-button')?.getAttribute('aria-label')).toBe('Columns');
-  });
-
-  it('should use a custom label for the columns button', async () => {
-    const { toolbar } = await createFixture();
-
-    toolbar.columnsButtonLabel = 'Show columns';
-    await toolbar.updateComplete;
-
-    expect(toolbar.shadowRoot?.querySelector('#columns-button')?.getAttribute('aria-label')).toBe('Show columns');
-  });
-
-  it('should not render the columns button when hide-columns-button is set', async () => {
-    const { toolbar } = await createFixture();
-
-    toolbar.hideColumnsButton = true;
-    await toolbar.updateComplete;
-
-    expect(toolbar.shadowRoot?.querySelector('#columns-button')).toBeNull();
-  });
-
-  describe('column visibility', () => {
-    it('should list the hideable columns when the menu is opened', async () => {
+  describe('layout', () => {
+    it('should render the title slot', async () => {
       const { toolbar } = await createFixture();
 
-      const checkboxes = await openColumnsMenu(toolbar);
-
-      expect(checkboxes.map(c => c.textContent?.trim())).toEqual(['Name', 'Age']);
-      expect(checkboxes.every(c => (c as HTMLInputElement & { checked: boolean }).checked)).toBe(true);
-    });
-
-    it('should list no columns when no table is connected', async () => {
-      const { toolbar } = await createFixture({ withTable: false });
-
-      await userEvent.click(toolbar.shadowRoot?.querySelector('#columns-button') as HTMLElement);
-
-      expect(toolbar.shadowRoot?.querySelectorAll('.column-list forge-checkbox').length).toBe(0);
-    });
-
-    it('should hide the column when its checkbox is cleared', async () => {
-      const { toolbar, table } = await createFixture();
-      const checkboxes = await openColumnsMenu(toolbar);
-
-      checkboxes[0].click();
-
-      await vi.waitFor(() => expect(table.columnVisibility.name).toBe(false));
-    });
-
-    it('should show the column again when its checkbox is checked', async () => {
-      const { toolbar, table } = await createFixture();
-      const checkboxes = await openColumnsMenu(toolbar);
-
-      checkboxes[0].click();
-      await vi.waitFor(() => expect(table.columnVisibility.name).toBe(false));
-      checkboxes[0].click();
-
-      await vi.waitFor(() => expect(table.columnVisibility.name).toBe(true));
-    });
-
-    it('should reflect columns hidden elsewhere when the menu is opened', async () => {
-      const { toolbar, table } = await createFixture();
-      table.hideColumn('age');
-      await table.updateComplete;
-
-      const checkboxes = await openColumnsMenu(toolbar);
-
-      expect((checkboxes[1] as HTMLInputElement & { checked: boolean }).checked).toBe(false);
+      expect(toolbar.querySelector('[slot="title"]')?.textContent).toBe('People');
+      expect(toolbar.shadowRoot?.querySelector('slot[name="title"]')).not.toBeNull();
     });
   });
 
-  describe('row selection', () => {
-    it('should not show the selection summary when no rows are selected', async () => {
+  describe('features', () => {
+    it('should not render any buttons when no features are set', async () => {
       const { toolbar } = await createFixture();
 
-      expect(getSelectionSummary(toolbar)).toBeUndefined();
+      expect(getButtons(toolbar)).toHaveLength(0);
     });
 
-    it('should show the number of selected rows', async () => {
-      const { toolbar, table } = await createFixture();
+    it('should render a button for each feature in the features attribute', async () => {
+      const { toolbar } = await createFixture({ features: 'columns, export, search' });
 
-      await selectRow(table, 0);
-      await selectRow(table, 2);
-
-      await vi.waitFor(() => expect(getSelectionSummary(toolbar)).toBe('2 selected'));
+      expect(getButtons(toolbar)).toHaveLength(3);
+      expect(getTooltipLabels(toolbar)).toEqual(['Columns', 'Export', 'Search']);
     });
 
-    it('should show the selection actions only while rows are selected', async () => {
-      const { toolbar, table } = await createFixture();
-      expect(toolbar.shadowRoot?.querySelector('slot[name="selection-actions"]')).toBeNull();
+    it('should render a button for each feature in the features property', async () => {
+      const { toolbar } = await createFixture();
 
-      await selectRow(table, 0);
-
-      await vi.waitFor(() => expect(toolbar.shadowRoot?.querySelector('slot[name="selection-actions"]')).not.toBeNull());
-    });
-
-    it('should hide the selection summary when the selection is cleared', async () => {
-      const { toolbar, table } = await createFixture();
-      await selectRow(table, 0);
-      await vi.waitFor(() => expect(getSelectionSummary(toolbar)).toBe('1 selected'));
-
-      await selectRow(table, 0);
-
-      await vi.waitFor(() => expect(getSelectionSummary(toolbar)).toBeUndefined());
-    });
-
-    it('should stop tracking the previous table when a different table is connected', async () => {
-      const { toolbar, table } = await createFixture();
-      await selectRow(table, 0);
-      await vi.waitFor(() => expect(getSelectionSummary(toolbar)).toBe('1 selected'));
-
-      toolbar.tableElement = null;
+      toolbar.features = ['print', 'reload'];
       await toolbar.updateComplete;
-      await selectRow(table, 1);
 
-      expect(getSelectionSummary(toolbar)).toBeUndefined();
+      expect(getTooltipLabels(toolbar)).toEqual(['Print', 'Reload']);
+    });
+  });
+
+  describe('export', () => {
+    it('should export the connected table to CSV when the export button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'export' });
+      const exportToCsv = vi.spyOn(table, 'exportToCsv').mockImplementation(() => undefined);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(exportToCsv).toHaveBeenCalledOnce();
+    });
+
+    it('should not throw when the export button is clicked without a connected table', async () => {
+      const { toolbar } = await createFixture({ features: 'export', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+    });
+
+    it('should not export when a different feature button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'search,export' });
+      const exportToCsv = vi.spyOn(table, 'exportToCsv').mockImplementation(() => undefined);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(exportToCsv).not.toHaveBeenCalled();
     });
   });
 
   it('should be accessible', async () => {
-    const { toolbar } = await createFixture();
+    const { toolbar } = await createFixture({ features: 'export' });
 
     await expect(toolbar).toBeAccessible();
   });

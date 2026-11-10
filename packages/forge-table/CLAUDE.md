@@ -53,6 +53,10 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   applied because it takes a row, not a value. A footer cell that shows an aggregate (`ColumnDefMeta.aggregated`: `aggregate` set and `footer`
   not a string) also gets the column's `align` and format attribute, so it right-aligns and styles like the body cells; other footer cells
   are never aligned. Grouped-row aggregation (`columnGroupingFeature`) is not registered.
+  `csv-export.ts` backs `DataTableElement.exportToCsv(filename?)`: `buildCsv` writes the visible data columns in display order (start-pinned, center,
+  end-pinned, so it follows `columnOrder`, visibility and renames) and the rows of `getRowModel()` (sorted and filtered), and `downloadCsv` saves it with a
+  UTF-8 BOM. Columns without an accessor (selection, expander, actions) are skipped. Values are accessor values, so a `format` column exports its formatted text
+  and templates are ignored. The element keeps the table from its last render in `#table`, so nothing is exported before the first render.
   `filter/index.ts` is only side-effect imports that register `forge-select` and `forge-text-field`; it is
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.

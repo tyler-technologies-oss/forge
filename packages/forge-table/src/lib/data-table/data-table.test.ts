@@ -2883,6 +2883,174 @@ describe('DataTable', () => {
     });
   });
 
+  describe('CSV Export', () => {
+    async function exportCsv(harness: DataTableHarness, filename?: string): Promise<{ csv: string; filename: string }> {
+      let blob: Blob | undefined;
+      let downloadName = '';
+      const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockImplementation(value => {
+        blob = value as Blob;
+        return 'blob:test';
+      });
+      const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+      const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+        downloadName = this.download;
+      });
+
+      try {
+        harness.element.exportToCsv(filename);
+      } finally {
+        createObjectURL.mockRestore();
+        revokeObjectURL.mockRestore();
+        click.mockRestore();
+      }
+
+      const text = (await blob?.text()) ?? '';
+      return { csv: text.replace(/^\uFEFF/, ''), filename: downloadName };
+    }
+
+    const lines = (csv: string): string[] => csv.split('\r\n');
+
+    it('should export a header row and a row for each item', async () => {
+      const harness = await createFixture();
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)).toEqual(['ID,Name,Age,Email', '1,Alice,30,alice@example.com', '2,Bob,25,bob@example.com', '3,Charlie,35,charlie@example.com']);
+    });
+
+    it('should use the default filename when none is provided', async () => {
+      const harness = await createFixture();
+
+      const { filename } = await exportCsv(harness);
+
+      expect(filename).toBe('data-table.csv');
+    });
+
+    it('should use the provided filename', async () => {
+      const harness = await createFixture();
+
+      const { filename } = await exportCsv(harness, 'people.csv');
+
+      expect(filename).toBe('people.csv');
+    });
+
+    it('should export the rows in their sorted order', async () => {
+      const harness = await createFixture({ sortable: true });
+      await harness.clickHeaderCell(2);
+      const displayedNames = harness.bodyRows.map(row => row.querySelectorAll('td')[1].textContent?.trim());
+
+      const { csv } = await exportCsv(harness);
+
+      expect(displayedNames).not.toEqual(TEST_DATA.map(item => item.name));
+      expect(
+        lines(csv)
+          .slice(1)
+          .map(line => line.split(',')[1])
+      ).toEqual(displayedNames);
+    });
+
+    it('should only export rows that match the filters', async () => {
+      const harness = await createFixture({ filterable: true });
+      await harness.typeIntoFilter(1, 'bob');
+      await settle(harness.element);
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)).toEqual(['ID,Name,Age,Email', '2,Bob,25,bob@example.com']);
+    });
+
+    it('should export the columns in their reordered order', async () => {
+      const harness = await createFixture({ reorderable: true });
+      harness.element.columnOrder = ['email', 'name', 'id', 'age'];
+      await settle(harness.element);
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[0]).toBe('Email,Name,ID,Age');
+    });
+
+    it('should not export hidden columns', async () => {
+      const harness = await createFixture();
+      harness.element.hideColumn('age');
+      await settle(harness.element);
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[0]).toBe('ID,Name,Email');
+    });
+
+    it('should export pinned columns in the order they are displayed', async () => {
+      const harness = await createFixture({
+        columns: [
+          { id: 'id', header: 'ID', property: 'id' },
+          { id: 'name', header: 'Name', property: 'name', pin: 'end' },
+          { id: 'age', header: 'Age', property: 'age', pin: 'start' }
+        ]
+      });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[0]).toBe('Age,ID,Name');
+    });
+
+    it('should use renamed column headers', async () => {
+      const harness = await createFixture({ columns: [{ id: 'name', header: 'Name', property: 'name', renamable: true }] });
+      await chooseMenuAction(harness, 'name', 'Rename');
+      const input = harness.shadowRoot.querySelector<HTMLInputElement>('.rename-input') as HTMLInputElement;
+      input.value = 'Full name';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, composed: true }));
+      await settle(harness.element);
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[0]).toBe('Full name');
+    });
+
+    it('should not export the selection column', async () => {
+      const harness = await createFixture({ rowSelection: 'multiple' });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[0]).toBe('ID,Name,Age,Email');
+    });
+
+    it('should export formatted values for columns with a formatter', async () => {
+      const harness = await createFixture({
+        columns: [
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'age', header: 'Age', property: 'age', format: new NumberFormatter({ minimumFractionDigits: 2 }) }
+        ]
+      });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)[1]).toBe('Alice,30.00');
+    });
+
+    it('should quote values that contain delimiters, quotes or line breaks', async () => {
+      const harness = await createFixture({
+        columns: [{ id: 'name', header: 'Name', property: 'name' }],
+        data: [
+          { id: 1, name: 'Smith, Alice', age: 30, email: '' },
+          { id: 2, name: 'Say "hi"', age: 25, email: '' },
+          { id: 3, name: 'Two\nlines', age: 35, email: '' }
+        ]
+      });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)).toEqual(['Name', '"Smith, Alice"', '"Say ""hi"""', '"Two\nlines"']);
+    });
+
+    it('should export only the header row when there is no data', async () => {
+      const harness = await createFixture({ data: [] });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(csv).toBe('ID,Name,Age,Email');
+    });
+  });
+
   describe('Edge Cases', () => {
     it('should handle empty data array', async () => {
       const harness = await createFixture({ data: [] });
