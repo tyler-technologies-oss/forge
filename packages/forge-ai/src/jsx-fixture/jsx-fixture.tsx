@@ -26,10 +26,9 @@ export function ValidUsage(): ReactElement {
           return void value;
         }}
         onforge-ai-prompt-cancel={() => undefined}>
-        <span slot="actions">Actions</span>
+        <span slot="actions-end">Actions</span>
       </forge-ai-prompt>
       <forge-ai-message-thread messageItems={messages} enableReactions onforge-ai-message-thread-copy={event => void event.detail} />
-      <forge-ai-button disabled>Label</forge-ai-button>
       <forge-ai-sidebar
         open
         onforge-ai-sidebar-close={event => void event.type}
@@ -37,7 +36,6 @@ export function ValidUsage(): ReactElement {
       />
       <forge-ai-chat-header onforge-ai-chat-header-agent-change={event => void event.detail.previousAgentId} />
       <forge-ai-paginator onforge-ai-paginator-page-change={event => void (event.detail.currentPage satisfies number)} />
-      <forge-ai-prompt-button disabled>Label</forge-ai-prompt-button>
     </div>
   );
 }

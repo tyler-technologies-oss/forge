@@ -77,6 +77,9 @@ const SCROLL_THRESHOLD = 100;
  * @event {CustomEvent<ForgeAiMessageThreadResendEventData>} forge-ai-message-thread-resend - Fired when user clicks resend on a message
  * @event {CustomEvent<ForgeAiMessageThreadThumbsEventData>} forge-ai-message-thread-thumbs-up - Fired when user gives thumbs up
  * @event {CustomEvent<ForgeAiMessageThreadThumbsEventData>} forge-ai-message-thread-thumbs-down - Fired when user gives thumbs down
+ * @event {CustomEvent<ForgeAiMessageThreadCopyEventData>} forge-ai-message-thread-user-copy - Fired when user clicks copy on a user message
+ * @event {CustomEvent<ForgeAiMessageThreadResendEventData>} forge-ai-message-thread-user-resend - Fired when user clicks resend on a user message
+ * @event {CustomEvent<ForgeAiMessageThreadEditEventData>} forge-ai-message-thread-user-edit - Fired when user edits a user message
  */
 @customElement(AiMessageThreadComponentTagName)
 export class AiMessageThreadComponent extends LitElement {

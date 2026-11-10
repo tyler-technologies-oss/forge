@@ -56,7 +56,8 @@ export const AiPromptComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-p
 /**
  * @tag forge-ai-prompt
  *
- * @slot actions - Slot for action components that are hidden in inline mode (voice input, file picker, model selectors, web search, etc.)
+ * @slot actions-start - Action components at the start of the actions row, hidden in inline mode (file picker, model selectors, web search, etc.)
+ * @slot actions-end - Action components at the end of the actions row, hidden in inline mode (voice input, etc.)
  *
  * @state inline - The prompt is in inline layout mode with actions hidden.
  * @state stacked - The prompt is in stacked layout mode with actions displayed below the input.

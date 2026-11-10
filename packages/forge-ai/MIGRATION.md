@@ -3,9 +3,10 @@
 ## TL;DR
 
 - `@tylertech/forge-ai` is now presentational primitives only and lives in the Forge monorepo (`packages/forge-ai`). The package name is unchanged.
-- The chat composition layer (chatbot, adapters, runner, floating/sidebar/launcher form factors) is removed. Use `@ai-foundry/chatbot`.
+- The chat composition layer (chatbot, adapters, runner, floating/sidebar/launcher form factors) is removed. Composition is now the consumer's responsibility; build it from these primitives.
 - `forge-ai-threads` and `forge-ai-embedded-chat` are removed.
-- `forge-ai-chatbot-tool-call` is now `forge-ai-tool-call`, and `forge-prompt-button` is now `forge-ai-prompt-button`. The paginator event `page-change` is now `forge-ai-paginator-page-change`, and the `toggle` event on `forge-ai-reasoning-header` is now `forge-ai-reasoning-header-toggle` (fixing reasoning headers closing parent dialogs).
+- `forge-ai-button`, `forge-ai-icon-button`, `forge-prompt-button` and `forge-ai-confirmation-prompt` are removed (see [Removed: unused elements](#removed-unused-elements)).
+- `forge-ai-chatbot-tool-call` is now `forge-ai-tool-call`. The paginator event `page-change` is now `forge-ai-paginator-page-change`, and the `toggle` event on `forge-ai-reasoning-header` is now `forge-ai-reasoning-header-toggle` (fixing reasoning headers closing parent dialogs).
 - New subpaths: `/types`, `/ai-tool-call`, and `/jsx`. Many types moved to `/types`.
 - `@ag-ui/client`, `@ag-ui/core`, and `uuid` are no longer dependencies.
 - `@tylertech/forge-ai-react` is discontinued. Use React 19 with the `/jsx` typings.
@@ -17,7 +18,7 @@ The source for `@tylertech/forge-ai` now lives in the [tyler-technologies-oss/fo
 
 ## Removed: composition components
 
-The chat composition layer (engine, adapters, runner, form-factor shells) is no longer part of this package. Use `@ai-foundry/chatbot`, which composes the primitives that remain here.
+The chat composition layer (engine, adapters, runner, form-factor shells) is no longer part of this package. Composition is now the consumer's responsibility; build it from the primitives that remain here.
 
 | Removed tag                 | Removed class                                                     |
 | --------------------------- | ----------------------------------------------------------------- |
@@ -94,9 +95,18 @@ Notes: rich values (arrays, objects) are passed as properties by React 19, so `m
 - `@tylertech/forge-ai/utils` now exports `generateUniqueId`, `toggleState`, `formatRelativeTime`, and `MarkdownStreamController` in addition to the existing markdown, storage, CSV, and controller utilities.
 - `@tylertech/forge-ai/core` now exports the overlay, popover, and tooltip components alongside `DragController` and `ResizeController`.
 
-Removed subpaths: `@tylertech/forge-ai/ai-chatbot`, `/ai-chatbot-launcher`, `/ai-floating-chat`, `/ai-sidebar-chat`, `/ai-threads`, `/ai-embedded-chat`.
+Removed subpaths: `@tylertech/forge-ai/ai-chatbot`, `/ai-chatbot-launcher`, `/ai-floating-chat`, `/ai-sidebar-chat`, `/ai-threads`, `/ai-embedded-chat`, `/ai-button`, `/ai-icon-button`, `/ai-confirmation-prompt`, `/ai-prompt/prompt-button`. `PromptButtonComponent` and `PromptButtonComponentTagName` are no longer exported from `/ai-prompt`.
 
 Importing `@tylertech/forge-ai/core` registers `forge-ai-overlay`, `forge-ai-popover`, and `forge-ai-tooltip` as a side effect.
+
+## Removed: unused elements
+
+| Removed tag                    | Removed class                                                           | Replacement                                 |
+| ------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------- |
+| `forge-ai-button`              | `AiButtonComponent`, `AiButtonComponentTagName`                         | `forge-button` from `@tylertech/forge`      |
+| `forge-ai-icon-button`         | `AiIconButtonComponent`, `AiIconButtonComponentTagName`                 | `forge-icon-button` from `@tylertech/forge` |
+| `forge-prompt-button`          | `PromptButtonComponent`, `PromptButtonComponentTagName`                 | `forge-button` from `@tylertech/forge`      |
+| `forge-ai-confirmation-prompt` | `AiConfirmationPromptComponent`, `AiConfirmationPromptComponentTagName` | None                                        |
 
 ## Renamed
 
@@ -107,13 +117,12 @@ Elements, classes, and events:
 | `<forge-ai-chatbot-tool-call>`                  | `<forge-ai-tool-call>`             |
 | `AiChatbotToolCallComponent`                    | `AiToolCallComponent`              |
 | `AiChatbotToolCallComponentTagName`             | `AiToolCallComponentTagName`       |
-| `<forge-prompt-button>`                         | `<forge-ai-prompt-button>`         |
 | `page-change` event on `<forge-ai-paginator>`   | `forge-ai-paginator-page-change`   |
 | `toggle` event on `<forge-ai-reasoning-header>` | `forge-ai-reasoning-header-toggle` |
 
 The `toggle` event on `forge-ai-reasoning-header` used the name of the native popover `toggle` event; it bubbled to ancestor popovers and closed them (see [Fixed](#fixed)). Its detail is unchanged (`{ expanded }`, now typed as `ForgeAiReasoningHeaderToggleEventData`). Update `@toggle` listeners on the header to `@forge-ai-reasoning-header-toggle`. `forge-ai-reasoning` and `forge-ai-chain-of-thought` already listen for the new name.
 
-The paginator event detail is unchanged (`{ currentPage, previousPage }`) and is now typed as `ForgeAiPaginatorPageChangeEventData`. Update `@page-change` listeners to `@forge-ai-paginator-page-change`. `forge-ai-prompt-button` is registered by importing `@tylertech/forge-ai/ai-prompt` (it is also still available at `@tylertech/forge-ai/ai-prompt/prompt-button`).
+The paginator event detail is unchanged (`{ currentPage, previousPage }`) and is now typed as `ForgeAiPaginatorPageChangeEventData`. Update `@page-change` listeners to `@forge-ai-paginator-page-change`.
 
 Moved symbols:
 
@@ -129,7 +138,7 @@ Moved symbols:
 | `MarkdownStreamController`                                                                                                                                                                                                                                                                                                                  | `@tylertech/forge-ai/ai-chatbot`        | `@tylertech/forge-ai/utils`                                            |
 | `renderMarkdown`, `renderInlineMarkdown`                                                                                                                                                                                                                                                                                                    | `@tylertech/forge-ai/ai-chatbot`        | `@tylertech/forge-ai/utils`                                            |
 
-For composition hosts (the new `@ai-foundry/chatbot`), these canvas host helpers are now public from `@tylertech/forge-ai/ai-tool-call`: `toolCanvasHostContext`, `ToolCanvasHostState`, `createToolCanvas`, and the `resolveToolCanvas*` functions.
+For composition hosts, these canvas host helpers are now public from `@tylertech/forge-ai/ai-tool-call`: `toolCanvasHostContext`, `ToolCanvasHostState`, `createToolCanvas`, and the `resolveToolCanvas*` functions.
 
 ## Changed defaults
 
