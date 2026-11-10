@@ -20,6 +20,7 @@ import type {
 import './field.js';
 
 const READONLY_TEST_COLOR = 'rgb(1, 2, 3)';
+const TRANSPARENT = 'rgba(0, 0, 0, 0)';
 const TONAL_TEST_COLOR = 'rgb(4, 5, 6)';
 const TONAL_HOVER_TEST_COLOR = 'rgb(7, 8, 9)';
 
@@ -568,6 +569,24 @@ describe('Field', () => {
   });
 
   describe('tonal', () => {
+    it('should not show a border by default', async () => {
+      const harness = await createFixture({ variant: 'tonal' });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).toBe(TRANSPARENT);
+    });
+
+    it('should show a border when invalid', async () => {
+      const harness = await createFixture({ variant: 'tonal', invalid: true });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).not.toBe(TRANSPARENT);
+    });
+
+    it('should show a border with the warning theme', async () => {
+      const harness = await createFixture({ variant: 'tonal', theme: 'warning' });
+      harness.disableSurfaceAnimation();
+      expect(harness.outlineColor).not.toBe(TRANSPARENT);
+    });
+
     it('should not change the background on hover', async () => {
       const harness = await createFixture({ variant: 'tonal' });
       harness.element.style.setProperty('--forge-field-surface-animation-duration', '0s');
@@ -748,6 +767,10 @@ class FieldHarness extends TestHarness<IFieldComponent> {
 
   public get outlineColor(): string {
     return getComputedStyle(getShadowElement(this.element, '.outline')).outlineColor;
+  }
+
+  public disableSurfaceAnimation(): void {
+    this.element.style.setProperty('--forge-field-surface-animation-duration', '0s');
   }
 
   public useReadonlyTestColor(): void {

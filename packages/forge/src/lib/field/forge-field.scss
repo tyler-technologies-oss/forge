@@ -329,11 +329,12 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
   .forge-field--warning:not(.forge-field--invalid, :has(#{$_input-selector}:invalid)) {
     outline-color: #{theme.variable(border-warning-strongest)};
 
-    &:hover:not(:has(#{$_input-selector}:disabled)) {
+    &:not(.forge-field--tonal):hover:not(:has(#{$_input-selector}:disabled)) {
       outline-color: #{theme.variable(on-warning-container)};
     }
 
     &.forge-field--tonal {
+      outline-width: #{token(outline-width)};
       background: #{theme.variable(control-bg-tonal-warning)};
     }
   }
@@ -345,7 +346,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     &:has(#{$_input-selector}:invalid) {
       outline-color: #{theme.variable(border-error-strongest)};
 
-      &:hover:not(:has(#{$_input-selector}:disabled)) {
+      &:not(.forge-field--tonal):hover:not(:has(#{$_input-selector}:disabled)) {
         outline-color: #{theme.variable(on-error-container)};
       }
 
@@ -359,6 +360,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       }
 
       &.forge-field--tonal {
+        outline-width: #{token(outline-width)};
         background: #{theme.variable(control-bg-tonal-error)};
       }
 

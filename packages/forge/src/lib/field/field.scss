@@ -170,6 +170,12 @@ $variants: (
   }
 }
 
+:host(#{$warning}:is(#{map.get($variants, tonal)})) {
+  .forge-field {
+    @include override(outline-color, theme.variable(border-warning-strongest), value);
+  }
+}
+
 :host(#{$invalid}) {
   .forge-field {
     @include core.theme('error');
