@@ -876,6 +876,13 @@
       "docsPath": "development/tailwind.md"
     },
     {
+      "name": "theme-updates",
+      "title": "Theme and Variant Updates",
+      "description": "How to update banners, inline messages, badges, and fields to the semantic theme and variant pattern, and what changed in the tokens.",
+      "status": "stable",
+      "docsPath": "development/theme-updates.md"
+    },
+    {
       "name": "theming",
       "title": "Theming",
       "description": "How to customize Forge's colors and theme via CSS custom properties and Sass mixins.",

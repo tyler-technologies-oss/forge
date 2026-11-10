@@ -190,6 +190,7 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Sass Library](references/development/sass-library.md) — Using Forge's internal Sass files, mixins, and variables in your own application or library.
 - [Svelte](references/development/frameworks/svelte.md) — Using Tyler Forge with Svelte.
 - [Tailwind CSS](references/development/tailwind.md) — An optional Tailwind CSS v4 theme that maps Tailwind utilities to Forge design tokens.
+- [Theme and Variant Updates](references/development/theme-updates.md) — How to update banners, inline messages, badges, and fields to the semantic theme and variant pattern, and what changed in the tokens.
 - [Theming](references/development/theming.md) — How to customize Forge's colors and theme via CSS custom properties and Sass mixins.
 - [Typography](references/development/typography.md) — Forge's typography font, stylesheet, and typographic scale.
 - [Usage](references/development/usage.md) — How Tyler Forge components work as Web Components — properties, events, methods, slots, and more.

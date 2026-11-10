@@ -8,7 +8,7 @@ A select component allows users to choose one or more options from a list of pre
 
 ## Usage
 
-`forge-select` presents a list of `forge-option` (optionally grouped with `forge-option-group`) inside a field frame, and supports `label`, `placeholder`, `multiple`, and `showSelectAll`. Use it to recommend a default from a closed set of options; reach for a [autocomplete](./autocomplete.md) instead once a list runs past 10 or so options, or a [radio group](./radio.md) instead when every option must stay visible for comparison.
+`forge-select` presents a list of `forge-option` (optionally grouped with `forge-option-group`) inside a field frame, and supports `label`, `placeholder`, `multiple`, and `showSelectAll`. Set `invalid` to show an error, or `theme="warning"` for a warning; both add a built-in status icon, and the other themes render as the default. Set `readonly` when people need to see the selection but not change it. Use it to recommend a default from a closed set of options; reach for a [autocomplete](./autocomplete.md) instead once a list runs past 10 or so options, or a [radio group](./radio.md) instead when every option must stay visible for comparison.
 
 ## Rules
 

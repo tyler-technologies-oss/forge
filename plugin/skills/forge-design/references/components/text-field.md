@@ -44,7 +44,7 @@ Example (Label positioned inline, beside the field.): `get_forge_blocks(blockId:
 
 ## Helper text and validation
 
-Slot support text in the `helper-text` slot, set `required` for a required field, and set `invalid` to swap in error text describing the fix.
+Slot support text in the `helper-text` slot, set `required` for a required field, and set `invalid` to swap in error text describing the fix. Invalid fields show a built-in error icon and an error border. For a non-blocking warning, set `theme="warning"` to show a warning icon and border. Only `error` and `warning` change a field's appearance; the other themes are deprecated and render as the default.
 
 **Set required on both elements**
 
