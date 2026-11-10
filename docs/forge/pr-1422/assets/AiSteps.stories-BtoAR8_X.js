@@ -1,0 +1,31 @@
+import{n as e,r as t}from"./rolldown-runtime-sJBDdmOt.js";import{a as n}from"./lit-html-SpIZ5SkX.js";import{g as r}from"./iframe-BbUsXXnT.js";import{i,t as a}from"./ref-CKV-hb40.js";import{t as o}from"./ai-steps2-BfL_Rh3c.js";function s(){return(s=e((()=>{o()})))()}var c=t({Complete:()=>x,Demo:()=>_,NoDetail:()=>v,Running:()=>b,Streaming:()=>S,WithMarkdownLabels:()=>y,__namedExportsOrder:()=>C,default:()=>u});function l(e){let t=h.slice(0,e).map(e=>({...e,status:`complete`})),n=h[e];return n?[...t,{label:n.label,status:`running`}]:t}var u,d,f,p,m,h,g,_,v,y,b,x,S,C;function w(){return(w=e((()=>{r(),a(),s(),u={title:`AI/Components/Tools & Reasoning/Steps`,component:`forge-ai-steps`,argTypes:{running:{control:`boolean`,description:`Whether the run producing these steps is still in progress`}},args:{running:!1}},d=[{label:`Searched the orders table`,detail:`Matched 1,284 orders placed in the last 90 days.`,status:`complete`},{label:`Filtered by region`,detail:`Narrowed to the West region, leaving 412 orders.`,status:`complete`},{label:`Loaded the product catalog`,detail:`Could not reach the catalog service — falling back to cached product names.`,status:`complete`}],f=[{label:`Refreshed the cache`,status:`complete`},{label:`Loaded customer records`,status:`complete`}],p=[{label:`Matched **8,412** incidents`,detail:`Read every 2024–2025 filing before narrowing.`,status:`complete`},{label:`*Approximated* the ~~cached~~ district totals`,detail:`The catalog service was unreachable, so these are recomputed rather than cached.`,status:`complete`},{label:"Filtered `incidents` by `crime_category`",detail:"Kept rows where `crime_category = 'Burglary'`, leaving **412**.",status:`complete`}],m=[{label:`Searched the orders table`,detail:`Matched 1,284 orders.`,status:`complete`},{label:`Filtered by region`,status:`running`},{label:`Summarizing results`,status:`pending`}],h=[{label:"Searched `case_filings`",detail:`Queried 2024–2025 filings for "zoning variance", returning **63** matches.`},{label:"Filtered by `jurisdiction`",detail:`Kept the **18** filings within Travis County.`},{label:"Grouped by `outcome`",detail:`**11** approved, 5 denied, 2 withdrawn.`}],g=1e3,_={render:({running:e})=>n`<forge-ai-steps .steps=${d} ?running=${e}></forge-ai-steps>`},v={render:()=>n`<forge-ai-steps .steps=${f}></forge-ai-steps>`},y={render:({running:e})=>n`<forge-ai-steps .steps=${p} ?running=${e}></forge-ai-steps>`},b={render:()=>n`<forge-ai-steps .steps=${m} running></forge-ai-steps>`},x={render:()=>n`<forge-ai-steps .steps=${d}></forge-ai-steps>`},S={render:()=>{let e;return n`<forge-ai-steps ${i(t=>{if(window.clearInterval(e),!t)return;t.running=!0,t.steps=l(0);let n=0;e=window.setInterval(()=>{n++,t.steps=l(n),n>=h.length&&(t.running=!1,window.clearInterval(e))},g)})}></forge-ai-steps>`}},_.parameters={..._.parameters,docs:{..._.parameters?.docs,source:{originalSource:`{
+  render: ({
+    running
+  }) => html\`<forge-ai-steps .steps=\${steps} ?running=\${running}></forge-ai-steps>\`
+}`,..._.parameters?.docs?.source},description:{story:"Every label and detail is supplied by the agent through the `displaySteps` tool call — the\ncomponent derives nothing on its own.",..._.parameters?.docs?.description}}},v.parameters={...v.parameters,docs:{...v.parameters?.docs,source:{originalSource:"{\n  render: () => html`<forge-ai-steps .steps=${noDetailSteps}></forge-ai-steps>`\n}",...v.parameters?.docs?.source}}},y.parameters={...y.parameters,docs:{...y.parameters?.docs,source:{originalSource:`{
+  render: ({
+    running
+  }) => html\`<forge-ai-steps .steps=\${markdownSteps} ?running=\${running}></forge-ai-steps>\`
+}`,...y.parameters?.docs?.source},description:{story:'`label` and `detail` are rendered as sanitized inline markdown, so the agent chooses what to\nemphasize instead of the component prescribing it. Emphasis works at any position and any number of\ntimes per label, and it carries into the collapsed summary. Unsafe markup is stripped, and links\nare forced to `target="_blank"` with a safe `rel`.',...y.parameters?.docs?.description}}},b.parameters={...b.parameters,docs:{...b.parameters?.docs,source:{originalSource:"{\n  render: () => html`<forge-ai-steps .steps=${runningSteps} running></forge-ai-steps>`\n}",...b.parameters?.docs?.source},description:{story:"While `running` is `true` the timeline is held open and the summary row is hidden, so the user can\nwatch the agent work.",...b.parameters?.docs?.description}}},x.parameters={...x.parameters,docs:{...x.parameters?.docs,source:{originalSource:"{\n  render: () => html`<forge-ai-steps .steps=${steps}></forge-ai-steps>`\n}",...x.parameters?.docs?.source},description:{story:"A finished run. An element that mounts with `running` already `false` renders expanded and can be\ncollapsed with the summary row; one that *transitions* from running to finished auto-collapses.",...x.parameters?.docs?.description}}},S.parameters={...S.parameters,docs:{...S.parameters?.docs,source:{originalSource:`{
+  render: () => {
+    let timer: number | undefined;
+    const start = (element: AiStepsComponent | undefined): void => {
+      window.clearInterval(timer);
+      if (!element) {
+        return;
+      }
+      element.running = true;
+      element.steps = stepsInFlight(0);
+      let index = 0;
+      timer = window.setInterval(() => {
+        index++;
+        element.steps = stepsInFlight(index);
+        if (index >= streamedSteps.length) {
+          element.running = false;
+          window.clearInterval(timer);
+        }
+      }, STEP_RUNNING_DELAY);
+    };
+    return html\`<forge-ai-steps \${ref(start)}></forge-ai-steps>\`;
+  }
+}`,...S.parameters?.docs?.source},description:{story:"Works through the steps one at a time. Each step is announced as `running` with just its label,\nthen flips to `complete` and gains its `detail`, so the detail card is the part that streams in.\nRe-assigning the whole `steps` array each tick mirrors how an agent's partial JSON accumulates.\nThe timeline stays expanded while `running` and auto-collapses once it finishes.",...S.parameters?.docs?.description}}},C=[`Demo`,`NoDetail`,`WithMarkdownLabels`,`Running`,`Complete`,`Streaming`]})))()}export{b as a,w as c,v as i,x as n,S as o,_ as r,y as s,c as t};

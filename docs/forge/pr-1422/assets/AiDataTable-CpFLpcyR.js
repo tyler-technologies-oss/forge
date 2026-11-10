@@ -1,0 +1,9 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-CqthO5_N.js";import{a as r}from"./chunk-W22LQPXL-DaWckgVw.js";import{h as i,n as a,p as o,u as s}from"./blocks-Dp_o0sTV.js";import{n as c,t as l}from"./CustomArgTypes-_m-okSqZ.js";import{i as u,n as d,r as f,t as p}from"./AiDataTable.stories-fPEHXWtb.js";function m(e){let n={code:`code`,h2:`h2`,p:`p`,...t(),...e.components};return(0,g.jsxs)(g.Fragment,{children:[(0,g.jsx)(s,{of:p}),`
+`,(0,g.jsx)(o,{}),`
+`,(0,g.jsx)(n.p,{children:`Renders tabular data returned by an agent tool, with filtering, pagination and CSV download. Use it as the renderer for a tool that returns a table.`}),`
+`,(0,g.jsxs)(n.p,{children:[`Import `,(0,g.jsx)(n.code,{children:`@tylertech/forge-ai/tools`}),`, then set `,(0,g.jsx)(n.code,{children:`toolCall`}),` on `,(0,g.jsx)(n.code,{children:`forge-ai-tool-data-table`}),`. `,(0,g.jsx)(n.code,{children:`toolCall.args`}),` holds the `,(0,g.jsx)(n.code,{children:`title`}),`, `,(0,g.jsx)(n.code,{children:`headers`}),`, `,(0,g.jsx)(n.code,{children:`rows`}),` and an optional `,(0,g.jsx)(n.code,{children:`maxNumberOfRows`}),` (default 10).`]}),`
+`,(0,g.jsx)(a,{of:f}),`
+`,(0,g.jsxs)(n.p,{children:[`A filter input appears with more than 5 rows, and a paginator appears when the rows exceed `,(0,g.jsx)(n.code,{children:`maxNumberOfRows`}),`.`]}),`
+`,(0,g.jsx)(a,{of:d}),`
+`,(0,g.jsx)(n.h2,{id:`api`,children:`API`}),`
+`,(0,g.jsx)(l,{})]})}function h(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,g.jsx)(n,{...e,children:(0,g.jsx)(m,{...e})}):m(e)}var g;function _(){return(_=e((()=>{g=r(),n(),i(),c(),u()})))()}_();export{h as default};

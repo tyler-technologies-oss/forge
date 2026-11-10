@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(e=`id`){return`${e}-${Math.random().toString(36).substr(2,9)}`}function n(e,t,n){if(n)try{e.states.add(t)}catch{e.states.add(`--${t}`)}else try{e.states.delete(t)}catch{e.states.delete(`--${t}`)}}function r(){return(r=e((()=>{})))()}export{r as n,n as r,t};
