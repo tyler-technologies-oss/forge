@@ -4,10 +4,11 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/animation';
 @use '../focus-indicator';
+@use '../icon';
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
-@layer base, textarea, density, invalid, disabled;
+@layer base, textarea, density, warning, invalid, disabled;
 
 @layer base {
   .forge-field {
@@ -22,7 +23,8 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         padding-inline,
         disabled-background,
         disabled-opacity,
-        placeholder-color
+        placeholder-color,
+        icon-size
       )
     );
   }
@@ -44,8 +46,14 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     outline-offset: calc(#{token(outline-width)} * -1);
 
     background: #{token(background)};
+    color: #{theme.variable(text-high)};
 
     @include core.disableable;
+    @include icon.provide-theme(
+      (
+        font-size: #{token(icon-size)}
+      )
+    );
 
     &:hover:not(:has(#{$_input-selector}:disabled)) {
       outline-color: #{theme.variable(outline-medium)};
@@ -307,16 +315,33 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
   }
 }
 
+@layer warning {
+  .forge-field--warning:not(.forge-field--invalid, :has(#{$_input-selector}:invalid)) {
+    outline-color: #{theme.variable(border-warning-strongest)};
+
+    &:hover:not(:has(#{$_input-selector}:disabled)) {
+      outline-color: #{theme.variable(on-warning-container)};
+    }
+
+    &.forge-field--tonal {
+      background: #{theme.variable(warning-container-low)};
+
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        background: #{theme.variable(warning-container-minimum)};
+      }
+    }
+  }
+}
+
 @layer invalid {
   .forge-field {
     &--invalid,
     &:has(#{$_input-selector}:invalid) {
-      outline-color: #{theme.variable(error)};
+      outline-color: #{theme.variable(border-error-strongest)};
 
-      // TODO: enable after design review determines theme color and interaction
-      // &:hover:not(:has(#{$_input-selector}):disabled) {
-      //   outline-color: #{theme.variable(error-container-high)};
-      // }
+      &:hover:not(:has(#{$_input-selector}:disabled)) {
+        outline-color: #{theme.variable(on-error-container)};
+      }
 
       &.forge-field:has(#{$_input-selector}:focus) {
         @include focus-indicator.provide-theme(
