@@ -27,11 +27,12 @@
     <script type="module" src="/blocks/v1/ready-transition.js" id="ready-transition"></script>
     <script type="module" src="/blocks/v1/theme-listener.js" id="theme-listener"></script>
     <script type="module" src="/blocks/v1/height-reporter.js" id="height-reporter"></script>
+    <script type="module" src="/blocks/v1/link-guard.js" id="link-guard"></script>
   </head>
   <body class=" overflow-y-auto overflow-x-hidden" style="background-color: transparent">
     <div>
-  <forge-skip-link target="main-content"></forge-skip-link>
-  <div id="main-content" tabindex="0">Target</div>
+  <forge-skip-link target="main-content" skip-url-change></forge-skip-link>
+  <div id="main-content" tabindex="-1">Target</div>
 </div>
   </body>
 </html>

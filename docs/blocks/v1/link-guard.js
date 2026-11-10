@@ -1,0 +1,1 @@
+var e=`forge-app-bar-navigate`,t=e=>e.composedPath().find(e=>e instanceof HTMLAnchorElement);document.addEventListener(`click`,e=>{if(e.defaultPrevented)return;let n=t(e)?.getAttribute(`href`);if(!n?.startsWith(`#`))return;e.preventDefault();let r=decodeURIComponent(n.slice(1));r&&document.getElementById(r)?.scrollIntoView()}),document.addEventListener(e,e=>e.preventDefault());
