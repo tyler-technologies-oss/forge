@@ -2,10 +2,10 @@
   "theme": {
     "$type": "color",
     "brand": {
-      "$value": "{color.radix-dark.slate.3}"
+      "$value": "{color.radix-dark.brand.9}"
     },
     "on-brand": {
-      "$value": "{color.radix.white}"
+      "$value": "{color.radix-dark.brand.contrast}"
     },
     "control-bg": {
       "$value": "{color.radix-dark.neutral.a1}"
