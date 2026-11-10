@@ -1,6 +1,7 @@
 import type { Cell, CellContext } from '@tanstack/lit-table';
 import { html, type TemplateResult } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { getCellLabelledBy } from '../features/row-meta.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { ColumnDef, Row, TemplateFn } from '../types.js';
 
@@ -51,6 +52,7 @@ function renderInput(cell: AnyCell): TemplateResult {
         type="text"
         class="input-cell-input"
         aria-label=${ifDefined(typeof header === 'string' ? header : undefined)}
+        aria-labelledby=${ifDefined(getCellLabelledBy(cell))}
         .value=${value == null ? '' : String(value)} />
     </div>
   `;

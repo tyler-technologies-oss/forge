@@ -3283,4 +3283,116 @@ describe('DataTable', () => {
       expect(harness.headerCells.length).toBe(3);
     });
   });
+
+  describe('Row Names', () => {
+    function getAccessibleName(harness: DataTableHarness, element: Element | null | undefined): string {
+      const ids = element?.getAttribute('aria-labelledby')?.split(' ') ?? [];
+      return ids
+        .map(id => {
+          const target = harness.shadowRoot.getElementById(id);
+          return target?.getAttribute('aria-label') ?? target?.textContent?.trim();
+        })
+        .join(' ');
+    }
+
+    it('should name each row with the default row name', async () => {
+      const harness = await createFixture();
+
+      expect(harness.bodyRows.map(row => row.getAttribute('aria-label'))).toEqual(['Row 1', 'Row 2', 'Row 3']);
+    });
+
+    it('should name each row using getRowName', async () => {
+      const harness = await createFixture();
+
+      harness.element.getRowName = row => `Person ${row.name}`;
+      await settle(harness.element);
+
+      expect(harness.bodyRows.map(row => row.getAttribute('aria-label'))).toEqual(['Person Alice', 'Person Bob', 'Person Charlie']);
+    });
+
+    it('should give every row a unique id', async () => {
+      const harness = await createFixture();
+
+      const ids = harness.bodyRows.map(row => row.id);
+      expect(ids.every(Boolean)).toBe(true);
+      expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it('should label the meter cell with the row name and column header', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: meterCell({ min: 0, max: 50 }) }];
+      const harness = await createFixture({ columns });
+      harness.element.getRowName = row => row.name;
+      await settle(harness.element);
+
+      const meter = harness.getBodyCellByRowAndColumn(1, 0)?.querySelector('forge-meter');
+      expect(getAccessibleName(harness, meter)).toBe('Bob Age');
+    });
+
+    it('should label the rating cell with the row name and column header', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: ratingCell({ min: 0, max: 50 }) }];
+      const harness = await createFixture({ columns });
+      harness.element.getRowName = row => row.name;
+      await settle(harness.element);
+
+      const meter = harness.getBodyCellByRowAndColumn(2, 0)?.querySelector('[role="meter"]');
+      expect(getAccessibleName(harness, meter)).toBe('Charlie Age');
+    });
+
+    it('should label the input of an editable cell with the row name and column header', async () => {
+      const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', editable: true }];
+      const harness = await createFixture({ columns });
+      harness.element.getRowName = row => `Person ${row.name}`;
+      await settle(harness.element);
+
+      const input = harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('input');
+      expect(getAccessibleName(harness, input)).toBe('Person Alice Name');
+    });
+
+    it('should label the row selection checkbox with the row name', async () => {
+      const harness = await createFixture({ rowSelection: 'multiple' });
+      harness.element.getRowName = row => row.name;
+      await settle(harness.element);
+
+      const checkbox = harness.getBodyRowByIndex(1)?.querySelector('forge-checkbox');
+      expect(getAccessibleName(harness, checkbox)).toBe('Bob');
+    });
+
+    it('should label the expander button with its label and the row name', async () => {
+      const columns: ColumnDef<TestData>[] = [createExpanderColumn(), { id: 'name', header: 'Name', property: 'name' }];
+      const harness = await createFixture({ columns, expandable: true });
+      harness.element.getRowName = row => row.name;
+      await settle(harness.element);
+
+      const button = harness.getBodyRowByIndex(0)?.querySelector('forge-icon-button');
+      expect(getAccessibleName(harness, button)).toBe('Toggle row expansion Alice');
+    });
+
+    it('should label action buttons with their text and the row name', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        {
+          id: 'actions',
+          header: 'Actions',
+          template: actionCell([
+            { text: 'Edit', icon: 'edit', onClick: () => undefined },
+            { text: 'Archive', type: 'button', onClick: () => undefined }
+          ])
+        }
+      ];
+      const harness = await createFixture({ columns });
+      harness.element.getRowName = row => row.name;
+      await settle(harness.element);
+
+      const [iconButton, button] = Array.from(harness.getBodyRowByIndex(1)?.querySelectorAll('forge-icon-button, forge-button') ?? []);
+      expect(getAccessibleName(harness, iconButton)).toBe('Edit Bob');
+      expect(getAccessibleName(harness, button)).toBe('Archive Bob');
+    });
+
+    it('should reference the column header text when the header is renamed', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', template: meterCell({ min: 0, max: 50 }) }];
+      const harness = await createFixture({ columns });
+
+      const headerTextId = harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('forge-meter')?.getAttribute('aria-labelledby')?.split(' ')[1];
+      expect(harness.shadowRoot.getElementById(headerTextId ?? '')).toBe(harness.getHeaderCellById('age')?.querySelector('.cell-text'));
+    });
+  });
 });

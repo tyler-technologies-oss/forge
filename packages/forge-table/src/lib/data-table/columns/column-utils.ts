@@ -1,11 +1,13 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
 import type { ColumnDef, CustomFormatter, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
 import type { DataTableFeatures } from '../table-features.js';
 import { createAggregationFn, formatAggregationValue } from '../features/aggregation.js';
+import { getCellLabelledBy } from '../features/row-meta.js';
 import { createCellEditablePredicate, inputCell } from '../templates/input-cell.js';
 
 export interface LeafColumn<TData extends Row> {
@@ -185,8 +187,9 @@ export function prependSelectColumn<TData extends Row>(
                 .indeterminate="${table.getIsSomeRowsSelected()}"></forge-checkbox>
               <forge-tooltip>Toggle all rows</forge-tooltip>`
         : undefined,
-    cell: ({ row }) => html`
+    cell: ({ row, cell }) => html`
       <forge-checkbox
+        aria-labelledby="${ifDefined(getCellLabelledBy(cell))}"
         @change="${row.getToggleSelectedHandler()}"
         .checked="${row.getIsSelected()}"
         ?disabled="${!row.getCanSelect()}"

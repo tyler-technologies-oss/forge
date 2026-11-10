@@ -11,6 +11,7 @@ import {
   SortingState,
   TableController,
   ColumnDef as TanstackColumnDef,
+  Row as TanstackRow,
   Updater
 } from '@tanstack/lit-table';
 import { VirtualizerController } from '@tanstack/lit-virtual';
@@ -43,6 +44,7 @@ import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
 import { buildCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
+import { getColumnHeaderTextId, setRowName, type RowMeta } from './features/row-meta.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderFilterField } from './templates/filter-fields.js';
@@ -228,6 +230,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
    */
   @property({ type: Boolean, attribute: 'fixed-headers' })
   public fixedHeaders = false;
+
+  /**
+   * Returns the accessible name for a given row.
+   */
+  @property({ attribute: false })
+  public getRowName: (row: TData, index: number) => string = (_, index) => `Row ${index + 1}`;
 
   @state() private _data: TData[] = [];
   @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
@@ -573,7 +581,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                     @dblclick=${canRename ? () => this.#onHeaderDoubleClick(header.column) : nothing}>
                     ${isRenaming
                       ? this.#renderRenameInput(header.column)
-                      : html`<span class="cell-text">${header.isPlaceholder ? null : FlexRender({ header })}</span>`}
+                      : html`<span class="cell-text" id=${getColumnHeaderTextId(header.column.id)}
+                          >${header.isPlaceholder ? null : FlexRender({ header })}</span
+                        >`}
                     ${this.sortable && header.column.getIsSorted()
                       ? html`
                           ${this._sorting.length > 1 ? html`<span class="sort-index" part="sort-index">${header.column.getSortIndex() + 1}</span>` : nothing}
@@ -717,25 +727,30 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       ${repeat(
         table.getRowModel().rows,
         row => row.id,
-        row => html`
-          <tr
-            class=${classMap({ selected: row.getIsSelected() })}
-            part="body-tr tr"
-            @click=${this.allowRowClick ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
-            ${row.getVisibleCells().map(cell => this.#renderCell(cell, row.id, groupStartColumnIds))}
-          </tr>
-          ${row.getIsExpanded()
-            ? html`
-                <tr part="body-tr tr">
-                  <td colspan=${row.getAllCells().length}>
-                    <div class="expanded-content">
-                      <slot name=${`expanded:row-${row.id}`}></slot>
-                    </div>
-                  </td>
-                </tr>
-              `
-            : nothing}
-        `
+        row => {
+          const { name, nameId } = this.#getRowName(row);
+          return html`
+            <tr
+              id=${nameId}
+              aria-label=${name}
+              class=${classMap({ selected: row.getIsSelected() })}
+              part="body-tr tr"
+              @click=${this.allowRowClick ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
+              ${row.getVisibleCells().map(cell => this.#renderCell(cell, row.id, groupStartColumnIds))}
+            </tr>
+            ${row.getIsExpanded()
+              ? html`
+                  <tr part="body-tr tr">
+                    <td colspan=${row.getAllCells().length}>
+                      <div class="expanded-content">
+                        <slot name=${`expanded:row-${row.id}`}></slot>
+                      </div>
+                    </td>
+                  </tr>
+                `
+              : nothing}
+          `;
+        }
       )}
     </tbody>`;
   }
@@ -917,6 +932,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     return column.id;
   }
 
+  #getRowName(row: TanstackRow<DataTableFeatures, TData>): RowMeta {
+    return setRowName(row, this.getRowName(row.original, row.index));
+  }
+
   #getColumnHeaderId(columnId: string): string {
     return `column-header-${columnId}`;
   }
@@ -1058,8 +1077,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         item => item.key,
         item => {
           const row = rows[item.index];
+          const { name, nameId } = this.#getRowName(row);
           return html`
             <tr
+              id=${nameId}
+              aria-label=${name}
               data-index="${item.index}"
               class=${classMap({
                 selected: row.getIsSelected(),

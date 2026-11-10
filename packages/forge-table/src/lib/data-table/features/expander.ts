@@ -1,5 +1,6 @@
 import type { Row as TanstackRow } from '@tanstack/lit-table';
 import type { DataTableFeatures } from '../table-features.js';
+import { labelWithRowName } from './row-meta.js';
 import type { ColumnDef, Row } from '../types.js';
 
 import '@tylertech/forge/icon-button';
@@ -58,6 +59,7 @@ export function createExpanderColumn<TData extends Row = Row>(options: ExpanderC
 
       icon.external = true;
       iconButton.setAttribute('aria-label', ariaLabel);
+      labelWithRowName(iconButton, row);
       iconButton.appendChild(icon);
 
       iconButton.addEventListener('click', evt => {

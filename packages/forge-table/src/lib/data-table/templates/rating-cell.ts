@@ -1,5 +1,6 @@
 import '@tylertech/forge/tooltip';
 import type { TooltipComponent } from '@tylertech/forge/tooltip';
+import { getCellLabelledBy } from '../features/row-meta.js';
 import type { TemplateFn } from '../types.js';
 
 export interface RatingOptions {
@@ -46,6 +47,10 @@ export function ratingCell(options: RatingOptions = {}): TemplateFn {
     meter.classList.add('rating-cell__meter');
     meter.setAttribute('role', 'meter');
     meter.setAttribute('aria-label', typeof header === 'string' && header ? header : DEFAULT_LABEL);
+    const labelledBy = getCellLabelledBy(cell);
+    if (labelledBy) {
+      meter.setAttribute('aria-labelledby', labelledBy);
+    }
     meter.setAttribute('aria-valuemin', `${min}`);
     meter.setAttribute('aria-valuemax', `${max}`);
     meter.setAttribute('aria-valuenow', `${clampedValue}`);

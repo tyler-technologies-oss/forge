@@ -2,6 +2,7 @@ import '@tylertech/forge/meter';
 import type { MeterComponent } from '@tylertech/forge/meter';
 import '@tylertech/forge/tooltip';
 import type { TooltipComponent } from '@tylertech/forge/tooltip';
+import { getCellLabelledBy } from '../features/row-meta.js';
 import type { TemplateFn } from '../types.js';
 
 export type MeterCellOptions = Partial<
@@ -39,6 +40,10 @@ export function meterCell(options: MeterCellOptions = {}): TemplateFn {
     meter.density = 'small';
     meter.value = Number.isFinite(rawValue) ? rawValue : (rest.min ?? 0);
     meter.setAttribute('aria-label', column.columnDef.header || DEFAULT_LABEL);
+    const labelledBy = getCellLabelledBy(cell);
+    if (labelledBy) {
+      meter.setAttribute('aria-labelledby', labelledBy);
+    }
 
     if (low != null) {
       meter.low = low;

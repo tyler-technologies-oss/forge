@@ -263,6 +263,7 @@ dataTable.dataSource = new DataSource<RowData>(async (skip, take) => {
   await new Promise(resolve => setTimeout(resolve, FETCH_DELAY_MS));
   return employees.slice(skip, skip + take);
 });
+dataTable.getRowName = (row: RowData) => `${row.firstName} ${row.lastName}`;
 
 dataTable.addEventListener('forge-data-table-sort', console.log);
 dataTable.addEventListener('forge-data-table-filter', console.log);

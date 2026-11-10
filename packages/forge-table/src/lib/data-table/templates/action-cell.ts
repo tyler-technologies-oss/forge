@@ -1,6 +1,7 @@
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon-button';
 import type { TooltipComponent } from '@tylertech/forge/tooltip';
+import { labelWithRowName } from '../features/row-meta.js';
 
 export interface ActionButtonConfig {
   text: string | ((row: any) => string);
@@ -33,6 +34,10 @@ export function actionCell(config: ActionButtonConfig[]) {
         icon.slot = buttonConfig.type === 'button' ? 'start' : '';
         button.prepend(icon);
       }
+      if (buttonConfig.type !== 'button') {
+        button.setAttribute('aria-label', textContent);
+      }
+      labelWithRowName(button, row);
       button.addEventListener('click', () => buttonConfig.onClick(row));
       container.appendChild(button);
       if (tooltip) {

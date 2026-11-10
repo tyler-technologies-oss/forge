@@ -60,6 +60,10 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   `print.ts` backs `DataTableElement.print(title?)`: `buildPrintDocument` writes the same columns, header text and rows as the CSV export (it reuses `csv-export.ts`'s
   helpers) into a static HTML table, with cells aligned by `ColumnDef.align`, because the live table only renders the rows scrolled into view when `virtualized`.
   `printDocument` loads it into a hidden iframe (`srcdoc`), calls the iframe's `print()` on load and removes the iframe on `afterprint`. Nothing is printed before the first render.
+  `row-meta.ts` holds the accessible name of each row. On every render the element calls `getRowName(row, index)` (default `Row N`) and stores the result with a generated element id in a `WeakMap` keyed by the TanStack row
+  (TanStack v9 rows have no meta slot). The `<tr>` gets that id and an `aria-label` with the name, so cell templates can reference the row from `aria-labelledby`: `getCellLabelledBy(cell)` yields `{row name} {column header}` (the
+  header `.cell-text` span has the id `column-header-text-<columnId>`) for the rating, meter, input and select-checkbox cells, and `labelWithRowName(element, row)` yields `{own label} {row name}` for the expander and action buttons. Both return
+  nothing outside a data table. `aria-labelledby` cannot cross shadow roots, so `useTemplateSlot` (light DOM) cells are not labelled this way.
   `filter/index.ts` is only side-effect imports that register `forge-select` and `forge-text-field`; it is
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.
