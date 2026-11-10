@@ -1,4 +1,5 @@
 @use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge/sass/toolbar/core' as toolbar;
 
 :host {
   display: block;
@@ -8,8 +9,23 @@
   display: none;
 }
 
+.forge-table-toolbar {
+  @include toolbar.tokens;
+  @include toolbar.base;
+  @include toolbar.inner;
+
+  border: none;
+  background: transparent;
+}
+
 .title {
-  @include typography.style(heading4);
+  @include toolbar.section;
+  @include typography.style(heading3);
+}
+
+.end {
+  @include toolbar.section;
+  @include toolbar.end;
 }
 
 .column-list {

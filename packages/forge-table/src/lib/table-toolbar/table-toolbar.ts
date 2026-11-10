@@ -22,7 +22,6 @@ import '@tylertech/forge/checkbox';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/popover';
-import '@tylertech/forge/toolbar';
 
 import styles from './table-toolbar.scss';
 
@@ -96,11 +95,11 @@ export class TableToolbarElement extends LitElement {
 
   public render(): TemplateResult {
     return html`
-      <forge-toolbar>
-        <div slot="start" class="title">
+      <div class="forge-table-toolbar">
+        <div class="title">
           <slot name="title"></slot>
         </div>
-        <div slot="end" class="end">
+        <div class="end">
           ${map(
             this.features,
             feature => html`
@@ -111,7 +110,7 @@ export class TableToolbarElement extends LitElement {
             `
           )}
         </div>
-      </forge-toolbar>
+      </div>
     `;
   }
 
