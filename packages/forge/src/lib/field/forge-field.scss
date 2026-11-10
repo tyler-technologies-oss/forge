@@ -20,6 +20,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         height,
         inset-height,
         background,
+        filled-background,
         padding-inline,
         disabled-background,
         disabled-opacity,
@@ -100,7 +101,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
     &--filled {
       @include core.variant(filled);
 
-      background: #{theme.variable(surface-bright)};
+      background: #{token(filled-background)};
     }
 
     &--raised {
