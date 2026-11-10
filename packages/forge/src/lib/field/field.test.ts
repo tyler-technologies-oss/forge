@@ -20,6 +20,8 @@ import type {
 import './field.js';
 
 const READONLY_TEST_COLOR = 'rgb(1, 2, 3)';
+const TONAL_TEST_COLOR = 'rgb(4, 5, 6)';
+const TONAL_HOVER_TEST_COLOR = 'rgb(7, 8, 9)';
 
 describe('Field', () => {
   it('should contain shadow root', async () => {
@@ -565,6 +567,18 @@ describe('Field', () => {
     });
   });
 
+  describe('tonal', () => {
+    it('should not change the background on hover', async () => {
+      const harness = await createFixture({ variant: 'tonal' });
+      harness.element.style.setProperty('--forge-field-surface-animation-duration', '0s');
+      harness.element.style.setProperty('--forge-field-tonal-background', TONAL_TEST_COLOR);
+      harness.element.style.setProperty('--forge-field-tonal-background-hover', TONAL_HOVER_TEST_COLOR);
+      await userEvent.hover(getShadowElement(harness.element, '.container'));
+      expect(harness.surfaceBackgrounds).toContain(TONAL_TEST_COLOR);
+      expect(harness.surfaceBackgrounds).not.toContain(TONAL_HOVER_TEST_COLOR);
+    });
+  });
+
   describe('readonly', () => {
     it('should use the readonly outline color when readonly', async () => {
       const harness = await createFixture({ readonly: true });
@@ -726,6 +740,10 @@ class FieldHarness extends TestHarness<IFieldComponent> {
       return null;
     }
     return visible.classList.contains('status-icon__error') ? 'error' : 'warning';
+  }
+
+  public get surfaceBackgrounds(): string[] {
+    return Array.from(this.element.shadowRoot?.querySelectorAll('*') ?? []).map(el => getComputedStyle(el).backgroundColor);
   }
 
   public get outlineColor(): string {

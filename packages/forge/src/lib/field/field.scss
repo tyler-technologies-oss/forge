@@ -181,11 +181,13 @@ $variants: (
   }
 }
 
-:host(:not([disabled])) {
+:host(:not([disabled], #{map.get($variants, tonal)})) {
   .forge-field:has(.container:hover) {
     @include core.hover;
   }
+}
 
+:host(:not([disabled])) {
   .forge-field:has(.input:focus-within) {
     @include core.focus;
   }

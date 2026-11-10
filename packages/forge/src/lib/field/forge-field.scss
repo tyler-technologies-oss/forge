@@ -21,6 +21,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         inset-height,
         background,
         filled-background,
+        tonal-background,
         padding-inline,
         disabled-background,
         disabled-opacity,
@@ -91,11 +92,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       @include core.variant(tonal);
 
       outline-width: 0;
-      background: #{theme.variable(primary-container-low)};
-
-      &:hover:not(:has(#{$_input-selector}:disabled)) {
-        background: #{theme.variable(surface-container-minimum)};
-      }
+      background: #{token(tonal-background)};
     }
 
     &--filled {
@@ -338,10 +335,6 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
     &.forge-field--tonal {
       background: #{theme.variable(warning-container-low)};
-
-      &:hover:not(:has(#{$_input-selector}:disabled)) {
-        background: #{theme.variable(warning-container-minimum)};
-      }
     }
   }
 }
@@ -367,10 +360,6 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
       &.forge-field--tonal {
         background: #{theme.variable(error-container-low)};
-
-        &:hover:not(:has(#{$_input-selector}:disabled)) {
-          background: #{theme.variable(error-container-minimum)};
-        }
       }
 
       + .forge-support-text {
