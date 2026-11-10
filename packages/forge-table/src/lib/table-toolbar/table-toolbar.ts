@@ -118,6 +118,8 @@ export class TableToolbarElement extends LitElement {
   #onFeatureClick(feature: TableToolbarFeature): void {
     if (feature === 'export') {
       this.tableElement?.exportToCsv();
+    } else if (feature === 'print') {
+      this.tableElement?.print();
     }
   }
 

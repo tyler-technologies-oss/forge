@@ -161,6 +161,42 @@ describe('TableToolbar', () => {
     });
   });
 
+  describe('print', () => {
+    it('should print the connected table when the print button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'print' });
+      const print = vi.spyOn(table, 'print').mockImplementation(() => undefined);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(print).toHaveBeenCalledOnce();
+    });
+
+    it('should not throw when the print button is clicked without a connected table', async () => {
+      const { toolbar } = await createFixture({ features: 'print', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+    });
+
+    it('should not print when a different feature button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'search,print' });
+      const print = vi.spyOn(table, 'print').mockImplementation(() => undefined);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(print).not.toHaveBeenCalled();
+    });
+
+    it('should not export when the print button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'print' });
+      vi.spyOn(table, 'print').mockImplementation(() => undefined);
+      const exportToCsv = vi.spyOn(table, 'exportToCsv').mockImplementation(() => undefined);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(exportToCsv).not.toHaveBeenCalled();
+    });
+  });
+
   it('should be accessible', async () => {
     const { toolbar } = await createFixture({ features: 'export' });
 

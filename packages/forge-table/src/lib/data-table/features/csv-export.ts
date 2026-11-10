@@ -45,12 +45,12 @@ export function downloadCsv(csv: string, filename = DEFAULT_CSV_FILENAME): void 
   URL.revokeObjectURL(url);
 }
 
-function getHeaderText<TData extends Row>(column: Column<DataTableFeatures, TData>): string {
+export function getHeaderText<TData extends Row>(column: Column<DataTableFeatures, TData>): string {
   const { header } = column.columnDef;
   return typeof header === 'string' ? header : column.id;
 }
 
-function stringifyValue(value: unknown): string {
+export function stringifyValue(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
   }

@@ -57,6 +57,9 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   end-pinned, so it follows `columnOrder`, visibility and renames) and the rows of `getRowModel()` (sorted and filtered), and `downloadCsv` saves it with a
   UTF-8 BOM. Columns without an accessor (selection, expander, actions) are skipped. Values are accessor values, so a `format` column exports its formatted text
   and templates are ignored. The element keeps the table from its last render in `#table`, so nothing is exported before the first render.
+  `print.ts` backs `DataTableElement.print(title?)`: `buildPrintDocument` writes the same columns, header text and rows as the CSV export (it reuses `csv-export.ts`'s
+  helpers) into a static HTML table, with cells aligned by `ColumnDef.align`, because the live table only renders the rows scrolled into view when `virtualized`.
+  `printDocument` loads it into a hidden iframe (`srcdoc`), calls the iframe's `print()` on load and removes the iframe on `afterprint`. Nothing is printed before the first render.
   `filter/index.ts` is only side-effect imports that register `forge-select` and `forge-text-field`; it is
   a directory so the `./*` export pattern can resolve it as `@tylertech/forge-table/data-table/features/filter`.
 - `src/lib/column-menu/` — `forge-data-table-column-menu`, an icon button + `forge-menu` of actions for one column.
@@ -70,6 +73,7 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Double-clicking the header text of a renamable column also starts it; the two clicks of the double click each toggle sorting, so the sorting
   captured at the first click is restored before editing begins.
 - `src/lib/table-toolbar/` — `forge-data-table-toolbar`, a `forge-toolbar` for a data table. Connected through `table` (the id of a data table, looked up in the toolbar's root node when `table` changes) or by assigning a `DataTableElement` to `tableElement`; the id lookup sets `tableElement`, so a table that is not in the DOM yet when the toolbar first updates is not found.
+  The `features` attribute picks the icon buttons; `export` calls the table's `exportToCsv()` and `print` calls its `print()`, and the other features have no behavior yet.
   It shows an "N selected" summary and the `selection-actions` slot while rows are selected, plus a popover of checkboxes that show and hide columns through
   the table's public `showColumn`/`hideColumn`. The selected count comes from `forge-data-table-row-select`, so a selection made before the table is connected is not counted.
   The column list is built from `table.columns` when the popover opens, so it shows the column definitions' headers, not renamed ones.

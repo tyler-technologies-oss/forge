@@ -42,6 +42,7 @@ import { formatAttribute } from './directives/format-attribute.js';
 import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
 import { buildCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
+import { buildPrintDocument, printDocument } from './features/print.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderFilterField } from './templates/filter-fields.js';
@@ -1164,6 +1165,20 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       return;
     }
     downloadCsv(buildCsv(this.#table), filename);
+  }
+
+  /**
+   * Opens the browser's print dialog for the table's data.
+   *
+   * The printout contains the visible columns and every row as currently displayed (not only the rows scrolled into view), so it reflects
+   * the column order, hidden columns, column renames, sorting and filtering.
+   * @param {string} title - An optional heading printed above the table, also used as the document title.
+   */
+  public print(title = ''): void {
+    if (!this.#table) {
+      return;
+    }
+    printDocument(buildPrintDocument(this.#table, title));
   }
 }
 

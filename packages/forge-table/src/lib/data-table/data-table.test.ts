@@ -3051,6 +3051,176 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Print', () => {
+    interface PrintResult {
+      doc: Document;
+      print: ReturnType<typeof vi.fn>;
+      addEventListener: ReturnType<typeof vi.fn>;
+      frame: HTMLIFrameElement;
+    }
+
+    function printTable(harness: DataTableHarness, title?: string): PrintResult {
+      const print = vi.fn();
+      const addEventListener = vi.fn();
+      const fakeWindow = { focus: vi.fn(), print, addEventListener };
+      const contentWindow = vi.spyOn(HTMLIFrameElement.prototype, 'contentWindow', 'get').mockReturnValue(fakeWindow as unknown as Window);
+      let frame: HTMLIFrameElement | undefined;
+      const append = vi.spyOn(document.body, 'append').mockImplementation((...nodes: (Node | string)[]) => {
+        frame = nodes.find((node): node is HTMLIFrameElement => node instanceof HTMLIFrameElement);
+      });
+
+      try {
+        harness.element.print(title);
+        frame?.dispatchEvent(new Event('load'));
+      } finally {
+        append.mockRestore();
+        contentWindow.mockRestore();
+      }
+
+      const printedHtml = frame?.srcdoc ?? '';
+      return { doc: new DOMParser().parseFromString(printedHtml, 'text/html'), print, addEventListener, frame: frame as HTMLIFrameElement };
+    }
+
+    const cellText = (doc: Document, selector: string): (string | null)[] => [...doc.querySelectorAll(selector)].map(cell => cell.textContent);
+
+    it('should print a header row and a row for each item', async () => {
+      const harness = await createFixture();
+
+      const { doc } = printTable(harness);
+
+      expect(cellText(doc, 'th')).toEqual(['ID', 'Name', 'Age', 'Email']);
+      expect(doc.querySelectorAll('tbody tr')).toHaveLength(TEST_DATA.length);
+      expect(cellText(doc, 'tbody tr:first-child td')).toEqual(['1', 'Alice', '30', 'alice@example.com']);
+    });
+
+    it('should open the print dialog once the document has loaded', async () => {
+      const harness = await createFixture();
+
+      const { print } = printTable(harness);
+
+      expect(print).toHaveBeenCalledOnce();
+    });
+
+    it('should print a title heading when one is provided', async () => {
+      const harness = await createFixture();
+
+      const { doc } = printTable(harness, 'People');
+
+      expect(doc.querySelector('h1')?.textContent).toBe('People');
+      expect(doc.title).toBe('People');
+    });
+
+    it('should not print a heading when no title is provided', async () => {
+      const harness = await createFixture();
+
+      const { doc } = printTable(harness);
+
+      expect(doc.querySelector('h1')).toBeNull();
+    });
+
+    it('should print every row, not only the rows rendered in the viewport', async () => {
+      const data = Array.from({ length: 100 }, (_, index) => ({ id: index, name: `User ${index}`, age: 20 + (index % 50), email: `user${index}@example.com` }));
+      const harness = await createFixture({ data, virtualized: true });
+
+      const { doc } = printTable(harness);
+
+      expect(harness.bodyRows.length).toBeLessThan(data.length);
+      expect(doc.querySelectorAll('tbody tr')).toHaveLength(data.length);
+    });
+
+    it('should only print rows that match the filters', async () => {
+      const harness = await createFixture({ filterable: true });
+      await harness.typeIntoFilter(1, 'bob');
+      await settle(harness.element);
+
+      const { doc } = printTable(harness);
+
+      expect(cellText(doc, 'tbody td')).toEqual(['2', 'Bob', '25', 'bob@example.com']);
+    });
+
+    it('should print the rows in their sorted order', async () => {
+      const harness = await createFixture({ sortable: true });
+      await harness.clickHeaderCell(2);
+      const displayedNames = harness.bodyRows.map(row => row.querySelectorAll('td')[1].textContent?.trim());
+
+      const { doc } = printTable(harness);
+
+      expect(displayedNames).not.toEqual(TEST_DATA.map(item => item.name));
+      expect([...doc.querySelectorAll('tbody tr')].map(row => row.querySelectorAll('td')[1].textContent)).toEqual(displayedNames);
+    });
+
+    it('should not print hidden columns', async () => {
+      const harness = await createFixture();
+      harness.element.hideColumn('age');
+      await settle(harness.element);
+
+      const { doc } = printTable(harness);
+
+      expect(cellText(doc, 'th')).toEqual(['ID', 'Name', 'Email']);
+    });
+
+    it('should print formatted values for columns with a formatter', async () => {
+      const harness = await createFixture({
+        columns: [
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'age', header: 'Age', property: 'age', format: new NumberFormatter({ minimumFractionDigits: 2 }) }
+        ]
+      });
+
+      const { doc } = printTable(harness);
+
+      expect(cellText(doc, 'tbody tr:first-child td')).toEqual(['Alice', '30.00']);
+    });
+
+    it('should align cells according to the column alignment', async () => {
+      const harness = await createFixture({
+        columns: [
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'age', header: 'Age', property: 'age', align: 'end' }
+        ]
+      });
+
+      const { doc } = printTable(harness);
+
+      expect(doc.querySelector('th:nth-child(2)')?.classList.contains('align-end')).toBe(true);
+      expect(doc.querySelector('td:nth-child(2)')?.classList.contains('align-end')).toBe(true);
+      expect(doc.querySelector('td:nth-child(1)')?.className).toBe('');
+    });
+
+    it('should escape HTML in headers and values', async () => {
+      const harness = await createFixture({
+        columns: [{ id: 'name', header: 'Name', property: 'name' }],
+        data: [{ id: 1, name: '<img src=x onerror=alert(1)> & "co"', age: 30, email: '' }]
+      });
+
+      const { doc } = printTable(harness);
+
+      expect(doc.querySelector('img')).toBeNull();
+      expect(cellText(doc, 'tbody td')).toEqual(['<img src=x onerror=alert(1)> & "co"']);
+    });
+
+    it('should remove the print frame after printing', async () => {
+      const harness = await createFixture();
+      const { frame, addEventListener } = printTable(harness);
+      document.body.append(frame);
+      const [eventName, onAfterPrint] = addEventListener.mock.calls[0];
+
+      onAfterPrint();
+
+      expect(eventName).toBe('afterprint');
+      expect(frame.isConnected).toBe(false);
+    });
+
+    it('should print only the header row when there is no data', async () => {
+      const harness = await createFixture({ data: [] });
+
+      const { doc } = printTable(harness);
+
+      expect(cellText(doc, 'th')).toEqual(['ID', 'Name', 'Age', 'Email']);
+      expect(doc.querySelectorAll('tbody tr')).toHaveLength(0);
+    });
+  });
+
   describe('Edge Cases', () => {
     it('should handle empty data array', async () => {
       const harness = await createFixture({ data: [] });
