@@ -3,6 +3,7 @@
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/radix-color-palette' as palette;
+@use '@tylertech/forge-tokens/sass/radix-color-palette-dark' as palette-dark;
 @use '../focus-indicator';
 @use '../state-layer';
 @use '../field';
@@ -14,7 +15,7 @@
   @include core.provide-theme(
     (
       theme-foreground: #{core.token(foreground)},
-      theme-foreground-muted: #{palette.$white-alpha-9}
+      theme-foreground-muted: #{palette-dark.$text-4}
     )
   );
 
@@ -25,13 +26,13 @@
         on-primary: #{palette.$black-alpha-12},
         on-primary-container-minimum: #{core.token(foreground)},
         border-primary-default: #{palette.$white-alpha-7},
-        text-high: #{palette.$white-alpha-12},
-        text-medium: #{palette.$white-alpha-9},
-        text-low: #{palette.$white-alpha-6},
+        text-high: #{palette-dark.$text-5},
+        text-medium: #{palette-dark.$text-4},
+        text-low: #{palette-dark.$text-3},
         outline-high: #{palette.$white-alpha-12},
-        outline-medium: #{palette.$white-alpha-10},
-        outline: #{palette.$white-alpha-8},
-        outline-low: #{palette.$white-alpha-6}
+        outline-medium: #{palette.$white-alpha-7},
+        outline: #{palette.$white-alpha-6},
+        outline-low: #{palette.$white-alpha-5}
       )
     );
   }
