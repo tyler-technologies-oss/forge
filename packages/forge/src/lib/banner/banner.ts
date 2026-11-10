@@ -62,6 +62,8 @@ declare global {
  * @cssproperty --forge-banner-gap - The gap between the contents.
  * @cssproperty --forge-banner-padding-inline - The inline padding.
  * @cssproperty --forge-banner-padding-block - The block padding.
+ * @cssproperty --forge-banner-min-height - The minimum height. Defaults to `56px`.
+ * @cssproperty --forge-banner-dismissible-padding-inline-end - The inline end padding when the dismiss button is visible, so the button is the same distance from the top, bottom, and end edges.
  * @cssproperty --forge-banner-transition-duration - The transition duration.
  * @cssproperty --forge-banner-transition-easing - The transition easing function.
  *

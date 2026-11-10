@@ -19,7 +19,9 @@ $tokens: (
   outlined-shape: utils.module-val(banner, outlined-shape, shape.variable(medium)),
   gap: utils.module-val(banner, gap, spacing.variable(small)),
   padding-inline: utils.module-val(banner, padding-inline, spacing.variable(large)),
-  padding-block: utils.module-val(banner, padding-block, spacing.variable(small)),
+  padding-block: utils.module-val(banner, padding-block, spacing.variable(xsmall)),
+  min-height: utils.module-val(banner, min-height, 56px),
+  dismissible-padding-inline-end: utils.module-val(banner, dismissible-padding-inline-end, spacing.variable(xxsmall)),
   transition-duration: utils.module-val(banner, transition-duration, animation.variable(duration-short4)),
   transition-easing: utils.module-val(banner, transition-easing, animation.variable(easing-standard))
 ) !default;

@@ -13,6 +13,7 @@
   align-items: center;
   gap: #{core.token(gap)};
   padding-block: #{core.token(padding-block)};
+  min-height: #{core.token(min-height)};
 
   @include core.button-theme;
 

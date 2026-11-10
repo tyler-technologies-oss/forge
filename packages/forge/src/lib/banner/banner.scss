@@ -71,6 +71,16 @@
 }
 
 //
+// Dismissible
+//
+
+:host(:not([persistent])) {
+  .inner {
+    @include dismissible;
+  }
+}
+
+//
 // Dismissed
 //
 

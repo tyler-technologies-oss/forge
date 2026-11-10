@@ -51,7 +51,14 @@
   align-items: center;
   gap: #{token(gap)};
   flex: 1 1 auto;
+  box-sizing: border-box;
+  min-height: #{token(min-height)};
   padding-block: #{token(padding-block)};
+}
+
+// The dismiss button sits the same distance from the top, bottom, and end edges
+@mixin dismissible {
+  padding-inline-end: #{token(dismissible-padding-inline-end)};
 }
 
 @mixin dismiss-button-container {

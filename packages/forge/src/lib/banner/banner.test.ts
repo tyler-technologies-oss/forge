@@ -376,6 +376,34 @@ describe('Banner', () => {
     });
   });
 
+  describe('layout', () => {
+    it('should be 56px tall by default', async () => {
+      const screen = render(html`<forge-banner>Test</forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await frame();
+      expect(el.getBoundingClientRect().height).toBe(56);
+    });
+
+    it('should place the dismiss button the same distance from the top, bottom, and end edges', async () => {
+      const screen = render(html`<forge-banner>Test</forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await frame();
+      const banner = el.getBoundingClientRect();
+      const button = (el.shadowRoot?.querySelector('[part=dismiss-button]') as HTMLElement).getBoundingClientRect();
+      const top = button.top - banner.top;
+      expect(banner.bottom - button.bottom).toBe(top);
+      expect(banner.right - button.right).toBe(top);
+    });
+
+    it('should use the regular end padding when persistent', async () => {
+      const screen = render(html`<forge-banner persistent>Test</forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      await frame();
+      const inner = el.shadowRoot?.querySelector('.inner') as HTMLElement;
+      expect(getComputedStyle(inner).paddingInlineEnd).toBe(getComputedStyle(inner).paddingInlineStart);
+    });
+  });
+
   describe('deprecated', () => {
     it('should proxy deprecated can-dismiss attribute to persistent property', async () => {
       const screen = render(html`<forge-banner can-dismiss="false"></forge-banner>`);
