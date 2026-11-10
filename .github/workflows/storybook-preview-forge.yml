@@ -5,7 +5,6 @@ on:
     types: [labeled, synchronize]
     paths:
       - 'packages/forge/**'
-      - 'packages/forge-ai/**'
 
 concurrency:
   group: storybook-preview-forge-${{ github.event.pull_request.number }}

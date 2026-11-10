@@ -8,7 +8,7 @@ const GROUP_PROMPT = {
   default: 'Primitives'
 };
 
-const STORIES_DESTINATION = '../forge/src/stories/ai/{{dashCase name}}';
+const STORIES_DESTINATION = 'src/stories/{{dashCase name}}';
 
 function transformComponentName(value) {
   return value.trim();
@@ -73,7 +73,7 @@ export default function (plop) {
     }
   });
 
-  // Scaffold out a new Storybook page for a component (lives in packages/forge)
+  // Scaffold out a new Storybook page for a component
   plop.setGenerator('story', {
     description: 'Create a new Storybook page for a component',
     prompts: [

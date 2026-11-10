@@ -1,0 +1,41 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiContextChipStories from './AiContextChip.stories';
+
+<Meta of={AiContextChipStories} />
+
+<Title />
+
+A small chip that shows one piece of context, such as a selected record or an attached file, that will be sent along with a prompt. Use [`forge-ai-context-items`](?path=/docs/components-input-context-context-items--docs) to show a list of them.
+
+<Canvas of={AiContextChipStories.Demo} />
+
+## Usage
+
+```html
+<forge-ai-context-chip id="file-1" label="quarterly-report.pdf" sublabel="2.4 MB" type="file"></forge-ai-context-chip>
+```
+
+- Set `type="file"` for a document icon. Any other value uses the default context icon.
+- The `sublabel` is secondary text after the label. It is replaced by a spinner while `loading` is set.
+- Long labels are truncated, and the full label appears in a tooltip.
+
+<Canvas of={AiContextChipStories.File} />
+
+### Removing
+
+The remove button is shown unless `removable` is `false`. Clicking it fires `forge-ai-context-chip-remove` with the chip's `id` and a snapshot of its properties as `item`. The chip does not remove itself, so remove it from your own data in response to the event.
+
+```ts
+chip.addEventListener('forge-ai-context-chip-remove', evt => {
+  console.log(evt.detail.id);
+});
+```
+
+### Loading
+
+<Canvas of={AiContextChipStories.Loading} />
+
+## API
+
+<CustomArgTypes />

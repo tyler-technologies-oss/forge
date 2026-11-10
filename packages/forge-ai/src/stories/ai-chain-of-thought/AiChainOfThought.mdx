@@ -1,0 +1,48 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiChainOfThoughtStories from './AiChainOfThought.stories';
+
+<Meta of={AiChainOfThoughtStories} />
+
+<Title />
+
+An expandable container that shows the steps an agent took to reach an answer. Use it so users can inspect the reasoning behind a response without it taking over the conversation.
+
+Put a `forge-ai-reasoning-header` in the `heading` slot and thought components in the default slot. Clicking the header expands the container, or you can set `expanded` yourself.
+
+<Canvas of={AiChainOfThoughtStories.Demo} />
+
+## Usage
+
+```html
+<forge-ai-chain-of-thought>
+  <forge-ai-reasoning-header slot="heading">
+    <span slot="title">Chain of thought</span>
+    <span slot="reasoning-title">Thinking...</span>
+  </forge-ai-reasoning-header>
+
+  <forge-ai-thought-search-result>
+    <span slot="title">Searching for information</span>
+    Found 3 relevant articles.
+  </forge-ai-thought-search-result>
+
+  <forge-ai-thought-detail>
+    <span slot="title">Conclusion</span>
+    Based on the sources, here is the answer.
+  </forge-ai-thought-detail>
+</forge-ai-chain-of-thought>
+```
+
+Set `reasoning` on the header while the agent is still working to show the `reasoning-title` slot instead of `title`.
+
+## Thought components
+
+Each takes a `title` slot.
+
+- `forge-ai-thought-detail`: a text step. Content goes in the default slot.
+- `forge-ai-thought-search-result`: a search step (optional `step` number). Set `sources` to an array of `{ title, href }` to list source links. Optional description in the default slot.
+- `forge-ai-thought-image`: an image-analysis step (optional `step` number). Put the image in the `image` slot.
+
+## API
+
+<CustomArgTypes />

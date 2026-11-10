@@ -47,8 +47,6 @@ const preview: Preview = {
           'Components',
           'Rich Text Editor',
           ['Editor', 'Features', 'Renderer', 'Recipes'],
-          'AI',
-          ['Introduction', 'React', 'Components', ['Chat', 'Messages', 'Input & Context', 'Agents', 'Conversations', 'Tools & Reasoning', 'Artifacts', 'Containers', 'Primitives']],
           'Recipes',
           'Design Tokens',
           ['Introduction'],

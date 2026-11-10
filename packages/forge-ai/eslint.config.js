@@ -36,5 +36,5 @@ export default defineConfig([
       '@typescript-eslint/no-unused-expressions': 'off'
     }
   },
-  { ignores: ['dist/**/*'] }
+  { ignores: ['dist/**/*', 'storybook-static/**/*', 'src/stories/**/*', '.storybook/**/*'] }
 ]);

@@ -11,6 +11,7 @@
     "dev:blocks": "turbo run --filter blocks dev",
     "dev:docs": "turbo run --filter forge-docs dev",
     "storybook:forge": "turbo run --filter @tylertech/forge storybook",
+    "storybook:forge-ai": "turbo run --filter @tylertech/forge-ai storybook",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "turbo run format",

@@ -8,3 +8,5 @@ coverage/
 .DS_Store
 *.log
 .vite/
+storybook-static/
+*storybook.log

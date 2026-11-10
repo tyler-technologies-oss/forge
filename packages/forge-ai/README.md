@@ -22,7 +22,7 @@ import '@tylertech/forge-ai/ai-prompt';
 <forge-ai-prompt></forge-ai-prompt>
 ```
 
-Documentation and examples are in the [Forge Storybook](https://forge.tylerdev.io/forge/v3/?path=/docs/ai-introduction--docs) under **AI/Introduction**.
+Documentation and examples are in this package's local Storybook. From the repo root, run `pnpm storybook:forge-ai`.
 
 ### Subpaths
 
@@ -58,7 +58,7 @@ import '@tylertech/forge-ai/ai-prompt';
 <forge-ai-prompt placeholder="Ask" sendDisabled={false} onforge-ai-prompt-send={event => console.log(event.detail.value)} />;
 ```
 
-Event props are `on` plus the event name exactly as dispatched (`onforge-ai-prompt-send`, not `onForgeAiPromptSend`). Prefer camelCase props: TypeScript does not check hyphenated JSX attributes, so a typo in a kebab-case attribute or an `on<event>` name compiles silently. The typings compile under `@types/react` 18, but React 18's runtime does not support these elements correctly (objects are stringified and events are not attached), so use React 19. See the AI/React page in the Forge Storybook.
+Event props are `on` plus the event name exactly as dispatched (`onforge-ai-prompt-send`, not `onForgeAiPromptSend`). Prefer camelCase props: TypeScript does not check hyphenated JSX attributes, so a typo in a kebab-case attribute or an `on<event>` name compiles silently. The typings compile under `@types/react` 18, but React 18's runtime does not support these elements correctly (objects are stringified and events are not attached), so use React 19. See the React page in the local Storybook.
 
 ## Migrating
 
