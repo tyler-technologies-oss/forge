@@ -19,6 +19,7 @@ const optRequired = document.getElementById('opt-required') as ISwitchComponent;
 const optOptional = document.getElementById('opt-optional') as ISwitchComponent;
 const optInvalid = document.getElementById('opt-invalid') as ISwitchComponent;
 const optDisabled = document.getElementById('opt-disabled') as ISwitchComponent;
+const optReadonly = document.getElementById('opt-readonly') as ISwitchComponent;
 const optDense = document.getElementById('opt-dense') as ISwitchComponent;
 const optFloatLabel = document.getElementById('opt-float-label') as ISwitchComponent;
 const optShowClear = document.getElementById('opt-show-clear') as ISwitchComponent;
@@ -83,6 +84,12 @@ optInvalid.addEventListener('forge-switch-change', () => {
 optDisabled.addEventListener('forge-switch-change', () => {
   textFields.forEach(textField => {
     textField.disabled = optDisabled.on;
+  });
+});
+
+optReadonly.addEventListener('forge-switch-change', () => {
+  textFields.forEach(textField => {
+    textField.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach(input => (input.readOnly = optReadonly.on));
   });
 });
 

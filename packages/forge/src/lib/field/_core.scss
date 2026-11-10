@@ -42,6 +42,12 @@
   @include override(disableable-opacity, #{token(disabled-opacity)}, value);
 }
 
+@mixin readonly {
+  @include override(background, readonly-background);
+  @include override(outline-color, #{token(readonly-outline-color)}, value);
+  @include override(outline-color-hover, #{token(readonly-outline-color)}, value);
+}
+
 @mixin disableable($rule: 'both') {
   @if $rule == 'both' or $rule == 'opacity' {
     opacity: #{token(disableable-opacity, value)};

@@ -510,6 +510,16 @@ describe('Select', () => {
       expect(harness.element.readonly).toBe(true);
     });
 
+    it('should set the field readonly when readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+
+      expect(harness.fieldElement.readonly).toBe(true);
+
+      harness.element.readonly = false;
+
+      expect(harness.fieldElement.readonly).toBe(false);
+    });
+
     it('should set label-position attribute', async () => {
       const harness = await createFixture({ labelPosition: 'block-start' });
 

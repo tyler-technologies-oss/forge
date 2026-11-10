@@ -8,7 +8,7 @@
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';
 
-@layer base, textarea, density, warning, invalid, disabled;
+@layer base, textarea, density, readonly, warning, invalid, disabled;
 
 @layer base {
   .forge-field {
@@ -24,7 +24,9 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         disabled-background,
         disabled-opacity,
         placeholder-color,
-        icon-size
+        icon-size,
+        readonly-background,
+        readonly-outline-color
       )
     );
   }
@@ -311,6 +313,16 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
       #{$_input-selector}:disabled {
         cursor: not-allowed;
       }
+    }
+  }
+}
+
+@layer readonly {
+  .forge-field:not(.forge-field--plain, .forge-field--tonal, .forge-field--raised):has(:is(input, textarea)[readonly]) {
+    &,
+    &:hover {
+      outline-color: #{token(readonly-outline-color)};
+      background: #{token(readonly-background)};
     }
   }
 }

@@ -82,6 +82,9 @@ optRequired.addEventListener('forge-switch-change', ({ detail: selected }) => (s
 const optDisabled = document.querySelector('#opt-disabled') as ISwitchComponent;
 optDisabled.addEventListener('forge-switch-change', ({ detail: selected }) => (select.disabled = selected));
 
+const optReadonly = document.querySelector('#opt-readonly') as ISwitchComponent;
+optReadonly.addEventListener('forge-switch-change', ({ detail: selected }) => (select.readonly = selected));
+
 const optInvalid = document.querySelector('#opt-invalid') as ISwitchComponent;
 optInvalid.addEventListener('forge-switch-change', ({ detail: selected }) => (select.invalid = selected));
 

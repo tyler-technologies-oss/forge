@@ -20,6 +20,7 @@ export interface IFieldCore {
   required: boolean;
   optional: boolean;
   disabled: boolean;
+  readonly: boolean;
   variant: FieldVariant;
   theme: FieldTheme;
   shape: FieldShape;
@@ -48,6 +49,7 @@ export class FieldCore implements IFieldCore {
   private _required = false;
   private _optional = false;
   private _disabled = false;
+  private _readonly = false;
   private _theme: FieldTheme = FIELD_CONSTANTS.defaults.DEFAULT_THEME;
   private _shape: FieldShape = FIELD_CONSTANTS.defaults.DEFAULT_SHAPE;
   private _density: FieldDensity = FIELD_CONSTANTS.defaults.DEFAULT_DENSITY;
@@ -184,6 +186,16 @@ export class FieldCore implements IFieldCore {
     if (this._disabled !== value) {
       this._disabled = value;
       this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.DISABLED, this._disabled);
+    }
+  }
+
+  public get readonly(): boolean {
+    return this._readonly;
+  }
+  public set readonly(value: boolean) {
+    if (this._readonly !== value) {
+      this._readonly = value;
+      this._adapter.toggleHostAttribute(FIELD_CONSTANTS.attributes.READONLY, this._readonly);
     }
   }
 

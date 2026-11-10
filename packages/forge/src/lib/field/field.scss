@@ -164,6 +164,12 @@ $variants: (
   }
 }
 
+:host([readonly]:not([disabled], [invalid], [theme='error'], [theme='warning']):is(#{map.get($variants, outlined)}, #{map.get($variants, filled)})) {
+  .forge-field {
+    @include core.readonly;
+  }
+}
+
 :host(#{$invalid}) {
   .forge-field {
     @include core.theme('error');

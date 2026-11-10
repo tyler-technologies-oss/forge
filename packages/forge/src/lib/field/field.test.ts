@@ -19,6 +19,8 @@ import type {
 
 import './field.js';
 
+const READONLY_TEST_COLOR = 'rgb(1, 2, 3)';
+
 describe('Field', () => {
   it('should contain shadow root', async () => {
     const harness = await createFixture();
@@ -68,6 +70,11 @@ describe('Field', () => {
     it('should set disabled', async () => {
       const harness = await createFixture({ disabled: true });
       expect(harness.element.disabled).toBe(true);
+    });
+
+    it('should set readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+      expect(harness.element.readonly).toBe(true);
     });
 
     (['plain', 'outlined', 'tonal', 'filled', 'raised'] as FieldVariant[]).forEach(variant => {
@@ -181,6 +188,18 @@ describe('Field', () => {
       expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.DISABLED)).toBe(true);
     });
 
+    it('should set readonly attribute', async () => {
+      const harness = await createDefaultFixture();
+      harness.element.readonly = true;
+      expect(harness.element.hasAttribute(FIELD_CONSTANTS.attributes.READONLY)).toBe(true);
+    });
+
+    it('should set readonly property from attribute', async () => {
+      const harness = await createDefaultFixture();
+      harness.element.setAttribute(FIELD_CONSTANTS.attributes.READONLY, '');
+      expect(harness.element.readonly).toBe(true);
+    });
+
     it('should set popover icon attribute', async () => {
       const harness = await createDefaultFixture();
       harness.element.popoverIcon = true;
@@ -246,6 +265,11 @@ describe('Field', () => {
     it('should default disabled to false', async () => {
       const harness = await createDefaultFixture();
       expect(harness.element.disabled).toBe(false);
+    });
+
+    it('should default readonly to false', async () => {
+      const harness = await createDefaultFixture();
+      expect(harness.element.readonly).toBe(false);
     });
 
     it('should default variant to "outlined"', async () => {
@@ -541,6 +565,50 @@ describe('Field', () => {
     });
   });
 
+  describe('readonly', () => {
+    it('should use the readonly outline color when readonly', async () => {
+      const harness = await createFixture({ readonly: true });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should use the readonly outline color in the filled variant', async () => {
+      const harness = await createFixture({ readonly: true, variant: 'filled' });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should not use the readonly outline color when not readonly', async () => {
+      const harness = await createFixture();
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).not.toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should not use the readonly outline color when disabled', async () => {
+      const harness = await createFixture({ readonly: true, disabled: true });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).not.toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should not use the readonly outline color in the tonal variant', async () => {
+      const harness = await createFixture({ readonly: true, variant: 'tonal' });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).not.toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should not use the readonly outline color when readonly with the warning theme', async () => {
+      const harness = await createFixture({ readonly: true, theme: 'warning' });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).not.toBe(READONLY_TEST_COLOR);
+    });
+
+    it('should use the invalid outline color when readonly and invalid', async () => {
+      const harness = await createFixture({ readonly: true, invalid: true });
+      harness.useReadonlyTestColor();
+      expect(harness.outlineColor).not.toBe(READONLY_TEST_COLOR);
+    });
+  });
+
   describe('label position', () => {
     it('should render label before container when label position is inline start', async () => {
       const harness = await createFixture({ labelPosition: 'inline-start' });
@@ -660,6 +728,15 @@ class FieldHarness extends TestHarness<IFieldComponent> {
     return visible.classList.contains('status-icon__error') ? 'error' : 'warning';
   }
 
+  public get outlineColor(): string {
+    return getComputedStyle(getShadowElement(this.element, '.outline')).outlineColor;
+  }
+
+  public useReadonlyTestColor(): void {
+    this.element.style.setProperty('--forge-field-surface-animation-duration', '0s');
+    this.element.style.setProperty('--forge-field-readonly-outline-color', READONLY_TEST_COLOR);
+  }
+
   public async clickElement(el: HTMLElement): Promise<void> {
     await userEvent.click(el);
   }
@@ -686,6 +763,7 @@ interface FieldFixtureConfig {
   required?: boolean;
   optional?: boolean;
   disabled?: boolean;
+  readonly?: boolean;
   variant?: FieldVariant;
   theme?: FieldTheme;
   shape?: FieldShape;
@@ -705,6 +783,7 @@ async function createFixture({
   required,
   optional,
   disabled,
+  readonly,
   variant,
   theme,
   shape,
@@ -724,6 +803,7 @@ async function createFixture({
       ?required=${required}
       ?optional=${optional}
       ?disabled=${disabled}
+      ?readonly=${readonly}
       variant=${ifDefined(variant)}
       theme=${ifDefined(theme)}
       shape=${ifDefined(shape)}
