@@ -55,7 +55,6 @@
   "devDependencies": {
     "@tylertech-eslint/eslint-plugin": "catalog:",
     "@tylertech/stylelint-rules": "catalog:",
-    "colorjs.io": "^0.7.1",
     "eslint": "catalog:",
     "glob": "catalog:",
     "prettier": "catalog:",

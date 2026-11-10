@@ -18,7 +18,6 @@ The global design tokens (JSON, design tokens format) and the Sass utilities tha
 - The compiled CSS from the Sass modules must not change unless the change is intentional. When refactoring, compile the forge stylesheets before and after and diff them.
 - A new Sass module directory needs an explicit entry in `package.json` `exports` (`"./sass/<name>": "./sass/<name>/index.scss"`), because Vite cannot resolve a directory import through the `./sass/*` pattern.
 - Tokens reference each other with `{group.token}`. The light and dark themes (`tokens/theme/*.json`) must define the same token names.
-- To use a palette color at a different opacity, alias it and set `$extensions["com.tylertech.forge"].alpha` (0–1) instead of hardcoding the color. `scripts/color-alpha.js` applies it at build time and outputs `oklch()`.
 - Generated map keys come from the token path below the `root` configured in `scripts/build-sass.js`. Renaming a token in JSON renames its Sass map key and its CSS custom property.
 
 ## Commands

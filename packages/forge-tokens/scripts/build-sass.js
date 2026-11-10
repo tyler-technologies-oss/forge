@@ -1,5 +1,4 @@
 import StyleDictionary from 'style-dictionary';
-import { colorAlphaTransform, COLOR_ALPHA_TRANSFORM } from './color-alpha.js';
 import { sassFormat } from './sass-format.js';
 
 const FORMAT_NAME = 'forge/sass';
@@ -8,7 +7,6 @@ const BUILD_PATH = 'sass/tokens/';
 const SHARED_SOURCES = ['tokens/color/*.json', 'tokens/elevation.json'];
 
 StyleDictionary.registerFormat({ name: FORMAT_NAME, format: sassFormat });
-StyleDictionary.registerTransform(colorAlphaTransform);
 
 const GLOBAL_FILES = [
   { destination: '_color-palette.scss', variables: [{ type: 'variables', root: ['color', 'palette'] }] },
@@ -43,7 +41,7 @@ const createConfig = ({ source, files }) => ({
   log: { verbosity: 'silent' },
   platforms: {
     sass: {
-      transforms: ['cubicBezier/css', 'shadow/css/shorthand', COLOR_ALPHA_TRANSFORM],
+      transforms: ['cubicBezier/css', 'shadow/css/shorthand'],
       buildPath: BUILD_PATH,
       files: files.map(({ destination, variables }) => ({
         destination,
