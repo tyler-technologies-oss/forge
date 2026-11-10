@@ -30,6 +30,13 @@ describe('sass', () => {
       expect(css).toContain('--forge-theme-text-high: oklch(98.07% 0.0051 247.88deg);');
     });
 
+    it('should apply an extension alpha to an aliased palette color', () => {
+      const light = compile(`@use 'theme'; :root { @include theme.properties; }`);
+      const dark = compile(`@use 'theme'; :root { @include theme.properties-dark; }`);
+      expect(light).toContain('--forge-theme-surface-transparent: oklch(100% 0 0deg / 0);');
+      expect(dark).toContain('--forge-theme-surface-transparent: oklch(17.85% 0.0041 285.98deg / 0);');
+    });
+
     it('should resolve theme tokens that reference other theme tokens', () => {
       const css = compile(`@use 'theme'; :root { @include theme.properties; }`);
       expect(css).toContain('--forge-theme-on-surface: oklch(21.21% 0.005 248.06deg);');

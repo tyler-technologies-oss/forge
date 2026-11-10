@@ -1108,6 +1108,9 @@ importers:
       '@tylertech/stylelint-rules':
         specifier: 'catalog:'
         version: 5.1.2(postcss@8.5.30)(stylelint@16.26.1(typescript@6.0.3))
+      colorjs.io:
+        specifier: ^0.7.1
+        version: 0.7.1
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@2.6.1)
@@ -14820,9 +14823,9 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.3.4(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.9.0)(sass-embedded@1.106.1)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.9.1))
+      vitest: 4.1.11(@types/node@25.5.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.3.4(@types/node@25.5.0)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.0)(sass-embedded@1.106.1)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.9.1))
     optionalDependencies:
-      '@vitest/browser': 4.1.11(vite@8.3.4(@types/node@25.5.0)(esbuild@0.27.4)(jiti@2.6.1)(less@4.9.0)(sass-embedded@1.106.1)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.9.1))(vitest@4.1.11)
+      '@vitest/browser': 4.1.11(vite@8.3.4(@types/node@25.5.0)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.0)(sass-embedded@1.106.1)(sass@1.101.7)(terser@5.46.0)(tsx@4.21.0)(yaml@2.9.1))(vitest@4.1.11)
 
   '@vitest/expect@3.2.4':
     dependencies:

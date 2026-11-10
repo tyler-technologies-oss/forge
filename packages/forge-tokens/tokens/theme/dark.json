@@ -208,7 +208,12 @@
       "$value": "{color.radix-dark.slate.surface}"
     },
     "surface-transparent": {
-      "$value": "oklch(0.1785 0.0041 285.98 / 0%)"
+      "$value": "{color.radix-dark.slate.1}",
+      "$extensions": {
+        "com.tylertech.forge": {
+          "alpha": 0
+        }
+      }
     },
     "surface-elevated": {
       "$value": "{color.radix-dark.slate.2}"
