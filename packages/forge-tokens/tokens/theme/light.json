@@ -211,6 +211,9 @@
     "surface-elevated-translucent": {
       "$value": "{color.radix.neutral.a1}"
     },
+    "surface-elevated-ring": {
+      "$value": "color-mix(in oklab, {color.radix.slate.a3}, {color.radix.slate.3} 25%)"
+    },
     "on-surface": {
       "$value": "{theme.text-high}"
     },
