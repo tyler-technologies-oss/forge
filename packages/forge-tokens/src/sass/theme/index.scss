@@ -3,8 +3,10 @@
 @use './tokens';
 @use '../tokens/color-emphasis' as emphasis-tokens;
 @use '../utils';
+@use './accent';
 
 @forward './utils';
+@forward './accent' show $accent-hues, $accent-steps, color-variable, accent-properties, accent-properties-dark;
 
 ///
 /// Emits custom property declarations for all default theme tokens.
@@ -13,6 +15,7 @@
   @each $token-name, $token-value in tokens.$tokens {
     @include utils.declare-var(theme, $token-name, $token-value);
   }
+  @include accent.accent-properties;
 }
 
 ///
@@ -22,6 +25,7 @@
   @each $token-name, $token-value in tokens.$tokens-dark {
     @include utils.declare-var(theme, $token-name, $token-value);
   }
+  @include accent.accent-properties-dark;
 }
 
 ///

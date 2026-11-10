@@ -30,6 +30,35 @@ describe('sass', () => {
       expect(css).toContain('--forge-theme-text-high: oklch(98.07% 0.0051 247.88deg);');
     });
 
+    it('should emit accent color properties for each mode', () => {
+      const light = compile(`@use 'theme'; :root { @include theme.properties; }`);
+      const dark = compile(`@use 'theme'; :root { @include theme.properties-dark; }`);
+      expect(light).toContain('--forge-color-plum-a3:');
+      expect(light).toContain('--forge-color-sky-contrast:');
+      expect(dark).toContain('--forge-color-plum-a3:');
+      expect(dark).toContain('--forge-color-plum-contrast:');
+      expect(light.match(/--forge-color-plum-a3: ([^;]+);/)[1]).not.toBe(dark.match(/--forge-color-plum-a3: ([^;]+);/)[1]);
+    });
+
+    it('should shift the solid step only for hues that fail contrast at step 9', () => {
+      const light = compile(
+        `@use 'radix-color-palette' as p; @use 'theme'; :root { @include theme.properties; } .a { b: p.$blue-11; c: p.$plum-9; d: p.$gray-11; }`
+      );
+      const dark = compile(
+        `@use 'radix-color-palette-dark' as p; @use 'theme'; :root { @include theme.properties-dark; } .a { b: p.$blue-8; c: p.$plum-9; d: p.$gray-9; }`
+      );
+      for (const css of [light, dark]) {
+        expect(css.match(/--forge-color-blue-solid: ([^;]+);/)[1]).toBe(css.match(/ b: ([^;]+);/)[1]);
+        expect(css.match(/--forge-color-plum-solid: ([^;]+);/)[1]).toBe(css.match(/ c: ([^;]+);/)[1]);
+        expect(css.match(/--forge-color-gray-solid: ([^;]+);/)[1]).toBe(css.match(/ d: ([^;]+);/)[1]);
+      }
+    });
+
+    it('should reference an accent color with the light value as the fallback', () => {
+      const css = compile(`@use 'theme'; .a { color: theme.color-variable(plum, a11); }`);
+      expect(css).toMatch(/color: var\(--forge-color-plum-a11, oklch\([^)]+\)\);/);
+    });
+
     it('should resolve theme tokens that reference other theme tokens', () => {
       const css = compile(`@use 'theme'; :root { @include theme.properties; }`);
       expect(css).toContain('--forge-theme-on-surface: oklch(21.21% 0.005 248.06deg);');
