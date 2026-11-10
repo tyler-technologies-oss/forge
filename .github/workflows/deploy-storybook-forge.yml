@@ -29,10 +29,10 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"
-          elif git tag --points-at HEAD | grep -q '^@tylertech/forge@'; then
+          elif git tag --points-at HEAD | grep -qE '^@tylertech/forge(-ai)?@'; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No @tylertech/forge release tag at HEAD, skipping deploy"
+            echo "No @tylertech/forge or forge-ai release tag at HEAD, skipping deploy"
             echo "deploy=false" >> "$GITHUB_OUTPUT"
           fi
 

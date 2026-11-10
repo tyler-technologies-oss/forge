@@ -8,7 +8,7 @@ This package contains **presentational primitives only**: messages, prompts, too
 
 It does **not** contain composition or chat logic. There is no chatbot element, no agent adapter or runner, no message state engine, and no form factors (floating, sidebar, launcher). That layer is the consumer's responsibility. Do not add chat orchestration here.
 
-Source was migrated from the standalone `tyler-technologies-oss/forge-ai` repo. See `MIGRATION.md` for what changed and `BUGS.md` for the migration bug triage and follow-ups (deleted before the PR).
+Source was migrated from the standalone `tyler-technologies-oss/forge-ai` repo. See `MIGRATION.md` for what changed.
 
 ## Commands
 
@@ -137,7 +137,7 @@ Vitest browser mode in real Chromium, matching `packages/forge-rich-text-editor`
 - CEM plugin tests live next to the plugins (`plugins/**/*.test.mjs`) and use `node:test`.
 - Assert effects, not attributes.
 - Relative imports in tests and source need `.js` extensions (NodeNext resolution).
-- `vitest.config.ts` maps `@tylertech/forge/sass/*` to forge source. `@tylertech/forge` (CSS under `dist/`) and `@tylertech/forge-tokens` (generated Sass) must still be built. There is no turbo dependency for `test` (same as every other package; CI runs build then test), so on a fresh clone run `pnpm turbo run build --filter=@tylertech/forge-ai...` (or the root `pnpm build`) before testing.
-- Every primitive has a test file. Coverage thresholds are enforced when running with `--coverage` (statements 97, branches 91, functions 98, lines 97; see `vitest.config.ts`). New features need tests that keep these green. Known component bugs are `it.skip('… (BUG: …)')` tests tracked in `BUGS.md`; un-skip them when fixing.
+- `vitest.config.ts` maps `@tylertech/forge/sass/*` to forge source. `@tylertech/forge` (CSS under `dist/`) and `@tylertech/forge-tokens` (generated Sass) must still be built. This package's `turbo.json` makes `test` depend on `^build`, so `pnpm turbo run test --filter=@tylertech/forge-ai` builds them first (running `pnpm test` directly in the package does not).
+- Every primitive has a test file. Coverage thresholds are enforced when running with `--coverage` (statements 97, branches 91, functions 98, lines 97; see `vitest.config.ts`). New features need tests that keep these green.
 - JSX typings are checked by `src/jsx-fixture/jsx-fixture.tsx` (own `tsconfig.json`, React 19 types, `@ts-expect-error` negative cases), run by `test:types` after the Vitest run. It resolves `@tylertech/forge-ai/jsx` through the package's own `exports` (self-reference), so this package's own `dist/` (including `dist/jsx.d.ts`) must be built first; CI's build-then-test order provides it. Update the fixture when the generator output shape changes.
 - Every new feature gets a test. Do not update existing tests unless the task requires it.
