@@ -13,6 +13,9 @@
     "control-bg-filled": {
       "$value": "{color.radix-dark.slate.a2}"
     },
+    "control-bg-tonal": {
+      "$value": "{color.radix-dark.slate.a3}"
+    },
     "primary": {
       "$value": "{color.radix-dark.indigo.9}",
       "$deprecated": "Use secondary tokens instead"

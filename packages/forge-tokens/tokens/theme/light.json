@@ -13,6 +13,9 @@
     "control-bg-filled": {
       "$value": "{color.radix.slate.a2}"
     },
+    "control-bg-tonal": {
+      "$value": "{color.radix.slate.a3}"
+    },
     "primary": {
       "$value": "{color.radix.indigo.9}"
     },
