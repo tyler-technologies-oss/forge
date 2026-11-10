@@ -17,10 +17,10 @@
       "$value": "{color.radix-dark.slate.a3}"
     },
     "control-bg-tonal-error": {
-      "$value": "{color.radix-dark.red.a3}"
+      "$value": "{color.radix-dark.red.a2}"
     },
     "control-bg-tonal-warning": {
-      "$value": "{color.radix-dark.amber.a3}"
+      "$value": "{color.radix-dark.amber.a2}"
     },
     "primary": {
       "$value": "{color.radix-dark.indigo.9}",
