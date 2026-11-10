@@ -88,6 +88,66 @@ const navigation = buildNavigation(components);
     attributeFilter: ["data-forge-theme"],
   });
   syncThemeToggle();
+
+  const TOOLTIP_DELAY_MS = 300;
+  const tooltips = new WeakMap<Element, HTMLElement>();
+
+  const isTruncated = (label: HTMLElement): boolean => {
+    const container = label.assignedSlot?.parentElement;
+    if (!container || container.clientWidth === 0) {
+      return false;
+    }
+    const range = document.createRange();
+    range.selectNodeContents(label);
+    const textWidth = range.getBoundingClientRect().width;
+    return container.scrollWidth > container.clientWidth || textWidth > container.clientWidth + 1;
+  };
+
+  const syncTooltip = (item: Element): void => {
+    const label = item.querySelector<HTMLElement>(":scope > a, :scope > button");
+    const existing = tooltips.get(item);
+    if (!label || !isTruncated(label)) {
+      existing?.remove();
+      tooltips.delete(item);
+      return;
+    }
+    const text = label.textContent?.trim() ?? "";
+    if (existing) {
+      existing.textContent = text;
+      return;
+    }
+    const tooltip = document.createElement("forge-tooltip");
+    tooltip.placement = "right";
+    tooltip.delay = TOOLTIP_DELAY_MS;
+    tooltip.textContent = text;
+    tooltip.anchorElement = item.querySelector(":scope > forge-expansion-panel, :scope > [slot='additional-content']") ? label : (item as HTMLElement);
+    tooltips.set(item, tooltip);
+    item.closest("[slot='body']")?.append(tooltip);
+  };
+
+  const body = document.querySelector("[data-sidenav] [slot='body']");
+  const syncAllTooltips = (): void => {
+    body?.querySelectorAll("forge-list-item").forEach(syncTooltip);
+  };
+
+  if (body) {
+    new ResizeObserver(syncAllTooltips).observe(body);
+    body.addEventListener("forge-expansion-panel-animation-complete", syncAllTooltips);
+    new MutationObserver(() => requestAnimationFrame(syncAllTooltips)).observe(body, {
+      attributes: true,
+      attributeFilter: ["open"],
+      subtree: true,
+    });
+    body.addEventListener("mouseover", ({ target }) => {
+      const item = (target as Element).closest("forge-list-item");
+      if (item) {
+        syncTooltip(item);
+      }
+    });
+    Promise.all([customElements.whenDefined("forge-list-item"), document.fonts.ready]).then(() => {
+      requestAnimationFrame(syncAllTooltips);
+    });
+  }
 </script>
 
 <style lang="scss">
