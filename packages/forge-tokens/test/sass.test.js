@@ -1,16 +1,11 @@
 import { readFileSync } from 'fs';
 import { compileString } from 'sass';
-import { beforeAll, describe, expect, it } from 'vitest';
-import { build } from '../scripts/build.js';
+import { describe, expect, it } from 'vitest';
 
 const compile = source => compileString(source, { loadPaths: ['sass'], style: 'expanded' }).css;
 const collapseWhitespace = css => css.replace(/\s+/g, ' ');
 
 describe('sass', () => {
-  beforeAll(async () => {
-    await build();
-  });
-
   describe('theme', () => {
     it('should create a variable reference with the token value as the fallback', () => {
       const css = compile(`@use 'theme'; .a { color: theme.variable(primary); }`);

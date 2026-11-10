@@ -24,7 +24,7 @@ The global design tokens (JSON, design tokens format) and the Sass utilities tha
 
 ```bash
 pnpm build   # Generate sass/
-pnpm test    # Builds, then runs Vitest
+pnpm test    # Runs Vitest against the built sass/ (run build first)
 pnpm lint
 pnpm dev    # Builds, then serves the dev app
 pnpm dev:build
