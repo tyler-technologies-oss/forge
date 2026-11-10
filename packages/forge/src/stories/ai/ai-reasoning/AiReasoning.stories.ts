@@ -9,6 +9,13 @@ import '@tylertech/forge-ai/ai-chat-header';
 
 const component = 'forge-ai-reasoning';
 
+const storyStyles = html`<style>
+  .gradient-story-chat {
+    block-size: 800px;
+    inline-size: 100%;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Tools & Reasoning/Reasoning',
   component,
@@ -16,20 +23,10 @@ const meta = {
     expanded: {
       control: 'boolean',
       description: 'Whether the reasoning is expanded'
-    },
-    reasoning: {
-      control: 'boolean',
-      description: 'Whether this is a reasoning component'
-    },
-    title: {
-      control: 'text',
-      description: 'Title for the reasoning section'
     }
   },
   args: {
-    expanded: true,
-    title: 'AI Reasoning Process',
-    reasoningTitle: 'Thinking...'
+    expanded: true
   },
   render: (args: any) => {
     const reasoningSteps = [
@@ -41,13 +38,14 @@ const meta = {
     ];
 
     const template = html`
-      <forge-ai-gradient-container style="height: 800px; width: 100%;">
+      ${storyStyles}
+      <forge-ai-gradient-container class="gradient-story-chat">
         <forge-ai-chat-interface>
           <forge-ai-chat-header slot="header"></forge-ai-chat-header>
           <forge-ai-reasoning .expanded=${args.expanded} id="reasoning-container">
-            <forge-ai-reasoning-header slot="header" .expanded=${args.expanded} .reasoning=${args.reasoning}>
-              <span slot="reasoning-title">${args.reasoningTitle}</span>
-              <span slot="title">${args.title}</span>
+            <forge-ai-reasoning-header slot="header" .expanded=${args.expanded}>
+              <span slot="reasoning-title">Thinking...</span>
+              <span slot="title">AI Reasoning Process</span>
             </forge-ai-reasoning-header>
           </forge-ai-reasoning>
         </forge-ai-chat-interface>

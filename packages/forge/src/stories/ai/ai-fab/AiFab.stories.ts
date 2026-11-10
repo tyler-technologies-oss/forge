@@ -5,6 +5,14 @@ import { action } from 'storybook/actions';
 import '@tylertech/forge-ai/ai-fab';
 
 const component = 'forge-ai-fab';
+
+const storyStyles = html`<style>
+  .fab-story-logo {
+    inline-size: 24px;
+    block-size: 24px;
+    border-radius: 50%;
+  }
+</style>`;
 const clickAction = action('click');
 
 const meta = {
@@ -94,8 +102,9 @@ export const Branded: Story = {
       .join('; ');
 
     return html`
+      ${storyStyles}
       <forge-ai-fab .extended=${true} @click=${clickAction} style=${styleString}>
-        <img slot="icon" src="${fabLogo}" alt="Acme Corp" style="width: 24px; height: 24px; border-radius: 50%;" />
+        <img slot="icon" src="${fabLogo}" alt="Acme Corp" class="fab-story-logo" />
         Acme Support
       </forge-ai-fab>
     `;

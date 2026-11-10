@@ -21,6 +21,7 @@ export const AiChatInterfaceComponentTagName: keyof HTMLElementTagNameMap = 'for
  * @slot suggestions - Slot for AI suggestions component
  * @slot attachments - Slot for file attachments component
  * @slot prompt - Slot for AI prompt component
+ * @slot disclaimer - Slot for disclaimer text shown below the prompt
  */
 @customElement(AiChatInterfaceComponentTagName)
 export class AiChatInterfaceComponent extends LitElement {

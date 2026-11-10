@@ -8,6 +8,17 @@ import { type ClientMessageAction, type MessageItem, type ToolDefinition } from 
 
 const component = 'forge-ai-message-thread';
 
+const storyStyles = html`<style>
+  .message-thread-story-host {
+    inline-size: 100%;
+    block-size: 600px;
+    max-inline-size: 800px;
+    margin-inline: auto;
+    border: 1px solid var(--forge-theme-outline);
+    overflow: hidden;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Chat/Message Thread',
   component,
@@ -175,7 +186,8 @@ const meta = {
     const onScrollRequest = action('forge-ai-message-thread-scroll-request');
 
     return html`
-      <div style="width: 100%; height: 600px; max-width: 800px; margin: 0 auto; border: 1px solid #ccc; overflow: hidden;">
+      ${storyStyles}
+      <div class="message-thread-story-host">
         <forge-ai-message-thread
           .messageItems=${sampleMessages}
           .tools=${sampleTools}
@@ -299,7 +311,8 @@ export const WithToolCalls: Story = {
     const onScrollRequest = action('forge-ai-message-thread-scroll-request');
 
     return html`
-      <div style="width: 100%; height: 600px; max-width: 800px; margin: 0 auto; border: 1px solid #ccc; overflow: hidden;">
+      ${storyStyles}
+      <div class="message-thread-story-host">
         <forge-ai-message-thread
           .messageItems=${messageItems}
           .tools=${tools}
@@ -410,7 +423,8 @@ export const WithErroredToolCalls: Story = {
     const onScrollRequest = action('forge-ai-message-thread-scroll-request');
 
     return html`
-      <div style="width: 100%; height: 600px; max-width: 800px; margin: 0 auto; border: 1px solid #ccc; overflow: hidden;">
+      ${storyStyles}
+      <div class="message-thread-story-host">
         <forge-ai-message-thread
           .messageItems=${messageItems}
           .tools=${tools}
@@ -536,7 +550,8 @@ export const WithClientMessages: Story = {
     ];
 
     return html`
-      <div style="width: 100%; height: 600px; max-width: 800px; margin: 0 auto; border: 1px solid #ccc; overflow: hidden;">
+      ${storyStyles}
+      <div class="message-thread-story-host">
         <forge-ai-message-thread
           .messageItems=${messageItems}
           ?enable-reactions=${args.enableReactions}

@@ -13,6 +13,18 @@ import '@tylertech/forge-ai/ai-fab';
 
 const component = 'forge-ai-dialog';
 
+const storyStyles = html`<style>
+  .dialog-story-fab {
+    position: fixed;
+    inset-block-end: var(--forge-spacing-large);
+    inset-inline-end: var(--forge-spacing-large);
+    z-index: 1000;
+  }
+  .dialog-story-host {
+    min-block-size: 300px;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Containers/Dialog',
   component,
@@ -71,12 +83,11 @@ const meta = {
       </forge-ai-dialog>
     `;
 
-    const fab = html`
-      <forge-ai-fab style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;" @click=${() => dialogRef.value?.show()}> </forge-ai-fab>
-    `;
+    const fab = html` <forge-ai-fab class="dialog-story-fab" @click=${() => dialogRef.value?.show()}> </forge-ai-fab> `;
 
     return html`
-      <div style="min-height: 300px;">
+      ${storyStyles}
+      <div class="dialog-story-host">
         <div>
           <h2>AI Dialog Demo (Atomic Composition)</h2>
           <p>Click the FAB in the bottom right corner to open the AI dialog.</p>

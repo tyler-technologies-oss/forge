@@ -26,6 +26,17 @@ IconRegistry.define([tylIconMenu, tylIconSettings, tylIconPerson, tylIconDashboa
 
 const component = 'forge-ai-sidebar';
 
+const storyStyles = html`<style>
+  .sidebar-story-scaffold {
+    overflow: hidden;
+    block-size: 600px;
+    border: 1px solid var(--forge-theme-outline);
+  }
+  .sidebar-story-body {
+    padding: var(--forge-spacing-large);
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Containers/Sidebar',
   component,
@@ -33,10 +44,6 @@ const meta = {
     open: {
       control: { type: 'boolean' },
       description: 'Controls whether the sidebar is open'
-    },
-    expanded: {
-      control: { type: 'boolean' },
-      description: 'Controls whether the sidebar is displayed in an expanded state'
     },
     resizable: {
       control: { type: 'select' },
@@ -50,7 +57,6 @@ const meta = {
   },
   args: {
     open: false,
-    expanded: false,
     resizable: 'on',
     width: undefined
   },
@@ -71,7 +77,8 @@ const meta = {
     };
 
     return html`
-      <forge-scaffold style="overflow: hidden; height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <forge-scaffold class="sidebar-story-scaffold">
         <forge-app-bar slot="header" title-text="AI Sidebar Demo"></forge-app-bar>
 
         <forge-toolbar slot="body-header">
@@ -79,7 +86,7 @@ const meta = {
           <forge-button slot="end" variant="filled" @click=${() => sidebarRef.value?.toggle()}>Ask AI Assistant</forge-button>
         </forge-toolbar>
 
-        <main slot="body" style="padding: 24px;">
+        <main slot="body" class="sidebar-story-body">
           <forge-card>
             <p>Demo of the AI Sidebar component within a typical application layout.</p>
           </forge-card>
@@ -100,7 +107,6 @@ const meta = {
               show-expand-button
               show-minimize-button
               minimize-icon="panel"
-              ?expanded=${args.expanded}
               @forge-ai-chat-header-expand=${handleExpandClick}
               @forge-ai-chat-header-minimize=${handleMinimizeClick}>
             </forge-ai-chat-header>

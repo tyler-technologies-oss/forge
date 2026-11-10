@@ -6,6 +6,30 @@ import '@tylertech/forge-ai/ai-user-message-toolbar';
 
 const component = 'forge-ai-user-message-toolbar';
 
+const storyStyles = html`<style>
+  .user-toolbar-story-hint {
+    margin: 0 0 var(--forge-spacing-medium) 0;
+    color: var(--forge-theme-text-primary);
+  }
+  .user-toolbar-story-context {
+    max-inline-size: 600px;
+  }
+  .user-toolbar-story-message {
+    margin-inline-start: auto;
+    inline-size: fit-content;
+    margin-block-end: var(--forge-spacing-small);
+    padding: var(--forge-spacing-small);
+    background: var(--forge-theme-surface-container-minimum);
+    border-radius: 8px;
+    border-start-end-radius: 0;
+    color: var(--forge-theme-text-primary);
+  }
+  .user-toolbar-story-toolbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Messages/User Message Toolbar',
   component,
@@ -28,7 +52,8 @@ const meta = {
     const onResend = action('forge-ai-user-message-toolbar-resend');
     const onEdit = action('forge-ai-user-message-toolbar-edit');
     return html`
-      <p style="margin: 0 0 16px 0; color: var(--forge-theme-text-primary);">Click any button to see events in the Actions panel below.</p>
+      ${storyStyles}
+      <p class="user-toolbar-story-hint">Click any button to see events in the Actions panel below.</p>
       <forge-ai-user-message-toolbar
         .timestamp=${args.timestamp}
         ?streaming=${args.streaming}
@@ -58,12 +83,12 @@ export const InMessageContext: Story = {
     const onResend = action('forge-ai-user-message-toolbar-resend');
     const onEdit = action('forge-ai-user-message-toolbar-edit');
     return html`
-      <div style="max-width: 600px;">
-        <div
-          style="margin-left: auto; width: fit-content; margin-bottom: 12px; padding: 12px; background: var(--forge-theme-surface-container-minimum); border-radius: 8px; border-top-right-radius: 0; color: var(--forge-theme-text-primary);">
+      ${storyStyles}
+      <div class="user-toolbar-story-context">
+        <div class="user-toolbar-story-message">
           This is a sample user message. The toolbar demonstrates how it would appear below a user's message in the chat.
         </div>
-        <div style="display: flex; justify-content: flex-end;">
+        <div class="user-toolbar-story-toolbar">
           <forge-ai-user-message-toolbar
             .timestamp=${Date.now()}
             @forge-ai-user-message-toolbar-copy=${onCopy}

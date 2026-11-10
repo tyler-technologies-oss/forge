@@ -23,12 +23,12 @@ const KIND_ICON_PATHS: Record<Exclude<ClientMessageKind, 'text'>, string> = {
 /**
  * @tag forge-ai-client-message
  *
- * @summary Renders a client-only status message (never sent to the agent adapter) as
- * either plain system-message text or a Forge inline-message banner, depending on `kind`.
+ * @summary A standalone message for client-side or system notices, rendered as either plain
+ * system-message text or a Forge inline-message banner, depending on `kind`.
  *
  * @description
- * Used internally by `forge-ai-message-thread` to render client-only messages. Not intended to be
- * used standalone outside a message thread, but exported for direct Storybook/testing use.
+ * Use to show notices such as status, warnings or errors in a conversation. Supports optional
+ * header, content and action buttons.
  */
 @customElement(AiClientMessageComponentTagName)
 export class AiClientMessageComponent extends LitElement {

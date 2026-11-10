@@ -6,6 +6,14 @@ import { AiGradientContainerVariant } from '@tylertech/forge-ai/ai-gradient-cont
 
 const component = 'forge-ai-gradient-container';
 
+const storyStyles = html`<style>
+  .gradient-story-content {
+    inline-size: 150px;
+    block-size: 150px;
+    padding: var(--forge-spacing-medium);
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Containers/Gradient Container',
   component,
@@ -20,9 +28,9 @@ const meta = {
     variant: 'medium'
   },
   render: (args: any) =>
-    html`<forge-ai-gradient-container variant=${args.variant}>
-      <div style="width: 150px; height: 150px; padding: 16px;">This is inside the gradient container</div>
-    </forge-ai-gradient-container>`
+    html`${storyStyles}<forge-ai-gradient-container variant=${args.variant}>
+        <div class="gradient-story-content">This is inside the gradient container</div>
+      </forge-ai-gradient-container>`
 } satisfies Meta;
 
 export default meta;

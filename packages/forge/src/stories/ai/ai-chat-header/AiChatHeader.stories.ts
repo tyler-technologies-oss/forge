@@ -11,6 +11,12 @@ import { tylIconHistory, tylIconSettings } from '@tylertech/tyler-icons';
 
 const component = 'forge-ai-chat-header';
 
+const storyStyles = html`<style>
+  .chat-header-story-emoji {
+    font-size: 24px;
+  }
+</style>`;
+
 // Storybook actions for events
 const expandAction = action('forge-ai-chat-header-expand');
 const minimizeAction = action('forge-ai-chat-header-minimize');
@@ -76,7 +82,7 @@ const meta = {
     const getCustomIcon = (): TemplateResult | string => {
       switch (args.customIcon) {
         case 'emoji':
-          return html`<div slot="icon" style="font-size: 24px;">🤖</div>`;
+          return html`<div slot="icon" class="chat-header-story-emoji">🤖</div>`;
         case 'custom-svg':
           return html`
             <svg slot="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -93,6 +99,7 @@ const meta = {
       : args.titleText;
 
     return html`
+      ${storyStyles}
       <forge-ai-chat-header
         .titleText=${titleText}
         .showExpandButton=${args.showExpandButton}
@@ -158,4 +165,21 @@ export const WithHeaderActions: Story = {
       </forge-ai-chat-header>
     `;
   }
+};
+
+export const WithAgentInfo: Story = {
+  render: (args: any) => html`
+    <forge-ai-chat-header
+      .titleText=${args.titleText}
+      .agentInfo=${{
+        name: 'Support Assistant',
+        description: 'Answers questions about accounts, billing and service requests.',
+        identifier: 'support-assistant',
+        version: '1.2.0',
+        model: 'GPT-4.1',
+        lastUpdated: '2025-01-15'
+      }}
+      heading-level="2">
+    </forge-ai-chat-header>
+  `
 };

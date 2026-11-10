@@ -6,6 +6,26 @@ import '@tylertech/forge-ai/ai-response-message-toolbar';
 
 const component = 'forge-ai-response-message-toolbar';
 
+const storyStyles = html`<style>
+  .response-toolbar-story-hint {
+    margin: 0 0 var(--forge-spacing-medium) 0;
+    color: var(--forge-theme-text-primary);
+  }
+  .response-toolbar-story-context {
+    max-inline-size: 600px;
+    background: var(--forge-theme-surface);
+    border-radius: 8px;
+    padding: var(--forge-spacing-medium);
+  }
+  .response-toolbar-story-message {
+    margin-block-end: var(--forge-spacing-small);
+    padding: var(--forge-spacing-small);
+    background: var(--forge-theme-surface-variant);
+    border-radius: 4px;
+    color: var(--forge-theme-text-primary);
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Messages/Response Message Toolbar',
   component,
@@ -28,7 +48,8 @@ const meta = {
     const onAction = action('forge-ai-response-message-toolbar-action');
     const onFeedback = action('forge-ai-response-message-toolbar-feedback');
     return html`
-      <p style="margin: 0 0 16px 0; color: var(--forge-theme-text-primary);">Click any button to see events in the Actions panel below.</p>
+      ${storyStyles}
+      <p class="response-toolbar-story-hint">Click any button to see events in the Actions panel below.</p>
       <forge-ai-response-message-toolbar
         ?enable-reactions=${args.enableReactions}
         feedback-type=${args.feedbackType || ''}
@@ -59,9 +80,9 @@ export const InMessageContext: Story = {
     const onAction = action('forge-ai-response-message-toolbar-action');
     const onFeedback = action('forge-ai-response-message-toolbar-feedback');
     return html`
-      <div style="max-width: 600px; background: var(--forge-theme-surface); border-radius: 8px; padding: 16px;">
-        <div
-          style="margin-bottom: 12px; padding: 12px; background: var(--forge-theme-surface-variant); border-radius: 4px; color: var(--forge-theme-text-primary);">
+      ${storyStyles}
+      <div class="response-toolbar-story-context">
+        <div class="response-toolbar-story-message">
           This is sample AI response content. The toolbar demonstrates how it would appear below an AI response message.
         </div>
         <forge-ai-response-message-toolbar

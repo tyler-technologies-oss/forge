@@ -6,12 +6,18 @@ import type { AgentInfo } from '@tylertech/forge-ai/ai-agent-info';
 
 const component = 'forge-ai-agent-info';
 
+const storyStyles = html`<style>
+  .agent-info-story {
+    max-inline-size: 400px;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Agents/Agent Info',
   component,
   render: ({ name, identifier, version, threadId }: AgentInfo) => {
     const agentInfo: AgentInfo = { name, identifier, version, threadId };
-    return html`<forge-ai-agent-info style="max-width: 400px;" .agentInfo=${agentInfo}></forge-ai-agent-info>`;
+    return html`${storyStyles}<forge-ai-agent-info class="agent-info-story" .agentInfo=${agentInfo}></forge-ai-agent-info>`;
   },
   argTypes: {
     name: { control: 'text' },

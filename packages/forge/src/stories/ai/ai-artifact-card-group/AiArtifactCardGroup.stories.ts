@@ -12,6 +12,12 @@ IconRegistry.define([tylIconBarChart, tylIconTable]);
 
 const component = 'forge-ai-artifact-card-group';
 
+const storyStyles = html`<style>
+  .artifact-card-group-story {
+    max-inline-size: 480px;
+  }
+</style>`;
+
 const results = [
   {
     title: 'Traffic collisions by intersection',
@@ -43,8 +49,9 @@ function renderCards(count: number, activeIndex = -1): TemplateResult[] {
 const meta = {
   title: 'AI/Components/Artifacts/Artifact Card Group',
   render: args => html`
+    ${storyStyles}
     <forge-ai-artifact-card-group
-      style="max-width: 480px;"
+      class="artifact-card-group-story"
       visible-count=${args.visibleCount}
       ?expanded=${args.expanded}
       show-more-text=${args.showMoreText}
@@ -104,5 +111,5 @@ export const Expanded: Story = {
 };
 
 export const ActiveRow: Story = {
-  render: () => html` <forge-ai-artifact-card-group style="max-width: 480px;">${renderCards(3, 1)}</forge-ai-artifact-card-group> `
+  render: () => html`${storyStyles}<forge-ai-artifact-card-group class="artifact-card-group-story">${renderCards(3, 1)}</forge-ai-artifact-card-group> `
 };

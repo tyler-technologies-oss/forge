@@ -3,6 +3,16 @@ import { html } from 'lit';
 import { action } from 'storybook/actions';
 import '@tylertech/forge-ai/ai-disclaimer';
 
+const storyStyles = html`<style>
+  .disclaimer-story-host {
+    inline-size: 500px;
+    block-size: 600px;
+  }
+  .disclaimer-story-icon {
+    color: var(--forge-theme-primary);
+  }
+</style>`;
+
 const meta: Meta = {
   title: 'AI/Components/Chat/Disclaimer',
   component: 'forge-ai-disclaimer',
@@ -19,9 +29,10 @@ type Story = StoryObj;
 
 export const Demo: Story = {
   render: () => html`
-    <div style="width: 500px; height: 600px;">
+    ${storyStyles}
+    <div class="disclaimer-story-host">
       <forge-ai-disclaimer @forge-ai-disclaimer-agree=${action('agree')} @forge-ai-disclaimer-disagree=${action('disagree')}>
-        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: var(--mdc-theme-primary, #6200ee);">
+        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="disclaimer-story-icon">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
         </svg>
         <h2>Terms of Service</h2>
@@ -35,11 +46,12 @@ export const Demo: Story = {
 
 export const CustomButtonText: Story = {
   render: () => html`
-    <div style="width: 500px; height: 600px;">
+    ${storyStyles}
+    <div class="disclaimer-story-host">
       <forge-ai-disclaimer @forge-ai-disclaimer-agree=${action('accept')} @forge-ai-disclaimer-disagree=${action('decline')}>
         <span slot="disagree-button-text">Decline</span>
         <span slot="agree-button-text">Accept</span>
-        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: var(--mdc-theme-primary, #6200ee);">
+        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="disclaimer-story-icon">
           <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z" />
         </svg>
         <h2>Cookie Policy</h2>
@@ -52,7 +64,8 @@ export const CustomButtonText: Story = {
 
 export const LongContent: Story = {
   render: () => html`
-    <div style="width: 500px; height: 600px;">
+    ${storyStyles}
+    <div class="disclaimer-story-host">
       <forge-ai-disclaimer @forge-ai-disclaimer-agree=${action('agree')} @forge-ai-disclaimer-disagree=${action('disagree')}>
         <h2>Privacy Policy</h2>
         <p>This privacy policy describes how we collect, use, and protect your personal information when you use our AI assistant service.</p>
@@ -82,7 +95,8 @@ export const LongContent: Story = {
 
 export const NoIcon: Story = {
   render: () => html`
-    <div style="width: 500px; height: 600px;">
+    ${storyStyles}
+    <div class="disclaimer-story-host">
       <forge-ai-disclaimer @forge-ai-disclaimer-agree=${action('agree')} @forge-ai-disclaimer-disagree=${action('disagree')}>
         <h2>Important Notice</h2>
         <p>Please read and acknowledge this notice before proceeding.</p>

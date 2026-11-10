@@ -20,6 +20,13 @@ import { tylIconAdd, tylIconSparkles } from '@tylertech/tyler-icons';
 
 const component = 'forge-ai-chain-of-thought';
 
+const storyStyles = html`<style>
+  .gradient-story-chat {
+    block-size: 800px;
+    inline-size: 100%;
+  }
+</style>`;
+
 IconRegistry.define([tylIconAdd, tylIconSparkles]);
 
 const snowboardingSources = [
@@ -106,7 +113,8 @@ export const Demo: Story = {};
 
 export const InChatInterface: Story = {
   render: () => html`
-    <forge-ai-gradient-container style="height: 800px; width: 100%;">
+    ${storyStyles}
+    <forge-ai-gradient-container class="gradient-story-chat">
       <forge-ai-chat-interface>
         <forge-ai-chat-header slot="header"></forge-ai-chat-header>
 
@@ -244,7 +252,8 @@ export const SequentialLoading: Story = {
     }, 500);
 
     return html`
-      <forge-ai-gradient-container style="height: 800px; width: 100%;">
+      ${storyStyles}
+      <forge-ai-gradient-container class="gradient-story-chat">
         <forge-ai-chat-interface>
           <forge-ai-chat-header slot="header"></forge-ai-chat-header>
 

@@ -7,6 +7,15 @@ import { type ClientMessageAction, type ClientMessageKind } from '@tylertech/for
 
 const component = 'forge-ai-client-message';
 
+const storyStyles = html`<style>
+  .client-message-story-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--forge-spacing-medium);
+    max-inline-size: 480px;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Messages/Client Message',
   component,
@@ -69,7 +78,8 @@ export const AllKinds: Story = {
     ];
 
     return html`
-      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 480px;">
+      ${storyStyles}
+      <div class="client-message-story-list">
         ${kinds.map(({ kind, header, content }) => {
           const actions: ClientMessageAction[] = kind === 'error' ? [{ id: 'refresh', label: 'Refresh', onClick: () => onActionClick('refresh') }] : [];
           return html` <forge-ai-client-message kind=${kind} .header=${header} .content=${content} .actions=${actions}></forge-ai-client-message> `;

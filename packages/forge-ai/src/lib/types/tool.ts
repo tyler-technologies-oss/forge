@@ -195,8 +195,8 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
 }
 
 /**
- * Type-erased tool definition for collections that mix tools with different argument types, e.g. the
- * `tools` passed to an adapter. Any `ToolDefinition<TArgs, TResult>` is assignable to it.
+ * Type-erased tool definition for collections that mix tools with different argument types, e.g. a
+ * list of tools passed to an agent. Any `ToolDefinition<TArgs, TResult>` is assignable to it.
  */
 export type AnyToolDefinition = ToolDefinition<object, any>;
 

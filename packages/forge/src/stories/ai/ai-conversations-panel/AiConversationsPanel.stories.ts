@@ -12,6 +12,21 @@ import type {
 
 const component = 'forge-ai-conversations-panel';
 
+const storyStyles = html`<style>
+  .conversations-panel-story-host {
+    inline-size: 400px;
+    block-size: 600px;
+    border: 1px solid var(--forge-theme-outline);
+  }
+  .conversations-panel-story-notes {
+    margin-block-start: var(--forge-spacing-medium);
+  }
+  .conversations-panel-story-notes-narrow {
+    margin-block-start: var(--forge-spacing-medium);
+    max-inline-size: 400px;
+  }
+</style>`;
+
 const generateThreads = (count: number, startIndex = 0): Thread[] => {
   const topics = ['TypeScript', 'Web Components', 'React', 'Angular', 'Vue', 'CSS Grid', 'Flexbox', 'JavaScript', 'Performance', 'Testing'];
   const actions = ['best practices', 'tutorial', 'comparison', 'explained', 'patterns', 'optimization', 'debugging'];
@@ -127,7 +142,8 @@ const meta = {
     errorMessage: undefined
   },
   render: args => html`
-    <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+    ${storyStyles}
+    <div class="conversations-panel-story-host">
       <forge-ai-conversations-panel
         .threads=${args.threads}
         total-chats=${args.totalChats}
@@ -224,7 +240,8 @@ export const LoadMoreErrorState: Story = {
     totalChats: 120
   },
   render: args => html`
-    <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+    ${storyStyles}
+    <div class="conversations-panel-story-host">
       <forge-ai-conversations-panel
         .threads=${args.threads}
         total-chats=${args.totalChats}
@@ -254,7 +271,8 @@ export const WithLocalSearch: Story = {
     threads: sampleThreads
   },
   render: args => html`
-    <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+    ${storyStyles}
+    <div class="conversations-panel-story-host">
       <forge-ai-conversations-panel
         .threads=${args.threads}
         .selectedThreadId=${args.selectedThreadId}
@@ -270,7 +288,7 @@ export const WithLocalSearch: Story = {
         @forge-ai-conversations-panel-delete=${action('forge-ai-conversations-panel-delete')}>
       </forge-ai-conversations-panel>
     </div>
-    <div style="margin-top: 16px;">
+    <div class="conversations-panel-story-notes">
       <p><strong>Local Search (Default)</strong></p>
       <p>Click "Search chats" to enter search chats. Type in the search field - results are filtered locally from recent threads with 300ms debounce.</p>
     </div>
@@ -324,7 +342,8 @@ export const WithAsyncSearch: Story = {
     };
 
     return html`
-      <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <div class="conversations-panel-story-host">
         <forge-ai-conversations-panel
           .threads=${args.threads}
           .selectedThreadId=${args.selectedThreadId}
@@ -338,7 +357,7 @@ export const WithAsyncSearch: Story = {
           @forge-ai-conversations-panel-delete=${action('forge-ai-conversations-panel-delete')}>
         </forge-ai-conversations-panel>
       </div>
-      <div style="margin-top: 16px; max-width: 400px;">
+      <div class="conversations-panel-story-notes-narrow">
         <p><strong>Async Search (preventDefault)</strong></p>
         <p>
           Click "Search chats" and type in the search field. This story simulates an async search by calling
@@ -387,7 +406,8 @@ export const WithNoRecentThreads: Story = {
     };
 
     return html`
-      <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <div class="conversations-panel-story-host">
         <forge-ai-conversations-panel
           .threads=${args.threads}
           .selectedThreadId=${args.selectedThreadId}
@@ -401,7 +421,7 @@ export const WithNoRecentThreads: Story = {
           @forge-ai-conversations-panel-delete=${action('forge-ai-conversations-panel-delete')}>
         </forge-ai-conversations-panel>
       </div>
-      <div style="margin-top: 16px; max-width: 400px;">
+      <div class="conversations-panel-story-notes-narrow">
         <p><strong>No Recent Threads + Async Search</strong></p>
         <p>No recent threads are shown in recent chats. Click "Search chats" to search through older archived conversations.</p>
       </div>
@@ -457,7 +477,8 @@ export const WithInfiniteScroll: Story = {
     };
 
     return html`
-      <div style="width: 400px; height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <div class="conversations-panel-story-host">
         <forge-ai-conversations-panel
           .threads=${args.threads}
           total-chats=${TOTAL_THREADS}
@@ -473,7 +494,7 @@ export const WithInfiniteScroll: Story = {
           @forge-ai-conversations-panel-delete=${action('forge-ai-conversations-panel-delete')}>
         </forge-ai-conversations-panel>
       </div>
-      <div style="margin-top: 16px; max-width: 400px;">
+      <div class="conversations-panel-story-notes-narrow">
         <p><strong>Infinite Scroll Demo</strong></p>
         <p>
           Demonstrates infinite scroll for both recent chats and search chats. Scroll to the bottom of the list to load more results. Results load 20 at a time

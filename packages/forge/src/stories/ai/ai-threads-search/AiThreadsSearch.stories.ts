@@ -26,6 +26,13 @@ const generateThreads = (count: number, startIndex = 0): Thread[] => {
 
 const component = 'forge-ai-threads-search';
 
+const storyStyles = html`<style>
+  .threads-search-story-host {
+    block-size: 600px;
+    border: 1px solid var(--forge-theme-outline);
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Conversations/Threads Search',
   component,
@@ -83,7 +90,8 @@ const meta = {
     emptyMessage: 'No conversations found'
   },
   render: (args: any) => html`
-    <div style="height: 600px; border: 1px solid var(--forge-theme-outline);">
+    ${storyStyles}
+    <div class="threads-search-story-host">
       <forge-ai-threads-search
         .threads=${args.threads}
         total-chats=${args.totalChats}
@@ -151,7 +159,8 @@ export const WithAsyncSearch: Story = {
     };
 
     return html`
-      <div style="height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <div class="threads-search-story-host">
         <forge-ai-threads-search
           .threads=${args.threads}
           .showNewChatButton=${args.showNewChatButton}
@@ -203,7 +212,8 @@ export const WithInfiniteScroll: Story = {
     };
 
     return html`
-      <div style="height: 600px; border: 1px solid var(--forge-theme-outline);">
+      ${storyStyles}
+      <div class="threads-search-story-host">
         <forge-ai-threads-search
           .threads=${args.threads}
           total-chats=${120}
@@ -299,7 +309,8 @@ export const LoadMoreErrorState: Story = {
     totalChats: 120
   },
   render: (args: any) => html`
-    <div style="height: 600px; border: 1px solid var(--forge-theme-outline);">
+    ${storyStyles}
+    <div class="threads-search-story-host">
       <forge-ai-threads-search
         .threads=${args.threads}
         total-chats=${args.totalChats}

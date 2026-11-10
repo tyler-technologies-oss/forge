@@ -8,6 +8,15 @@ import '@tylertech/forge/button';
 
 const component = 'forge-ai-modal';
 
+const storyStyles = html`<style>
+  .modal-story-content {
+    padding: var(--forge-spacing-large);
+  }
+  .modal-story-content :is(h3, p) {
+    margin: 0 0 var(--forge-spacing-medium) 0;
+  }
+</style>`;
+
 const meta = {
   title: 'AI/Components/Containers/Modal',
   render: args => {
@@ -22,11 +31,12 @@ const meta = {
     }
 
     return html`
+      ${storyStyles}
       <forge-button variant="raised" @click=${toggleModal}>Show Modal</forge-button>
       <forge-ai-modal ${ref(modalRef)} .open=${args.open} label=${args.label}>
-        <div style="padding: 24px;">
-          <h3 style="margin: 0 0 16px 0;">Modal Title</h3>
-          <p style="margin: 0 0 16px 0;">This is a basic modal dialog with some sample content.</p>
+        <div class="modal-story-content">
+          <h3>Modal Title</h3>
+          <p>This is a basic modal dialog with some sample content.</p>
           <forge-button variant="outlined" @click=${() => modalRef.value?.close()}> Close Modal </forge-button>
         </div>
       </forge-ai-modal>

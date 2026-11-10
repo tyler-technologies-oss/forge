@@ -12,6 +12,18 @@ IconRegistry.define([tylIconBarChart, tylIconTable]);
 
 const component = 'forge-ai-artifact-card';
 
+const storyStyles = html`<style>
+  .artifact-card-story-accent {
+    --forge-ai-artifact-card-accent-color: var(--forge-theme-tertiary);
+  }
+  .artifact-card-story-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--forge-spacing-xsmall);
+    max-inline-size: 480px;
+  }
+</style>`;
+
 const tableIcon = html`<forge-icon slot="icon" name="table"></forge-icon>`;
 const chartIcon = html`<forge-icon slot="icon" name="bar_chart"></forge-icon>`;
 
@@ -120,11 +132,12 @@ export const Truncation: Story = {
 
 export const CustomAccent: Story = {
   render: () => html`
+    ${storyStyles}
     <forge-ai-artifact-card
       title-text="Q4 collision summary"
       subtitle-text="Report · 4 charts"
       asset-id="q4-report"
-      style="--forge-ai-artifact-card-accent-color: var(--forge-theme-tertiary);"
+      class="artifact-card-story-accent"
       @forge-ai-artifact-card-open=${action('forge-ai-artifact-card-open')}>
       ${chartIcon}
     </forge-ai-artifact-card>
@@ -133,7 +146,8 @@ export const CustomAccent: Story = {
 
 export const InTranscript: Story = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+    ${storyStyles}
+    <div class="artifact-card-story-list">
       <forge-ai-artifact-card
         title-text="Traffic collisions by intersection"
         subtitle-text="Table · 2024 Collision Records · 1,284 rows"
