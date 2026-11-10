@@ -10,8 +10,8 @@ $tonal-backgrounds: (
   secondary: theme.variable(secondary-container-low),
   tertiary: theme.variable(tertiary-container-low),
   success: theme.variable(success-container-low),
-  error: theme.variable(error-container-low),
-  warning: theme.variable(warning-container-low),
+  error: theme.variable(control-bg-tonal-error),
+  warning: theme.variable(control-bg-tonal-warning),
   info: theme.variable(info-container-low)
 );
 $tonal-backgrounds-hover: (
@@ -20,8 +20,8 @@ $tonal-backgrounds-hover: (
   secondary: theme.variable(secondary-container-minimum),
   tertiary: theme.variable(tertiary-container-minimum),
   success: theme.variable(success-container-minimum),
-  error: theme.variable(error-container-minimum),
-  warning: theme.variable(warning-container-minimum),
+  error: theme.variable(control-bg-tonal-error),
+  warning: theme.variable(control-bg-tonal-warning),
   info: theme.variable(info-container-minimum)
 );
 $filled-backgrounds: (
