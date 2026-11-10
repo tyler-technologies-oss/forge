@@ -1,11 +1,8 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/border';
-@use '@tylertech/forge-tokens/sass/radix-color-palette-dark' as color-palette-dark;
 
 @use '../app-bar/app-bar' as app-bar;
-@use '../button';
 @use '../popover';
-@use '../tooltip';
 @use '../chips/chip';
 
 ///
@@ -22,35 +19,12 @@
     )
   );
 
-  // Button
-  // @include button.provide-theme(
-  //   (
-  //     tonal-background: color-palette-dark.$slate-6,
-  //     tonal-color: color-palette-dark.$slate-12,
-  //     outlined-border-color: color-palette-dark.$indigo-7,
-  //     filled-background: color-palette-dark.$indigo-9,
-  //     filled-color: color-palette-dark.$indigo-contrast,
-  //     raised-background: color-palette-dark.$indigo-9,
-  //     raised-color: color-palette-dark.$indigo-contrast
-  //   )
-  // );
-
   // Popover
   @include popover.provide-theme(
     (
       border-width: border.variable(thin) // Popovers use thin borders in dark theme to increase contrast
     )
   );
-
-  // Tooltip
-  // @include tooltip.provide-theme(
-  //   (
-  //     background: theme.variable(surface-bright),
-  //     // Tooltips use bright surface color in dark theme to increase contrast
-  //     color: theme.variable(text-high),
-  //     border-width: border.variable(thin) // Tooltips use thin borders in dark theme to increase contrast
-  //   )
-  // );
 
   // Chips
   @include chip.provide-theme(
