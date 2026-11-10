@@ -7,7 +7,7 @@ import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import './data-table.js';
 import type { ColumnDef, DataTableElement } from './data-table.js';
-import { badgeCell, createExpanderColumn } from './data-table.js';
+import { badgeCell, createExpanderColumn, meterCell, ratingCell } from './data-table.js';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -542,6 +542,64 @@ describe('DataTable', () => {
         const badges = harness.getBodyCellByRowAndColumn(0, 0)?.querySelectorAll('.forge-badge');
         expect(Array.from(badges ?? []).map(badge => badge.textContent)).toEqual(['Alice', '30']);
         expect(badges?.[1].classList.contains('forge-badge--warning')).toBe(true);
+      });
+    });
+
+    describe('Meter Cell', () => {
+      it('should render a tooltip anchored to the meter that contains the value', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: meterCell({ min: 0, max: 50 }) }];
+        const harness = await createFixture({ columns });
+
+        const cell = harness.getBodyCellByRowAndColumn(0, 0);
+        const tooltip = cell?.querySelector('forge-tooltip');
+        expect(tooltip?.textContent).toBe('30 out of 50');
+        expect(tooltip?.anchorElement).toBe(cell?.querySelector('forge-meter'));
+      });
+
+      it('should show the percentage in the tooltip when the value mode is percentage', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: meterCell({ min: 0, max: 40, valueMode: 'percentage' }) }];
+        const harness = await createFixture({ columns });
+
+        expect(harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('forge-tooltip')?.textContent).toBe('75%');
+      });
+
+      it('should label the meter with the column header', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: meterCell({ min: 0, max: 50 }) }];
+        const harness = await createFixture({ columns });
+
+        expect(harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('forge-meter')?.getAttribute('aria-label')).toBe('Age');
+      });
+    });
+
+    describe('Rating Cell', () => {
+      it('should expose the value as a meter with ARIA value attributes', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: ratingCell({ min: 0, max: 50 }) }];
+        const harness = await createFixture({ columns });
+
+        const meter = harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('[role="meter"]');
+        expect(meter?.getAttribute('aria-label')).toBe('Age');
+        expect(meter?.getAttribute('aria-valuemin')).toBe('0');
+        expect(meter?.getAttribute('aria-valuemax')).toBe('50');
+        expect(meter?.getAttribute('aria-valuenow')).toBe('30');
+        expect(meter?.getAttribute('aria-valuetext')).toBe('30 out of 50');
+      });
+
+      it('should clamp aria-valuenow to the range when the value is out of bounds', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: ratingCell({ min: 0, max: 20 }) }];
+        const harness = await createFixture({ columns });
+
+        const meter = harness.getBodyCellByRowAndColumn(0, 0)?.querySelector('[role="meter"]');
+        expect(meter?.getAttribute('aria-valuenow')).toBe('20');
+      });
+
+      it('should render a tooltip anchored to the meter that contains the value', async () => {
+        const columns: ColumnDef<TestData>[] = [{ header: 'Age', property: 'age', template: ratingCell({ min: 0, max: 50 }) }];
+        const harness = await createFixture({ columns });
+
+        const cell = harness.getBodyCellByRowAndColumn(0, 0);
+        const tooltip = cell?.querySelector('forge-tooltip');
+        expect(tooltip?.textContent).toBe('30 out of 50');
+        expect(tooltip?.anchorElement).toBe(cell?.querySelector('[role="meter"]'));
       });
     });
 
