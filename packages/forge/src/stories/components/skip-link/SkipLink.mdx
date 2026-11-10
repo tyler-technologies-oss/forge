@@ -10,6 +10,9 @@ Skip links are used at the beginning of a page to allow users to skip over repet
 
 <Canvas of={SkipLinkStories.Demo} />
 
+> This demo sets `skip-url-change` so activating the link focuses the target without changing the URL. Storybook renders
+> stories in a frame whose links open in the parent window, so a regular fragment link would navigate away from the demo.
+
 ## Accessibility
 
 Always include a skip link as the first child of the `<body>` element that targets the main content of the page. Any page with
