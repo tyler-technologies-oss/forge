@@ -73,7 +73,7 @@ export const CustomMobileContent: Story = {
 
       const mobileOnlyBanner =
         currentBreakpoint === 'small'
-          ? `<forge-inline-message theme="info-secondary" style="margin: var(--forge-spacing-medium);">
+          ? `<forge-inline-message style="margin: var(--forge-spacing-medium);">
               <forge-icon slot="icon" name="info_outline"></forge-icon>
               This banner only appears in the mobile view.
             </forge-inline-message>`

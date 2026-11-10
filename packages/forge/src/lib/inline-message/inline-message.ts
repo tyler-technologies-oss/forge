@@ -20,9 +20,9 @@ declare global {
  *
  * @summary Inline messages are used to provide feedback to the user about a specific action or state. Use inline messages to communicate information such as errors, warnings, or success messages in a way that is contextual to the content on the page.
  *
- * @property {InlineMessageTheme} [theme="info"] - The theme to apply.
+ * @property {InlineMessageTheme} [theme="default"] - The theme to apply. `default` is neutral; `info`, `success`, `warning`, and `error` (or `critical`) convey meaning. `primary`, `secondary`, `tertiary`, and `info-secondary` are deprecated and render as `default`.
  *
- * @attribute {InlineMessageTheme} [theme="info"] - The theme to apply.
+ * @attribute {InlineMessageTheme} [theme="default"] - The theme to apply. `default` is neutral; `info`, `success`, `warning`, and `error` (or `critical`) convey meaning. `primary`, `secondary`, `tertiary`, and `info-secondary` are deprecated and render as `default`.
  *
  * @cssproperty --forge-inline-message-background - The background color.
  * @cssproperty --forge-inline-message-color - The text color.

@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
-import { GLOBAL_THEME_OPTIONS, customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
+import { customElementStoryRenderer, generateCustomElementArgTypes, getCssVariableArgs, standaloneStoryParams } from '../../utils.js';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconInfo } from '@tylertech/tyler-icons';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -26,7 +26,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      controls: { theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS } }
+      controls: { theme: { control: { type: 'select' }, options: ['default', 'info', 'success', 'warning', 'error'] } }
     })
   },
   args: {
@@ -74,8 +74,8 @@ export const Themed: Story = {
         <p>Qui nulla anim sunt eiusmod eiusmod id esse veniam proident ea adipisicing ad exercitation.</p>
       </forge-inline-message>
 
-      <forge-inline-message theme="info-secondary">
-        <forge-icon slot="icon" name="info"></forge-icon>
+      <forge-inline-message>
+        <forge-icon slot="icon" name="info_outline"></forge-icon>
         <p>Qui nulla anim sunt eiusmod eiusmod id esse veniam proident ea adipisicing ad exercitation.</p>
       </forge-inline-message>
     </div>

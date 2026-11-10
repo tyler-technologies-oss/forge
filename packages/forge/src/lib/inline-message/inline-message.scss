@@ -53,35 +53,22 @@
 // Theme
 //
 
-@each $theme in [primary secondary tertiary success warning] {
+// The default theme is neutral. The deprecated primary, secondary, tertiary, and info-secondary themes render as default.
+@each $theme in [info success warning] {
   :host([theme='#{$theme}']) {
     .forge-inline-message {
-      @if $theme == 'secondary' {
-        @include override(background, theme.variable(secondary-container), value);
-        @include override(icon-color, theme.variable(on-secondary-container), value);
-        @include override(border-color, theme.variable(secondary), value);
-      } @else {
-        @include override(background, theme.variable(#{$theme}-container-low), value);
-        @include override(icon-color, theme.variable(on-#{$theme}-container-low), value);
-        @include override(border-color, theme.variable(#{$theme}-container), value);
-      }
+      @include override(background, theme.variable(#{$theme}-container-low), value);
+      @include override(icon-color, theme.variable(on-#{$theme}-container-low), value);
+      @include override(border-color, theme.variable(border-#{$theme}-default), value);
     }
   }
 }
 
-// Map both "error" and "danger" for backwards compatibility with "danger" theme
-:host(:is([theme='error'], [theme='danger'])) {
+// "critical" and the legacy "danger" render as "error"
+:host(:is([theme='error'], [theme='critical'], [theme='danger'])) {
   .forge-inline-message {
     @include override(background, theme.variable(error-container-low), value);
     @include override(icon-color, theme.variable(on-error-container-low), value);
-    @include override(border-color, theme.variable(error-container), value);
-  }
-}
-
-:host([theme='info-secondary']) {
-  .forge-inline-message {
-    @include override(background, theme.variable(surface-container-low), value);
-    @include override(icon-color, theme.variable(on-surface-container-low), value);
-    @include override(border-color, theme.variable(surface-container), value);
+    @include override(border-color, theme.variable(border-error-default), value);
   }
 }

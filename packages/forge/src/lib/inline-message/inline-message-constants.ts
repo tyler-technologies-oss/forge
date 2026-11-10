@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants.js';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}inline-message`;
 
@@ -7,7 +7,7 @@ const attributes = {
 };
 
 const defaults = {
-  THEME: 'info'
+  THEME: 'default' as InlineMessageTheme
 };
 
 export const INLINE_MESSAGE_CONSTANTS = {
@@ -16,5 +16,6 @@ export const INLINE_MESSAGE_CONSTANTS = {
   defaults
 };
 
-type LegacyInlineMessageThemes = 'info-secondary' | 'danger';
-export type InlineMessageTheme = Theme | LegacyInlineMessageThemes;
+/** @deprecated These themes render as `default`, except `danger`, which renders as `error`. */
+type LegacyInlineMessageThemes = 'primary' | 'secondary' | 'tertiary' | 'info-secondary' | 'danger';
+export type InlineMessageTheme = 'default' | 'info' | 'success' | 'warning' | 'error' | 'critical' | LegacyInlineMessageThemes;

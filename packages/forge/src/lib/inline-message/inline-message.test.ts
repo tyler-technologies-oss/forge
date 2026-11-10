@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from 'vitest-browser-lit';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { IInlineMessageComponent } from './inline-message.js';
 import { InlineMessageTheme, INLINE_MESSAGE_CONSTANTS } from './inline-message-constants.js';
 import { frame } from '../core/utils/utils.js';
@@ -30,7 +30,19 @@ describe('Inline Message', () => {
     `);
     const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
 
-    const themes: InlineMessageTheme[] = ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info', 'info-secondary'];
+    const themes: InlineMessageTheme[] = [
+      'default',
+      'info',
+      'success',
+      'warning',
+      'error',
+      'critical',
+      'primary',
+      'secondary',
+      'tertiary',
+      'info-secondary',
+      'danger'
+    ];
     for (const theme of themes) {
       el.theme = theme;
       await frame();
@@ -56,4 +68,41 @@ describe('Inline Message', () => {
     const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
     expect(el.theme).toBe('error');
   });
+
+  it('should default the theme to default', async () => {
+    const screen = render(html`<forge-inline-message></forge-inline-message>`);
+    const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
+    expect(el.theme).toBe('default');
+  });
+
+  it('should remove the theme attribute when set to default', async () => {
+    const screen = render(html`<forge-inline-message theme="info"></forge-inline-message>`);
+    const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
+    el.theme = 'default';
+    expect(el.hasAttribute(INLINE_MESSAGE_CONSTANTS.attributes.THEME)).toBe(false);
+  });
+
+  it('should use a different background for the info theme than the default', async () => {
+    expect(await getBackground('info')).not.toBe(await getBackground());
+  });
+
+  (['primary', 'secondary', 'tertiary', 'info-secondary'] as InlineMessageTheme[]).forEach(theme => {
+    it(`should render the deprecated ${theme} theme as default`, async () => {
+      expect(await getBackground(theme)).toBe(await getBackground());
+    });
+  });
+
+  (['critical', 'danger'] as InlineMessageTheme[]).forEach(theme => {
+    it(`should render the ${theme} theme as error`, async () => {
+      expect(await getBackground(theme)).toBe(await getBackground('error'));
+    });
+  });
 });
+
+async function getBackground(theme?: InlineMessageTheme): Promise<string> {
+  const screen = render(html`<forge-inline-message theme=${theme ?? nothing}>Test content</forge-inline-message>`);
+  const el = screen.container.querySelector('forge-inline-message') as IInlineMessageComponent;
+  await frame();
+  const root = el.shadowRoot?.querySelector('.forge-inline-message') as HTMLElement;
+  return getComputedStyle(root).backgroundColor;
+}

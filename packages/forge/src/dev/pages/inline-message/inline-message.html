@@ -8,16 +8,13 @@ include('./src/partials/page.ejs', {
         type: 'select',
         label: 'Theme',
         id: 'opt-theme',
-        defaultValue: 'info',
+        defaultValue: 'default',
         options: [
-          { label: 'Primary', value: 'primary' },
-          { label: 'Secondary', value: 'secondary' },
-          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Default', value: 'default' },
+          { label: 'Info', value: 'info' },
           { label: 'Success', value: 'success' },
-          { label: 'Error', value: 'error' },
           { label: 'Warning', value: 'warning' },
-          { label: 'Info (default)', value: 'info' },
-          { label: 'Info secondary', value: 'info-secondary' }
+          { label: 'Error', value: 'error' }
         ]
       }
     ]

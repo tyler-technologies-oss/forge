@@ -6,7 +6,7 @@
 @use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
-  background: utils.module-val(inline-message, background, theme.variable(info-container-low)),
+  background: utils.module-val(inline-message, background, theme.variable(control-bg-tonal)),
   color: utils.module-val(inline-message, color, theme.variable(text-high)),
   shape: utils.module-val(inline-message, shape, shape.variable(medium)),
   padding: utils.module-val(inline-message, padding, spacing.variable(small)),
@@ -14,11 +14,11 @@ $tokens: (
   padding-block: utils.module-ref(inline-message, padding-block, padding),
   border-width: utils.module-val(inline-message, border-width, border.variable(thin)),
   border-style: utils.module-val(inline-message, border-style, none),
-  border-color: utils.module-val(inline-message, border-color, theme.variable(info-container)),
+  border-color: utils.module-val(inline-message, border-color, theme.variable(border-neutral-default)),
   gap: utils.module-val(inline-message, gap, spacing.variable(small)),
   icon-gap: utils.module-ref(inline-message, icon-gap, gap),
   content-gap: utils.module-ref(inline-message, content-gap, gap),
-  icon-color: utils.module-val(inline-message, icon-color, theme.variable(on-info-container-low))
+  icon-color: utils.module-val(inline-message, icon-color, theme.variable(text-medium))
 ) !default;
 
 @function get($key) {

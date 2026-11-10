@@ -66,7 +66,7 @@ Add a `title` slot above the message body when the message needs a short heading
 
 ## Theme
 
-Set `theme` to `error`, `warning`, `success`, `info` (the default), or `info-secondary` to match the message's meaning, and pair it with an icon in the `icon` slot that reinforces the same meaning.
+Leave `theme` unset for a neutral message. Set it to `info`, `success`, `warning`, or `error` to convey meaning, and pair it with an icon in the `icon` slot that reinforces the same meaning. `critical` is an alias for `error`. The `primary`, `secondary`, `tertiary`, and `info-secondary` themes are deprecated and render as the neutral default.
 
 <Example
   description="Every inline message theme, each paired with an icon."

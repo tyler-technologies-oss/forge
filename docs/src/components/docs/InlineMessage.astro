@@ -25,11 +25,12 @@ interface Props {
 }
 
 const THEME_ICONS: Partial<Record<InlineMessageTheme, string>> = {
+  default: "info_outline",
   info: "info",
-  "info-secondary": "info",
   success: "check_circle",
   warning: "warning",
   error: "error",
+  critical: "error",
 };
 
 const {
