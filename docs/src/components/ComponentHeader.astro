@@ -28,6 +28,8 @@
  * `thumbnail` renders the same demo as a small, inert, hidden-from-assistive-tech
  * preview (used by the All components page): the frame lays out at
  * `1 / THUMBNAIL_SCALE` times the thumbnail's size, then scales down to fit.
+ * It resets the forge-card custom properties the wrapping `forge-card.p-0`
+ * sets, so cards inside the demo keep their own padding.
  */
 interface Props {
   fit?: "center" | "cover";
@@ -74,7 +76,7 @@ const coverStyle = [
 
 <div
   data-pagefind-ignore
-  class={thumbnail ? "relative overflow-hidden border-b border-outline" : "contents"}
+  class={thumbnail ? "relative overflow-hidden border-b border-outline [--forge-card-padding:initial] [--forge-card-overflow:initial]" : "contents"}
   style={thumbnail ? `height: ${THUMBNAIL_HEIGHT}` : undefined}
   aria-hidden={thumbnail ? "true" : undefined}>
 <div
