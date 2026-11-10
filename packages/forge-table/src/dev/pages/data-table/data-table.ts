@@ -60,6 +60,7 @@ const tagsBadges = badgeCell({
 const actionsColumn: ColumnDef<RowData> = {
   id: 'actions',
   header: 'Actions',
+  align: 'end',
   resizable: false,
   stopRowClickPropagation: true,
   template: actionCell([

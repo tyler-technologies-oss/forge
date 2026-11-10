@@ -7,7 +7,7 @@ import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import './data-table.js';
 import type { ColumnDef, DataTableElement } from './data-table.js';
-import { badgeCell, createExpanderColumn, meterCell, ratingCell } from './data-table.js';
+import { actionCell, badgeCell, createExpanderColumn, meterCell, ratingCell } from './data-table.js';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -630,6 +630,20 @@ describe('DataTable', () => {
       const harness = await createFixture({ columns });
 
       expect(getComputedStyle(harness.bodyCells[0]).textAlign).toBe(align);
+    });
+
+    it.each([
+      ['start', 'flex-start'],
+      ['center', 'center'],
+      ['end', 'flex-end']
+    ] as const)('should justify cell content to %s when align is set', async (align, justifyContent) => {
+      const columns: ColumnDef<TestData>[] = [
+        { header: 'Actions', id: 'actions', align, template: actionCell([{ text: 'Edit', icon: 'edit', onClick: () => undefined }]) }
+      ];
+      const harness = await createFixture({ columns });
+
+      const cellContent = harness.bodyCells[0].querySelector('.cell-content') as HTMLElement;
+      expect(getComputedStyle(cellContent).justifyContent).toBe(justifyContent);
     });
 
     it('should not align header or footer cell text when align is set', async () => {

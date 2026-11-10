@@ -46,14 +46,26 @@ table {
 
     &[data-align='start'] {
       text-align: start;
+
+      .cell-content {
+        justify-content: flex-start;
+      }
     }
 
     &[data-align='center'] {
       text-align: center;
+
+      .cell-content {
+        justify-content: center;
+      }
     }
 
     &[data-align='end'] {
       text-align: end;
+
+      .cell-content {
+        justify-content: flex-end;
+      }
     }
   }
 

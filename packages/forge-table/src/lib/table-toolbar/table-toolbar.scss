@@ -1,0 +1,21 @@
+@use '@tylertech/forge-tokens/sass/typography';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.title {
+  @include typography.style(heading4);
+}
+
+.column-list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  max-block-size: 320px;
+  overflow-y: auto;
+}
