@@ -85,6 +85,8 @@ declare global {
  * @cssproperty --forge-step-line-min-width-clustered - The minimum width of the step line when clustered. Defaults to 25px.
  * @cssproperty --forge-step-label-color - The color of the step label. Defaults to the text-high theme.
  * @cssproperty --forge-step-sub-label-color - The color of the step sub-label. Defaults to the text-medium theme.
+ * @cssproperty --forge-step-selected-label-color - The color of the label and sub-label of the selected step. Defaults to the primary color.
+ * @cssproperty --forge-step-error-label-color - The color of the label and sub-label of the step with an error. Defaults to the error color.
  * @cssproperty --forge-step-error-color - The color of the step error. Defaults to the error theme.
  * @cssproperty --forge-step-error-text-color - The text color of the step error. Defaults to the on-error theme.
  * @cssproperty --forge-step-expansion-panel-border-left-width - The border left width of the step expansion panel. Defaults to 1px.

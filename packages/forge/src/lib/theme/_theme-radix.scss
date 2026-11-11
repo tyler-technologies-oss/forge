@@ -285,6 +285,12 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       line-color: var(--forge-theme-outline-low)
     )
   );
+  @include _step-labels;
+}
+
+@mixin _step-labels {
+  --forge-step-selected-label-color: var(--forge-theme-on-primary-container-minimum);
+  --forge-step-error-label-color: var(--forge-theme-text-critical);
 }
 
 @mixin _tab {

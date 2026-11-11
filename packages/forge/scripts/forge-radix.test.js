@@ -307,6 +307,14 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the stepper label colors', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-step)')).toContain('--forge-step-selected-label-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(getRule(stylesheet, ':where(forge-step)')).toContain('--forge-step-error-label-color: var(--forge-theme-text-critical);');
+      expect(getRule(stylesheet, ':root')).toContain('--forge-step-error-label-color: var(--forge-theme-text-critical);');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
