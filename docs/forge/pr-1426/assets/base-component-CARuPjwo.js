@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{A as t,t as n}from"./dist-19HqaCjJ.js";var r;function i(){return(i=e((()=>{n(),r=class extends HTMLElement{adoptedCallback(){this.shadowRoot&&t(this)}}})))()}export{i as n,r as t};
