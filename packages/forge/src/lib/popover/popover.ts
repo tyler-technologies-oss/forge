@@ -91,6 +91,8 @@ declare global {
  * @cssproperty --forge-popover-background - The background color of the popover surface.
  * @cssproperty --forge-popover-border-radius - The border radius of the popover surface.
  * @cssproperty --forge-popover-box-shadow - The box shadow of the popover surface.
+ * @cssproperty --forge-popover-ring-width - The width of the ring drawn outside the popover surface.
+ * @cssproperty --forge-popover-ring-color - The color of the ring drawn outside the popover surface.
  * @cssproperty --forge-popover-border-width - The border width of the popover surface.
  * @cssproperty --forge-popover-border-style - The border style of the popover surface.
  * @cssproperty --forge-popover-border-color - The border color of the popover surface.
@@ -109,6 +111,7 @@ declare global {
  * @cssproperty --forge-popover-arrow-bottom-rotation - The rotation of the arrow when the popover is placed on the bottom.
  * @cssproperty --forge-popover-arrow-left-rotation - The rotation of the arrow when the popover is placed on the left.
  * @cssproperty --forge-popover-arrow-border-width - The border width of the popover surface and arrow when an arrow is applied.
+ * @cssproperty --forge-popover-arrow-ring-width - The ring width of the popover surface and arrow when an arrow is applied. Defaults to the ring width.
  * @cssproperty --forge-popover-arrow-clip-path - The clip path to use for the arrow element.
  * @cssproperty --forge-popover-animation-timing - The animation timing function to use for the popover animation.
  * @cssproperty --forge-popover-zoom-duration - The duration of the zoom animation.

@@ -205,7 +205,10 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include popover.provide-theme(
     (
       background: var(--forge-theme-surface-elevated),
-      border-color: var(--forge-theme-outline-low)
+      ring-width: border.variable(thin),
+      ring-color: var(--forge-theme-surface-elevated-ring),
+      border-color: var(--forge-theme-outline-low),
+      arrow-border-width: 0px
     )
   );
 }
@@ -633,12 +636,6 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include radix-theme.properties-dark;
   @include radix-typography.properties;
   @include component-properties;
-
-  @include popover.provide-theme(
-    (
-      border-width: border.variable(thin)
-    )
-  );
 
   @include chip.provide-theme(
     (

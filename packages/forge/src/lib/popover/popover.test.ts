@@ -1356,6 +1356,52 @@ describe('Popover', () => {
     });
   });
 
+  describe('ring', () => {
+    it('should not draw a ring by default', async () => {
+      const harness = await createFixture({ open: true });
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toContain('0px 0px 0px 0px');
+    });
+
+    it('should draw a ring outside the surface when a ring width and color are set', async () => {
+      const harness = await createFixture({ open: true });
+      harness.popoverElement.style.setProperty('--forge-popover-ring-width', '2px');
+      harness.popoverElement.style.setProperty('--forge-popover-ring-color', 'rgb(1, 2, 3)');
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toContain('rgb(1, 2, 3) 0px 0px 0px 2px');
+    });
+
+    it('should draw a ring around the arrow when a ring width is set', async () => {
+      const harness = await createFixture({ open: true, arrow: true });
+      harness.popoverElement.style.setProperty('--forge-popover-ring-width', '2px');
+      harness.popoverElement.style.setProperty('--forge-popover-ring-color', 'rgb(1, 2, 3)');
+
+      expect(getComputedStyle(harness.arrowElement).boxShadow).toContain('rgb(1, 2, 3) 0px 0px 0px 2px');
+    });
+
+    it('should use the arrow ring width when an arrow is applied', async () => {
+      const harness = await createFixture({ open: true, arrow: true });
+      harness.popoverElement.style.setProperty('--forge-popover-ring-width', '2px');
+      harness.popoverElement.style.setProperty('--forge-popover-arrow-ring-width', '3px');
+      harness.popoverElement.style.setProperty('--forge-popover-ring-color', 'rgb(1, 2, 3)');
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toContain('rgb(1, 2, 3) 0px 0px 0px 3px');
+    });
+
+    it('should clip the arrow only by the border width when there is no ring', async () => {
+      const harness = await createFixture({ open: true, arrow: true });
+
+      expect(getComputedStyle(harness.arrowElement).clipPath).toContain('-1px -1px');
+    });
+
+    it('should extend the arrow clip path by the ring width', async () => {
+      const harness = await createFixture({ open: true, arrow: true });
+      harness.popoverElement.style.setProperty('--forge-popover-ring-width', '2px');
+
+      expect(getComputedStyle(harness.arrowElement).clipPath).toContain('-3px -3px');
+    });
+  });
+
   describe('focus management', () => {
     it('should focus element with autofocus attribute when opened via keyboard', async () => {
       const harness = await createFixture();

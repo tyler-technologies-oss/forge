@@ -262,12 +262,23 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should draw the popover edge as a ring instead of a border', () => {
+    for (const stylesheet of [light, dark]) {
+      const rule = getRule(stylesheet, ':where(forge-popover)');
+      expect(rule).toContain('--forge-popover-ring-width: var(--forge-border-thin');
+      expect(rule).toContain('--forge-popover-ring-color: var(--forge-theme-surface-elevated-ring);');
+      expect(rule).toContain('--forge-popover-arrow-border-width: 0px;');
+      expect(stylesheet).not.toContain('--forge-popover-border-width:');
+    }
+    expect(defaultTheme).not.toContain('--forge-popover-ring-color:');
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
 
   it('should provide the dark overrides without relying on the default dark stylesheet', () => {
-    expect(dark).toContain('--forge-popover-border-width:');
+    expect(dark).not.toContain('--forge-popover-border-width:');
     expect(dark).toContain('--forge-toast-action-color:');
     expect(dark).not.toContain('--forge-tooltip-background:');
     expect(dark).not.toContain('--forge-tooltip-border-width:');
