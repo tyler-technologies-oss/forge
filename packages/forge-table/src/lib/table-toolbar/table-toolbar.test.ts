@@ -197,6 +197,43 @@ describe('TableToolbar', () => {
     });
   });
 
+  describe('select', () => {
+    it('should turn on row selection when the select button is clicked and selection is off', async () => {
+      const { toolbar, table } = await createFixture({ features: 'select' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(table.rowSelection).toBe('multiple');
+    });
+
+    it('should turn off row selection when the select button is clicked and selection is on', async () => {
+      const { toolbar, table } = await createFixture({ features: 'select' });
+      await userEvent.click(getButtons(toolbar)[0]);
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(table.rowSelection).toBe('off');
+    });
+
+    it('should show the select button as on when row selection is enabled', async () => {
+      const { toolbar, table } = await createFixture({ features: 'select' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(true);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(false);
+      expect(table.rowSelection).toBe('off');
+    });
+
+    it('should not throw when the select button is clicked without a connected table', async () => {
+      const { toolbar } = await createFixture({ features: 'select', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+    });
+  });
+
   it('should be accessible', async () => {
     const { toolbar } = await createFixture({ features: 'export' });
 

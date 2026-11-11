@@ -10,7 +10,7 @@ import {
   tylIconViewColumn,
   tylIconPrint
 } from '@tylertech/tyler-icons';
-import { html, LitElement, type PropertyValues, type TemplateResult, unsafeCSS } from 'lit';
+import { html, LitElement, nothing, type PropertyValues, type TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
 import { getAllLeafColumns, resolveColumnId } from '../data-table/columns/column-utils.js';
@@ -103,8 +103,14 @@ export class TableToolbarElement extends LitElement {
           ${map(
             this.features,
             feature => html`
-              <forge-icon-button shape="squared" @click=${() => this.#onFeatureClick(feature)}>
+              <forge-icon-button
+                shape="squared"
+                ?toggle=${feature === 'select'}
+                .on=${feature === 'select' && !!this.tableElement && this.tableElement.rowSelection !== 'off'}
+                @click=${() => this.#onFeatureClick(feature)}
+                @forge-icon-button-toggle=${(evt: CustomEvent<boolean>) => this.#onSelectToggle(evt)}>
                 <forge-icon .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>
+                ${feature === 'select' ? html`<forge-icon slot="on" .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
               </forge-icon-button>
               <forge-tooltip type="label" placement="top"> ${TABLE_TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
             `
@@ -120,6 +126,14 @@ export class TableToolbarElement extends LitElement {
     } else if (feature === 'print') {
       this.tableElement?.print();
     }
+  }
+
+  #onSelectToggle(evt: CustomEvent<boolean>): void {
+    if (!this.tableElement) {
+      return;
+    }
+    this.tableElement.rowSelection = evt.detail ? 'multiple' : 'off';
+    this.requestUpdate();
   }
 
   #getColumnOptions(): ColumnOption[] {
