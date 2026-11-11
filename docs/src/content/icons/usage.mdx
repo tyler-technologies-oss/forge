@@ -1,6 +1,63 @@
 ---
 title: Usage
-description: How to use Tyler Forge icons in your applications
+description: When and how to use the most common icons across Tyler applications.
 ---
 
-Coming soon.
+import Rules from '../../components/Rules.astro';
+import Rule from '../../components/Rule.astro';
+import InlineMessage from '../../components/docs/InlineMessage.astro';
+import CommonIconsTable from '../../components/docs/CommonIconsTable.astro';
+
+Icons keep an interface consistent and help users recognize actions at a glance. This page lists the icons used most often across Tyler ERP applications, and the action each one stands for. Use the same icon for the same action in every application, so users can carry what they learn from one product to the next.
+
+To find any other icon, search the [icon library](/icons/library/). For general guidance on sizing, color, and accessibility, see [iconography](/designing/iconography/).
+
+## Best practices
+
+- **Add a tooltip to every icon button.** The tooltip names the action, since the icon alone doesn't.
+- **Pair an icon with text for a less familiar action.** Use an icon-only button only for actions users already recognize, like close, search, and edit.
+- **Don't use an icon alone for an unfamiliar action or concept.** If users have to guess what an icon means, use a text label instead.
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      'Use the outline variant of an icon when one exists, like `pencil_outline` for edit and `delete_outline` for delete.',
+      'Use the icon listed below for its action, so it means the same thing in every application.',
+      'Show an icon in its resting color, `--forge-theme-text-medium`, until it is active or focused.'
+    ]}
+  />
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't mix filled and outline icons in the same toolbar, menu, or group of actions.",
+      "Don't use one icon for two different actions in the same application.",
+      "Don't use an icon-only button for a domain-specific action."
+    ]}
+  />
+</Rules>
+
+## Outline icons
+
+Forge favors outline icons. They're lighter on the page than filled icons, so a toolbar or table row full of actions stays easy to scan. When an icon has an outline variant, use it, like `cog_outline` instead of `settings` or `bell_outline` instead of `notifications`.
+
+Some icons don't need an outline variant because they're already drawn with lines, like `close`, `add`, `download`, and `magnify`. Use those as they are. Their `_outline` versions, where they exist, draw a hollow shape around the lines and don't match the rest of the set.
+
+Use a filled icon only to show a state that the outline icon doesn't, like a filled `star` for an item that's already a favorite.
+
+## Color
+
+On a page, icons sit in a resting state and use the medium-emphasis text color. When an icon is active or focused, it uses the high-emphasis text color.
+
+| State           | Token                       |
+| --------------- | --------------------------- |
+| Resting         | `--forge-theme-text-medium` |
+| Active, focused | `--forge-theme-text-high`   |
+
+Forge 3 renamed these tokens. If you're upgrading from Forge 2, replace `--mdc-theme-text-secondary-on-light` with `--forge-theme-text-medium`, and `--mdc-theme-text-primary-on-light` with `--forge-theme-text-high`.
+
+## Common icons
+
+Each row lists the recommended icon for an action, when to use it, and where it usually appears in an application. The previews are shown in the resting color.
+
+<CommonIconsTable />

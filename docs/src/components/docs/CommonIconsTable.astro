@@ -1,0 +1,112 @@
+---
+/**
+ * CommonIconsTable — the recommended icon for each common action, from
+ * src/data/common-icons.ts, in a card with a filter field. The filter matches
+ * the action, icon names, guidance, categories, and locations. Previews render
+ * in the resting text-medium color they should have on a page.
+ */
+import { commonIcons } from "../../data/common-icons";
+
+const COLUMN_COUNT = 4;
+
+const searchText = ({ label, icon, alternate, guidance, categories, locations }: (typeof commonIcons)[number]) =>
+  [label, icon, alternate?.icon, alternate?.state, guidance, ...categories, ...locations]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+---
+
+<forge-structured-card heading-level="3" body-spacing="none" data-common-icons>
+  <span slot="title" class="text-heading3">Recommended icons</span>
+
+  <forge-text-field slot="header-actions" density="small" label-position="none" show-clear class="w-64">
+    <label for="common-icons-filter">Filter icons</label>
+    <input id="common-icons-filter" type="search" autocomplete="off" data-common-icons-filter />
+    <forge-icon slot="start" name="magnify"></forge-icon>
+  </forge-text-field>
+
+  <div slot="body" class="overflow-x-auto">
+    <table class="forge-data-table">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Action</th>
+          <th>Use guidance</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          commonIcons.map((entry) => (
+            <tr data-common-icons-row={searchText(entry)}>
+              <td>
+                <div class="flex flex-col gap-xsmall">
+                  <div class="flex items-center gap-small">
+                    <forge-icon
+                      name={entry.icon}
+                      class="text-medium [--forge-icon-size:24px]"
+                      aria-hidden="true"
+                    />
+                    <code>{entry.icon}</code>
+                  </div>
+                  {entry.alternate && (
+                    <div class="flex items-center gap-small">
+                      <forge-icon
+                        name={entry.alternate.icon}
+                        class="text-medium [--forge-icon-size:24px]"
+                        aria-hidden="true"
+                      />
+                      <code>{entry.alternate.icon}</code>
+                      <span class="text-label1 text-medium">{entry.alternate.state}</span>
+                    </div>
+                  )}
+                </div>
+              </td>
+              <td>{entry.label}</td>
+              <td>{entry.guidance}</td>
+              <td class="whitespace-nowrap">
+                {entry.locations.map((location) => (
+                  <div>{location}</div>
+                ))}
+              </td>
+            </tr>
+          ))
+        }
+        <tr hidden data-common-icons-empty>
+          <td colspan={COLUMN_COUNT} class="text-medium">No icons match your filter.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <span slot="body" class="sr-only" aria-live="polite" data-common-icons-status></span>
+</forge-structured-card>
+
+<script>
+  const setUpFilter = (card: HTMLElement): void => {
+    const input = card.querySelector<HTMLInputElement>("[data-common-icons-filter]");
+    const rows = Array.from(card.querySelectorAll<HTMLElement>("[data-common-icons-row]"));
+    const empty = card.querySelector<HTMLElement>("[data-common-icons-empty]");
+    const status = card.querySelector<HTMLElement>("[data-common-icons-status]");
+    if (!input || !empty || !status) {
+      return;
+    }
+
+    input.addEventListener("input", () => {
+      const terms = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let visibleCount = 0;
+      rows.forEach((row) => {
+        const text = row.dataset.commonIconsRow ?? "";
+        const isMatch = terms.every((term) => text.includes(term));
+        row.hidden = !isMatch;
+        visibleCount += isMatch ? 1 : 0;
+      });
+      empty.hidden = visibleCount > 0;
+      status.textContent = terms.length ? `${visibleCount} of ${rows.length} icons shown` : "";
+    });
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-common-icons]").forEach(setUpFilter);
+  });
+</script>
