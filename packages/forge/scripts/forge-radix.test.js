@@ -154,6 +154,24 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the surface and border colors of overlays and dividers', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-dialog)')).toContain('--forge-dialog-background: var(--forge-theme-surface-elevated);');
+      expect(getRule(stylesheet, ':where(forge-popover)')).toContain('--forge-popover-border-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-divider)')).toContain('--forge-divider-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-kbd)')).toContain('--forge-kbd-border-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-tooltip)')).toContain('--forge-tooltip-border-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-toolbar)')).toContain('--forge-toolbar-divider-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-drawer)')).toContain('--forge-drawer-border-color: var(--forge-theme-outline-low);');
+    }
+  });
+
+  it('should set the toast action color on the light stylesheet and keep the dark override', () => {
+    expect(light).toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
+    expect(dark).toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse,');
+    expect(dark).not.toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
@@ -161,7 +179,8 @@ describe('forge-radix stylesheets', () => {
   it('should provide the dark overrides without relying on the default dark stylesheet', () => {
     expect(dark).toContain('--forge-popover-border-width:');
     expect(dark).toContain('--forge-toast-action-color:');
-    expect(dark).not.toContain('--forge-tooltip-');
+    expect(dark).not.toContain('--forge-tooltip-background:');
+    expect(dark).not.toContain('--forge-tooltip-border-width:');
   });
 
   it('should not change the default theme', () => {

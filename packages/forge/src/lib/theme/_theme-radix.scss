@@ -9,6 +9,10 @@
 @use '../button-toggle/button-toggle/token-utils' as button-toggle;
 @use '../button-toggle/button-toggle-group/token-utils' as button-toggle-group;
 @use '../card/token-utils' as card;
+@use '../dialog/token-utils' as dialog;
+@use '../divider/token-utils' as divider;
+@use '../kbd/token-utils' as kbd;
+@use '../tooltip/token-utils' as tooltip;
 @use '../chips/chip/token-utils' as chip;
 @use '../field/token-utils' as field;
 @use '../file-picker/token-utils' as file-picker;
@@ -184,7 +188,48 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 @mixin _popover {
   @include popover.provide-theme(
     (
+      background: var(--forge-theme-surface-elevated),
+      border-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _dialog {
+  @include dialog.provide-theme(
+    (
       background: var(--forge-theme-surface-elevated)
+    )
+  );
+}
+
+@mixin _divider {
+  @include divider.provide-theme(
+    (
+      color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _kbd {
+  @include kbd.provide-theme(
+    (
+      border-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _tooltip {
+  @include tooltip.provide-theme(
+    (
+      border-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _toast {
+  @include toast.provide-theme(
+    (
+      action-color: var(--forge-theme-on-surface-inverse-secondary)
     )
   );
 }
@@ -200,7 +245,8 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 @mixin _toolbar {
   @include toolbar.provide-theme(
     (
-      backdrop-filter: blur(20px)
+      backdrop-filter: blur(20px),
+      divider-color: var(--forge-theme-outline-low)
     )
   );
 }
@@ -218,6 +264,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
 @mixin _drawer {
   --forge-drawer-background: var(--forge-theme-surface-translucent);
+  --forge-drawer-border-color: var(--forge-theme-outline-low);
 }
 
 ///
@@ -238,6 +285,10 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _skip-link;
   @include _card;
   @include _chip;
+  @include _dialog;
+  @include _divider;
+  @include _kbd;
+  @include _tooltip;
   @include _field;
   @include _file-picker;
   @include _fab;
@@ -301,6 +352,22 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-skip-link) {
     @include _skip-link;
+  }
+
+  :where(forge-dialog) {
+    @include _dialog;
+  }
+
+  :where(forge-divider) {
+    @include _divider;
+  }
+
+  :where(forge-kbd) {
+    @include _kbd;
+  }
+
+  :where(forge-tooltip) {
+    @include _tooltip;
   }
 
   :where(forge-chip) {
@@ -380,6 +447,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include radix-theme.properties;
   @include radix-typography.properties;
   @include component-properties;
+  @include _toast;
 }
 
 ///
