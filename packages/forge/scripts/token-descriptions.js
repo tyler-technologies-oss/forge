@@ -55,6 +55,8 @@ const THEME_DESCRIPTIONS = {
     'A translucent version of the elevated surface background color, for elevated surfaces that let the content behind them show through.',
   '--forge-theme-surface-elevated-ring':
     'The color of the hairline ring drawn around elevated surfaces such as popovers, dialogs, and raised cards, so their edge stays visible in both themes.',
+  '--forge-theme-ai-gradient-start': 'The starting color of the AI gradient, at the top center of components styled with the AI stylesheet.',
+  '--forge-theme-ai-gradient-end': 'The ending color of the AI gradient, at the outer edges of components styled with the AI stylesheet.',
   '--forge-theme-surface-transparent':
     'The surface color at 0% opacity. Use it to fade to or clear a surface without the gray cast of plain transparent, such as the readonly field background.',
   '--forge-theme-on-surface': 'The color for content, such as text and icons, placed on a surface. Also the base color for hover and focus state layers.',

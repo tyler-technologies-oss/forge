@@ -214,6 +214,12 @@
     "surface-elevated-ring": {
       "$value": "color-mix(in oklab, {color.radix.slate.a3}, {color.radix.slate.3} 25%)"
     },
+    "ai-gradient-start": {
+      "$value": "{color.radix.plum.6}"
+    },
+    "ai-gradient-end": {
+      "$value": "{color.radix.iris.6}"
+    },
     "on-surface": {
       "$value": "{theme.text-high}"
     },

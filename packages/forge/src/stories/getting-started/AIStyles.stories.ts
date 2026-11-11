@@ -82,7 +82,7 @@ export const States: Story = {
       <forge-text-field class="forge-ai" invalid>
         <label slot="label" for="ai-invalid">Invalid</label>
         <input type="text" id="ai-invalid" />
-        <span slot="support-text">Invalid fields keep their error styling</span>
+        <span slot="support-text">Invalid fields keep their error outline</span>
       </forge-text-field>
 
       <forge-text-field class="forge-ai" disabled>
