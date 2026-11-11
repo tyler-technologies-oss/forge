@@ -273,6 +273,16 @@ describe('forge-radix stylesheets', () => {
     expect(defaultTheme).not.toContain('--forge-popover-ring-color:');
   });
 
+  it('should draw the dialog edge as a ring through the elevation tokens', () => {
+    for (const stylesheet of [light, dark]) {
+      const rule = getRule(stylesheet, ':where(forge-dialog)');
+      expect(rule).toMatch(/--forge-dialog-elevation: 0 0 0 var\(--forge-border-thin[^)]*\) var\(--forge-theme-surface-elevated-ring\), 0px 11px 15px -7px/);
+      expect(rule).toMatch(
+        /--forge-dialog-nonmodal-elevation: 0 0 0 var\(--forge-border-thin[^)]*\) var\(--forge-theme-surface-elevated-ring\), 0px 2px 4px -1px/
+      );
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

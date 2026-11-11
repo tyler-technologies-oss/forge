@@ -1,4 +1,5 @@
 @use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/radix-theme';
 @use '@tylertech/forge-tokens/sass/radix-typography';
 @use '@tylertech/forge-tokens/sass/theme';
@@ -216,7 +217,15 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 @mixin _dialog {
   @include dialog.provide-theme(
     (
-      background: var(--forge-theme-surface-elevated)
+      background: var(--forge-theme-surface-elevated),
+      elevation: (
+        0 0 0 border.variable(thin) var(--forge-theme-surface-elevated-ring),
+        elevation.value(24)
+      ),
+      nonmodal-elevation: (
+        0 0 0 border.variable(thin) var(--forge-theme-surface-elevated-ring),
+        elevation.value(4)
+      )
     )
   );
 }
