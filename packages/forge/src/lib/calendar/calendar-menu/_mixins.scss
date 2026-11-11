@@ -113,12 +113,6 @@
   }
 }
 
-@mixin popup-context-styles() {
-  .forge-calendar-menu {
-    @include popup-context-base;
-  }
-}
-
 @mixin host() {
   display: block;
   position: absolute;
@@ -129,15 +123,10 @@
 }
 
 @mixin base() {
-  background-color: #{theme.variable(surface)};
   position: relative;
   height: 100%;
   width: 100%;
   overflow: hidden;
-}
-
-@mixin popup-context-base() {
-  background-color: #{theme.variable(surface-bright)};
 }
 
 @mixin view() {
@@ -183,7 +172,7 @@
 }
 
 @mixin grid-item-enabled {
-  border: 1px solid #{theme.variable(outline)};
+  border: 1px solid #{theme.variable(outline-low)};
   cursor: pointer;
 }
 

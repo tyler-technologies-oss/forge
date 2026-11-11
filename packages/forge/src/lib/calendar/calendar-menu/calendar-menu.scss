@@ -10,8 +10,3 @@
 :host([hidden]) {
   display: none;
 }
-
-// This is here until Firefox supports :host-context()...
-:host([forge-popover-context='true']) {
-  @include mixins.popup-context-styles;
-}

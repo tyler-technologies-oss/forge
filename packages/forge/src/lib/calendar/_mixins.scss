@@ -3,6 +3,7 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '../utils/mixins' as utils;
 @use './variables';
+@use './calendar-menu/variables' as menu-variables;
 @use '../focus-indicator';
 
 @mixin core-styles() {
@@ -23,6 +24,11 @@
 
     &__date-view {
       @include date-view;
+
+      .forge-calendar--month-menu-open &,
+      .forge-calendar--year-menu-open & {
+        @include date-view-hidden;
+      }
 
       &__row {
         @include date-view-row;
@@ -154,7 +160,7 @@
 }
 
 @mixin popup-context-styles() {
-  --forge-calendar-event-stroke-color: #{theme.variable(surface-bright)};
+  --forge-calendar-event-stroke-color: #{theme.variable(surface-elevated)};
 }
 
 @mixin host() {
@@ -203,6 +209,14 @@
 
 @mixin date-view() {
   display: block;
+  transition:
+    opacity menu-variables.$animation-duration,
+    visibility menu-variables.$animation-duration;
+}
+
+@mixin date-view-hidden() {
+  opacity: 0;
+  visibility: hidden;
 }
 
 // Dates
