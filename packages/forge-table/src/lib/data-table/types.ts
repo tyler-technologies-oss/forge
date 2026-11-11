@@ -20,6 +20,7 @@ export interface ColumnDefMeta {
   formatAttribute?: string;
   aggregated?: boolean;
   canEdit?: CellEditablePredicate;
+  enableCellSelection?: boolean | EnableCellSelectionFn<any, any>;
 }
 
 export type Row = RowData;
@@ -37,6 +38,8 @@ export type TemplateFn<TData extends Row = Row, TValue = unknown> = (props: {
   column: Column<DataTableFeatures, TData>;
   cell: Cell<DataTableFeatures, TData, TValue>;
 }) => string | HTMLElement;
+
+export type EnableCellSelectionFn<TData extends Row = Row, TValue = unknown> = (cell: Cell<DataTableFeatures, TData, TValue>) => boolean;
 
 export interface ColumnDef<TData extends Row = Row> {
   id?: string;
@@ -59,4 +62,5 @@ export interface ColumnDef<TData extends Row = Row> {
   align?: ColumnAlign;
   pin?: ColumnPin;
   editable?: boolean;
+  enableCellSelection?: boolean | EnableCellSelectionFn<TData>;
 }

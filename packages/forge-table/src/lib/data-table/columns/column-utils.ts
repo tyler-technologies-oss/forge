@@ -63,6 +63,13 @@ function mapFooter<TData extends Row>(column: ColumnDef<TData>): TanstackColumnD
   };
 }
 
+function getStaticCellSelection<TData extends Row>({ enableCellSelection, stopRowClickPropagation, editable }: ColumnDef<TData>): false | undefined {
+  if (enableCellSelection === undefined) {
+    return stopRowClickPropagation || editable ? false : undefined;
+  }
+  return enableCellSelection === false ? false : undefined;
+}
+
 export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], parentIndices: number[] = []): TanstackColumnDef<DataTableFeatures, TData>[] {
   return columns.map((column, index) => {
     const indexPath = [...parentIndices, index];
@@ -74,6 +81,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
       header: column.header,
       footer: mapFooter(column),
       enableHiding: column.hideable ?? true,
+      enableCellSelection: getStaticCellSelection(column),
       size: column.width ?? DEFAULT_COLUMN_WIDTH,
       meta: {
         cellSlot: column.useTemplateSlot,
@@ -84,7 +92,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         align: column.align,
         formatAttribute: getFormatterAttribute(column.format),
         aggregated: !!column.aggregate && typeof column.footer !== 'string',
-        canEdit: createCellEditablePredicate(column)
+        canEdit: createCellEditablePredicate(column),
+        enableCellSelection: column.enableCellSelection
       }
     };
 
@@ -178,6 +187,7 @@ export function prependSelectColumn<TData extends Row>(
     enableColumnFilter: false,
     enableSorting: false,
     enableHiding: false,
+    enableCellSelection: false,
     header:
       rowSelection === 'multiple'
         ? ({ table }) =>

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase -- TanStack exports its built-in filter and sort functions with underscores */
 import {
+  cellSelectionFeature,
   columnFilteringFeature,
   columnOrderingFeature,
   columnPinningFeature,
@@ -28,6 +29,7 @@ import { dataTableAggregationFns } from './features/aggregation.js';
 import type { ColumnDefMeta } from './types.js';
 
 export const dataTableFeatures = tableFeatures({
+  cellSelectionFeature,
   columnFilteringFeature,
   columnOrderingFeature,
   columnPinningFeature,

@@ -1,5 +1,5 @@
 import { constructAggregationFn } from '@tanstack/lit-table';
-import type { ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
+import type { CellSelectionRange, CellSelectionState, ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
 import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
@@ -203,6 +203,31 @@ class DataTableHarness {
     }
   }
 
+  public get selectedCells(): HTMLTableCellElement[] {
+    return Array.from(this.shadowRoot.querySelectorAll('tbody td.cell-selected'));
+  }
+
+  public get activeCell(): Element | null {
+    return this.shadowRoot.activeElement;
+  }
+
+  public async dragBodyCells(from: [number, number], to: [number, number]): Promise<void> {
+    const start = this.getBodyCellByRowAndColumn(...from) as HTMLElement;
+    const end = this.getBodyCellByRowAndColumn(...to) as HTMLElement;
+    start.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, composed: true, button: 0 }));
+    await this.element.updateComplete;
+    end.dispatchEvent(new MouseEvent('mouseenter', { composed: true }));
+    document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    await settle(this.element);
+  }
+
+  public async clickBodyCellWithModifier(rowIndex: number, colIndex: number, key: 'Shift' | 'Control'): Promise<void> {
+    await userEvent.keyboard(`{${key}>}`);
+    await this.clickBodyCell(rowIndex, colIndex);
+    await userEvent.keyboard(`{/${key}}`);
+    await settle(this.element);
+  }
+
   public async typeIntoFilter(index: number, value: string): Promise<void> {
     const input = this.filterInputs[index];
     if (input) {
@@ -284,6 +309,8 @@ async function createFixture(
       .compact=${props.compact ?? false}
       .bordered=${props.bordered ?? false}
       .rowSelection=${props.rowSelection ?? 'off'}
+      .cellSelection=${props.cellSelection ?? false}
+      .enableCellSelection=${props.enableCellSelection ?? true}
       .reorderable=${props.reorderable ?? false}
       .allowRowClick=${props.allowRowClick ?? false}
       .expandable=${props.expandable ?? false}
@@ -2182,6 +2209,800 @@ describe('DataTable', () => {
         const rowsStillSelected = harness.bodyRows.filter(row => row.classList.contains('selected'));
         expect(rowsStillSelected.length).toBeLessThanOrEqual(1);
       });
+    });
+  });
+
+  describe('Cell Selection', () => {
+    const cellSelectEvents = (harness: DataTableHarness): CellSelectionState[] => {
+      const events: CellSelectionState[] = [];
+      harness.element.addEventListener('forge-data-table-cell-select', (evt: Event) => events.push((evt as CustomEvent<CellSelectionState>).detail));
+      return events;
+    };
+
+    const selectedPositions = (harness: DataTableHarness): string[] =>
+      harness.bodyRows.flatMap((row, rowIndex) =>
+        Array.from(row.querySelectorAll('td'))
+          .map((cell, colIndex) => (cell.classList.contains('cell-selected') ? `${rowIndex}:${colIndex}` : null))
+          .filter((position): position is string => position !== null)
+      );
+
+    it('should not make cells selectable when cell selection is off', async () => {
+      const harness = await createFixture();
+
+      await harness.clickBodyCell(0, 1);
+
+      expect(harness.tableElement?.hasAttribute('role')).toBe(false);
+      expect(harness.bodyCells.some(cell => cell.hasAttribute('tabindex'))).toBe(false);
+      expect(harness.selectedCells.length).toBe(0);
+    });
+
+    it('should expose a multiselectable grid when cell selection is on', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      expect(harness.tableElement?.getAttribute('role')).toBe('grid');
+      expect(harness.tableElement?.getAttribute('aria-multiselectable')).toBe('true');
+      expect(harness.hasCustomState('cell-selection')).toBe(true);
+    });
+
+    it('should select a cell when it is clicked', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(1, 2);
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['1:2']);
+      expect(harness.getBodyCellByRowAndColumn(1, 2)?.getAttribute('aria-selected')).toBe('true');
+      expect(harness.getBodyCellByRowAndColumn(0, 0)?.getAttribute('aria-selected')).toBe('false');
+    });
+
+    it('should replace the selection when another cell is clicked', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await harness.clickBodyCell(2, 3);
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['2:3']);
+    });
+
+    it('should emit cell select event with the selected range', async () => {
+      const harness = await createFixture({ cellSelection: true });
+      const events = cellSelectEvents(harness);
+
+      await harness.clickBodyCell(1, 1);
+
+      expect(events.length).toBe(1);
+      expect(events[0]).toEqual([{ anchorRowId: '1', anchorColumnId: 'name', focusRowId: '1', focusColumnId: 'name' }]);
+    });
+
+    it('should not emit cell select event when the data first loads', async () => {
+      const harness = await createFixture({ cellSelection: true });
+      const events = cellSelectEvents(harness);
+
+      await harness.setData(TEST_DATA.slice(0, 2));
+
+      expect(events.length).toBe(0);
+    });
+
+    it('should select a range when shift-clicking', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await harness.clickBodyCellWithModifier(1, 1, 'Shift');
+
+      expect(selectedPositions(harness)).toEqual(['0:0', '0:1', '1:0', '1:1']);
+    });
+
+    it('should select a range when dragging across cells', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.dragBodyCells([0, 1], [2, 2]);
+
+      expect(selectedPositions(harness)).toEqual(['0:1', '0:2', '1:1', '1:2', '2:1', '2:2']);
+    });
+
+    it('should add a range when ctrl-clicking', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await harness.clickBodyCellWithModifier(2, 3, 'Control');
+
+      expect(selectedPositions(harness)).toEqual(['0:0', '2:3']);
+    });
+
+    it('should mark only the outer sides of a range as its edges', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.dragBodyCells([0, 0], [1, 1]);
+
+      const edgesOf = (row: number, col: number): string[] =>
+        ['top', 'right', 'bottom', 'left'].filter(side => harness.getBodyCellByRowAndColumn(row, col)?.classList.contains(`selection-${side}`));
+      expect(edgesOf(0, 0)).toEqual(['top', 'left']);
+      expect(edgesOf(0, 1)).toEqual(['top', 'right']);
+      expect(edgesOf(1, 0)).toEqual(['bottom', 'left']);
+      expect(edgesOf(1, 1)).toEqual(['right', 'bottom']);
+    });
+
+    it('should make the first cell the tab stop when nothing is selected', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      const tabStops = harness.bodyCells.filter(cell => cell.getAttribute('tabindex') === '0');
+      expect(tabStops).toEqual([harness.getBodyCellByRowAndColumn(0, 0)]);
+    });
+
+    it('should move the tab stop to the selected cell', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(1, 2);
+      await settle(harness.element);
+
+      const tabStops = harness.bodyCells.filter(cell => cell.getAttribute('tabindex') === '0');
+      expect(tabStops).toEqual([harness.getBodyCellByRowAndColumn(1, 2)]);
+    });
+
+    it('should select the first cell when it receives focus with no selection', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      harness.getBodyCellByRowAndColumn(0, 0)?.focus();
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['0:0']);
+    });
+
+    it('should move the selection and focus with the arrow keys', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await userEvent.keyboard('{ArrowDown}');
+      await settle(harness.element);
+      await userEvent.keyboard('{ArrowRight}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['1:1']);
+      expect(harness.activeCell).toBe(harness.getBodyCellByRowAndColumn(1, 1));
+
+      await userEvent.keyboard('{ArrowUp}');
+      await settle(harness.element);
+      await userEvent.keyboard('{ArrowLeft}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['0:0']);
+      expect(harness.activeCell).toBe(harness.getBodyCellByRowAndColumn(0, 0));
+    });
+
+    it('should not move the selection past the edge of the table', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await userEvent.keyboard('{ArrowUp}');
+      await userEvent.keyboard('{ArrowLeft}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['0:0']);
+    });
+
+    it('should extend the selection with shift and the arrow keys', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await userEvent.keyboard('{Shift>}{ArrowDown}{ArrowRight}{/Shift}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['0:0', '0:1', '1:0', '1:1']);
+      expect(harness.activeCell).toBe(harness.getBodyCellByRowAndColumn(0, 0));
+    });
+
+    it('should select every cell with ctrl+a', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await userEvent.keyboard('{Control>}a{/Control}');
+      await settle(harness.element);
+
+      expect(harness.selectedCells.length).toBe(TEST_DATA.length * TEST_COLUMNS.length);
+    });
+
+    it('should clear the selection with escape', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(1, 1);
+      const events = cellSelectEvents(harness);
+      await userEvent.keyboard('{Escape}');
+      await settle(harness.element);
+
+      expect(harness.selectedCells.length).toBe(0);
+      expect(events.length).toBe(1);
+      expect(events[0]).toEqual([]);
+    });
+
+    it('should select cells again after the selection is cleared with escape', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(1, 1);
+      await userEvent.keyboard('{Escape}');
+      await settle(harness.element);
+      await userEvent.keyboard('{ArrowDown}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['1:1']);
+    });
+
+    it('should select the sorted cells by position when the table is sorted', async () => {
+      const harness = await createFixture({ cellSelection: true, sortable: true });
+
+      await harness.clickBodyCell(0, 0);
+      await harness.clickHeaderCell(2);
+      await settle(harness.element);
+
+      expect(harness.selectedCells.length).toBe(1);
+      expect(harness.selectedCells[0].textContent?.trim()).toBe('1');
+    });
+
+    it('should clear the selection when the data changes', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await harness.setData([...TEST_DATA]);
+
+      expect(harness.selectedCells.length).toBe(0);
+    });
+
+    it('should clear the selection when cell selection is turned off', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      harness.element.cellSelection = false;
+      await settle(harness.element);
+
+      expect(harness.selectedCells.length).toBe(0);
+      expect(harness.tableElement?.hasAttribute('role')).toBe(false);
+      expect(harness.bodyCells.some(cell => cell.hasAttribute('tabindex'))).toBe(false);
+    });
+
+    it('should not make the row selection column selectable', async () => {
+      const harness = await createFixture({ cellSelection: true, rowSelection: 'multiple' });
+
+      const selectCells = harness.bodyCells.filter(cell => cell.classList.contains('select-column'));
+      expect(selectCells.length).toBe(TEST_DATA.length);
+      expect(selectCells.some(cell => cell.hasAttribute('tabindex'))).toBe(false);
+
+      await harness.clickBodyCell(0, 1);
+      await userEvent.keyboard('{ArrowLeft}');
+      await settle(harness.element);
+
+      expect(selectedPositions(harness)).toEqual(['0:1']);
+    });
+
+    it('should not make editable or interactive columns selectable', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'age', header: 'Age', property: 'age', editable: true },
+        { id: 'email', header: 'Email', property: 'email', stopRowClickPropagation: true }
+      ];
+      const harness = await createFixture({ cellSelection: true, columns });
+
+      await harness.clickBodyCell(0, 1);
+      await harness.clickBodyCell(0, 2);
+
+      expect(harness.selectedCells.length).toBe(0);
+      expect(harness.getBodyCellByRowAndColumn(0, 1)?.hasAttribute('tabindex')).toBe(false);
+      expect(harness.getBodyCellByRowAndColumn(0, 2)?.hasAttribute('tabindex')).toBe(false);
+    });
+
+    describe('enableCellSelection', () => {
+      const isSelectable = (harness: DataTableHarness, row: number, column: number): boolean =>
+        !!harness.getBodyCellByRowAndColumn(row, column)?.classList.contains('cell-selectable');
+
+      it('should not make any cell selectable when the table option is false', async () => {
+        const harness = await createFixture({ cellSelection: true, enableCellSelection: false });
+
+        await harness.clickBodyCell(0, 1);
+        await settle(harness.element);
+
+        expect(harness.bodyCells.some(cell => cell.classList.contains('cell-selectable'))).toBe(false);
+        expect(selectedPositions(harness)).toEqual([]);
+      });
+
+      it('should only make cells selectable where the table function returns true', async () => {
+        const enableCellSelection = (cell: { row: { original: TestData } }): boolean => cell.row.original.age > 28;
+        const harness = await createFixture({ cellSelection: true, enableCellSelection });
+
+        expect([0, 1, 2].map(row => isSelectable(harness, row, 1))).toEqual([true, false, true]);
+
+        await harness.clickBodyCell(1, 1);
+        await settle(harness.element);
+        expect(selectedPositions(harness)).toEqual([]);
+
+        await harness.clickBodyCell(2, 1);
+        await settle(harness.element);
+        expect(selectedPositions(harness)).toEqual(['2:1']);
+      });
+
+      it('should update selectable cells when the table option changes', async () => {
+        const harness = await createFixture({ cellSelection: true });
+        expect(isSelectable(harness, 0, 1)).toBe(true);
+
+        harness.element.enableCellSelection = false;
+        await settle(harness.element);
+
+        expect(isSelectable(harness, 0, 1)).toBe(false);
+      });
+
+      it('should not make cells in a column selectable when the column option is false', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'age', header: 'Age', property: 'age', enableCellSelection: false }
+        ];
+        const harness = await createFixture({ cellSelection: true, columns });
+
+        await harness.clickBodyCell(0, 1);
+        await settle(harness.element);
+
+        expect(isSelectable(harness, 0, 0)).toBe(true);
+        expect(isSelectable(harness, 0, 1)).toBe(false);
+        expect(selectedPositions(harness)).toEqual([]);
+      });
+
+      it('should only make cells selectable where the column function returns true', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name', enableCellSelection: cell => cell.row.original.name !== 'Bob' },
+          { id: 'age', header: 'Age', property: 'age' }
+        ];
+        const harness = await createFixture({ cellSelection: true, columns });
+
+        expect([0, 1, 2].map(row => isSelectable(harness, row, 0))).toEqual([true, false, true]);
+        expect([0, 1, 2].map(row => isSelectable(harness, row, 1))).toEqual([true, true, true]);
+      });
+
+      it('should let a column set to true override a table option of false', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name', enableCellSelection: true },
+          { id: 'age', header: 'Age', property: 'age' }
+        ];
+        const harness = await createFixture({ cellSelection: true, enableCellSelection: false, columns });
+
+        await harness.clickBodyCell(0, 0);
+        await settle(harness.element);
+
+        expect(isSelectable(harness, 0, 0)).toBe(true);
+        expect(isSelectable(harness, 0, 1)).toBe(false);
+        expect(selectedPositions(harness)).toEqual(['0:0']);
+      });
+
+      it('should let a column set to false override a table function that returns true', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name', enableCellSelection: false },
+          { id: 'age', header: 'Age', property: 'age' }
+        ];
+        const harness = await createFixture({ cellSelection: true, enableCellSelection: () => true, columns });
+
+        expect(isSelectable(harness, 0, 0)).toBe(false);
+        expect(isSelectable(harness, 0, 1)).toBe(true);
+      });
+
+      it('should let a column function override a table option of false', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name', enableCellSelection: cell => cell.row.original.name === 'Bob' }
+        ];
+        const harness = await createFixture({ cellSelection: true, enableCellSelection: false, columns });
+
+        expect([0, 1, 2].map(row => isSelectable(harness, row, 0))).toEqual([false, true, false]);
+      });
+
+      it('should let an editable column opt in to selection', async () => {
+        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', editable: true, enableCellSelection: true }];
+        const harness = await createFixture({ cellSelection: true, columns });
+
+        expect(isSelectable(harness, 0, 0)).toBe(true);
+      });
+
+      it('should skip unselectable cells when selecting all cells', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'age', header: 'Age', property: 'age', enableCellSelection: false }
+        ];
+        const harness = await createFixture({ cellSelection: true, columns });
+
+        await harness.clickBodyCell(0, 0);
+        await userEvent.keyboard('{Control>}a{/Control}');
+        await settle(harness.element);
+
+        expect(selectedPositions(harness)).toEqual(['0:0', '1:0', '2:0']);
+      });
+    });
+
+    describe('selectCellRange()', () => {
+      const range = (anchor: [string, string], focus: [string, string]): CellSelectionRange => ({
+        anchorRowId: anchor[0],
+        anchorColumnId: anchor[1],
+        focusRowId: focus[0],
+        focusColumnId: focus[1]
+      });
+
+      it('should select the cells between the two corners', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        harness.element.selectCellRange(range(['0', 'id'], ['1', 'name']));
+        await settle(harness.element);
+
+        expect(selectedPositions(harness)).toEqual(['0:0', '0:1', '1:0', '1:1']);
+      });
+
+      it('should select the range regardless of the order of the corners', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        harness.element.selectCellRange(range(['2', 'email'], ['1', 'age']));
+        await settle(harness.element);
+
+        expect(selectedPositions(harness)).toEqual(['1:2', '1:3', '2:2', '2:3']);
+      });
+
+      it('should emit cell select event', async () => {
+        const harness = await createFixture({ cellSelection: true });
+        const events = cellSelectEvents(harness);
+
+        harness.element.selectCellRange(range(['0', 'id'], ['0', 'age']));
+
+        expect(events).toEqual([[range(['0', 'id'], ['0', 'age'])]]);
+      });
+
+      it('should replace the current selection by default', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(2, 3);
+        harness.element.selectCellRange(range(['0', 'id'], ['0', 'id']));
+        await settle(harness.element);
+
+        expect(selectedPositions(harness)).toEqual(['0:0']);
+      });
+
+      it('should add the range to the current selection in include mode', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        harness.element.selectCellRange(range(['0', 'id'], ['0', 'id']));
+        harness.element.selectCellRange(range(['2', 'email'], ['2', 'email']), { mode: 'include' });
+        await settle(harness.element);
+
+        expect(selectedPositions(harness)).toEqual(['0:0', '2:3']);
+      });
+
+      it('should remove the range from the current selection in exclude mode', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        harness.element.selectCellRange(range(['0', 'id'], ['2', 'email']));
+        harness.element.selectCellRange(range(['1', 'name'], ['1', 'age']), { mode: 'exclude' });
+        await settle(harness.element);
+
+        expect(harness.selectedCells.length).toBe(TEST_DATA.length * TEST_COLUMNS.length - 2);
+        expect(selectedPositions(harness)).not.toContain('1:1');
+        expect(selectedPositions(harness)).not.toContain('1:2');
+      });
+
+      it('should do nothing when cell selection is off', async () => {
+        const harness = await createFixture();
+        const events = cellSelectEvents(harness);
+
+        harness.element.selectCellRange(range(['0', 'id'], ['1', 'name']));
+        await settle(harness.element);
+
+        expect(events.length).toBe(0);
+        expect(harness.selectedCells.length).toBe(0);
+      });
+
+      it('should do nothing before the table has rendered', () => {
+        const element = document.createElement('forge-data-table') as DataTableElement<TestData>;
+        element.cellSelection = true;
+        const events: Event[] = [];
+        element.addEventListener('forge-data-table-cell-select', evt => events.push(evt));
+
+        expect(() => element.selectCellRange(range(['0', 'id'], ['1', 'name']))).not.toThrow();
+        expect(events.length).toBe(0);
+      });
+    });
+
+    describe('getSelectedCellRangesData()', () => {
+      it('should return the values of the selected cells as a grid per region', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        harness.element.selectCellRange({ anchorRowId: '0', anchorColumnId: 'id', focusRowId: '1', focusColumnId: 'name' });
+
+        expect(harness.element.getSelectedCellRangesData()).toEqual([
+          [
+            [1, 'Alice'],
+            [2, 'Bob']
+          ]
+        ]);
+      });
+
+      it('should return a grid for each separate region', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(0, 1);
+        await harness.clickBodyCellWithModifier(2, 3, 'Control');
+        await settle(harness.element);
+
+        expect(harness.element.getSelectedCellRangesData()).toEqual([[['Alice']], [['charlie@example.com']]]);
+      });
+
+      it('should follow the displayed row order', async () => {
+        const harness = await createFixture({ cellSelection: true, sortable: true });
+
+        await harness.clickHeaderCell(2);
+        await settle(harness.element);
+        harness.element.selectCellRange({ anchorRowId: '1', anchorColumnId: 'name', focusRowId: '2', focusColumnId: 'name' });
+
+        const displayedNames = harness.bodyRows.map(row => [row.querySelectorAll('td')[1].textContent?.trim()]);
+        expect(displayedNames).not.toEqual(TEST_DATA.map(({ name }) => [name]));
+        expect(harness.element.getSelectedCellRangesData()).toEqual([displayedNames]);
+      });
+
+      it('should reflect the new selection inside the cell select listener', async () => {
+        const harness = await createFixture({ cellSelection: true });
+        const data: unknown[][][][] = [];
+        harness.element.addEventListener('forge-data-table-cell-select', () => data.push(harness.element.getSelectedCellRangesData()));
+
+        await harness.clickBodyCell(1, 2);
+
+        expect(data).toEqual([[[[25]]]]);
+      });
+
+      it('should return an empty array when nothing is selected', async () => {
+        const harness = await createFixture({ cellSelection: true });
+
+        expect(harness.element.getSelectedCellRangesData()).toEqual([]);
+      });
+
+      it('should return an empty array when cell selection is off', async () => {
+        const harness = await createFixture();
+
+        expect(harness.element.getSelectedCellRangesData()).toEqual([]);
+      });
+
+      it('should return an empty array before the table has rendered', () => {
+        const element = document.createElement('forge-data-table') as DataTableElement<TestData>;
+
+        expect(element.getSelectedCellRangesData()).toEqual([]);
+      });
+    });
+
+    describe('Copying', () => {
+      const stubClipboard = (): ReturnType<typeof vi.fn> => {
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        vi.spyOn(navigator.clipboard, 'writeText').mockImplementation(writeText);
+        return writeText;
+      };
+
+      it('should copy the selected cells as CSV with ctrl+c', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(0, 0);
+        await userEvent.keyboard('{Shift>}{ArrowDown}{ArrowRight}{/Shift}');
+        await settle(harness.element);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('1,Alice\r\n2,Bob');
+      });
+
+      it('should copy with cmd+c', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(1, 1);
+        await userEvent.keyboard('{Meta>}c{/Meta}');
+
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('Bob');
+      });
+
+      it('should quote values that contain CSV special characters', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true, data: [{ id: 1, name: 'Smith, "Al"', age: 30, email: 'a@example.com' }] });
+
+        await harness.clickBodyCell(0, 1);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('"Smith, ""Al"""');
+      });
+
+      it('should write the rows of each region one after another', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(0, 1);
+        await harness.clickBodyCellWithModifier(2, 3, 'Control');
+        await settle(harness.element);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('Alice\r\ncharlie@example.com');
+      });
+
+      it('should copy the value returned by getSelectionClipboardValue', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true });
+        const converter = vi.fn((data: unknown[][][]) =>
+          data
+            .flat()
+            .map(row => row.join('\t'))
+            .join('\n')
+        );
+        harness.element.getSelectionClipboardValue = converter;
+
+        await harness.clickBodyCell(0, 0);
+        await userEvent.keyboard('{Shift>}{ArrowDown}{ArrowRight}{/Shift}');
+        await settle(harness.element);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(converter).toHaveBeenCalledExactlyOnceWith([
+          [
+            [1, 'Alice'],
+            [2, 'Bob']
+          ]
+        ]);
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('1\tAlice\n2\tBob');
+      });
+
+      it('should not copy when cell selection is off', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture();
+
+        await harness.clickBodyCell(0, 0);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(writeText).not.toHaveBeenCalled();
+      });
+
+      it('should not copy when no cells are selected', async () => {
+        const writeText = stubClipboard();
+        const harness = await createFixture({ cellSelection: true });
+
+        await harness.clickBodyCell(0, 0);
+        await userEvent.keyboard('{Escape}');
+        await settle(harness.element);
+        await userEvent.keyboard('{Control>}c{/Control}');
+
+        expect(writeText).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Auto-scrolling', () => {
+      const nextFrames = (): Promise<void> => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+
+      const createOverflowingTable = async (): Promise<{ harness: DataTableHarness; container: HTMLElement }> => {
+        const harness = await createFixture({ cellSelection: true });
+        Object.assign(harness.element.style, { display: 'block', width: '300px' });
+        (harness.tableElement as HTMLElement).style.minWidth = '700px';
+        await settle(harness.element);
+        const container = harness.shadowRoot.querySelector('.table-container') as HTMLElement;
+        expect(container.scrollWidth).toBeGreaterThan(container.clientWidth);
+        return { harness, container };
+      };
+
+      const pressCell = (harness: DataTableHarness, row: number, col: number): void => {
+        const cell = harness.getBodyCellByRowAndColumn(row, col) as HTMLElement;
+        const { left, top, width, height } = cell.getBoundingClientRect();
+        cell.dispatchEvent(
+          new MouseEvent('mousedown', { bubbles: true, composed: true, button: 0, buttons: 1, clientX: left + width / 2, clientY: top + height / 2 })
+        );
+      };
+
+      const moveMouse = (clientX: number, clientY: number, buttons = 1): void => {
+        document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, buttons, clientX, clientY }));
+      };
+
+      const releaseMouse = (): void => {
+        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      };
+
+      const selectedColumns = (harness: DataTableHarness): number[] => [...new Set(selectedPositions(harness).map(position => Number(position.split(':')[1])))];
+
+      it('should scroll right and extend the selection when dragging to the right edge', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { right, top, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 0);
+        await settle(harness.element);
+        moveMouse(right - 4, top + height / 2);
+
+        await vi.waitFor(() => {
+          expect(container.scrollLeft).toBeGreaterThan(0);
+          expect(Math.max(...selectedColumns(harness))).toBeGreaterThanOrEqual(2);
+        });
+        releaseMouse();
+      });
+
+      it('should scroll left and extend the selection when dragging to the left edge', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        container.scrollLeft = maxScroll;
+        await settle(harness.element);
+        const { left, top, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 3);
+        await settle(harness.element);
+        moveMouse(left + 4, top + height / 2);
+
+        await vi.waitFor(() => {
+          expect(container.scrollLeft).toBeLessThan(maxScroll);
+          expect(Math.min(...selectedColumns(harness))).toBeLessThanOrEqual(1);
+        });
+        releaseMouse();
+      });
+
+      it('should extend the selection to the edge cell when dragging beyond the table', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { right, top, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 0);
+        await settle(harness.element);
+        moveMouse(right + 200, top + height / 2);
+
+        await vi.waitFor(() => expect(container.scrollLeft).toBe(container.scrollWidth - container.clientWidth));
+        await vi.waitFor(() => expect(selectedColumns(harness)).toEqual([0, 1, 2, 3]));
+        releaseMouse();
+      });
+
+      it('should not scroll when the pointer is away from the edges', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { left, top, width, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 0);
+        await settle(harness.element);
+        moveMouse(left + width / 2, top + height / 2);
+        await nextFrames();
+
+        expect(container.scrollLeft).toBe(0);
+        releaseMouse();
+      });
+
+      it('should stop scrolling when the mouse is released', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { right, top, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 0);
+        await settle(harness.element);
+        moveMouse(right - 4, top + height / 2);
+        await vi.waitFor(() => expect(container.scrollLeft).toBeGreaterThan(0));
+        releaseMouse();
+        const scrollLeft = container.scrollLeft;
+        await nextFrames();
+
+        expect(container.scrollLeft).toBe(scrollLeft);
+      });
+
+      it('should stop scrolling when the pointer reports that no button is pressed', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { right, top, height } = container.getBoundingClientRect();
+
+        pressCell(harness, 0, 0);
+        await settle(harness.element);
+        moveMouse(right - 4, top + height / 2);
+        await vi.waitFor(() => expect(container.scrollLeft).toBeGreaterThan(0));
+        moveMouse(right - 4, top + height / 2, 0);
+        const scrollLeft = container.scrollLeft;
+        await nextFrames();
+
+        expect(container.scrollLeft).toBe(scrollLeft);
+      });
+
+      it('should not scroll when the selection is not being dragged', async () => {
+        const { harness, container } = await createOverflowingTable();
+        const { right, top, height } = container.getBoundingClientRect();
+
+        moveMouse(right - 4, top + height / 2);
+        await nextFrames();
+
+        expect(container.scrollLeft).toBe(0);
+        expect(harness.selectedCells.length).toBe(0);
+      });
+    });
+
+    it('should be accessible with cell selection on', async () => {
+      const harness = await createFixture({ cellSelection: true });
+
+      await harness.clickBodyCell(0, 0);
+      await settle(harness.element);
+
+      await expect(harness.element).toBeAccessible();
     });
   });
 

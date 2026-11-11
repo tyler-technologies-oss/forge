@@ -343,6 +343,9 @@ customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: sele
 const rowSelectionSelect = document.querySelector('#opt-row-selection') as ISelectComponent;
 rowSelectionSelect.addEventListener('change', ({ detail }) => (dataTable.rowSelection = detail as RowSelectionType));
 
+const cellSelectionToggle = document.querySelector('#opt-cell-selection') as ISwitchComponent;
+cellSelectionToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.cellSelection = selected));
+
 const sortableToggle = document.querySelector('#opt-sortable') as ISwitchComponent;
 sortableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.sortable = selected));
 

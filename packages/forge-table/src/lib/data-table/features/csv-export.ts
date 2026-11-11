@@ -30,7 +30,18 @@ export function buildCsv<TData extends Row>(table: Table<DataTableFeatures, TDat
   const columns = getCsvColumns(table);
   const header = columns.map(column => getHeaderText(column));
   const rows = table.getRowModel().rows.map(row => columns.map(column => row.getValue(column.id)));
-  return [header, ...rows].map(fields => fields.map(escapeField).join(CSV_DELIMITER)).join(CSV_LINE_BREAK);
+  return serializeCsv([header, ...rows]);
+}
+
+/**
+ * Builds CSV text from the grids returned by `getSelectedCellRangesData()`. The rows of every region are written one after another.
+ */
+export function buildSelectionCsv(regions: unknown[][][]): string {
+  return serializeCsv(regions.flat());
+}
+
+function serializeCsv(rows: unknown[][]): string {
+  return rows.map(fields => fields.map(escapeField).join(CSV_DELIMITER)).join(CSV_LINE_BREAK);
 }
 
 /**

@@ -1,5 +1,7 @@
 import {
   Cell,
+  CellSelectionRange,
+  CellSelectionState,
   Column,
   ColumnFiltersState,
   ColumnOrderState,
@@ -8,6 +10,7 @@ import {
   FlexRender,
   LitTable,
   RowSelectionState,
+  SelectCellRangeOptions,
   SortingState,
   TableController,
   ColumnDef as TanstackColumnDef,
@@ -36,13 +39,23 @@ import {
   prependSelectColumn,
   resolveColumnId
 } from './columns/column-utils.js';
-import { COMPACT_ROW_HEIGHT, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID, VIRTUALIZER_OVERSCAN } from './constants.js';
+import {
+  CELL_SELECTION_KEY_DIRECTIONS,
+  COMPACT_ROW_HEIGHT,
+  DEFAULT_COLUMN_WIDTH,
+  DEFAULT_ROW_HEIGHT,
+  FETCH_SKIP,
+  FETCH_TAKE,
+  SELECT_COLUMN_ID,
+  VIRTUALIZER_OVERSCAN
+} from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
 import { formatAttribute } from './directives/format-attribute.js';
 import { lightDomRender } from './directives/light-dom-render.js';
 import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
-import { buildCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
+import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
+import { CellSelectionAutoScroller, type AutoScrollInsets } from './features/cell-selection-autoscroll.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
 import { getColumnHeaderTextId, setRowName, type RowMeta } from './features/row-meta.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
@@ -50,7 +63,7 @@ import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderEmptyState } from './templates/empty-state.js';
 import { renderFilterField } from './templates/filter-fields.js';
 import { isCellEditable } from './templates/input-cell.js';
-import type { ColumnDef, Row, RowSelectionType } from './types.js';
+import type { ColumnDef, EnableCellSelectionFn, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -69,7 +82,8 @@ export { ratingCell, type RatingOptions } from './templates/rating-cell.js';
 export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
 export { badgeCell, type BadgeCellConfig, type BadgeCellFn, type BadgeCellOptions } from './templates/badge-cell.js';
 export { meterCell, type MeterCellOptions } from './templates/meter-cell.js';
-export type { ColumnAggregation, ColumnDef, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
+export type { CellSelectionRange, CellSelectionState, SelectCellRangeOptions } from '@tanstack/lit-table';
+export type { ColumnAggregation, ColumnDef, EnableCellSelectionFn, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
 
 /**
  * @tag forge-data-table
@@ -89,6 +103,13 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   #internals: ElementInternals;
   #isDragging = false;
   #sortingBeforeClick: SortingState | null = null;
+  #cellTabStopId: string | undefined;
+  #pendingCellFocus = false;
+  #cellAutoScroller = new CellSelectionAutoScroller({
+    getScrollElement: () => this.#tableContainerRef.value,
+    getInsets: () => this.#getStickyInsets(),
+    onPoint: (x, y, evt) => this.#extendCellSelectionAtPoint(x, y, evt)
+  });
 
   public static override styles = unsafeCSS(styles);
 
@@ -203,6 +224,26 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public rowSelection: RowSelectionType = 'off';
 
   /**
+   * Allow individual cells to be selected, either one at a time or as ranges.
+   *
+   * Click a cell to select it, hold Shift while clicking or dragging to select a range, and hold Ctrl or Cmd to add or remove ranges.
+   * The arrow keys move the selection, Shift+arrow keys extend it, Ctrl/Cmd+A selects every cell, and Escape clears it.
+   * Cells in the row selection column and in columns that are editable or set `stopRowClickPropagation` cannot be selected,
+   * unless the column sets its own `enableCellSelection`.
+   */
+  @property({ type: Boolean, attribute: 'cell-selection' })
+  public cellSelection = false;
+
+  /**
+   * Controls which cells can be selected while `cellSelection` is on. Pass `false` to make every cell unselectable, or a function
+   * that receives each cell and returns whether it can be selected.
+   *
+   * A column's `enableCellSelection` takes precedence over this value for that column's cells.
+   */
+  @property({ attribute: false })
+  public enableCellSelection: boolean | EnableCellSelectionFn<any, any> = true;
+
+  /**
    * Allow columns to be reordered.
    */
   @property({ type: Boolean })
@@ -238,6 +279,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @property({ attribute: false })
   public getRowName: (row: TData, index: number) => string = (_, index) => `Row ${index + 1}`;
 
+  /**
+   * Converts the selected cells to the text that Ctrl/Cmd+C copies to the clipboard while `cellSelection` is on.
+   *
+   * Receives the same grids as `getSelectedCellRangesData()` (`[region][row][column]`) and returns the clipboard text. The default writes
+   * the cells as CSV, with the rows of each region one after another.
+   */
+  @property({ attribute: false })
+  public getSelectionClipboardValue: (data: unknown[][][]) => string = buildSelectionCsv;
+
   @state() private _data: TData[] = [];
   @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
   @state() private _tableColumns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
@@ -245,6 +295,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @state() private _columnFilters: ColumnFiltersState = [];
   @state() private _columnPinning: ColumnPinningState = { start: [], end: [] };
   @state() private _rowSelection: RowSelectionState = {};
+  @state() private _cellSelection: CellSelectionState = [];
   @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
   @state() private _columnMenuAnchorId: string | null = null;
   @state() private _columnMenuOpen = false;
@@ -265,6 +316,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
     if (changedProperties.has('rowSelection')) {
       toggleState(this.#internals, 'row-selection', this.rowSelection !== 'off');
+    }
+    if (changedProperties.has('cellSelection')) {
+      toggleState(this.#internals, 'cell-selection', this.cellSelection);
     }
     if (changedProperties.has('hover')) {
       toggleState(this.#internals, 'hover', this.hover);
@@ -321,6 +375,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('filterable') ||
       changedProperties.has('manualFilter') ||
       changedProperties.has('rowSelection') ||
+      changedProperties.has('cellSelection') ||
+      changedProperties.has('enableCellSelection') ||
       changedProperties.has('expandable') ||
       changedProperties.has('fixedHeaders') ||
       changedProperties.has('virtualized');
@@ -368,12 +424,23 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
   }
 
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#cellAutoScroller.stop();
+  }
+
   // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     this.#updateCustomStates(changedProperties);
 
     if (changedProperties.has('columns')) {
       this.#handleColumnsChange();
+    }
+
+    if (changedProperties.has('cellSelection') && !this.cellSelection) {
+      this._cellSelection = [];
+      this.#pendingCellFocus = false;
+      this.#cellAutoScroller.stop();
     }
 
     this.#checkRecreateTableController(changedProperties);
@@ -405,6 +472,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       const input = this.shadowRoot?.querySelector<HTMLInputElement>('.rename-input');
       input?.focus();
       input?.select();
+    }
+
+    if (this.#pendingCellFocus) {
+      this.#focusCellTabStop();
     }
   }
 
@@ -448,6 +519,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       enableRowSelection: this.rowSelection !== 'off',
       enableMultiRowSelection: this.rowSelection === 'multiple',
       onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
+      enableCellSelection: this.cellSelection && (cell => this.#canSelectCell(cell)),
+      onCellSelectionChange: updaterOrValue => this.#onCellSelect(updaterOrValue),
       onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
       onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
       onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
@@ -458,10 +531,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         columnVisibility: this.columnVisibility,
         columnOrder: this.columnOrder,
         columnPinning: this._columnPinning,
-        rowSelection: this._rowSelection
+        rowSelection: this._rowSelection,
+        cellSelection: this._cellSelection
       }
     });
     this.#table = table;
+    this.#cellTabStopId = this.cellSelection ? this.#getCellTabStopId(table) : undefined;
     const tableStyle = this.#getColumnSizeStyles(table);
 
     return html`
@@ -470,6 +545,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
           class=${classMap({
             'allow-row-click': this.allowRowClick,
             bordered: this.bordered,
+            'cell-selection': this.cellSelection,
             compact: this.compact,
             filterable: this.filterable,
             'fixed-headers': this.fixedHeaders,
@@ -480,6 +556,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             striped: this.striped,
             virtualized: this.virtualized
           })}
+          role=${ifDefined(this.cellSelection ? 'grid' : undefined)}
+          aria-multiselectable=${ifDefined(this.cellSelection ? 'true' : undefined)}
           style=${styleMap(tableStyle)}>
           ${this.#renderColumnGroup(table)}
           <thead>
@@ -694,19 +772,41 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     menu?.focus();
   }
 
+  #canSelectCell(cell: Cell<DataTableFeatures, TData, any>): boolean {
+    const columnOption = cell.column.columnDef.meta?.enableCellSelection ?? this.enableCellSelection;
+    return typeof columnOption === 'function' ? columnOption(cell as Cell<DataTableFeatures, any, any>) : columnOption;
+  }
+
   #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
     const editable = isCellEditable(cell as Cell<DataTableFeatures, any>);
+    const selectable = this.cellSelection && cell.getCanSelect();
+    const selected = selectable && cell.getIsSelected();
+    const edges = selected ? cell.getSelectionEdges() : undefined;
     return html`
       <td
         part="body-cell cell"
         style=${styleMap({ width: this.#getColumnWidthStyle(cell.column), ...getPinnedColumnStyle(cell.column) })}
         class=${classMap({
           ...getPinnedColumnClasses(cell.column),
+          'cell-selectable': selectable,
+          'cell-selected': selected,
+          'selection-top': !!edges?.top,
+          'selection-right': !!edges?.right,
+          'selection-bottom': !!edges?.bottom,
+          'selection-left': !!edges?.left,
           'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
           'editable-cell': editable,
           'group-start': groupStartColumnIds.has(cell.column.id)
         })}
         id=${cell.column.id}
+        data-row-id=${ifDefined(selectable ? cell.row.id : undefined)}
+        data-column-id=${ifDefined(selectable ? cell.column.id : undefined)}
+        tabindex=${ifDefined(selectable ? (cell.id === this.#cellTabStopId ? 0 : -1) : undefined)}
+        aria-selected=${ifDefined(selectable ? String(selected) : undefined)}
+        @mousedown=${selectable ? (evt: MouseEvent) => this.#onCellMouseDown(evt, cell) : nothing}
+        @mouseenter=${selectable ? cell.getSelectionExtendHandler() : nothing}
+        @keydown=${selectable ? (evt: KeyboardEvent) => this.#onCellKeydown(evt, cell) : nothing}
+        @focus=${selectable ? () => this.#onCellFocus(cell) : nothing}
         data-align=${ifDefined(cell.column.columnDef.meta?.align)}
         ${formatAttribute(cell.column.columnDef.meta?.formatAttribute)}
         ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
@@ -722,6 +822,116 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         </div>
       </td>
     `;
+  }
+
+  #getCellTabStopId(table: LitTable<DataTableFeatures, TData>): string | undefined {
+    const focusedCell = table.getFocusedCell();
+    if (focusedCell?.getCanSelect()) {
+      return focusedCell.id;
+    }
+    return table
+      .getRowModel()
+      .rows[0]?.getVisibleCells()
+      .find(cell => cell.getCanSelect())?.id;
+  }
+
+  #onCellMouseDown(evt: MouseEvent, cell: Cell<DataTableFeatures, TData>): void {
+    if (evt.button !== 0) {
+      return;
+    }
+    this.#pendingCellFocus = false;
+    cell.getSelectionStartHandler()(evt);
+    this.#cellAutoScroller.start(evt, this.ownerDocument);
+  }
+
+  #getStickyInsets(): AutoScrollInsets {
+    const sumSizes = (columns: Column<DataTableFeatures, TData>[]): number => columns.reduce((total, column) => total + column.getSize(), 0);
+    return {
+      top: this.fixedHeaders ? (this.shadowRoot?.querySelector('thead')?.offsetHeight ?? 0) : 0,
+      right: sumSizes(this.#table?.getEndVisibleLeafColumns() ?? []),
+      bottom: 0,
+      left: sumSizes(this.#table?.getStartVisibleLeafColumns() ?? [])
+    };
+  }
+
+  #extendCellSelectionAtPoint(x: number, y: number, evt: MouseEvent): void {
+    const target = this.shadowRoot
+      ?.elementsFromPoint(x, y)
+      .map(element => element.closest<HTMLElement>('td[data-row-id]'))
+      .find(Boolean);
+    const { rowId, columnId } = target?.dataset ?? {};
+    const row = this.#table?.getRowModel().rows.find(({ id }) => id === rowId);
+    row
+      ?.getVisibleCells()
+      .find(cell => cell.column.id === columnId)
+      ?.getSelectionExtendHandler()(evt);
+  }
+
+  #onCellFocus(cell: Cell<DataTableFeatures, TData>): void {
+    if (!this._cellSelection.length) {
+      cell.table.setFocusedCell(cell.row.id, cell.column.id);
+    }
+  }
+
+  #onCellKeydown(evt: KeyboardEvent, cell: Cell<DataTableFeatures, TData>): void {
+    if (evt.target !== evt.currentTarget) {
+      return;
+    }
+
+    const { table } = cell;
+    const direction = CELL_SELECTION_KEY_DIRECTIONS[evt.key];
+    const hasModifier = evt.ctrlKey || evt.metaKey;
+    const selectsAll = hasModifier && evt.key.toLowerCase() === 'a';
+    const copies = hasModifier && evt.key.toLowerCase() === 'c';
+    if (copies) {
+      this.#copySelectedCells(evt);
+      return;
+    }
+
+    if (!direction && !selectsAll && evt.key !== 'Escape') {
+      return;
+    }
+
+    evt.preventDefault();
+
+    if (evt.key === 'Escape') {
+      table.resetCellSelection(true);
+    } else if (!this._cellSelection.length) {
+      table.setFocusedCell(cell.row.id, cell.column.id);
+    } else if (selectsAll) {
+      table.selectAllCells();
+    } else if (evt.shiftKey) {
+      table.extendCellSelection(direction);
+    } else {
+      this.#pendingCellFocus = true;
+      table.moveCellSelection(direction);
+    }
+  }
+
+  #copySelectedCells(evt: KeyboardEvent): void {
+    const data = this.getSelectedCellRangesData();
+    if (!data.length) {
+      return;
+    }
+
+    evt.preventDefault();
+    void navigator.clipboard?.writeText(this.getSelectionClipboardValue(data)).catch(() => {});
+  }
+
+  #focusCellTabStop(): void {
+    const cell = this.shadowRoot?.querySelector<HTMLElement>('td[tabindex="0"]');
+    if (cell) {
+      this.#pendingCellFocus = false;
+      cell.focus();
+      return;
+    }
+
+    // The cell is in a row the virtualizer has not rendered; scrolling to it triggers another update that retries the focus
+    const focusedCell = this.#table?.getFocusedCell();
+    const rowIndex = focusedCell ? (this.#table?.getRowModel().rows.findIndex(row => row.id === focusedCell.row.id) ?? -1) : -1;
+    if (rowIndex >= 0) {
+      this._virtualizerController?.getVirtualizer().scrollToIndex(rowIndex);
+    }
   }
 
   #renderBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
@@ -1032,6 +1242,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     this.dispatchEvent(new CustomEvent('forge-data-table-row-select', { detail: this._rowSelection, bubbles: true, composed: true }));
   }
 
+  #onCellSelect(updaterOrValue: Updater<CellSelectionState>): void {
+    const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this._cellSelection) : updaterOrValue;
+    if (!nextState.length && !this._cellSelection.length) {
+      return;
+    }
+    this._cellSelection = nextState;
+    this.dispatchEvent(new CustomEvent('forge-data-table-cell-select', { detail: this._cellSelection, bubbles: true, composed: true }));
+  }
+
   #onColumnVisibilityChange(updaterOrValue: Updater<ColumnVisibilityState>): void {
     const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this.columnVisibility) : updaterOrValue;
     this.#columnVisibilityController.setVisibilityState(nextState);
@@ -1190,6 +1409,42 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   /**
+   * Selects a rectangle of cells, given by its two corners as row and column ids.
+   *
+   * By default the range replaces the current selection. Pass `{ mode: 'include' }` to add it alongside the existing ranges, or
+   * `{ mode: 'exclude' }` to subtract it from them. Emits `forge-data-table-cell-select`.
+   *
+   * Does nothing unless `cellSelection` is on and the table has rendered. Ids are not validated, and the selection is cleared when the
+   * rows change, so call this after the rows have loaded.
+   * @param {CellSelectionRange} range - The corners of the range: `anchorRowId`, `anchorColumnId`, `focusRowId` and `focusColumnId`.
+   * @param {SelectCellRangeOptions} options - How the range combines with the current selection.
+   */
+  public selectCellRange(range: CellSelectionRange, options?: SelectCellRangeOptions): void {
+    if (!this.#table || !this.cellSelection) {
+      return;
+    }
+    this.#table.selectCellRange(range, options);
+  }
+
+  /**
+   * Returns the values of the selected cells, one entry per selected region.
+   *
+   * Each region is a row-major grid indexed as `[regionIndex][rowIndex][columnIndex]`, in the order the rows and columns are currently
+   * displayed (so it follows sorting, filtering, column order and pinning). Values are the cells' accessor values, so a column with
+   * a `format` yields its formatted text. Overlapping ranges are merged into disjoint regions and excluded cells are left out.
+   *
+   * Reflects the latest selection even when called straight after it changes, such as from a `forge-data-table-cell-select` listener.
+   * Returns an empty array when nothing is selected, `cellSelection` is off or the table has not rendered.
+   */
+  public getSelectedCellRangesData(): unknown[][][] {
+    // The table only sees the new selection after a render, so finish a pending one first
+    if (this.hasUpdated && this.isUpdatePending) {
+      void this.performUpdate();
+    }
+    return this.#table?.getSelectedCellRangesData() ?? [];
+  }
+
+  /**
    * Downloads the table's data as a CSV file.
    *
    * The file contains the visible columns and the rows as currently displayed, so it reflects the column order, hidden columns,
@@ -1227,6 +1482,7 @@ declare global {
     'forge-data-table-sort': CustomEvent<SortingState>;
     'forge-data-table-filter': CustomEvent<ColumnFiltersState>;
     'forge-data-table-row-select': CustomEvent<RowSelectionState>;
+    'forge-data-table-cell-select': CustomEvent<CellSelectionState>;
     'forge-data-table-column-visibility': CustomEvent<ColumnVisibilityState>;
     'forge-data-table-column-order': CustomEvent<ColumnOrderState>;
     'forge-data-table-column-rename': CustomEvent<{ columnId: string; header: string }>;

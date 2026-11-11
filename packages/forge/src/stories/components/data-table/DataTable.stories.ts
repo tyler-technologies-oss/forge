@@ -15,6 +15,7 @@ const largeDataset = generateLargeDataset();
 const sortAction = action('forge-data-table-sort');
 const filterAction = action('forge-data-table-filter');
 const rowSelectAction = action('forge-data-table-row-select');
+const cellSelectAction = action('forge-data-table-cell-select');
 const rowClickAction = action('forge-data-table-row-click');
 const columnOrderAction = action('forge-data-table-column-order');
 const columnVisibilityAction = action('forge-data-table-column-visibility');
@@ -43,12 +44,14 @@ const meta = {
           ?virtualized=${args.virtualized}
           ?fixed-headers=${args.fixedHeaders}
           row-selection=${args.rowSelection}
+          ?cell-selection=${args.cellSelection}
           ?allow-row-click=${args.allowRowClick}
           ?manual-sort=${args.manualSort}
           ?manual-filter=${args.manualFilter}
           @forge-data-table-sort=${sortAction}
           @forge-data-table-filter=${filterAction}
           @forge-data-table-row-select=${rowSelectAction}
+          @forge-data-table-cell-select=${cellSelectAction}
           @forge-data-table-row-click=${rowClickAction}
           @forge-data-table-column-order=${columnOrderAction}
           @forge-data-table-column-visibility=${columnVisibilityAction}>
@@ -74,6 +77,7 @@ const meta = {
       control: 'select',
       options: ['off', 'single', 'multiple']
     },
+    cellSelection: { control: 'boolean' },
     allowRowClick: { control: 'boolean' },
     manualSort: { control: 'boolean' },
     manualFilter: { control: 'boolean' }
@@ -93,6 +97,7 @@ const meta = {
     virtualized: false,
     fixedHeaders: false,
     rowSelection: 'off',
+    cellSelection: false,
     allowRowClick: false,
     manualSort: false,
     manualFilter: false
@@ -133,6 +138,13 @@ export const Sortable: Story = {
 export const RowSelection: Story = {
   args: {
     rowSelection: 'multiple'
+  }
+};
+
+// Story with cell selection
+export const CellSelection: Story = {
+  args: {
+    cellSelection: true
   }
 };
 

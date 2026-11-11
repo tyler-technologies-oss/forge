@@ -430,6 +430,62 @@ table.row-selection {
 }
 
 //
+// Cell selection
+//
+
+table.cell-selection {
+  td.cell-selectable {
+    user-select: none;
+  }
+
+  td.cell-selected {
+    // The outline replaces the focus ring; a focused cell that is not selected keeps the native one
+    &:focus {
+      outline: none;
+    }
+
+    // The tint and outline are drawn over the cell so that they layer on any row background (striped, hover, pinned) and do not shift the
+    // cell's content or collide with the pinned column shadows. They extend a border width past the cell so they also cover the cell
+    // borders and the collapsed borders of a bordered table, which would otherwise cut through the outline.
+    &::after {
+      content: '';
+      position: absolute;
+      inset: calc(-1 * #{border.variable(thin)});
+      box-sizing: border-box;
+      border: 0 solid #{theme.variable(primary)};
+      padding: #{border.variable(thin)};
+      background-color: color-mix(in srgb, #{theme.variable(primary)} 12%, transparent);
+      background-clip: content-box; // keeps the tint off the extension so neighboring cells' tints do not stack
+      pointer-events: none;
+    }
+
+    &:not(.pinned) {
+      position: relative;
+    }
+
+    &.selection-top::after {
+      border-block-start-width: #{border.variable(medium)};
+      padding-block-start: 0;
+    }
+
+    &.selection-right::after {
+      border-inline-end-width: #{border.variable(medium)};
+      padding-inline-end: 0;
+    }
+
+    &.selection-bottom::after {
+      border-block-end-width: #{border.variable(medium)};
+      padding-block-end: 0;
+    }
+
+    &.selection-left::after {
+      border-inline-start-width: #{border.variable(medium)};
+      padding-inline-start: 0;
+    }
+  }
+}
+
+//
 // Hover
 //
 
