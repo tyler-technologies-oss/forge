@@ -1758,6 +1758,47 @@ describe('DataTable', () => {
       expect(inputs?.length).toBe(2);
     });
 
+    describe('filter labels', () => {
+      const getLabel = (harness: { shadowRoot: ShadowRoot }, field: Element): string | undefined =>
+        field
+          .getAttribute('aria-labelledby')
+          ?.split(' ')
+          .map(id => {
+            const target = harness.shadowRoot.getElementById(id);
+            return target?.id === field.id ? target.getAttribute('aria-label') : target?.textContent?.trim();
+          })
+          .join(' ');
+
+      it('should label a text filter with its column header', async () => {
+        const harness = await createFixture({ filterable: true });
+
+        expect(getLabel(harness, harness.filterInputs[1])).toBe('Filter Name');
+      });
+
+      it('should label a select filter with its column header', async () => {
+        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'select' }];
+        const harness = await createFixture({ columns, filterable: true });
+
+        expect(getLabel(harness, harness.shadowRoot.querySelector('forge-select') as Element)).toBe('Filter Name');
+      });
+
+      it('should label a date filter with its column header', async () => {
+        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'date' }];
+        const harness = await createFixture({ columns, filterable: true });
+
+        expect(getLabel(harness, harness.filterInputs[0])).toBe('Filter Name');
+      });
+
+      it('should label each range filter input with its bound and column header', async () => {
+        const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'range' }];
+        const harness = await createFixture({ columns, filterable: true });
+
+        const [min, max] = harness.filterInputs;
+        expect(getLabel(harness, min)).toBe('Filter minimum Age');
+        expect(getLabel(harness, max)).toBe('Filter maximum Age');
+      });
+    });
+
     it('should render select filter when filterType is select', async () => {
       const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'select' }];
       const harness = await createFixture({ columns, filterable: true });

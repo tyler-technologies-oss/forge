@@ -353,6 +353,11 @@ table.resizable {
 //
 
 table.filterable {
+  thead th,
+  &.row-selection thead th.select-column {
+    vertical-align: top;
+  }
+
   .filter-container {
     padding-block: #{spacing.variable(xsmall)};
   }
