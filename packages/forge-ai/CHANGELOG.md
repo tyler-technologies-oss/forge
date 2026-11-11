@@ -1,12 +1,28 @@
 # @tylertech/forge-ai
 
+## 0.16.0
+
+### Breaking Changes
+
+- b2dca55: **forge-ai**: move to the Forge monorepo as a primitives-only package (see https://github.com/tyler-technologies-oss/forge/blob/main/packages/forge-ai/MIGRATION.md)
+- b2dca55: **forge-ai**: remove unused button, icon-button, prompt-button, confirmation-prompt and attachment elements
+
+### Features
+
+- b2dca55: **forge-ai**: add `forge-ai-artifact-card`, `forge-ai-artifact-card-group`, `forge-ai-canvas` and `forge-ai-steps` components
+
+### Bug Fixes
+
+- b2dca55: **markdown**: harden sanitizer media handling
+- b2dca55: **forge-ai**: fix dropdown, modal, dialog, tooltip and other primitive bugs
+
 ## 0.15.2
 
 ### Patch Changes
 
 - 2f7433e: fix: return focus to the history button when Escape or light dismiss closes the launcher history popover
 - 604755c: feat(sidebar): persist resized width per tab via sessionStorage with a localStorage fallback for new tabs, expose `width` property and `forge-ai-sidebar-resize` / `forge-ai-sidebar-chat-resize` events, retain width across expand/collapse
-  
+
   BREAKING: `resizable` on `forge-ai-sidebar` and `forge-ai-sidebar-chat` is now `'on' | 'off'` (default `'on'`) instead of a boolean, so it can be disabled via attribute. Replace `.resizable=${false}` with `resizable="off"`.
 
 ## 0.15.1
@@ -32,14 +48,14 @@
 ### Minor Changes
 
 - 8834b49: feat(launcher): add support for chat history
-  
+
   BREAKING: renamed thread-list API on `forge-ai-chatbot`/`forge-ai-conversations-panel` to match `forge-ai-chatbot-launcher`/`forge-ai-threads-search` vocabulary:
   - `recentThreads` -> `threads`
   - `showConversationRename`/`show-conversation-rename` -> `showThreadRename`/`show-thread-rename`
   - `showConversationDelete`/`show-conversation-delete` -> `showThreadDelete`/`show-thread-delete`
   - events `forge-ai-chatbot-conversation-{select,search,load-more,rename,delete}` -> `forge-ai-chatbot-thread-{select,search,load-more,rename,delete}`
   - types `ForgeAiChatbotConversation*EventData` -> `ForgeAiChatbotThread*EventData`
-  
+
   `conversationsOpen`/`showConversations()`/`hideConversations()`/`toggleConversations()` are unchanged - they refer to the panel itself, not thread data.
 
 ## 0.13.13
