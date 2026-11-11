@@ -1,7 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{i as t,r as n}from"./react-CqthO5_N.js";import{a as r}from"./chunk-W22LQPXL-DaWckgVw.js";import{h as i,n as a,p as o,u as s}from"./blocks-DnEL0lHT.js";import{n as c,t as l}from"./CustomArgTypes-CbY-ITnm.js";import{n as u,r as d,t as f}from"./AiChatInterface.stories-Bx1IIQc4.js";function p(e){let n={code:`code`,h2:`h2`,p:`p`,...t(),...e.components};return(0,h.jsxs)(h.Fragment,{children:[(0,h.jsx)(s,{of:f}),`
-`,(0,h.jsx)(o,{}),`
-`,(0,h.jsxs)(n.p,{children:[`The layout for a chat: a header, a scrolling message area, and a prompt. Use it as the frame you place messages and a `,(0,h.jsx)(n.code,{children:`forge-ai-prompt`}),` in.`]}),`
-`,(0,h.jsxs)(n.p,{children:[`Messages go in the default slot. The `,(0,h.jsx)(n.code,{children:`header`}),`, `,(0,h.jsx)(n.code,{children:`suggestions`}),`, `,(0,h.jsx)(n.code,{children:`attachments`}),`, `,(0,h.jsx)(n.code,{children:`prompt`}),` and `,(0,h.jsx)(n.code,{children:`disclaimer`}),` slots take the matching components. Call `,(0,h.jsx)(n.code,{children:`scrollToBottom()`}),` to scroll the message area to the latest message.`]}),`
-`,(0,h.jsx)(a,{of:u}),`
-`,(0,h.jsx)(n.h2,{id:`api`,children:`API`}),`
-`,(0,h.jsx)(l,{})]})}function m(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,h.jsx)(n,{...e,children:(0,h.jsx)(p,{...e})}):p(e)}var h;function g(){return(g=e((()=>{h=r(),n(),i(),c(),d()})))()}g();export{m as default};
