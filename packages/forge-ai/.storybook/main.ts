@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { forgeSassImporter } from '../config/forge-sass-importer.ts';
 
 const LIB_DIR = fileURLToPath(new URL('../src/lib', import.meta.url));
+const FORGE_ESM_DIR = fileURLToPath(new URL('../../forge/esm', import.meta.url));
 
 const config: StorybookConfig = {
   stories: ['../src/stories/**/*.mdx', '../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -45,6 +46,9 @@ const config: StorybookConfig = {
       },
       resolve: {
         alias: [
+          // Forge's "development" export condition points at raw source that needs forge's own vite plugins, so use its built output.
+          { find: /^@tylertech\/forge$/, replacement: `${FORGE_ESM_DIR}/index.js` },
+          { find: /^@tylertech\/forge\/(?!dist\/|sass\/)(.+)$/, replacement: `${FORGE_ESM_DIR}/$1/index.js` },
           // Load components from source so edits apply without rebuilding the package.
           { find: /^@tylertech\/forge-ai$/, replacement: `${LIB_DIR}/index.ts` },
           { find: /^@tylertech\/forge-ai\/(.+)$/, replacement: `${LIB_DIR}/$1/index.ts` }
