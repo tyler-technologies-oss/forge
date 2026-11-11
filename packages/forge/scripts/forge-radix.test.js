@@ -254,6 +254,14 @@ describe('forge-radix stylesheets', () => {
     expect(defaultTheme).not.toContain('--forge-field-readonly-');
   });
 
+  it('should set the raised card outline', () => {
+    for (const stylesheet of [light, dark]) {
+      const rule = getRule(stylesheet, ':where(forge-card)');
+      expect(rule).toContain('--forge-card-raised-outline-width: var(--forge-border-thin');
+      expect(rule).toContain('--forge-card-raised-outline-color: var(--forge-theme-surface-elevated-ring);');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

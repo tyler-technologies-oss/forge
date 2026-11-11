@@ -144,6 +144,8 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include card.provide-theme(
     (
       raised-background: var(--forge-theme-surface-elevated),
+      raised-outline-width: border.variable(thin),
+      raised-outline-color: var(--forge-theme-surface-elevated-ring),
       outline-color: var(--forge-theme-outline-low)
     )
   );

@@ -28,4 +28,5 @@
   @include override(background, raised-background);
   @include override(elevation, raised-elevation);
   @include override(outline-width, raised-outline-width);
+  border-color: #{token(raised-outline-color)};
 }

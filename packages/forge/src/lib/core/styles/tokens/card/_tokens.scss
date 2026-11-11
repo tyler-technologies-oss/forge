@@ -20,7 +20,8 @@ $tokens: (
   // Raised
   raised-background: utils.module-val(card, raised-background, var(--forge-card-background, #{theme.variable(surface)})),
   raised-elevation: utils.module-val(card, raised-elevation, elevation.value(1)),
-  raised-outline-width: utils.module-val(card, raised-outline-width, 0)
+  raised-outline-width: utils.module-val(card, raised-outline-width, 0),
+  raised-outline-color: utils.module-ref(card, raised-outline-color, outline-color)
 ) !default;
 
 @function get($key) {

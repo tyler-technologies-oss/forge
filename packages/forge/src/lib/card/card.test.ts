@@ -107,4 +107,38 @@ describe('Card', () => {
 
     expect(getComputedStyle(rootEl).padding).toBe('0px');
   });
+
+  it('should use the card outline color when raised and no raised outline color is set', async () => {
+    const screen = render(html`<forge-card raised></forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
+
+    el.style.setProperty('--forge-card-outline-color', 'rgb(1, 2, 3)');
+
+    expect(getComputedStyle(rootEl).borderColor).toBe('rgb(1, 2, 3)');
+  });
+
+  it('should use the raised outline color when raised', async () => {
+    const screen = render(html`<forge-card raised></forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
+
+    el.style.setProperty('--forge-card-outline-color', 'rgb(1, 2, 3)');
+    el.style.setProperty('--forge-card-raised-outline-color', 'rgb(4, 5, 6)');
+
+    expect(getComputedStyle(rootEl).borderColor).toBe('rgb(4, 5, 6)');
+  });
+
+  it('should not use the raised outline color when not raised', async () => {
+    const screen = render(html`<forge-card></forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
+
+    el.style.setProperty('--forge-card-raised-outline-color', 'rgb(4, 5, 6)');
+
+    expect(getComputedStyle(rootEl).borderColor).not.toBe('rgb(4, 5, 6)');
+  });
 });
