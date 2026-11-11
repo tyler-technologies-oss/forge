@@ -39,14 +39,12 @@ $tokens: (
   selected-color: utils.module-val(chip, selected-color, theme.variable(on-primary)),
   // Invalid
   invalid-color: utils.module-val(chip, invalid-color, theme.variable(error)),
-  invalid-border-tint: utils.module-val(chip, invalid-border-tint, transparent),
   invalid-selected-background: utils.module-val(chip, invalid-selected-background, theme.variable(error)),
   invalid-selected-color: utils.module-val(chip, invalid-selected-color, theme.variable(on-error)),
   // Border
   border-width: utils.module-val(chip, border-width, border.variable(thin)),
   border-style: utils.module-val(chip, border-style, solid),
   border-color: utils.module-ref(chip, border-color, color),
-  border-tint: utils.module-val(chip, border-tint, transparent),
   // Field type
   field-background: utils.module-val(chip, field-background, theme.variable(surface-container-low)),
   field-color: utils.module-val(chip, field-color, theme.variable(on-surface-container-low)),

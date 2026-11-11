@@ -99,15 +99,11 @@ declare global {
  * @cssproperty --forge-chip-selected-background - The background color of the selected chip.
  * @cssproperty --forge-chip-selected-color - The text color of the selected chip.
  * @cssproperty --forge-chip-invalid-color - The text color of the invalid chip.
- * @cssproperty --forge-chip-invalid-border-tint - The tint drawn under the border of the invalid chip. The border color is drawn over it.
- * @cssproperty --forge-chip-invalid-border-tint - The tint drawn under the border of the invalid chip. The border color is drawn over it.
  * @cssproperty --forge-chip-invalid-selected-background - The background color of the invalid selected chip.
  * @cssproperty --forge-chip-invalid-selected-color - The text color of the invalid selected chip.
  * @cssproperty --forge-chip-border-width - The width of the chip border.
  * @cssproperty --forge-chip-border-style - The style of the chip border.
  * @cssproperty --forge-chip-border-color - The color of the chip border.
- * @cssproperty --forge-chip-border-tint - The tint drawn under the border of the chip. The border color is drawn over it.
- * @cssproperty --forge-chip-border-tint - The tint drawn under the border of the chip. The border color is drawn over it.
  * @cssproperty --forge-chip-field-background - The background color of the chip field.
  * @cssproperty --forge-chip-field-color - The text color of the chip field.
  * @cssproperty --forge-chip-field-shape - The shape of the chip field.

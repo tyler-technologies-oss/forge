@@ -17,9 +17,8 @@
 
   border-width: #{token(border-width)};
   border-style: #{token(border-style)};
-  border-color: #{token(border-tint)};
+  border-color: #{token(border-color)};
   border-radius: #{token(shape)};
-  @include border-overlay;
 
   background: #{token(background)};
   color: #{token(color)};
@@ -57,11 +56,6 @@
   outline: none;
 }
 
-@mixin border-overlay {
-  outline: #{token(border-width)} #{token(border-style)} #{token(border-color)};
-  outline-offset: calc(#{token(border-width)} * -1);
-}
-
 @mixin remove-button {
   padding-inline: #{token(remove-button-spacing)};
 }
@@ -73,7 +67,6 @@
 
 @mixin invalid {
   @include override(color, invalid-color);
-  @include override(border-tint, invalid-border-tint);
 }
 
 @mixin invalid-selected {
@@ -85,7 +78,6 @@
   @include override(background, field-background);
   @include override(color, field-color);
   @include override(border-color, field-border-color);
-  @include override(border-tint, transparent, value);
   @include override(shape, field-shape);
   @include override(cursor, field-cursor);
 }

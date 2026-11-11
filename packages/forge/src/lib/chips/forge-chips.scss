@@ -50,7 +50,6 @@
         shape: #{chip-core.token(shape)}
       )
     );
-    @include chip-core.border-overlay;
   }
 
   &--field {
