@@ -204,6 +204,37 @@ describe('forge-radix stylesheets', () => {
     expect(light).not.toContain('--forge-tab-indicator-color:');
   });
 
+  it('should set the border colors of tables, split view handles, scrollable dialogs, and calendar menus', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-table)')).toContain('--forge-table-theme-border-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-split-view-panel)')).toContain('--forge-split-view-handle-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-calendar-menu)')).toContain('--forge-calendar-menu-border-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':root')).toContain('--forge-dialog-scrollable-border-color: var(--forge-theme-outline-low);');
+    }
+  });
+
+  it('should set the calendar today color and the popup event stroke', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-calendar)')).toContain('--forge-calendar-theme-today-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(getRule(stylesheet, ':where(forge-calendar[forge-popover-context=true])')).toContain(
+        '--forge-calendar-event-stroke-color: var(--forge-theme-surface-elevated);'
+      );
+    }
+  });
+
+  it('should only change the count card outline for the secondary info state', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-count-card:state(info-secondary))')).toContain('--forge-card-outline-color: var(--forge-theme-outline-low);');
+      expect(stylesheet).not.toContain(':where(forge-count-card) {');
+    }
+  });
+
+  it('should not re-point theme tokens on container elements', () => {
+    for (const element of ['forge-table', 'forge-split-view-panel', 'forge-calendar', 'forge-calendar-menu', 'forge-count-card']) {
+      expect(light).not.toMatch(new RegExp(`:where\\(${element}[^)]*\\) \\{[^}]*\\n\\s*--forge-theme-[a-z-]+:`));
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

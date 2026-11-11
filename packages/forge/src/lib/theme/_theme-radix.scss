@@ -300,6 +300,26 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   );
 }
 
+@mixin _table {
+  --forge-table-theme-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _split-view-panel {
+  --forge-split-view-handle-color: var(--forge-theme-outline-low);
+}
+
+@mixin _dialog-utils {
+  --forge-dialog-scrollable-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _calendar-menu {
+  --forge-calendar-menu-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _calendar {
+  --forge-calendar-theme-today-color: var(--forge-theme-on-primary-container-minimum);
+}
+
 @mixin _toast {
   @include toast.provide-theme(
     (
@@ -371,6 +391,11 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _timeline-break;
   @include _timeline-item;
   @include _tree-item;
+  @include _table;
+  @include _split-view-panel;
+  @include _dialog-utils;
+  @include _calendar-menu;
+  @include _calendar;
   @include _field;
   @include _file-picker;
   @include _fab;
@@ -478,6 +503,30 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-tree-item) {
     @include _tree-item;
+  }
+
+  :where(forge-table) {
+    @include _table;
+  }
+
+  :where(forge-split-view-panel) {
+    @include _split-view-panel;
+  }
+
+  :where(forge-calendar-menu) {
+    @include _calendar-menu;
+  }
+
+  :where(forge-calendar) {
+    @include _calendar;
+  }
+
+  :where(forge-calendar[forge-popover-context='true']) {
+    --forge-calendar-event-stroke-color: var(--forge-theme-surface-elevated);
+  }
+
+  :where(forge-count-card:state(info-secondary)) {
+    --forge-card-outline-color: var(--forge-theme-outline-low);
   }
 
   :where(forge-chip) {

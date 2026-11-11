@@ -183,7 +183,7 @@
 }
 
 @mixin grid-item-enabled {
-  border: 1px solid #{theme.variable(outline)};
+  border: 1px solid var(--forge-calendar-menu-border-color, #{theme.variable(outline)});
   cursor: pointer;
 }
 

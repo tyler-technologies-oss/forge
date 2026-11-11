@@ -38,6 +38,8 @@ declare global {
 /**
  * @internal
  * @tag forge-calendar-menu
+ *
+ * @cssproperty --forge-calendar-menu-border-color - The border color of the enabled month and year items.
  */
 @customElement({
   name: CALENDAR_MENU_CONSTANTS.elementName,

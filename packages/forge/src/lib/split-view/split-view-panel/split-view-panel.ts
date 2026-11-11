@@ -85,6 +85,7 @@ declare global {
  *
  * @cssproperty --forge-split-view-panel-size - The size of the panel along the axis of orientation.
  * @cssproperty --forge-split-view-panel-cursor - The cursor to display when hovering over the panel.
+ * @cssproperty --forge-split-view-handle-color - The background color of the panel handle.
  */
 @customElement({
   name: SPLIT_VIEW_PANEL_CONSTANTS.elementName,
