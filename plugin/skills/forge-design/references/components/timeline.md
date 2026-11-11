@@ -31,13 +31,13 @@ Example (A timeline of items connected by a vertical line through their markers.
 
 ## Icons
 
-Slot a `forge-icon` into `marker` to replace an item's default circular indicator. Treat the icon as decorative, since the item's own content should carry the meaning.
+Slot a `forge-icon` into `marker` to replace an item's default circular indicator. The icon gets the same background and foreground colors as a badge, following the item's `theme`. Treat the icon as decorative, since the item's own content should carry the meaning.
 
 Example (Timeline items with an icon in the marker slot in place of the default marker.): `get_forge_blocks(blockId: "components/timeline/with-icons/with-icons")`
 
 ## Badges
 
-Slot a `forge-badge` into `marker` for a short text label, and theme the item and badge together to reflect its status.
+Slot a `forge-badge` into `marker` for a short text label. The badge keeps its own `theme` or `color`, so set it to reflect the item's status. A badge without either follows the item's `theme`.
 
 Example (Timeline items with a badge in the marker slot, themed to match each item's status.): `get_forge_blocks(blockId: "components/timeline/with-badges/with-badges")`
 
@@ -55,7 +55,7 @@ Example (Each sidebar value on a timeline item: auto, none, start, end, and both
 
 ## Theme
 
-Set `theme` on an item to color its default marker. Use the `marker` slot instead when the item needs an icon or badge.
+Set `theme` on an item to color its default marker, an icon marker, or a badge marker that has no `theme` or `color` of its own. Use the `marker` slot when the item needs an icon or badge.
 
 Example (Timeline items using each marker theme.): `get_forge_blocks(blockId: "components/timeline/themed/themed")`
 
