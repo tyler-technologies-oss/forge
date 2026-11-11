@@ -1,0 +1,126 @@
+{
+  "name": "@tylertech/forge-ai",
+  "version": "0.15.2",
+  "description": "A library of Tyler Forge™ AI chat interface web components.",
+  "license": "Apache-2.0",
+  "author": "Tyler Technologies, Inc.",
+  "keywords": [
+    "tyler forge",
+    "web components",
+    "custom elements",
+    "lit",
+    "ai",
+    "chat"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-ai"
+  },
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./jsx": {
+      "types": "./dist/jsx.d.ts"
+    },
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "default": "./dist/*/index.mjs"
+    },
+    "./custom-elements.json": {
+      "default": "./custom-elements.json"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "customElements": "custom-elements.json",
+  "files": [
+    "dist/",
+    "custom-elements.json",
+    "MIGRATION.md"
+  ],
+  "scripts": {
+    "build": "rimraf dist && vite build && pnpm cem",
+    "cem": "cem analyze --config custom-elements-manifest.config.mjs --litelement",
+    "lint": "tsc --noEmit && eslint . && stylelint \"src/lib/**/*.{css,scss}\" --allow-empty-input",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --browser.headless && pnpm test:plugins && pnpm test:types",
+    "test:plugins": "node --test \"plugins/**/*.test.mjs\"",
+    "test:types": "tsc -p src/jsx-fixture --noEmit",
+    "test:watch": "vitest",
+    "format": "prettier --write \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,md,mdx,css,scss,yaml,json}\"",
+    "plop": "plop",
+    "storybook": "pnpm run cem && storybook dev -p 6016",
+    "build:storybook": "pnpm run cem && storybook build"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "catalog:",
+    "@lit/context": "catalog:",
+    "dompurify": "^3.4.17",
+    "lit": "catalog:",
+    "marked": "^18.1.1",
+    "remend": "^1.4.0"
+  },
+  "peerDependencies": {
+    "@types/react": "^19"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "catalog:",
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-links": "catalog:",
+    "@storybook/addon-themes": "catalog:",
+    "@storybook/web-components-vite": "catalog:",
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-tokens": "workspace:*",
+    "@tylertech/stylelint-rules": "catalog:",
+    "@tylertech/tyler-icons": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "19.2.14",
+    "@vitest/browser": "^4.1.2",
+    "@vitest/browser-playwright": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "@vueless/storybook-dark-mode": "catalog:",
+    "@wc-toolkit/jsdoc-tags": "^1.2.1",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "glob": "catalog:",
+    "playwright": "catalog:",
+    "plop": "catalog:",
+    "prettier": "catalog:",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remark-gfm": "^4.0.1",
+    "rimraf": "catalog:",
+    "sass": "catalog:",
+    "storybook": "catalog:",
+    "stylelint": "catalog:",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.58.0",
+    "vite": "catalog:",
+    "vite-plugin-dts": "^5.1.2",
+    "vitest": "^4.1.2",
+    "vitest-browser-lit": "^1.0.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

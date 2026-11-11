@@ -1,0 +1,33 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiChatHeaderStories from './AiChatHeader.stories';
+
+<Meta of={AiChatHeaderStories} />
+
+<Title />
+
+The header for a chat panel: an icon, a title, and optional controls for expanding, minimizing, clearing and exporting the conversation. Place it in the `header` slot of `forge-ai-chat-interface`.
+
+Each control emits an event for you to handle, such as `forge-ai-chat-header-expand`, `-minimize`, `-clear` and `-export`.
+
+<Canvas of={AiChatHeaderStories.Demo} />
+
+## Agents
+
+Pass `agents` and `selectedAgentId` to replace the title with a `forge-ai-agent-selector`. Selection emits `forge-ai-chat-header-agent-change`; update `selectedAgentId` in response. Set `disable-agent-selector` to lock it, for example while a response streams.
+
+## Agent info
+
+Set `agentInfo` to add an "Info" option to the menu that opens a dialog with the agent's details. Use `options`, `export-option` and `clear-option` (`enabled` or `off`) to control which menu items appear.
+
+<Canvas of={AiChatHeaderStories.WithAgentInfo} />
+
+## Conversations button
+
+Set `show-conversations-button` to show a menu button that emits `forge-ai-chat-header-conversations-toggle`, typically to toggle a conversations panel. Set `has-conversations-error` when loading threads failed, so the button shows an error badge while the panel is closed.
+
+<Canvas of={AiChatHeaderStories.ConversationsError} />
+
+## API
+
+<CustomArgTypes />

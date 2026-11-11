@@ -1,0 +1,50 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+
+@mixin ai-gradient-container-border(
+  $surface-color: #{forge-theme.variable(surface)},
+  $bottom-color: #{forge-theme.variable(surface-container-high)},
+  $top-color: #{forge-theme.variable(outline)}
+) {
+  background-image: linear-gradient($surface-color, $surface-color), linear-gradient(to top, $bottom-color, $top-color);
+}
+
+@mixin ai-chain-of-thought-grid() {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  padding: 0;
+}
+
+@mixin sr-only() {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin scroll-region-focus-ring {
+  &:focus-visible {
+    outline: 2px solid #{forge-theme.variable(primary)};
+    outline-offset: 2px;
+  }
+}
+
+@mixin fade-in() {
+  opacity: 0; /* Initial state */
+  animation: fadein 250ms ease-in-out forwards; /* Apply animation */
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

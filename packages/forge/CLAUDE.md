@@ -98,6 +98,10 @@ export class ExampleComponent extends BaseComponent {
 - `src/lib/core/base/` - `BaseComponent`, `BaseLitElement`
 - `src/stories/` - Storybook stories
 
+## Shared styles
+
+`packages/forge-ai` compiles Forge component CSS and Sass into its own styles at build time. Forge releases do not reach it until forge-ai is released, so a user-visible style fix should also include a `@tylertech/forge-ai` patch changeset.
+
 ## Commands
 
 ```bash

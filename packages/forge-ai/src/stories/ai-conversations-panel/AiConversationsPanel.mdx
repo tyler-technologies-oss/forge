@@ -1,0 +1,31 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiConversationsPanelStories from './AiConversationsPanel.stories';
+
+<Meta of={AiConversationsPanelStories} />
+
+<Title />
+
+A panel listing previous conversations, with a new chat action, search, selection, rename and delete. Use it for conversation history next to a chat.
+
+The panel renders the `threads` it is given and reports user intent through events, so your app owns loading and persistence.
+
+<Canvas of={AiConversationsPanelStories.Demo} />
+
+## Usage
+
+- Select a thread with `selected-thread-id`. Enable the per-thread menu actions with `show-thread-rename` and `show-thread-delete`.
+- `forge-ai-conversations-panel-select`, `-new-chat` and `-close` report navigation.
+- Search runs locally by default. Cancel `forge-ai-conversations-panel-search` and call `setResults()` to search on your server.
+- Set `total-chats` to the full count to enable infinite scroll, and handle `forge-ai-conversations-panel-load-more` by calling `appendResults()`. Pass an empty array to signal the end.
+- Rename and delete update the list optimistically. Cancel `-rename` or `-delete` to confirm with your backend, then call `onSuccess()` or `onError()`.
+
+## States
+
+Set `loading` while threads load. Set `error-message` when a load fails, and clear it once a retry succeeds. The panel emits `forge-ai-conversations-panel-retry` when the user clicks retry.
+
+<Canvas of={AiConversationsPanelStories.ErrorState} />
+
+## API
+
+<CustomArgTypes />

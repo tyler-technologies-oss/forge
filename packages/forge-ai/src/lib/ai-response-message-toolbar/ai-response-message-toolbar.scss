@@ -1,0 +1,47 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/dist/field/forge-field';
+@use '../utils/toolbar' as toolbar;
+
+:host {
+  display: block;
+}
+
+.response-message-toolbar {
+  @include toolbar.toolbar-layout;
+}
+
+.forge-icon-button {
+  @include toolbar.toolbar-icon-button;
+
+  &.is-active-positive {
+    color: #{forge-theme.variable(success)};
+    background-color: #{forge-theme.variable(success-container)};
+  }
+
+  &.is-active-negative {
+    color: #{forge-theme.variable(error)};
+    background-color: #{forge-theme.variable(error-container)};
+  }
+}
+
+.popover-content {
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(medium)};
+  padding: #{forge-spacing.variable(medium)};
+  min-width: 320px;
+}
+
+.popover-header {
+  @include forge-typography.style(heading1);
+}
+
+.popover-actions {
+  display: flex;
+  gap: #{forge-spacing.variable(small)};
+  justify-content: flex-end;
+}

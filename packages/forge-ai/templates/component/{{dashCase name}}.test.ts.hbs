@@ -1,0 +1,13 @@
+import { describe, expect, it } from 'vitest';
+import { html } from 'lit';
+import { renderFixture } from '../../testing/fixture.js';
+import type { {{pascalCase name}}Component } from './{{dashCase name}}.js';
+import './{{dashCase name}}.js';
+
+describe('{{pascalCase name}}', () => {
+  it('should contain shadow root', async () => {
+    const el = await renderFixture<{{pascalCase name}}Component>(html`<forge-{{dashCase name}}></forge-{{dashCase name}}>`, 'forge-{{dashCase name}}');
+
+    expect(el.shadowRoot).not.toBeNull();
+  });
+});

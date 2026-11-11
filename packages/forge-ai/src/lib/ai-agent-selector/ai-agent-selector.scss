@@ -1,0 +1,145 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/list/list-item' as forge-list-item;
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/dist/field/forge-field';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+.title-text,
+.trigger-text {
+  @include forge-typography.style(heading3);
+
+  font-weight: 500;
+  color: #{forge-theme.variable(on-surface)};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.title-text {
+  display: block;
+}
+
+.trigger-button {
+  --forge-state-layer-hover-opacity: 0.04;
+  --forge-focus-indicator-outward-offset: 0px; // Requires px unit
+}
+
+.dropdown-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  fill: #{forge-theme.variable(text-medium)};
+  transition: transform 150ms ease;
+  margin-inline-end: -6px;
+
+  :host(:state(open)) & {
+    transform: rotate(180deg);
+  }
+}
+
+.agent-list {
+  @include forge-scrollbar.base;
+
+  min-width: 256px;
+  max-width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: #{forge-spacing.variable(xxsmall)} 0 #{forge-spacing.variable(xxsmall)};
+}
+
+.agent-item {
+  @include forge-list-item.tokens;
+  @include forge-list-item.base;
+  @include forge-list-item.dense;
+  @include forge-state-layer.standalone;
+  @include forge-list-item.provide-theme(
+    (
+      padding: 0 forge-spacing.variable(xxsmall)
+    )
+  );
+
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #{forge-theme.variable(primary)};
+    outline-offset: -2px;
+  }
+
+  &--focused {
+    background-color: #{forge-theme.variable(surface-container-low)};
+  }
+
+  &--selected {
+    @include forge-list-item.selected;
+    @include forge-state-layer.provide-theme(
+      (
+        color: #{forge-list-item.token(selected-color)}
+      )
+    );
+
+    .agent-name {
+      font-weight: 500;
+    }
+  }
+
+  &__selection-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: forge-spacing.variable(medium);
+  }
+}
+
+.selection-icon {
+  fill: currentColor;
+  width: 16px;
+  height: 16px;
+}
+
+.agent-list-separator {
+  height: 1px;
+  background-color: #{forge-theme.variable(outline)};
+  margin: #{forge-spacing.variable(xxsmall)} 0;
+}
+
+.agent-name {
+  @include forge-list-item.text-container;
+  @include forge-list-item.dense-text;
+}
+
+.dropdown-header {
+  @include forge-typography.style(heading1);
+
+  padding: #{forge-spacing.variable(small)} #{forge-spacing.variable(small)} #{forge-spacing.variable(xxsmall)};
+}
+
+.filter-field {
+  padding: #{forge-spacing.variable(xsmall)} #{forge-spacing.variable(small)} #{forge-spacing.variable(small)};
+  border-bottom: 1px solid #{forge-theme.variable(outline)};
+}
+
+.search-icon {
+  width: 24px;
+  height: 24px;
+  fill: #{forge-theme.variable(text-medium)};
+}
+
+.no-results {
+  padding: #{forge-spacing.variable(small)};
+  color: #{forge-theme.variable(text-medium)};
+  text-align: center;
+}
