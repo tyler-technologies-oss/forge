@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
-import { describe, expect, it } from 'vitest';
-import { renderInlineMarkdown, renderMarkdown } from './markdown.js';
+import { afterEach, describe, expect, it } from 'vitest';
+import { renderInlineMarkdown, renderMarkdown, resolveTrustedOrigin, setTrustedImageOrigin } from './markdown.js';
 
 function parse(htmlString: string): Document {
   return new DOMParser().parseFromString(htmlString, 'text/html');
@@ -796,5 +796,153 @@ describe('markdown media and sanitizer hardening', () => {
     const html = DOMPurify.sanitize(`<img src="https://${OUTSIDE_HOST}/p.png">`);
 
     expect(parseBody(html).querySelector('img')?.getAttribute('src')).toContain(OUTSIDE_HOST);
+  });
+});
+
+describe('resolveTrustedOrigin', () => {
+  it('should use the origin that served the module', () => {
+    expect(resolveTrustedOrigin({ moduleUrl: 'https://cdn.example.com/forge-ai/md.js', pageOrigin: 'https://app.test' })).toBe('https://cdn.example.com');
+  });
+
+  ['file:///build/md.js', 'blob:https://app.test/1234', 'not a url', '{}'].forEach(moduleUrl => {
+    it(`should fall back to the page origin for a module URL of ${moduleUrl}`, () => {
+      expect(resolveTrustedOrigin({ moduleUrl, pageOrigin: 'https://app.test' })).toBe('https://app.test');
+    });
+  });
+});
+
+describe('setTrustedImageOrigin', () => {
+  const SERVICE = 'https://service.invalid';
+
+  afterEach(() => setTrustedImageOrigin(window.location.origin));
+
+  it('should keep an image from the configured origin inline', () => {
+    setTrustedImageOrigin(`${SERVICE}/api/agents`);
+    const img = parseBody(renderMarkdown(`![chart](${SERVICE}/api/files/chart.png)`, { streaming: false })).querySelector('img');
+
+    expect(img?.getAttribute('src')).toBe(`${SERVICE}/api/files/chart.png`);
+  });
+
+  it('should resolve a relative image against the configured origin and write it back absolute', () => {
+    setTrustedImageOrigin(SERVICE);
+    const img = parseBody(renderMarkdown('![chart](/api/files/chart.png)', { streaming: false })).querySelector('img');
+
+    expect(img?.getAttribute('src')).toBe(`${SERVICE}/api/files/chart.png`);
+  });
+
+  it('should render an image from the host page as a link once another origin is trusted', () => {
+    setTrustedImageOrigin(SERVICE);
+    const body = parseBody(renderMarkdown(`![logo](${window.location.origin}/logo.png)`, { streaming: false }));
+
+    expect(body.querySelector('img')).toBeNull();
+    expect(body.querySelector('a')?.textContent).toBe(`logo (${window.location.host})`);
+  });
+
+  it('should resolve a relative link against the configured origin', () => {
+    setTrustedImageOrigin(SERVICE);
+    const body = parseBody(renderMarkdown('[docs](/docs/x) [top](#top) [mail](mailto:a@b.invalid)', { streaming: false }));
+    const hrefs = Array.from(body.querySelectorAll('a')).map(a => a.getAttribute('href'));
+
+    expect(hrefs).toEqual([`${SERVICE}/docs/x`, '#top', 'mailto:a@b.invalid']);
+  });
+
+  it('should leave relative links alone when the page origin is trusted', () => {
+    const href = parseBody(renderMarkdown('[docs](/docs/x)', { streaming: false }))
+      .querySelector('a')
+      ?.getAttribute('href');
+
+    expect(href).toBe('/docs/x');
+  });
+
+  it('should trust no origin for a URL that is not http(s)', () => {
+    setTrustedImageOrigin('file:///build');
+    const html = renderMarkdown(`![logo](${window.location.origin}/logo.png)`, { streaming: false });
+
+    expect(parseBody(html).querySelector('img')).toBeNull();
+  });
+});
+
+describe('anchors', () => {
+  it('should not add target or rel to an anchor whose href a host hook removed', () => {
+    const stripStorageHref = (node: Element): void => {
+      if (node.getAttribute('href')?.startsWith('s3:')) {
+        node.removeAttribute('href');
+      }
+    };
+    DOMPurify.addHook('afterSanitizeAttributes', stripStorageHref);
+    try {
+      const anchor = parseBody(renderMarkdown('[Y.pdf][ref]\n\n[ref]: s3://bucket/Y.pdf', { streaming: false })).querySelector('a');
+
+      expect(anchor?.hasAttribute('target')).toBe(false);
+      expect(anchor?.hasAttribute('rel')).toBe(false);
+    } finally {
+      DOMPurify.removeHook('afterSanitizeAttributes', stripStorageHref);
+    }
+  });
+});
+
+describe('defences that only one rule provides', () => {
+  it('should drop an svg attribute whose CSS function name is written with escapes', () => {
+    const html = renderMarkdown(`<svg><path title="https://${OUTSIDE_HOST}/a.png" mask="image-se\\74(att\\72(title) 1x)"></path></svg>`, { streaming: false });
+
+    expect(parseBody(html).querySelector('path')?.hasAttribute('mask')).toBe(false);
+  });
+
+  it('should drop a style attribute that references another origin without url()', () => {
+    const html = renderMarkdown(`<div style="background-image:image-set('https://${OUTSIDE_HOST}/a.png' 1x)">x</div>`, { streaming: false });
+
+    expect(parseBody(html).querySelector('div')?.hasAttribute('style')).toBe(false);
+    expect(fetchingReferences(html)).toEqual([]);
+  });
+
+  it('should drop a style attribute even when a host hook force-keeps it', () => {
+    const keepStyle = (_node: Element, data: { attrName: string; forceKeepAttr?: boolean }): void => {
+      if (data.attrName === 'style') {
+        data.forceKeepAttr = true;
+      }
+    };
+    DOMPurify.addHook('uponSanitizeAttribute', keepStyle);
+    try {
+      const html = renderMarkdown(`<div style="background:url(https://${OUTSIDE_HOST}/a.png)">x</div>`, { streaming: false });
+
+      expect(fetchingReferences(html)).toEqual([]);
+    } finally {
+      DOMPurify.removeHook('uponSanitizeAttribute', keepStyle);
+    }
+  });
+
+  it('should keep its forbid lists when the host app has called DOMPurify.setConfig()', () => {
+    DOMPurify.setConfig({ ADD_ATTR: ['data-x'] });
+    try {
+      const html = renderMarkdown(
+        [
+          `<img src="/ok.png" srcset="https://${OUTSIDE_HOST}/a.png 1x">`,
+          `<picture><source srcset="https://${OUTSIDE_HOST}/b.png"><img src="/ok.png"></picture>`,
+          `<svg><image href="https://${OUTSIDE_HOST}/c.png"></image></svg>`,
+          `<table background="https://${OUTSIDE_HOST}/d.png"><tr><td>x</td></tr></table>`,
+          `<div style="background-image:image-set('https://${OUTSIDE_HOST}/e.png' 1x)">x</div>`
+        ].join('\n'),
+        { streaming: false }
+      );
+
+      expect(fetchingReferences(html)).toEqual([]);
+    } finally {
+      DOMPurify.clearConfig();
+    }
+  });
+});
+
+describe('accessibility attributes', () => {
+  [
+    ['an svg aria-label with an apostrophe', `<svg aria-label="Q3's revenue" role="img"></svg>`, 'svg', 'aria-label', "Q3's revenue"],
+    ['an html aria-label mentioning url()', '<span aria-label="see url(docs) for more">x</span>', 'span', 'aria-label', 'see url(docs) for more']
+  ].forEach(([label, content, selector, attr, value]) => {
+    it(`should keep ${label}`, () => {
+      expect(
+        parseBody(renderMarkdown(content, { streaming: false }))
+          .querySelector(selector)
+          ?.getAttribute(attr)
+      ).toBe(value);
+    });
   });
 });

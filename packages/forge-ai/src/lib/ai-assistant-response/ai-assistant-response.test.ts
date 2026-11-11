@@ -409,3 +409,29 @@ describe('AiAssistantResponseComponent', () => {
     });
   });
 });
+
+describe('AiAssistantResponseComponent markdown streaming', () => {
+  const CONTENT = 'Cost<Budget Review Q3';
+
+  async function renderedText(status: AssistantResponse['status'], chunkStatus: 'streaming' | 'complete'): Promise<string> {
+    const el = await createElement(response({ status, children: [text(CONTENT, chunkStatus)] }));
+    return el.shadowRoot!.querySelector('.text-chunk')?.textContent ?? '';
+  }
+
+  [
+    ['a completed response', 'complete', 'complete'],
+    ['an errored response', 'error', 'streaming'],
+    ['a finished chunk in a streaming response', 'streaming', 'complete']
+  ].forEach(([label, status, chunkStatus]) => {
+    it(`should keep text after a "<" in ${label}`, async () => {
+      expect(await renderedText(status as AssistantResponse['status'], chunkStatus as 'streaming' | 'complete')).toContain(CONTENT);
+    });
+  });
+
+  it('should repair partial markup in a chunk that is still streaming', async () => {
+    const rendered = await renderedText('streaming', 'streaming');
+
+    expect(rendered).toContain('Cost');
+    expect(rendered).not.toContain(CONTENT);
+  });
+});

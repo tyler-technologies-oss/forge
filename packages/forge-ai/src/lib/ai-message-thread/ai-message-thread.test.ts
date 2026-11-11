@@ -602,3 +602,31 @@ describe('AiMessageThreadComponent', () => {
     });
   });
 });
+
+describe('AiMessageThreadComponent markdown streaming', () => {
+  const CONTENT = 'Cost<Budget Review Q3';
+
+  async function renderedText(item: MessageItem): Promise<string> {
+    const el = await createElement([item]);
+    return container(el).textContent?.replace(/\s+/g, ' ') ?? '';
+  }
+
+  [
+    ['a complete assistant message', { role: 'assistant', status: 'complete' }],
+    ['an error message', { role: 'assistant', status: 'error' }],
+    ['a user message', { role: 'user' }]
+  ].forEach(([label, overrides]) => {
+    it(`should keep text after a "<" in ${label}`, async () => {
+      expect(await renderedText(msgItem({ content: CONTENT, ...(overrides as Partial<ChatMessage>) }))).toContain(CONTENT);
+    });
+  });
+
+  ['streaming', 'pending'].forEach(status => {
+    it(`should repair partial markup in a ${status} assistant message`, async () => {
+      const rendered = await renderedText(msgItem({ role: 'assistant', content: CONTENT, status: status as ChatMessage['status'] }));
+
+      expect(rendered).toContain('Cost');
+      expect(rendered).not.toContain(CONTENT);
+    });
+  });
+});
