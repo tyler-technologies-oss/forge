@@ -315,6 +315,15 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the toast focus indicator color from the toast text color', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-toast)')).toContain('--forge-toast-focus-indicator-color: var(--forge-theme-on-surface-inverse);');
+      for (const theme of ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info']) {
+        expect(getRule(stylesheet, `:where(forge-toast[theme=${theme}])`)).toContain(`--forge-toast-focus-indicator-color: var(--forge-theme-on-${theme});`);
+      }
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

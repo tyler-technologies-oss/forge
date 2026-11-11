@@ -37,6 +37,7 @@
 
 $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 $_button-themes: secondary, tertiary, success, error, warning, info;
+$_toast-themes: primary, secondary, tertiary, success, warning, error, info;
 $_chip-themes: secondary, tertiary, success, warning, error, info;
 $_icon-themes: primary, secondary, tertiary, success, error, warning;
 $_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
@@ -354,6 +355,10 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   --forge-calendar-theme-today-color: var(--forge-theme-on-primary-container-minimum);
 }
 
+@mixin _toast-focus {
+  --forge-toast-focus-indicator-color: var(--forge-theme-on-surface-inverse);
+}
+
 @mixin _toast {
   @include toast.provide-theme(
     (
@@ -427,6 +432,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _step;
   @include _tab;
   @include _tab-bar;
+  @include _toast-focus;
   @include _timeline-break;
   @include _timeline-item;
   @include _tree-item;
@@ -526,6 +532,20 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-step) {
     @include _step;
+  }
+
+  :where(forge-toast) {
+    @include _toast-focus;
+  }
+
+  @each $theme in $_toast-themes {
+    :where(forge-toast[theme='#{$theme}']) {
+      @include toast.provide-theme(
+        (
+          focus-indicator-color: var(--forge-theme-on-#{$theme})
+        )
+      );
+    }
   }
 
   :where(forge-tab-bar) {
