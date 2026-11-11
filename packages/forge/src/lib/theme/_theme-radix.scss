@@ -150,6 +150,10 @@ $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
     @include _button;
   }
 
+  :where(forge-card, forge-dialog) {
+    --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-bright);
+  }
+
   :where(forge-card) {
     @include _card;
   }
@@ -169,6 +173,7 @@ $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
   :where(forge-popover) {
     @include _popover;
     --forge-theme-surface: var(--forge-theme-surface-elevated);
+    --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-elevated);
   }
 
   :where(forge-switch) {

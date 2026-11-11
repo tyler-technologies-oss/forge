@@ -18,8 +18,6 @@
         surface: theme.variable(surface-bright)
       )
     );
-
-    --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-elevated, var(--forge-theme-surface-bright));
   }
 
   :host([hidden]) {

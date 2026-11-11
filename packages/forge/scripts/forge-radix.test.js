@@ -35,6 +35,11 @@ describe('forge-radix stylesheets', () => {
     expect(light).toMatch(/:where\(forge-toolbar\) \{[^}]*--forge-toolbar-backdrop-filter:/);
   });
 
+  it('should keep toolbars inside cards, dialogs, and popovers opaque', () => {
+    expect(light).toMatch(/:where\(forge-card, forge-dialog\) \{[^}]*--forge-theme-surface-elevated-translucent: var\(--forge-theme-surface-bright\);/);
+    expect(light).toMatch(/:where\(forge-popover\) \{[^}]*--forge-theme-surface-elevated-translucent: var\(--forge-theme-surface-elevated\);/);
+  });
+
   it('should leave the toolbar background to the component so nested shadow roots resolve it', () => {
     expect(light).not.toContain('--forge-toolbar-background:');
   });

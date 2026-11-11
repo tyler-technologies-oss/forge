@@ -6,8 +6,6 @@
 
 :host {
   @include host;
-
-  --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-bright);
 }
 
 :host([hidden]) {
