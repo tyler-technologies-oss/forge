@@ -1,0 +1,42 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '../mixins' as mixins;
+
+:host {
+  display: block;
+
+  --_ai-gradient-container-shape: var(--forge-ai-gradient-container-radius, #{forge-shape.variable(large)});
+
+  // fixes border clipping issues in the threads view
+  --forge-drawer-background: transparent;
+
+  border: #{forge-shape.variable(small)} solid transparent;
+  border-radius: var(--_ai-gradient-container-shape);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+::slotted(*) {
+  border-radius: var(--_ai-gradient-container-shape);
+}
+
+:host(:state(low)) {
+  @include mixins.ai-gradient-container-border(
+    #{forge-theme.variable(surface)},
+    #{forge-theme.variable(tertiary-container-low)},
+    #{forge-theme.variable(outline)}
+  );
+}
+
+:host(:state(medium)) {
+  @include mixins.ai-gradient-container-border(#{forge-theme.variable(surface)}, #{forge-theme.variable(tertiary-container)}, #{forge-theme.variable(outline)});
+}
+
+:host(:state(high)) {
+  @include mixins.ai-gradient-container-border(#{forge-theme.variable(surface)}, #{forge-theme.variable(tertiary)}, #{forge-theme.variable(outline)});
+}
+
+:host(:state(disabled)) {
+  @include mixins.ai-gradient-container-border(#{forge-theme.variable(surface)}, #{forge-theme.variable(text-low)}, #{forge-theme.variable(text-low)});
+}

@@ -1,0 +1,34 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiToolStepsStories from './AiToolSteps.stories';
+
+<Meta of={AiToolStepsStories} />
+
+<Title />
+
+A tool renderer that displays a `displaySteps` tool call as a [`forge-ai-steps`](?path=/docs/components-tools-reasoning-steps--docs) timeline. It is exported from `@tylertech/forge-ai/tools`. Use it when you want the model to narrate its work as a list of steps.
+
+<Canvas of={AiToolStepsStories.Demo} />
+
+The tool call's `args.steps` supplies the steps. The timeline stays open while the call is still in progress and collapses once it settles.
+
+<Canvas of={AiToolStepsStories.Running} />
+
+## Registering
+
+Define a tool named `displaySteps` that takes a `steps` array and render it with this element. Set `renderOnStart` so the timeline appears while the arguments stream in.
+
+```ts
+import '@tylertech/forge-ai/tools';
+
+const displaySteps = {
+  name: 'displaySteps',
+  renderOnStart: true,
+  renderer: { elementTag: 'forge-ai-tool-steps' }
+  // parameters: a `steps` array of { label, detail?, status? }
+};
+```
+
+## API
+
+<CustomArgTypes />

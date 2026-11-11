@@ -1,9 +1,9 @@
-import { PropertyValues, TemplateResult, html, unsafeCSS } from 'lit';
+import { PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { property, queryAssignedNodes } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
-import { hideWhenEmpty } from '../core/utils/lit-utils.js';
+import { createHideRef, hideWhenEmpty } from '../core/utils/lit-utils.js';
 import { toggleState, HeadingLevel } from '../core/utils/utils.js';
 import { CardComponent } from '../card/index.js';
 import { ContentScaffoldComponent } from '../content-scaffold/index.js';
@@ -77,6 +77,8 @@ export class StructuredCardComponent extends BaseLitElement implements IStructur
   private readonly _beforeTitleNodes!: Node[];
 
   readonly #internals: ElementInternals;
+  readonly #headerHideRef = createHideRef();
+  readonly #footerHideRef = createHideRef();
 
   constructor() {
     super();
@@ -93,7 +95,7 @@ export class StructuredCardComponent extends BaseLitElement implements IStructur
     return html`
       <forge-card class="container">
         <forge-content-scaffold>
-          <div slot="header" class="header-container" ${hideWhenEmpty()}>
+          <div slot=${this.#headerHideRef.hidden ? nothing : 'header'} class="header-container" ${hideWhenEmpty(this.#headerHideRef)}>
             <div class="title-container">
               <slot name="before-title" @slotchange=${this.#handleSlotChange}></slot>
               <div
@@ -112,7 +114,7 @@ export class StructuredCardComponent extends BaseLitElement implements IStructur
             </div>
           </div>
           <slot name="body" slot="body"></slot>
-          <div class="footer-container" slot="footer" ${hideWhenEmpty()}>
+          <div class="footer-container" slot=${this.#footerHideRef.hidden ? nothing : 'footer'} ${hideWhenEmpty(this.#footerHideRef)}>
             <div class="footer-start-container">
               <slot name="footer-start"></slot>
             </div>

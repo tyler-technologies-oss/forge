@@ -1,0 +1,44 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiContextItemsStories from './AiContextItems.stories';
+
+<Meta of={AiContextItemsStories} />
+
+<Title />
+
+A wrapping row of [`forge-ai-context-chip`](?path=/docs/components-input-context-context-chip--docs) elements. Use it to show the records and files that will be sent as context with a prompt.
+
+<Canvas of={AiContextItemsStories.Demo} />
+
+## Usage
+
+Set the `items` property to an array of context items. The component renders nothing when the array is empty.
+
+```ts
+import '@tylertech/forge-ai/ai-context-items';
+import type { ContextItem } from '@tylertech/forge-ai/types';
+
+const element = document.querySelector('forge-ai-context-items');
+element.items = [
+  { id: 'case-1', label: 'Case CASE-123' },
+  { id: 'file-1', label: 'quarterly-report.pdf', sublabel: '2.4 MB', type: 'file' }
+] satisfies ContextItem[];
+```
+
+Each item takes an `id` and `label`, plus optional `sublabel`, `type` (`'file'` or `'context'`), `loading`, and `removable` (defaults to `true`). See the chip for how each is displayed.
+
+<Canvas of={AiContextItemsStories.NotRemovable} />
+
+### Removing
+
+Clicking a remove button fires `forge-ai-context-items-remove` with the item's `id` and the `item`. The list does not remove anything itself, so assign a new `items` array without that item.
+
+```ts
+element.addEventListener('forge-ai-context-items-remove', evt => {
+  element.items = element.items.filter(item => item.id !== evt.detail.id);
+});
+```
+
+## API
+
+<CustomArgTypes />

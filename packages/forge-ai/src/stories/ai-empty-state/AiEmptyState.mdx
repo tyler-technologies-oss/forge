@@ -1,0 +1,28 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiEmptyStateStories from './AiEmptyState.stories';
+
+<Meta of={AiEmptyStateStories} />
+
+<Title />
+
+A welcome or placeholder view for a conversation that has no messages yet. It shows an optional icon, heading and message, with space below for actions such as suggested prompts.
+
+<Canvas of={AiEmptyStateStories.Demo} />
+
+## Usage
+
+All parts are optional slots. When `body` is left empty, a default welcome message is shown.
+
+```html
+<forge-ai-empty-state>
+  <img slot="icon" src="logo.png" alt="" />
+  <span slot="heading">How can I help?</span>
+  <span slot="body">Ask a question or describe what you need.</span>
+  <forge-ai-suggestions slot="actions" .suggestions="${suggestions}"></forge-ai-suggestions>
+</forge-ai-empty-state>
+```
+
+## API
+
+<CustomArgTypes />

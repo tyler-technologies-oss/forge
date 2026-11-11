@@ -1,0 +1,12 @@
+node_modules/
+dist/
+custom-elements.json
+coverage/
+.coverage/
+.vitest-coverage/
+*.bak
+.DS_Store
+*.log
+.vite/
+storybook-static/
+*storybook.log

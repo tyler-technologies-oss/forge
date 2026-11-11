@@ -1,0 +1,60 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+@use '../utils/markdown-styles' as markdown;
+@use '../utils/toolbar' as toolbar;
+
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+
+:host(:state(empty)) {
+  display: none;
+}
+
+.assistant-response {
+  position: relative;
+}
+
+.text-chunk {
+  @include markdown.markdown-content;
+}
+
+.thinking-indicator {
+  margin-block-start: #{forge-spacing.variable(xsmall)};
+}
+
+// No leading space when the indicator directly follows a tool-call indicator
+forge-ai-tool-call-indicator + .thinking-indicator {
+  margin-block-start: 0;
+}
+
+.toolbar-container {
+  @include toolbar.toolbar-container;
+  left: 0;
+}
+
+.assistant-response[data-complete]:hover .toolbar-container,
+.assistant-response[data-complete] .toolbar-container:focus-within {
+  @include toolbar.toolbar-container-visible;
+}
+
+:host(:not(:last-of-type)) .assistant-response[data-complete]::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  height: 40px;
+}
+
+:host(:last-of-type) .assistant-response[data-complete] .toolbar-container {
+  @include toolbar.toolbar-container-visible;
+}
+
+.debug-button {
+  color: #{forge-theme.variable(on-error-container-low)};
+  --forge-icon-button-focus-indicator-color: #{forge-theme.variable(error)};
+  --forge-icon-button-tonal-background-color: #{forge-theme.variable(error-container-low)};
+}

@@ -1,0 +1,49 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/dist/button/forge-button';
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+:host {
+  display: inline-block;
+  position: relative;
+  color: #{forge-theme.variable(text-high)}; // Reset the cascade color in case of nesting
+
+  // CSS Custom Properties for theming and configuration
+  --_ai-dropdown-menu-min-width: var(--forge-ai-dropdown-menu-min-width, 200px);
+  --_ai-dropdown-menu-max-width: var(--forge-ai-dropdown-menu-max-width, 400px);
+  --_ai-dropdown-menu-max-height: var(--forge-ai-dropdown-menu-max-height, 300px);
+  --_ai-dropdown-menu-padding: var(--forge-ai-dropdown-menu-padding, #{forge-spacing.variable(xxsmall)} 0);
+}
+
+.forge-button,
+.forge-icon-button {
+  --forge-button-color: #{forge-theme.variable(text-medium)};
+  --forge-icon-button-color: #{forge-theme.variable(text-medium)};
+
+  ::slotted(svg) {
+    fill: #{forge-theme.variable(text-medium)};
+  }
+}
+
+.ai-dropdown-menu {
+  &__dropdown {
+    @include forge-scrollbar.base;
+
+    min-width: var(--_ai-dropdown-menu-min-width);
+    max-width: var(--_ai-dropdown-menu-max-width);
+    max-height: var(--_ai-dropdown-menu-max-height);
+    overflow-y: auto;
+    padding: var(--_ai-dropdown-menu-padding);
+  }
+}
+
+::slotted([slot='header']) {
+  @include forge-typography.style(heading1);
+
+  display: block;
+  margin-block-start: #{forge-spacing.variable(xxsmall)};
+  margin-inline: #{forge-spacing.variable(small)};
+}

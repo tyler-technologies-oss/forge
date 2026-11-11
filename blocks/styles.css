@@ -34,6 +34,19 @@ body.h-dvh {
   height: 100dvh;
 }
 
+/*
+ * height-reporter.ts adds `embedded` when a block renders in an iframe. Pad the body so
+ * focus rings and elevation shadows on edge-aligned content aren't clipped by the frame.
+ * Full-page app layouts are excluded, and border-box keeps `min-h-screen` blocks from
+ * overflowing. Layered so a block's own body padding utility (e.g. `p-8`) still wins.
+ */
+@layer base {
+  body.embedded:not(.h-dvh, :has(> forge-app-layout)) {
+    box-sizing: border-box;
+    padding: var(--forge-spacing-medium);
+  }
+}
+
 /* Block specific utilities */
 @layer components {
   .striped-box {
