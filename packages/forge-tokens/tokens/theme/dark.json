@@ -234,6 +234,15 @@
     "ai-gradient-end": {
       "$value": "{color.radix-dark.iris.6}"
     },
+    "ai-glow-start": {
+      "$value": "{color.radix-dark.plum.7}"
+    },
+    "ai-glow-end": {
+      "$value": "{color.radix-dark.iris.7}"
+    },
+    "ai-surface": {
+      "$value": "color-mix(in srgb, {color.radix-dark.slate.1} 90%, transparent)"
+    },
     "on-surface": {
       "$value": "{theme.text-high}"
     },

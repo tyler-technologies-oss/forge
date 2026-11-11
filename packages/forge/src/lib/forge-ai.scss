@@ -17,7 +17,8 @@ $targets: '#{$fields}.forge-ai, #{$wrappers}.forge-ai > #{$fields}';
 $gradient-start: var(--forge-ai-gradient-start, #{theme.variable(ai-gradient-start)});
 $gradient-end: var(--forge-ai-gradient-end, #{theme.variable(ai-gradient-end)});
 $gradient: ai-gradient($gradient-start, $gradient-end);
-$surface: color-mix(in srgb, #{theme.variable(surface)} 85%, transparent);
+$glow-gradient: ai-gradient(theme.variable(ai-glow-start), theme.variable(ai-glow-end));
+$surface: theme.variable(ai-surface);
 $border-width: var(--forge-ai-border-width, #{border.variable(thin)});
 // The surface color stops at the padding box, inside a transparent border, so the field's outline draws over the gradient and
 // picks up some of its color. Clipping to the padding box keeps the inner corners rounded.
@@ -35,7 +36,7 @@ $field-shape: var(--_field-shape, 0px);
   inset: calc(#{$glow-width} * -1);
   padding: #{$glow-width};
   border-radius: calc(#{$field-shape} + #{$glow-width});
-  background: #{$gradient};
+  background: #{$glow-gradient};
   mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
