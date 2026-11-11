@@ -1,5 +1,6 @@
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/radix-theme';
+@use '@tylertech/forge-tokens/sass/radix-typography';
 @use '@tylertech/forge-tokens/sass/theme';
 
 @use '../badge/token-utils' as badge;
@@ -202,6 +203,7 @@ $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 ///
 @mixin theme-properties {
   @include radix-theme.properties;
+  @include radix-typography.properties;
   @include component-properties;
 }
 
@@ -210,6 +212,7 @@ $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 ///
 @mixin theme-properties-dark {
   @include radix-theme.properties-dark;
+  @include radix-typography.properties;
   @include component-properties;
 
   @include popover.provide-theme(

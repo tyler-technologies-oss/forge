@@ -33,7 +33,8 @@ describe('default theme contract', () => {
 
   it.each([
     ['theme/radix-light', 'theme/light'],
-    ['theme/radix-dark', 'theme/dark']
+    ['theme/radix-dark', 'theme/dark'],
+    ['theme/radix-typography', 'typography']
   ])('should define every %s token that %s defines', (radix, base) => {
     const radixTokens = readTokens(radix);
     const missing = Object.keys(readTokens(base)).filter(token => !(token in radixTokens));

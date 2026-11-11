@@ -13,6 +13,19 @@ describe('forge-radix stylesheets', () => {
     expect(light).toContain('--forge-theme-primary-container-maximum:');
   });
 
+  it('should set the radix typography values that differ from the default typography', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-typography-heading1-font-weight: 600;');
+      expect(stylesheet).toContain('--forge-typography-heading1-letter-spacing: 0em;');
+      expect(stylesheet).toContain('--forge-typography-code1-font-family: var(--forge-typography-font-family-mono, "Cascadia Code", ui-monospace, monospace);');
+    }
+  });
+
+  it('should not set typography values that match the default typography', () => {
+    expect(light).not.toContain('--forge-typography-body1-font-weight:');
+    expect(light).not.toContain('--forge-typography-heading1-font-family:');
+  });
+
   it('should set component tokens for the radix theme', () => {
     expect(light).toContain('--forge-button-tonal-background: var(--forge-theme-secondary-container);');
     expect(light).toContain('--forge-field-background: var(--forge-theme-control-bg);');
