@@ -92,7 +92,7 @@ describe('StateLayer', () => {
   });
 
   it('should animate ripple', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -104,7 +104,7 @@ describe('StateLayer', () => {
   });
 
   it('should not animate ripple when disabled', async () => {
-    const { container, surface } = await createFixture({ disabled: true });
+    const { container, surface } = await createFixture({ disabled: true, ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -116,7 +116,7 @@ describe('StateLayer', () => {
   });
 
   it('should disable dynamically', async () => {
-    const { container, surface, stateLayer } = await createFixture();
+    const { container, surface, stateLayer } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
     stateLayer.disabled = true;
@@ -130,7 +130,7 @@ describe('StateLayer', () => {
   });
 
   it('should animate ripple when using touch pointer', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -155,7 +155,7 @@ describe('StateLayer', () => {
   });
 
   it('should not remove pressed when done animating if still pressed', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
     const animateSpy = vi.spyOn(surface, 'animate');
 
     await simulatePressAndHold(container);
@@ -171,7 +171,7 @@ describe('StateLayer', () => {
   });
 
   it('should animate via method manually', async () => {
-    const { stateLayer, surface } = await createFixture();
+    const { stateLayer, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -182,7 +182,7 @@ describe('StateLayer', () => {
   });
 
   it('should stop animating if pointercancel', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -200,7 +200,7 @@ describe('StateLayer', () => {
   });
 
   it('should stop animating if contextmenu', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -232,7 +232,7 @@ describe('StateLayer', () => {
   });
 
   it('should set target element by id dynamically', async () => {
-    const { container, sibling, stateLayer, surface } = await createFixture();
+    const { container, sibling, stateLayer, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
     stateLayer.target = 'sibling';
@@ -253,7 +253,7 @@ describe('StateLayer', () => {
   });
 
   it('should animate on click', async () => {
-    const { container, surface } = await createFixture();
+    const { container, surface } = await createFixture({ ripple: true });
 
     const animateSpy = vi.spyOn(surface, 'animate');
 
@@ -272,7 +272,7 @@ describe('StateLayer', () => {
   });
 
   it('should set target element manually', async () => {
-    const { container, sibling, stateLayer, surface } = await createFixture({ target: 'sibling' });
+    const { container, sibling, stateLayer, surface } = await createFixture({ target: 'sibling', ripple: true });
     const animateSpy = vi.spyOn(surface, 'animate');
 
     expect(stateLayer.targetElement).toBe(sibling);
@@ -298,9 +298,91 @@ describe('StateLayer', () => {
 
     expect(animateSpy).toHaveBeenCalledTimes(2);
   });
+
+  it('should show a flat pressed state without a ripple by default', async () => {
+    const { container, surface, stateLayer } = await createFixture();
+    const animateSpy = vi.spyOn(surface, 'animate');
+
+    simulatePressed(container);
+    await task(TOUCH_DELAY_MS);
+
+    expect(stateLayer.ripple).toBe(false);
+    expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
+    expect(animateSpy).not.toHaveBeenCalled();
+  });
+
+  it('should remove the flat pressed state after the minimum press time', async () => {
+    const { container, surface } = await createFixture();
+
+    simulatePressed(container);
+    await task(TOUCH_DELAY_MS);
+
+    expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
+
+    await task(MINIMUM_PRESS_MS);
+
+    expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(false);
+  });
+
+  it('should show a flat pressed state when playing the animation manually by default', async () => {
+    const { stateLayer, surface } = await createFixture();
+    const animateSpy = vi.spyOn(surface, 'animate');
+
+    stateLayer.playAnimation();
+
+    expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
+    expect(animateSpy).not.toHaveBeenCalled();
+  });
+
+  it('should reflect the ripple property to the attribute', async () => {
+    const { stateLayer } = await createFixture();
+
+    stateLayer.ripple = true;
+    expect(stateLayer.hasAttribute(STATE_LAYER_CONSTANTS.attributes.RIPPLE)).toBe(true);
+
+    stateLayer.ripple = false;
+    expect(stateLayer.hasAttribute(STATE_LAYER_CONSTANTS.attributes.RIPPLE)).toBe(false);
+  });
+
+  it('should enable the ripple from the global configuration', async () => {
+    const originalConfig = window.TylerForgeGlobalConfiguration;
+    window.TylerForgeGlobalConfiguration = { 'forge-state-layer': { ripple: true } };
+
+    try {
+      const { container, surface, stateLayer } = await createFixture();
+      const animateSpy = vi.spyOn(surface, 'animate');
+
+      simulatePressed(container);
+      await task(TOUCH_DELAY_MS);
+
+      expect(stateLayer.ripple).toBe(true);
+      expect(animateSpy).toHaveBeenCalledOnce();
+    } finally {
+      window.TylerForgeGlobalConfiguration = originalConfig;
+    }
+  });
+
+  it('should not animate the ripple when the user prefers reduced motion', async () => {
+    const matchMediaSpy = vi
+      .spyOn(window, 'matchMedia')
+      .mockImplementation(query => ({ matches: query.includes('prefers-reduced-motion'), media: query }) as MediaQueryList);
+
+    try {
+      const { container, surface } = await createFixture({ ripple: true });
+      const animateSpy = vi.spyOn(surface, 'animate');
+
+      simulatePressed(container);
+      await task(TOUCH_DELAY_MS);
+
+      expect(surface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
+      expect(animateSpy).not.toHaveBeenCalled();
+    } finally {
+      matchMediaSpy.mockRestore();
+    }
+  });
 });
 
-async function createFixture({ target, disabled }: Partial<IStateLayerComponent> = {}): Promise<{
+async function createFixture({ target, disabled, ripple }: Partial<IStateLayerComponent> = {}): Promise<{
   container: HTMLDivElement;
   sibling: HTMLElement;
   stateLayer: IStateLayerComponent;
@@ -309,7 +391,7 @@ async function createFixture({ target, disabled }: Partial<IStateLayerComponent>
   const screen = render(html`
     <div style="position: relative; overflow: hidden; height: 100px; width: 100px;">
       <div id="sibling"></div>
-      <forge-state-layer target=${target ?? nothing} ?disabled=${disabled}></forge-state-layer>
+      <forge-state-layer target=${target ?? nothing} ?disabled=${disabled} ?ripple=${ripple}></forge-state-layer>
     </div>
   `);
   const container = screen.container.firstElementChild as HTMLDivElement;

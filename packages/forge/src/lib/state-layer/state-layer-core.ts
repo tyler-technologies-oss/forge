@@ -5,6 +5,7 @@ export interface IStateLayerCore {
   targetElement: HTMLElement | null;
   target: string | null;
   disabled: boolean;
+  ripple: boolean;
   playAnimation(coords?: StateLayerCoords): void;
 }
 
@@ -12,6 +13,7 @@ export class StateLayerCore implements IStateLayerCore {
   // State
   private _target: string | null = null;
   private _disabled = false;
+  private _ripple = false;
   private _attached = false;
   private _deferred = true;
   private _pointerStartEvent: PointerEvent | undefined;
@@ -38,6 +40,7 @@ export class StateLayerCore implements IStateLayerCore {
   }
 
   public initialize(): void {
+    this._adapter.tryApplyGlobalConfiguration(['ripple']);
     this._adapter.trySetTarget(this._target);
 
     // Clicks could be triggered programmatically so we need to listen for them regardless
@@ -61,7 +64,7 @@ export class StateLayerCore implements IStateLayerCore {
   }
 
   public playAnimation(coords?: StateLayerCoords): void {
-    this._adapter.startAnimation(coords);
+    this._adapter.startAnimation(coords, this._ripple);
     this._endAnimation();
   }
 
@@ -212,7 +215,7 @@ export class StateLayerCore implements IStateLayerCore {
 
   private _startAnimation(evt?: PointerEvent): void {
     const coords = evt ? StateLayerCoords.fromPointerEvent(evt) : undefined;
-    this._adapter.startAnimation(coords);
+    this._adapter.startAnimation(coords, this._ripple);
   }
 
   private _endAnimation(): void {
@@ -313,6 +316,17 @@ export class StateLayerCore implements IStateLayerCore {
       }
 
       this._adapter.toggleHostAttribute(STATE_LAYER_CONSTANTS.attributes.DISABLED, this._disabled);
+    }
+  }
+
+  public get ripple(): boolean {
+    return this._ripple;
+  }
+  public set ripple(value: boolean) {
+    value = Boolean(value);
+    if (this._ripple !== value) {
+      this._ripple = value;
+      this._adapter.toggleHostAttribute(STATE_LAYER_CONSTANTS.attributes.RIPPLE, this._ripple);
     }
   }
 }

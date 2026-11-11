@@ -12,8 +12,18 @@ they interact with an element, and are especially useful for interactive element
 indicators to provide a complete set of visual feedback for interactive elements. These are building block components that are typically used internally
 within other components such as buttons.
 
-Additionally, state layers provide a "ripple" effect that animates from the point of interaction to the bounds of the element. This effect is used to
-indicate that the user's interaction has been received and is being processed.
+When pressed, the state layer shows a flat overlay across the element to indicate that the user's interaction has been received.
+
+State layers can instead show a "ripple" effect that animates from the point of interaction to the bounds of the element. The ripple is off by default.
+Turn it on for a single state layer with the `ripple` attribute, or for every state layer in an application with the global configuration:
+
+```javascript
+window.TylerForgeGlobalConfiguration = {
+  'forge-state-layer': { ripple: true }
+};
+```
+
+The ripple is not shown when the user prefers reduced motion.
 
 When using a state layer, it's important to note that they are absolutely positioned and should be used with a parent element that has `position: relative`
 set to ensure that the bounds of interaction state are contained within the parent element.

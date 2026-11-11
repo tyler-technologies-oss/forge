@@ -4,7 +4,8 @@ const elementName = `${COMPONENT_NAME_PREFIX}state-layer`;
 
 const observedAttributes = {
   TARGET: 'target',
-  DISABLED: 'disabled'
+  DISABLED: 'disabled',
+  RIPPLE: 'ripple'
 };
 
 const attributes = {

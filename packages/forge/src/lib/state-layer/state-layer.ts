@@ -11,6 +11,7 @@ export interface IStateLayerComponent extends IBaseComponent {
   targetElement: HTMLElement | null;
   target: string | null;
   disabled: boolean;
+  ripple: boolean;
   playAnimation(coords?: StateLayerCoords): void;
 }
 
@@ -33,9 +34,13 @@ declare global {
  * @property {HTMLElement} targetElement - The element to attach the state layer to.
  * @property {string} target - The id of the element to attach the state layer to.
  * @property {boolean} [disabled=false] - Controls whether the state layer is disabled.
+ * @property {boolean} [ripple=false] - Whether pressing shows a ripple that grows from the pointer instead of a flat overlay. The ripple is not shown when the user prefers reduced motion.
  *
  * @attribute {string} target - The id of the element to attach the state layer to.
  * @attribute {boolean} [disabled=false] - Controls whether the state layer is disabled.
+ * @attribute {boolean} [ripple=false] - Whether pressing shows a ripple that grows from the pointer instead of a flat overlay. The ripple is not shown when the user prefers reduced motion.
+ *
+ * @globalconfig ripple
  *
  * @cssproperty --forge-state-layer-color - The color of the state layer. Defaults to the on-surface theme.
  * @cssproperty --forge-state-layer-hover-color - The color of the state layer when hovered.
@@ -56,7 +61,7 @@ declare global {
 })
 export class StateLayerComponent extends BaseComponent implements IStateLayerComponent {
   public static get observedAttributes(): string[] {
-    return [STATE_LAYER_CONSTANTS.attributes.TARGET, STATE_LAYER_CONSTANTS.attributes.DISABLED];
+    return Object.values(STATE_LAYER_CONSTANTS.attributes);
   }
 
   private _core: StateLayerCore;
@@ -83,6 +88,9 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
       case STATE_LAYER_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
+      case STATE_LAYER_CONSTANTS.attributes.RIPPLE:
+        this.ripple = coerceBoolean(newValue);
+        break;
     }
   }
 
@@ -95,12 +103,15 @@ export class StateLayerComponent extends BaseComponent implements IStateLayerCom
   @coreProperty()
   declare public disabled: boolean;
 
+  @coreProperty()
+  declare public ripple: boolean;
+
   /**
-   * Triggers the animation to run.
+   * Shows the pressed state briefly, as if the target element was pressed.
    *
-   * Note: If coordinates are not provided, the transition will originate from the center of the target element.
+   * Note: When `ripple` is enabled and coordinates are not provided, the ripple will originate from the center of the target element.
    *
-   * @param {StateLayerCoords} [coords] - The coordinates to play the animation from.
+   * @param {StateLayerCoords} [coords] - The coordinates to play the ripple from.
    */
   public playAnimation(coords?: StateLayerCoords): void {
     this._core.playAnimation(coords);

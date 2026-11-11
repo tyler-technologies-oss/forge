@@ -90,18 +90,15 @@ describe('Button Area', () => {
   it('should animate state layer when handling keydown', async () => {
     const { button, stateLayer } = await createFixture({});
     const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
-    const animateSpy = vi.spyOn(stateLayerSurface, 'animate');
-
     button.focus();
     await userEvent.keyboard('z');
     await task(TOUCH_DELAY_MS);
-    expect(animateSpy).not.toHaveBeenCalled();
     expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(false);
 
     await userEvent.keyboard('{Enter}');
     await task(TOUCH_DELAY_MS);
 
-    expect(animateSpy).toHaveBeenCalled();
+    expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
   });
 
   it('should not dispatch click events when disabled', async () => {
@@ -590,25 +587,21 @@ describe('Button Area', () => {
     it('should handle Enter key with anchor element', async () => {
       const { anchor, stateLayer } = await createFixtureWithAnchor({});
       const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
-      const animateSpy = vi.spyOn(stateLayerSurface, 'animate');
-
       anchor.focus();
       await userEvent.keyboard('{Enter}');
       await task(TOUCH_DELAY_MS);
 
-      expect(animateSpy).toHaveBeenCalled();
+      expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(true);
     });
 
     it('should not handle Space key with anchor element', async () => {
       const { anchor, stateLayer } = await createFixtureWithAnchor({});
       const stateLayerSurface = getStateLayerSurfaceEl(stateLayer);
-      const animateSpy = vi.spyOn(stateLayerSurface, 'animate');
-
       anchor.focus();
       await userEvent.keyboard(' ');
       await task(TOUCH_DELAY_MS);
 
-      expect(animateSpy).not.toHaveBeenCalled();
+      expect(stateLayerSurface.classList.contains(STATE_LAYER_CONSTANTS.classes.PRESSED)).toBe(false);
     });
 
     it('should keep state layer when disabled with anchor element', async () => {

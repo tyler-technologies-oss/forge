@@ -38,6 +38,20 @@ $_host-tokens: (display);
   }
 }
 
+:host([ripple]) {
+  .forge-state-layer::after {
+    @include ripple-base;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([ripple]) {
+    .forge-state-layer::after {
+      @include press-base;
+    }
+  }
+}
+
 @media screen and (forced-colors: active) {
   :host {
     display: none;

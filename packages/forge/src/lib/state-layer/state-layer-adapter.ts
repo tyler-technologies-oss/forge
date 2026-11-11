@@ -1,11 +1,12 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { prefersReducedMotion } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, createUserInteractionListener } from '../core/utils/utils.js';
 import { IStateLayerComponent } from './state-layer.js';
 import { ANIMATION_FILL, EASING, MINIMUM_PRESS_MS, PRESS_GROW_MS, PRESS_PSEUDO, StateLayerCoords, STATE_LAYER_CONSTANTS } from './state-layer-constants.js';
 import { calcRippleSize, getTranslationCoordinates, isInBounds } from './state-layer-utils.js';
 
-export interface IStateLayerAdapter extends IBaseAdapter {
+export interface IStateLayerAdapter extends IBaseAdapter<IStateLayerComponent> {
   destroy(): void;
   deferInitialization(listener: (evt?: PointerEvent) => void): void;
   getTargetElement(): HTMLElement | null;
@@ -15,7 +16,7 @@ export interface IStateLayerAdapter extends IBaseAdapter {
   removeTargetListener(type: string, listener: EventListener): void;
   setHovered(hovered: boolean): void;
   setPressed(pressed: boolean): void;
-  startAnimation(coords?: StateLayerCoords): void;
+  startAnimation(coords?: StateLayerCoords, ripple?: boolean): void;
   endAnimation(): Promise<void>;
   inBounds(x: number, y: number): boolean;
 }
@@ -24,6 +25,8 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
   private readonly _surfaceElement: HTMLElement;
   private _targetElement: HTMLElement | null = null;
   private _rippleAnimation: Animation | undefined;
+  private _pressId = 0;
+  private _pressStartTime = 0;
   private _destroyDeferListener: (() => void) | undefined;
 
   constructor(component: IStateLayerComponent) {
@@ -77,13 +80,20 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
     this._targetElement = locateTargetHeuristic(this._component, value);
   }
 
-  public startAnimation(coords?: StateLayerCoords): void {
+  public startAnimation(coords?: StateLayerCoords, ripple = false): void {
     if (!this._surfaceElement) {
       return;
     }
 
     this.setPressed(true);
     this._rippleAnimation?.cancel();
+    this._rippleAnimation = undefined;
+    this._pressId++;
+    this._pressStartTime = performance.now();
+
+    if (!ripple || prefersReducedMotion()) {
+      return;
+    }
 
     const { rippleSize, rippleScale, initialSize } = calcRippleSize(this._component);
 
@@ -113,19 +123,19 @@ export class StateLayerAdapter extends BaseAdapter<IStateLayerComponent> impleme
   }
 
   public async endAnimation(): Promise<void> {
-    const animation = this._rippleAnimation;
-    const pressAnimationPlayState = (animation?.currentTime as number) ?? Infinity;
+    const pressId = this._pressId;
+    const pressedTime = performance.now() - this._pressStartTime;
 
-    if (pressAnimationPlayState >= MINIMUM_PRESS_MS) {
+    if (pressedTime >= MINIMUM_PRESS_MS) {
       this.setPressed(false);
       return;
     }
 
     await new Promise(resolve => {
-      setTimeout(resolve, MINIMUM_PRESS_MS - pressAnimationPlayState);
+      setTimeout(resolve, MINIMUM_PRESS_MS - pressedTime);
     });
 
-    if (this._rippleAnimation !== animation) {
+    if (this._pressId !== pressId) {
       return;
     }
 
