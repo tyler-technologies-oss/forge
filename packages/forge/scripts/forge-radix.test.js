@@ -326,6 +326,53 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should map legacy and semantic badge themes without touching strong badges', () => {
+    const notStrong = ':not([strong], :state(strong))';
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong})`)).toContain('--forge-badge-background: var(--forge-theme-bg-neutral-default);');
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong})`)).toContain('--forge-badge-color: var(--forge-theme-text-medium);');
+      const themed = {
+        ':is([theme=info], [theme=info-primary])': 'info',
+        '[theme=success]': 'success',
+        '[theme=warning]': 'warning',
+        ':is([theme=error], [theme=danger])': 'error'
+      };
+      for (const [selector, role] of Object.entries(themed)) {
+        const rule = getRule(stylesheet, `:where(forge-badge${notStrong}${selector})`);
+        expect(rule).toContain(`--forge-badge-background: var(--forge-theme-bg-${role}-default);`);
+        expect(rule).toContain(`--forge-badge-color: var(--forge-theme-on-${role}-container-low);`);
+      }
+      expect(getRule(stylesheet, ':where(forge-badge)')).toContain('--forge-badge-font-weight: var(--forge-typography-badge-font-weight);');
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-badge-background');
+    }
+  });
+
+  it('should map legacy and semantic banner and inline message themes', () => {
+    const neutral = ':is([theme=primary], [theme=secondary], [theme=tertiary], [theme=info-secondary])';
+    const roles = { '[theme=success]': 'success', '[theme=warning]': 'warning', ':is([theme=error], [theme=danger])': 'error' };
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-banner)')).toContain('--forge-banner-background: var(--forge-theme-bg-info-default);');
+      expect(getRule(stylesheet, `:where(forge-banner${neutral})`)).toContain('--forge-banner-background: var(--forge-theme-bg-neutral-default);');
+      expect(getRule(stylesheet, `:where(forge-banner${neutral})`)).toContain('--forge-banner-icon-color: var(--forge-theme-text-medium);');
+      expect(getRule(stylesheet, ':where(forge-inline-message)')).toContain('--forge-inline-message-border-color: var(--forge-theme-border-info-default);');
+      expect(getRule(stylesheet, `:where(forge-inline-message${neutral})`)).toContain(
+        '--forge-inline-message-border-color: var(--forge-theme-border-neutral-default);'
+      );
+      for (const [selector, role] of Object.entries(roles)) {
+        const banner = getRule(stylesheet, `:where(forge-banner${selector})`);
+        expect(banner).toContain(`--forge-banner-background: var(--forge-theme-bg-${role}-default);`);
+        expect(banner).toContain(`--forge-banner-color: var(--forge-theme-on-${role}-container-low);`);
+        expect(banner).toContain(`--forge-banner-icon-color: var(--forge-theme-on-${role}-container-low);`);
+        const message = getRule(stylesheet, `:where(forge-inline-message${selector})`);
+        expect(message).toContain(`--forge-inline-message-background: var(--forge-theme-bg-${role}-default);`);
+        expect(message).toContain(`--forge-inline-message-border-color: var(--forge-theme-border-${role}-default);`);
+        expect(message).toContain(`--forge-inline-message-icon-color: var(--forge-theme-on-${role}-container-low);`);
+      }
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-banner-');
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-inline-message-');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

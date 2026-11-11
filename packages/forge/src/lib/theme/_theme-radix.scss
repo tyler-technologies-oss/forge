@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/radix-theme';
@@ -5,6 +6,8 @@
 @use '@tylertech/forge-tokens/sass/theme';
 
 @use '../badge/token-utils' as badge;
+@use '../banner/token-utils' as banner;
+@use '../inline-message/token-utils' as inline-message;
 @use '../button/token-utils' as button;
 @use '../button-area/token-utils' as button-area;
 @use '../button-toggle/button-toggle/token-utils' as button-toggle;
@@ -38,16 +41,53 @@
 $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 $_button-themes: secondary, tertiary, success, error, warning, info;
 $_toast-themes: primary, secondary, tertiary, success, warning, error, info;
+$_legacy-neutral-themes: primary, secondary, tertiary, info-secondary;
 $_chip-themes: secondary, tertiary, success, warning, error, info;
 $_icon-themes: primary, secondary, tertiary, success, error, warning;
 $_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
 
+@function _theme-selector($themes) {
+  $selectors: ();
+  @each $theme in $themes {
+    $selectors: list.append($selectors, '[theme=#{$theme}]', comma);
+  }
+  @return $selectors;
+}
+
 @mixin _badge {
   @include badge.provide-theme(
     (
-      background: var(--forge-theme-surface-container),
-      color: var(--forge-theme-on-surface-container),
-      font-weight: 500
+      font-weight: var(--forge-typography-badge-font-weight)
+    )
+  );
+}
+
+@mixin _badge-colors($background, $color) {
+  @include badge.provide-theme(
+    (
+      background: $background,
+      color: $color
+    )
+  );
+}
+
+@mixin _banner-colors($background, $color, $icon-color) {
+  @include banner.provide-theme(
+    (
+      background: $background,
+      color: $color,
+      icon-color: $icon-color
+    )
+  );
+}
+
+@mixin _inline-message-colors($background, $color, $border-color, $icon-color) {
+  @include inline-message.provide-theme(
+    (
+      background: $background,
+      color: $color,
+      border-color: $border-color,
+      icon-color: $icon-color
     )
   );
 }
@@ -451,6 +491,68 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 @mixin scoped-properties {
   :where(forge-badge) {
     @include _badge;
+  }
+
+  $_not-strong: ':not([strong], :state(strong))';
+
+  :where(forge-badge#{$_not-strong}) {
+    @include _badge-colors(var(--forge-theme-bg-neutral-default), var(--forge-theme-text-medium));
+  }
+
+  @each $role,
+    $themes
+      in (info: ':is([theme=info], [theme=info-primary])', success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])')
+  {
+    :where(forge-badge#{$_not-strong}#{$themes}) {
+      @include _badge-colors(var(--forge-theme-bg-#{$role}-default), var(--forge-theme-on-#{$role}-container-low));
+    }
+  }
+
+  :where(forge-banner) {
+    @include _banner-colors(var(--forge-theme-bg-info-default), var(--forge-theme-on-info-container-low), var(--forge-theme-on-info-container-low));
+  }
+
+  :where(forge-banner:is(#{_theme-selector($_legacy-neutral-themes)})) {
+    @include _banner-colors(var(--forge-theme-bg-neutral-default), var(--forge-theme-text-high), var(--forge-theme-text-medium));
+  }
+
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])') {
+    :where(forge-banner#{$themes}) {
+      @include _banner-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-on-#{$role}-container-low)
+      );
+    }
+  }
+
+  :where(forge-inline-message) {
+    @include _inline-message-colors(
+      var(--forge-theme-bg-info-default),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-border-info-default),
+      var(--forge-theme-on-info-container-low)
+    );
+  }
+
+  :where(forge-inline-message:is(#{_theme-selector($_legacy-neutral-themes)})) {
+    @include _inline-message-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-high),
+      var(--forge-theme-border-neutral-default),
+      var(--forge-theme-text-medium)
+    );
+  }
+
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])') {
+    :where(forge-inline-message#{$themes}) {
+      @include _inline-message-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-border-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low)
+      );
+    }
   }
 
   :where(forge-button) {
