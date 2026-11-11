@@ -207,9 +207,9 @@ input[type='range'] {
   @include on-top;
 }
 
-@media (prefers-reduced-motion) {
+@media (prefers-reduced-motion: reduce) {
   .handle-label {
-    transition-duration: 0;
+    transition-duration: 0s;
   }
 }
 

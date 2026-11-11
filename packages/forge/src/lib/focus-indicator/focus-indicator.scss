@@ -55,8 +55,8 @@
 // Media Queries
 //
 
-@media (prefers-reduced-motion) {
-  :host {
+@media (prefers-reduced-motion: reduce) {
+  :host .focus-indicator {
     animation: none;
   }
 }

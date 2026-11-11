@@ -72,7 +72,7 @@ forge-icon {
 // Media
 //
 
-@media prefers-reduced-motion {
+@media (prefers-reduced-motion: reduce) {
   .forge-open-icon {
     transition: none;
   }
