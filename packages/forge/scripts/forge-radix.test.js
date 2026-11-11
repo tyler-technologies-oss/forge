@@ -172,6 +172,38 @@ describe('forge-radix stylesheets', () => {
     expect(dark).not.toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
   });
 
+  it('should set the tonal field background', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-field, forge-text-field, forge-select, forge-chip-field)')).toContain(
+        '--forge-field-tonal-background: var(--forge-theme-control-bg-tonal);'
+      );
+    }
+  });
+
+  it('should set the selected color of list items and options', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-list-item)')).toContain('--forge-list-item-selected-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(getRule(stylesheet, ':where(forge-option)')).toContain('--forge-option-selected-color: var(--forge-theme-on-primary-container-minimum);');
+    }
+  });
+
+  it('should set navigation divider and line colors', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-tab-bar)')).toContain('--forge-tab-bar-divider-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-tab-bar)')).toContain('--forge-tab-bar-overflow-divider-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-tree-item)')).toContain('--forge-tree-item-indent-line-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-timeline-break)')).toContain('--forge-timeline-break-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-timeline-item)')).toContain('--forge-timeline-item-line-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-step)')).toContain('--forge-step-line-color: var(--forge-theme-outline-low);');
+    }
+  });
+
+  it('should set the active tab color only on the root so app bar tab bars can override it', () => {
+    expect(light).toMatch(/:root \{[^}]*--forge-tab-active-color: var\(--forge-theme-text-high\);/);
+    expect(light).not.toContain(':where(forge-tab)');
+    expect(light).not.toContain('--forge-tab-indicator-color:');
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

@@ -13,6 +13,14 @@
 @use '../divider/token-utils' as divider;
 @use '../kbd/token-utils' as kbd;
 @use '../tooltip/token-utils' as tooltip;
+@use '../list/list-item/token-utils' as list-item;
+@use '../option/option/token-utils' as option;
+@use '../stepper/step/token-utils' as step;
+@use '../tabs/tab/token-utils' as tab;
+@use '../tabs/tab-bar/token-utils' as tab-bar;
+@use '../timeline/timeline-break/token-utils' as timeline-break;
+@use '../timeline/timeline-item/token-utils' as timeline-item;
+@use '../tree/tree-item/token-utils' as tree-item;
 @use '../chips/chip/token-utils' as chip;
 @use '../field/token-utils' as field;
 @use '../file-picker/token-utils' as file-picker;
@@ -158,6 +166,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include field.provide-theme(
     (
       background: var(--forge-theme-control-bg),
+      tonal-background: var(--forge-theme-control-bg-tonal),
       filled-background: var(--forge-theme-control-bg-filled),
       default-outline-color: var(--forge-theme-outline),
       default-outline-color-hover: var(--forge-theme-outline-medium),
@@ -226,6 +235,71 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   );
 }
 
+@mixin _list-item {
+  @include list-item.provide-theme(
+    (
+      selected-color: var(--forge-theme-on-primary-container-minimum)
+    )
+  );
+}
+
+@mixin _option {
+  @include option.provide-theme(
+    (
+      selected-color: var(--forge-theme-on-primary-container-minimum)
+    )
+  );
+}
+
+@mixin _step {
+  @include step.provide-theme(
+    (
+      line-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _tab {
+  @include tab.provide-theme(
+    (
+      active-color: var(--forge-theme-text-high)
+    )
+  );
+}
+
+@mixin _tab-bar {
+  @include tab-bar.provide-theme(
+    (
+      divider-color: var(--forge-theme-outline-low),
+      overflow-divider-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _timeline-break {
+  @include timeline-break.provide-theme(
+    (
+      color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _timeline-item {
+  @include timeline-item.provide-theme(
+    (
+      line-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _tree-item {
+  @include tree-item.provide-theme(
+    (
+      indent-line-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
 @mixin _toast {
   @include toast.provide-theme(
     (
@@ -289,6 +363,14 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _divider;
   @include _kbd;
   @include _tooltip;
+  @include _list-item;
+  @include _option;
+  @include _step;
+  @include _tab;
+  @include _tab-bar;
+  @include _timeline-break;
+  @include _timeline-item;
+  @include _tree-item;
   @include _field;
   @include _file-picker;
   @include _fab;
@@ -368,6 +450,34 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-tooltip) {
     @include _tooltip;
+  }
+
+  :where(forge-list-item) {
+    @include _list-item;
+  }
+
+  :where(forge-option) {
+    @include _option;
+  }
+
+  :where(forge-step) {
+    @include _step;
+  }
+
+  :where(forge-tab-bar) {
+    @include _tab-bar;
+  }
+
+  :where(forge-timeline-break) {
+    @include _timeline-break;
+  }
+
+  :where(forge-timeline-item) {
+    @include _timeline-item;
+  }
+
+  :where(forge-tree-item) {
+    @include _tree-item;
   }
 
   :where(forge-chip) {
