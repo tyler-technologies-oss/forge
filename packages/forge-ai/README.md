@@ -22,7 +22,7 @@ import '@tylertech/forge-ai/ai-prompt';
 <forge-ai-prompt></forge-ai-prompt>
 ```
 
-Documentation and examples are in this package's local Storybook. From the repo root, run `pnpm --filter @tylertech/forge-ai storybook`.
+Documentation and examples are in this package's local Storybook. From the repo root, run `pnpm storybook:forge-ai`.
 
 ### Subpaths
 
