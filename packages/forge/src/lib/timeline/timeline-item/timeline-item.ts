@@ -26,8 +26,10 @@ export const TIMELINE_ITEM_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-timeli
  *
  * @cssproperty --forge-timeline-item-marker-size - The size of the slotted icon marker.
  * @cssproperty --forge-timeline-item-marker-padding - The space around the marker that is filled with the background color.
- * @cssproperty --forge-timeline-item-marker-color - The color of the marker.
- * @cssproperty --forge-timeline-item-marker-background - The background color of the marker.
+ * @cssproperty --forge-timeline-item-marker-color - The color of the default marker.
+ * @cssproperty --forge-timeline-item-marker-background - The background color of an icon marker, matching a badge background.
+ * @cssproperty --forge-timeline-item-marker-icon-color - The color of an icon marker, matching a badge's text color.
+ * @cssproperty --forge-timeline-item-marker-backdrop - The opaque color behind icon and badge markers, which keeps the line from showing through them.
  * @cssproperty --forge-timeline-item-marker-shape - The corner radius of the marker.
  * @cssproperty --forge-timeline-item-default-marker-size - The size of the default marker displayed when no slotted marker is provided.
  * @cssproperty --forge-timeline-item-default-marker-shape - The corner radius of the default marker displayed when no slotted marker is provided.

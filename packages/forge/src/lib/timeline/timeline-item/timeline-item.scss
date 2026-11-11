@@ -48,6 +48,14 @@
   ::slotted(forge-icon) {
     @include core.icon;
   }
+
+  ::slotted(forge-badge) {
+    @include core.badge;
+  }
+
+  ::slotted(forge-badge:is(:not([theme]), [theme='default']):not([color])) {
+    @include core.badge-theme;
+  }
 }
 
 .default-marker {

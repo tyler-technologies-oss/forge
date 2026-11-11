@@ -9,6 +9,7 @@ import './timeline/timeline.js';
 import './timeline-item/timeline-item.js';
 import './timeline-break/timeline-break.js';
 import '../timestamp/timestamp.js';
+import '../badge/badge.js';
 
 describe('Timeline', () => {
   describe('timeline container', () => {
@@ -135,6 +136,48 @@ describe('Timeline', () => {
 
         expect(customMarker).toBeTruthy();
         expect(customMarker?.textContent).toBe('✓');
+      });
+
+      it('should keep the theme of a slotted badge marker', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item theme="error">
+              <forge-badge slot="marker" theme="success">Done</forge-badge>
+              <span>Content</span>
+            </forge-timeline-item>
+          </forge-timeline>
+          <forge-badge id="reference" theme="success">Done</forge-badge>
+        `);
+        const badge = screen.container.querySelector('forge-badge[slot="marker"]') as HTMLElement;
+        const reference = screen.container.querySelector('#reference') as HTMLElement;
+        await (badge as HTMLElement & { updateComplete: Promise<boolean> }).updateComplete;
+        await (reference as HTMLElement & { updateComplete: Promise<boolean> }).updateComplete;
+        const badgeRoot = badge.shadowRoot?.firstElementChild as HTMLElement;
+        const referenceRoot = reference.shadowRoot?.firstElementChild as HTMLElement;
+
+        expect(getComputedStyle(badgeRoot).backgroundColor).toBe(getComputedStyle(referenceRoot).backgroundColor);
+        expect(getComputedStyle(badgeRoot).color).toBe(getComputedStyle(referenceRoot).color);
+      });
+
+      it('should give a badge marker without a theme the timeline item theme', async () => {
+        const screen = render(html`
+          <forge-timeline>
+            <forge-timeline-item theme="error">
+              <forge-badge slot="marker">Error</forge-badge>
+              <span>Content</span>
+            </forge-timeline-item>
+          </forge-timeline>
+          <forge-badge id="reference" theme="error">Error</forge-badge>
+        `);
+        const badge = screen.container.querySelector('forge-badge[slot="marker"]') as HTMLElement;
+        const reference = screen.container.querySelector('#reference') as HTMLElement;
+        await (badge as HTMLElement & { updateComplete: Promise<boolean> }).updateComplete;
+        await (reference as HTMLElement & { updateComplete: Promise<boolean> }).updateComplete;
+        const badgeRoot = badge.shadowRoot?.firstElementChild as HTMLElement;
+        const referenceRoot = reference.shadowRoot?.firstElementChild as HTMLElement;
+
+        expect(getComputedStyle(badgeRoot).backgroundColor).toBe(getComputedStyle(referenceRoot).backgroundColor);
+        expect(getComputedStyle(badgeRoot).color).toBe(getComputedStyle(referenceRoot).color);
       });
     });
 
