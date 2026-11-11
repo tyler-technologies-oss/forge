@@ -496,7 +496,15 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     @include _icon-button;
   }
 
+  :where(forge-icon-button[variant='outlined']:not([disabled], :state(toggle):state(pressed))) {
+    --forge-icon-button-icon-color: var(--forge-theme-text-medium);
+  }
+
   @each $theme in $_icon-button-themes {
+    :where(forge-icon-button[variant='outlined'][theme='#{$theme}']:not([disabled], :state(toggle):state(pressed))) {
+      --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container-minimum);
+    }
+
     :where(forge-icon-button[theme='#{$theme}']) {
       @include _icon-button-theme($theme);
     }

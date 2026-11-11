@@ -324,6 +324,21 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the outlined icon button icon color without affecting toggled on or disabled buttons', () => {
+    for (const stylesheet of [light, dark]) {
+      const guard = ':not([disabled], :state(toggle):state(pressed))';
+      expect(getRule(stylesheet, `:where(forge-icon-button[variant=outlined]${guard})`)).toContain(
+        '--forge-icon-button-icon-color: var(--forge-theme-text-medium);'
+      );
+      for (const theme of ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info']) {
+        expect(getRule(stylesheet, `:where(forge-icon-button[variant=outlined][theme=${theme}]${guard})`)).toContain(
+          `--forge-icon-button-icon-color: var(--forge-theme-on-${theme}-container-minimum);`
+        );
+      }
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-icon-button-icon-color');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
