@@ -4,7 +4,10 @@
  * Captures every story in light and dark, then compares two captures. Run both captures on the same machine so
  * identical renders are byte-identical.
  *
- *   node scripts/visual-ab.js capture <storybook-static-dir> <out-dir> [--filter <text>] [--themes light,dark] [--workers <n>]
+ *   node scripts/visual-ab.js capture <storybook-static-dir> <out-dir> [--filter <text>] [--themes light,dark] [--workers <n>] [--css-light <file>] [--css-dark <file>]
+ *
+ * `--css-light` and `--css-dark` inject a stylesheet into each story for that theme. The dark stylesheet replaces the default dark theme
+ * class, so the Storybook dark class is not applied when `--css-dark` is given.
  *   node scripts/visual-ab.js compare <capture-a> <capture-b> [--report <file>]
  */
 
@@ -69,7 +72,10 @@ const readStories = (directory, filter) => {
     .sort((a, b) => a.id.localeCompare(b.id));
 };
 
-const settlePage = async (page, theme) => {
+const settlePage = async (page, theme, injectedCss) => {
+  if (injectedCss) {
+    await page.addStyleTag({ content: injectedCss });
+  }
   await page.evaluate(
     async ({ darkClass, dark, frames }) => {
       document.body.classList.toggle(darkClass, dark);
@@ -93,11 +99,11 @@ const settlePage = async (page, theme) => {
         await new Promise(resolveFrame => requestAnimationFrame(resolveFrame));
       }
     },
-    { darkClass: DARK_CLASS, dark: theme === 'dark', frames: SETTLE_FRAMES }
+    { darkClass: DARK_CLASS, dark: theme === 'dark' && !injectedCss, frames: SETTLE_FRAMES }
   );
 };
 
-const captureStory = async (context, origin, entry, theme, outDirectory) => {
+const captureStory = async (context, origin, entry, theme, outDirectory, injectedCss) => {
   const page = await context.newPage();
   const record = { id: entry.id, title: entry.title, name: entry.name, theme };
   try {
@@ -110,7 +116,7 @@ const captureStory = async (context, origin, entry, theme, outDirectory) => {
       record.error = 'story failed to render';
     }
     await page.waitForLoadState('networkidle', { timeout: NAVIGATION_TIMEOUT_MS }).catch(() => undefined);
-    await settlePage(page, theme);
+    await settlePage(page, theme, injectedCss);
     const buffer = await page.screenshot({ fullPage: true, animations: 'disabled', caret: 'hide' });
     record.file = join(theme, `${entry.id}.png`);
     record.sha256 = createHash('sha256').update(buffer).digest('hex');
@@ -144,6 +150,8 @@ const capture = async () => {
   const [, , , staticDirectory, outDirectory] = process.argv;
   const themes = getArg('themes', DEFAULT_THEMES.join(',')).split(',');
   const workers = Number(getArg('workers', DEFAULT_WORKERS));
+  const cssFiles = { light: getArg('css-light'), dark: getArg('css-dark') };
+  const injected = Object.fromEntries(Object.entries(cssFiles).map(([theme, file]) => [theme, file ? readFileSync(file, 'utf8') : undefined]));
   const stories = readStories(staticDirectory, getArg('filter'));
   const server = await serveDirectory(staticDirectory);
   const browser = await chromium.launch();
@@ -152,7 +160,7 @@ const capture = async () => {
 
   log(`Capturing ${stories.length} stories x ${themes.length} themes from ${staticDirectory}`);
   mkdirSync(outDirectory, { recursive: true });
-  const tasks = stories.flatMap(entry => themes.map(theme => () => captureStory(context, server.origin, entry, theme, outDirectory)));
+  const tasks = stories.flatMap(entry => themes.map(theme => () => captureStory(context, server.origin, entry, theme, outDirectory, injected[theme])));
   const records = (await runPool(tasks, workers)).sort((a, b) => `${a.theme}/${a.id}`.localeCompare(`${b.theme}/${b.id}`));
   writeFileSync(join(outDirectory, MANIFEST_FILE), `${JSON.stringify(records, null, 2)}\n`);
 
