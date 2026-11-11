@@ -332,10 +332,10 @@ forge-overlay[clipped-y] {
 
   @media (prefers-reduced-motion: reduce) {
     .forge-popover {
-      animation: none;
+      animation-name: fadein;
 
       &.exiting {
-        animation: none;
+        animation-name: fadeout;
       }
     }
   }

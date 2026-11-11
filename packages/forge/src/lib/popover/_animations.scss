@@ -2,41 +2,41 @@
 
 @keyframes zoomin {
   from {
-    transform: scale(0.8);
+    scale: 0.96;
   }
 
   to {
-    transform: scale(1);
+    scale: 1;
   }
 }
 
 @keyframes zoomout {
   from {
-    transform: scale(1);
+    scale: 1;
   }
 
   to {
-    transform: scale(0.8);
+    scale: 0.96;
   }
 }
 
 @keyframes slidein {
   from {
-    transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
+    translate: #{token(slidein-x, custom)} #{token(slidein-y, custom)};
   }
 
   to {
-    transform: translateX(0) translateY(0);
+    translate: 0 0;
   }
 }
 
 @keyframes slideout {
   from {
-    transform: translateX(0) translateY(0);
+    translate: 0 0;
   }
 
   to {
-    transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
+    translate: #{token(slidein-x, custom)} #{token(slidein-y, custom)};
   }
 }
 

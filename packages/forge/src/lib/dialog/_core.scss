@@ -284,7 +284,10 @@
 
 @mixin preset-sheet-dialog-base {
   @include override(enter-animation-duration, preset-sheet-enter-animation-duration);
+  @include override(enter-animation-easing, preset-sheet-enter-animation-easing);
   @include override(exit-animation-duration, preset-sheet-exit-animation-duration);
+  @include override(exit-animation-easing, preset-sheet-exit-animation-easing);
+  @include override(slide-opacity, 1, value);
 }
 
 @mixin preset-sheet-surface-base {

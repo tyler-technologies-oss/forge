@@ -126,10 +126,13 @@ export interface IDialogComponent extends IDialogProperties, BaseLitElement, IDi
  * @cssproperty --forge-dialog-nonmodal-elevation - The elevation of non-modal dialogs.
  * @cssproperty --forge-dialog-fullscreen-enter-animation-duration - The duration of the enter animation for fullscreen dialogs.
  * @cssproperty --forge-dialog-fullscreen-exit-animation-duration - The duration of the exit animation for fullscreen dialogs.
+ * @cssproperty --forge-dialog-fullscreen-translate - The starting translation of the enter animation for fullscreen dialogs.
  * @cssproperty --forge-dialog-position-x - The x-axis position of the dialog.
  * @cssproperty --forge-dialog-position-y - The y-axis position of the dialog.
  * @cssproperty --forge-dialog-preset-sheet-enter-animation-duration - The duration of the enter animation for preset sheet dialogs.
+ * @cssproperty --forge-dialog-preset-sheet-enter-animation-easing - The easing function of the enter animation for preset sheet dialogs.
  * @cssproperty --forge-dialog-preset-sheet-exit-animation-duration - The duration of the exit animation for preset sheet dialogs.
+ * @cssproperty --forge-dialog-preset-sheet-exit-animation-easing - The easing function of the exit animation for preset sheet dialogs.
  *
  * @csspart root - The dialog container element.
  * @csspart backdrop - The backdrop element.

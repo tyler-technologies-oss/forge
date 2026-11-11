@@ -75,3 +75,19 @@
     translate: #{token(slide-translate)};
   }
 }
+
+//
+// Fullscreen
+//
+
+@keyframes forge-dialog-fullscreen-in {
+  from {
+    opacity: #{token(zoom-opacity)};
+    translate: #{token(fullscreen-translate)};
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

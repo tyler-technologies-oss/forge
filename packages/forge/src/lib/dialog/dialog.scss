@@ -333,6 +333,18 @@ $can-animate: '[visible]:not([animation-type=none])';
       display: none;
     }
   }
+
+  :host([fullscreen]#{$can-animate}:is(:not([animation-type]), [animation-type='zoom']):not([preset$='-sheet'])) {
+    dialog.forge-dialog[open] {
+      .surface {
+        animation-name: forge-dialog-fullscreen-in;
+
+        &.exiting {
+          animation-name: forge-dialog-fade-out;
+        }
+      }
+    }
+  }
 }
 
 //
