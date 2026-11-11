@@ -283,6 +283,17 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should draw the modal drawer edge as a ring without a border', () => {
+    for (const stylesheet of [light, dark]) {
+      const rule = getRule(stylesheet, ':where(forge-modal-drawer)');
+      expect(rule).toMatch(
+        /--forge-modal-drawer-elevation: 0 0 0 var\(--forge-border-thin[^)]*\) var\(--forge-theme-surface-elevated-ring\), 0px 11px 15px -7px/
+      );
+      expect(rule).toContain('--forge-drawer-border-width: 0;');
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-drawer-border-width');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

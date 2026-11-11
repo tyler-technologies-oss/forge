@@ -368,6 +368,11 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   --forge-radio-unchecked-border-color: var(--forge-theme-outline-medium);
 }
 
+@mixin _modal-drawer {
+  --forge-modal-drawer-elevation: 0 0 0 #{border.variable(thin)} var(--forge-theme-surface-elevated-ring), #{elevation.value(24)};
+  --forge-drawer-border-width: 0;
+}
+
 @mixin _scrollbar {
   --forge-scrollbar-track-container: transparent;
   --forge-scrollbar-track-container-hover: transparent;
@@ -624,6 +629,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   }
 
   :where(forge-modal-drawer) {
+    @include _modal-drawer;
     --forge-drawer-background: var(--forge-theme-surface-elevated);
   }
 }

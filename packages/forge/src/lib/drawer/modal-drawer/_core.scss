@@ -5,7 +5,7 @@
   top: 0;
   z-index: #{elevation.z-index-variable(dialog)};
 
-  box-shadow: #{elevation.value(24)};
+  box-shadow: var(--forge-modal-drawer-elevation, #{elevation.value(24)});
 
   max-width: 80%;
 }
