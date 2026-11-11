@@ -9,7 +9,10 @@
   z-index: #{elevation.z-index-variable(dialog)};
   background-color: #{token(background)};
 
-  box-shadow: #{elevation.value(24)};
+  // A floating surface, so the hairline ring sits outside it instead of the drawer's border
+  box-shadow:
+    0 0 0 #{token(ring-width)} #{token(ring-color)},
+    #{elevation.value(24)};
 
   max-width: 80%;
 }
