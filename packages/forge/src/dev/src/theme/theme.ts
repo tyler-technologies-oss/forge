@@ -5,7 +5,8 @@ const THEME_IDENTIFIER_LIGHT = 'light';
 const THEME_IDENTIFIER_DARK = 'dark';
 const RADIX_COOKIE_NAME = 'forge-radix';
 const RADIX_QUERY_PARAM = 'radix';
-const RADIX_ENABLED_IDENTIFIER = 'true';
+const DARK_QUERY_PARAM = 'dark';
+const ENABLED_IDENTIFIER = 'true';
 const STYLE_TAG_ID = 'forge-theme-style';
 
 interface IThemeStyles {
@@ -68,7 +69,7 @@ export async function listenThemeChange(): Promise<void> {
   radixThemeButton?.addEventListener('click', async () => {
     const isRadix = await toggleRadixTheme();
     syncRadixButton(radixThemeButton);
-    setCookie(RADIX_COOKIE_NAME, isRadix ? RADIX_ENABLED_IDENTIFIER : 'false');
+    setCookie(RADIX_COOKIE_NAME, isRadix ? ENABLED_IDENTIFIER : 'false');
   });
 }
 
@@ -114,6 +115,10 @@ function syncRadixButton(button: (HTMLElement & { variant: string }) | null): vo
 }
 
 function detectDarkTheme(): boolean {
+  const queryValue = new URLSearchParams(window.location.search).get(DARK_QUERY_PARAM);
+  if (queryValue !== null) {
+    return queryValue === '1' || queryValue === ENABLED_IDENTIFIER;
+  }
   const cookieVal = getCookie(THEME_COOKIE_NAME);
   if (cookieVal) {
     return cookieVal === THEME_IDENTIFIER_DARK;
@@ -126,7 +131,7 @@ function detectDarkTheme(): boolean {
 function detectRadixTheme(): boolean {
   const queryValue = new URLSearchParams(window.location.search).get(RADIX_QUERY_PARAM);
   if (queryValue !== null) {
-    return queryValue === '1' || queryValue === RADIX_ENABLED_IDENTIFIER;
+    return queryValue === '1' || queryValue === ENABLED_IDENTIFIER;
   }
-  return getCookie(RADIX_COOKIE_NAME) === RADIX_ENABLED_IDENTIFIER;
+  return getCookie(RADIX_COOKIE_NAME) === ENABLED_IDENTIFIER;
 }
