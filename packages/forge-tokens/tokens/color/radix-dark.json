@@ -2,7 +2,7 @@
   "color": {
     "$type": "color",
     "radix-dark": {
-      "$description": "Radix Colors (https://www.radix-ui.com/colors) dark palette, with a custom Forge indigo scale.",
+      "$description": "Radix Colors (https://www.radix-ui.com/colors) dark palette, with a custom Forge indigo scale and Forge brand colors.",
       "gray": {
         "1": {
           "$value": "oklch(0.1776 0 0)"
@@ -575,7 +575,7 @@
           "$value": "oklch(0.9351 0.0717 86.07)"
         },
         "contrast": {
-          "$value": "oklch(0.1873 0.0123 167.01)"
+          "$value": "oklch(0.2431 0.0076 95.37)"
         },
         "surface": {
           "$value": "oklch(0.245 0.0245 77.33 / 50.2%)"
@@ -661,7 +661,7 @@
           "$value": "oklch(0.9071 0.051 238.45)"
         },
         "contrast": {
-          "$value": "oklch(0.1936 0.0255 256.49)"
+          "$value": "oklch(1 0 0)"
         },
         "surface": {
           "$value": "oklch(0.2502 0.0576 260.83 / 50.2%)"
@@ -1245,7 +1245,7 @@
           "$value": "oklch(0.9441 0.0869 158.41 / 94.12%)"
         },
         "contrast": {
-          "$value": "oklch(0.1873 0.0123 167.01)"
+          "$value": "oklch(1 0 0)"
         },
         "surface": {
           "$value": "oklch(0.2472 0.0266 161.89 / 50.2%)"
@@ -1334,7 +1334,7 @@
           "$value": "oklch(1 0 0)"
         },
         "surface": {
-          "$value": "oklch(0.236 0.0658 270.68 / 50.2%)"
+          "$value": "oklch(0.2377 0.0692 270.87 / 50.2%)"
         },
         "indicator": {
           "$value": "{color.radix-dark.indigo.9}"
@@ -2682,7 +2682,7 @@
       },
       "text": {
         "1": {
-          "$value": "oklch(0.9807 0.0051 247.88 / 32%)"
+          "$value": "oklch(0.9807 0.0051 247.88 / 40%)"
         },
         "2": {
           "$value": "oklch(0.9807 0.0051 247.88 / 48%)"
@@ -2721,6 +2721,17 @@
         },
         "a3": {
           "$value": "oklch(0 0 0 / 75%)"
+        }
+      },
+      "brand": {
+        "9": {
+          "$value": "{color.radix-dark.slate.3}"
+        },
+        "contrast": {
+          "$value": "{color.radix.slate.contrast}"
+        },
+        "surface": {
+          "$value": "#111b4380"
         }
       }
     }

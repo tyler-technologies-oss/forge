@@ -21,7 +21,8 @@ describe('forge-radix stylesheets', () => {
   it('should use dark values in the dark stylesheet', () => {
     expect(dark).not.toBe(light);
     expect(dark).toContain('--forge-theme-control-bg:');
-    expect(dark).toContain('--forge-theme-brand: #212121;');
+    expect(dark).toContain('--forge-theme-brand: oklch(25.21% 0.0058 271.18deg);');
+    expect(light).toContain('--forge-theme-brand: #283593;');
   });
 
   it('should scope surface overrides to elements with low specificity', () => {

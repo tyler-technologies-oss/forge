@@ -2,7 +2,7 @@
   "color": {
     "$type": "color",
     "radix": {
-      "$description": "Radix Colors (https://www.radix-ui.com/colors) light palette, with a custom Forge indigo scale.",
+      "$description": "Radix Colors (https://www.radix-ui.com/colors) light palette, with a custom Forge indigo scale and Forge brand colors.",
       "gray": {
         "1": {
           "$value": "oklch(0.9911 0 0)"
@@ -2878,6 +2878,17 @@
         },
         "a3": {
           "$value": "oklch(1 0 0 / 95%)"
+        }
+      },
+      "brand": {
+        "9": {
+          "$value": "#283593"
+        },
+        "contrast": {
+          "$value": "{color.radix.indigo.contrast}"
+        },
+        "surface": {
+          "$value": "#f3f8ffcc"
         }
       }
     }
