@@ -6,6 +6,11 @@ const light = compileStylesheet('src/lib/forge-radix.scss');
 const dark = compileStylesheet('src/lib/forge-radix-dark.scss');
 const defaultTheme = compileStylesheet('src/lib/forge.scss');
 
+const getRule = (stylesheet, selector) => {
+  const start = stylesheet.indexOf(`${selector} {`);
+  return start === -1 ? '' : stylesheet.slice(start, stylesheet.indexOf('}', start));
+};
+
 describe('forge-radix stylesheets', () => {
   it('should set the radix theme tokens on the root element', () => {
     expect(light).toContain(':root {');
@@ -65,6 +70,63 @@ describe('forge-radix stylesheets', () => {
   it('should set the default field outline tokens', () => {
     expect(light).toContain('--forge-field-default-outline-color: var(--forge-theme-outline);');
     expect(light).toContain('--forge-field-default-outline-color-hover: var(--forge-theme-outline-medium);');
+  });
+
+  it('should set the button text, link, and outlined colors for the default theme', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-button-text-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-button-link-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-button-outlined-background: var(--forge-theme-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-button-outlined-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-button-outlined-border-color: var(--forge-theme-border-primary-default);');
+    }
+  });
+
+  it('should set the button colors for each button theme', () => {
+    for (const stylesheet of [light, dark]) {
+      for (const theme of ['secondary', 'tertiary', 'success', 'error', 'warning', 'info']) {
+        const rule = getRule(stylesheet, `:where(forge-button[theme=${theme}])`);
+        expect(rule).toContain(`--forge-button-text-color: var(--forge-theme-on-${theme}-container-minimum);`);
+        expect(rule).toContain(`--forge-button-link-color: var(--forge-theme-on-${theme}-container-minimum);`);
+        expect(rule).toContain(`--forge-button-outlined-background: var(--forge-theme-${theme}-container-minimum);`);
+        expect(rule).toContain(`--forge-button-outlined-color: var(--forge-theme-on-${theme}-container-minimum);`);
+        expect(rule).toContain(`--forge-button-outlined-border-color: var(--forge-theme-border-${theme}-default);`);
+      }
+    }
+  });
+
+  it('should keep outlined app bar buttons transparent', () => {
+    expect(getRule(light, ':where(forge-button[theme=app-bar])')).toContain('--forge-button-outlined-background: transparent;');
+  });
+
+  it('should set the focus indicator color from the theme for interactive components', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toMatch(/:root \{[^}]*--forge-focus-indicator-color: var\(--forge-theme-focus-indicator\);/);
+      expect(stylesheet).toContain('--forge-button-area-focus-indicator-color: var(--forge-theme-focus-indicator);');
+      expect(stylesheet).toContain('--forge-button-toggle-focus-indicator-color: var(--forge-theme-focus-indicator);');
+      expect(stylesheet).toContain('--forge-icon-button-focus-indicator-color: var(--forge-theme-focus-indicator);');
+      expect(stylesheet).toContain('--forge-skip-link-focus-indicator-color: var(--forge-theme-focus-indicator);');
+    }
+  });
+
+  it('should not override the focus indicator color on focus indicator elements', () => {
+    expect(light).not.toMatch(/:where\(forge-focus-indicator\)/);
+  });
+
+  it('should set the button toggle group outline color', () => {
+    expect(light).toContain('--forge-button-toggle-group-outline-color: var(--forge-theme-outline);');
+  });
+
+  it('should set the icon button toggle and outlined colors', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-icon-button-filled-toggle-icon-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-icon-button-outlined-border-color: var(--forge-theme-border-neutral-default);');
+      expect(stylesheet).toContain('--forge-icon-button-toggle-on-icon-color: var(--forge-theme-on-primary-container);');
+      const rule = getRule(stylesheet, ':where(forge-icon-button[theme=error])');
+      expect(rule).toContain('--forge-icon-button-toggle-on-icon-color: var(--forge-theme-on-error-container);');
+      expect(rule).toContain('--forge-icon-button-tonal-toggle-on-icon-color: var(--forge-theme-on-error-container);');
+      expect(rule).toContain('--forge-icon-button-outlined-border-color: var(--forge-theme-border-error-default);');
+    }
   });
 
   it('should not emit global keyframes', () => {
