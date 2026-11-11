@@ -129,6 +129,31 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the chip colors for the default theme and invalid state', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-chip-color: var(--forge-theme-on-primary-container-minimum);');
+      expect(stylesheet).toContain('--forge-chip-focus-indicator-color: var(--forge-theme-focus-indicator);');
+      expect(stylesheet).toContain('--forge-chip-border-color: var(--forge-theme-outline-low);');
+      expect(stylesheet).toContain('--forge-chip-selected-background: var(--forge-theme-primary-container);');
+      expect(stylesheet).toContain('--forge-chip-selected-color: var(--forge-theme-on-primary-container);');
+      expect(stylesheet).toContain('--forge-chip-invalid-color: var(--forge-theme-on-error-container-minimum);');
+      expect(stylesheet).toContain('--forge-chip-invalid-selected-background: var(--forge-theme-error-container);');
+      expect(stylesheet).toContain('--forge-chip-invalid-selected-color: var(--forge-theme-on-error-container);');
+    }
+  });
+
+  it('should set the chip colors for each chip theme except field chips', () => {
+    for (const stylesheet of [light, dark]) {
+      for (const theme of ['secondary', 'tertiary', 'success', 'warning', 'error', 'info']) {
+        const rule = getRule(stylesheet, `:where(forge-chip[theme=${theme}]:not([type=field]))`);
+        expect(rule).toContain(`--forge-chip-color: var(--forge-theme-on-${theme}-container-minimum);`);
+        const selectedRule = getRule(stylesheet, `:where(forge-chip[theme=${theme}][selected]:not([type=field]))`);
+        expect(selectedRule).toContain(`--forge-chip-background: var(--forge-theme-${theme}-container);`);
+        expect(selectedRule).toContain(`--forge-chip-color: var(--forge-theme-on-${theme}-container);`);
+      }
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

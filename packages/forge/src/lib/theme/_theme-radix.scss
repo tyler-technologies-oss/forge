@@ -23,6 +23,7 @@
 
 $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 $_button-themes: secondary, tertiary, success, error, warning, info;
+$_chip-themes: secondary, tertiary, success, warning, error, info;
 $_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
 
 @mixin _badge {
@@ -134,6 +135,21 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   );
 }
 
+@mixin _chip {
+  @include chip.provide-theme(
+    (
+      color: var(--forge-theme-on-primary-container-minimum),
+      focus-indicator-color: var(--forge-theme-focus-indicator),
+      border-color: var(--forge-theme-outline-low),
+      selected-background: var(--forge-theme-primary-container),
+      selected-color: var(--forge-theme-on-primary-container),
+      invalid-color: var(--forge-theme-on-error-container-minimum),
+      invalid-selected-background: var(--forge-theme-error-container),
+      invalid-selected-color: var(--forge-theme-on-error-container)
+    )
+  );
+}
+
 @mixin _field {
   @include field.provide-theme(
     (
@@ -221,6 +237,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _icon-button;
   @include _skip-link;
   @include _card;
+  @include _chip;
   @include _field;
   @include _file-picker;
   @include _fab;
@@ -284,6 +301,29 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-skip-link) {
     @include _skip-link;
+  }
+
+  :where(forge-chip) {
+    @include _chip;
+  }
+
+  @each $theme in $_chip-themes {
+    :where(forge-chip[theme='#{$theme}']:not([type='field'])) {
+      @include chip.provide-theme(
+        (
+          color: var(--forge-theme-on-#{$theme}-container-minimum)
+        )
+      );
+    }
+
+    :where(forge-chip[theme='#{$theme}'][selected]:not([type='field'])) {
+      @include chip.provide-theme(
+        (
+          background: var(--forge-theme-#{$theme}-container),
+          color: var(--forge-theme-on-#{$theme}-container)
+        )
+      );
+    }
   }
 
   :where(forge-card, forge-dialog) {
