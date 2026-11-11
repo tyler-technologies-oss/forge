@@ -486,7 +486,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   $_not-strong: ':not([strong], :state(strong))';
 
-  :where(forge-badge#{$_not-strong}) {
+  :where(forge-badge#{$_not-strong}, .forge-badge) {
     @include _badge-colors(var(--forge-theme-bg-neutral-default), var(--forge-theme-text-medium));
   }
 
@@ -499,7 +499,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     }
   }
 
-  :where(forge-banner) {
+  :where(forge-banner, .forge-banner) {
     @include _banner-colors(var(--forge-theme-bg-info-default), var(--forge-theme-on-info-container-low), var(--forge-theme-on-info-container-low));
   }
 
@@ -517,7 +517,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     }
   }
 
-  :where(forge-inline-message) {
+  :where(forge-inline-message, .forge-inline-message) {
     @include _inline-message-colors(
       var(--forge-theme-bg-info-default),
       var(--forge-theme-on-info-container-low),
@@ -587,6 +587,22 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @each $theme in $_icon-button-themes {
     :where(forge-icon-button[variant='outlined'][theme='#{$theme}']:not([disabled], :state(toggle):state(pressed))) {
       --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container-minimum);
+    }
+
+    :where(forge-icon-button[variant='icon'][theme='#{$theme}']:not(:state(toggle))) {
+      @if list.index((primary, secondary, tertiary), $theme) {
+        --forge-icon-button-icon-color: var(--forge-theme-text-high);
+      } @else {
+        --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container-minimum);
+      }
+    }
+
+    @if $theme != primary {
+      :where(forge-icon-button[variant='filled'][theme='#{$theme}']:not(:state(toggle))),
+      :where(forge-icon-button[variant='raised'][theme='#{$theme}']:not(:state(toggle))) {
+        --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container);
+        --forge-icon-button-background-color: var(--forge-theme-#{$theme}-container);
+      }
     }
 
     :where(forge-icon-button[theme='#{$theme}']) {

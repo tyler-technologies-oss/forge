@@ -345,8 +345,10 @@ describe('forge-radix stylesheets', () => {
   it('should map legacy and semantic badge themes without touching strong badges', () => {
     const notStrong = ':not([strong], :state(strong))';
     for (const stylesheet of [light, dark]) {
-      expect(getRule(stylesheet, `:where(forge-badge${notStrong})`)).toContain('--forge-badge-background: var(--forge-theme-bg-neutral-default);');
-      expect(getRule(stylesheet, `:where(forge-badge${notStrong})`)).toContain('--forge-badge-color: var(--forge-theme-text-medium);');
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`)).toContain(
+        '--forge-badge-background: var(--forge-theme-bg-neutral-default);'
+      );
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`)).toContain('--forge-badge-color: var(--forge-theme-text-medium);');
       const themed = {
         ':is([theme=info], [theme=info-primary])': 'info',
         '[theme=success]': 'success',
@@ -367,10 +369,12 @@ describe('forge-radix stylesheets', () => {
     const neutral = ':is([theme=primary], [theme=secondary], [theme=tertiary], [theme=info-secondary])';
     const roles = { '[theme=success]': 'success', '[theme=warning]': 'warning', ':is([theme=error], [theme=danger])': 'error' };
     for (const stylesheet of [light, dark]) {
-      expect(getRule(stylesheet, ':where(forge-banner)')).toContain('--forge-banner-background: var(--forge-theme-bg-info-default);');
+      expect(getRule(stylesheet, ':where(forge-banner, .forge-banner)')).toContain('--forge-banner-background: var(--forge-theme-bg-info-default);');
       expect(getRule(stylesheet, `:where(forge-banner${neutral})`)).toContain('--forge-banner-background: var(--forge-theme-bg-neutral-default);');
       expect(getRule(stylesheet, `:where(forge-banner${neutral})`)).toContain('--forge-banner-icon-color: var(--forge-theme-text-medium);');
-      expect(getRule(stylesheet, ':where(forge-inline-message)')).toContain('--forge-inline-message-border-color: var(--forge-theme-border-info-default);');
+      expect(getRule(stylesheet, ':where(forge-inline-message, .forge-inline-message)')).toContain(
+        '--forge-inline-message-border-color: var(--forge-theme-border-info-default);'
+      );
       expect(getRule(stylesheet, `:where(forge-inline-message${neutral})`)).toContain(
         '--forge-inline-message-border-color: var(--forge-theme-border-neutral-default);'
       );
@@ -386,6 +390,26 @@ describe('forge-radix stylesheets', () => {
       }
       expect(getRule(stylesheet, ':root')).not.toContain('--forge-banner-');
       expect(getRule(stylesheet, ':root')).not.toContain('--forge-inline-message-');
+    }
+  });
+
+  it('should set the themed icon button icon colors for the icon, filled, and raised variants', () => {
+    for (const stylesheet of [light, dark]) {
+      for (const theme of ['primary', 'secondary', 'tertiary']) {
+        expect(getRule(stylesheet, `:where(forge-icon-button[variant=icon][theme=${theme}]:not(:state(toggle)))`)).toContain(
+          '--forge-icon-button-icon-color: var(--forge-theme-text-high);'
+        );
+      }
+      for (const theme of ['success', 'error', 'warning', 'info']) {
+        expect(getRule(stylesheet, `:where(forge-icon-button[variant=icon][theme=${theme}]:not(:state(toggle)))`)).toContain(
+          `--forge-icon-button-icon-color: var(--forge-theme-on-${theme}-container-minimum);`
+        );
+      }
+      expect(stylesheet).toContain(':where(forge-icon-button[variant=filled][theme=success]:not(:state(toggle))),');
+      const rule = getRule(stylesheet, ':where(forge-icon-button[variant=raised][theme=success]:not(:state(toggle)))');
+      expect(rule).toContain('--forge-icon-button-icon-color: var(--forge-theme-on-success-container);');
+      expect(rule).toContain('--forge-icon-button-background-color: var(--forge-theme-success-container);');
+      expect(stylesheet).not.toContain('forge-icon-button[variant=filled][theme=primary]');
     }
   });
 

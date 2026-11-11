@@ -33,6 +33,23 @@ describe('Radix theme', () => {
       expect(getIconColor(iconButton)).toBe(getThemeColor('on-error-container-minimum'));
     });
 
+    it('should use the text emphasis for the themed icon variant icon color', async () => {
+      const iconButton = await createIconButton('<forge-icon-button theme="secondary"></forge-icon-button>');
+      expect(getIconColor(iconButton)).toBe(getThemeColor('text-high'));
+    });
+
+    it('should use the container color for the success icon variant icon color', async () => {
+      const iconButton = await createIconButton('<forge-icon-button theme="success"></forge-icon-button>');
+      expect(getIconColor(iconButton)).toBe(getThemeColor('on-success-container-minimum'));
+    });
+
+    it('should use the container colors for the themed filled variant', async () => {
+      const iconButton = await createIconButton('<forge-icon-button variant="filled" theme="success"></forge-icon-button>');
+      const root = iconButton.shadowRoot?.querySelector('[part=root]') as HTMLElement;
+      expect(getIconColor(iconButton)).toBe(getThemeColor('on-success-container'));
+      expect(getComputedStyle(root).backgroundColor).toBe(getThemeColor('success-container'));
+    });
+
     it('should not change the icon color of the filled variant', async () => {
       const iconButton = await createIconButton('<forge-icon-button variant="filled"></forge-icon-button>');
       expect(getIconColor(iconButton)).not.toBe(getThemeColor('text-medium'));
