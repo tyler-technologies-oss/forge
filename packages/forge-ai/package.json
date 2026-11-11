@@ -62,7 +62,7 @@
     "build:storybook": "pnpm run cem && storybook build"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.8.0",
+    "@floating-ui/dom": "catalog:",
     "@lit/context": "catalog:",
     "dompurify": "^3.4.17",
     "lit": "catalog:",

@@ -156,7 +156,7 @@ User-facing strings that referred to a "chatbot" now use neutral wording, becaus
 
 `renderMarkdown` and `renderInlineMarkdown` (and the components that use them) now harden media handling.
 
-- Images from any origin other than the one serving forge-ai render as links instead of images. `data:image/*` and same-origin images still render inline.
+- Images from any origin other than the one serving forge-ai render as links instead of images. `data:image/*` and images from the origin serving forge-ai's JavaScript still render inline. This is usually your page's origin, but if you load forge-ai from a CDN or embed it in a widget, it is that server's origin. Images from your page's origin then render as links, and relative image paths resolve against the serving origin instead of your page.
 - `<video>`/`<audio>` in rendered markdown render as links instead of players.
 - Inline `style` attributes are stripped, as are `srcset`, `poster` and `background` attributes.
 - `picture`, `source`, `track`, svg `image`/`feImage` and `mglyph` elements are removed.

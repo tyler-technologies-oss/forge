@@ -73,6 +73,13 @@ export class AiSlashCommandMenuComponent extends LitElement {
     }
   }
 
+  public override updated(): void {
+    const menu = this.renderRoot.querySelector<HTMLElement>('.slash-command-menu');
+    if (menu) {
+      menu.style.width = `${this.#menuWidth}px`;
+    }
+  }
+
   #filterCommands(): void {
     if (!this.filterQuery) {
       this._filteredCommands = [...this.commands];
@@ -191,7 +198,7 @@ export class AiSlashCommandMenuComponent extends LitElement {
                 </svg>
               </button>
             </div>
-            <div class="slash-command-menu" style="width: ${this.#menuWidth}px">${this.#menuItems}</div>
+            <div class="slash-command-menu">${this.#menuItems}</div>
           </forge-ai-popover>
         `
       )}

@@ -1,12 +1,13 @@
 import { HeaderMdx, Markdown, useOf } from '@storybook/addon-docs/blocks';
 import { Code } from 'storybook/internal/components';
-import { TagItem, getBranchName, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils.js';
+import { TagItem, getCustomElementType, getCustomElementsTagDeclaration, getCustomElementsTagModule, htmlEncode } from '../utils.js';
 import { NameDescriptionTable, Section } from './Shared.jsx';
 
 import styles from './CustomArgTypes.module.scss';
 import GitHubLogo from './GitHubLogo.jsx';
 
 const BASE_GITHUB_URL = `https://github.com/tyler-technologies-oss/forge/blob`;
+const BRANCH = 'main';
 const PACKAGE_PATH = 'packages/forge-ai';
 const STORY_KIND_PATH_SEPARATOR = /\s*\/\s*/;
 
@@ -30,12 +31,11 @@ function ForgeTypeLinks({ typeText }: { typeText: string }) {
   const tokenizedType = [...new Set(typeText.match(/\w+/g) ?? [])].sort((a, b) => b.length - a.length);
 
   // Loop through each token in reverse order to avoid replacing tokens that are substrings of other tokens that contain the same text
-  const branchName = getBranchName();
   tokenizedType.forEach(token => {
     const matchingType = getCustomElementType(token);
     if (matchingType) {
       const { path, lineNumber } = matchingType;
-      const href = `${BASE_GITHUB_URL}/${branchName}/${PACKAGE_PATH}/${path}#L${lineNumber}`;
+      const href = `${BASE_GITHUB_URL}/${BRANCH}/${PACKAGE_PATH}/${path}#L${lineNumber}`;
       const tokenRegExp = new RegExp(`(?<!>)${token}`, 'g'); // Negative lookbehind to avoid replacing inside existing links
       typeText = typeText.replace(tokenRegExp, `<a href=${href} target="_blank" rel="noreferrer noopener">${token}</a>`);
     }
@@ -221,10 +221,9 @@ export default function CustomArgTypes() {
 
   const subcomponents = resolvedOf.story.subcomponents as Record<string, string>;
   const hasSubcomponents = Boolean(subcomponents) && Object.keys(subcomponents).length > 0;
-  const branch = getBranchName();
 
   const GitHubLink = ({ modulePath, className }: { modulePath: string; className?: string }) => (
-    <a href={`${BASE_GITHUB_URL}/${branch}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={className}>
+    <a href={`${BASE_GITHUB_URL}/${BRANCH}/${modulePath}`} rel="noreferrer noopener" target="_blank" className={className}>
       <GitHubLogo />
     </a>
   );

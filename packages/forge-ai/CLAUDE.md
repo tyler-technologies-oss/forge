@@ -21,7 +21,7 @@ pnpm --filter @tylertech/forge-ai cem       # regenerate custom-elements.json an
 pnpm --filter @tylertech/forge-ai plop      # scaffold a new component
 ```
 
-Storybook (local dev only, port 6016): `pnpm storybook:forge-ai` from the repo root or `pnpm --filter @tylertech/forge-ai storybook`. See [Storybook](#storybook).
+Storybook (local dev only, port 6016): `pnpm --filter @tylertech/forge-ai storybook` from the repo root. See [Storybook](#storybook).
 
 ## Architecture
 
@@ -82,7 +82,7 @@ src/lib/[component-name]/
 
 Stories live in `src/stories/<component-name>/` (`<Name>.stories.ts` + `<Name>.mdx`); `Introduction.mdx` and `React.mdx` are the top-level pages. Titles are `Components/<Group>/<Name>` (no `Ai` prefix); groups are Chat, Messages, Input & Context, Agents, Conversations, Tools & Reasoning, Artifacts, Containers, Primitives, ordered in `.storybook/preview.ts`. Document parent components only: sub-components (for example `forge-ai-reasoning-header`, `forge-ai-reasoning-content`, `forge-ai-thought-*`, dropdown menu items) are covered in their parent's page, with no standalone page.
 
-- Run: `pnpm storybook:forge-ai` from the repo root (or `pnpm --filter @tylertech/forge-ai storybook`), http://localhost:6016. Build: `pnpm turbo run build:storybook --filter=@tylertech/forge-ai`. There is no deploy or CI workflow yet; it is for local development.
+- Run: `pnpm --filter @tylertech/forge-ai storybook` from the repo root, http://localhost:6016. Build: `pnpm turbo run build:storybook --filter=@tylertech/forge-ai`. There is no deploy or CI workflow yet; it is for local development.
 - `.storybook/main.ts` aliases `@tylertech/forge-ai` and `@tylertech/forge-ai/<subpath>` to `src/lib` **source**, so edits hot-reload with no rebuild. Component SCSS uses the shared `config/forge-sass-importer.ts` (also used by `vitest.config.ts`). Global Forge CSS comes from the built `@tylertech/forge` dist, so forge must be built.
 - Docs tables (`src/stories/blocks/CustomArgTypes.tsx`) read this package's `custom-elements.json`; the `storybook` and `build:storybook` scripts run `cem` first.
 - Stories import from public subpaths only (`@tylertech/forge-ai/<component>`, `/types`, `/utils`, `/tools`, `/core`), never `src/`. Forge components used in stories come from `@tylertech/forge/<component>` side-effect imports.

@@ -253,7 +253,7 @@ export class AiFilePickerComponent extends LitElement {
         ?multiple=${this.multiple}
         accept=${ifDefined(this.accept || undefined)}
         @change=${this._handleFileChange}
-        style="display: none;"
+        hidden
         tabindex="-1"
         aria-hidden="true" />
     `;

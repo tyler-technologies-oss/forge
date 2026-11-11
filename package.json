@@ -11,7 +11,6 @@
     "dev:blocks": "turbo run --filter blocks dev",
     "dev:docs": "turbo run --filter forge-docs dev",
     "storybook:forge": "turbo run --filter @tylertech/forge storybook",
-    "storybook:forge-ai": "turbo run --filter @tylertech/forge-ai storybook",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "turbo run format",
@@ -33,9 +32,6 @@
     "pnpm": ">=10"
   },
   "pnpm": {
-    "overrides": {
-      "@types/react-router-dom>@types/react": "17.0.93"
-    },
     "patchedDependencies": {
       "custom-element-vs-code-integration@1.5.0": "patches/custom-element-vs-code-integration@1.5.0.patch",
       "@changesets/assemble-release-plan@6.0.9": "patches/@changesets__assemble-release-plan@6.0.9.patch"

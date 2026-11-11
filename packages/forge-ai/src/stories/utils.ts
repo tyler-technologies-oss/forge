@@ -18,11 +18,6 @@ export function getCustomElementType(type: string): { path: string; lineNumber: 
   return cemForgeTypes[type];
 }
 
-/** Gets the branch name that the custom elements manifest was generated with. */
-export function getBranchName(): string {
-  return cem.branchName;
-}
-
 export function htmlEncode(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
