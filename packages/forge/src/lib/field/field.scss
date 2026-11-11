@@ -163,6 +163,32 @@ $variants: (
   }
 }
 
+@function readonly-host($selector) {
+  @return ':host([readonly]:not([disabled], [invalid], [theme="error"], [theme="warning"])#{$selector})';
+}
+
+@each $theme, $selector in $themes {
+  @if $theme != error and $theme != warning {
+    #{readonly-host('#{$selector}:is(#{map.get($variants, outlined)}, #{map.get($variants, filled)})')} {
+      .forge-field {
+        @include core.readonly-outline($theme);
+      }
+    }
+  }
+}
+
+#{readonly-host(map.get($variants, outlined))} {
+  .forge-field {
+    @include core.readonly-background(outlined);
+  }
+}
+
+#{readonly-host(map.get($variants, filled))} {
+  .forge-field {
+    @include core.readonly-background(filled);
+  }
+}
+
 :host(#{$invalid}) {
   .forge-field {
     @include core.theme('error');

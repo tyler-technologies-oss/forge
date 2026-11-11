@@ -25,6 +25,7 @@ export interface IFieldComponent extends IBaseComponent {
   required: boolean;
   optional: boolean;
   disabled: boolean;
+  readonly: boolean;
   variant: FieldVariant;
   theme: FieldTheme;
   shape: FieldShape;
@@ -62,6 +63,7 @@ declare global {
  * @property {boolean} [required=false] - Whether the field is required.
  * @property {boolean} [optional=false] - Whether the field is optional.
  * @property {boolean} [disabled=false] - Whether the field is disabled.
+ * @property {boolean} [readonly=false] - Whether the field is readonly.
  * @property {FieldVariant} [variant="outlined"] - The variant of the field.
  * @property {FieldTheme} [theme="default"] - The theme of the field.
  * @property {FieldShape} [shape="default"] - The border radius of the field's corners.
@@ -85,6 +87,7 @@ declare global {
  * @attribute {boolean} [required=false] - Whether the field is required.
  * @attribute {boolean} [optional=false] - Whether the field is optional.
  * @attribute {boolean} [disabled=false] - Whether the field is disabled.
+ * @attribute {boolean} [readonly=false] - Whether the field is readonly.
  * @attribute {FieldVariant} [variant="outlined"] - The variant of the field.
  * @attribute {FieldTheme} [theme="default"] - The theme of the field.
  * @attribute {FieldShape} [shape="default"] - The border radius of the field's corners.
@@ -142,6 +145,8 @@ declare global {
  * @cssproperty --forge-field-focus-indicator-width - The width of the focus indicator.
  * @cssproperty --forge-field-disabled-opacity - The opacity of the field when disabled.
  * @cssproperty --forge-field-disabled-background - The background of the field when disabled.
+ * @cssproperty --forge-field-readonly-background - The background of the field when readonly.
+ * @cssproperty --forge-field-readonly-outline-color - The outline color of the field when readonly.
  * @cssproperty --forge-field-overflow - The overflow behavior of the internal container element.
  * @cssproperty --forge-field-isolation - The isolation behavior of the internal container element.
  *
@@ -225,6 +230,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
       case FIELD_CONSTANTS.attributes.DISABLED:
         this.disabled = coerceBoolean(newValue);
         break;
+      case FIELD_CONSTANTS.attributes.READONLY:
+        this.readonly = coerceBoolean(newValue);
+        break;
       case FIELD_CONSTANTS.attributes.VARIANT:
         this.variant = newValue as FieldVariant;
         break;
@@ -281,6 +289,9 @@ export class FieldComponent extends BaseComponent implements IFieldComponent {
 
   @coreProperty()
   declare public disabled: boolean;
+
+  @coreProperty()
+  declare public readonly: boolean;
 
   @coreProperty()
   declare public variant: FieldVariant;

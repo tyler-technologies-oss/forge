@@ -175,6 +175,9 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       placeholder-color: var(--forge-theme-text-low)
     )
   );
+
+  --forge-field-readonly-background: var(--forge-theme-surface-transparent);
+  --forge-field-readonly-outline-color: var(--forge-theme-outline-low);
 }
 
 @mixin _file-picker {

@@ -245,6 +245,15 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the readonly field colors', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-field-readonly-background: var(--forge-theme-surface-transparent);');
+      expect(stylesheet).toContain('--forge-field-readonly-outline-color: var(--forge-theme-outline-low);');
+      expect(getRule(stylesheet, ':where(forge-field, forge-text-field, forge-select, forge-chip-field)')).toContain('--forge-field-readonly-outline-color:');
+    }
+    expect(defaultTheme).not.toContain('--forge-field-readonly-');
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
