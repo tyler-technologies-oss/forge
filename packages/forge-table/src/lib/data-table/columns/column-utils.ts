@@ -121,9 +121,9 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         ...(column.editable
           ? { cell: inputCell(typeof column.template === 'function' ? column.template : undefined) }
           : typeof column.template === 'function' && { cell: column.template })
-      } satisfies TanstackColumnDef<DataTableFeatures, TData>;
+      };
 
-      return leafColumn;
+      return leafColumn as TanstackColumnDef<DataTableFeatures, TData>;
     }
   });
 }

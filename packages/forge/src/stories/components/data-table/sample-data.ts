@@ -87,12 +87,145 @@ export const generateLargeDataset = (count = 100): SampleData[] => {
 
 type SampleData = (typeof sampleData)[number];
 
-export const sampleColumns: ColumnDef<SampleData>[] = [
+export const sampleDataColumns: ColumnDef<SampleData>[] = [
   { header: 'ID', property: 'id' },
   { header: 'Name', property: 'name' },
   { header: 'Age', property: 'age' },
   { header: 'Email', property: 'email', width: 256 },
   { header: 'Status', property: 'status' },
-  { header: 'Created Date', property: 'createdAt', filterType: 'date' },
-  createExpanderColumn()
+  { header: 'Created Date', property: 'createdAt', filterType: 'date' }
+];
+
+export const sampleColumns: ColumnDef<SampleData>[] = [...sampleDataColumns, createExpanderColumn()];
+
+export type EmployeeStatus = 'Active' | 'On leave' | 'Terminated';
+
+export interface EmployeeData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  website: string;
+  department: string;
+  status: EmployeeStatus;
+  salary: number;
+  bonusRate: number;
+  rating: number;
+  utilization: number;
+  hireDate: string;
+}
+
+export const employeeData: EmployeeData[] = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '555-0101',
+    website: 'https://johndoe.example.com',
+    department: 'Engineering',
+    status: 'Active',
+    salary: 128500,
+    bonusRate: 0.1,
+    rating: 4.5,
+    utilization: 86,
+    hireDate: '2019-03-11'
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    phone: '555-0102',
+    website: 'https://janesmith.example.com',
+    department: 'Design',
+    status: 'On leave',
+    salary: 112250.5,
+    bonusRate: 0.075,
+    rating: 3.8,
+    utilization: 0,
+    hireDate: '2020-07-27'
+  },
+  {
+    id: 3,
+    name: 'Bob Johnson',
+    email: 'bob.johnson@example.com',
+    phone: '555-0103',
+    website: 'https://bobjohnson.example.com',
+    department: 'Sales',
+    status: 'Active',
+    salary: 94000,
+    bonusRate: 0.15,
+    rating: 2.4,
+    utilization: 42,
+    hireDate: '2017-11-02'
+  },
+  {
+    id: 4,
+    name: 'Alice Brown',
+    email: 'alice.brown@example.com',
+    phone: '555-0104',
+    website: 'https://alicebrown.example.com',
+    department: 'Engineering',
+    status: 'Active',
+    salary: 141800,
+    bonusRate: 0.12,
+    rating: 5,
+    utilization: 97,
+    hireDate: '2021-01-18'
+  },
+  {
+    id: 5,
+    name: 'Charlie Wilson',
+    email: 'charlie.wilson@example.com',
+    phone: '555-0105',
+    website: 'https://charliewilson.example.com',
+    department: 'Support',
+    status: 'Terminated',
+    salary: 67500,
+    bonusRate: 0.02,
+    rating: 1.2,
+    utilization: 18,
+    hireDate: '2022-05-09'
+  },
+  {
+    id: 6,
+    name: 'Diana Miller',
+    email: 'diana.miller@example.com',
+    phone: '555-0106',
+    website: 'https://dianamiller.example.com',
+    department: 'Marketing',
+    status: 'Active',
+    salary: 88750,
+    bonusRate: 0.08,
+    rating: 4.1,
+    utilization: 71,
+    hireDate: '2018-09-24'
+  },
+  {
+    id: 7,
+    name: 'Edward Davis',
+    email: 'edward.davis@example.com',
+    phone: '555-0107',
+    website: 'https://edwarddavis.example.com',
+    department: 'Sales',
+    status: 'On leave',
+    salary: 99300,
+    bonusRate: 0.11,
+    rating: 3,
+    utilization: 0,
+    hireDate: '2016-04-14'
+  },
+  {
+    id: 8,
+    name: 'Fiona Garcia',
+    email: 'fiona.garcia@example.com',
+    phone: '555-0108',
+    website: 'https://fionagarcia.example.com',
+    department: 'Design',
+    status: 'Active',
+    salary: 105600,
+    bonusRate: 0.09,
+    rating: 4.8,
+    utilization: 63,
+    hireDate: '2023-02-06'
+  }
 ];

@@ -33,13 +33,14 @@ export function meterCell(options: MeterCellOptions = {}): TemplateFn {
   const { low, high, optimum, ...rest } = options;
 
   return ({ cell, column }) => {
+    const { header } = column.columnDef;
     const rawValue = Number(cell.getValue());
 
     const meter = document.createElement('forge-meter') as MeterComponent;
     Object.assign(meter, rest);
     meter.density = 'small';
     meter.value = Number.isFinite(rawValue) ? rawValue : (rest.min ?? 0);
-    meter.setAttribute('aria-label', column.columnDef.header || DEFAULT_LABEL);
+    meter.setAttribute('aria-label', typeof header === 'string' && header ? header : DEFAULT_LABEL);
     const labelledBy = getCellLabelledBy(cell);
     if (labelledBy) {
       meter.setAttribute('aria-labelledby', labelledBy);

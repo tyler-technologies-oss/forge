@@ -17,7 +17,12 @@ It supports features such as sorting, filtering, column resizing and reordering,
 - **Reordering**: Drag and drop columns to rearrange them
 - **Row Selection**: Select single or multiple rows
 - **Row Clicking**: Respond to row click events
+- **Toolbar**: Show and hide columns, export to CSV, print, and toggle filtering or row selection
 - **Column Visibility**: Right-click headers to open a column menu or control visibility programmatically
+- **Cell Templates**: Render badges, links, meters, ratings, action buttons, inputs, or your own content in a cell
+- **Aggregation**: Show sums, averages, counts, ranges, or custom results in a footer
+- **Column Renaming**: Let users rename column headers
+- **Formatters**: Format numbers, currency, and dates, or transform values with a function
 - **Styling Options**: Apply various styling options like striped rows, hover effects, and more
 - **Virtualization**: Efficiently handle large datasets with row virtualization for improved performance
 - **Fixed Headers**: Keep column headers visible while scrolling through large datasets
@@ -31,6 +36,14 @@ It supports features such as sorting, filtering, column resizing and reordering,
 This example showcases a fully interactive table with sorting, filtering, resizing, and row selection enabled:
 
 <Canvas of={DataTableStories.Interactive} />
+
+## Toolbar
+
+Add a `forge-data-table-toolbar` above the table and connect it by setting `table` to the id of the data table.
+The `features` attribute picks the icon buttons to show: `columns` (show and hide columns), `export` (download as CSV),
+`filter` (toggle column filters), `print`, and `select` (toggle row selection). Use the `title` slot for the table's title.
+
+<Canvas of={DataTableStories.Toolbar} />
 
 ## Sortable Table
 
@@ -75,6 +88,64 @@ Enable row virtualization for efficiently handling large datasets with improved 
 Enable fixed headers to keep column headers visible while scrolling through large datasets:
 
 <Canvas of={DataTableStories.FixedHeaders} />
+
+## Cell Templates
+
+By default a cell shows its value as text. Set a column's `template` to change how the cell renders. The package exports helpers
+that create common templates, and you can write your own. Each example below shows its column definitions under **Show code**.
+
+### Badge
+
+<Canvas of={DataTableStories.BadgeCell} />
+
+### Link
+
+<Canvas of={DataTableStories.LinkCell} />
+
+### Meter
+
+<Canvas of={DataTableStories.MeterCell} />
+
+### Rating
+
+<Canvas of={DataTableStories.RatingCell} />
+
+### Actions
+
+<Canvas of={DataTableStories.ActionCell} />
+
+### Editable
+
+<Canvas of={DataTableStories.EditableCell} />
+
+### Custom
+
+<Canvas of={DataTableStories.CustomTemplate} />
+
+## Formatters
+
+Set a column's `format` to transform the value that is displayed, exported and printed, without changing the underlying data.
+
+<Canvas of={DataTableStories.Formatters} />
+
+## Empty State
+
+A table with no rows shows a message. When a filter is what removed the rows, the message says so and offers a button to clear the filters.
+
+<Canvas of={DataTableStories.EmptyState} />
+
+<Canvas of={DataTableStories.EmptyStateFiltered} />
+
+## Aggregation
+
+Set a column's `aggregate` to show a calculated value in the footer. The built-in aggregations are `sum`, `mean`, `median`, `min`,
+`max`, `extent`, `count`, `uniqueCount`, `unique`, `first` and `last`. The aggregates are calculated over the filtered rows.
+
+<Canvas of={DataTableStories.Aggregation} />
+
+## Column Renaming
+
+<Canvas of={DataTableStories.ColumnRenaming} />
 
 ## API
 
