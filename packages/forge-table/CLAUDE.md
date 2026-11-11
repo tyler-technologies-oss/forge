@@ -77,7 +77,7 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Double-clicking the header text of a renamable column also starts it; the two clicks of the double click each toggle sorting, so the sorting
   captured at the first click is restored before editing begins.
 - `src/lib/table-toolbar/` — `forge-data-table-toolbar`, a toolbar for a data table built on the CSS-only `.forge-toolbar` styles (not the `forge-toolbar` element). Connected through `table` (the id of a data table, looked up in the toolbar's root node when `table` changes) or by assigning a `DataTableElement` to `tableElement`; the id lookup sets `tableElement`, so a table that is not in the DOM yet when the toolbar first updates is not found.
-  The `features` attribute picks the icon buttons; `export` calls the table's `exportToCsv()` and `print` calls its `print()`, and the other features have no behavior yet.
+  The `features` attribute picks the icon buttons; `export` calls the table's `exportToCsv()` and `print` calls its `print()`, `select` and `filter` are toggle buttons that set the table's `rowSelection` (`multiple`/`off`) and `filterable`, and the other features have no behavior yet.
   It shows an "N selected" summary and the `selection-actions` slot while rows are selected, plus a popover of checkboxes that show and hide columns through
   the table's public `showColumn`/`hideColumn`. The selected count comes from `forge-data-table-row-select`, so a selection made before the table is connected is not counted.
   The column list is built from `table.columns` when the popover opens, so it shows the column definitions' headers, not renamed ones.

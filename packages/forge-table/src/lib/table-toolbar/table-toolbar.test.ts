@@ -234,6 +234,50 @@ describe('TableToolbar', () => {
     });
   });
 
+  describe('filter', () => {
+    it('should turn on column filtering when the filter button is clicked and filtering is off', async () => {
+      const { toolbar, table } = await createFixture({ features: 'filter' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(table.filterable).toBe(true);
+    });
+
+    it('should turn off column filtering when the filter button is clicked and filtering is on', async () => {
+      const { toolbar, table } = await createFixture({ features: 'filter' });
+      await userEvent.click(getButtons(toolbar)[0]);
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(table.filterable).toBe(false);
+    });
+
+    it('should show the filter button as on when column filtering is enabled', async () => {
+      const { toolbar } = await createFixture({ features: 'filter' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(true);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(false);
+    });
+
+    it('should not change row selection when the filter button is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'filter' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(table.rowSelection).toBe('off');
+    });
+
+    it('should not throw when the filter button is clicked without a connected table', async () => {
+      const { toolbar } = await createFixture({ features: 'filter', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+    });
+  });
+
   it('should be accessible', async () => {
     const { toolbar } = await createFixture({ features: 'export' });
 

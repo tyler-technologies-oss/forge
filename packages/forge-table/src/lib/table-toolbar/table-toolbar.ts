@@ -25,6 +25,7 @@ import '@tylertech/forge/popover';
 
 import styles from './table-toolbar.scss';
 
+const TOGGLE_FEATURES: ReadonlySet<TableToolbarFeature> = new Set(['select', 'filter']);
 const COLUMN_VISIBILITY_EVENT = 'forge-data-table-column-visibility';
 
 interface ColumnOption {
@@ -105,12 +106,12 @@ export class TableToolbarElement extends LitElement {
             feature => html`
               <forge-icon-button
                 shape="squared"
-                ?toggle=${feature === 'select'}
-                .on=${feature === 'select' && !!this.tableElement && this.tableElement.rowSelection !== 'off'}
+                ?toggle=${TOGGLE_FEATURES.has(feature)}
+                .on=${this.#isFeatureOn(feature)}
                 @click=${() => this.#onFeatureClick(feature)}
-                @forge-icon-button-toggle=${(evt: CustomEvent<boolean>) => this.#onSelectToggle(evt)}>
+                @forge-icon-button-toggle=${(evt: CustomEvent<boolean>) => this.#onFeatureToggle(feature, evt)}>
                 <forge-icon .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>
-                ${feature === 'select' ? html`<forge-icon slot="on" .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
+                ${TOGGLE_FEATURES.has(feature) ? html`<forge-icon slot="on" .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
               </forge-icon-button>
               <forge-tooltip type="label" placement="top"> ${TABLE_TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
             `
@@ -128,11 +129,25 @@ export class TableToolbarElement extends LitElement {
     }
   }
 
-  #onSelectToggle(evt: CustomEvent<boolean>): void {
+  #isFeatureOn(feature: TableToolbarFeature): boolean {
+    if (!this.tableElement) {
+      return false;
+    }
+    if (feature === 'select') {
+      return this.tableElement.rowSelection !== 'off';
+    }
+    return feature === 'filter' && this.tableElement.filterable;
+  }
+
+  #onFeatureToggle(feature: TableToolbarFeature, evt: CustomEvent<boolean>): void {
     if (!this.tableElement) {
       return;
     }
-    this.tableElement.rowSelection = evt.detail ? 'multiple' : 'off';
+    if (feature === 'select') {
+      this.tableElement.rowSelection = evt.detail ? 'multiple' : 'off';
+    } else if (feature === 'filter') {
+      this.tableElement.filterable = evt.detail;
+    }
     this.requestUpdate();
   }
 
