@@ -8,7 +8,7 @@ Lit-based data table Web Component for `@tylertech/forge`, built on
 
 Lifted out of the base `@tylertech/forge` package into its own so consumers of the main library do not
 pay for TanStack. `@tylertech/forge` is a **peerDependency** — the table renders Forge elements
-(`forge-checkbox`, `forge-popover`, `forge-list`, `forge-text-field` (column rename), `forge-tooltip`, `forge-date-picker`, and with the
+(`forge-checkbox`, `forge-popover`, `forge-dropdown-menu`, `forge-list`, `forge-text-field` (column rename), `forge-tooltip`, `forge-date-picker`, and with the
 filter feature `forge-select`) and does not bundle them.
 
 The element is **`forge-data-table`**, not `forge-table`: `forge-table` is an existing, unrelated element
@@ -77,10 +77,12 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Double-clicking the header text of a renamable column also starts it; the two clicks of the double click each toggle sorting, so the sorting
   captured at the first click is restored before editing begins.
 - `src/lib/table-toolbar/` — `forge-data-table-toolbar`, a toolbar for a data table built on the CSS-only `.forge-toolbar` styles (not the `forge-toolbar` element). Connected through `table` (the id of a data table, looked up in the toolbar's root node when `table` changes) or by assigning a `DataTableElement` to `tableElement`; the id lookup sets `tableElement`, so a table that is not in the DOM yet when the toolbar first updates is not found.
-  The `features` attribute picks the icon buttons; `export` calls the table's `exportToCsv()` and `print` calls its `print()`, `select` and `filter` are toggle buttons that set the table's `rowSelection` (`multiple`/`off`) and `filterable`, and the other features have no behavior yet.
-  It shows an "N selected" summary and the `selection-actions` slot while rows are selected, plus a popover of checkboxes that show and hide columns through
-  the table's public `showColumn`/`hideColumn`. The selected count comes from `forge-data-table-row-select`, so a selection made before the table is connected is not counted.
-  The column list is built from `table.columns` when the popover opens, so it shows the column definitions' headers, not renamed ones.
+  The `features` attribute picks the icon buttons; `export` calls the table's `exportToCsv()` and `print` calls its `print()`, `select` and `filter` are toggle buttons that set the table's `rowSelection` (`multiple`/`off`) and `filterable`, `columns` opens a menu (below), and `reload` and `search` have no behavior yet.
+  It shows an "N selected" summary and the `selection-actions` slot while rows are selected. Features in `MENU_FEATURES` (just `columns` for now) also render a `forge-dropdown-menu` right after the button and tooltip,
+  triggered by the button's id (`<feature>-button`). The menu is always in the DOM while the button is, and its items are built in `#renderMenuItems`, so a new menu button needs an entry in both. `columns` lists a
+  "Show all" item and a divider, then a `forge-dropdown-menu-item-checkbox` per hideable column (checked when visible) that shows and hides the column through the table's public `showColumn`/`hideColumn`; the select event is canceled so the menu stays open while toggling.
+  The selected count comes from `forge-data-table-row-select`, so a selection made before the table is connected is not counted.
+  The items are rebuilt when the table's column visibility changes and when the menu opens, so they show the column definitions' headers, not renamed ones.
 - `src/dev/` — a dev page on **localhost:3470**, written like forge's own dev pages (`pages/data-table/data-table.{html,ejs,ts,scss}`;
   the options drawer is the `options` array in the `.html`). It reuses forge's page shell (`packages/forge/src/dev/src`: scaffold, app bar,
   options drawer, theme toggle) through the `$src` alias and the EJS `views` list in `vite.config.mts`. `vite.config.mts` aliases this package to `src/lib` and

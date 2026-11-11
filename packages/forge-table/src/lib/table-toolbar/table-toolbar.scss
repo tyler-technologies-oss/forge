@@ -27,11 +27,3 @@
   @include toolbar.section;
   @include toolbar.end;
 }
-
-.column-list {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 16px;
-  max-block-size: 320px;
-  overflow-y: auto;
-}

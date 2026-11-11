@@ -58,6 +58,18 @@ function getTooltipLabels(toolbar: TableToolbarElement): (string | undefined)[] 
   return Array.from(toolbar.shadowRoot?.querySelectorAll('forge-tooltip') ?? []).map(tooltip => tooltip.textContent?.trim());
 }
 
+function getColumnsMenu(toolbar: TableToolbarElement): HTMLElement & { open: boolean } {
+  return toolbar.shadowRoot?.querySelector('forge-dropdown-menu') as HTMLElement & { open: boolean };
+}
+
+function getShowAllItem(toolbar: TableToolbarElement): HTMLElement & { disabled: boolean } {
+  return getColumnsMenu(toolbar).querySelector('forge-dropdown-menu-item') as HTMLElement & { disabled: boolean };
+}
+
+function getColumnItems(toolbar: TableToolbarElement): (HTMLElement & { checked: boolean })[] {
+  return Array.from(getColumnsMenu(toolbar).querySelectorAll<HTMLElement & { checked: boolean }>('forge-dropdown-menu-item-checkbox'));
+}
+
 describe('TableToolbar', () => {
   describe('table association', () => {
     it('should connect to the data table with the id given by table', async () => {
@@ -132,6 +144,137 @@ describe('TableToolbar', () => {
       await toolbar.updateComplete;
 
       expect(getTooltipLabels(toolbar)).toEqual(['Print', 'Reload']);
+    });
+  });
+
+  describe('columns', () => {
+    it('should render the menu while the columns button is present, even when it is closed', async () => {
+      const { toolbar } = await createFixture({ features: 'columns' });
+
+      expect(getColumnsMenu(toolbar)).not.toBeNull();
+      expect(getColumnsMenu(toolbar).open).toBe(false);
+    });
+
+    it('should not render a menu when the columns button is not present', async () => {
+      const { toolbar } = await createFixture({ features: 'export' });
+
+      expect(toolbar.shadowRoot?.querySelector('forge-dropdown-menu')).toBeNull();
+    });
+
+    it('should keep the same menu element when the menu is opened and closed', async () => {
+      const { toolbar } = await createFixture({ features: 'columns' });
+      const menu = getColumnsMenu(toolbar);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await vi.waitFor(() => expect(menu.open).toBe(true));
+      await userEvent.keyboard('{Escape}');
+      await vi.waitFor(() => expect(menu.open).toBe(false));
+
+      expect(getColumnsMenu(toolbar)).toBe(menu);
+    });
+
+    it('should open the menu when the columns button is clicked', async () => {
+      const { toolbar } = await createFixture({ features: 'columns' });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      await vi.waitFor(() => expect(getColumnsMenu(toolbar).open).toBe(true));
+    });
+
+    it('should list every column with visible columns checked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+      table.hideColumn('age');
+      await toolbar.updateComplete;
+
+      const items = getColumnItems(toolbar);
+
+      expect(items.map(item => item.textContent?.trim())).toEqual(['ID', 'Name', 'Age']);
+      expect(items.map(item => item.checked)).toEqual([true, true, false]);
+    });
+
+    it('should render a show all item followed by a divider before the column items', async () => {
+      const { toolbar } = await createFixture({ features: 'columns' });
+
+      const [first, second, third] = Array.from(getColumnsMenu(toolbar).children);
+
+      expect(first.tagName.toLowerCase()).toBe('forge-dropdown-menu-item');
+      expect(first.textContent?.trim()).toBe('Show all');
+      expect(second.tagName.toLowerCase()).toBe('forge-divider');
+      expect(third.tagName.toLowerCase()).toBe('forge-dropdown-menu-item-checkbox');
+    });
+
+    it('should show every hidden column when the show all item is clicked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+      table.hideColumn('id');
+      table.hideColumn('age');
+      await toolbar.updateComplete;
+      await userEvent.click(getButtons(toolbar)[0]);
+      await vi.waitFor(() => expect(getColumnsMenu(toolbar).open).toBe(true));
+
+      await userEvent.click(getShowAllItem(toolbar));
+      await toolbar.updateComplete;
+
+      expect(table.columnVisibility['id']).not.toBe(false);
+      expect(table.columnVisibility['age']).not.toBe(false);
+      expect(getColumnItems(toolbar).map(item => item.checked)).toEqual([true, true, true]);
+    });
+
+    it('should disable the show all item when every column is visible', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+      expect(getShowAllItem(toolbar).disabled).toBe(true);
+
+      table.hideColumn('name');
+      await toolbar.updateComplete;
+
+      expect(getShowAllItem(toolbar).disabled).toBe(false);
+    });
+
+    it('should hide a column when its item is unchecked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+      await userEvent.click(getButtons(toolbar)[0]);
+      await vi.waitFor(() => expect(getColumnsMenu(toolbar).open).toBe(true));
+
+      await userEvent.click(getColumnItems(toolbar)[1]);
+
+      expect(table.columnVisibility['name']).toBe(false);
+    });
+
+    it('should show a hidden column when its item is checked', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+      table.hideColumn('name');
+      await toolbar.updateComplete;
+      await userEvent.click(getButtons(toolbar)[0]);
+      await vi.waitFor(() => expect(getColumnsMenu(toolbar).open).toBe(true));
+
+      await userEvent.click(getColumnItems(toolbar)[1]);
+
+      expect(table.columnVisibility['name']).not.toBe(false);
+    });
+
+    it('should keep the menu open when a column item is toggled', async () => {
+      const { toolbar } = await createFixture({ features: 'columns' });
+      await userEvent.click(getButtons(toolbar)[0]);
+      await vi.waitFor(() => expect(getColumnsMenu(toolbar).open).toBe(true));
+
+      await userEvent.click(getColumnItems(toolbar)[0]);
+
+      expect(getColumnsMenu(toolbar).open).toBe(true);
+    });
+
+    it('should update the checked items when column visibility changes elsewhere', async () => {
+      const { toolbar, table } = await createFixture({ features: 'columns' });
+
+      table.hideColumn('id');
+      await toolbar.updateComplete;
+
+      expect(getColumnItems(toolbar)[0].checked).toBe(false);
+    });
+
+    it('should not throw when the columns button is clicked without a connected table', async () => {
+      const { toolbar } = await createFixture({ features: 'columns', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+      expect(getColumnItems(toolbar)).toHaveLength(0);
     });
   });
 

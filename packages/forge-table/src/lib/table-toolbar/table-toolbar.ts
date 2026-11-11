@@ -1,6 +1,6 @@
 import type { ColumnVisibilityState } from '@tanstack/lit-table';
 import { IconRegistry } from '@tylertech/forge';
-import type { IPopoverToggleEventData } from '@tylertech/forge/popover';
+import type { IDropdownMenuItemSelectEventData } from '@tylertech/forge/dropdown-menu';
 import {
   tylIconCheckboxMultipleMarked,
   tylIconExport,
@@ -12,20 +12,25 @@ import {
 } from '@tylertech/tyler-icons';
 import { html, LitElement, nothing, type PropertyValues, type TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { live } from 'lit/directives/live.js';
 import { map } from 'lit/directives/map.js';
+import { repeat } from 'lit/directives/repeat.js';
 import { getAllLeafColumns, resolveColumnId } from '../data-table/columns/column-utils.js';
 import type { DataTableElement } from '../data-table/data-table.js';
 import type { TableToolbarFeature } from './constants.js';
 import { TABLE_TOOLBAR_FEATURE_ICONS, TABLE_TOOLBAR_FEATURE_LABELS, TABLE_TOOLBAR_TAG_NAME } from './constants.js';
 
-import '@tylertech/forge/checkbox';
+import '@tylertech/forge/divider';
+import '@tylertech/forge/dropdown-menu';
+import '@tylertech/forge/dropdown-menu/dropdown-menu-item';
+import '@tylertech/forge/dropdown-menu/dropdown-menu-item-checkbox';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
-import '@tylertech/forge/popover';
 
 import styles from './table-toolbar.scss';
 
 const TOGGLE_FEATURES: ReadonlySet<TableToolbarFeature> = new Set(['select', 'filter']);
+const MENU_FEATURES: ReadonlySet<TableToolbarFeature> = new Set(['columns']);
 const COLUMN_VISIBILITY_EVENT = 'forge-data-table-column-visibility';
 
 interface ColumnOption {
@@ -105,6 +110,7 @@ export class TableToolbarElement extends LitElement {
             this.features,
             feature => html`
               <forge-icon-button
+                id=${this.#getButtonId(feature)}
                 shape="squared"
                 ?toggle=${TOGGLE_FEATURES.has(feature)}
                 .on=${this.#isFeatureOn(feature)}
@@ -114,11 +120,47 @@ export class TableToolbarElement extends LitElement {
                 ${TOGGLE_FEATURES.has(feature) ? html`<forge-icon slot="on" .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
               </forge-icon-button>
               <forge-tooltip type="label" placement="top"> ${TABLE_TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
+              ${this.#renderMenu(feature)}
             `
           )}
         </div>
       </div>
     `;
+  }
+
+  #getButtonId(feature: TableToolbarFeature): string {
+    return `${feature}-button`;
+  }
+
+  #renderMenu(feature: TableToolbarFeature): TemplateResult | typeof nothing {
+    if (!MENU_FEATURES.has(feature)) {
+      return nothing;
+    }
+    return html`
+      <forge-dropdown-menu dense trigger=${this.#getButtonId(feature)} @toggle=${this.#onMenuToggle}>${this.#renderMenuItems(feature)}</forge-dropdown-menu>
+    `;
+  }
+
+  #renderMenuItems(feature: TableToolbarFeature): TemplateResult | typeof nothing {
+    if (feature === 'columns') {
+      const options = this.#getColumnOptions();
+      return html`
+        <forge-dropdown-menu-item ?disabled=${options.every(({ visible }) => visible)} @forge-dropdown-menu-item-select=${this.#onShowAllSelect}>
+          Show all
+        </forge-dropdown-menu-item>
+        <forge-divider></forge-divider>
+        ${repeat(
+          options,
+          ({ id }) => id,
+          ({ id, label, visible }) => html`
+            <forge-dropdown-menu-item-checkbox .value=${id} .checked=${live(visible)} @forge-dropdown-menu-item-select=${this.#onColumnSelect}>
+              ${label}
+            </forge-dropdown-menu-item-checkbox>
+          `
+        )}
+      `;
+    }
+    return nothing;
   }
 
   #onFeatureClick(feature: TableToolbarFeature): void {
@@ -180,20 +222,28 @@ export class TableToolbarElement extends LitElement {
     table?.addEventListener(COLUMN_VISIBILITY_EVENT, this.#onTableChange);
   }
 
-  #onColumnsToggle(evt: CustomEvent<IPopoverToggleEventData>): void {
-    if (evt.detail.newState === 'open') {
+  #onMenuToggle = (evt: ToggleEvent): void => {
+    if (evt.newState === 'open') {
       this.requestUpdate();
     }
-  }
+  };
 
-  #onColumnChange(evt: Event, id: string): void {
-    const { checked } = evt.target as HTMLInputElement;
+  #onShowAllSelect = (evt: CustomEvent<IDropdownMenuItemSelectEventData>): void => {
+    evt.preventDefault();
+    this.#getColumnOptions()
+      .filter(({ visible }) => !visible)
+      .forEach(({ id }) => this.tableElement?.showColumn(id));
+  };
+
+  #onColumnSelect = (evt: CustomEvent<IDropdownMenuItemSelectEventData>): void => {
+    evt.preventDefault();
+    const { value, checked } = evt.detail;
     if (checked) {
-      this.tableElement?.showColumn(id);
+      this.tableElement?.showColumn(value as string);
     } else {
-      this.tableElement?.hideColumn(id);
+      this.tableElement?.hideColumn(value as string);
     }
-  }
+  };
 }
 
 declare global {
