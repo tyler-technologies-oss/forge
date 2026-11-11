@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-ai",
-  "version": "0.15.2",
+  "version": "0.16.0",
   "description": "A library of Tyler Forge™ AI chat interface web components.",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
