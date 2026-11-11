@@ -50,17 +50,26 @@ describe('forge-radix stylesheets', () => {
   });
 
   it('should declare component tokens on both the root and the component elements', () => {
-    expect(light).toMatch(/:root \{[^}]*--forge-toolbar-backdrop-filter:/);
-    expect(light).toMatch(/:where\(forge-toolbar\) \{[^}]*--forge-toolbar-backdrop-filter:/);
+    expect(light).toMatch(/:root \{[^}]*--forge-toolbar-divider-color:/);
+    expect(light).toMatch(/:where\(forge-toolbar\) \{[^}]*--forge-toolbar-divider-color:/);
   });
 
-  it('should keep toolbars inside cards, dialogs, and popovers opaque', () => {
-    expect(light).toMatch(/:where\(forge-card, forge-dialog\) \{[^}]*--forge-theme-surface-elevated-translucent: var\(--forge-theme-surface-bright\);/);
-    expect(light).toMatch(/:where\(forge-popover\) \{[^}]*--forge-theme-surface-elevated-translucent: var\(--forge-theme-surface-elevated\);/);
+  it('should make toolbars inside cards, dialogs, and popovers transparent', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-card, forge-dialog, forge-popover)')).toContain('--forge-toolbar-background: transparent;');
+    }
   });
 
-  it('should leave the toolbar background to the component so nested shadow roots resolve it', () => {
-    expect(light).not.toContain('--forge-toolbar-background:');
+  it('should set the toolbar background on the root only so containers can make it transparent', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':root')).toContain('--forge-toolbar-background: var(--forge-theme-surface-elevated);');
+      expect(getRule(stylesheet, ':where(forge-toolbar)')).not.toContain('--forge-toolbar-background');
+      expect(stylesheet).not.toContain('--forge-toolbar-backdrop-filter');
+    }
+  });
+
+  it('should use the translucent elevated surface for the card background', () => {
+    expect(getRule(light, ':root')).toContain('--forge-card-background: var(--forge-theme-surface-elevated-translucent);');
   });
 
   it('should not set the card background on the card element so ancestors can override it', () => {
@@ -166,10 +175,17 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
-  it('should set the toast action color on the light stylesheet and keep the dark override', () => {
-    expect(light).toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
-    expect(dark).toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse,');
-    expect(dark).not.toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
+  it('should set the toast action color in both themes', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-toast-action-color: var(--forge-theme-on-surface-inverse-secondary);');
+    }
+  });
+
+  it('should not override the switch off handle color and should use the subtle field chip border in dark', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).not.toContain('--forge-switch-handle-off-color');
+    }
+    expect(dark).toContain('--forge-chip-field-border-color: var(--forge-theme-outline-low');
   });
 
   it('should set the tonal field background', () => {

@@ -34,7 +34,6 @@
 @use '../focus-indicator/token-utils' as focus-indicator;
 @use '../popover/token-utils' as popover;
 @use '../skip-link/token-utils' as skip-link;
-@use '../switch/token-utils' as switch;
 @use '../toast/token-utils' as toast;
 @use '../toolbar/token-utils' as toolbar;
 
@@ -398,18 +397,9 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   );
 }
 
-@mixin _switch {
-  @include switch.provide-theme(
-    (
-      handle-off-color: var(--forge-theme-outline-low)
-    )
-  );
-}
-
 @mixin _toolbar {
   @include toolbar.provide-theme(
     (
-      backdrop-filter: blur(20px),
       divider-color: var(--forge-theme-outline-low)
     )
   );
@@ -458,6 +448,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _divider;
   @include _kbd;
   @include _tooltip;
+  @include _toast;
   @include _list-item;
   @include _option;
   @include _step;
@@ -476,13 +467,13 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _file-picker;
   @include _fab;
   @include _popover;
-  @include _switch;
   @include _toolbar;
   @include _radio;
   @include _scrollbar;
   @include _drawer;
 
-  --forge-card-background: var(--forge-theme-surface-bright);
+  --forge-card-background: var(--forge-theme-surface-elevated-translucent);
+  --forge-toolbar-background: var(--forge-theme-surface-elevated);
 }
 
 ///
@@ -722,8 +713,8 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     }
   }
 
-  :where(forge-card, forge-dialog) {
-    --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-bright);
+  :where(forge-card, forge-dialog, forge-popover) {
+    --forge-toolbar-background: transparent;
   }
 
   :where(forge-card) {
@@ -746,10 +737,6 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     @include _popover;
     --forge-theme-surface: var(--forge-theme-surface-elevated);
     --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-elevated);
-  }
-
-  :where(forge-switch) {
-    @include _switch;
   }
 
   :where(forge-toolbar) {
@@ -777,7 +764,6 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include radix-theme.properties;
   @include radix-typography.properties;
   @include component-properties;
-  @include _toast;
 }
 
 ///
@@ -790,13 +776,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   @include chip.provide-theme(
     (
-      field-border-color: theme.variable(outline)
-    )
-  );
-
-  @include toast.provide-theme(
-    (
-      action-color: theme.variable(on-surface-inverse)
+      field-border-color: theme.variable(outline-low)
     )
   );
 }
