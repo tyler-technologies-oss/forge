@@ -91,11 +91,11 @@ class DataTableHarness {
   }
 
   public get bodyRows(): HTMLTableRowElement[] {
-    return Array.from(this.shadowRoot.querySelectorAll('tbody tr'));
+    return Array.from(this.shadowRoot.querySelectorAll('tbody:not(.empty-tbody) tr'));
   }
 
   public get bodyCells(): HTMLTableCellElement[] {
-    return Array.from(this.shadowRoot.querySelectorAll('tbody td'));
+    return Array.from(this.shadowRoot.querySelectorAll('tbody:not(.empty-tbody) td'));
   }
 
   public get footerCells(): HTMLTableCellElement[] {
@@ -104,6 +104,18 @@ class DataTableHarness {
 
   public get resizers(): HTMLElement[] {
     return Array.from(this.shadowRoot.querySelectorAll('.resizer'));
+  }
+
+  public get emptyState(): HTMLElement | null {
+    return this.shadowRoot.querySelector('.empty-state');
+  }
+
+  public get emptyStateMessage(): string | undefined {
+    return this.emptyState?.querySelector('.empty-state-message')?.textContent?.trim();
+  }
+
+  public get clearFiltersButton(): HTMLElement | null {
+    return this.emptyState?.querySelector('forge-button') ?? null;
   }
 
   public get filterInputs(): HTMLInputElement[] {
@@ -342,6 +354,43 @@ describe('DataTable', () => {
       expect(harness.bodyRows.length).toBe(0);
     });
 
+    it('should show an empty state when no data provided', async () => {
+      const harness = await createFixture({ data: [] });
+
+      expect(harness.emptyStateMessage).toBe('There are no rows to display');
+      expect(harness.clearFiltersButton).toBeNull();
+    });
+
+    it('should span all visible columns in the empty state', async () => {
+      const harness = await createFixture({ data: [] });
+
+      const cell = harness.shadowRoot.querySelector('.empty-tbody td');
+      expect(cell?.getAttribute('colspan')).toBe(`${TEST_COLUMNS.length}`);
+    });
+
+    it('should keep the empty state in view when the table scrolls horizontally', async () => {
+      const harness = await createFixture({ data: [] });
+      harness.element.style.display = 'block';
+      harness.element.style.width = '200px';
+      await settle(harness.element);
+      const container = harness.shadowRoot.querySelector('.table-container') as HTMLElement;
+      expect(container.scrollWidth).toBeGreaterThan(container.clientWidth);
+
+      container.scrollLeft = container.scrollWidth;
+      await settle(harness.element);
+
+      const containerRect = container.getBoundingClientRect();
+      const emptyStateRect = (harness.emptyState as HTMLElement).getBoundingClientRect();
+      expect(emptyStateRect.left).toBeGreaterThanOrEqual(containerRect.left);
+      expect(emptyStateRect.right).toBeLessThanOrEqual(containerRect.right + 1);
+    });
+
+    it('should not show the empty state when rows exist', async () => {
+      const harness = await createFixture();
+
+      expect(harness.emptyState).toBeNull();
+    });
+
     it('should update when data changes', async () => {
       const harness = await createFixture();
 
@@ -425,6 +474,33 @@ describe('DataTable', () => {
       expect(groupHeader).not.toBeNull();
       expect(child1Header).not.toBeNull();
       expect(child2Header).not.toBeNull();
+    });
+
+    it('should not render a column menu in column group headers', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        {
+          id: 'group',
+          header: 'Group',
+          columns: [
+            { id: 'child1', header: 'Child 1', property: 'name' },
+            { id: 'child2', header: 'Child 2', property: 'age' }
+          ]
+        },
+        { id: 'id', header: 'ID', property: 'id' }
+      ];
+      const harness = await createFixture({ columns });
+
+      expect(harness.getHeaderCellById('group')?.querySelector('forge-data-table-column-menu')).toBeNull();
+      expect(harness.getHeaderCellById('child1')?.querySelector('forge-data-table-column-menu')).not.toBeNull();
+      expect(harness.shadowRoot.querySelectorAll('thead forge-data-table-column-menu').length).toBe(3);
+    });
+
+    it('should not render a column menu in the select checkbox header', async () => {
+      const harness = await createFixture({ rowSelection: 'multiple' });
+
+      const selectHeader = harness.shadowRoot.querySelector('thead th.select-column');
+      expect(selectHeader).not.toBeNull();
+      expect(selectHeader?.querySelector('forge-data-table-column-menu')).toBeNull();
     });
 
     it('should not render a bottom border on grouping column headers', async () => {
@@ -1715,6 +1791,28 @@ describe('DataTable', () => {
       await harness.typeIntoFilter(1, 'Alice');
 
       expect(events.length).toBeGreaterThan(0);
+    });
+
+    it('should show a filter message with a clear button when the filter matches no rows', async () => {
+      const harness = await createFixture({ filterable: true });
+
+      await harness.typeIntoFilter(1, 'zzz');
+
+      expect(harness.bodyRows.length).toBe(0);
+      expect(harness.emptyStateMessage).toBe('No rows match your filter');
+      expect(harness.clearFiltersButton?.textContent?.trim()).toBe('Clear filters');
+    });
+
+    it('should restore all rows when the clear filters button is clicked', async () => {
+      const harness = await createFixture({ filterable: true });
+      await harness.typeIntoFilter(1, 'zzz');
+
+      harness.clearFiltersButton?.click();
+      await settle(harness.element);
+
+      expect(harness.emptyState).toBeNull();
+      expect(harness.bodyRows.length).toBe(3);
+      expect(harness.filterInputs[1].value).toBe('');
     });
 
     it('should not auto-filter data when manual filter is true', async () => {

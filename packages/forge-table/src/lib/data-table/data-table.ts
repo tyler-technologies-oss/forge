@@ -47,6 +47,7 @@ import { buildPrintDocument, printDocument } from './features/print.js';
 import { getColumnHeaderTextId, setRowName, type RowMeta } from './features/row-meta.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
+import { renderEmptyState } from './templates/empty-state.js';
 import { renderFilterField } from './templates/filter-fields.js';
 import { isCellEditable } from './templates/input-cell.js';
 import type { ColumnDef, Row, RowSelectionType } from './types.js';
@@ -484,8 +485,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
           <thead>
             ${this.#renderTableHeader(table)}
           </thead>
-          ${this.virtualized && this._virtualizerController ? this.#renderVirtualizedTableBody(table) : this.#renderTableBody(table)}
-          ${this.#renderTableFooter(table)}
+          ${this.#renderBody(table)} ${this.#renderTableFooter(table)}
         </table>
       </div>
       ${this.#renderColumnVisibilityPopover(table)}
@@ -536,6 +536,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                 : canBeDragged
                   ? (evt: MouseEvent) => this.#onHeaderClick(evt, header.column)
                   : null;
+            const hasColumnMenu = header.column.columnDef.id !== SELECT_COLUMN_ID && !header.isPlaceholder && !isParent;
             const canShowColumnMenu =
               header.column.columnDef.id !== SELECT_COLUMN_ID && header.column.getCanHide() && !header.isPlaceholder && !header.column.columns.length;
             return html`
@@ -591,12 +592,14 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
                         `
                       : null}
                   </div>
-                  <forge-data-table-column-menu
-                    .table=${table}
-                    .column=${header.column}
-                    .reorderable=${this.reorderable}
-                    @forge-data-table-column-menu-action=${(evt: CustomEvent<ColumnMenuActionEventDetail>) =>
-                      this.#onColumnMenuAction(evt, header.column)}></forge-data-table-column-menu>
+                  ${hasColumnMenu
+                    ? html`<forge-data-table-column-menu
+                        .table=${table}
+                        .column=${header.column}
+                        .reorderable=${this.reorderable}
+                        @forge-data-table-column-menu-action=${(evt: CustomEvent<ColumnMenuActionEventDetail>) =>
+                          this.#onColumnMenuAction(evt, header.column)}></forge-data-table-column-menu>`
+                    : nothing}
                 </div>
                 ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(header.column)}</div>` : nothing}
                 ${this.resizable && header.column.getCanResize() && !header.isPlaceholder
@@ -719,6 +722,17 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         </div>
       </td>
     `;
+  }
+
+  #renderBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
+    if (!table.getRowModel().rows.length) {
+      return renderEmptyState({
+        colSpan: Math.max(table.getVisibleLeafColumns().length, 1),
+        filtered: this._columnFilters.length > 0,
+        onClearFilters: () => table.setColumnFilters([])
+      });
+    }
+    return this.virtualized && this._virtualizerController ? this.#renderVirtualizedTableBody(table) : this.#renderTableBody(table);
   }
 
   #renderTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {

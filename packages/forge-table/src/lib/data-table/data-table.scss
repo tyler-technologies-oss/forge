@@ -369,6 +369,38 @@ table.filterable {
 }
 
 //
+// Empty state
+//
+
+.table-container:has(.empty-tbody) {
+  container-type: inline-size;
+}
+
+table tbody.empty-tbody td {
+  padding: 0;
+}
+
+.empty-state {
+  position: sticky;
+  inset-inline-start: 0;
+  box-sizing: border-box;
+  inline-size: 100cqi;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: #{spacing.variable(large)};
+  padding: #{spacing.variable(xlarge)};
+  text-align: center;
+  color: #{theme.variable(text-medium)};
+}
+
+.empty-state-message {
+  @include typography.style(heading2);
+
+  margin: 0;
+}
+
+//
 // Row selection
 //
 
@@ -402,7 +434,7 @@ table.row-selection {
 //
 
 table.hover {
-  tbody tr:hover {
+  tbody:not(.empty-tbody) tr:hover {
     background-color: #{theme.variable(surface-container-minimum)};
   }
 
@@ -411,7 +443,7 @@ table.hover {
   }
 
   &.striped {
-    tbody tr:nth-child(odd):hover {
+    tbody:not(.empty-tbody) tr:nth-child(odd):hover {
       background-color: #{theme.variable(surface-container-low)};
     }
   }
@@ -422,7 +454,7 @@ table.hover {
 //
 
 table.striped {
-  tbody tr:nth-child(odd) {
+  tbody:not(.empty-tbody) tr:nth-child(odd) {
     background-color: #{theme.variable(surface-container-minimum)};
   }
 }
