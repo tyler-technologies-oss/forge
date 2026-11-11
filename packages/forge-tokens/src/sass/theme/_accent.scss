@@ -96,7 +96,11 @@ $_dark: meta.module-variables(palette-dark);
 @function _value($palette, $hue, $step, $mode: light) {
   @if $step == solid {
     $shift: map.get($_solid-shifts, $mode);
-    $step: if(list.index(map.get($shift, hues), $hue), map.get($shift, step), 9);
+    @if list.index(map.get($shift, hues), $hue) {
+      $step: map.get($shift, step);
+    } @else {
+      $step: 9;
+    }
   }
   @return map.get($palette, '#{$hue}-#{$step}');
 }
