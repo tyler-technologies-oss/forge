@@ -25,6 +25,7 @@
 @use '../field/token-utils' as field;
 @use '../file-picker/token-utils' as file-picker;
 @use '../floating-action-button/token-utils' as fab;
+@use '../icon/token-utils' as icon;
 @use '../icon-button/token-utils' as icon-button;
 @use '../focus-indicator/token-utils' as focus-indicator;
 @use '../popover/token-utils' as popover;
@@ -36,6 +37,7 @@
 $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 $_button-themes: secondary, tertiary, success, error, warning, info;
 $_chip-themes: secondary, tertiary, success, warning, error, info;
+$_icon-themes: primary, secondary, tertiary, success, error, warning;
 $_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
 
 @mixin _badge {
@@ -527,6 +529,16 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   :where(forge-count-card:state(info-secondary)) {
     --forge-card-outline-color: var(--forge-theme-outline-low);
+  }
+
+  @each $theme in $_icon-themes {
+    :where(forge-icon[theme='#{$theme}']) {
+      @include icon.provide-theme(
+        (
+          color: var(--forge-theme-on-#{$theme}-container-minimum)
+        )
+      );
+    }
   }
 
   :where(forge-chip) {

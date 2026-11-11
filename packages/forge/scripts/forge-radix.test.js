@@ -235,6 +235,16 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should set the icon color for each icon theme and leave the neutral themes alone', () => {
+    for (const stylesheet of [light, dark]) {
+      for (const theme of ['primary', 'secondary', 'tertiary', 'success', 'error', 'warning']) {
+        expect(getRule(stylesheet, `:where(forge-icon[theme=${theme}])`)).toContain(`--forge-icon-color: var(--forge-theme-on-${theme}-container-minimum);`);
+      }
+      expect(stylesheet).not.toContain(':where(forge-icon[theme=text-medium])');
+      expect(stylesheet).not.toContain(':where(forge-icon[theme=info])');
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });
