@@ -328,7 +328,8 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 @mixin _tab {
   @include tab.provide-theme(
     (
-      active-color: var(--forge-theme-text-high)
+      active-color: var(--forge-theme-text-high),
+      indicator-color: var(--forge-theme-on-primary-container-minimum)
     )
   );
 }
@@ -463,7 +464,6 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   @include _list-item;
   @include _option;
   @include _step;
-  @include _tab;
   @include _tab-bar;
   @include _toast-focus;
   @include _timeline-break;
@@ -668,8 +668,16 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     }
   }
 
+  :where(forge-tab) {
+    @include _tab;
+  }
+
   :where(forge-tab-bar) {
     @include _tab-bar;
+  }
+
+  :where(forge-app-bar, forge-app-bar > *, .forge-app-bar) {
+    --forge-theme-on-primary-container-minimum: var(--forge-theme-primary);
   }
 
   :where(forge-timeline-break) {

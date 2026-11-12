@@ -214,10 +214,18 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
-  it('should set the active tab color only on the root so app bar tab bars can override it', () => {
-    expect(light).toMatch(/:root \{[^}]*--forge-tab-active-color: var\(--forge-theme-text-high\);/);
-    expect(light).not.toContain(':where(forge-tab)');
-    expect(light).not.toContain('--forge-tab-indicator-color:');
+  it('should resolve the active tab and indicator colors on each tab so app bar tab bars use the app bar colors', () => {
+    expect(getRule(light, ':where(forge-tab)')).toContain('--forge-tab-active-color: var(--forge-theme-text-high);');
+    expect(getRule(light, ':root')).not.toContain('--forge-tab-active-color');
+    expect(getRule(light, ':where(forge-tab)')).toContain('--forge-tab-indicator-color: var(--forge-theme-on-primary-container-minimum);');
+  });
+
+  it('should resolve the primary text color from the foreground inside an app bar', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(forge-app-bar, forge-app-bar > *, .forge-app-bar)')).toContain(
+        '--forge-theme-on-primary-container-minimum: var(--forge-theme-primary);'
+      );
+    }
   });
 
   it('should set the border colors of tables, split view handles, scrollable dialogs, and calendar menus', () => {
