@@ -36,10 +36,18 @@ const syncSwitch = document.querySelector('#opt-sync') as ISwitchComponent;
 const params = new URLSearchParams(window.location.search);
 const pages = (componentsJson as IComponentIdentifier[]).filter(({ path }) => path !== SELF_PATH);
 
+const VIEWS: CompareView[] = ['side-by-side', 'difference'];
+const WIDTHS = [DEFAULT_WIDTH, '1280', '1024', '768', '414'];
+const PAGE_PATHS = pages.map(({ path }) => path);
+
+function pick<T extends string>(allowed: readonly T[], value: string | null, fallback: T): T {
+  return allowed.find(item => item === value) ?? fallback;
+}
+
 const state = {
-  page: params.get('page') ?? DEFAULT_PAGE_PATH,
-  view: (params.get('view') as CompareView | null) ?? DEFAULT_VIEW,
-  width: params.get('width') ?? DEFAULT_WIDTH,
+  page: pick(PAGE_PATHS, params.get('page'), DEFAULT_PAGE_PATH),
+  view: pick(VIEWS, params.get('view'), DEFAULT_VIEW),
+  width: pick(WIDTHS, params.get('width'), DEFAULT_WIDTH),
   dark: params.get('dark') === '1',
   sync: params.get('sync') !== '0'
 };
