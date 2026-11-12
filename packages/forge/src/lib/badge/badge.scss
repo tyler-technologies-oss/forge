@@ -146,7 +146,8 @@
 // Color
 //
 
-$_hues: gray gold bronze brown yellow amber orange tomato red ruby crimson pink plum purple violet iris indigo blue cyan teal jade green grass lime mint sky;
+$_hues: 'gray' 'gold' 'bronze' 'brown' 'yellow' 'amber' 'orange' 'tomato' 'red' 'ruby' 'crimson' 'pink' 'plum' 'purple' 'violet' 'iris' 'indigo' 'blue' 'cyan'
+  'teal' 'jade' 'green' 'grass' 'lime' 'mint' 'sky';
 
 // The hue custom properties are provided by the Radix theme. Without them, color renders as a neutral badge.
 @function _hue($hue, $step, $fallback) {

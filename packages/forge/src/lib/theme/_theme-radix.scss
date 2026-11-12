@@ -567,8 +567,8 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
     }
   }
 
-  @each $role, $hue, $themes in (info, blue, ':is([theme=info], [theme=info-primary])'), (success, green, '[theme=success]'),
-    (warning, amber, '[theme=warning]'), (error, red, ':is([theme=error], [theme=critical], [theme=danger])')
+  @each $role, $hue, $themes in (info, 'blue', ':is([theme=info], [theme=info-primary])'), (success, 'green', '[theme=success]'),
+    (warning, 'amber', '[theme=warning]'), (error, 'red', ':is([theme=error], [theme=critical], [theme=danger])')
   {
     :where(forge-badge:is([strong], :state(strong))#{$themes}) {
       @include _badge-colors(var(--forge-color-#{$hue}-solid), var(--forge-color-#{$hue}-contrast));
