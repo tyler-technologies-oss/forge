@@ -111,10 +111,10 @@ describe('Radix legacy themes', () => {
       });
     }
 
-    it('should keep the strong colors when the badge is strong', async () => {
+    it('should use the accent solid colors when the badge is strong and themed', async () => {
       const badge = await createElement('<forge-badge strong theme="success">1</forge-badge>');
-      expect(getInnerStyle(badge, '.forge-badge').backgroundColor).toBe(getThemeColor('success'));
-      expect(getInnerStyle(badge, '.forge-badge').color).toBe(getThemeColor('on-success'));
+      expect(getInnerStyle(badge, '.forge-badge').backgroundColor).toBe(getAccentColor('green-solid'));
+      expect(getInnerStyle(badge, '.forge-badge').color).toBe(getAccentColor('green-contrast'));
     });
 
     it('should keep the strong colors when the badge is strong and unthemed', async () => {
@@ -214,6 +214,15 @@ async function createIconButton(markup: string): Promise<IconButtonComponent> {
 function getIconColor(iconButton: IconButtonComponent): string {
   const root = iconButton.shadowRoot?.querySelector('[part=root]') as HTMLElement;
   return getComputedStyle(root).color;
+}
+
+function getAccentColor(token: string): string {
+  const probe = document.createElement('span');
+  probe.style.color = `var(--forge-color-${token})`;
+  document.body.append(probe);
+  const { color } = getComputedStyle(probe);
+  probe.remove();
+  return color;
 }
 
 function getThemeColor(token: string): string {
