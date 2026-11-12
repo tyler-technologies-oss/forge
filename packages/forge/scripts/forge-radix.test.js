@@ -444,6 +444,19 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should tint the chip border and keep the tint off field chips', () => {
+    for (const stylesheet of [light, dark]) {
+      const rule = getRule(stylesheet, ':where(forge-chip, .forge-chip)');
+      expect(rule).toContain('--forge-chip-border-tint: var(--forge-theme-primary-container-low);');
+      expect(rule).toContain('--forge-chip-invalid-border-tint: var(--forge-theme-error-container-low);');
+      expect(getRule(stylesheet, ':where(forge-chip[type=field])')).toContain('--forge-chip-border-tint: transparent;');
+      expect(getRule(stylesheet, ':root')).not.toContain('--forge-chip-border-tint');
+      for (const theme of ['secondary', 'tertiary', 'success', 'warning', 'error', 'info']) {
+        expect(getRule(stylesheet, `:where(forge-chip[theme=${theme}])`)).toContain(`--forge-chip-border-tint: var(--forge-theme-${theme}-container-low);`);
+      }
+    }
+  });
+
   it('should not emit global keyframes', () => {
     expect(light).not.toContain('@keyframes');
   });

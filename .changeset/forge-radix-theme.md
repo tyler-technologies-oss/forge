@@ -16,3 +16,5 @@ The Radix stylesheet renders the legacy badge, banner, and inline message themes
 Adds the `--forge-color-picker-slider-thumb-shadow`, `--forge-color-picker-preview-shadow`, `--forge-color-picker-preview-ring-shadow`, `--forge-color-picker-input-focus-color`, `--forge-color-picker-gradient-thumb-size`, `--forge-color-picker-gradient-thumb-border-width`, and `--forge-color-picker-gradient-thumb-shadow` custom properties, which default to the existing rendering. The CSS-only `.forge-field` now reads `--forge-field-default-outline-color` and `--forge-field-default-outline-color-hover` too.
 
 The color picker opacity track now fills with the selected color, the gradient and slider thumbs show a focus indicator when focused, and the value inputs now animate their border color on focus (the transition named a misspelled property).
+
+Adds the `--forge-chip-border-tint` and `--forge-chip-invalid-border-tint` custom properties. The chip border color is now drawn as an outline over the tinted border, which is transparent by default. Default chips render the same except for sub-pixel anti-aliasing along the rounded edge of selected chips.
