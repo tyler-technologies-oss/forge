@@ -51,10 +51,11 @@ describe('design tokens', () => {
         Object.values(pair).map(theme => [theme, new Set([...shared, ...allTokens.filter(({ file }) => file === theme)].map(({ path }) => path.join('.')))])
       )
     );
+    const everything = new Set(allTokens.map(({ path }) => path.join('.')));
     const missing = [];
 
     for (const { file, path, token } of allTokens) {
-      const known = sets.get(file) ?? new Set(allTokens.map(({ path }) => path.join('.')));
+      const known = sets.get(file) ?? everything;
       const values = typeof token.$value === 'string' ? [token.$value] : (JSON.stringify(token.$value).match(REFERENCE_PATTERN) ?? []);
       for (const value of values) {
         for (const [, reference] of String(value).matchAll(REFERENCE_PATTERN)) {
