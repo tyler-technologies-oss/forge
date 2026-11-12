@@ -391,7 +391,7 @@ describe('forge-radix stylesheets', () => {
         ':is([theme=info], [theme=info-primary])': 'info',
         '[theme=success]': 'success',
         '[theme=warning]': 'warning',
-        ':is([theme=error], [theme=danger])': 'error'
+        ':is([theme=error], [theme=critical], [theme=danger])': 'error'
       };
       for (const [selector, role] of Object.entries(themed)) {
         const rule = getRule(stylesheet, `:where(forge-badge${notStrong}${selector})`);
@@ -403,9 +403,34 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should map the badge outlined variant and the strong role colors', () => {
+    const notStrong = ':not([strong], :state(strong))';
+    for (const stylesheet of [light, dark]) {
+      const neutral = getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`);
+      expect(neutral).toContain('--forge-badge-outlined-background: var(--forge-theme-bg-neutral-subtle);');
+      expect(neutral).toContain('--forge-badge-outlined-border-color: var(--forge-theme-border-neutral-subtle);');
+      expect(getRule(stylesheet, ':where(forge-badge:is([strong], :state(strong))[theme=success])')).toContain(
+        '--forge-badge-background: var(--forge-color-green-solid);'
+      );
+    }
+    expect(defaultTheme).not.toContain('--forge-color-green-solid');
+  });
+
+  it('should set the banner geometry and the outlined variant colors', () => {
+    for (const stylesheet of [light, dark]) {
+      const banner = getRule(stylesheet, ':where(forge-banner, .forge-banner)');
+      expect(banner).toContain('--forge-banner-min-height: 56px;');
+      expect(banner).toContain('--forge-banner-outlined-background: var(--forge-theme-bg-info-subtle);');
+      expect(getRule(stylesheet, ':where(forge-inline-message, .forge-inline-message)')).toContain(
+        '--forge-inline-message-outlined-border-color: var(--forge-theme-border-info-subtle);'
+      );
+    }
+    expect(defaultTheme).not.toContain('--forge-banner-min-height: 56px');
+  });
+
   it('should map legacy and semantic banner and inline message themes', () => {
-    const neutral = ':is([theme=primary], [theme=secondary], [theme=tertiary], [theme=info-secondary])';
-    const roles = { '[theme=success]': 'success', '[theme=warning]': 'warning', ':is([theme=error], [theme=danger])': 'error' };
+    const neutral = ':is([theme=default], [theme=primary], [theme=secondary], [theme=tertiary], [theme=info-secondary])';
+    const roles = { '[theme=success]': 'success', '[theme=warning]': 'warning', ':is([theme=error], [theme=critical], [theme=danger])': 'error' };
     for (const stylesheet of [light, dark]) {
       expect(getRule(stylesheet, ':where(forge-banner, .forge-banner)')).toContain('--forge-banner-background: var(--forge-theme-bg-info-default);');
       expect(getRule(stylesheet, `:where(forge-banner${neutral})`)).toContain('--forge-banner-background: var(--forge-theme-bg-neutral-default);');

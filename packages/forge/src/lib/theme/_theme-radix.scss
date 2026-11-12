@@ -1,6 +1,7 @@
 @use 'sass:list';
 @use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/radix-theme';
 @use '@tylertech/forge-tokens/sass/radix-typography';
 @use '@tylertech/forge-tokens/sass/theme';
@@ -41,7 +42,7 @@
 $_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
 $_button-themes: secondary, tertiary, success, error, warning, info;
 $_toast-themes: primary, secondary, tertiary, success, warning, error, info;
-$_legacy-neutral-themes: primary, secondary, tertiary, info-secondary;
+$_legacy-neutral-themes: default, primary, secondary, tertiary, info-secondary;
 $_chip-themes: secondary, tertiary, success, warning, error, info;
 $_icon-themes: primary, secondary, tertiary, success, error, warning;
 $_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
@@ -62,16 +63,26 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   );
 }
 
-@mixin _badge-colors($background, $color) {
+@mixin _badge-colors($background, $color, $outlined-background: null, $outlined-color: null, $outlined-border-color: null) {
   @include badge.provide-theme(
     (
       background: $background,
       color: $color
     )
   );
+
+  @if $outlined-background {
+    @include badge.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-color: $outlined-color,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
 }
 
-@mixin _banner-colors($background, $color, $icon-color) {
+@mixin _banner-colors($background, $color, $icon-color, $outlined-background: null, $outlined-border-color: null) {
   @include banner.provide-theme(
     (
       background: $background,
@@ -79,9 +90,18 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       icon-color: $icon-color
     )
   );
+
+  @if $outlined-background {
+    @include banner.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
 }
 
-@mixin _inline-message-colors($background, $color, $border-color, $icon-color) {
+@mixin _inline-message-colors($background, $color, $border-color, $icon-color, $outlined-background: null, $outlined-border-color: null) {
   @include inline-message.provide-theme(
     (
       background: $background,
@@ -90,6 +110,15 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       icon-color: $icon-color
     )
   );
+
+  @if $outlined-background {
+    @include inline-message.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
 }
 
 @mixin _button {
@@ -509,32 +538,78 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
   $_not-strong: ':not([strong], :state(strong))';
 
   :where(forge-badge#{$_not-strong}, .forge-badge) {
-    @include _badge-colors(var(--forge-theme-bg-neutral-default), var(--forge-theme-text-medium));
+    @include _badge-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-border-neutral-subtle)
+    );
   }
 
   @each $role,
     $themes
-      in (info: ':is([theme=info], [theme=info-primary])', success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])')
+      in (
+        info: ':is([theme=info], [theme=info-primary])',
+        success: '[theme=success]',
+        warning: '[theme=warning]',
+        error: ':is([theme=error], [theme=critical], [theme=danger])'
+      )
   {
     :where(forge-badge#{$_not-strong}#{$themes}) {
-      @include _badge-colors(var(--forge-theme-bg-#{$role}-default), var(--forge-theme-on-#{$role}-container-low));
+      @include _badge-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-border-#{$role}-subtle)
+      );
+    }
+  }
+
+  @each $role, $hue, $themes in (info, blue, ':is([theme=info], [theme=info-primary])'), (success, green, '[theme=success]'),
+    (warning, amber, '[theme=warning]'), (error, red, ':is([theme=error], [theme=critical], [theme=danger])')
+  {
+    :where(forge-badge:is([strong], :state(strong))#{$themes}) {
+      @include _badge-colors(var(--forge-color-#{$hue}-solid), var(--forge-color-#{$hue}-contrast));
     }
   }
 
   :where(forge-banner, .forge-banner) {
-    @include _banner-colors(var(--forge-theme-bg-info-default), var(--forge-theme-on-info-container-low), var(--forge-theme-on-info-container-low));
+    @include _banner-colors(
+      var(--forge-theme-bg-info-default),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-bg-info-subtle),
+      var(--forge-theme-border-info-subtle)
+    );
+    @include banner.provide-theme(
+      (
+        min-height: 56px,
+        dismissible-padding-inline-end: spacing.variable(xxsmall),
+        padding-block: spacing.variable(xsmall)
+      )
+    );
   }
 
   :where(forge-banner:is(#{_theme-selector($_legacy-neutral-themes)})) {
-    @include _banner-colors(var(--forge-theme-bg-neutral-default), var(--forge-theme-text-high), var(--forge-theme-text-medium));
+    @include _banner-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-high),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-border-neutral-subtle)
+    );
   }
 
-  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])') {
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=critical], [theme=danger])') {
     :where(forge-banner#{$themes}) {
       @include _banner-colors(
         var(--forge-theme-bg-#{$role}-default),
         var(--forge-theme-on-#{$role}-container-low),
-        var(--forge-theme-on-#{$role}-container-low)
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-border-#{$role}-subtle)
       );
     }
   }
@@ -544,7 +619,9 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       var(--forge-theme-bg-info-default),
       var(--forge-theme-on-info-container-low),
       var(--forge-theme-border-info-default),
-      var(--forge-theme-on-info-container-low)
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-bg-info-subtle),
+      var(--forge-theme-border-info-subtle)
     );
   }
 
@@ -553,17 +630,21 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
       var(--forge-theme-bg-neutral-default),
       var(--forge-theme-text-high),
       var(--forge-theme-border-neutral-default),
-      var(--forge-theme-text-medium)
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-border-neutral-subtle)
     );
   }
 
-  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=danger])') {
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=critical], [theme=danger])') {
     :where(forge-inline-message#{$themes}) {
       @include _inline-message-colors(
         var(--forge-theme-bg-#{$role}-default),
         var(--forge-theme-on-#{$role}-container-low),
         var(--forge-theme-border-#{$role}-default),
-        var(--forge-theme-on-#{$role}-container-low)
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-border-#{$role}-subtle)
       );
     }
   }
