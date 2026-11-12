@@ -1,3 +1,4 @@
+@use '@tylertech/forge-tokens/sass/theme';
 @use './core' as *;
 @use '../base/core' as base-core;
 @use '../../divider';
@@ -33,6 +34,11 @@
 }
 
 :host([hover]) {
+  // Expanding on hover overlaps the content, so the background has to be opaque. This matches the translucent background over the page.
+  .forge-drawer {
+    @include base-core.override(background, var(--forge-drawer-background, #{theme.variable(surface-elevated)}), value);
+  }
+
   .right {
     position: absolute;
     right: 0;

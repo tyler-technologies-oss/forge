@@ -1,3 +1,4 @@
+@use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/typography';
 @use '../../badge';
@@ -70,16 +71,10 @@
 }
 
 @mixin marker {
-  @include badge.provide-theme(
-    (
-      color: #{token(marker-color)},
-      background: #{token(marker-background)}
-    )
-  );
   @include icon.provide-theme(
     (
       size: #{token(marker-size)},
-      color: #{token(marker-color)}
+      color: #{token(marker-icon-color)}
     )
   );
 
@@ -104,8 +99,11 @@
   background: #{token(marker-color)};
 }
 
+// Icon markers use the same background and foreground pairing as badges, over the same opaque backdrop
 @mixin icon {
-  background: #{token(marker-background)};
+  background:
+    linear-gradient(#{token(marker-background)} 0 0),
+    #{token(marker-backdrop)};
   padding: #{token(marker-padding)};
   border-radius: #{token(marker-shape)};
 }
@@ -136,5 +134,23 @@
 
 @mixin theme($theme) {
   @include override(marker-color, theme.variable($theme), value);
-  @include override(marker-background, theme.variable(#{$theme}-container-low), value);
+  @include override(marker-background, theme.variable(bg-#{$theme}-default), value);
+  @include override(marker-icon-color, theme.variable(on-#{$theme}-container-low), value);
+}
+
+// Badge markers keep their own theme and color. The line runs behind the marker, so an opaque backdrop keeps it from
+// showing through the badge's translucent background.
+@mixin badge {
+  background: #{token(marker-backdrop)};
+  border-radius: var(--forge-badge-shape, #{shape.variable(full)});
+}
+
+// A badge with no theme or color of its own follows the timeline item's theme, like an icon marker
+@mixin badge-theme {
+  @include badge.provide-theme(
+    (
+      background: #{token(marker-background)},
+      color: #{token(marker-icon-color)}
+    )
+  );
 }

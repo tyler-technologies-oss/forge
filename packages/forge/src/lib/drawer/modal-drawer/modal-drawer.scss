@@ -21,7 +21,10 @@
 @include base-core.core-styles;
 
 .forge-drawer {
+  @include tokens;
+
   &.modal {
+    @include base-core.override(border-width, 0, value);
     @include base;
 
     &.closing,

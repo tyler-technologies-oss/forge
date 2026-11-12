@@ -1,5 +1,5 @@
 @use '../../core/styles/tokens/drawer/modal/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: modal-drawer;
 $_tokens: tokens.$tokens;

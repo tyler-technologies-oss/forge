@@ -69,17 +69,17 @@ The styles are purely visual. Component behavior, attributes, and accessibility 
 
 | Component                                                                        | Where to add the class                                                  | What it styles                                                       |
 | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `forge-field`, `forge-text-field`, `forge-select`, `forge-chip-field`            | The component                                                           | Gradient outline, glow, and background                               |
-| `forge-autocomplete`, `forge-date-picker`, `forge-date-range-picker`, `forge-time-picker` | The picker, which styles the field nested directly inside of it | Gradient outline, glow, and background of the nested field           |
+| `forge-field`, `forge-text-field`, `forge-select`, `forge-chip-field`            | The component                                                           | Gradient background, tinted outline, and glow                        |
+| `forge-autocomplete`, `forge-date-picker`, `forge-date-range-picker`, `forge-time-picker` | The picker, which styles the field nested directly inside of it | Gradient background, tinted outline, and glow of the nested field    |
 
 ### Fields
 
-Fields get a gradient outline with a soft glow, and a gradient background that follows your light or dark theme. They keep working with their usual attributes,
+Fields get a gradient background with a soft glow around the edge, in colors that follow your light or dark theme. The outline draws over the gradient, so it picks up some of its color. They keep working with their usual attributes,
 so the AI styles can be combined with any `variant`. The `plain` variant has no outline or background of its own, so it only gets a gradient underline.
 
 <Canvas of={AIStylesStories.Variants} />
 
-Invalid fields keep their standard error outline instead of the gradient outline, and disabled fields are dimmed like any other disabled field.
+Invalid fields keep the glow around their standard error outline, and disabled fields are dimmed like any other disabled field.
 
 <Canvas of={AIStylesStories.States} />
 

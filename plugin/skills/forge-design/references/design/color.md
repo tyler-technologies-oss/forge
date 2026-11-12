@@ -51,6 +51,13 @@ There are two border families, each with its own job.
 
 **Tinted and role-based surfaces** use the `border-{role}` tokens, where the role is `neutral`, `info`, `success`, `warning`, `error`, `primary`, `secondary`, or `tertiary`. Each role has the same four steps: `subtle`, `default`, `strong`, and `strongest`. Use these when a component's border follows its theme, like an outlined banner, inline message, or badge, so switching the theme only swaps the role. `border-neutral-subtle` matches `outline-low`, and `border-neutral-strong` matches `outline`.
 
+**Elevated edges** use `--forge-theme-surface-elevated-ring`, a hairline that keeps the edge of a raised or floating surface visible in both themes. How it's drawn depends on whether the surface sits in the page layout:
+
+- Floating surfaces, such as popovers, menus, dialogs, and the modal drawer, draw it as a ring outside the surface with `box-shadow`, so it doesn't take up space. Their tokens are named `ring`, like `--forge-popover-ring-color`.
+- Surfaces in the page layout that can switch variants while the page is in use, such as a card switching from outlined to raised, draw it as a border, and keep the same border width in every variant. Only the color changes, so switching variants doesn't move or rewrap the content. Their tokens are named `outline`, like `--forge-card-raised-outline-color`.
+
+The same idea applies to any border that a variant adds. If the component already has a border, keep its width in every variant and change only its color. If it doesn't, draw the variant's border as an inset `box-shadow`, the way outlined banners, inline messages, and badges do, so it sits inside the edge without taking up space. Variants that are chosen once and don't switch at runtime, like a button's `variant`, don't need to match sizes exactly.
+
 ## Gradients
 
 Forge designs rarely use gradients. When one is needed, keep it subtle by moving between two close tones of the same color, such as `--forge-theme-surface-container-minimum` to `--forge-theme-surface-container-low`, or `--forge-theme-primary-container-minimum` to `--forge-theme-primary-container`. Avoid gradients between unrelated colors, like `primary` to `secondary`, and avoid saturated or dark tones.

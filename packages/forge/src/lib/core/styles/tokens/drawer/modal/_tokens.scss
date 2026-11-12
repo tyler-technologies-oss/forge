@@ -1,9 +1,12 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
-  background: utils.module-val(modal-drawer, background, theme.variable(surface-elevated))
+  background: utils.module-val(modal-drawer, background, theme.variable(surface-elevated)),
+  ring-width: utils.module-val(modal-drawer, ring-width, border.variable(thin)),
+  ring-color: utils.module-val(modal-drawer, ring-color, theme.variable(surface-elevated-ring))
 ) !default;
 
 @function get($key) {

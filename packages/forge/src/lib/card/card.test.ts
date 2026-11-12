@@ -33,21 +33,35 @@ describe('Card', () => {
   });
 
   it('should draw a hairline ring when raised', async () => {
-    const screen = render(html`<forge-card raised style="--forge-card-raised-ring-color: ${RING_TEST_COLOR}"></forge-card>`);
+    const screen = render(html`<forge-card raised style="--forge-card-raised-outline-color: ${RING_TEST_COLOR}"></forge-card>`);
     const el = screen.container.querySelector('forge-card') as ICardComponent;
     await el.updateComplete;
     const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
 
-    expect(getComputedStyle(rootEl).boxShadow).toContain(RING_TEST_COLOR);
+    expect(getComputedStyle(rootEl).borderTopColor).toBe(RING_TEST_COLOR);
   });
 
   it('should not draw a hairline ring when not raised', async () => {
-    const screen = render(html`<forge-card style="--forge-card-raised-ring-color: ${RING_TEST_COLOR}"></forge-card>`);
+    const screen = render(html`<forge-card style="--forge-card-raised-outline-color: ${RING_TEST_COLOR}"></forge-card>`);
     const el = screen.container.querySelector('forge-card') as ICardComponent;
     await el.updateComplete;
     const rootEl = el.shadowRoot?.querySelector('.forge-card') as HTMLElement;
 
-    expect(getComputedStyle(rootEl).boxShadow).not.toContain(RING_TEST_COLOR);
+    expect(getComputedStyle(rootEl).borderTopColor).not.toBe(RING_TEST_COLOR);
+  });
+
+  it('should keep the same size when raised', async () => {
+    const screen = render(html`<forge-card style="width: 120px">Some card content that wraps across lines</forge-card>`);
+    const el = screen.container.querySelector('forge-card') as ICardComponent;
+    await el.updateComplete;
+    const { width, height } = el.getBoundingClientRect();
+
+    el.raised = true;
+    await el.updateComplete;
+    const raisedRect = el.getBoundingClientRect();
+
+    expect(raisedRect.width).toBe(width);
+    expect(raisedRect.height).toBe(height);
   });
 
   it('should make slotted toolbars transparent', async () => {
