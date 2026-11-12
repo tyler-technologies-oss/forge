@@ -46,6 +46,14 @@ declare global {
  * @attribute {string | null | undefined} value Gets/sets the value using hex format only.
  *
  * @event {CustomEvent<IColorPickerChangeEventData>} forge-color-picker-change - Emits when the color value changed.
+ *
+ * @cssproperty --forge-color-picker-slider-thumb-shadow - The box shadow of the hue and opacity slider thumbs.
+ * @cssproperty --forge-color-picker-preview-shadow - The box shadow of the color preview circle.
+ * @cssproperty --forge-color-picker-preview-ring-shadow - An inset box shadow drawn above the color preview, used for an edge ring.
+ * @cssproperty --forge-color-picker-input-focus-color - The border color of the focused value inputs.
+ * @cssproperty --forge-color-picker-gradient-thumb-size - The overall size of the gradient thumb.
+ * @cssproperty --forge-color-picker-gradient-thumb-border-width - The border width of the gradient thumb.
+ * @cssproperty --forge-color-picker-gradient-thumb-shadow - The box shadow of the gradient thumb.
  */
 @customElement({
   name: COLOR_PICKER_CONSTANTS.elementName,

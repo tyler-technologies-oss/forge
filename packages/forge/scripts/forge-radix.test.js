@@ -261,6 +261,29 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should keep the app bar outline colors for CSS-only fields inside an app bar', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':where(.forge-field)')).toContain('--forge-field-default-outline-color:');
+      expect(getRule(stylesheet, ':where(:is(forge-app-bar, .forge-app-bar) .forge-field)')).toContain(
+        '--forge-field-default-outline-color: var(--forge-theme-outline-low'
+      );
+    }
+  });
+
+  it('should set the dark app bar edge as a hairline only in the dark theme', () => {
+    expect(dark).toMatch(/--forge-app-bar-elevation: inset 0 -1px 0 var\(--forge-theme-outline-low[,)]/);
+    expect(light).not.toContain('--forge-app-bar-elevation');
+  });
+
+  it('should set the color picker edge and thumb styling', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(stylesheet).toContain('--forge-color-picker-preview-ring-shadow: inset 0 0 0 1px var(--forge-theme-outline);');
+      expect(stylesheet).toContain('--forge-color-picker-gradient-thumb-size: 12px;');
+      expect(stylesheet).toContain('--forge-color-picker-input-focus-color: var(--forge-theme-focus-indicator);');
+    }
+    expect(defaultTheme).not.toContain('--forge-color-picker-');
+  });
+
   it('should set the readonly field colors', () => {
     for (const stylesheet of [light, dark]) {
       expect(stylesheet).toContain('--forge-field-readonly-background: var(--forge-theme-surface-transparent);');

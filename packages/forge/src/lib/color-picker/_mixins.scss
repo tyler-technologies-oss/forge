@@ -46,7 +46,7 @@
         height: 16px;
         width: 16px;
         background-color: white;
-        box-shadow: 0 1px 2px rgb(0, 0, 0, 0.3);
+        box-shadow: var(--forge-color-picker-slider-thumb-shadow, 0 1px 2px rgb(0, 0, 0, 0.3));
         position: absolute;
         border-radius: 50%;
         top: calc(50% - 8px);
@@ -64,11 +64,19 @@
     }
 
     &__color-preview-container {
+      position: relative;
       border-radius: 50%;
-      box-shadow:
-        0 0 2px 0 rgb(0, 0, 0, 0.54) inset,
-        0 0 2px 0 rgb(0, 0, 0, 0.54);
+      box-shadow: var(--forge-color-picker-preview-shadow, 0 0 2px 0 rgb(0, 0, 0, 0.54) inset, 0 0 2px 0 rgb(0, 0, 0, 0.54));
       overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow: var(--forge-color-picker-preview-ring-shadow, 0 0 #0000);
+        pointer-events: none;
+      }
     }
 
     &__color-preview {
@@ -116,8 +124,8 @@
           }
 
           &:focus {
-            border-color: #{theme.variable(primary)};
-            box-shadow: 0 0 0 1px inset #{theme.variable(primary)};
+            border-color: var(--forge-color-picker-input-focus-color, #{theme.variable(primary)});
+            box-shadow: 0 0 0 1px inset var(--forge-color-picker-input-focus-color, #{theme.variable(primary)});
           }
         }
 
@@ -206,15 +214,16 @@
 }
 
 @mixin gradient-thumb() {
-  border: 1px solid #fff;
+  border: var(--forge-color-picker-gradient-thumb-border-width, 1px) solid #fff;
   border-radius: 50%;
+  box-shadow: var(--forge-color-picker-gradient-thumb-shadow, none);
   // box-shadow: 0 0 3px rgba(0, 0, 0, 0.7), inset 0 0 2px rgba(0, 0, 0, 0.7);
   cursor: pointer;
   display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin-left: -5px;
-  margin-top: -5px;
+  height: var(--forge-color-picker-gradient-thumb-size, 10px);
+  width: var(--forge-color-picker-gradient-thumb-size, 10px);
+  margin-left: calc(var(--forge-color-picker-gradient-thumb-size, 10px) / -2);
+  margin-top: calc(var(--forge-color-picker-gradient-thumb-size, 10px) / -2);
   position: absolute;
   touch-action: none;
   user-select: none;
