@@ -383,10 +383,12 @@ describe('forge-radix stylesheets', () => {
   it('should map legacy and semantic badge themes without touching strong badges', () => {
     const notStrong = ':not([strong], :state(strong))';
     for (const stylesheet of [light, dark]) {
-      expect(getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`)).toContain(
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong}:not([color]), .forge-badge)`)).toContain(
         '--forge-badge-background: var(--forge-theme-bg-neutral-default);'
       );
-      expect(getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`)).toContain('--forge-badge-color: var(--forge-theme-text-medium);');
+      expect(getRule(stylesheet, `:where(forge-badge${notStrong}:not([color]), .forge-badge)`)).toContain(
+        '--forge-badge-color: var(--forge-theme-text-medium);'
+      );
       const themed = {
         ':is([theme=info], [theme=info-primary])': 'info',
         '[theme=success]': 'success',
@@ -406,7 +408,7 @@ describe('forge-radix stylesheets', () => {
   it('should map the badge outlined variant and the strong role colors', () => {
     const notStrong = ':not([strong], :state(strong))';
     for (const stylesheet of [light, dark]) {
-      const neutral = getRule(stylesheet, `:where(forge-badge${notStrong}, .forge-badge)`);
+      const neutral = getRule(stylesheet, `:where(forge-badge${notStrong}:not([color]), .forge-badge)`);
       expect(neutral).toContain('--forge-badge-outlined-background: var(--forge-theme-bg-neutral-subtle);');
       expect(neutral).toContain('--forge-badge-outlined-border-color: var(--forge-theme-border-neutral-subtle);');
       expect(getRule(stylesheet, ':where(forge-badge:is([strong], :state(strong))[theme=success])')).toContain(

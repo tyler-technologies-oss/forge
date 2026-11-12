@@ -537,7 +537,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 
   $_not-strong: ':not([strong], :state(strong))';
 
-  :where(forge-badge#{$_not-strong}, .forge-badge) {
+  :where(forge-badge#{$_not-strong}:not([color]), .forge-badge) {
     @include _badge-colors(
       var(--forge-theme-bg-neutral-default),
       var(--forge-theme-text-medium),
