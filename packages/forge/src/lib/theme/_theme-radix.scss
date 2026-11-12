@@ -393,6 +393,7 @@ $_icon-button-themes: primary, secondary, tertiary, success, error, warning, inf
 }
 
 @mixin _calendar {
+  --forge-calendar-menu-background: transparent;
   --forge-calendar-theme-today-color: var(--forge-theme-on-primary-container-minimum);
 }
 

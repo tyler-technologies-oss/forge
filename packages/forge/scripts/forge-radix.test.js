@@ -228,6 +228,13 @@ describe('forge-radix stylesheets', () => {
     }
   });
 
+  it('should make the calendar menu transparent so it matches the surface behind it', () => {
+    for (const stylesheet of [light, dark]) {
+      expect(getRule(stylesheet, ':root')).toContain('--forge-calendar-menu-background: transparent;');
+    }
+    expect(defaultTheme).not.toContain('--forge-calendar-menu-background: transparent');
+  });
+
   it('should set the border colors of tables, split view handles, scrollable dialogs, and calendar menus', () => {
     for (const stylesheet of [light, dark]) {
       expect(getRule(stylesheet, ':where(forge-table)')).toContain('--forge-table-theme-border-color: var(--forge-theme-outline-low);');

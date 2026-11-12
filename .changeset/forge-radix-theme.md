@@ -18,3 +18,5 @@ Adds the `--forge-color-picker-slider-thumb-shadow`, `--forge-color-picker-previ
 The color picker opacity track now fills with the selected color, the gradient and slider thumbs show a focus indicator when focused, and the value inputs now animate their border color on focus (the transition named a misspelled property).
 
 Adds the `--forge-chip-border-tint` and `--forge-chip-invalid-border-tint` custom properties. The chip border color is now drawn as an outline over the tinted border, which is transparent by default. Default chips render the same except for sub-pixel anti-aliasing along the rounded edge of selected chips.
+
+Adds the `--forge-calendar-menu-background` custom property, which defaults to the current surface colors. The calendar date view is now hidden, with a short fade, while the month or year menu is open, so the menu can be transparent.

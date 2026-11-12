@@ -129,7 +129,7 @@
 }
 
 @mixin base() {
-  background-color: #{theme.variable(surface)};
+  background-color: var(--forge-calendar-menu-background, #{theme.variable(surface)});
   position: relative;
   height: 100%;
   width: 100%;
@@ -137,7 +137,7 @@
 }
 
 @mixin popup-context-base() {
-  background-color: #{theme.variable(surface-bright)};
+  background-color: var(--forge-calendar-menu-background, #{theme.variable(surface-bright)});
 }
 
 @mixin view() {
