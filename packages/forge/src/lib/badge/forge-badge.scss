@@ -12,6 +12,14 @@
     @include core.dot;
   }
 
+  &--strong {
+    @include core.strong;
+  }
+
+  &--outlined:not(.forge-badge--strong) {
+    @include core.outlined;
+  }
+
   forge-icon,
   .forge-icon,
   .forge-badge__icon {

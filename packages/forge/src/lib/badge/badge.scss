@@ -62,6 +62,17 @@
 }
 
 //
+// Strong
+//
+
+// Placed before the themes so that a theme's strong colors take precedence
+:host(:where([strong], :state(strong))) {
+  .forge-badge {
+    @include strong;
+  }
+}
+
+//
 // Themes
 //
 
@@ -71,6 +82,8 @@
     .forge-badge {
       @include override(background, theme.variable(#{$theme}-container), value);
       @include override(color, theme.variable(on-#{$theme}-container), value);
+      @include override(outlined-color, theme.variable(on-#{$theme}-container), value);
+      @include override(outlined-border-color, theme.variable($theme), value);
     }
   }
 
@@ -82,14 +95,16 @@
   }
 }
 
-// Map both "error" and "danger" for backwards compatibility with legacy "danger" theme
-:host(:not(:where([strong], :state(strong))):is([theme='error'], [theme='danger'])) {
+// Map "error", "critical", and "danger" (legacy) to the same appearance
+:host(:not(:where([strong], :state(strong))):is([theme='error'], [theme='critical'], [theme='danger'])) {
   .forge-badge {
     @include override(background, theme.variable(error-container-low), value);
     @include override(color, theme.variable(error), value);
+    @include override(outlined-color, theme.variable(error), value);
+    @include override(outlined-border-color, theme.variable(error), value);
   }
 }
-:host(:where([strong], :state(strong)):is([theme='error'], [theme='danger'])) {
+:host(:where([strong], :state(strong)):is([theme='error'], [theme='critical'], [theme='danger'])) {
   .forge-badge {
     @include override(background, theme.variable(error), value);
     @include override(color, theme.variable(on-error), value);
@@ -101,6 +116,8 @@
   .forge-badge {
     @include override(background, theme.variable(info-container), value);
     @include override(color, theme.variable(on-info-container), value);
+    @include override(outlined-color, theme.variable(on-info-container), value);
+    @include override(outlined-border-color, theme.variable(info), value);
   }
 }
 :host(:where([strong], :state(strong)):is([theme='info'], [theme='info-primary'])) {
@@ -115,11 +132,57 @@
   .forge-badge {
     @include override(background, theme.variable(surface-container-low), value);
     @include override(color, theme.variable(on-surface-container-low), value);
+    @include override(outlined-color, theme.variable(on-surface-container-low), value);
   }
 }
 :host(:where([strong], :state(strong))[theme='info-secondary']) {
   .forge-badge {
     @include override(background, theme.variable(surface-inverse), value);
     @include override(color, theme.variable(on-surface-inverse), value);
+  }
+}
+
+//
+// Color
+//
+
+$_hues: gray gold bronze brown yellow amber orange tomato red ruby crimson pink plum purple violet iris indigo blue cyan teal jade green grass lime mint sky;
+
+// The hue custom properties are provided by the Radix theme. Without them, color renders as a neutral badge.
+@function _hue($hue, $step, $fallback) {
+  @return var(--forge-color-#{$hue}-#{$step}, #{$fallback});
+}
+
+@each $hue in $_hues {
+  :host([color='#{$hue}']) {
+    .forge-badge {
+      @include override(background, _hue($hue, a3, theme.variable(surface-container-low)), value);
+      @include override(color, _hue($hue, a12, theme.variable(on-surface-container-low)), value);
+      @include override(outlined-background, _hue($hue, a2, transparent), value);
+      @include override(outlined-color, _hue($hue, a12, theme.variable(on-surface-container-low)), value);
+      @include override(outlined-border-color, _hue($hue, a6, theme.variable(outline-low)), value);
+      @include override(strong-background, _hue($hue, solid, theme.variable(surface-inverse)), value);
+      @include override(strong-color, _hue($hue, contrast, theme.variable(on-surface-inverse)), value);
+    }
+  }
+}
+
+//
+// Outlined
+//
+
+:host([variant='outlined']:not([strong], :state(strong))) {
+  .forge-badge {
+    @include outlined;
+  }
+}
+
+//
+// Strong with color
+//
+
+:host(:where([strong], :state(strong))[color]) {
+  .forge-badge {
+    @include strong;
   }
 }

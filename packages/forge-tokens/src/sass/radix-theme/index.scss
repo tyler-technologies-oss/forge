@@ -1,6 +1,7 @@
 @use '../utils';
 @use '../tokens/theme-radix-light' as light;
 @use '../tokens/theme-radix-dark' as dark;
+@use './accent';
 
 ///
 /// Emits custom property declarations for all Radix light theme tokens.
@@ -9,6 +10,7 @@
   @each $token-name, $token-value in light.$tokens {
     @include utils.declare-var(theme, $token-name, $token-value);
   }
+  @include accent.accent-properties;
 }
 
 ///
@@ -18,4 +20,5 @@
   @each $token-name, $token-value in dark.$tokens {
     @include utils.declare-var(theme, $token-name, $token-value);
   }
+  @include accent.accent-properties-dark;
 }
