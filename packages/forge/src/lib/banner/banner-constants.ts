@@ -1,4 +1,4 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants.js';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}banner`;
 
@@ -6,7 +6,8 @@ const observedAttributes = {
   DISMISSED: 'dismissed',
   PERSISTENT: 'persistent',
   CAN_DISMISS: 'can-dismiss',
-  THEME: 'theme'
+  THEME: 'theme',
+  VARIANT: 'variant'
 };
 
 const attributes = {
@@ -25,7 +26,8 @@ const selectors = {
 };
 
 const defaults = {
-  THEME: 'info' as BannerTheme
+  THEME: 'info' as BannerTheme,
+  VARIANT: 'tonal' as BannerVariant
 };
 
 const events = {
@@ -43,4 +45,7 @@ export const BANNER_CONSTANTS = {
   events
 };
 
-export type BannerTheme = Theme | 'danger' | 'info-secondary';
+/** @deprecated These themes are kept for compatibility. Use `default`, `info`, `success`, `warning`, `error`, or `critical` instead. */
+type LegacyBannerThemes = 'primary' | 'secondary' | 'tertiary' | 'info-secondary' | 'danger';
+export type BannerTheme = 'default' | 'info' | 'success' | 'warning' | 'error' | 'critical' | LegacyBannerThemes;
+export type BannerVariant = 'tonal' | 'outlined';
