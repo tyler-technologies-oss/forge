@@ -8,7 +8,7 @@ export interface IBannerAdapter extends IBaseAdapter {
   setDismissButtonVisibility(visible: boolean): void;
   addDismissListener(callback: EventListener): void;
   removeDismissListener(callback: EventListener): void;
-  startDismissCompleteListener(): Promise<void>;
+  waitForTransitions(): Promise<void>;
   setDismissed(value: boolean): void;
 }
 
@@ -50,10 +50,9 @@ export class BannerAdapter extends BaseAdapter<IBannerComponent> implements IBan
     this._rootElement.inert = value;
   }
 
-  public async startDismissCompleteListener(): Promise<void> {
-    return new Promise<void>(resolve => {
-      this._rootElement.addEventListener('transitionend', () => resolve(), { once: true });
-    });
+  public async waitForTransitions(): Promise<void> {
+    const transitions = this._rootElement.getAnimations().filter(animation => animation instanceof CSSTransition);
+    await Promise.allSettled(transitions.map(transition => transition.finished));
   }
 
   private _onIconSlotChange(): void {

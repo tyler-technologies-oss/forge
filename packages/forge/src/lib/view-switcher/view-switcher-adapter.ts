@@ -250,7 +250,7 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
 
     // We only animate the height if it is different...
     if (fromViewHeight !== toViewHeight) {
-      this._rootElement.addEventListener('transitionend', this._onRootTransitionEnd.bind(this));
+      this._rootElement.addEventListener('transitionend', this._onRootTransitionEnd);
 
       // Set to the height of the current view so we can animate the height from something static
       this._setHeight(fromViewHeight);
@@ -260,6 +260,14 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
         window.requestAnimationFrame(() => {
           // Start the transition to the new view height
           this._setHeight(toViewHeight);
+
+          // Without a running transition, `transitionend` never fires to release the static height
+          const isTransitioning = this._rootElement
+            .getAnimations()
+            .some(animation => animation instanceof CSSTransition && animation.transitionProperty === 'height');
+          if (!isTransitioning) {
+            this._releaseHeight();
+          }
         });
       });
     }
@@ -269,12 +277,16 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
    * Handles the root container transitionend event.
    * @param evt The transition event.
    */
-  private _onRootTransitionEnd(evt: TransitionEvent): void {
-    if (evt.propertyName === 'height') {
-      this._rootElement.removeEventListener('transitionend', this._onRootTransitionEnd);
-      // Removes the static height from the root element so that it can grow with content
-      this._rootElement.style.removeProperty('height');
+  private _onRootTransitionEnd = (evt: TransitionEvent): void => {
+    if (evt.target === this._rootElement && evt.propertyName === 'height') {
+      this._releaseHeight();
     }
+  };
+
+  /** Removes the static height from the root element so that it can grow with content. */
+  private _releaseHeight(): void {
+    this._rootElement.removeEventListener('transitionend', this._onRootTransitionEnd);
+    this._rootElement.style.removeProperty('height');
   }
 
   /**

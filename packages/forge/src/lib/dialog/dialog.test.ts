@@ -902,6 +902,54 @@ describe('Dialog', () => {
 
       expect(harness.isOpen).toBe(false);
     });
+
+    it('should stay open when reopened during the exit animation', async () => {
+      const harness = await createFixture({ open: true });
+      const openSpy = vi.fn();
+      const closeSpy = vi.fn();
+      harness.element.addEventListener(DIALOG_CONSTANTS.events.OPEN, openSpy);
+      harness.element.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
+      harness.element.open = false;
+      await frame();
+      harness.element.open = true;
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(true);
+      expect(harness.backdropElement.visible).toBe(true);
+      expect(getComputedStyle(harness.surfaceElement).opacity).toBe('1');
+      expect(openSpy).not.toHaveBeenCalled();
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should dismiss with escape after being reopened during the exit animation', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.element.open = false;
+      await frame();
+      harness.element.open = true;
+      await harness.pressEscapeKey();
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(false);
+      expect(harness.nativeDialogElement.open).toBe(false);
+    });
+
+    it('should close when closed again after being reopened during the exit animation', async () => {
+      const harness = await createFixture({ open: true });
+      const closeSpy = vi.fn();
+      harness.element.addEventListener(DIALOG_CONSTANTS.events.CLOSE, closeSpy);
+
+      harness.element.open = false;
+      await frame();
+      harness.element.open = true;
+      harness.element.open = false;
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(false);
+      expect(harness.nativeDialogElement.open).toBe(false);
+      expect(closeSpy).toHaveBeenCalledOnce();
+    });
   });
 
   describe('events', () => {

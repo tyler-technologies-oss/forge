@@ -45,9 +45,11 @@ export class BannerCore implements IBannerCore {
       return;
     }
 
-    const dismissComplete = this._adapter.startDismissCompleteListener();
     this.dismissed = !this._dismissed;
-    await dismissComplete;
+    await this._adapter.waitForTransitions();
+    if (!this._dismissed) {
+      return;
+    }
     this._adapter.dispatchHostEvent(new CustomEvent(BANNER_CONSTANTS.events.DISMISSED, { bubbles: true, composed: true }));
   }
 

@@ -452,9 +452,8 @@ describe('AppLauncher', () => {
       expect(popover).toBeTruthy();
 
       popover?.dispatchEvent(new CustomEvent('forge-popover-toggle', { detail: { newState: 'closed' }, bubbles: true }));
-      await harness.element.updateComplete;
 
-      expect(harness.element.open).toBe(false);
+      await vi.waitFor(() => expect(harness.element.open).toBe(false));
     });
 
     it('should not reset state when popover toggle event has non-closed state', async () => {
@@ -606,8 +605,7 @@ describe('AppLauncher', () => {
       expect(popoverHarness.popover).toBeTruthy();
 
       popoverHarness.popover?.dispatchEvent(new CustomEvent('forge-popover-toggle', { detail: { newState: 'closed' }, bubbles: true }));
-      await popoverHarness.element.updateComplete;
-      expect(popoverHarness.element.open).toBe(false);
+      await vi.waitFor(() => expect(popoverHarness.element.open).toBe(false));
     });
   });
 

@@ -1,4 +1,5 @@
-import { getShadowElement, playKeyframeAnimation, toggleAttribute } from '@tylertech/forge-core';
+import { getShadowElement, toggleAttribute } from '@tylertech/forge-core';
+import { playClassAnimation } from '../../core/utils/animation-utils.js';
 
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
 import { ISplitViewPanelComponent } from './split-view-panel.js';
@@ -43,6 +44,7 @@ export interface ISplitViewPanelAdapter extends IBaseAdapter {
 
 export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent> implements ISplitViewPanelAdapter {
   private _root: HTMLElement;
+  private _openAnimationId = 0;
   private _handle: HTMLElement;
   private _icon: IIconComponent;
   private _stateLayer: IStateLayerComponent;
@@ -172,7 +174,7 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
    * @param value Whether the component is open.
    * @param withAnimation Whether to use the animation. Defaults to `true`.
    */
-  public setOpen(value: boolean, withAnimation = true, event?: ISplitViewPanelOpenEvent): void {
+  public async setOpen(value: boolean, withAnimation = true, event?: ISplitViewPanelOpenEvent): Promise<void> {
     const finish = (): void => {
       if (!value) {
         this._root.classList.add(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
@@ -184,28 +186,25 @@ export class SplitViewPanelAdapter extends BaseAdapter<ISplitViewPanelComponent>
       this._parent?.update({ accessibility: true, cursor: true });
     };
 
-    if (value && this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
-      this._root.classList.remove(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED);
+    const { CLOSED, CLOSING, OPENING } = SPLIT_VIEW_PANEL_CONSTANTS.classes;
+    const classList = this._root.classList;
+    const isOpen = !classList.contains(CLOSED) && !classList.contains(CLOSING);
+    if (value === isOpen) {
+      return;
+    }
 
-      if (!withAnimation) {
-        finish();
-        return;
-      }
+    const animationId = ++this._openAnimationId;
+    classList.remove(CLOSED, CLOSING, OPENING);
 
-      this._parent?.layerSlottedPanels(this._component);
-      playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.OPENING, true).then(() => {
-        finish();
-      });
-    } else if (!value && !this._root.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)) {
-      if (!withAnimation) {
-        finish();
-        return;
-      }
+    if (!withAnimation) {
+      finish();
+      return;
+    }
 
-      this._parent?.layerSlottedPanels(this._component);
-      playKeyframeAnimation(this._root, SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSING, true).then(() => {
-        finish();
-      });
+    this._parent?.layerSlottedPanels(this._component);
+    const finished = await playClassAnimation(this._root, value ? OPENING : CLOSING);
+    if (finished && animationId === this._openAnimationId) {
+      finish();
     }
   }
 

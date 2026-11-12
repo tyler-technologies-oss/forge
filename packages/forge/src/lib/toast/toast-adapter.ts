@@ -1,4 +1,5 @@
-import { getShadowElement, playKeyframeAnimation } from '@tylertech/forge-core';
+import { getShadowElement } from '@tylertech/forge-core';
+import { playClassAnimation } from '../core/utils/animation-utils.js';
 import { type ButtonComponent } from '../button/button.js';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
 import { type IconButtonComponent } from '../icon-button/icon-button.js';
@@ -8,7 +9,7 @@ import { TOAST_CONSTANTS } from './toast-constants.js';
 
 export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
   show(): void;
-  hide(): void;
+  hide(): Promise<boolean>;
   getMessageText(): string;
   addCloseListener(listener: EventListener): void;
   removeCloseListener(listener: EventListener): void;
@@ -31,6 +32,7 @@ export interface IToastAdapter extends IBaseAdapter<IToastComponent> {
 export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToastAdapter {
   private _overlayElement: IOverlayComponent;
   private _surfaceElement: HTMLElement;
+  private _hideId = 0;
   private _actionButtonElement: ButtonComponent;
   private _closeButtonElement: IconButtonComponent;
 
@@ -43,12 +45,19 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
   }
 
   public show(): void {
+    this._hideId++;
+    this._surfaceElement.classList.remove(TOAST_CONSTANTS.classes.EXITING);
     this._overlayElement.open = true;
   }
 
-  public async hide(): Promise<void> {
-    await playKeyframeAnimation(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
+  public async hide(): Promise<boolean> {
+    const hideId = ++this._hideId;
+    const finished = await playClassAnimation(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
+    if (!finished || hideId !== this._hideId) {
+      return false;
+    }
     this._overlayElement.open = false;
+    return true;
   }
 
   public getMessageText(): string {

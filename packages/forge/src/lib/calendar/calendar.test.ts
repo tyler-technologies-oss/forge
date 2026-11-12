@@ -525,6 +525,22 @@ describe('Calendar', () => {
       expect(harness.menu.hasAttribute('hidden')).toBe(true);
     });
 
+    it('should keep the menu open when reopened while it is closing', async () => {
+      const harness = await createFixture();
+      const yearButton = harness.yearButton;
+      yearButton.click();
+      await task(300);
+      yearButton.click();
+      await task();
+      yearButton.click();
+      await task(300);
+
+      const menu = harness.menu.shadowRoot as ShadowRoot;
+      expect(harness.menu.hasAttribute('hidden')).toBe(false);
+      expect(menu.querySelectorAll(CALENDAR_MENU_CONSTANTS.selectors.ITEM).length).toBeGreaterThan(0);
+      expect(menu.querySelectorAll(CALENDAR_MENU_CONSTANTS.selectors.VIEW).length).toBe(1);
+    });
+
     it('should call the dateSelectCallback when a date is selected', async () => {
       const harness = await createFixture();
       const dateSelectSpy = vi.fn();

@@ -125,6 +125,69 @@ describe('Popover', () => {
     });
   });
 
+  describe('interrupted exit animation', () => {
+    it('should report closed while the exit animation runs', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.popoverElement.open = false;
+
+      expect(harness.popoverElement.open).toBe(false);
+      expect(harness.popoverElement.overlay.open).toBe(true);
+    });
+
+    it('should stay open when reopened before the exit animation starts', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.popoverElement.open = false;
+      harness.popoverElement.open = true;
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(true);
+    });
+
+    it('should stay open when reopened during the exit animation', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.popoverElement.open = false;
+      await frame();
+      await frame();
+      harness.popoverElement.open = true;
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(true);
+      expect(getComputedStyle(harness.surfaceElement).opacity).toBe('1');
+    });
+
+    it('should close when closed again after being reopened during the exit animation', async () => {
+      const harness = await createFixture({ open: true });
+
+      harness.popoverElement.open = false;
+      await frame();
+      await frame();
+      harness.popoverElement.open = true;
+      harness.popoverElement.open = false;
+      await harness.exitAnimation();
+      await frame();
+
+      expect(harness.popoverElement.open).toBe(false);
+      expect(harness.popoverElement.overlay.open).toBe(false);
+      expect(harness.popoverElement.hasAttribute(POPOVER_CONSTANTS.attributes.OPEN)).toBe(false);
+    });
+
+    it('should not dispatch a toggle event for a dismissal that was interrupted by reopening', async () => {
+      const harness = await createFixture({ open: true });
+      const toggleSpy = vi.fn();
+      harness.popoverElement.addEventListener(POPOVER_CONSTANTS.events.TOGGLE, toggleSpy);
+
+      await harness.pressEscapeKey();
+      harness.popoverElement.open = true;
+      await harness.exitAnimation();
+
+      expect(harness.isOpen).toBe(true);
+      expect(toggleSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('overlay aware', () => {
     it('should set inline', async () => {
       const harness = await createFixture();

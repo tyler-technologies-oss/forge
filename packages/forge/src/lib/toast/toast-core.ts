@@ -22,6 +22,7 @@ export class ToastCore implements IToastCore {
   private _dismissLabel: string;
   private _theme: ToastTheme = TOAST_CONSTANTS.defaults.THEME;
   private _hideTimeout: number | undefined;
+  private _closing?: Promise<void>;
   private _actionListener: EventListener = this._onAction.bind(this);
   private _closeListener: EventListener = this._onClose.bind(this);
   private _isHovered = false;
@@ -49,6 +50,7 @@ export class ToastCore implements IToastCore {
   }
 
   public show(): void {
+    this._closing = undefined;
     this._adapter.show();
 
     const message = this._adapter.getMessageText();
@@ -70,7 +72,12 @@ export class ToastCore implements IToastCore {
     this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
   }
 
-  public async hide({ dispatchEvent = true } = {}): Promise<void> {
+  public hide({ dispatchEvent = true } = {}): Promise<void> {
+    this._closing ??= this._hide(dispatchEvent);
+    return this._closing;
+  }
+
+  private async _hide(dispatchEvent: boolean): Promise<void> {
     if (this._hideTimeout) {
       window.clearTimeout(this._hideTimeout);
       this._hideTimeout = undefined;
@@ -81,8 +88,12 @@ export class ToastCore implements IToastCore {
 
     DismissibleStack.instance.remove(this._adapter.hostElement as IDismissible);
 
-    await this._adapter.hide();
+    const closed = await this._adapter.hide();
+    if (!closed) {
+      return;
+    }
 
+    this._closing = undefined;
     this._open = false;
     this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
 
@@ -121,7 +132,7 @@ export class ToastCore implements IToastCore {
   }
 
   private _handleKeyboard(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this._open) {
+    if (event.key === 'Escape' && this.open) {
       event.stopPropagation();
       DismissibleStack.instance.dismiss(this._adapter.hostElement as IDismissible, { reason: 'escape' });
     }
@@ -159,11 +170,11 @@ export class ToastCore implements IToastCore {
   }
 
   public get open(): boolean {
-    return this._open;
+    return this._open && !this._closing;
   }
   public set open(value: boolean) {
     value = Boolean(value);
-    if (this._open !== value) {
+    if (this.open !== value) {
       if (this._adapter.isConnected) {
         if (value) {
           this.show();
@@ -172,8 +183,8 @@ export class ToastCore implements IToastCore {
         }
       } else {
         this._open = value;
+        this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
       }
-      this._adapter.toggleHostAttribute(TOAST_CONSTANTS.attributes.OPEN, this._open);
     }
   }
 

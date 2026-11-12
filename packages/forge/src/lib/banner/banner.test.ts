@@ -159,6 +159,36 @@ describe('Banner', () => {
       expect(dismissSpy).toHaveBeenCalledOnce();
     });
 
+    it('should dispatch dismissed event when the dismiss transition is turned off', async () => {
+      const screen = render(html`<forge-banner style="--forge-banner-transition-duration: 0s"></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      const dismissSpy = vi.fn();
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+
+      dismissButton.click();
+      await task();
+
+      expect(el.dismissed).toBe(true);
+      expect(dismissSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should not dispatch dismissed event when shown again before the dismiss transition ends', async () => {
+      const screen = render(html`<forge-banner></forge-banner>`);
+      const el = screen.container.querySelector('forge-banner') as IBannerComponent;
+      const dismissButton = el.shadowRoot?.querySelector(BANNER_CONSTANTS.selectors.DISMISS_BUTTON) as HTMLButtonElement;
+      const dismissSpy = vi.fn();
+      el.addEventListener(BANNER_CONSTANTS.events.DISMISSED, dismissSpy);
+
+      dismissButton.click();
+      await frame();
+      el.dismissed = false;
+      await task(DISMISS_ANIMATION_TIMEOUT);
+
+      expect(el.dismissed).toBe(false);
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
     it('should dispatch dismissed event when dismiss button is clicked', async () => {
       const screen = render(html`<forge-banner></forge-banner>`);
       const el = screen.container.querySelector('forge-banner') as IBannerComponent;

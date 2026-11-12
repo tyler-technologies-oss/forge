@@ -327,6 +327,33 @@ describe('Expansion Panel', () => {
   });
 
   describe('hidden until-found', () => {
+    it('should set hidden="until-found" right after closing when reduced motion is preferred', async () => {
+      const screen = render(html`
+        <forge-expansion-panel open>
+          <button slot="header">Header</button>
+          <div>Searchable content</div>
+        </forge-expansion-panel>
+      `);
+      const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+      await task();
+      const contentEl = getContentElement(el);
+      const originalMatchMedia = window.matchMedia;
+      const matchMediaSpy = vi
+        .spyOn(window, 'matchMedia')
+        .mockImplementation(query =>
+          query.includes('prefers-reduced-motion') ? ({ matches: true } as MediaQueryList) : originalMatchMedia.call(window, query)
+        );
+
+      try {
+        el.open = false;
+        await el.updateComplete;
+
+        expect(contentEl.getAttribute('hidden')).toBe('until-found');
+      } finally {
+        matchMediaSpy.mockRestore();
+      }
+    });
+
     it('should set hidden="until-found" on content element when closed', async () => {
       const screen = render(html`
         <forge-expansion-panel>

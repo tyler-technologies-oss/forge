@@ -1,4 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
+import { playClassAnimation } from '../core/utils/animation-utils.js';
 import { prefersReducedMotion } from '../core/utils/feature-detection.js';
 import { VirtualElement } from '../core/utils/position-utils.js';
 import { checkVisibility, frame } from '../core/utils/utils.js';
@@ -17,7 +18,7 @@ export interface IPopoverAdapter extends IOverlayAwareAdapter<IPopoverComponent>
   removeAnchorListener(type: string, listener: EventListener): void;
   addSurfaceListener(type: string, listener: EventListener): void;
   removeSurfaceListener(type: string, listener: EventListener): void;
-  hide(): Promise<void>;
+  hide(): Promise<boolean>;
   setOverlayOpen(newState: boolean): void;
   toggleArrow(value: boolean): void;
   isChildElement(element: HTMLElement): boolean;
@@ -28,6 +29,7 @@ export interface IPopoverAdapter extends IOverlayAwareAdapter<IPopoverComponent>
 
 export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> implements IPopoverAdapter {
   private _surfaceElement: HTMLElement;
+  private _hideId = 0;
   private _arrowElement: HTMLElement | undefined;
 
   constructor(component: IPopoverComponent) {
@@ -80,40 +82,44 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
   }
 
   public setOverlayOpen(newState: boolean): void {
+    this._hideId++;
     this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
     this._overlayElement.open = newState;
     this._updateAnchorExpandedState(newState);
   }
 
-  public async hide(): Promise<void> {
+  public async hide(): Promise<boolean> {
+    const hideId = ++this._hideId;
+
     if (prefersReducedMotion()) {
-      this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
-      this._overlayElement.open = false;
-      this._updateAnchorExpandedState(false);
-      return Promise.resolve();
+      this._closeOverlay();
+      return true;
     }
 
     await frame();
 
-    if (!checkVisibility(this._surfaceElement)) {
-      this._overlayElement.open = false;
-      this._updateAnchorExpandedState(false);
-      return Promise.resolve();
+    if (hideId !== this._hideId) {
+      return false;
     }
 
-    return new Promise(resolve => {
-      this._surfaceElement.addEventListener(
-        'animationend',
-        () => {
-          this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
-          this._overlayElement.open = false;
-          this._updateAnchorExpandedState(false);
-          resolve();
-        },
-        { once: true }
-      );
-      this._surfaceElement.classList.add(POPOVER_CONSTANTS.classes.EXITING);
-    });
+    if (!checkVisibility(this._surfaceElement)) {
+      this._closeOverlay();
+      return true;
+    }
+
+    const finished = await playClassAnimation(this._surfaceElement, POPOVER_CONSTANTS.classes.EXITING);
+    if (!finished || hideId !== this._hideId) {
+      return false;
+    }
+
+    this._closeOverlay();
+    return true;
+  }
+
+  private _closeOverlay(): void {
+    this._surfaceElement.classList.remove(POPOVER_CONSTANTS.classes.EXITING);
+    this._overlayElement.open = false;
+    this._updateAnchorExpandedState(false);
   }
 
   public toggleArrow(value: boolean): void {

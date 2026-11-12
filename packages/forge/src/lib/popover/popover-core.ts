@@ -35,6 +35,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
   private _anchor: string | null = null;
   private _arrow = false;
   private _animationType: PopoverAnimationType = 'zoom';
+  private _closing?: Promise<boolean>;
   private _triggerTypes: PopoverTriggerType[] = [POPOVER_CONSTANTS.defaults.TRIGGER_TYPE];
   private _persistentHover = false;
   private _hoverDismissDelay = POPOVER_HOVER_TIMEOUT;
@@ -117,8 +118,8 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     this._removeTriggerListeners();
   }
 
-  public hideAsync(): Promise<void> {
-    return this._closePopover();
+  public async hideAsync(): Promise<void> {
+    await this._closePopover();
   }
 
   protected async _onOverlayLightDismiss(evt: CustomEvent<OverlayLightDismissEventData>): Promise<void> {
@@ -135,7 +136,10 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
     const previousFocusedEl = this._previouslyFocusedElement;
 
-    this._closePopover().then(() => {
+    this._closePopover().then(closed => {
+      if (!closed) {
+        return;
+      }
       this._dispatchToggleEvent();
 
       if (reason === 'escape' && previousFocusedEl && this._adapter.hasFocus()) {
@@ -159,6 +163,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     }
 
     this._previouslyFocusedElement = this._adapter.captureFocusedElement();
+    this._closing = undefined;
     this._adapter.setOverlayOpen(true);
 
     // Popovers can be distinct from each other, meaning that only one popover with the same distinct
@@ -182,9 +187,12 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
     }
   }
 
-  private async _closePopover(): Promise<void> {
+  private _closePopover(): Promise<boolean> {
+    if (this._closing) {
+      return this._closing;
+    }
     if (!this.open) {
-      return;
+      return Promise.resolve(false);
     }
 
     this._previouslyFocusedElement = null;
@@ -192,11 +200,18 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
 
     if (this._animationType === 'none') {
       this._adapter.setOverlayOpen(false);
-    } else {
-      await this._adapter.hide();
+      this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
+      return Promise.resolve(true);
     }
 
-    this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
+    this._closing = this._adapter.hide().then(closed => {
+      if (closed) {
+        this._closing = undefined;
+        this._adapter.toggleHostAttribute(POPOVER_CONSTANTS.attributes.OPEN, this.open);
+      }
+      return closed;
+    });
+    return this._closing;
   }
 
   private _dispatchBeforetoggleEvent(): CustomEvent<IPopoverToggleEventData> {
@@ -365,7 +380,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
    */
   private _onAnchorMouseenter(): void {
     window.clearTimeout(this._hoverAnchorLeaveTimeout);
-    if (!this._adapter.overlayElement.open) {
+    if (!this.open) {
       if (!this._persistentHover) {
         this._adapter.addAnchorListener('mouseleave', this._anchorMouseleaveListener);
       }
@@ -435,7 +450,7 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
    * Handles `focusin` events on the anchor element. This is used to determine if focus has been received on the anchor element when using the "focus" trigger type.
    */
   private _onAnchorFocus(_evt: FocusEvent): void {
-    if (!this._adapter.overlayElement.open) {
+    if (!this.open) {
       this._adapter.addAnchorListener('focusout', this._anchorBlurListener);
       this._openPopover();
     }
@@ -484,10 +499,10 @@ export class PopoverCore extends WithLongpressListener(OverlayAwareCore<IPopover
    */
 
   public override get open(): boolean {
-    return this._adapter.overlayElement.open;
+    return this._adapter.overlayElement.open && !this._closing;
   }
   public override set open(value: boolean) {
-    if (this._adapter.overlayElement.open !== value) {
+    if (this.open !== value) {
       if (value) {
         this._openPopover({ dispatchEvents: false });
       } else {

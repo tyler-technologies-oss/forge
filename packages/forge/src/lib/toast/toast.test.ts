@@ -253,6 +253,37 @@ describe('Toast', () => {
       expect(el.open).toBe(false);
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).toBe(false);
     });
+
+    it('should stay open when shown again during the exit animation', async () => {
+      const screen = render(html`<forge-toast open>Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      const closeSpy = vi.fn();
+      el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+
+      el.hide();
+      await frame();
+      el.open = true;
+      await task(TOAST_ANIMATION_DURATION);
+
+      expect(el.open).toBe(true);
+      expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).toBe(true);
+      expect(getOverlay(el).open).toBe(true);
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should dispatch one close event when hide() is called repeatedly', async () => {
+      const screen = render(html`<forge-toast open>Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      const closeSpy = vi.fn();
+      el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+
+      el.hide();
+      el.hide();
+      await task(TOAST_ANIMATION_DURATION);
+
+      expect(el.open).toBe(false);
+      expect(closeSpy).toHaveBeenCalledOnce();
+    });
   });
 
   describe('dismissible', () => {

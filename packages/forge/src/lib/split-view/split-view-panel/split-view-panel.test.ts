@@ -20,6 +20,9 @@ import type { IStateLayerComponent } from '../../state-layer/index.js';
 import '../split-view-panel/split-view-panel.js';
 import '../split-view/split-view.js';
 
+// Open and close animation duration (300ms) plus a buffer
+const PANEL_ANIMATION_DURATION = 400;
+
 interface SplitViewPanelCoreInternal {
   _adapter: ISplitViewPanelAdapter;
 }
@@ -842,8 +845,7 @@ describe('SplitViewPanelComponent', () => {
       const didCloseSpy = vi.fn();
       harness.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, didCloseSpy);
       harness.component.open = false;
-      harness.getPart('root')!.dispatchEvent(new AnimationEvent('animationend'));
-      await frame();
+      await task(PANEL_ANIMATION_DURATION);
       expect(didCloseSpy).toHaveBeenCalledOnce();
     });
 
@@ -856,9 +858,35 @@ describe('SplitViewPanelComponent', () => {
       const didOpenSpy = vi.fn();
       harness.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_OPEN, didOpenSpy);
       harness.component.open = true;
-      harness.getPart('root')!.dispatchEvent(new AnimationEvent('animationend'));
-      await frame();
+      await task(PANEL_ANIMATION_DURATION);
       expect(didOpenSpy).toHaveBeenCalledOnce();
+    });
+
+    it('should end open when reopened during the close animation', async () => {
+      const harness = setupTestContext(true, 1);
+      harness.component.resizable = 'end';
+      const didCloseSpy = vi.fn();
+      harness.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, didCloseSpy);
+      harness.component.open = false;
+      await frame();
+      harness.component.open = true;
+      await task(PANEL_ANIMATION_DURATION);
+      expect(harness.component.open).toBe(true);
+      expect(harness.getPart('root')?.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)).toBe(false);
+      expect(didCloseSpy).not.toHaveBeenCalled();
+    });
+
+    it('should end closed when closed during the open animation', async () => {
+      const harness = setupTestContext(true, 1);
+      harness.component.resizable = 'end';
+      harness.component.open = false;
+      await task(PANEL_ANIMATION_DURATION);
+      harness.component.open = true;
+      await frame();
+      harness.component.open = false;
+      await task(PANEL_ANIMATION_DURATION);
+      expect(harness.component.open).toBe(false);
+      expect(harness.getPart('root')?.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)).toBe(true);
     });
   });
 

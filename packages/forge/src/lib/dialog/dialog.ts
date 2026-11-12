@@ -1,14 +1,9 @@
-import {
-  CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY,
-  CUSTOM_ELEMENT_NAME_PROPERTY,
-  getFirstFocusableElement,
-  playKeyframeAnimation,
-  tryDefine
-} from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, getFirstFocusableElement, tryDefine } from '@tylertech/forge-core';
 import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { BACKDROP_CONSTANTS, BackdropComponent, IBackdropComponent } from '../backdrop/index.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
+import { playClassAnimation } from '../core/utils/animation-utils.js';
 import { GlobalConfiguration } from '../core/configuration/global-configuration.js';
 import { MoveController } from '../core/controllers/move-controller.js';
 import { DismissibleStack, IDismissible, IDismissibleStackState, tryDismiss } from '../core/utils/dismissible-stack.js';
@@ -239,6 +234,8 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     return this.#open;
   }
   #open = false;
+  #exitId = 0;
+  #exiting = false;
 
   /**
    * The mode of the dialog.
@@ -618,9 +615,14 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
   }
 
   #show(): void {
-    if (this._dialogElement.open) {
+    const isReopening = this.#exiting;
+    if (this._dialogElement.open && !isReopening) {
       /* c8 ignore next */
       return;
+    }
+
+    if (isReopening) {
+      this.#cancelExit();
     }
 
     if (this.type !== 'dialog') {
@@ -644,10 +646,12 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
       }
     }
 
-    if (this.mode === 'modal') {
-      this._dialogElement.showModal();
-    } else {
-      this._dialogElement.show();
+    if (!isReopening) {
+      if (this.mode === 'modal') {
+        this._dialogElement.showModal();
+      } else {
+        this._dialogElement.show();
+      }
     }
 
     if (isModal) {
@@ -665,6 +669,10 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
 
     if (!this.persistent) {
       this._backdropElement.addEventListener('click', this.#backdropDismissListener);
+    }
+
+    if (isReopening) {
+      return;
     }
 
     if (this.moveable && !this.fullscreen) {
@@ -685,8 +693,13 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     if (this.animationType === 'none') {
       this.#forceClose();
     } else {
+      const exitId = ++this.#exitId;
+      this.#exiting = true;
       this._backdropElement.fadeOut();
-      await playKeyframeAnimation(this._surfaceElement, BACKDROP_CONSTANTS.classes.EXITING);
+      const finished = await playClassAnimation(this._surfaceElement, BACKDROP_CONSTANTS.classes.EXITING);
+      if (!finished || exitId !== this.#exitId) {
+        return;
+      }
       this.#forceClose();
     }
 
@@ -706,15 +719,25 @@ export class DialogComponent extends BaseLitElement implements IDialogComponent 
     DismissibleStack.instance.remove(this);
   }
 
-  #forceClose(): void {
+  #cancelExit(): void {
+    this.#exitId++;
+    this.#exiting = false;
     this._surfaceElement?.classList.remove(BACKDROP_CONSTANTS.classes.EXITING);
+  }
+
+  #forceClose(): void {
+    this.#cancelExit();
     this._dialogElement?.close();
     DialogComponent[dialogStack].delete(this);
     this.#showMostRecentBackdrop();
   }
 
   #hideOtherBackdrops(): void {
-    DialogComponent[dialogStack].forEach(dialog => dialog[hideBackdrop]());
+    DialogComponent[dialogStack].forEach(dialog => {
+      if (dialog !== this) {
+        dialog[hideBackdrop]();
+      }
+    });
   }
 
   #showMostRecentBackdrop(): void {

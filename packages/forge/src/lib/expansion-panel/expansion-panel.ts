@@ -5,6 +5,7 @@ import { property, queryAssignedElements, state } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { toggleState } from '../core/index.js';
+import { prefersReducedMotion } from '../core/utils/feature-detection.js';
 import { IOpenIconComponent, OPEN_ICON_CONSTANTS } from '../open-icon/index.js';
 import { emulateUserToggle, EXPANSION_PANEL_CONSTANTS, ExpansionPanelAnimationType, ExpansionPanelOrientation } from './expansion-panel-constants.js';
 import { ExpansionPanelTriggerController } from './expansion-panel-trigger-controller.js';
@@ -286,7 +287,7 @@ export class ExpansionPanelComponent extends BaseLitElement implements IExpansio
 
   #handleOpen(): void {
     // Only animate if this isn't the initial update cycle
-    this._isAnimating = this.animationType !== 'none' && this.hasUpdated;
+    this._isAnimating = this.animationType !== 'none' && this.hasUpdated && !prefersReducedMotion();
     toggleState(this.#internals, 'open', this.open);
     this.#tryCloseLinkedPanels();
   }

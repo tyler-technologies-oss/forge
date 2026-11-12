@@ -1,4 +1,5 @@
 import { getShadowElement, playKeyframeAnimation, removeAllChildren, tryScrollIntoView } from '@tylertech/forge-core';
+import { playClassAnimation } from '../../core/utils/animation-utils.js';
 
 import { BaseAdapter, IBaseAdapter } from '../../core/index.js';
 import { CalendarMenuAnimationType, CALENDAR_MENU_CONSTANTS, ICalendarMenuOption } from './calendar-menu-constants.js';
@@ -69,17 +70,19 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
     this._container.setAttribute(CALENDAR_MENU_CONSTANTS.attributes.DATA_ANIMATION, value);
   }
 
-  public setClosed(): void {
+  public async setClosed(): Promise<void> {
     this._container.classList.remove(CALENDAR_MENU_CONSTANTS.classes.OPEN);
-    this._container.classList.add(CALENDAR_MENU_CONSTANTS.classes.CLOSING);
-    playKeyframeAnimation(this._container, CALENDAR_MENU_CONSTANTS.classes.CLOSING, true).then(() => {
-      this.toggleHostAttribute('hidden', true);
-      removeAllChildren(this._container);
-    });
+    const finished = await playClassAnimation(this._container, CALENDAR_MENU_CONSTANTS.classes.CLOSING);
+    if (!finished) {
+      return;
+    }
+    this.toggleHostAttribute('hidden', true);
+    removeAllChildren(this._container);
   }
 
   public setOpenAsGrid(options: ICalendarMenuOption[], focusedIndex: number, setFocus: boolean, preventFocus: boolean, replace?: boolean): void {
     const element = getGrid(options);
+    this._cancelClose();
     if (replace) {
       playKeyframeAnimation(this._container, CALENDAR_MENU_CONSTANTS.classes.REPLACING_VIEW, true).then(() => {
         removeAllExceptLastChild(this._container);
@@ -88,7 +91,6 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
     }
     this._container.appendChild(element);
     this.toggleHostAttribute('hidden', false);
-    this._container.classList.remove(CALENDAR_MENU_CONSTANTS.classes.CLOSING);
     this._container.classList.add(CALENDAR_MENU_CONSTANTS.classes.OPEN);
     if (!replace) {
       this.setFocusAtIndex(focusedIndex, setFocus, preventFocus);
@@ -97,6 +99,7 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
 
   public setOpenAsList(options: ICalendarMenuOption[], focusedIndex: number, setFocus: boolean, preventFocus: boolean, replace?: boolean): void {
     const element = getList(options);
+    this._cancelClose();
     if (replace) {
       playKeyframeAnimation(this._container, CALENDAR_MENU_CONSTANTS.classes.REPLACING_VIEW, true).then(() => {
         removeAllExceptLastChild(this._container);
@@ -105,11 +108,17 @@ export class CalendarMenuAdapter extends BaseAdapter<ICalendarMenuComponent> imp
     }
     this._container.appendChild(element);
     this.toggleHostAttribute('hidden', false);
-    this._container.classList.remove(CALENDAR_MENU_CONSTANTS.classes.CLOSING);
     this._container.classList.add(CALENDAR_MENU_CONSTANTS.classes.OPEN);
     this._scrollItemIntoView('selected');
     if (!replace) {
       this.setFocusAtIndex(focusedIndex, setFocus, preventFocus);
+    }
+  }
+
+  private _cancelClose(): void {
+    if (this._container.classList.contains(CALENDAR_MENU_CONSTANTS.classes.CLOSING)) {
+      this._container.classList.remove(CALENDAR_MENU_CONSTANTS.classes.CLOSING);
+      removeAllChildren(this._container);
     }
   }
 
