@@ -181,3 +181,35 @@ the styles to the `:root` selector:
   @include theme-dark.theme-properties;
 }
 ```
+
+## Radix theme (opt-in)
+
+Forge includes an optional Radix-based theme. It is opt-in: if you do not load the stylesheets below, nothing about your application changes.
+
+Two stylesheets are distributed in the npm package under the `dist` directory, and are also available from the CDN:
+
+- `forge-radix.css`: the Radix light theme. Load it after `forge.css`.
+- `forge-radix-dark.css`: the Radix dark theme. Load it after `forge.css` **instead of** `forge-dark.css`. Do not load both.
+
+```css
+@use '@tylertech/forge/dist/forge-radix';
+```
+
+For dark mode, load the dark stylesheet in place of the light one:
+
+```css
+@use '@tylertech/forge/dist/forge-radix-dark';
+```
+
+The Radix stylesheets only set CSS custom properties: the theme colors, the typography, and the colors, borders, and shadows that individual components expose as custom
+properties. You can still override any of them in your own stylesheet as described above.
+
+### Things to know
+
+- The Radix stylesheets apply to components in the document. The same components rendered inside another component's shadow root keep the default colors.
+- Switch between `forge-radix.css` and `forge-radix-dark.css` when you change color scheme, the same way you would switch between the default light theme and `forge-dark.css`.
+- `forge-badge`, `forge-banner`, and `forge-inline-message` render their `primary`, `secondary`, `tertiary`, and `info-secondary` themes with the Radix neutral colors, and their `info`, `success`, `warning`, `error`, `critical`, and `danger` themes with the Radix role colors.
+
+### Trying it out
+
+In the `forge:dev` app, the Radix toggle in the app bar (a green dot when Radix is on, red when it is off) switches the stylesheets. The **Radix compare** page shows the default and Radix themes side by side, or as a pixel difference.
