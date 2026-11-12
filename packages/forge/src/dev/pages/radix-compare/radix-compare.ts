@@ -140,17 +140,17 @@ function initializeControls(): void {
   syncSwitch.on = state.sync;
 
   pageSelect.addEventListener('change', () => {
-    state.page = pageSelect.value as string;
+    state.page = pick(PAGE_PATHS, pageSelect.value as string, DEFAULT_PAGE_PATH);
     updateAddressBar();
     reloadFrames();
   });
   viewSelect.addEventListener('change', () => {
-    state.view = viewSelect.value as CompareView;
+    state.view = pick(VIEWS, viewSelect.value as string, DEFAULT_VIEW);
     updateAddressBar();
     applyLayout();
   });
   widthSelect.addEventListener('change', () => {
-    state.width = widthSelect.value as string;
+    state.width = pick(WIDTHS, widthSelect.value as string, DEFAULT_WIDTH);
     updateAddressBar();
     applyLayout();
   });
