@@ -8,6 +8,8 @@ const RADIX_QUERY_PARAM = 'radix';
 const DARK_QUERY_PARAM = 'dark';
 const ENABLED_IDENTIFIER = 'true';
 const STYLE_TAG_ID = 'forge-theme-style';
+const RADIX_ON_COLOR = '#2e7d32';
+const RADIX_OFF_COLOR = '#d32f2f';
 
 interface IThemeStyles {
   dark?: string;
@@ -110,8 +112,15 @@ function syncRadixButton(button: (HTMLElement & { variant: string }) | null): vo
   if (!button) {
     return;
   }
-  button.variant = state.radix ? 'outlined' : 'icon';
   button.setAttribute('aria-pressed', String(state.radix));
+  const indicator = document.querySelector<HTMLElement>('#radix-theme-indicator');
+  if (indicator) {
+    indicator.style.background = state.radix ? RADIX_ON_COLOR : RADIX_OFF_COLOR;
+  }
+  const tooltip = document.querySelector('#radix-theme-tooltip');
+  if (tooltip) {
+    tooltip.textContent = state.radix ? 'Radix theme: on (click to turn off)' : 'Radix theme: off (click to turn on)';
+  }
 }
 
 function detectDarkTheme(): boolean {
