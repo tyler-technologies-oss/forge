@@ -14,3 +14,5 @@ Adds a `readonly` property and attribute to `forge-field` (followed by `forge-te
 The Radix stylesheet renders the legacy badge, banner, and inline message themes (`primary`, `secondary`, `tertiary`, and `info-secondary`) with the Radix neutral colors, and the `info`, `success`, `warning`, `error`, and `danger` themes with the Radix role colors.
 
 Adds the `--forge-color-picker-slider-thumb-shadow`, `--forge-color-picker-preview-shadow`, `--forge-color-picker-preview-ring-shadow`, `--forge-color-picker-input-focus-color`, `--forge-color-picker-gradient-thumb-size`, `--forge-color-picker-gradient-thumb-border-width`, and `--forge-color-picker-gradient-thumb-shadow` custom properties, which default to the existing rendering. The CSS-only `.forge-field` now reads `--forge-field-default-outline-color` and `--forge-field-default-outline-color-hover` too.
+
+The color picker opacity track now fills with the selected color, the gradient and slider thumbs show a focus indicator when focused, and the value inputs now animate their border color on focus (the transition named a misspelled property).

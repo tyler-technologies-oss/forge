@@ -10,6 +10,7 @@ export interface IColorPickerAdapter extends IBaseAdapter {
   setHsvaInputValue(hsva: IHSVA): void;
   updateA11y(hueValue: number, opacityValue: number): void;
   setGradientColor(value: string): void;
+  setOpacityGradientColor(rgba: IRGBA): void;
   getHueSliderElement(): HTMLElement;
   getOpacitySliderElement(): HTMLElement;
   getGradientElement(): HTMLElement;
@@ -105,6 +106,10 @@ export class ColorPickerAdapter extends BaseAdapter<IColorPickerComponent> imple
 
   public setGradientColor(value: string): void {
     this._gradientElement.style.backgroundColor = value;
+  }
+
+  public setOpacityGradientColor({ r, g, b }: IRGBA): void {
+    this._opacitySliderElement.style.backgroundImage = `linear-gradient(to right, rgb(${r} ${g} ${b} / 0) 0%, rgb(${r} ${g} ${b}) 100%)`;
   }
 
   public getHueSliderElement(): HTMLElement {

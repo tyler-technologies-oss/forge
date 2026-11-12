@@ -1,8 +1,11 @@
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge-tokens/sass/animation';
+@use '../focus-indicator';
 
 @mixin styles() {
+  @include focus-indicator.keyframes;
+
   * {
     box-sizing: border-box;
   }
@@ -16,6 +19,7 @@
 
     &__gradient {
       @include gradient;
+      @include focus-indicator.standalone(inward);
 
       &-color {
         @include gradient-color;
@@ -42,7 +46,13 @@
       position: relative;
 
       &-thumb {
-        outline: none;
+        @include focus-indicator.standalone;
+        @include focus-indicator.provide-theme(
+          (
+            shape: 50%
+          )
+        );
+
         height: 16px;
         width: 16px;
         background-color: white;
@@ -115,7 +125,7 @@
           border-radius: 4px;
           box-sizing: border-box;
           outline: none;
-          transition-property: box-shadow, border-colo;
+          transition-property: box-shadow, border-color;
           transition-duration: #{animation.variable(duration-short4)};
           transition-timing-function: #{animation.variable(easing-standard)};
 
@@ -205,7 +215,6 @@
 
 @mixin gradient() {
   position: relative;
-  outline: none;
 }
 
 @mixin gradient-color() {
