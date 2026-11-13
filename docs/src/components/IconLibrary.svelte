@@ -1,27 +1,26 @@
 <script lang="ts">
-  import hljs from "highlight.js/lib/core";
-  import xml from "highlight.js/lib/languages/xml";
-  import typescript from "highlight.js/lib/languages/typescript";
+  import hljs from 'highlight.js/lib/core';
+  import xml from 'highlight.js/lib/languages/xml';
+  import typescript from 'highlight.js/lib/languages/typescript';
 
-  hljs.registerLanguage("xml", xml);
-  hljs.registerLanguage("typescript", typescript);
+  hljs.registerLanguage('xml', xml);
+  hljs.registerLanguage('typescript', typescript);
 
   const MORE_ICONS_INCREMENT = 100;
-  const METADATA_URI =
-    "https://cdn.forge.tylertech.com/v1/metadata/icons/tyler-icons-metadata-all.json";
+  const METADATA_URI = 'https://cdn.forge.tylertech.com/v1/metadata/icons/tyler-icons-metadata-all.json';
 
   type MatchType =
-    | "none"
-    | "exact_name"
-    | "name_prefix"
-    | "name_contains"
-    | "name_fuzzy"
-    | "exact_keyword"
-    | "keyword_prefix"
-    | "keyword_contains"
-    | "keyword_fuzzy";
+    | 'none'
+    | 'exact_name'
+    | 'name_prefix'
+    | 'name_contains'
+    | 'name_fuzzy'
+    | 'exact_keyword'
+    | 'keyword_prefix'
+    | 'keyword_contains'
+    | 'keyword_fuzzy';
 
-  const MATCH_TYPE_PRIORITY: Record<Exclude<MatchType, "none">, number> = {
+  const MATCH_TYPE_PRIORITY: Record<Exclude<MatchType, 'none'>, number> = {
     exact_name: 1,
     name_prefix: 2,
     name_contains: 3,
@@ -29,7 +28,7 @@
     exact_keyword: 5,
     keyword_prefix: 6,
     keyword_contains: 7,
-    keyword_fuzzy: 8,
+    keyword_fuzzy: 8
   };
 
   interface IIcon {
@@ -78,7 +77,7 @@
   }
 
   let isLoading = $state(true);
-  let filterText = $state("");
+  let filterText = $state('');
   let icons = $state<IIcon[]>([]);
   let currentIcon = $state<IIcon | null>(null);
   let visibleCount = $state(MORE_ICONS_INCREMENT);
@@ -88,15 +87,13 @@
   let copiedSnippet = $state<string | null>(null);
 
   $effect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     fetchMetadata();
   });
 
   async function fetchMetadata() {
     try {
-      const response = await window.fetch(
-        `${METADATA_URI}?t=${new Date().getTime()}`,
-      );
+      const response = await window.fetch(`${METADATA_URI}?t=${new Date().getTime()}`);
       const data = (await response.json()) as IIcon[];
       icons = data;
       isLoading = false;
@@ -117,17 +114,14 @@
   $effect(() => {
     if (!sentinelEl) return;
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         for (const entry of entries) {
           if (entry.isIntersecting && visibleCount < filteredIcons.length) {
-            visibleCount = Math.min(
-              visibleCount + MORE_ICONS_INCREMENT,
-              filteredIcons.length,
-            );
+            visibleCount = Math.min(visibleCount + MORE_ICONS_INCREMENT, filteredIcons.length);
           }
         }
       },
-      { rootMargin: "500px 0px" },
+      { rootMargin: '500px 0px' }
     );
     observer.observe(sentinelEl);
     return () => observer.disconnect();
@@ -142,8 +136,8 @@
   $effect(() => {
     if (!dialogEl) return;
     const handler = () => closeDialog();
-    dialogEl.addEventListener("forge-dialog-close", handler);
-    return () => dialogEl?.removeEventListener("forge-dialog-close", handler);
+    dialogEl.addEventListener('forge-dialog-close', handler);
+    return () => dialogEl?.removeEventListener('forge-dialog-close', handler);
   });
 
   function filterIcons(list: IIcon[], text: string): IIcon[] {
@@ -156,51 +150,50 @@
     }[] = [];
 
     for (const icon of list) {
-      const iconName = icon.name?.trim().toLowerCase() || "";
-      const keywords =
-        icon.keywords?.map((kw) => kw.trim().toLowerCase()) || [];
+      const iconName = icon.name?.trim().toLowerCase() || '';
+      const keywords = icon.keywords?.map(kw => kw.trim().toLowerCase()) || [];
 
       let bestMatch: { icon: IIcon; score: number; matchType: MatchType } = {
         icon,
         score: 0,
-        matchType: "none",
+        matchType: 'none'
       };
 
       if (iconName === query) {
-        bestMatch = { icon, score: 1, matchType: "exact_name" };
+        bestMatch = { icon, score: 1, matchType: 'exact_name' };
       } else if (iconName.startsWith(query)) {
-        bestMatch = { icon, score: 0.9, matchType: "name_prefix" };
+        bestMatch = { icon, score: 0.9, matchType: 'name_prefix' };
       } else if (iconName.includes(query)) {
-        bestMatch = { icon, score: 0.8, matchType: "name_contains" };
+        bestMatch = { icon, score: 0.8, matchType: 'name_contains' };
       } else if (iconName.length > 0) {
         const nameSimilarity = computeStringSimilarity(iconName, query);
         if (nameSimilarity >= 0.6) {
           bestMatch = {
             icon,
             score: nameSimilarity * 0.7,
-            matchType: "name_fuzzy",
+            matchType: 'name_fuzzy'
           };
         }
       }
 
       for (const keyword of keywords) {
         let keywordScore = 0;
-        let keywordMatchType: MatchType = "none";
+        let keywordMatchType: MatchType = 'none';
 
         if (keyword === query) {
           keywordScore = 0.6;
-          keywordMatchType = "exact_keyword";
+          keywordMatchType = 'exact_keyword';
         } else if (keyword.startsWith(query)) {
           keywordScore = 0.5;
-          keywordMatchType = "keyword_prefix";
+          keywordMatchType = 'keyword_prefix';
         } else if (keyword.includes(query)) {
           keywordScore = 0.4;
-          keywordMatchType = "keyword_contains";
+          keywordMatchType = 'keyword_contains';
         } else {
           const keywordSimilarity = computeStringSimilarity(keyword, query);
           if (keywordSimilarity >= 0.7) {
             keywordScore = keywordSimilarity * 0.3;
-            keywordMatchType = "keyword_fuzzy";
+            keywordMatchType = 'keyword_fuzzy';
           }
         }
 
@@ -208,7 +201,7 @@
           bestMatch = {
             icon,
             score: keywordScore,
-            matchType: keywordMatchType,
+            matchType: keywordMatchType
           };
         }
       }
@@ -218,15 +211,13 @@
 
     results.sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
-      const aPrio =
-        a.matchType === "none" ? 99 : MATCH_TYPE_PRIORITY[a.matchType];
-      const bPrio =
-        b.matchType === "none" ? 99 : MATCH_TYPE_PRIORITY[b.matchType];
+      const aPrio = a.matchType === 'none' ? 99 : MATCH_TYPE_PRIORITY[a.matchType];
+      const bPrio = b.matchType === 'none' ? 99 : MATCH_TYPE_PRIORITY[b.matchType];
       if (aPrio !== bPrio) return aPrio - bPrio;
-      return (a.icon.name || "").localeCompare(b.icon.name || "");
+      return (a.icon.name || '').localeCompare(b.icon.name || '');
     });
 
-    return results.map((r) => r.icon);
+    return results.map(r => r.icon);
   }
 
   const handleFilter = debounce((value: string) => {
@@ -259,6 +250,23 @@
     }
   }
 
+  async function downloadIcon() {
+    if (!currentIcon) return;
+    try {
+      const blob = new Blob([currentIcon.data], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentIcon.name}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function copySnippet(snippet: string, key: string) {
     try {
       await navigator.clipboard.writeText(snippet);
@@ -273,76 +281,36 @@
 
   function toTylIconIdentifier(name: string): string {
     return (
-      "tylIcon" +
+      'tylIcon' +
       name
         .split(/[_-]/)
         .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join("")
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('')
     );
   }
 
-  const tylIconIdentifier = $derived(
-    currentIcon ? toTylIconIdentifier(currentIcon.name) : "",
-  );
+  const tylIconIdentifier = $derived(currentIcon ? toTylIconIdentifier(currentIcon.name) : '');
 
-  const iconCodeSnippet = $derived(
-    currentIcon ? `<forge-icon name="${currentIcon.name}"></forge-icon>` : "",
-  );
+  const iconCodeSnippet = $derived(currentIcon ? `<forge-icon name="${currentIcon.name}"></forge-icon>` : '');
   const iconButtonCodeSnippet = $derived(
-    currentIcon
-      ? `<forge-icon-button aria-label="Add your label here">\n  <forge-icon name="${currentIcon.name}"></forge-icon>\n</forge-icon-button>`
-      : "",
+    currentIcon ? `<forge-icon-button aria-label="Add your label here">\n  <forge-icon name="${currentIcon.name}"></forge-icon>\n</forge-icon-button>` : ''
   );
-  const registryImportSnippet =
-    "import { IconRegistry } from '@tylertech/forge';";
-  const iconImportSnippet = $derived(
-    tylIconIdentifier
-      ? `import { ${tylIconIdentifier} } from '@tylertech/tyler-icons';`
-      : "",
-  );
-  const iconDefineSnippet = $derived(
-    tylIconIdentifier ? `IconRegistry.define([${tylIconIdentifier}]);` : "",
-  );
+  const registryImportSnippet = "import { IconRegistry } from '@tylertech/forge';";
+  const iconImportSnippet = $derived(tylIconIdentifier ? `import { ${tylIconIdentifier} } from '@tylertech/tyler-icons';` : '');
+  const iconDefineSnippet = $derived(tylIconIdentifier ? `IconRegistry.define([${tylIconIdentifier}]);` : '');
 
-  const highlightedSvg = $derived(
-    currentIcon
-      ? hljs.highlight(currentIcon.data, { language: "xml" }).value
-      : "",
-  );
-  const highlightedIconSnippet = $derived(
-    iconCodeSnippet
-      ? hljs.highlight(iconCodeSnippet, { language: "xml" }).value
-      : "",
-  );
-  const highlightedButtonSnippet = $derived(
-    iconButtonCodeSnippet
-      ? hljs.highlight(iconButtonCodeSnippet, { language: "xml" }).value
-      : "",
-  );
-  const highlightedRegistryImport = $derived(
-    hljs.highlight(registryImportSnippet, { language: "typescript" }).value,
-  );
-  const highlightedIconImport = $derived(
-    iconImportSnippet
-      ? hljs.highlight(iconImportSnippet, { language: "typescript" }).value
-      : "",
-  );
-  const highlightedIconDefine = $derived(
-    iconDefineSnippet
-      ? hljs.highlight(iconDefineSnippet, { language: "typescript" }).value
-      : "",
-  );
+  const highlightedSvg = $derived(currentIcon ? hljs.highlight(currentIcon.data, { language: 'xml' }).value : '');
+  const highlightedIconSnippet = $derived(iconCodeSnippet ? hljs.highlight(iconCodeSnippet, { language: 'xml' }).value : '');
+  const highlightedButtonSnippet = $derived(iconButtonCodeSnippet ? hljs.highlight(iconButtonCodeSnippet, { language: 'xml' }).value : '');
+  const highlightedRegistryImport = $derived(hljs.highlight(registryImportSnippet, { language: 'typescript' }).value);
+  const highlightedIconImport = $derived(iconImportSnippet ? hljs.highlight(iconImportSnippet, { language: 'typescript' }).value : '');
+  const highlightedIconDefine = $derived(iconDefineSnippet ? hljs.highlight(iconDefineSnippet, { language: 'typescript' }).value : '');
 </script>
 
 <div class="flex flex-col gap-medium">
   <forge-text-field>
-    <input
-      type="text"
-      placeholder="Filter..."
-      oninput={onFilterInput}
-      aria-label="Filter icons"
-    />
+    <input type="text" placeholder="Filter..." oninput={onFilterInput} aria-label="Filter icons" />
   </forge-text-field>
 
   {#if isLoading}
@@ -357,19 +325,12 @@
         <button
           class="icon-container flex items-center justify-center min-w-0 bg-surface border border-outline rounded-md p-small cursor-pointer text-inherit hover:bg-primary-container-low hover:border-primary"
           onclick={() => openDialog(icon)}
-          type="button"
-        >
-          <div
-            class="flex flex-col items-center justify-center gap-xsmall w-full min-w-0"
-          >
-            <div
-              class="icon flex items-center justify-center w-8 h-8 text-high"
-            >
+          type="button">
+          <div class="flex flex-col items-center justify-center gap-xsmall w-full min-w-0">
+            <div class="icon flex items-center justify-center w-8 h-8 text-high">
               {@html icon.data}
             </div>
-            <div
-              class="text-medium text-center break-words text-[12px] leading-[1.3]"
-            >
+            <div class="text-medium text-center break-words text-[12px] leading-[1.3]">
               {icon.name}
             </div>
           </div>
@@ -380,27 +341,16 @@
       <div class="h-px w-full" bind:this={sentinelEl} aria-hidden="true"></div>
     {/if}
   {:else}
-    <div
-      class="flex flex-col items-center justify-center px-large py-xxlarge text-medium text-center gap-small"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        class="w-12 h-12 fill-current"
-      >
+    <div class="flex flex-col items-center justify-center px-large py-xxlarge text-medium text-center gap-small">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-12 h-12 fill-current">
         <path
-          d="M19.27 18.9c.43-.69.68-1.52.68-2.4 0-2.5-2-4.5-4.49-4.5s-4.5 2-4.5 4.5 2 4.5 4.5 4.5c.87 0 1.69-.25 2.38-.68l3.12 3.07L22.35 22zm-3.81.1c-1.39 0-2.5-1.12-2.5-2.5s1.11-2.5 2.5-2.5 2.49 1.12 2.49 2.5-1.11 2.5-2.49 2.5M22 14h-.55c-.33-.81-.83-1.53-1.45-2.14V10h2zM20 4h-3V2h3a2 2 0 0 1 2 2v3h-2zm-6 0h-4V2h4zM4 2h3v2H4v3H2V4a2 2 0 0 1 2-2m8 20h-2v-2c.5.82 1.2 1.5 2 2m-8-2h3v2H4a2 2 0 0 1-2-2v-3h2zm0-6H2v-4h2z"
-        />
+          d="M19.27 18.9c.43-.69.68-1.52.68-2.4 0-2.5-2-4.5-4.49-4.5s-4.5 2-4.5 4.5 2 4.5 4.5 4.5c.87 0 1.69-.25 2.38-.68l3.12 3.07L22.35 22zm-3.81.1c-1.39 0-2.5-1.12-2.5-2.5s1.11-2.5 2.5-2.5 2.49 1.12 2.49 2.5-1.11 2.5-2.49 2.5M22 14h-.55c-.33-.81-.83-1.53-1.45-2.14V10h2zM20 4h-3V2h3a2 2 0 0 1 2 2v3h-2zm-6 0h-4V2h4zM4 2h3v2H4v3H2V4a2 2 0 0 1 2-2m8 20h-2v-2c.5.82 1.2 1.5 2 2m-8-2h3v2H4a2 2 0 0 1-2-2v-3h2zm0-6H2v-4h2z" />
       </svg>
       <p>No icons found. Please try searching again</p>
     </div>
   {/if}
 
-  <forge-dialog
-    bind:this={dialogEl}
-    aria-labelledby="icon-dialog-title"
-    style="--forge-dialog-width: 960px;"
-  >
+  <forge-dialog bind:this={dialogEl} aria-labelledby="icon-dialog-title" style="--forge-dialog-width: 960px;">
     {#if currentIcon}
       <forge-scaffold>
         <forge-toolbar slot="header">
@@ -410,48 +360,30 @@
             </h2>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <forge-icon-button
-              id="icon-dialog-copy-name-btn"
-              density="medium"
-              aria-label={copied ? "Copied" : "Copy icon name"}
-              onclick={copyName}
-            >
-              <forge-icon name={copied ? "check" : "content_copy"}></forge-icon>
+            <forge-icon-button id="icon-dialog-copy-name-btn" density="medium" aria-label={copied ? 'Copied' : 'Copy icon name'} onclick={copyName}>
+              <forge-icon name={copied ? 'check' : 'content_copy'}></forge-icon>
             </forge-icon-button>
-            <forge-tooltip
-              anchor="icon-dialog-copy-name-btn"
-              aria-hidden="true"
-            >
-              {copied ? "Copied" : "Copy icon name"}
+            <forge-tooltip anchor="icon-dialog-copy-name-btn" aria-hidden="true">
+              {copied ? 'Copied' : 'Copy icon name'}
             </forge-tooltip>
+            <forge-icon-button id="icon-dialog-download-btn" density="medium" aria-label="Download icon" onclick={downloadIcon}>
+              <forge-icon name="download"></forge-icon>
+            </forge-icon-button>
           </div>
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <forge-icon-button
-            id="icon-dialog-close-btn"
-            slot="end"
-            aria-label="Close dialog"
-            onclick={closeDialog}
-          >
+          <forge-icon-button id="icon-dialog-close-btn" slot="end" aria-label="Close dialog" onclick={closeDialog}>
             <forge-icon name="close"></forge-icon>
           </forge-icon-button>
-          <forge-tooltip anchor="icon-dialog-close-btn" aria-hidden="true">
-            Close dialog
-          </forge-tooltip>
+          <forge-tooltip anchor="icon-dialog-close-btn" aria-hidden="true"> Close dialog </forge-tooltip>
         </forge-toolbar>
         <div slot="body" class="dialog-body grid gap-medium p-medium">
-          <div
-            class="dialog-icon flex items-center justify-center aspect-square rounded-md bg-surface text-high"
-          >
+          <div class="dialog-icon flex items-center justify-center aspect-square rounded-md bg-surface text-high">
             {@html currentIcon.data}
           </div>
           <div class="flex flex-col gap-large min-w-0">
             <section class="flex flex-col gap-xsmall">
-              <h3
-                class="text-subheading1 text-medium m-0 mb-xxsmall tracking-wider"
-              >
-                Registration
-              </h3>
+              <h3 class="text-subheading1 text-medium m-0 mb-xxsmall tracking-wider">Registration</h3>
               <div class="code-block">
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -459,28 +391,14 @@
                   id="icon-dialog-copy-registry-import-btn"
                   density="medium"
                   class="copy-btn"
-                  aria-label={copiedSnippet === "registry-import"
-                    ? "Copied"
-                    : "Copy IconRegistry import"}
-                  onclick={() =>
-                    copySnippet(registryImportSnippet, "registry-import")}
-                >
-                  <forge-icon
-                    name={copiedSnippet === "registry-import"
-                      ? "check"
-                      : "content_copy"}
-                  ></forge-icon>
+                  aria-label={copiedSnippet === 'registry-import' ? 'Copied' : 'Copy IconRegistry import'}
+                  onclick={() => copySnippet(registryImportSnippet, 'registry-import')}>
+                  <forge-icon name={copiedSnippet === 'registry-import' ? 'check' : 'content_copy'}></forge-icon>
                 </forge-icon-button>
-                <forge-tooltip
-                  anchor="icon-dialog-copy-registry-import-btn"
-                  aria-hidden="true"
-                >
-                  {copiedSnippet === "registry-import"
-                    ? "Copied"
-                    : "Copy IconRegistry import"}
+                <forge-tooltip anchor="icon-dialog-copy-registry-import-btn" aria-hidden="true">
+                  {copiedSnippet === 'registry-import' ? 'Copied' : 'Copy IconRegistry import'}
                 </forge-tooltip>
-                <pre><code class="hljs">{@html highlightedRegistryImport}</code
-                  ></pre>
+                <pre><code class="hljs">{@html highlightedRegistryImport}</code></pre>
               </div>
               <div class="code-block">
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -489,27 +407,14 @@
                   id="icon-dialog-copy-icon-import-btn"
                   density="medium"
                   class="copy-btn"
-                  aria-label={copiedSnippet === "icon-import"
-                    ? "Copied"
-                    : "Copy icon import"}
-                  onclick={() => copySnippet(iconImportSnippet, "icon-import")}
-                >
-                  <forge-icon
-                    name={copiedSnippet === "icon-import"
-                      ? "check"
-                      : "content_copy"}
-                  ></forge-icon>
+                  aria-label={copiedSnippet === 'icon-import' ? 'Copied' : 'Copy icon import'}
+                  onclick={() => copySnippet(iconImportSnippet, 'icon-import')}>
+                  <forge-icon name={copiedSnippet === 'icon-import' ? 'check' : 'content_copy'}></forge-icon>
                 </forge-icon-button>
-                <forge-tooltip
-                  anchor="icon-dialog-copy-icon-import-btn"
-                  aria-hidden="true"
-                >
-                  {copiedSnippet === "icon-import"
-                    ? "Copied"
-                    : "Copy icon import"}
+                <forge-tooltip anchor="icon-dialog-copy-icon-import-btn" aria-hidden="true">
+                  {copiedSnippet === 'icon-import' ? 'Copied' : 'Copy icon import'}
                 </forge-tooltip>
-                <pre><code class="hljs">{@html highlightedIconImport}</code
-                  ></pre>
+                <pre><code class="hljs">{@html highlightedIconImport}</code></pre>
               </div>
               <div class="code-block">
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -518,44 +423,22 @@
                   id="icon-dialog-copy-icon-define-btn"
                   density="medium"
                   class="copy-btn"
-                  aria-label={copiedSnippet === "icon-define"
-                    ? "Copied"
-                    : "Copy IconRegistry.define call"}
-                  onclick={() => copySnippet(iconDefineSnippet, "icon-define")}
-                >
-                  <forge-icon
-                    name={copiedSnippet === "icon-define"
-                      ? "check"
-                      : "content_copy"}
-                  ></forge-icon>
+                  aria-label={copiedSnippet === 'icon-define' ? 'Copied' : 'Copy IconRegistry.define call'}
+                  onclick={() => copySnippet(iconDefineSnippet, 'icon-define')}>
+                  <forge-icon name={copiedSnippet === 'icon-define' ? 'check' : 'content_copy'}></forge-icon>
                 </forge-icon-button>
-                <forge-tooltip
-                  anchor="icon-dialog-copy-icon-define-btn"
-                  aria-hidden="true"
-                >
-                  {copiedSnippet === "icon-define"
-                    ? "Copied"
-                    : "Copy IconRegistry.define call"}
+                <forge-tooltip anchor="icon-dialog-copy-icon-define-btn" aria-hidden="true">
+                  {copiedSnippet === 'icon-define' ? 'Copied' : 'Copy IconRegistry.define call'}
                 </forge-tooltip>
-                <pre><code class="hljs">{@html highlightedIconDefine}</code
-                  ></pre>
+                <pre><code class="hljs">{@html highlightedIconDefine}</code></pre>
               </div>
             </section>
 
             <section class="flex flex-col gap-xsmall">
-              <h3
-                class="text-subheading1 text-medium m-0 mb-xxsmall tracking-wider"
-              >
-                Usage
-              </h3>
-              <forge-tab-bar
-                aria-label="Icon usage examples"
-                active-tab-name="icon"
-              >
+              <h3 class="text-subheading1 text-medium m-0 mb-xxsmall tracking-wider">Usage</h3>
+              <forge-tab-bar aria-label="Icon usage examples" active-tab-name="icon">
                 <forge-tab id="usage-tab-icon" name="icon">Icon</forge-tab>
-                <forge-tab id="usage-tab-icon-button" name="icon-button"
-                  >Icon button</forge-tab
-                >
+                <forge-tab id="usage-tab-icon-button" name="icon-button">Icon button</forge-tab>
                 <forge-tab id="usage-tab-svg" name="svg">SVG</forge-tab>
               </forge-tab-bar>
               <forge-tab-panel for="usage-tab-icon">
@@ -566,23 +449,14 @@
                     id="icon-dialog-copy-icon-usage-btn"
                     density="medium"
                     class="copy-btn"
-                    aria-label={copiedSnippet === "icon"
-                      ? "Copied"
-                      : "Copy icon usage"}
-                    onclick={() => copySnippet(iconCodeSnippet, "icon")}
-                  >
-                    <forge-icon
-                      name={copiedSnippet === "icon" ? "check" : "content_copy"}
-                    ></forge-icon>
+                    aria-label={copiedSnippet === 'icon' ? 'Copied' : 'Copy icon usage'}
+                    onclick={() => copySnippet(iconCodeSnippet, 'icon')}>
+                    <forge-icon name={copiedSnippet === 'icon' ? 'check' : 'content_copy'}></forge-icon>
                   </forge-icon-button>
-                  <forge-tooltip
-                    anchor="icon-dialog-copy-icon-usage-btn"
-                    aria-hidden="true"
-                  >
-                    {copiedSnippet === "icon" ? "Copied" : "Copy icon usage"}
+                  <forge-tooltip anchor="icon-dialog-copy-icon-usage-btn" aria-hidden="true">
+                    {copiedSnippet === 'icon' ? 'Copied' : 'Copy icon usage'}
                   </forge-tooltip>
-                  <pre><code class="hljs">{@html highlightedIconSnippet}</code
-                    ></pre>
+                  <pre><code class="hljs">{@html highlightedIconSnippet}</code></pre>
                 </div>
               </forge-tab-panel>
               <forge-tab-panel for="usage-tab-icon-button">
@@ -593,27 +467,14 @@
                     id="icon-dialog-copy-icon-button-usage-btn"
                     density="medium"
                     class="copy-btn"
-                    aria-label={copiedSnippet === "button"
-                      ? "Copied"
-                      : "Copy icon button usage"}
-                    onclick={() => copySnippet(iconButtonCodeSnippet, "button")}
-                  >
-                    <forge-icon
-                      name={copiedSnippet === "button"
-                        ? "check"
-                        : "content_copy"}
-                    ></forge-icon>
+                    aria-label={copiedSnippet === 'button' ? 'Copied' : 'Copy icon button usage'}
+                    onclick={() => copySnippet(iconButtonCodeSnippet, 'button')}>
+                    <forge-icon name={copiedSnippet === 'button' ? 'check' : 'content_copy'}></forge-icon>
                   </forge-icon-button>
-                  <forge-tooltip
-                    anchor="icon-dialog-copy-icon-button-usage-btn"
-                    aria-hidden="true"
-                  >
-                    {copiedSnippet === "button"
-                      ? "Copied"
-                      : "Copy icon button usage"}
+                  <forge-tooltip anchor="icon-dialog-copy-icon-button-usage-btn" aria-hidden="true">
+                    {copiedSnippet === 'button' ? 'Copied' : 'Copy icon button usage'}
                   </forge-tooltip>
-                  <pre><code class="hljs">{@html highlightedButtonSnippet}</code
-                    ></pre>
+                  <pre><code class="hljs">{@html highlightedButtonSnippet}</code></pre>
                 </div>
               </forge-tab-panel>
               <forge-tab-panel for="usage-tab-svg">
@@ -624,18 +485,12 @@
                     id="icon-dialog-copy-svg-btn"
                     density="medium"
                     class="copy-btn"
-                    aria-label={copiedSnippet === "svg" ? "Copied" : "Copy SVG"}
-                    onclick={() => copySnippet(currentIcon!.data, "svg")}
-                  >
-                    <forge-icon
-                      name={copiedSnippet === "svg" ? "check" : "content_copy"}
-                    ></forge-icon>
+                    aria-label={copiedSnippet === 'svg' ? 'Copied' : 'Copy SVG'}
+                    onclick={() => copySnippet(currentIcon!.data, 'svg')}>
+                    <forge-icon name={copiedSnippet === 'svg' ? 'check' : 'content_copy'}></forge-icon>
                   </forge-icon-button>
-                  <forge-tooltip
-                    anchor="icon-dialog-copy-svg-btn"
-                    aria-hidden="true"
-                  >
-                    {copiedSnippet === "svg" ? "Copied" : "Copy SVG"}
+                  <forge-tooltip anchor="icon-dialog-copy-svg-btn" aria-hidden="true">
+                    {copiedSnippet === 'svg' ? 'Copied' : 'Copy SVG'}
                   </forge-tooltip>
                   <pre><code class="hljs">{@html highlightedSvg}</code></pre>
                 </div>
@@ -666,12 +521,7 @@
 
   /* Shimmer skeleton — linear-gradient + keyframes not available as utility. */
   .skeleton {
-    background: linear-gradient(
-      90deg,
-      var(--forge-theme-surface-container) 0%,
-      var(--forge-theme-surface-dim) 50%,
-      var(--forge-theme-surface-container) 100%
-    );
+    background: linear-gradient(90deg, var(--forge-theme-surface-container) 0%, var(--forge-theme-surface-dim) 50%, var(--forge-theme-surface-container) 100%);
     background-size: 200% 100%;
     animation: skeleton-pulse 1.4s ease-in-out infinite;
   }
@@ -747,7 +597,7 @@
   }
 
   .code-block code {
-    font-family: "Roboto Mono", monospace;
+    font-family: 'Roboto Mono', monospace;
     color: var(--forge-theme-text-high);
     white-space: pre-wrap;
     word-break: break-word;
