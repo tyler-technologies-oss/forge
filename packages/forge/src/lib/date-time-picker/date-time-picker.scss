@@ -1,0 +1,205 @@
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-date-time-picker {
+  @include tokens;
+  @include base;
+}
+
+// The summary layout pads its own content area.
+:host(:not(:state(summary))) forge-popover > .forge-date-time-picker {
+  @include popover-inset;
+}
+
+:host(:state(summary)) .forge-date-time-picker {
+  @include base-summary;
+}
+
+.summary {
+  @include summary;
+}
+
+.summary-year {
+  @include summary-year;
+}
+
+.summary-day {
+  @include summary-day;
+}
+
+.summary-empty {
+  @include summary-empty;
+}
+
+.content {
+  @include content;
+}
+
+.body {
+  @include body;
+}
+
+.body.body--horizontal,
+.body-main.body-main--horizontal {
+  @include body-horizontal;
+}
+
+.body.body--vertical,
+.body-main.body-main--vertical {
+  @include body-vertical;
+}
+
+.body.body--vertical .time-section,
+.body-main.body-main--vertical .time-section {
+  @include stacked-time-section;
+}
+
+.body:has(.presets) {
+  @include body-with-presets;
+}
+
+.body-main {
+  @include body-main;
+}
+
+.calendar-section {
+  @include calendar-section;
+}
+
+forge-calendar {
+  @include calendar;
+}
+
+slot[name='time-label'] {
+  @include time-label;
+}
+
+.date-actions {
+  @include date-actions;
+}
+
+.clear-button {
+  @include clear-button;
+}
+
+.footer {
+  @include footer;
+}
+
+.footer-start,
+.footer-center,
+.footer-end {
+  @include footer-zone;
+}
+
+.footer-start {
+  @include footer-start;
+}
+
+.footer-center {
+  @include footer-center;
+}
+
+.footer-end {
+  @include footer-end;
+}
+
+.calendar-section,
+.time-section {
+  @include section;
+}
+
+.time-section.time-section--single,
+.time-section.time-section--range {
+  @include time-section-inputs;
+}
+
+.time-section.time-section--slots {
+  @include time-section-slots;
+}
+
+.time-inputs {
+  @include time-inputs;
+}
+
+.range-inputs {
+  @include range-inputs;
+}
+
+.time-inputs forge-time-picker,
+.range-inputs forge-time-picker {
+  @include time-picker;
+}
+
+.time-inputs forge-time-picker forge-text-field,
+.range-inputs forge-time-picker forge-text-field {
+  @include time-text-field;
+}
+
+.meridiem-badge {
+  @include meridiem-badge;
+}
+
+.slot-list {
+  @include slot-list;
+}
+
+.forge-date-time-picker:not(.sheet) .body.body--horizontal > .time-section.time-section--slots {
+  @include side-by-side-slots;
+}
+
+.body.body--vertical .slot-list,
+.forge-date-time-picker.sheet .slot-list {
+  @include stacked-slot-list;
+}
+
+.slot-list-inner {
+  @include slot-list-inner;
+}
+
+.slot {
+  @include slot;
+}
+
+.slot--selected {
+  @include slot-selected;
+}
+
+.slot--disabled {
+  @include slot-disabled;
+}
+
+.presets {
+  @include presets-container;
+}
+
+.preset {
+  @include preset;
+}
+
+.duration {
+  @include duration;
+}
+
+:host(:state(disabled)) {
+  @include disabled-host;
+}
+
+:host(:state(disabled)) .forge-date-time-picker {
+  @include disabled;
+}
+
+:host(:state(sheet)) {
+  @include sheet-host;
+}
+
+.forge-date-time-picker.sheet {
+  @include sheet;
+}
