@@ -1,0 +1,67 @@
+import { describe, expect, it } from 'vitest';
+import { html } from 'lit';
+import { renderFixture } from '../../testing/fixture.js';
+import { LineChartComponent, LineChartComponentTagName } from './line-chart.js';
+import './line-chart.js';
+import '../scales/time/index.js';
+
+const rows = [
+  { month: 'Jan', downloads: 12, package: 'Query' },
+  { month: 'Feb', downloads: 14, package: 'Query' },
+  { month: 'Mar', downloads: 17, package: 'Query' },
+  { month: 'Jan', downloads: 4, package: 'Router' },
+  { month: 'Feb', downloads: 5, package: 'Router' },
+  { month: 'Mar', downloads: 6, package: 'Router' }
+];
+
+const renderChart = (
+  template = html`<forge-line-chart x="month" y="downloads" color="package" .data=${rows}></forge-line-chart>`
+): Promise<LineChartComponent> => renderFixture<LineChartComponent>(template, LineChartComponentTagName);
+
+const countMarkers = (el: LineChartComponent): number => el.shadowRoot!.querySelectorAll('svg circle').length;
+
+describe('forge-line-chart', () => {
+  it('should render nothing when no data is set', async () => {
+    const el = await renderChart(html`<forge-line-chart x="month" y="downloads"></forge-line-chart>`);
+
+    expect(el.shadowRoot!.querySelector('svg')).toBeNull();
+  });
+
+  it('should render a marker for each row', async () => {
+    const el = await renderChart();
+
+    expect(countMarkers(el)).toBe(rows.length);
+  });
+
+  it('should not render markers when hide-points is set', async () => {
+    const el = await renderChart(html`<forge-line-chart x="month" y="downloads" color="package" hide-points .data=${rows}></forge-line-chart>`);
+
+    expect(countMarkers(el)).toBe(0);
+  });
+
+  it('should render numeric x values on a continuous axis', async () => {
+    const numeric = Array.from({ length: 10 }, (_, index) => ({ day: index + 1, users: index * 3 }));
+    const el = await renderChart(html`<forge-line-chart x="day" y="users" .data=${numeric}></forge-line-chart>`);
+
+    expect(countMarkers(el)).toBe(numeric.length);
+  });
+
+  it('should render date x values', async () => {
+    const dated = [new Date(Date.UTC(2026, 0, 1)), new Date(Date.UTC(2026, 1, 1)), new Date(Date.UTC(2026, 2, 1))].map((date, index) => ({
+      date,
+      value: index
+    }));
+    const el = await renderChart(html`<forge-line-chart x="date" y="value" .data=${dated}></forge-line-chart>`);
+
+    expect(countMarkers(el)).toBe(dated.length);
+  });
+
+  it('should render again when the data changes', async () => {
+    const el = await renderChart();
+
+    el.data = rows.slice(0, 3);
+    await el.updateComplete;
+
+    expect(countMarkers(el)).toBe(3);
+  });
+});

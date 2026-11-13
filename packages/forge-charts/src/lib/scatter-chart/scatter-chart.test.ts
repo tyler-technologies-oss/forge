@@ -1,0 +1,47 @@
+import { describe, expect, it } from 'vitest';
+import { html } from 'lit';
+import { renderFixture } from '../../testing/fixture.js';
+import { ScatterChartComponent, ScatterChartComponentTagName } from './scatter-chart.js';
+import './scatter-chart.js';
+
+const rows = [
+  { height: 150, weight: 52, group: 'A' },
+  { height: 160, weight: 61, group: 'A' },
+  { height: 170, weight: 70, group: 'B' },
+  { height: 180, weight: 84, group: 'B' }
+];
+
+const renderChart = (template = html`<forge-scatter-chart x="height" y="weight" .data=${rows}></forge-scatter-chart>`): Promise<ScatterChartComponent> =>
+  renderFixture<ScatterChartComponent>(template, ScatterChartComponentTagName);
+
+const countDots = (el: ScatterChartComponent): number => el.shadowRoot!.querySelectorAll('svg circle').length;
+
+describe('forge-scatter-chart', () => {
+  it('should render nothing when no data is set', async () => {
+    const el = await renderChart(html`<forge-scatter-chart x="height" y="weight"></forge-scatter-chart>`);
+
+    expect(el.shadowRoot!.querySelector('svg')).toBeNull();
+  });
+
+  it('should render a dot for each row', async () => {
+    const el = await renderChart();
+
+    expect(countDots(el)).toBe(rows.length);
+  });
+
+  it('should color the dots by series when color is set', async () => {
+    const el = await renderChart(html`<forge-scatter-chart x="height" y="weight" color="group" .data=${rows}></forge-scatter-chart>`);
+    const fills = new Set([...el.shadowRoot!.querySelectorAll('svg circle')].map(dot => getComputedStyle(dot).fill));
+
+    expect(fills.size).toBe(2);
+  });
+
+  it('should render again when the data changes', async () => {
+    const el = await renderChart();
+
+    el.data = rows.slice(0, 2);
+    await el.updateComplete;
+
+    expect(countDots(el)).toBe(2);
+  });
+});

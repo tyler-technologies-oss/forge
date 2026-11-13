@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.forge.tylertech.com/v1/css/tyler-font.css" />
+    <title>Tyler Forge™ Charts Dev</title>
+    <style>
+      body {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <forge-scaffold>
+      <forge-app-bar slot="header" title-text="Tyler Forge™ Charts Dev">
+        <forge-icon slot="logo" name="forge_logo"></forge-icon>
+        <forge-icon-button slot="end" id="dark-theme-button" aria-label="Toggle theme">
+          <forge-icon name="brightness_3"></forge-icon>
+        </forge-icon-button>
+      </forge-app-bar>
+
+      <main slot="body" class="content">
+        <div>
+          <h2 class="forge-typography--heading2">Line</h2>
+          <div class="chart-container">
+            <forge-line-chart
+              id="line-chart"
+              aria-label="Monthly downloads by package"
+              x="month"
+              y="downloads"
+              color="package"
+              y-label="Downloads (thousands)"></forge-line-chart>
+            <forge-key>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-primary)">Query</forge-key-item>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-secondary)">Router</forge-key-item>
+            </forge-key>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="forge-typography--heading2">Bar</h2>
+          <div class="chart-container">
+            <forge-bar-chart id="bar-chart" aria-label="Weekly signups by channel" x="channel" y="value" y-label="Weekly signups"></forge-bar-chart>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="forge-typography--heading2">Area (aspect ratio)</h2>
+          <div class="chart-container">
+            <forge-area-chart
+              id="area-chart"
+              aria-label="Daily active users"
+              x="day"
+              y="users"
+              x-label="Day"
+              y-label="Active users"
+              aspect-ratio="3"></forge-area-chart>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <forge-scatter-chart
+            id="scatter-chart"
+            aria-label="Weight by height"
+            x="height"
+            y="weight"
+            color="group"
+            x-label="Height (cm)"
+            y-label="Weight (kg)"></forge-scatter-chart>
+          <forge-key>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-primary)">A</forge-key-item>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-secondary)">B</forge-key-item>
+          </forge-key>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="forge-typography--heading2">Pie</h2>
+          <forge-pie-chart id="pie-chart" aria-label="Signups by channel" category="channel" value="value"></forge-pie-chart>
+          <forge-key>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-primary)">Search</forge-key-item>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-secondary)">Direct</forge-key-item>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-tertiary)">Referral</forge-key-item>
+            <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-success)">Social</forge-key-item>
+          </forge-key>
+        </div>
+
+        <div>
+          <h2 class="forge-typography--heading2">Donut</h2>
+          <div class="chart-container">
+            <forge-pie-chart id="donut-chart" aria-label="Signups by channel" category="channel" value="value" inner-radius="0.58"></forge-pie-chart>
+            <forge-key>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-primary)">Search</forge-key-item>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-secondary)">Direct</forge-key-item>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-tertiary)">Referral</forge-key-item>
+              <forge-key-item style="--forge-key-item-icon-color: var(--forge-theme-success)">Social</forge-key-item>
+            </forge-key>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="forge-typography--heading2">Custom definition (forge-chart)</h2>
+          <div class="chart-container">
+            <forge-chart id="custom-chart" aria-label="Weekly signups by channel"></forge-chart>
+          </div>
+        </div>
+      </main>
+    </forge-scaffold>
+
+    <script type="module" src="main.ts"></script>
+  </body>
+</html>

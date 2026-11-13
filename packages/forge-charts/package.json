@@ -1,0 +1,85 @@
+{
+  "name": "@tylertech/forge-charts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A library of Tyler Forge™ chart web components, built on TanStack Charts.",
+  "license": "Apache-2.0",
+  "author": "Tyler Technologies, Inc.",
+  "keywords": [
+    "tyler forge",
+    "web components",
+    "custom elements",
+    "lit",
+    "charts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-technologies-oss/forge.git",
+    "directory": "packages/forge-charts"
+  },
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "default": "./dist/*/index.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "rimraf dist && vite build",
+    "dev": "vite src/dev",
+    "lint": "tsc --noEmit && eslint . && stylelint \"src/lib/**/*.{css,scss}\" --allow-empty-input",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --browser.headless",
+    "test:watch": "vitest",
+    "format": "prettier --write \"**/*.{ts,js,mjs,html,md,css,scss,yaml,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,html,md,css,scss,yaml,json}\""
+  },
+  "dependencies": {
+    "@tanstack/charts": "^1.5.0",
+    "lit": "catalog:"
+  },
+  "devDependencies": {
+    "@tylertech-eslint/eslint-plugin": "catalog:",
+    "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-tokens": "workspace:*",
+    "@tylertech/stylelint-rules": "catalog:",
+    "@tylertech/tyler-icons": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/browser": "^4.1.2",
+    "@vitest/browser-playwright": "^4.1.2",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "glob": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "sass": "catalog:",
+    "stylelint": "catalog:",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.58.0",
+    "vite": "catalog:",
+    "vite-plugin-dts": "^5.1.2",
+    "vitest": "^4.1.2",
+    "vitest-browser-lit": "^1.0.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

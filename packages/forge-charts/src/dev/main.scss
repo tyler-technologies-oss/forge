@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  opacity: 0;
+  background-color: var(--forge-theme-surface-dim);
+
+  &.ready {
+    opacity: 1;
+    transition: opacity 300ms 200ms;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:not(:defined) {
+  visibility: hidden;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--forge-spacing-medium);
+  padding: var(--forge-spacing-medium);
+}
+
+.chart-container {
+  padding: var(--forge-spacing-medium);
+}

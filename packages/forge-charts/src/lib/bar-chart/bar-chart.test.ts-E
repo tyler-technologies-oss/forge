@@ -1,0 +1,118 @@
+import { describe, expect, it } from 'vitest';
+import { html } from 'lit';
+import { renderFixture } from '../../testing/fixture.js';
+import { BarChartComponent, BarChartComponentTagName } from './bar-chart.js';
+import './bar-chart.js';
+
+const rows = [
+  { channel: 'Search', value: 84 },
+  { channel: 'Direct', value: 63 },
+  { channel: 'Referral', value: 47 }
+];
+
+const seriesRows = [
+  { quarter: 'Q1', product: 'A', revenue: 10 },
+  { quarter: 'Q1', product: 'B', revenue: 20 },
+  { quarter: 'Q2', product: 'A', revenue: 15 },
+  { quarter: 'Q2', product: 'B', revenue: 25 }
+];
+
+const renderChart = (template = html`<forge-bar-chart label="Signups" x="channel" y="value" .data=${rows}></forge-bar-chart>`): Promise<BarChartComponent> =>
+  renderFixture<BarChartComponent>(template, BarChartComponentTagName);
+
+const getBars = (el: BarChartComponent): SVGRectElement[] =>
+  [...el.shadowRoot!.querySelectorAll<SVGRectElement>('svg rect')].filter(rect => rect.getBoundingClientRect().height > 0);
+
+describe('forge-bar-chart', () => {
+  it('should render nothing when no data is set', async () => {
+    const el = await renderChart(html`<forge-bar-chart label="Signups" x="channel" y="value"></forge-bar-chart>`);
+
+    expect(el.shadowRoot!.querySelector('svg')).toBeNull();
+  });
+
+  it('should render nothing when the x or y field is missing', async () => {
+    const el = await renderChart(html`<forge-bar-chart label="Signups" x="channel" .data=${rows}></forge-bar-chart>`);
+
+    expect(el.shadowRoot!.querySelector('svg')).toBeNull();
+  });
+
+  it('should render a bar for each row', async () => {
+    const el = await renderChart();
+
+    expect(getBars(el).length).toBe(rows.length);
+  });
+
+  it('should label the chart for assistive technology', async () => {
+    const el = await renderChart();
+
+    expect(el.shadowRoot!.querySelector('svg')!.getAttribute('aria-label')).toBe('Signups');
+  });
+
+  it('should render another bar when a row is added', async () => {
+    const el = await renderChart();
+
+    el.data = [...rows, { channel: 'Social', value: 31 }];
+    await el.updateComplete;
+
+    expect(getBars(el).length).toBe(rows.length + 1);
+  });
+
+  it('should render the chart when the data is set after the first render', async () => {
+    const el = await renderChart(html`<forge-bar-chart label="Signups" x="channel" y="value"></forge-bar-chart>`);
+
+    el.data = rows;
+    await el.updateComplete;
+
+    expect(getBars(el).length).toBe(rows.length);
+  });
+
+  it('should remove the chart when the data is cleared', async () => {
+    const el = await renderChart();
+
+    el.data = [];
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelector('svg')).toBeNull();
+  });
+
+  it('should show the axis titles when they are set', async () => {
+    const el = await renderChart(
+      html`<forge-bar-chart label="Signups" x="channel" y="value" x-label="Channel" y-label="Weekly signups" .data=${rows}></forge-bar-chart>`
+    );
+    const text = el.shadowRoot!.querySelector('svg')!.textContent;
+
+    expect(text).toContain('Channel');
+    expect(text).toContain('Weekly signups');
+  });
+
+  it('should show a legend only when the legend attribute is set', async () => {
+    const without = await renderChart(html`<forge-bar-chart label="Revenue" x="quarter" y="revenue" color="product" .data=${seriesRows}></forge-bar-chart>`);
+    const withLegend = await renderChart(
+      html`<forge-bar-chart label="Revenue" x="quarter" y="revenue" color="product" legend .data=${seriesRows}></forge-bar-chart>`
+    );
+
+    expect(without.shadowRoot!.querySelector('svg')!.textContent).not.toContain('A');
+    expect(withLegend.shadowRoot!.querySelector('svg')!.textContent).toContain('A');
+  });
+
+  it('should place series side by side only when grouped', async () => {
+    const stacked = await renderChart(html`<forge-bar-chart label="Revenue" x="quarter" y="revenue" color="product" .data=${seriesRows}></forge-bar-chart>`);
+    const grouped = await renderChart(
+      html`<forge-bar-chart label="Revenue" x="quarter" y="revenue" color="product" grouped .data=${seriesRows}></forge-bar-chart>`
+    );
+    const barWidth = (el: BarChartComponent): number => getBars(el)[0].getBoundingClientRect().width;
+
+    expect(barWidth(grouped)).toBeLessThan(barWidth(stacked));
+  });
+
+  it('should dispatch select event with the row when a bar is clicked', async () => {
+    const el = await renderChart();
+    const events: Array<CustomEvent<{ point: { datum: unknown } | null }>> = [];
+    el.addEventListener('forge-chart-select', evt => events.push(evt as CustomEvent));
+    const { left, top, width, height } = getBars(el)[0].getBoundingClientRect();
+
+    el.shadowRoot!.querySelector('svg')!.dispatchEvent(new MouseEvent('click', { bubbles: true, clientX: left + width / 2, clientY: top + height / 2 }));
+
+    expect(events[0].detail.point?.datum).toEqual(rows[0]);
+  });
+});

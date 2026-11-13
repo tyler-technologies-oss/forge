@@ -17,6 +17,7 @@ Tyler Forge is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspa
 | [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
 | [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
 | [@tylertech/forge-ai](./packages/forge-ai) | AI chat interface Web Components |
+| [@tylertech/forge-charts](./packages/forge-charts) | Chart Web Components built on TanStack Charts (private, unreleased) |
 
 ## Requirements
 

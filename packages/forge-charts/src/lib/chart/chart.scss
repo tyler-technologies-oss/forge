@@ -1,0 +1,27 @@
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+.container {
+  position: relative;
+  color: var(--forge-theme-on-surface);
+
+  @include forge-typography.style(label2, $exclude: [font-size line-height]);
+
+  --ts-chart-1: var(--forge-theme-primary);
+  --ts-chart-2: var(--forge-theme-secondary);
+  --ts-chart-3: var(--forge-theme-tertiary);
+  --ts-chart-4: var(--forge-theme-success);
+  --ts-chart-5: var(--forge-theme-warning);
+  --ts-chart-6: var(--forge-theme-error);
+  --ts-chart-tooltip-background: var(--forge-theme-surface-inverse);
+  --ts-chart-tooltip-color: var(--forge-theme-on-surface-inverse);
+  --ts-chart-tooltip-font: #{forge-typography.variable(label1, font-weight)}
+    #{forge-typography.variable(label1, font-size)}/#{forge-typography.variable(label1, line-height)} #{forge-typography.variable(label1, font-family)};
+  --ts-chart-tooltip-border: none;
+  --ts-chart-tooltip-border-radius: var(--forge-shape-medium);
+  --ts-chart-tooltip-shadow: var(--forge-elevation-4);
+}
