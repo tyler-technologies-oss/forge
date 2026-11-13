@@ -369,6 +369,7 @@
             <forge-icon-button id="icon-dialog-download-btn" density="medium" aria-label="Download icon" onclick={downloadIcon}>
               <forge-icon name="download"></forge-icon>
             </forge-icon-button>
+            <forge-tooltip anchor="icon-dialog-download-btn" aria-hidden="true">Download SVG</forge-tooltip>
           </div>
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <!-- svelte-ignore a11y_no_static_element_interactions -->
