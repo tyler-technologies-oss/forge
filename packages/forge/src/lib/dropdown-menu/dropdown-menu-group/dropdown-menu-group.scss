@@ -1,0 +1,22 @@
+@use '../../option/option-group/core' as option-group-core;
+@use '../../option/option-group/token-utils' as option-group;
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-dropdown-menu-group {
+  @include option-group.tokens;
+}
+
+.forge-dropdown-menu-group {
+  @include option-group-core.base;
+}
+
+.label {
+  @include option-group-core.label;
+}

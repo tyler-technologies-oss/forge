@@ -59,6 +59,11 @@ const config: StorybookConfig = {
           {
             find: '@tylertech/forge-rich-text-editor',
             replacement: fileURLToPath(new URL('../../forge-rich-text-editor/esm/index.js', import.meta.url))
+          },
+          // The data table ships as its own package for the same reason, and resolves to its built `esm/` output too.
+          {
+            find: '@tylertech/forge-table',
+            replacement: fileURLToPath(new URL('../../forge-table/esm/index.js', import.meta.url))
           }
         ]
       }

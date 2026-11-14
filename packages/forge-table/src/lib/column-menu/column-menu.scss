@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  margin-inline-start: 8px;
+}
+
+.menu {
+  --forge-popover-background: var(--forge-theme-surface-inverse);
+  color: var(--forge-theme-text-high-inverse);
+}
+
+forge-dropdown-menu-item {
+  &::part(submenu-icon) {
+    color: var(--forge-theme-text-medium-inverse);
+  }
+}

@@ -1,0 +1,437 @@
+import '$src/shared';
+import '@tylertech/forge-table';
+import '@tylertech/forge-table/data-table/features/filter';
+import './data-table.scss';
+import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
+import type { BadgeTheme } from '@tylertech/forge/badge';
+import type { ISelectComponent } from '@tylertech/forge/select';
+import type { ISwitchComponent } from '@tylertech/forge/switch';
+import { actionCell, badgeCell, linkCell, meterCell, ratingCell } from '@tylertech/forge-table';
+import type { ColumnAggregation, ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
+import { IconRegistry } from '@tylertech/forge';
+import { tylIconDelete, tylIconEdit, tylIconStar } from '@tylertech/tyler-icons';
+
+IconRegistry.define([tylIconEdit, tylIconDelete, tylIconStar]);
+
+interface RowData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  department: string;
+  position: string;
+  salary: number;
+  performanceRating: number;
+  bonusRate: number;
+  startDate: Date;
+  city: string;
+  state: string;
+  notes: string;
+}
+
+const FETCH_DELAY_MS = 250;
+
+const NUMERIC_AGGREGATION_PROPERTIES = new Set(['salary', 'performanceRating', 'bonusRate']);
+const DATE_AGGREGATION_PROPERTIES = new Set(['startDate']);
+const DATE_AGGREGATIONS = new Set(['min', 'max', 'extent', 'count']);
+
+const bonusRateFormatter = new NumberFormatter({ percentage: true, minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+const TOP_PERFORMER_RATING = 4.5;
+
+const DEPARTMENT_THEMES: Record<string, BadgeTheme> = {
+  Engineering: 'primary',
+  Marketing: 'tertiary',
+  Sales: 'success',
+  HR: 'warning',
+  Finance: 'info'
+};
+
+const performanceMeter = meterCell({ min: 0, max: 5, low: 3, high: 4, optimum: 5 });
+
+const tagsBadges = badgeCell({
+  badges: ({ row }) => [
+    { text: row.original.department, theme: DEPARTMENT_THEMES[row.original.department] },
+    ...(row.original.performanceRating >= TOP_PERFORMER_RATING ? [{ text: 'Top performer', theme: 'success' as const, strong: true, icon: 'star' }] : [])
+  ]
+});
+
+const actionsColumn: ColumnDef<RowData> = {
+  id: 'actions',
+  header: 'Actions',
+  align: 'end',
+  resizable: false,
+  stopRowClickPropagation: true,
+  template: actionCell([
+    { text: 'Edit', icon: 'edit', onClick: ({ original }) => console.log('edit', original) },
+    { text: 'Delete', icon: 'delete', onClick: ({ original }) => console.log('delete', original) }
+  ])
+};
+
+const flatColumns: ColumnDef<RowData>[] = [
+  { header: 'Id', property: 'id', filterType: 'number' },
+  { header: 'First Name', property: 'firstName', renamable: true },
+  { header: 'Last Name', property: 'lastName', renamable: true },
+  { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
+  { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
+  { header: 'Department', property: 'department', renamable: true },
+  { header: 'Position', property: 'position', renamable: true },
+  { header: 'Tags', id: 'tags', template: tagsBadges },
+  { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
+  { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
+  { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
+  { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
+  { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
+  { header: 'City', property: 'city', renamable: true },
+  { header: 'State', property: 'state', renamable: true },
+  { header: 'Notes', property: 'notes', editable: true },
+  actionsColumn
+];
+
+const groupedColumns: ColumnDef<RowData>[] = [
+  { header: 'Id', property: 'id', filterType: 'number' },
+  {
+    header: 'Personal Info',
+    columns: [
+      { header: 'First Name', property: 'firstName', renamable: true },
+      { header: 'Last Name', property: 'lastName', renamable: true },
+      { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
+      { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) }
+    ]
+  },
+  {
+    header: 'Employment',
+    columns: [
+      { header: 'Department', property: 'department', renamable: true },
+      { header: 'Position', property: 'position', renamable: true },
+      { header: 'Tags', id: 'tags', template: tagsBadges },
+      { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
+      { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
+      { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
+      { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
+      { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() }
+    ]
+  },
+  {
+    header: 'Location',
+    columns: [
+      { header: 'City', property: 'city', renamable: true },
+      { header: 'State', property: 'state', renamable: true }
+    ]
+  },
+  { header: 'Notes', property: 'notes', editable: true },
+  actionsColumn
+];
+
+const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;
+dataTable.columns = flatColumns;
+dataTable.reorderable = true;
+dataTable.multiSort = false;
+const employees: RowData[] = [
+  {
+    id: 1,
+    firstName: 'Alice',
+    lastName: 'Smith',
+    email: 'alice.smith@company.com',
+    phone: '(555) 123-4567',
+    department: 'Engineering',
+    position: 'Senior Developer',
+    salary: 125000,
+    performanceRating: 4.5,
+    bonusRate: 0.12,
+    startDate: new Date(2019, 2, 18),
+    city: 'San Francisco',
+    state: 'CA',
+    notes: 'Excellent performance'
+  },
+  {
+    id: 2,
+    firstName: 'Alice',
+    lastName: 'Johnson',
+    email: 'alice.johnson@company.com',
+    phone: '(555) 234-5678',
+    department: 'Marketing',
+    position: 'Marketing Manager',
+    salary: 95000,
+    performanceRating: 3.8,
+    bonusRate: 0.08,
+    startDate: new Date(2020, 6, 6),
+    city: 'New York',
+    state: 'NY',
+    notes: 'Strong marketing skills'
+  },
+  {
+    id: 3,
+    firstName: 'Bob',
+    lastName: 'Brown',
+    email: 'bob.brown@company.com',
+    phone: '(555) 345-6789',
+    department: 'Engineering',
+    position: 'Tech Lead',
+    salary: 145000,
+    performanceRating: 4.9,
+    bonusRate: 0.15,
+    startDate: new Date(2017, 10, 2),
+    city: 'Austin',
+    state: 'TX',
+    notes: 'Leads the engineering team'
+  },
+  {
+    id: 4,
+    firstName: 'Bob',
+    lastName: 'Williams',
+    email: 'bob.williams@company.com',
+    phone: '(555) 456-7890',
+    department: 'Sales',
+    position: 'Sales Representative',
+    salary: 85000,
+    performanceRating: 3.2,
+    bonusRate: 0.05,
+    startDate: new Date(2021, 0, 25),
+    city: 'Chicago',
+    state: 'IL',
+    notes: 'Top sales performer'
+  },
+  {
+    id: 5,
+    firstName: 'Charlie',
+    lastName: 'Davis',
+    email: 'charlie.davis@company.com',
+    phone: '(555) 567-8901',
+    department: 'Engineering',
+    position: 'Junior Developer',
+    salary: 75000,
+    performanceRating: 3.6,
+    bonusRate: 0.0425,
+    startDate: new Date(2023, 8, 11),
+    city: 'Seattle',
+    state: 'WA',
+    notes: 'Promising junior developer'
+  },
+  {
+    id: 6,
+    firstName: 'Charlie',
+    lastName: 'Miller',
+    email: 'charlie.miller@company.com',
+    phone: '(555) 678-9012',
+    department: 'HR',
+    position: 'HR Manager',
+    salary: 90000,
+    performanceRating: 4.1,
+    bonusRate: 0.07,
+    startDate: new Date(2018, 4, 14),
+    city: 'Boston',
+    state: 'MA',
+    notes: 'HR department lead'
+  },
+  {
+    id: 7,
+    firstName: 'David',
+    lastName: 'Wilson',
+    email: 'david.wilson@company.com',
+    phone: '(555) 789-0123',
+    department: 'Engineering',
+    position: 'Senior Developer',
+    salary: 130000,
+    performanceRating: 4.7,
+    bonusRate: 0.135,
+    startDate: new Date(2016, 11, 5),
+    city: 'Denver',
+    state: 'CO',
+    notes: 'Senior developer with high performance'
+  },
+  {
+    id: 8,
+    firstName: 'David',
+    lastName: 'Moore',
+    email: 'david.moore@company.com',
+    phone: '(555) 890-1234',
+    department: 'Finance',
+    position: 'Financial Analyst',
+    salary: 80000,
+    performanceRating: 3.9,
+    bonusRate: 0.06,
+    startDate: new Date(2022, 3, 29),
+    city: 'Atlanta',
+    state: 'GA',
+    notes: 'Financial analyst with solid performance'
+  }
+];
+
+dataTable.dataSource = new DataSource<RowData>(async (skip, take) => {
+  await new Promise(resolve => setTimeout(resolve, FETCH_DELAY_MS));
+  return employees.slice(skip, skip + take);
+});
+dataTable.getRowName = (row: RowData) => `${row.firstName} ${row.lastName}`;
+
+dataTable.addEventListener('forge-data-table-sort', console.log);
+dataTable.addEventListener('forge-data-table-filter', console.log);
+dataTable.addEventListener('forge-data-table-column-order', console.log);
+dataTable.addEventListener('forge-data-table-row-click', console.log);
+dataTable.addEventListener('forge-data-table-column-visibility', console.log);
+
+const groupedColumnsToggle = document.querySelector('#opt-grouped-columns') as ISwitchComponent;
+groupedColumnsToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  dataTable.columns = selected ? groupedColumns : flatColumns;
+});
+
+const resizableToggle = document.querySelector('#opt-resizable') as ISwitchComponent;
+resizableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.resizable = selected));
+
+const reorderableToggle = document.querySelector('#opt-reorderable') as ISwitchComponent;
+reorderableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.reorderable = selected));
+
+const stripedToggle = document.querySelector('#opt-striped') as ISwitchComponent;
+stripedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.striped = selected));
+
+const hoverToggle = document.querySelector('#opt-hover') as ISwitchComponent;
+hoverToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.hover = selected));
+
+const compactToggle = document.querySelector('#opt-compact') as ISwitchComponent;
+compactToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.compact = selected));
+
+const borderedToggle = document.querySelector('#opt-bordered') as ISwitchComponent;
+borderedToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.bordered = selected));
+
+const allowRowClickToggle = document.querySelector('#opt-allow-row-click') as ISwitchComponent;
+allowRowClickToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.allowRowClick = selected));
+
+const expandableToggle = document.querySelector('#opt-expandable') as ISwitchComponent;
+expandableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.expandable = selected));
+
+const customCellTemplateToggle = document.querySelector('#opt-custom-cell-template') as ISwitchComponent;
+customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  const findColumn = (columns: ColumnDef<RowData>[]): ColumnDef<RowData> | undefined => {
+    for (const column of columns) {
+      if (column.property === 'email') {
+        return column;
+      }
+      if (column.columns) {
+        const found = findColumn(column.columns as ColumnDef<RowData>[]);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const emailColumn = findColumn(dataTable.columns);
+  if (!emailColumn) {
+    return;
+  }
+
+  if (selected) {
+    emailColumn.template = ({ cell }) => {
+      const div = document.createElement('div');
+      div.setAttribute('part', 'cell');
+      div.textContent = `Custom: ${cell.getValue()}`;
+      div.style.color = 'red';
+      return div;
+    };
+    emailColumn.useTemplateSlot = true;
+    emailColumn.stopRowClickPropagation = true;
+  } else {
+    delete emailColumn.template;
+    delete emailColumn.useTemplateSlot;
+    delete emailColumn.stopRowClickPropagation;
+  }
+  dataTable.columns = [...dataTable.columns];
+});
+
+const rowSelectionSelect = document.querySelector('#opt-row-selection') as ISelectComponent;
+rowSelectionSelect.addEventListener('change', ({ detail }) => (dataTable.rowSelection = detail as RowSelectionType));
+
+const cellSelectionToggle = document.querySelector('#opt-cell-selection') as ISwitchComponent;
+cellSelectionToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.cellSelection = selected));
+
+const sortableToggle = document.querySelector('#opt-sortable') as ISwitchComponent;
+sortableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.sortable = selected));
+
+const manualSortToggle = document.querySelector('#opt-manual-sort') as ISwitchComponent;
+manualSortToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualSort = selected));
+
+const multiSortToggle = document.querySelector('#opt-multi-sort') as ISwitchComponent;
+multiSortToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.multiSort = selected));
+
+const multiSortKeySelect = document.querySelector('#opt-multi-sort-key') as ISelectComponent;
+multiSortKeySelect.addEventListener('change', ({ detail }) => (dataTable.multiSortKey = detail as 'shift' | 'ctrl' | 'meta' | 'alt'));
+
+const maxMultiSortColCountSelect = document.querySelector('#opt-max-multi-sort-col-count') as ISelectComponent;
+maxMultiSortColCountSelect.addEventListener('change', ({ detail }) => {
+  dataTable.maxMultiSortColCount = detail === 'unlimited' ? undefined : parseInt(detail, 10);
+});
+
+const filterableToggle = document.querySelector('#opt-filterable') as ISwitchComponent;
+filterableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.filterable = selected));
+
+const manualFilterToggle = document.querySelector('#opt-manual-filter') as ISwitchComponent;
+manualFilterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.manualFilter = selected));
+
+const showFooterToggle = document.querySelector('#opt-show-footer') as ISwitchComponent;
+showFooterToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
+  const updateColumnFooters = (columns: ColumnDef<RowData>[]): void => {
+    columns.forEach(column => {
+      if (column.columns) {
+        updateColumnFooters(column.columns);
+      } else if (column.property === 'id') {
+        if (selected) {
+          column.footer = ({ data }) => `Count: ${data.length}`;
+        } else {
+          delete column.footer;
+        }
+      } else if (column.property === 'salary') {
+        if (selected) {
+          column.footer = ({ data }) => {
+            const total = data.reduce((acc, row) => acc + row.salary, 0);
+            const avg = total / data.length;
+            return `Avg: $${Math.round(avg).toLocaleString()} | Total: $${total.toLocaleString()}`;
+          };
+        } else {
+          delete column.footer;
+        }
+      }
+    });
+  };
+
+  updateColumnFooters(dataTable.columns);
+  dataTable.columns = [...dataTable.columns];
+});
+
+const aggregationSelect = document.querySelector('#opt-aggregation') as ISelectComponent;
+aggregationSelect.addEventListener('change', ({ detail }) => {
+  const aggregate = detail === 'off' ? undefined : (detail as ColumnAggregation<RowData>);
+  const applyAggregate = (columns: ColumnDef<RowData>[]): void => {
+    columns.forEach(column => {
+      if (column.columns) {
+        applyAggregate(column.columns);
+        return;
+      }
+
+      const property = column.property as string;
+      const isAggregated = NUMERIC_AGGREGATION_PROPERTIES.has(property) || (DATE_AGGREGATION_PROPERTIES.has(property) && DATE_AGGREGATIONS.has(detail));
+      if (aggregate && isAggregated) {
+        column.aggregate = aggregate;
+      } else {
+        delete column.aggregate;
+      }
+    });
+  };
+
+  applyAggregate(flatColumns);
+  applyAggregate(groupedColumns);
+  dataTable.columns = [...dataTable.columns];
+});
+
+const hiddenColumnsSelect = document.querySelector('#opt-hidden-columns') as ISelectComponent;
+hiddenColumnsSelect.addEventListener('change', ({ detail }) => {
+  const hiddenColumns = new Set<string>(Array.isArray(detail) ? detail : []);
+  flatColumns.forEach(({ property }) => {
+    if (hiddenColumns.has(property as string)) {
+      dataTable.hideColumn(property as string);
+    } else {
+      dataTable.showColumn(property as string);
+    }
+  });
+});

@@ -1,0 +1,13 @@
+.content > .card {
+  max-width: none;
+}
+
+.content .container {
+  padding: 0;
+}
+
+.options-container .option-section {
+  margin-block: 16px 0;
+  padding-block-start: 16px;
+  border-block-start: 1px solid var(--forge-theme-outline);
+}
