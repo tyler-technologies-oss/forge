@@ -1,0 +1,941 @@
+@use 'sass:list';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/radix-theme';
+@use '@tylertech/forge-tokens/sass/radix-typography';
+@use '@tylertech/forge-tokens/sass/theme';
+
+@use '../app-bar/app-bar/token-utils' as app-bar;
+@use '../badge/token-utils' as badge;
+@use '../banner/token-utils' as banner;
+@use '../inline-message/token-utils' as inline-message;
+@use '../button/token-utils' as button;
+@use '../button-area/token-utils' as button-area;
+@use '../button-toggle/button-toggle/token-utils' as button-toggle;
+@use '../button-toggle/button-toggle-group/token-utils' as button-toggle-group;
+@use '../card/token-utils' as card;
+@use '../dialog/token-utils' as dialog;
+@use '../divider/token-utils' as divider;
+@use '../kbd/token-utils' as kbd;
+@use '../tooltip/token-utils' as tooltip;
+@use '../list/list-item/token-utils' as list-item;
+@use '../option/option/token-utils' as option;
+@use '../stepper/step/token-utils' as step;
+@use '../tabs/tab/token-utils' as tab;
+@use '../tabs/tab-bar/token-utils' as tab-bar;
+@use '../timeline/timeline-break/token-utils' as timeline-break;
+@use '../timeline/timeline-item/token-utils' as timeline-item;
+@use '../tree/tree-item/token-utils' as tree-item;
+@use '../chips/chip/token-utils' as chip;
+@use '../field/token-utils' as field;
+@use '../file-picker/token-utils' as file-picker;
+@use '../floating-action-button/token-utils' as fab;
+@use '../icon/token-utils' as icon;
+@use '../icon-button/token-utils' as icon-button;
+@use '../focus-indicator/token-utils' as focus-indicator;
+@use '../popover/token-utils' as popover;
+@use '../skip-link/token-utils' as skip-link;
+@use '../toast/token-utils' as toast;
+@use '../toolbar/token-utils' as toolbar;
+
+$_field-elements: forge-field, forge-text-field, forge-select, forge-chip-field;
+$_button-themes: secondary, tertiary, success, error, warning, info;
+$_toast-themes: primary, secondary, tertiary, success, warning, error, info;
+$_legacy-neutral-themes: default, primary, secondary, tertiary, info-secondary;
+$_chip-themes: secondary, tertiary, success, warning, error, info;
+$_icon-themes: primary, secondary, tertiary, success, error, warning;
+$_icon-button-themes: primary, secondary, tertiary, success, error, warning, info;
+
+@function _theme-selector($themes) {
+  $selectors: ();
+  @each $theme in $themes {
+    $selectors: list.append($selectors, '[theme=#{$theme}]', comma);
+  }
+  @return $selectors;
+}
+
+@mixin _badge {
+  @include badge.provide-theme(
+    (
+      font-weight: var(--forge-typography-badge-font-weight)
+    )
+  );
+}
+
+@mixin _badge-colors($background, $color, $outlined-background: null, $outlined-color: null, $outlined-border-color: null) {
+  @include badge.provide-theme(
+    (
+      background: $background,
+      color: $color
+    )
+  );
+
+  @if $outlined-background {
+    @include badge.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-color: $outlined-color,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
+}
+
+@mixin _banner-colors($background, $color, $icon-color, $outlined-background: null, $outlined-border-color: null) {
+  @include banner.provide-theme(
+    (
+      background: $background,
+      color: $color,
+      icon-color: $icon-color
+    )
+  );
+
+  @if $outlined-background {
+    @include banner.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
+}
+
+@mixin _inline-message-colors($background, $color, $border-color, $icon-color, $outlined-background: null, $outlined-border-color: null) {
+  @include inline-message.provide-theme(
+    (
+      background: $background,
+      color: $color,
+      border-color: $border-color,
+      icon-color: $icon-color
+    )
+  );
+
+  @if $outlined-background {
+    @include inline-message.provide-theme(
+      (
+        outlined-background: $outlined-background,
+        outlined-border-color: $outlined-border-color
+      )
+    );
+  }
+}
+
+@mixin _button {
+  @include button.provide-theme(
+    (
+      text-color: var(--forge-theme-on-primary-container-minimum),
+      link-color: var(--forge-theme-on-primary-container-minimum),
+      outlined-background: var(--forge-theme-primary-container-minimum),
+      outlined-color: var(--forge-theme-on-primary-container-minimum),
+      outlined-border-color: var(--forge-theme-border-primary-default),
+      tonal-background: var(--forge-theme-secondary-container),
+      tonal-color: var(--forge-theme-on-secondary-container)
+    )
+  );
+}
+
+@mixin _button-theme($theme) {
+  @include button.provide-theme(
+    (
+      text-color: var(--forge-theme-on-#{$theme}-container-minimum),
+      link-color: var(--forge-theme-on-#{$theme}-container-minimum),
+      outlined-background: var(--forge-theme-#{$theme}-container-minimum),
+      outlined-color: var(--forge-theme-on-#{$theme}-container-minimum),
+      outlined-border-color: var(--forge-theme-border-#{$theme}-default)
+    )
+  );
+}
+
+@mixin _button-area {
+  @include button-area.provide-theme(
+    (
+      focus-indicator-color: var(--forge-theme-focus-indicator)
+    )
+  );
+}
+
+@mixin _button-toggle {
+  @include button-toggle.provide-theme(
+    (
+      focus-indicator-color: var(--forge-theme-focus-indicator)
+    )
+  );
+}
+
+@mixin _button-toggle-group {
+  @include button-toggle-group.provide-theme(
+    (
+      outline-color: var(--forge-theme-outline)
+    )
+  );
+}
+
+@mixin _focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: var(--forge-theme-focus-indicator)
+    )
+  );
+}
+
+@mixin _icon-button {
+  @include icon-button.provide-theme(
+    (
+      toggle-on-icon-color: var(--forge-theme-on-primary-container),
+      outlined-toggle-on-icon-color: var(--forge-theme-on-primary-container),
+      tonal-toggle-on-icon-color: var(--forge-theme-on-primary-container),
+      filled-toggle-icon-color: var(--forge-theme-on-primary-container-minimum),
+      outlined-border-color: var(--forge-theme-border-neutral-default),
+      focus-indicator-color: var(--forge-theme-focus-indicator)
+    )
+  );
+}
+
+@mixin _icon-button-theme($theme) {
+  @include icon-button.provide-theme(
+    (
+      toggle-on-icon-color: var(--forge-theme-on-#{$theme}-container),
+      outlined-toggle-on-icon-color: var(--forge-theme-on-#{$theme}-container),
+      tonal-toggle-on-icon-color: var(--forge-theme-on-#{$theme}-container),
+      outlined-border-color: var(--forge-theme-border-#{$theme}-default)
+    )
+  );
+}
+
+@mixin _skip-link {
+  @include skip-link.provide-theme(
+    (
+      focus-indicator-color: var(--forge-theme-focus-indicator)
+    )
+  );
+}
+
+@mixin _card {
+  @include card.provide-theme(
+    (
+      raised-background: var(--forge-theme-surface-elevated),
+      raised-outline-width: border.variable(thin),
+      raised-outline-color: var(--forge-theme-surface-elevated-ring),
+      outline-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _chip {
+  @include chip.provide-theme(
+    (
+      color: var(--forge-theme-on-primary-container-minimum),
+      focus-indicator-color: var(--forge-theme-focus-indicator),
+      border-color: var(--forge-theme-outline-low),
+      selected-background: var(--forge-theme-primary-container),
+      selected-color: var(--forge-theme-on-primary-container),
+      invalid-color: var(--forge-theme-on-error-container-minimum),
+      invalid-selected-background: var(--forge-theme-error-container),
+      invalid-selected-color: var(--forge-theme-on-error-container)
+    )
+  );
+}
+
+@mixin _chip-tint {
+  @include chip.provide-theme(
+    (
+      border-tint: var(--forge-theme-primary-container-low),
+      invalid-border-tint: var(--forge-theme-error-container-low)
+    )
+  );
+}
+
+@mixin _field {
+  @include field.provide-theme(
+    (
+      background: var(--forge-theme-control-bg),
+      tonal-background: var(--forge-theme-control-bg-tonal),
+      filled-background: var(--forge-theme-control-bg-filled),
+      default-outline-color: var(--forge-theme-outline),
+      default-outline-color-hover: var(--forge-theme-outline-medium),
+      placeholder-color: var(--forge-theme-text-low)
+    )
+  );
+
+  --forge-field-readonly-background: var(--forge-theme-surface-transparent);
+  --forge-field-readonly-outline-color: var(--forge-theme-outline-low);
+}
+
+@mixin _file-picker {
+  @include file-picker.provide-theme(
+    (
+      background: var(--forge-theme-control-bg-filled),
+      border-color: var(--forge-theme-outline)
+    )
+  );
+}
+
+@mixin _fab {
+  @include fab.provide-theme(
+    (
+      background: var(--forge-theme-secondary-container-highest),
+      color: var(--forge-theme-on-secondary-container-highest),
+      shape: var(--forge-shape-extra-large)
+    )
+  );
+}
+
+@mixin _popover {
+  @include popover.provide-theme(
+    (
+      background: var(--forge-theme-surface-elevated),
+      ring-width: border.variable(thin),
+      ring-color: var(--forge-theme-surface-elevated-ring),
+      border-color: var(--forge-theme-outline-low),
+      arrow-border-width: 0px
+    )
+  );
+}
+
+@mixin _dialog {
+  @include dialog.provide-theme(
+    (
+      background: var(--forge-theme-surface-elevated),
+      elevation: (
+        0 0 0 border.variable(thin) var(--forge-theme-surface-elevated-ring),
+        elevation.value(24)
+      ),
+      nonmodal-elevation: (
+        0 0 0 border.variable(thin) var(--forge-theme-surface-elevated-ring),
+        elevation.value(4)
+      )
+    )
+  );
+}
+
+@mixin _divider {
+  @include divider.provide-theme(
+    (
+      color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _kbd {
+  @include kbd.provide-theme(
+    (
+      border-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _tooltip {
+  @include tooltip.provide-theme(
+    (
+      border-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _list-item {
+  @include list-item.provide-theme(
+    (
+      selected-color: var(--forge-theme-on-primary-container-minimum)
+    )
+  );
+}
+
+@mixin _option {
+  @include option.provide-theme(
+    (
+      selected-color: var(--forge-theme-on-primary-container-minimum)
+    )
+  );
+}
+
+@mixin _step {
+  @include step.provide-theme(
+    (
+      line-color: var(--forge-theme-outline-low)
+    )
+  );
+  @include _step-labels;
+}
+
+@mixin _step-labels {
+  --forge-step-selected-label-color: var(--forge-theme-on-primary-container-minimum);
+  --forge-step-error-label-color: var(--forge-theme-text-critical);
+}
+
+@mixin _tab {
+  @include tab.provide-theme(
+    (
+      active-color: var(--forge-theme-text-high),
+      indicator-color: var(--forge-theme-on-primary-container-minimum)
+    )
+  );
+}
+
+@mixin _tab-bar {
+  @include tab-bar.provide-theme(
+    (
+      divider-color: var(--forge-theme-outline-low),
+      overflow-divider-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _timeline-break {
+  @include timeline-break.provide-theme(
+    (
+      color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _timeline-item {
+  @include timeline-item.provide-theme(
+    (
+      line-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _tree-item {
+  @include tree-item.provide-theme(
+    (
+      indent-line-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _table {
+  --forge-table-theme-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _split-view-panel {
+  --forge-split-view-handle-color: var(--forge-theme-outline-low);
+}
+
+@mixin _dialog-utils {
+  --forge-dialog-scrollable-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _calendar-menu {
+  --forge-calendar-menu-border-color: var(--forge-theme-outline-low);
+}
+
+@mixin _calendar {
+  --forge-calendar-menu-background: transparent;
+  --forge-calendar-theme-today-color: var(--forge-theme-on-primary-container-minimum);
+}
+
+@mixin _toast-focus {
+  --forge-toast-focus-indicator-color: var(--forge-theme-on-surface-inverse);
+}
+
+@mixin _toast {
+  @include toast.provide-theme(
+    (
+      action-color: var(--forge-theme-on-surface-inverse-secondary)
+    )
+  );
+}
+
+@mixin _toolbar {
+  @include toolbar.provide-theme(
+    (
+      divider-color: var(--forge-theme-outline-low)
+    )
+  );
+}
+
+@mixin _radio {
+  --forge-radio-unchecked-border-color: var(--forge-theme-outline-medium);
+}
+
+@mixin _modal-drawer {
+  --forge-modal-drawer-elevation: 0 0 0 #{border.variable(thin)} var(--forge-theme-surface-elevated-ring), #{elevation.value(24)};
+  --forge-drawer-border-width: 0;
+}
+
+@mixin _color-picker {
+  --forge-color-picker-slider-thumb-shadow: 0 0 0 1px rgb(0 0 0 / 0.32), 0 1px 3px rgb(0 0 0 / 0.3);
+  --forge-color-picker-preview-shadow: none;
+  --forge-color-picker-preview-ring-shadow: inset 0 0 0 1px var(--forge-theme-outline);
+  --forge-color-picker-input-focus-color: var(--forge-theme-focus-indicator);
+  --forge-color-picker-gradient-thumb-size: 12px;
+  --forge-color-picker-gradient-thumb-border-width: 2px;
+  --forge-color-picker-gradient-thumb-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), inset 0 0 0 1px rgb(0 0 0 / 0.4);
+}
+
+@mixin _scrollbar {
+  --forge-scrollbar-track-container: transparent;
+  --forge-scrollbar-track-container-hover: transparent;
+  --forge-scrollbar-thumb-container: var(--forge-theme-surface-container-highest);
+  --forge-scrollbar-thumb-container-hover: var(--forge-theme-surface-container-maximum);
+}
+
+@mixin _drawer {
+  --forge-drawer-background: var(--forge-theme-surface-translucent);
+  --forge-drawer-border-color: var(--forge-theme-outline-low);
+}
+
+///
+/// Provides the component token definitions for the opt-in Forge Radix themes.
+///
+/// Custom properties resolve their `var()` references on the element that declares them. The tokens are therefore declared both on
+/// `:root` (for components nested in other components' shadow roots) and on each component element (so that `--forge-theme-*`
+/// overrides made on an ancestor still apply to the component).
+///
+@mixin component-properties {
+  @include _badge;
+  @include _button;
+  @include _button-area;
+  @include _button-toggle;
+  @include _button-toggle-group;
+  @include _focus-indicator;
+  @include _icon-button;
+  @include _skip-link;
+  @include _card;
+  @include _chip;
+  @include _dialog;
+  @include _divider;
+  @include _kbd;
+  @include _tooltip;
+  @include _toast;
+  @include _list-item;
+  @include _option;
+  @include _step;
+  @include _tab-bar;
+  @include _toast-focus;
+  @include _timeline-break;
+  @include _timeline-item;
+  @include _tree-item;
+  @include _table;
+  @include _split-view-panel;
+  @include _dialog-utils;
+  @include _calendar-menu;
+  @include _calendar;
+  @include _field;
+  @include _file-picker;
+  @include _fab;
+  @include _popover;
+  @include _toolbar;
+  @include _radio;
+  @include _scrollbar;
+  @include _color-picker;
+  @include _drawer;
+
+  --forge-card-background: var(--forge-theme-surface-elevated-translucent);
+  --forge-toolbar-background: var(--forge-theme-surface-elevated);
+}
+
+///
+/// Provides the element-scoped overrides for the opt-in Forge Radix themes. Emit at the top level of a stylesheet, not inside `:root`.
+///
+@mixin scoped-properties {
+  :where(forge-badge) {
+    @include _badge;
+  }
+
+  $_not-strong: ':not([strong], :state(strong))';
+
+  :where(forge-badge#{$_not-strong}:not([color]), .forge-badge) {
+    @include _badge-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-border-neutral-subtle)
+    );
+  }
+
+  @each $role,
+    $themes
+      in (
+        info: ':is([theme=info], [theme=info-primary])',
+        success: '[theme=success]',
+        warning: '[theme=warning]',
+        error: ':is([theme=error], [theme=critical], [theme=danger])'
+      )
+  {
+    :where(forge-badge#{$_not-strong}#{$themes}) {
+      @include _badge-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-border-#{$role}-subtle)
+      );
+    }
+  }
+
+  @each $role, $hue, $themes in (info, 'blue', ':is([theme=info], [theme=info-primary])'), (success, 'green', '[theme=success]'),
+    (warning, 'amber', '[theme=warning]'), (error, 'red', ':is([theme=error], [theme=critical], [theme=danger])')
+  {
+    :where(forge-badge:is([strong], :state(strong))#{$themes}) {
+      @include _badge-colors(var(--forge-color-#{$hue}-solid), var(--forge-color-#{$hue}-contrast));
+    }
+  }
+
+  :where(forge-banner, .forge-banner) {
+    @include _banner-colors(
+      var(--forge-theme-bg-info-default),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-bg-info-subtle),
+      var(--forge-theme-border-info-subtle)
+    );
+    @include banner.provide-theme(
+      (
+        min-height: 56px,
+        dismissible-padding-inline-end: spacing.variable(xxsmall),
+        padding-block: spacing.variable(xsmall)
+      )
+    );
+  }
+
+  :where(forge-banner:is(#{_theme-selector($_legacy-neutral-themes)})) {
+    @include _banner-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-high),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-border-neutral-subtle)
+    );
+  }
+
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=critical], [theme=danger])') {
+    :where(forge-banner#{$themes}) {
+      @include _banner-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-border-#{$role}-subtle)
+      );
+    }
+  }
+
+  :where(forge-inline-message, .forge-inline-message) {
+    @include _inline-message-colors(
+      var(--forge-theme-bg-info-default),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-border-info-default),
+      var(--forge-theme-on-info-container-low),
+      var(--forge-theme-bg-info-subtle),
+      var(--forge-theme-border-info-subtle)
+    );
+  }
+
+  :where(forge-inline-message:is(#{_theme-selector($_legacy-neutral-themes)})) {
+    @include _inline-message-colors(
+      var(--forge-theme-bg-neutral-default),
+      var(--forge-theme-text-high),
+      var(--forge-theme-border-neutral-default),
+      var(--forge-theme-text-medium),
+      var(--forge-theme-bg-neutral-subtle),
+      var(--forge-theme-border-neutral-subtle)
+    );
+  }
+
+  @each $role, $themes in (success: '[theme=success]', warning: '[theme=warning]', error: ':is([theme=error], [theme=critical], [theme=danger])') {
+    :where(forge-inline-message#{$themes}) {
+      @include _inline-message-colors(
+        var(--forge-theme-bg-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-border-#{$role}-default),
+        var(--forge-theme-on-#{$role}-container-low),
+        var(--forge-theme-bg-#{$role}-subtle),
+        var(--forge-theme-border-#{$role}-subtle)
+      );
+    }
+  }
+
+  :where(forge-button) {
+    @include _button;
+  }
+
+  @each $theme in $_button-themes {
+    :where(forge-button[theme='#{$theme}']) {
+      @include _button-theme($theme);
+    }
+  }
+
+  :where(forge-button[theme='app-bar']) {
+    @include button.provide-theme(
+      (
+        outlined-background: transparent
+      )
+    );
+  }
+
+  :where(forge-button-area) {
+    @include _button-area;
+  }
+
+  :where(forge-button-toggle) {
+    @include _button-toggle;
+  }
+
+  :where(forge-button-toggle-group) {
+    @include _button-toggle-group;
+  }
+
+  :where(forge-icon-button) {
+    @include _icon-button;
+  }
+
+  :where(forge-icon-button[variant='outlined']:not([disabled], :state(toggle):state(pressed))) {
+    --forge-icon-button-icon-color: var(--forge-theme-text-medium);
+  }
+
+  @each $theme in $_icon-button-themes {
+    :where(forge-icon-button[variant='outlined'][theme='#{$theme}']:not([disabled], :state(toggle):state(pressed))) {
+      --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container-minimum);
+    }
+
+    :where(forge-icon-button[variant='icon'][theme='#{$theme}']:not(:state(toggle))) {
+      @if list.index((primary, secondary, tertiary), $theme) {
+        --forge-icon-button-icon-color: var(--forge-theme-text-high);
+      } @else {
+        --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container-minimum);
+      }
+    }
+
+    @if $theme != primary {
+      :where(forge-icon-button[variant='filled'][theme='#{$theme}']:not(:state(toggle))),
+      :where(forge-icon-button[variant='raised'][theme='#{$theme}']:not(:state(toggle))) {
+        --forge-icon-button-icon-color: var(--forge-theme-on-#{$theme}-container);
+        --forge-icon-button-background-color: var(--forge-theme-#{$theme}-container);
+      }
+    }
+
+    :where(forge-icon-button[theme='#{$theme}']) {
+      @include _icon-button-theme($theme);
+    }
+  }
+
+  :where(forge-skip-link) {
+    @include _skip-link;
+  }
+
+  :where(forge-dialog) {
+    @include _dialog;
+  }
+
+  :where(forge-divider) {
+    @include _divider;
+  }
+
+  :where(forge-kbd) {
+    @include _kbd;
+  }
+
+  :where(forge-tooltip) {
+    @include _tooltip;
+  }
+
+  :where(forge-list-item) {
+    @include _list-item;
+  }
+
+  :where(forge-option) {
+    @include _option;
+  }
+
+  :where(forge-step) {
+    @include _step;
+  }
+
+  :where(forge-toast) {
+    @include _toast-focus;
+  }
+
+  @each $theme in $_toast-themes {
+    :where(forge-toast[theme='#{$theme}']) {
+      @include toast.provide-theme(
+        (
+          focus-indicator-color: var(--forge-theme-on-#{$theme})
+        )
+      );
+    }
+  }
+
+  :where(forge-tab) {
+    @include _tab;
+  }
+
+  :where(forge-tab-bar) {
+    @include _tab-bar;
+  }
+
+  :where(forge-app-bar, forge-app-bar > *, .forge-app-bar) {
+    --forge-theme-on-primary-container-minimum: var(--forge-theme-primary);
+  }
+
+  :where(forge-timeline-break) {
+    @include _timeline-break;
+  }
+
+  :where(forge-timeline-item) {
+    @include _timeline-item;
+  }
+
+  :where(forge-tree-item) {
+    @include _tree-item;
+  }
+
+  :where(forge-table) {
+    @include _table;
+  }
+
+  :where(forge-split-view-panel) {
+    @include _split-view-panel;
+  }
+
+  :where(forge-calendar-menu) {
+    @include _calendar-menu;
+  }
+
+  :where(forge-calendar) {
+    @include _calendar;
+  }
+
+  :where(forge-calendar[forge-popover-context='true']) {
+    --forge-calendar-event-stroke-color: var(--forge-theme-surface-elevated);
+  }
+
+  :where(forge-count-card:state(info-secondary)) {
+    --forge-card-outline-color: var(--forge-theme-outline-low);
+  }
+
+  @each $theme in $_icon-themes {
+    :where(forge-icon[theme='#{$theme}']) {
+      @include icon.provide-theme(
+        (
+          color: var(--forge-theme-on-#{$theme}-container-minimum)
+        )
+      );
+    }
+  }
+
+  :where(forge-chip, .forge-chip) {
+    @include _chip;
+    @include _chip-tint;
+  }
+
+  :where(forge-chip[type='field']) {
+    @include chip.provide-theme(
+      (
+        border-tint: transparent
+      )
+    );
+  }
+
+  @each $theme in $_chip-themes {
+    :where(forge-chip[theme='#{$theme}']) {
+      @include chip.provide-theme(
+        (
+          border-tint: var(--forge-theme-#{$theme}-container-low)
+        )
+      );
+    }
+
+    :where(forge-chip[theme='#{$theme}']:not([type='field'])) {
+      @include chip.provide-theme(
+        (
+          color: var(--forge-theme-on-#{$theme}-container-minimum)
+        )
+      );
+    }
+
+    :where(forge-chip[theme='#{$theme}'][selected]:not([type='field'])) {
+      @include chip.provide-theme(
+        (
+          background: var(--forge-theme-#{$theme}-container),
+          color: var(--forge-theme-on-#{$theme}-container)
+        )
+      );
+    }
+  }
+
+  :where(forge-card, forge-dialog, forge-popover) {
+    --forge-toolbar-background: transparent;
+  }
+
+  :where(forge-card) {
+    @include _card;
+  }
+
+  :where(#{$_field-elements}) {
+    @include _field;
+  }
+
+  :where(.forge-field) {
+    @include _field;
+  }
+
+  :where(:is(forge-app-bar, .forge-app-bar) .forge-field) {
+    --forge-field-default-outline-color: var(--forge-theme-outline-low);
+    --forge-field-default-outline-color-hover: var(--forge-theme-outline-high);
+  }
+
+  :where(forge-file-picker) {
+    @include _file-picker;
+  }
+
+  :where(forge-fab) {
+    @include _fab;
+  }
+
+  :where(forge-popover) {
+    @include _popover;
+    --forge-theme-surface: var(--forge-theme-surface-elevated);
+    --forge-theme-surface-elevated-translucent: var(--forge-theme-surface-elevated);
+  }
+
+  :where(forge-toolbar) {
+    @include _toolbar;
+  }
+
+  :where(forge-radio) {
+    @include _radio;
+  }
+
+  :where(forge-drawer) {
+    @include _drawer;
+  }
+
+  :where(forge-modal-drawer) {
+    @include _modal-drawer;
+    --forge-drawer-background: var(--forge-theme-surface-elevated);
+  }
+}
+
+///
+/// Provides the CSS custom property definitions for the opt-in Forge Radix light theme.
+///
+@mixin theme-properties {
+  @include radix-theme.properties;
+  @include radix-typography.properties;
+  @include component-properties;
+}
+
+///
+/// Provides the CSS custom property definitions for the opt-in Forge Radix dark theme.
+///
+@mixin theme-properties-dark {
+  @include radix-theme.properties-dark;
+  @include radix-typography.properties;
+  @include component-properties;
+
+  @include chip.provide-theme(
+    (
+      field-border-color: theme.variable(outline-low)
+    )
+  );
+
+  @include app-bar.provide-theme(
+    (
+      elevation: inset 0 -1px 0 theme.variable(outline-low)
+    )
+  );
+}

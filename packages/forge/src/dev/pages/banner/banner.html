@@ -10,14 +10,26 @@ include('./src/partials/page.ejs', {
         defaultValue: 'info',
         id: 'opt-theme',
         options: [
-          { label: 'Primary', value: 'primary' },
-          { label: 'Secondary', value: 'secondary' },
-          { label: 'Tertiary', value: 'tertiary' },
+          { label: 'Default (neutral)', value: 'default' },
+          { label: 'Primary (deprecated)', value: 'primary' },
+          { label: 'Secondary (deprecated)', value: 'secondary' },
+          { label: 'Tertiary (deprecated)', value: 'tertiary' },
           { label: 'Success', value: 'success' },
           { label: 'Error', value: 'error' },
+          { label: 'Critical', value: 'critical' },
           { label: 'Warning', value: 'warning' },
           { label: 'Info (default)', value: 'info' },
-          { label: 'Info Secondary', value: 'info-secondary' },
+          { label: 'Info Secondary (deprecated)', value: 'info-secondary' },
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Variant',
+        defaultValue: 'tonal',
+        id: 'opt-variant',
+        options: [
+          { label: 'Tonal (default)', value: 'tonal' },
+          { label: 'Outlined', value: 'outlined' }
         ]
       },
       { type: 'switch', label: 'Dismissed', id: 'opt-dismissed' },

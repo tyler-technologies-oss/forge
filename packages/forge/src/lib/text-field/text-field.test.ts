@@ -113,6 +113,22 @@ describe('Text field', () => {
       expect(harness.element.labelPosition).toBe('block-start');
     });
 
+    it('should set the field readonly when the input is readonly', async () => {
+      const harness = await createFixture();
+      harness.inputElement.readOnly = true;
+      await frame();
+      expect(harness.fieldElement.readonly).toBe(true);
+    });
+
+    it('should remove readonly from the field when the input is no longer readonly', async () => {
+      const harness = await createFixture();
+      harness.inputElement.readOnly = true;
+      await frame();
+      harness.inputElement.readOnly = false;
+      await frame();
+      expect(harness.fieldElement.readonly).toBe(false);
+    });
+
     it('should disable input when disabled is true', async () => {
       const harness = await createFixture();
       harness.element.disabled = true;

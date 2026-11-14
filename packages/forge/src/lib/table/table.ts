@@ -109,6 +109,8 @@ declare global {
  * @event {CustomEvent<void>} forge-table-before-body-rendered - Dispatched before the table body is rendered.
  * @event {CustomEvent<void>} forge-table-body-rendered - Dispatched when the table body is rendered.
  *
+ * @cssproperty --forge-table-theme-border-color - The color of the borders between table rows and under the sticky header.
+ *
  * @cssclass forge-data-table - The base table class.
  */
 @customElement({

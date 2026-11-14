@@ -1,0 +1,41 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'Radix compare',
+    includePath: './pages/radix-compare/radix-compare.ejs',
+    options: [
+      {
+        type: 'select',
+        label: 'Page',
+        id: 'opt-page',
+        options: []
+      },
+      {
+        type: 'select',
+        label: 'View',
+        id: 'opt-view',
+        defaultValue: 'side-by-side',
+        options: [
+          { label: 'Side by side', value: 'side-by-side' },
+          { label: 'Difference', value: 'difference' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Frame width',
+        id: 'opt-width',
+        defaultValue: 'fit',
+        options: [
+          { label: 'Fit', value: 'fit' },
+          { label: '1280px', value: '1280' },
+          { label: '1024px', value: '1024' },
+          { label: '768px', value: '768' },
+          { label: '414px', value: '414' }
+        ]
+      },
+      { type: 'switch', label: 'Dark', id: 'opt-dark' },
+      { type: 'switch', label: 'Sync scrolling', id: 'opt-sync', defaultValue: true }
+    ]
+  }
+})
+%>

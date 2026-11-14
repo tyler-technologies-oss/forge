@@ -1,13 +1,15 @@
-import { COMPONENT_NAME_PREFIX, Theme } from '../constants.js';
+import { COMPONENT_NAME_PREFIX } from '../constants.js';
 
 const elementName: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}inline-message`;
 
 const attributes = {
-  THEME: 'theme'
+  THEME: 'theme',
+  VARIANT: 'variant'
 };
 
 const defaults = {
-  THEME: 'info'
+  THEME: 'info' as InlineMessageTheme,
+  VARIANT: 'tonal' as InlineMessageVariant
 };
 
 export const INLINE_MESSAGE_CONSTANTS = {
@@ -16,5 +18,7 @@ export const INLINE_MESSAGE_CONSTANTS = {
   defaults
 };
 
-type LegacyInlineMessageThemes = 'info-secondary' | 'danger';
-export type InlineMessageTheme = Theme | LegacyInlineMessageThemes;
+/** @deprecated These themes are kept for compatibility. Use `default`, `info`, `success`, `warning`, `error`, or `critical` instead. */
+type LegacyInlineMessageThemes = 'primary' | 'secondary' | 'tertiary' | 'info-secondary' | 'danger';
+export type InlineMessageTheme = 'default' | 'info' | 'success' | 'warning' | 'error' | 'critical' | LegacyInlineMessageThemes;
+export type InlineMessageVariant = 'tonal' | 'outlined';

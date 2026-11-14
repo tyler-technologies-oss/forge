@@ -4,14 +4,18 @@
 @use '@tylertech/forge-tokens/sass/animation';
 @use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/border';
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '../backdrop/tokens' as backdrop;
+
+// A faint 1px ring around the surface, derived from the outline color so it works in light and dark
+$edge-ring: 0 0 0 border.variable(thin) color-mix(in srgb, theme.variable(outline-low) 20%, transparent);
 
 $tokens: (
   // Base
   background: utils.module-val(dialog, background, theme.variable(surface-bright)),
   shape: utils.module-val(dialog, shape, shape.variable(medium)),
-  elevation: utils.module-val(dialog, elevation, elevation.value(24)),
+  elevation: utils.module-val(dialog, elevation, (#{$edge-ring}, elevation.value(24))),
   spacing: utils.module-val(dialog, spacing, auto),
   block-start-spacing: utils.module-ref(dialog, block-start-spacing, spacing),
   block-end-spacing: utils.module-ref(dialog, block-end-spacing, spacing),
@@ -50,7 +54,7 @@ $tokens: (
   // Backdrop
   backdrop-opacity: utils.module-val(dialog, backdrop-opacity, backdrop.get(opacity)),
   // Non modal
-  nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, elevation.value(4)),
+  nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, (#{$edge-ring}, elevation.value(4))),
   // Fullscreen
   fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium1)),
   fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short2)),

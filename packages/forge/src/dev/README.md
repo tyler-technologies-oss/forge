@@ -13,6 +13,12 @@ simple multi-page website comprised of standard TypeScript, Sass, and HTML files
 pnpm run dev:forge
 ```
 
+## Comparing the Radix theme
+
+The header has a palette button that switches the current page between the default theme and the opt-in Radix theme. It works together with the dark theme button, and the choice is saved in a cookie. A `radix` query parameter (`?radix=1` or `?radix=0`) overrides the cookie for a single page load, and a `dark` query parameter does the same for dark mode.
+
+The **Radix compare** page (`/pages/radix-compare/radix-compare.html`) loads any dev page twice, once with the default theme and once with Radix. Use the options to pick the page, switch between side by side and a difference view (black means identical), choose a frame width, switch to dark mode, and turn scroll syncing on or off. The address bar is updated, so a comparison can be shared as a link. In the difference view only the Radix frame receives pointer events.
+
 ## EJS
 
 We EJS for templating purposes to make maintenance easier across all pages. For more

@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use 'sass:meta';
+@use '../utils';
+@use '../tokens/typography' as default;
+@use '../tokens/typography-radix' as radix;
+@use '../typography/core';
+
+@function _value($property, $value) {
+  @if $property == font-size or ($property == line-height and meta.type-of($value) == number) {
+    @return calc(#{core.get(font-size)} * #{$value});
+  }
+  @if $property == font-family and $value == radix.$font-family-mono {
+    @return utils.create-var(typography, font-family-mono, $value);
+  }
+  @return $value;
+}
+
+///
+/// Emits the typography custom properties that the Radix typography changes or adds relative to the default typography.
+///
+@mixin properties {
+  @each $style, $radix-style in radix.$styles {
+    $default-style: map.get(default.$styles, $style);
+    @each $property, $value in $radix-style {
+      @if not $default-style or map.get($default-style, $property) != $value {
+        @include utils.declare-var(typography, '#{$style}-#{$property}', _value($property, $value));
+      }
+    }
+  }
+}

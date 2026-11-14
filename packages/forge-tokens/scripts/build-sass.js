@@ -8,8 +8,17 @@ const SHARED_SOURCES = ['tokens/color/*.json', 'tokens/elevation.json'];
 
 StyleDictionary.registerFormat({ name: FORMAT_NAME, format: sassFormat });
 
+const TYPOGRAPHY_VARIABLES = [
+  { name: 'font-family', root: ['typography', 'font-family'], type: 'value', defaultable: true },
+  { name: 'font-size', root: ['typography', 'font-size'], type: 'value', defaultable: true },
+  { name: 'scale', root: ['typography', 'scale'], quoteKeys: true },
+  { name: 'styles', root: ['typography', 'style'], depth: 1, defaultable: true }
+];
+
 const GLOBAL_FILES = [
   { destination: '_color-palette.scss', variables: [{ type: 'variables', root: ['color', 'palette'] }] },
+  { destination: '_radix-color-palette.scss', variables: [{ type: 'variables', root: ['color', 'radix'] }] },
+  { destination: '_radix-color-palette-dark.scss', variables: [{ type: 'variables', root: ['color', 'radix-dark'] }] },
   { destination: '_color-emphasis.scss', variables: [{ name: 'emphasis', root: ['color', 'emphasis'] }] },
   { destination: '_animation.scss', variables: [{ name: 'tokens', root: ['animation'], defaultable: true }] },
   { destination: '_border.scss', variables: [{ name: 'tokens', root: ['border'], defaultable: true }] },
@@ -17,21 +26,21 @@ const GLOBAL_FILES = [
   { destination: '_spacing.scss', variables: [{ name: 'tokens', root: ['spacing'], defaultable: true }] },
   { destination: '_elevation.scss', variables: [{ name: 'tokens', root: ['elevation', 'level'], defaultable: true }] },
   { destination: '_z-index.scss', variables: [{ name: 'tokens', root: ['z-index'], defaultable: true }] },
-  {
-    destination: '_typography.scss',
-    variables: [
-      { name: 'font-family', root: ['typography', 'font-family'], type: 'value', defaultable: true },
-      { name: 'font-size', root: ['typography', 'font-size'], type: 'value', defaultable: true },
-      { name: 'scale', root: ['typography', 'scale'], quoteKeys: true },
-      { name: 'styles', root: ['typography', 'style'], depth: 1, defaultable: true }
-    ]
-  }
+  { destination: '_typography.scss', variables: TYPOGRAPHY_VARIABLES }
 ];
 
 const THEME_FILES = [
   { mode: 'light', source: 'tokens/theme/light.json', destination: '_theme-light.scss' },
-  { mode: 'dark', source: 'tokens/theme/dark.json', destination: '_theme-dark.scss' }
+  { mode: 'dark', source: 'tokens/theme/dark.json', destination: '_theme-dark.scss' },
+  { mode: 'light', source: 'tokens/theme/radix-light.json', destination: '_theme-radix-light.scss' },
+  { mode: 'dark', source: 'tokens/theme/radix-dark.json', destination: '_theme-radix-dark.scss' }
 ];
+
+const RADIX_TYPOGRAPHY = {
+  source: 'tokens/theme/radix-typography.json',
+  destination: '_typography-radix.scss',
+  variables: [{ name: 'font-family-mono', root: ['typography', 'font-family-mono'], type: 'value' }, ...TYPOGRAPHY_VARIABLES]
+};
 
 const createConfig = ({ source, files }) => ({
   source,
@@ -72,4 +81,12 @@ export async function buildSass() {
     );
     await theme.buildPlatform('sass');
   }
+
+  const radixTypography = new StyleDictionary(
+    createConfig({
+      source: [RADIX_TYPOGRAPHY.source],
+      files: [{ destination: RADIX_TYPOGRAPHY.destination, variables: RADIX_TYPOGRAPHY.variables }]
+    })
+  );
+  await radixTypography.buildPlatform('sass');
 }

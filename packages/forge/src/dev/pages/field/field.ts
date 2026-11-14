@@ -16,6 +16,7 @@ const requiredSwitch = document.getElementById('opt-required') as ISwitchCompone
 const optionalSwitch = document.getElementById('opt-optional') as ISwitchComponent;
 const invalidSwitch = document.getElementById('opt-invalid') as ISwitchComponent;
 const disabledSwitch = document.getElementById('opt-disabled') as ISwitchComponent;
+const readonlySwitch = document.getElementById('opt-readonly') as ISwitchComponent;
 const denseSwitch = document.getElementById('opt-dense') as ISwitchComponent;
 const startSwitch = document.getElementById('opt-start') as ISwitchComponent;
 const endSwitch = document.getElementById('opt-end') as ISwitchComponent;
@@ -52,6 +53,10 @@ invalidSwitch.addEventListener('forge-switch-change', () => {
 
 disabledSwitch.addEventListener('forge-switch-change', () => {
   fields.forEach(field => (field.disabled = disabledSwitch.on));
+});
+
+readonlySwitch.addEventListener('forge-switch-change', () => {
+  fields.forEach(field => (field.readonly = readonlySwitch.on));
 });
 
 denseSwitch.addEventListener('forge-switch-change', () => {

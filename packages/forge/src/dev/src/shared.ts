@@ -1,4 +1,4 @@
-import { listenThemeChange } from '$src/theme/dark-theme';
+import { listenThemeChange } from '$src/theme/theme';
 
 // Styles
 import '$src/shared.scss';
@@ -25,10 +25,10 @@ import '@tylertech/forge/tooltip';
 import '@tylertech/forge/stack';
 
 // Icons
-import { tylIconForgeLogo, tylIconBrightness3, tylIconWbSunny } from '@tylertech/tyler-icons';
+import { tylIconForgeLogo, tylIconBrightness3, tylIconWbSunny, tylIconColorLens } from '@tylertech/tyler-icons';
 import { IconRegistry } from '@tylertech/forge/icon';
 
-IconRegistry.define([tylIconForgeLogo, tylIconWbSunny, tylIconBrightness3]);
+IconRegistry.define([tylIconForgeLogo, tylIconWbSunny, tylIconBrightness3, tylIconColorLens]);
 
 listenThemeChange();
 

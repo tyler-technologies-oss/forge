@@ -31,12 +31,14 @@ const meta = {
       tagName: component,
       exclude: ['canDismiss'],
       controls: {
-        theme: { control: 'select', options: [...GLOBAL_THEME_OPTIONS, 'info-secondary'] }
+        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS, 'critical', 'info-secondary'] },
+        variant: { control: 'select', options: ['tonal', 'outlined'] }
       }
     })
   },
   args: {
     theme: BANNER_CONSTANTS.defaults.THEME,
+    variant: BANNER_CONSTANTS.defaults.VARIANT,
     text: 'Minim sunt eu laborum labore minim.',
     dismissed: false,
     persistent: false
@@ -53,11 +55,26 @@ export const Themed: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <div style="display: flex; gap: 12px; flex-direction: column;">
+      <forge-banner theme="default">Default (neutral)</forge-banner>
       <forge-banner theme="error">Error</forge-banner>
+      <forge-banner theme="critical">Critical (same as error)</forge-banner>
       <forge-banner theme="warning">Warning</forge-banner>
       <forge-banner theme="success">Success</forge-banner>
       <forge-banner theme="info">Info (default)</forge-banner>
       <forge-banner theme="info-secondary">Info (secondary)</forge-banner>
+    </div>
+  `
+};
+
+export const Outlined: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <div style="display: flex; gap: 12px; flex-direction: column;">
+      <forge-banner variant="outlined" theme="default">Default</forge-banner>
+      <forge-banner variant="outlined" theme="info">Info</forge-banner>
+      <forge-banner variant="outlined" theme="success">Success</forge-banner>
+      <forge-banner variant="outlined" theme="warning">Warning</forge-banner>
+      <forge-banner variant="outlined" theme="error">Error</forge-banner>
     </div>
   `
 };

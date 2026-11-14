@@ -468,6 +468,54 @@ describe('StepperComponent', () => {
     });
   });
 
+  describe('label colors', () => {
+    const getTitleColor = (step: IStepComponent): string => getComputedStyle(step.shadowRoot!.querySelector('.title') as HTMLElement).color;
+
+    it('should use the primary color for the selected step label by default', async () => {
+      const harness = await createFixture({ stepCount: 2, selectedIndex: 0 });
+      const step = harness.getSteps()[0];
+      step.style.setProperty('--forge-step-primary-color', 'rgb(1, 2, 3)');
+
+      expect(getTitleColor(step)).toBe('rgb(1, 2, 3)');
+    });
+
+    it('should use the selected label color for the selected step label when set', async () => {
+      const harness = await createFixture({ stepCount: 2, selectedIndex: 0 });
+      const step = harness.getSteps()[0];
+      step.style.setProperty('--forge-step-primary-color', 'rgb(1, 2, 3)');
+      step.style.setProperty('--forge-step-selected-label-color', 'rgb(4, 5, 6)');
+
+      expect(getTitleColor(step)).toBe('rgb(4, 5, 6)');
+    });
+
+    it('should use the error color for the error step label by default', async () => {
+      const harness = await createFixture({ stepCount: 2 });
+      const step = harness.getSteps()[1];
+      step.error = true;
+      step.style.setProperty('--forge-step-error-color', 'rgb(1, 2, 3)');
+
+      expect(getTitleColor(step)).toBe('rgb(1, 2, 3)');
+    });
+
+    it('should use the error label color for the error step label when set', async () => {
+      const harness = await createFixture({ stepCount: 2 });
+      const step = harness.getSteps()[1];
+      step.error = true;
+      step.style.setProperty('--forge-step-error-color', 'rgb(1, 2, 3)');
+      step.style.setProperty('--forge-step-error-label-color', 'rgb(4, 5, 6)');
+
+      expect(getTitleColor(step)).toBe('rgb(4, 5, 6)');
+    });
+
+    it('should not use the selected label color for steps that are not selected', async () => {
+      const harness = await createFixture({ stepCount: 2, selectedIndex: 0 });
+      const step = harness.getSteps()[1];
+      step.style.setProperty('--forge-step-selected-label-color', 'rgb(4, 5, 6)');
+
+      expect(getTitleColor(step)).not.toBe('rgb(4, 5, 6)');
+    });
+  });
+
   describe('vertical stepper', () => {
     it('should set vertical in component', async () => {
       const harness = await createFixture({ stepCount: 0, vertical: true });

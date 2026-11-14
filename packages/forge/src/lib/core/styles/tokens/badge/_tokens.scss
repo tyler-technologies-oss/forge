@@ -20,6 +20,14 @@ $tokens: (
   border-color: utils.module-ref(badge, border-color, color),
   gap: utils.module-val(badge, gap, spacing.variable(xxsmall)),
   font-weight: utils.module-val(badge, font-weight, bold),
+  // Outlined
+  outlined-background: utils.module-val(badge, outlined-background, transparent),
+  outlined-color: utils.module-val(badge, outlined-color, theme.variable(on-surface)),
+  outlined-border-width: utils.module-val(badge, outlined-border-width, border.variable(thin)),
+  outlined-border-color: utils.module-val(badge, outlined-border-color, theme.variable(outline-low)),
+  // Strong
+  strong-background: utils.module-val(badge, strong-background, theme.variable(secondary)),
+  strong-color: utils.module-val(badge, strong-color, theme.variable(on-secondary)),
   // Dot
   dot-size: utils.module-val(badge, dot-size, 8px),
   dot-height: utils.module-ref(badge, dot-height, dot-size),
