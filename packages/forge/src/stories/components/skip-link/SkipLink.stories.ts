@@ -18,12 +18,13 @@ const meta = {
       <div>
         <forge-skip-link
           target="main-content"
+          skip-url-change
           .theme=${args.theme}
           .muted=${args.muted}
           .persistent=${args.persistent}
           .inline=${args.inline}
           style=${style}></forge-skip-link>
-        <div id="main-content" tabindex="0">Target</div>
+        <div id="main-content" tabindex="-1">Target</div>
       </div>
     `;
   },
@@ -33,6 +34,7 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
+      exclude: ['skipUrlChange'],
       controls: {
         theme: { control: 'select', options: ['default', 'primary', 'secondary', 'tertiary', 'success', 'error', 'warning', 'info'] },
         muted: { control: 'boolean' },
