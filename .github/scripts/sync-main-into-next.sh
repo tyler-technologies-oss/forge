@@ -52,9 +52,9 @@ $(printf '%s\n' "$conflicts" | sed 's/^/- /')
 
 Resolve them locally, then push the branch and open the PR:
 
-    git fetch origin && git checkout -B $SYNC_BRANCH origin/$BASE_BRANCH
-    git merge --no-ff origin/$SOURCE_BRANCH
-    git push origin $SYNC_BRANCH
+    git fetch $REMOTE && git checkout -B $SYNC_BRANCH $REMOTE/$BASE_BRANCH
+    git merge --no-ff $REMOTE/$SOURCE_BRANCH
+    git push $REMOTE $SYNC_BRANCH
 
 Keep $BASE_BRANCH's package versions and take $SOURCE_BRANCH's changelog entries. Merge the PR with a merge commit."
   fi
