@@ -19,7 +19,7 @@
     "setup:playwright": "playwright install --with-deps chromium",
     "test": "turbo run test",
     "changeset": "node .changeset/add.mjs",
-    "version-packages": "changeset version && node .changeset/group-changelog.mjs && node plugin/scripts/sync-version.mjs",
+    "version-packages": "changeset version && node .changeset/group-changelog.mjs && node plugin/scripts/sync-version.mjs && pnpm install --lockfile-only",
     "release": "pnpm run build && changeset publish"
   },
   "keywords": [

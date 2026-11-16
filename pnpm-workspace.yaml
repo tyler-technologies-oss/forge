@@ -59,6 +59,9 @@ onlyBuiltDependencies:
   - esbuild
   - rs-module-lexer
 
+overrides:
+  '@tylertech/forge@^4.0.0-next.0': workspace:*
+
 patchedDependencies:
   '@changesets/assemble-release-plan@6.0.9': patches/@changesets__assemble-release-plan@6.0.9.patch
   custom-element-vs-code-integration@1.5.0: patches/custom-element-vs-code-integration@1.5.0.patch
