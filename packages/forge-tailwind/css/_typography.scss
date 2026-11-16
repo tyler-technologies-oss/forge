@@ -5,7 +5,7 @@
  * These use Forge's typography SCSS mixins for exact parity.
  */
 
-@use '@tylertech/forge/sass/core/styles/typography';
+@use '@tylertech/forge-tokens/sass/typography';
 
 /* Display styles */
 @utility text-display1 {
