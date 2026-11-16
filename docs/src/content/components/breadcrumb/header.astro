@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-breadcrumb aria-label="Breadcrumb">
+    <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
+    <forge-breadcrumb-item href="#">Section</forge-breadcrumb-item>
+    <forge-breadcrumb-item href="#">Subsection</forge-breadcrumb-item>
+    <forge-breadcrumb-item current>Current page</forge-breadcrumb-item>
+  </forge-breadcrumb>
+</ComponentHeader>

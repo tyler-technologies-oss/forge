@@ -1,0 +1,21 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="flex gap-medium">
+    <forge-count-card class="w-56">
+      <forge-icon slot="icon" name="attach_money"></forge-icon>
+      <span slot="label">Revenue</span>
+      <forge-badge slot="header-end" theme="success">+12%</forge-badge>
+      <span slot="count">$12,450.00</span>
+    </forge-count-card>
+    <forge-count-card class="w-56">
+      <forge-icon slot="icon" name="people"></forge-icon>
+      <span slot="label">Total users</span>
+      <span slot="count">1,234</span>
+    </forge-count-card>
+  </div>
+</ComponentHeader>

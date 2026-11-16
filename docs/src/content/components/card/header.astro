@@ -1,0 +1,12 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-card class="w-[450px]">
+    <div class="forge-typography--heading4">Card title</div>
+    <p class="forge-typography--body2">Cards group related content and actions.</p>
+  </forge-card>
+</ComponentHeader>

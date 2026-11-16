@@ -2,6 +2,10 @@
 
 Label values display a label and value pair in a compact format with the proper typography and spacing styles applied.
 
+## Overview
+
+The label value component displays read-only data in a structured label-value pair format. This component provides clear information hierarchy for non-interactive content, making it ideal for displaying submitted form data, summary information, or reference details within cards and layouts.
+
 ## Usage
 
 `forge-label-value` displays a readonly `label` and `value` pair, with an optional leading `icon` slot, plus `empty`, `ellipsis`, and `inline`. Use it for data the user can view but not edit, most often inside a [card](./card.md) or a submitted form; reach for a [text field](./text-field.md) with `disabled` instead only when the value is still part of an editable form. For long, text-heavy content, use a list instead — label value is meant for succinct data.
@@ -10,6 +14,9 @@ Label values display a label and value pair in a compact format with the proper 
 
 **Do**
 
+- Use consistent label formatting and capitalization across all instances.
+- Group related label-value pairs logically within containers or sections.
+- Provide meaningful labels that clearly describe the associated data.
 - Use label value for readonly data with a short label and a short value.
 - Use it in place of a disabled text field when the value will never be edited on that screen.
 - Communicate elsewhere on the page whether and how the value can be edited.

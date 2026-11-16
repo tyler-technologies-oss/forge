@@ -134,11 +134,6 @@ export function buildNavigation(
                   href: "/developing/typography/",
                 },
                 {
-                  id: "dev-customization",
-                  label: "Customization",
-                  href: "/developing/customization/",
-                },
-                {
                   id: "dev-css-only-components",
                   label: "CSS-Only Components",
                   href: "/developing/css-only-components/",
@@ -200,11 +195,6 @@ export function buildNavigation(
               id: "faq-dropdown-options",
               label: "Dropdown Options",
               href: "/faq/dropdown-options/",
-            },
-            {
-              id: "faq-focus-indicator-clipping",
-              label: "Focus Indicator Clipping",
-              href: "/faq/focus-indicator-clipping/",
             },
           ],
         },

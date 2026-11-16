@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-chip-set type="filter">
+    <forge-chip value="one" selected>Selected</forge-chip>
+    <forge-chip value="two">Option</forge-chip>
+    <forge-chip value="three">Option</forge-chip>
+  </forge-chip-set>
+</ComponentHeader>

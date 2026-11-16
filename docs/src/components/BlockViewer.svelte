@@ -8,23 +8,26 @@
   hljs.registerLanguage("xml", xml);
   hljs.registerLanguage("javascript", javascript);
 
-  type Viewport = "desktop" | "tablet" | "phone" | "responsive";
+  type Viewport = "desktop" | "tablet" | "phone";
   type ViewMode = "preview" | "source";
   type CodeTab = "html" | "js";
 
+  // Keep tablet/phone in sync with RESPONSIVE_VIEWPORTS in blocks/src/scripts/check-responsive.ts
   const viewportWidths: Record<Viewport, string> = {
     desktop: "100%",
     tablet: "768px",
     phone: "375px",
-    responsive: "100%",
   };
 
   let {
     title,
     iframeUrl,
+    responsive = false,
   }: {
     title: string;
     iframeUrl: string;
+    /** Shows the viewport toggles; only blocks flagged `@responsive` are verified at narrow widths. */
+    responsive?: boolean;
   } = $props();
 
   let iframeElement: HTMLIFrameElement | undefined = $state();
@@ -152,10 +155,7 @@
 
     {#if viewMode === "preview"}
       <div class="flex items-center gap-small" slot="end">
-        <div class="flex items-center gap-xxsmall">
-          <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <!-- svelte-ignore a11y_click_events_have_key_events -->
-
+        {#if responsive}
           <forge-button-toggle-group
             aria-label="Viewport size"
             value={viewport}
@@ -173,11 +173,8 @@
             <forge-button-toggle value="phone" aria-label="Phone (375px)">
               <forge-icon name="smartphone"></forge-icon>
             </forge-button-toggle>
-            <forge-button-toggle value="responsive" aria-label="Full width">
-              <forge-icon name="fullscreen"></forge-icon>
-            </forge-button-toggle>
           </forge-button-toggle-group>
-        </div>
+        {/if}
         <forge-icon-button
           aria-label="Switch to {currentTheme === 'light'
             ? 'dark'

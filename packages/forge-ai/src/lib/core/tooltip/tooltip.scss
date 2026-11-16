@@ -1,0 +1,149 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/tooltip' as forge-tooltip;
+@use '@tylertech/forge/sass/utils/mixins' as forge-utils;
+@use '@tylertech/forge/sass/tooltip/animations';
+
+:host {
+  display: contents;
+  position: relative;
+}
+
+.ai-tooltip {
+  @include forge-tooltip.tokens;
+  @include forge-tooltip.base;
+
+  position: relative;
+  animation-duration: 150ms;
+  animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  animation-name: tooltip-fadein, tooltip-scalein;
+  transform-origin: center center;
+
+  &__arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--forge-tooltip-background, #{forge-theme.variable(surface-inverse)});
+    transform: rotate(45deg);
+    z-index: -1;
+    filter: drop-shadow(0 2px 4px rgb(0, 0, 0, 0.2));
+  }
+}
+
+// Add margin for arrow spacing
+forge-ai-overlay[data-position-placement^='top'] .ai-tooltip {
+  margin-block-end: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='bottom'] .ai-tooltip {
+  margin-block-start: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='left'] .ai-tooltip {
+  margin-inline-end: #{forge-spacing.variable(small)};
+}
+
+forge-ai-overlay[data-position-placement^='right'] .ai-tooltip {
+  margin-inline-start: #{forge-spacing.variable(small)};
+}
+
+// Transform origin based on placement - target the overlay element that has the data attribute
+forge-ai-overlay[data-position-placement^='top'] {
+  &:not([data-position-placement*='-']) .ai-tooltip {
+    transform-origin: bottom center;
+  }
+
+  &[data-position-placement$='-start'] .ai-tooltip {
+    transform-origin: bottom left;
+  }
+
+  &[data-position-placement$='-end'] .ai-tooltip {
+    transform-origin: bottom right;
+  }
+
+  .ai-tooltip__arrow {
+    bottom: -5px;
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='right'] {
+  &:not([data-position-placement*='-']) .ai-tooltip {
+    transform-origin: left center;
+  }
+
+  &[data-position-placement$='-start'] .ai-tooltip {
+    transform-origin: left top;
+  }
+
+  &[data-position-placement$='-end'] .ai-tooltip {
+    transform-origin: left bottom;
+  }
+
+  .ai-tooltip__arrow {
+    left: -5px;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='bottom'] {
+  &:not([data-position-placement*='-']) .ai-tooltip {
+    transform-origin: top center;
+  }
+
+  &[data-position-placement$='-start'] .ai-tooltip {
+    transform-origin: top left;
+  }
+
+  &[data-position-placement$='-end'] .ai-tooltip {
+    transform-origin: top right;
+  }
+
+  .ai-tooltip__arrow {
+    top: -5px;
+    clip-path: polygon(0 0, 0 100%, 100% 0);
+  }
+}
+
+forge-ai-overlay[data-position-placement^='left'] {
+  &:not([data-position-placement*='-']) .ai-tooltip {
+    transform-origin: right center;
+  }
+
+  &[data-position-placement$='-start'] .ai-tooltip {
+    transform-origin: right top;
+  }
+
+  &[data-position-placement$='-end'] .ai-tooltip {
+    transform-origin: right bottom;
+  }
+
+  .ai-tooltip__arrow {
+    right: -5px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+}
+
+.tooltip-content--hidden {
+  @include forge-utils.visually-hidden;
+}
+
+@keyframes tooltip-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tooltip-scalein {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}

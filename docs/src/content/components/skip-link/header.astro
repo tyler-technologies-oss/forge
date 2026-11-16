@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-skip-link persistent inline>Skip to main content</forge-skip-link>
+</ComponentHeader>

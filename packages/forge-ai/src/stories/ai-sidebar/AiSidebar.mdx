@@ -1,0 +1,39 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiSidebarStories from './AiSidebar.stories';
+
+<Meta of={AiSidebarStories} />
+
+<Title />
+
+A resizable panel that docks to the right edge of your layout and holds chat content, typically a `forge-ai-chat-interface`. It is a layout shell only: it provides open/close, sizing, and width memory, and you supply the content.
+
+Use it with a layout that has a right-hand region, such as the `body-right` slot of `forge-scaffold`.
+
+<Canvas of={AiSidebarStories.Demo} />
+
+## Opening and closing
+
+Set `open`, or call `show()`, `close()`, or `toggle()`. The sidebar fires `forge-ai-sidebar-open` and `forge-ai-sidebar-close` when the state changes.
+
+```ts
+button.addEventListener('click', () => sidebar.toggle());
+```
+
+## Resizing
+
+By default the user can drag the handle on the sidebar's edge, or focus it and use the left/right arrow keys. The width stays between 360px and 800px and never exceeds the viewport. `forge-ai-sidebar-resize` fires when a resize is committed, with the new width in pixels in `event.detail.width`.
+
+Set `width` to control the width from code, or `resizable="off"` to disable resizing and return to the default width.
+
+```html
+<forge-ai-sidebar width="520"></forge-ai-sidebar>
+```
+
+### Width persistence
+
+The sidebar remembers the width the user chose in `sessionStorage` and `localStorage` under the key `forge-ai-sidebar-width`. A new load uses the tab's stored width first, then the most recent width from any tab, then the default. Setting `width` explicitly overrides the stored value, and `resizable="off"` clears it.
+
+## API
+
+<CustomArgTypes />

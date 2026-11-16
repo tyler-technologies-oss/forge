@@ -5,8 +5,55 @@ import mdx from '@astrojs/mdx';
 import svelte from '@astrojs/svelte';
 
 import tailwindcss from '@tailwindcss/vite';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { CODE_THEMES } from './src/config/code-themes.ts';
 import { LEGACY_REDIRECTS } from './src/config/redirects.ts';
+
+const PAGEFIND_DIR = fileURLToPath(new URL('./dist/pagefind/', import.meta.url));
+const PAGEFIND_ROUTE = '/pagefind/';
+/** @type {Record<string, string>} */
+const PAGEFIND_CONTENT_TYPES = { '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css' };
+
+/**
+ * @typedef {(req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse, next: () => void) => Promise<void>} PagefindMiddleware
+ */
+
+/**
+ * Serves the last build's Pagefind index under `astro dev`, so site search
+ * works locally once `pnpm --filter forge-docs build` has run.
+ * @returns {NonNullable<import('astro').ViteUserConfig['plugins']>[number]}
+ */
+function pagefindDevIndex() {
+  return {
+    name: 'forge-docs:pagefind-dev-index',
+    apply: 'serve',
+    /** @param {{ middlewares: { use: (handler: PagefindMiddleware) => void } }} server */
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const { pathname } = new URL(req.url ?? '/', 'http://localhost');
+        if (!pathname.startsWith(PAGEFIND_ROUTE)) {
+          return next();
+        }
+
+        const filePath = path.join(PAGEFIND_DIR, decodeURIComponent(pathname.slice(PAGEFIND_ROUTE.length)));
+        if (!filePath.startsWith(PAGEFIND_DIR)) {
+          return next();
+        }
+
+        try {
+          const body = await readFile(filePath);
+          res.setHeader('Content-Type', PAGEFIND_CONTENT_TYPES[path.extname(filePath)] ?? 'application/octet-stream');
+          res.setHeader('Cache-Control', 'no-store');
+          res.end(body);
+        } catch {
+          next();
+        }
+      });
+    }
+  };
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -64,6 +111,6 @@ export default defineConfig({
       }
     },
 
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss(), pagefindDevIndex()]
   }
 });

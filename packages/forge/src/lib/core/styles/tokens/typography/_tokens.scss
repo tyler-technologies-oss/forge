@@ -1,0 +1,2 @@
+@forward '@tylertech/forge-tokens/sass/typography/tokens' show $tokens, get;
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography/tokens" from @tylertech/forge-tokens instead.';

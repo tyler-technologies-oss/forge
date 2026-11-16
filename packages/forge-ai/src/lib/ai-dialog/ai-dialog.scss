@@ -1,0 +1,120 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/elevation' as forge-elevation;
+@use '@tylertech/forge/dist/icon-button/forge-icon-button';
+
+.ai-icon-button > svg {
+  fill: #{forge-theme.variable(text-medium)};
+}
+
+:host {
+  display: contents;
+}
+
+forge-ai-chat-interface {
+  flex-grow: 1;
+}
+
+.ai-dialog {
+  position: fixed;
+  overflow: visible;
+  box-sizing: border-box;
+
+  background: #{forge-theme.variable(surface-bright)};
+
+  border-radius: #{forge-shape.variable(large)};
+  box-shadow: #{forge-elevation.value(4)};
+  border: none;
+  outline: none;
+
+  width: 420px;
+  height: calc(100vh - 72px);
+
+  padding: 0;
+  inset: auto;
+  bottom: #{forge-spacing.variable(medium)};
+  right: #{forge-spacing.variable(medium)};
+
+  animation-duration: 150ms;
+  animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  animation-name: fadein, zoomin;
+  transform-origin: right bottom;
+
+  &:popover-open::backdrop {
+    display: none;
+  }
+
+  &.closing {
+    animation-duration: 100ms;
+    animation-timing-function: cubic-bezier(0.3, 0, 1, 1);
+    animation-name: fadeout, zoomout;
+    animation-fill-mode: forwards;
+    transform-origin: right bottom;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomin {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes zoomout {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.8);
+  }
+}
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 150ms ease,
+    visibility 150ms ease;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.ai-dialog:hover .drag-handle,
+.ai-dialog:focus-within .drag-handle {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ai-dialog.dragging {
+  opacity: 0.7;
+  transition: none;
+}

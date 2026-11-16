@@ -1,0 +1,15 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiResponseMessageStories from './AiResponseMessage.stories';
+
+<Meta of={AiResponseMessageStories} />
+
+<Title />
+
+Wraps the text of an assistant reply in a chat conversation. Use it for each response alongside `forge-ai-user-message`. Pair it with [`forge-ai-response-message-toolbar`](?path=/docs/components-messages-response-message-toolbar--docs) to offer actions on the reply.
+
+<Canvas of={AiResponseMessageStories.Demo} />
+
+## API
+
+<CustomArgTypes />

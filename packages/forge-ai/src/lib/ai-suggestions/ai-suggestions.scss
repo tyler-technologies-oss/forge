@@ -1,0 +1,89 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge/dist/icon/forge-icon.css';
+@use '@tylertech/forge/dist/list/forge-list.css';
+
+:host {
+  display: block;
+  container-type: inline-size;
+  width: 100%;
+  max-inline-size: var(--forge-ai-suggestions-inline-size, 768px);
+}
+
+.custom-list-item {
+  --forge-list-item-height: 32px;
+  --forge-list-item-padding: #{forge-spacing.variable(xxsmall)};
+  --forge-list-item-shape: #{forge-shape.variable(large)};
+  --forge-icon-color: #{forge-theme.variable(text-medium)};
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: #{forge-spacing.variable(medium)};
+  margin-inline: calc(#{forge-spacing.variable(xxsmall)} * -1) 0;
+  margin-block: 0;
+  width: 100%;
+
+  button {
+    @include forge-typography.style(body1);
+    display: flex;
+    justify-content: start;
+    text-box-trim: both;
+    max-inline-size: var(--forge-ai-suggestion-max-width, 82.5cqi);
+    min-inline-size: 0;
+
+    .suggestion-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &:hover,
+    &:focus-within,
+    &::after {
+      border-radius: #{forge-shape.variable(large)};
+    }
+  }
+}
+
+:host(:state(inline)) {
+  .custom-list-item {
+    flex: 0 0 auto; /* === don't grow, don't shrink, size to content */
+    width: fit-content; /* optional, just makes intent explicit */
+  }
+}
+
+:host(:state(block)) {
+  .forge-list {
+    display: flex;
+    flex-direction: column;
+    gap: #{forge-spacing.variable(xxsmall)};
+  }
+}
+
+.block-layout-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-container {
+  overflow: scroll;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+}
+
+.suggestions-inline {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: max-content;
+  gap: #{forge-spacing.variable(small)};
+}
+
+.suggestion-tooltip {
+  --forge-tooltip-content-align: start;
+}

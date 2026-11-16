@@ -10,6 +10,7 @@
     "build:assets": "vite build",
     "clean": "rimraf dist",
     "screenshots": "pnpm generate-screenshots",
+    "check-responsive": "tsx src/scripts/check-responsive.ts",
     "generate-manifest": "tsx src/scripts/generate-manifest.ts",
     "generate-screenshots": "tsx src/scripts/generate-screenshots.ts"
   },

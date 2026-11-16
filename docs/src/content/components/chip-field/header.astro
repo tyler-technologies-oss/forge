@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-chip-field class="w-320px">
+    <label slot="label" for="chip-field-header-input">Tags</label>
+    <input type="text" id="chip-field-header-input" />
+    <forge-chip slot="member" type="field" value="design">Design</forge-chip>
+    <forge-chip slot="member" type="field" value="research">Research</forge-chip>
+  </forge-chip-field>
+</ComponentHeader>

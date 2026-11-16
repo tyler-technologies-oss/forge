@@ -7,7 +7,7 @@ category: data-display
 storybookId: components-tree--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
@@ -17,21 +17,11 @@ import InlineMessage from "../../../components/docs/InlineMessage.astro";
   Tree is an experimental component in developer preview — its API and implementation may change in future versions, and there may be unresolved bugs. Use it with that in mind, and be prepared to update your code as it evolves.
 </InlineMessage>
 
-<ComponentHeader>
-  <div class="w-64">
-    <forge-tree>
-      <forge-tree-item open>
-        <span>Projects</span>
-        <forge-tree-item slot="children"><span>Alpha</span></forge-tree-item>
-        <forge-tree-item slot="children"><span>Beta</span></forge-tree-item>
-      </forge-tree-item>
-      <forge-tree-item>
-        <span>Archive</span>
-        <forge-tree-item slot="children"><span>2024</span></forge-tree-item>
-      </forge-tree-item>
-    </forge-tree>
-  </div>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+The tree component lets a user visualize and explore hierarchical sets of data in an organized, and collapsible format. It can be used for many different sets of data, including examples like directories, organization hierarchies, and file structures. Anything that has a dedicated hierarchy to it could leverage a tree structure for viewing and exploring relationships between items in the tree.
 
 ## Usage
 

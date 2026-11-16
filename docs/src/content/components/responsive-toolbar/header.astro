@@ -1,0 +1,23 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-card no-padding class="w-[480px]">
+    <forge-responsive-toolbar>
+      <forge-icon-button slot="before-start" aria-label="Back">
+        <forge-icon name="arrow_back"></forge-icon>
+      </forge-icon-button>
+      <div slot="start" class="forge-typography--heading4 whitespace-nowrap">User management</div>
+      <forge-stack inline alignment="center" slot="end-large">
+        <forge-button variant="text">Add user</forge-button>
+        <forge-button variant="outlined">Remove user</forge-button>
+      </forge-stack>
+      <forge-icon-button slot="end-small" aria-label="More actions">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+    </forge-responsive-toolbar>
+  </forge-card>
+</ComponentHeader>

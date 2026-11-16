@@ -21,6 +21,7 @@ export interface Block {
   file: string;
   category: string;
   hasScript?: boolean;
+  responsive?: boolean;
 }
 
 export interface Category {

@@ -71,6 +71,7 @@ DO NOT add comments unless code is complex. Defer to configs.
 - `packages/forge-rich-text-editor` - Rich text editor Web Components, built on Tiptap (see its CLAUDE.md)
 - `packages/forge-rich-text-editor-react` - React adapter for the rich text editor (see its CLAUDE.md)
 - `packages/forge-rich-text-editor-angular` - Angular adapter for the rich text editor (see its CLAUDE.md)
+- `packages/forge-ai` - AI chat interface presentational Web Components, built with Lit (see its CLAUDE.md)
 - `packages/forge-adapter-codegen` - Shared adapter code generation, private to this repo (see its CLAUDE.md)
 - `packages/forge-mcp` - MCP server for Forge (see its CLAUDE.md)
 
@@ -102,4 +103,4 @@ Blocks are pre-built HTML templates demonstrating Forge component patterns. Use 
 - When using `forge-app-layout` or `forge-app-bar`, the page title is the h1, so content headings should start at h2.
 - `forge-select` uses a `label` attribute for its label, not a slotted `<label>` element (unlike `forge-text-field`).
 - When creating forms, reference blocks from the "forms" and "application-layout" categories for typography, spacing, and layout patterns.
-- When creating cards that require a header, body, and footer, use `forge-structured-card` from `@tylertech/forge-extended` as it provides the necessary layout structure with dedicated slots.
+- When creating cards that require a header, body, and footer, use `forge-card` with a `forge-scaffold` (header and footer `forge-toolbar`s). `forge-structured-card` (`import '@tylertech/forge/structured-card'`, in `@tylertech/forge`) is an alternative, not the default.

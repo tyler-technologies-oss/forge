@@ -1,0 +1,15 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-96">
+    <forge-stepper selected-index="1">
+      <forge-step>Details</forge-step>
+      <forge-step>Review</forge-step>
+      <forge-step>Submit</forge-step>
+    </forge-stepper>
+  </div>
+</ComponentHeader>

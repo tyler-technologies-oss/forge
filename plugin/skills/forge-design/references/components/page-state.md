@@ -2,6 +2,10 @@
 
 Page state displays a full-height message — for an empty result, an error, or general information — with an optional graphic and actions.
 
+## Overview
+
+The page state component is a wrapper component that facilitates full-page states such as empty search results, error pages, and landing pages. It provides a consistent structure and layout for communicating system states when normal content cannot be displayed.
+
 ## Usage
 
 `forge-page-state` centers a `graphic`, `title`, `message`, and one or more `action` buttons. It adapts to whatever container it's in, so use it for a full-page empty state or server error, or scale it down inside a card or side sheet when space is limited.

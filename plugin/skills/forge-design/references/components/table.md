@@ -2,6 +2,10 @@
 
 Tables display sets of data in sortable, filterable, selectable rows and columns, configured through data and column definitions.
 
+## Overview
+
+Tables display information in a structured, scannable format that allows users to identify patterns and insights across datasets. The Forge table is a configuration-based component that handles data rendering and basic user interactions including sorting, filtering, and row selection. While designed to be flexible and customizable, it provides fundamental table functionality rather than comprehensive data manipulation features.
+
 ## Usage
 
 `forge-table` renders rows and columns from two JS properties — `data` (an array of row objects) and `columnConfigurations` (column definitions) — rather than static HTML attributes, plus `select`/`multiselect`, `filter`, `dense`/`roomy`, `resizable`, and `fixedHeaders`. It's a basic data table, not a fully-featured grid — use it when content has three or more well-defined, sortable dimensions and users need to compare across rows. For content that's primarily scanned rather than compared, or that's mostly viewed on mobile, use a [list](./list.md) instead. And if you need virtual or infinite scrolling, or more advanced filtering than a single input per column, reach for a dedicated grid library like [AG Grid](https://www.ag-grid.com/) instead — `forge-table` intentionally stays basic.
@@ -10,6 +14,7 @@ Tables display sets of data in sortable, filterable, selectable rows and columns
 
 **Do**
 
+- Use consistent alignment matching column headers to cell content.
 - Order columns left to right by importance, so the most critical information needs the least scrolling.
 - Use sentence case for column headers.
 - Use the dense variant for data-dense applications where more rows need to fit on screen.
@@ -20,6 +25,8 @@ Tables display sets of data in sortable, filterable, selectable rows and columns
 - Don't use a table when users primarily scan and identify a single item — a list is simpler.
 - Don't use a table as the primary view on mobile — it doesn't adapt well to narrow screens.
 - Don't display more than two custom header actions inline — tuck the rest into an overflow menu.
+- Avoid using excessive visual elements like unnecessary separators, row striping, shadows, or 3D effects.
+- Don’t use ALL CAPS in table data — use sentence case for readability.
 
 ## Basic usage
 

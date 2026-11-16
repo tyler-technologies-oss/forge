@@ -7,19 +7,12 @@ category: actions
 storybookId: components-split-button--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-split-button variant="filled">
-    <forge-button variant="filled">Save</forge-button>
-    <forge-menu>
-      <forge-button variant="filled" aria-label="Show menu" popover-icon aria-haspopup="true"></forge-button>
-    </forge-menu>
-  </forge-split-button>
-</ComponentHeader>
+<Header />
 
 ## Overview
 Split buttons communicate multiple related actions that users can take while providing a clear primary action alongside alternative options. They consist of a main button for the suggested action and a dropdown arrow that reveals secondary related actions, allowing users to access variations of the primary action without cluttering the interface.  

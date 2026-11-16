@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/typography/tokens' as typography;
+
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.label" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography/tokens" from @tylertech/forge-tokens instead.';
+
+$label1: map.get(typography.$tokens, label1) !default;
+$label2: map.get(typography.$tokens, label2) !default;
+$label3: map.get(typography.$tokens, label3) !default;
+$button: map.get(typography.$tokens, button) !default;
+$overline: map.get(typography.$tokens, overline) !default;
+$kbd: map.get(typography.$tokens, kbd) !default;
+
+$tokens: (
+  label1: $label1,
+  label2: $label2,
+  label3: $label3,
+  button: $button,
+  overline: $overline,
+  kbd: $kbd
+) !default;

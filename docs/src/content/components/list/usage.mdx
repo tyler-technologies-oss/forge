@@ -7,33 +7,16 @@ category: data-display
 storybookId: components-list--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <div class="w-64">
-    <forge-list>
-      <forge-list-item selected>
-        <forge-icon slot="start" name="home"></forge-icon>
-        Home
-      </forge-list-item>
-      <forge-list-item>
-        <forge-icon slot="start" name="folder"></forge-icon>
-        Projects
-      </forge-list-item>
-      <forge-list-item>
-        <forge-icon slot="start" name="person"></forge-icon>
-        Users
-      </forge-list-item>
-      <forge-list-item>
-        <forge-icon slot="start" name="settings"></forge-icon>
-        Settings
-      </forge-list-item>
-    </forge-list>
-  </div>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+Lists display groups of related items in a vertical arrangement, making content easy to scan and act upon. They should be organized in logical order (alphabetical, chronological, or by priority) to help users quickly find what they need. List items can include text, icons, actions, and selection controls, with spacing achieved through dividers or white space for visual separation and improved readability.
 
 ## Usage
 

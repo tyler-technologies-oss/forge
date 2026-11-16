@@ -1,0 +1,111 @@
+---
+/**
+ * ColorRamps — the header visual on the Color System page. Each ramp is a
+ * role (not a hue): its base fill with a sample of its `on-*` text, then its
+ * container tones from strongest to softest. Every color is a theme token, so
+ * the ramps follow light, dark, and custom themes.
+ */
+interface Ramp {
+  label: string;
+  base: string;
+  tones: string[];
+}
+
+const brandRamps: Ramp[] = [
+  {
+    label: "Primary",
+    base: "bg-primary text-(--forge-theme-on-primary)",
+    tones: [
+      "bg-primary-container-high",
+      "bg-primary-container",
+      "bg-primary-container-low",
+      "bg-primary-container-minimum",
+    ],
+  },
+  {
+    label: "Secondary",
+    base: "bg-secondary text-(--forge-theme-on-secondary)",
+    tones: [
+      "bg-secondary-container-high",
+      "bg-secondary-container",
+      "bg-secondary-container-low",
+      "bg-secondary-container-minimum",
+    ],
+  },
+  {
+    label: "Surface",
+    base: "bg-surface-inverse text-(--forge-theme-on-surface-inverse)",
+    tones: [
+      "bg-surface-container",
+      "bg-surface-container-low",
+      "bg-surface-container-minimum",
+      "bg-surface",
+    ],
+  },
+];
+
+const statusRamps: Ramp[] = [
+  {
+    label: "Success",
+    base: "bg-success text-(--forge-theme-on-success)",
+    tones: [
+      "bg-success-container-high",
+      "bg-success-container",
+      "bg-success-container-low",
+      "bg-success-container-minimum",
+    ],
+  },
+  {
+    label: "Warning",
+    base: "bg-warning text-(--forge-theme-on-warning)",
+    tones: [
+      "bg-warning-container-high",
+      "bg-warning-container",
+      "bg-warning-container-low",
+      "bg-warning-container-minimum",
+    ],
+  },
+  {
+    label: "Error",
+    base: "bg-error text-(--forge-theme-on-error)",
+    tones: [
+      "bg-error-container-high",
+      "bg-error-container",
+      "bg-error-container-low",
+      "bg-error-container-minimum",
+    ],
+  },
+  {
+    label: "Info",
+    base: "bg-info text-(--forge-theme-on-info)",
+    tones: [
+      "bg-info-container-high",
+      "bg-info-container",
+      "bg-info-container-low",
+      "bg-info-container-minimum",
+    ],
+  },
+];
+
+const groups = [brandRamps, statusRamps];
+---
+
+<div class="flex flex-wrap items-end justify-center gap-x-large gap-y-medium" aria-hidden="true">
+  {
+    groups.map((ramps) => (
+      <div class="flex flex-wrap justify-center gap-xsmall">
+        {ramps.map(({ label, base, tones }) => (
+          <div class="w-[72px] flex flex-col rounded-lg overflow-hidden border border-outline bg-surface">
+            <div class:list={["h-20 flex flex-col justify-between p-xsmall", base]}>
+              <span class="text-label2">{label}</span>
+              <span class="text-heading5 self-end">Aa</span>
+            </div>
+            {tones.map((tone) => (
+              <div class:list={["h-3", tone]} />
+            ))}
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>

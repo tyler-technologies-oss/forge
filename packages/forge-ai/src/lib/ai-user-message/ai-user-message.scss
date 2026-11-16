@@ -1,0 +1,90 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge/dist/button/forge-button';
+@use '../utils/toolbar' as toolbar;
+
+:host {
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin-inline-start: #{forge-spacing.variable(xxlarge)};
+  position: relative;
+}
+
+.ai-message-container {
+  padding-block: #{forge-spacing.variable(xsmall)};
+  padding-inline: #{forge-spacing.variable(medium)};
+  background-color: #{forge-theme.variable(primary-container-low)};
+  color: #{forge-theme.variable(on-primary-container-low)};
+  border-radius: #{forge-spacing.variable(xsmall)};
+  border-start-end-radius: 0;
+  margin-inline-start: auto;
+}
+
+span {
+  color: #{forge-theme.variable(on-surface)};
+  overflow-wrap: break-word;
+}
+
+.toolbar-container {
+  @include toolbar.toolbar-container;
+  right: 0;
+}
+
+.grid-container:hover .toolbar-container,
+.grid-container .toolbar-container:focus-within {
+  @include toolbar.toolbar-container-visible;
+}
+
+.grid-container::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  height: 40px;
+}
+
+.edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: #{forge-spacing.variable(small)};
+  padding: #{forge-spacing.variable(medium)};
+  background-color: #{forge-theme.variable(surface-container-minimum)};
+  border-radius: #{forge-spacing.variable(xsmall)};
+  border-start-end-radius: 0;
+}
+
+.edit-textarea {
+  @include forge-typography.style(body1);
+  @include forge-scrollbar.base;
+
+  width: 100%;
+  min-height: 60px;
+  max-height: 150px;
+  field-sizing: content;
+  resize: none;
+  border: 1px solid #{forge-theme.variable(outline)};
+  border-radius: #{forge-spacing.variable(xxsmall)};
+  padding: #{forge-spacing.variable(small)};
+  background-color: #{forge-theme.variable(surface)};
+  color: #{forge-theme.variable(on-surface)};
+  outline: none;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #{forge-theme.variable(primary)};
+  }
+}
+
+.edit-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: #{forge-spacing.variable(small)};
+}

@@ -4,6 +4,12 @@ description: How Tyler Forge components work as Web Components — properties, e
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="usage" />
+</ComponentHeader>
 
 Tyler Forge components are custom HTML elements built as [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
 This means that you can use them in any front-end framework or library, such as React, Angular, Vue, or vanilla JavaScript and can be used

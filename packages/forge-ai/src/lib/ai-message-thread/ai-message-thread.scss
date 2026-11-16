@@ -1,0 +1,90 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+@use '@tylertech/forge-tokens/sass/animation' as forge-animation;
+@use '../utils/markdown-styles' as markdown;
+@use '@tylertech/forge/dist/floating-action-button/forge-floating-action-button';
+
+:host {
+  display: grid;
+  height: 100%;
+  position: relative;
+}
+
+.message-thread {
+  @include forge-scrollbar.base;
+
+  overflow-y: auto;
+
+  // Safari-specific: force scrollbar to always show
+  @media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+      overflow-y: scroll;
+    }
+  }
+}
+
+.message-thread-content {
+  --_message-thread-item-spacing: #{forge-spacing.variable(xlarge)};
+
+  display: flex;
+  flex-direction: column;
+  padding: #{forge-spacing.variable(medium)} #{forge-spacing.variable(medium)} #{forge-spacing.variable(xxlarge)} #{forge-spacing.variable(medium)};
+  max-inline-size: var(--forge-ai-message-thread-content-max-width, none);
+  margin-inline: auto;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.message-thread-content > * + * {
+  margin-block-start: var(--_message-thread-item-spacing);
+}
+
+forge-ai-empty-state {
+  margin-block: auto;
+}
+
+.scroll-to-bottom-button {
+  --forge-fab-size: 40px;
+  --forge-fab-background: #{forge-theme.variable(surface-bright)};
+  --forge-fab-color: #{forge-theme.variable(text-high)};
+
+  position: absolute;
+  bottom: #{forge-spacing.variable(xxsmall)};
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+  transition:
+    opacity #{forge-animation.variable(duration-short2)} #{forge-animation.variable(easing-accelerate)},
+    transform #{forge-animation.variable(duration-short2)} #{forge-animation.variable(easing-accelerate)},
+    visibility 0s 0s;
+
+  &--hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity #{forge-animation.variable(duration-short2)} #{forge-animation.variable(easing-accelerate)},
+      transform #{forge-animation.variable(duration-short2)} #{forge-animation.variable(easing-accelerate)},
+      visibility 0s #{forge-animation.variable(duration-short2)};
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+}
+
+// Markdown formatting style overrides
+forge-ai-user-message,
+forge-ai-response-message,
+forge-ai-error-message {
+  @include markdown.markdown-content;
+}

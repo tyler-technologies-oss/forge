@@ -1,0 +1,21 @@
+## Labeling
+
+Place a `<label>` in the `label` slot and associate it with the slotted input using `for` and `id`. If the field has no visible label, give the input an `aria-label`.
+
+The decrement and increment buttons are icon-only, so each has an accessible name. They default to "Decrement" and "Increment". Set `decrement-label` and `increment-label` to make them more specific or to localize them, for example "Decrease guests" and "Increase guests".
+
+## Keyboard interaction
+
+The slotted `<input type="number">` keeps its native keyboard behavior, and each button is a separate tab stop.
+
+| Key                   | Action                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------ |
+| Tab                   | Moves focus between the decrement button, the input, and the increment button.                         |
+| Arrow up / Arrow down | Increments or decrements the value by `step` while the input has focus (native number input behavior). |
+| Enter / Space         | Activates the focused button, which steps the value by the input's `step`.                             |
+
+The buttons call the input's `stepDown()` and `stepUp()` methods, so `min`, `max`, and `step` are respected. They then dispatch `input` and `change` events from the input, so listeners behave the same as for typed changes.
+
+## Validation
+
+Set `invalid` to show the error state and `required` to mark the field as required. Also set `required` on the input itself so assistive technology and form validation know about it, and use the `support-text` slot to explain the error.

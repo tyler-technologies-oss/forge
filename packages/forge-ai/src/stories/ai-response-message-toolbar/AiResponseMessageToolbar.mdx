@@ -1,0 +1,35 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiResponseMessageToolbarStories from './AiResponseMessageToolbar.stories';
+
+<Meta of={AiResponseMessageToolbarStories} />
+
+<Title />
+
+A row of icon buttons for acting on an assistant response: resend, copy, and optional thumbs up/down feedback. The toolbar only emits events; your app performs the action.
+
+<Canvas of={AiResponseMessageToolbarStories.Demo} />
+
+## Reactions
+
+Set `enable-reactions` to show thumbs up/down buttons. Thumbs down opens a popover for optional written feedback. Use `feedback-type` and `feedback-reason` to restore a previously saved reaction.
+
+<Canvas of={AiResponseMessageToolbarStories.WithReactions} />
+
+## Events
+
+`forge-ai-response-message-toolbar-action` fires when resend or copy is pressed. `forge-ai-response-message-toolbar-feedback` fires for a thumbs up, or for a thumbs down once its feedback is submitted.
+
+```ts
+toolbar.addEventListener('forge-ai-response-message-toolbar-action', evt => {
+  const { action } = evt.detail; // 'resend' | 'copy'
+});
+
+toolbar.addEventListener('forge-ai-response-message-toolbar-feedback', evt => {
+  const { action, feedback } = evt.detail; // action: 'positive' | 'negative'
+});
+```
+
+## API
+
+<CustomArgTypes />

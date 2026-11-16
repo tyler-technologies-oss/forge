@@ -1,0 +1,13 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-button-toggle-group value="day">
+    <forge-button-toggle value="day">Day</forge-button-toggle>
+    <forge-button-toggle value="week">Week</forge-button-toggle>
+    <forge-button-toggle value="month">Month</forge-button-toggle>
+  </forge-button-toggle-group>
+</ComponentHeader>

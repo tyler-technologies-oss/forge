@@ -32,6 +32,18 @@ After editing any of those, before committing:
 
 Never edit `plugin/skills/forge-design/` by hand. Edits to other pages (tokens, FAQ, about) don't affect the skill.
 
+### Published guidance
+
+`pnpm --filter forge-docs build` also publishes the guidance to the site, for the Forge MCP server and other agents (FORGE-71). It writes these into `dist/`, and they aren't committed:
+
+- `skill/forge-design/references/**` - the same reference files as the plugin skill
+- `skill/forge-design/manifest.json` - the topic index, with a `schemaVersion`
+- `skill/forge-design/rules.md` - the top-level rules, workflow and tool list from the template, with absolute links
+- `skill/forge-design/rules.json` - data for hooks and tools. `subpathOnlyComponents` is derived from what `packages/forge/src/lib/index.ts` doesn't import
+- `llms.txt` - an index of every page
+
+Bump `SITE_SCHEMA_VERSION` in `build-forge-skill.mjs` when the shape of `manifest.json` or `rules.json` changes.
+
 ## Astro framework
 
 Use the Astro docs MCP server (`mcp__Astro_docs__search_astro_docs`, registered in the root `.mcp.json`) for any Astro question: syntax, configuration, components, layouts, content collections, MDX, view transitions, SSR/SSG behavior, and integrations. Query it before assuming Astro APIs or patterns.

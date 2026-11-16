@@ -186,6 +186,11 @@ const prefixed = (prefix: string, map: Record<string, string>): Record<string, s
 
 const allTo = (prefix: string, paths: string[], to: string): Record<string, string> => Object.fromEntries(paths.map(path => [`${prefix}/${path}`, to]));
 
+const removedPageRedirects: Record<string, string> = {
+  '/developing/customization': '/developing/theming/',
+  '/faq/focus-indicator-clipping': '/developing/accessibility/'
+};
+
 export const LEGACY_REDIRECTS: Record<string, string> = {
   '/get-started': '/',
   '/search': '/',
@@ -206,5 +211,6 @@ export const LEGACY_REDIRECTS: Record<string, string> = {
   ...prefixed('/patterns', patternRedirects),
   ...allTo('/recipes', recipes, BLOCKS),
   ...allTo('/blog', blogPosts, BLOG),
-  ...allTo('/blog/tags', blogTags, BLOG)
+  ...allTo('/blog/tags', blogTags, BLOG),
+  ...removedPageRedirects
 };

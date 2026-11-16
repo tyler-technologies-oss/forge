@@ -1,0 +1,42 @@
+---
+/**
+ * TypeSpecimen — the header visual on the Typography page. A large display
+ * glyph beside the hierarchy a Forge app actually uses, each line set in its
+ * own style with the style name alongside. Emphasis comes from the text
+ * tokens, so it follows light, dark, and custom themes.
+ */
+interface Specimen {
+  style: string;
+  role: string;
+  sample: string;
+  classes: string;
+}
+
+const specimens: Specimen[] = [
+  { style: "heading4", role: "Page title", sample: "Permit applications", classes: "text-heading4 text-high" },
+  { style: "heading3", role: "Card title", sample: "Recent activity", classes: "text-heading3 text-high" },
+  { style: "body2", role: "Body", sample: "Review each application before approval.", classes: "text-body2 text-high" },
+  { style: "label2", role: "Label", sample: "Status", classes: "text-label2 text-medium" },
+];
+---
+
+<div class="flex flex-wrap items-center justify-center gap-x-xxlarge gap-y-large" aria-hidden="true">
+  <div class="flex flex-col items-center gap-xxsmall">
+    <span class="text-display8 text-primary leading-none">Aa</span>
+    <span class="text-label2 text-medium">Roboto</span>
+  </div>
+
+  <div class="flex flex-col gap-xsmall min-w-0">
+    {
+      specimens.map(({ style, role, sample, classes }) => (
+        <div class="grid grid-cols-[160px_minmax(0,1fr)] items-baseline gap-medium">
+          <span class="text-label1 text-low">
+            {style}
+            <span class="text-lowest"> · {role}</span>
+          </span>
+          <span class:list={[classes, "truncate"]}>{sample}</span>
+        </div>
+      ))
+    }
+  </div>
+</div>

@@ -1,0 +1,48 @@
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge/dist/button/forge-button';
+
+:host {
+  display: block;
+  --_ai-empty-state-max-width: 420px;
+  --_ai-empty-state-icon-size: 200px;
+}
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: #{forge-spacing.variable(medium)};
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--ai-empty-state-max-width, var(--_ai-empty-state-max-width));
+}
+
+.heading-message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: #{forge-spacing.variable(xsmall)};
+}
+
+.heading {
+  @include forge-typography.style(heading4);
+  text-align: center;
+}
+
+.message {
+  @include forge-typography.style(body2);
+  text-align: center;
+}
+
+::slotted(:where(p, h1, h2, h3, h4, h5, h6)) {
+  margin: 0;
+}
+
+::slotted([slot='icon']) {
+  height: var(--ai-empty-state-icon-size, var(--_ai-empty-state-icon-size));
+  width: var(--ai-empty-state-icon-size, var(--_ai-empty-state-icon-size));
+}
