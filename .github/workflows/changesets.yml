@@ -62,14 +62,14 @@ jobs:
           fi
 
       - name: Configure AWS Credentials
-        if: ${{ !cancelled() && steps.forge-release.outputs.released == 'true' }}
+        if: ${{ !cancelled() && github.ref_name != 'next' && steps.forge-release.outputs.released == 'true' }}
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy CDN Assets
-        if: ${{ !cancelled() && steps.forge-release.outputs.released == 'true' }}
+        if: ${{ !cancelled() && github.ref_name != 'next' && steps.forge-release.outputs.released == 'true' }}
         working-directory: packages/forge
         run: |
           aws s3 sync cdn/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/ \
