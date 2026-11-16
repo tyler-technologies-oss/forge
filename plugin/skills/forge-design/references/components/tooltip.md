@@ -2,6 +2,10 @@
 
 Tooltips display a short text label for an element when the user hovers, focuses, or long-presses it.
 
+## Overview
+
+Tooltips are small, contextual overlays that appear when users hover over or focuses on an element. They display brief text labels that identify an element or provide additional explanation about its function. Tooltips help improve accessibility and usability by clarifying the purpose of interface elements, particularly icons and buttons that may not be immediately clear to all users.
+
 ## Usage
 
 `forge-tooltip` anchors a short text label to another element via `anchor` (an id reference), and reveals it through `triggerType` — `hover` (the default), `focus`, or `longpress` — plus `placement` and `flip` for positioning. Reserve it for a word or short phrase clarifying an element's purpose — it's essential for an [icon button](./icon-button.md) with no visible label. For anything longer than a few words, use an inline message or dialog instead of overloading a tooltip.
@@ -10,12 +14,14 @@ Tooltips display a short text label for an element when the user hovers, focuses
 
 **Do**
 
+- Adjust placement dynamically to prevent clipping or overflow.
 - Always pair an icon-only control, like an icon button, with a tooltip describing its action.
 - Keep tooltip text to a few words — a label or short phrase, not a sentence.
 - Pair hover with focus or longpress in triggerType so the tooltip is reachable without a mouse.
 
 **Don't**
 
+- Don’t use tooltips for critical or persistent information.
 - Don't restate text that's already visible next to the anchor.
 - Don't put rich content, images, or interactive controls inside a tooltip.
 - Don't rely on a tooltip alone to convey information essential to completing a task on mobile.

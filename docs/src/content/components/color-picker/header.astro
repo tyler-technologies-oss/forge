@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="cover" zoom={0.9} {thumbnail}>
+  <forge-color-picker value="1976d2"></forge-color-picker>
+</ComponentHeader>

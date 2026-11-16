@@ -1,0 +1,22 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-key>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-primary)]">
+      <span>Black Guillemot</span>
+      <span slot="value">25%</span>
+    </forge-key-item>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-success)]">
+      <span>Great Shearwater</span>
+      <span slot="value">50%</span>
+    </forge-key-item>
+    <forge-key-item class="[--forge-key-item-icon-color:var(--forge-theme-warning)]">
+      <span>Mealy Redpoll</span>
+      <span slot="value">75%</span>
+    </forge-key-item>
+  </forge-key>
+</ComponentHeader>

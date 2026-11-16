@@ -1,0 +1,78 @@
+---
+title: Confirmation Dialog
+description: A confirmation dialog is a modal that presents a brief message or alert and asks the user to make a primary or secondary decision.
+status: stable
+source: core
+category: feedback
+storybookId: components-confirmation-dialog--demo
+---
+
+import Header from './header.astro';
+import Example from '../../../components/Example.astro';
+import Rules from '../../../components/Rules.astro';
+import Rule from '../../../components/Rule.astro';
+
+<Header />
+
+## Overview
+
+A confirmation dialog interrupts the user to confirm a decision before the app acts on it, such as deleting data or discarding changes. It has a message and two actions: a primary action that confirms the decision and a secondary action that lets the user back out.
+
+For a succinct alert of a sentence or less, the title is usually omitted to keep the dialog focused. Use a title for longer messages or critical actions. Confirmation dialogs look the same on mobile and desktop.
+
+## Usage
+
+`forge-confirmation-dialog` is opened by setting `open`, and takes its content through the `title`, `message`, `secondary-button-text`, and `primary-button-text` slots. Listen for `forge-confirmation-dialog-action`: `detail.value` is `true` for the primary action and `false` for the secondary action or an Escape dismissal. Call `preventDefault()` on the event to keep the dialog open, and set `isBusy` while an async action runs. Use a confirmation dialog for a quick yes-or-no decision; for content that needs its own layout or form fields, use a <a href={`${import.meta.env.BASE_URL}components/dialog/usage/`}>dialog</a> instead.
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Phrase the message as a clear question or statement of the consequence.",
+      "Label the primary action with the specific verb, like Delete or Discard, rather than Yes or OK.",
+      "Offer a secondary action that lets the user cancel without proceeding.",
+      "Set isBusy and call preventDefault() on the action event while an async action finishes.",
+      "Return focus to a logical element on the page after the dialog closes.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a confirmation dialog for routine actions that are easy to undo.",
+      "Don't use one to show information the user doesn't need to act on.",
+      "Don't put forms or long content in it — use a dialog instead.",
+      "Don't expect a backdrop click to dismiss it; the backdrop is ignored.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Slot text into `title`, `message`, `secondary-button-text`, and `primary-button-text`. Every slot is optional; the secondary button is hidden when its slot is empty, and the primary button defaults to "Confirm".
+
+<Example
+  description="A confirmation dialog opened by a button, with a title, message, and two actions."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/confirmation-dialog/demo/demo.html"
+  height="350px"
+/>
+
+## Handling the action
+
+Read `detail.value` from the `forge-confirmation-dialog-action` event to see which action the user chose.
+
+```js
+const dialog = document.querySelector('forge-confirmation-dialog');
+
+dialog.addEventListener('forge-confirmation-dialog-action', async event => {
+  if (!event.detail.value) {
+    return;
+  }
+  event.preventDefault();
+  dialog.isBusy = true;
+  await deleteImages();
+  dialog.open = false;
+});
+```

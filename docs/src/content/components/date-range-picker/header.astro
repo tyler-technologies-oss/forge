@@ -1,0 +1,19 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-date-range-picker class="w-96">
+    <forge-text-field>
+      <label for="date-range-header-from" slot="label">Date range</label>
+      <input type="text" id="date-range-header-from" value="01/15/2025" />
+      <span data-forge-multi-input-separator aria-hidden="true">-</span>
+      <input type="text" id="date-range-header-to" value="01/22/2025" aria-label="To date" />
+      <forge-icon-button aria-label="Toggle calendar" slot="end" density="medium">
+        <forge-icon name="date_range"></forge-icon>
+      </forge-icon-button>
+    </forge-text-field>
+  </forge-date-range-picker>
+</ComponentHeader>

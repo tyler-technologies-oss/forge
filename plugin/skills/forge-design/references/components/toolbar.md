@@ -18,7 +18,7 @@ The toolbar is a horizontal container component that spans 100% width and provid
 - Pair a toolbar footer's actions the same way you would a dialog footer — confirming action last, dismissive action before it.
 - Set noDivider when the toolbar sits directly against another divider or border that already separates it from its neighbor.
 - Set `inverted` on every footer toolbar (card, dialog, table, and page footers) so its divider separates it from the content above.
-- Give toolbar titles a typography class: `forge-typography--heading4` for a page title, `forge-typography--heading3` for a card, dialog, or drawer title.
+- Give toolbar titles a typography class: `forge-typography--heading4` for a page or dialog title, `forge-typography--heading3` for a card or drawer title.
 
 **Don't**
 
@@ -41,7 +41,7 @@ Example (An inverted toolbar's divider sits on top instead of the bottom.): `get
 
 ## Common patterns
 
-Page titles are `h2` styled with `forge-typography--heading4`, since the app bar title is the page's `h1`. Container titles (card, dialog, drawer) use `forge-typography--heading3`.
+Page titles are `h2` styled with `forge-typography--heading4`, since the app bar title is the page's `h1`. Dialog titles also use `forge-typography--heading4`. Card and drawer titles use `forge-typography--heading3`.
 
 **Page header**: the page title in `start` and page-level actions in `end`.
 

@@ -2,6 +2,12 @@
 
 A skeleton screen is a low-fidelity placeholder that gradually loads into real content, giving users a visual cue that content is on its way.
 
+## Overview
+
+Skeleton screens are low-fidelity UI placeholders that gradually load with actual content, providing users with visual cues about the structure and layout of incoming information. They create perceptions of faster load times by focusing attention on progress rather than wait time, making them Forge's recommended method for loading new content when content size and shape are known in advance.
+
+Skeleton patterns can be used for initial page loads or to load specific components after an initial load while allowing users to continue interacting with other parts of the interface.
+
 ## Usage
 
 `forge-skeleton` shapes itself to match the content it's standing in for through `text`, `avatar`, `listItem`, `chip`, `button`, and `formField`, plus `stretch`. Use it whenever the size and shape of the incoming content is already known; when it isn't, use a linear or circular progress indicator, or a busy indicator for a full-page load, instead.
@@ -19,6 +25,7 @@ A skeleton screen is a low-fidelity placeholder that gradually loads into real c
 - Don't use a skeleton when the content's eventual size or shape is unknown — use a progress indicator instead.
 - Don't leave a skeleton on screen once its real content is ready — swap it out immediately.
 - Don't mix skeleton loading and a spinner for the same piece of content.
+- Don’t build overly complex skeleton UIs — keep placeholder shapes simple and recognizable.
 
 ## Basic usage
 

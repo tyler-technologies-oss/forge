@@ -1,5 +1,26 @@
 # @tylertech/forge-plugin
 
+## 1.7.0
+
+### Documentation
+
+- 37771d9: point bug reports and feature requests at the FORGE Jira forms
+- 37771d9: remove the Customization development guide
+
+### Other Changes
+
+- 630dc0d: Added docs pages for breadcrumb, confirmation-dialog, count-card, footer, listbox, process-stepper, quantity-field, responsive-toolbar, and user-profile.
+- 3ce0717: Fixed listbox example block IDs in the forge-design skill to point at existing blocks.
+
+## 1.6.0
+
+### Documentation
+
+- 6b203c3: add overview sections and usage guidance to component pages
+- 22d4f24: **dialog**: style dialog titles with heading4 like page titles, and fix the timestamp separator values
+- 8496768: **kbd**: add the kbd component docs page
+- 9cbbb58: **timestamp**: show the separators example from its block
+
 ## 1.5.0
 
 ### Documentation

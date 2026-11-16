@@ -1,0 +1,34 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="cover" {thumbnail}>
+  <table class="forge-data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ada Lovelace</td>
+        <td>Engineer</td>
+        <td>Active</td>
+      </tr>
+      <tr>
+        <td>Grace Hopper</td>
+        <td>Admiral</td>
+        <td>Active</td>
+      </tr>
+      <tr>
+        <td>Alan Turing</td>
+        <td>Researcher</td>
+        <td>Away</td>
+      </tr>
+    </tbody>
+  </table>
+</ComponentHeader>

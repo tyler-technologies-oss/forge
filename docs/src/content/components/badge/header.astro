@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-badge>3</forge-badge>
+  <forge-badge theme="success">Active</forge-badge>
+  <forge-badge theme="danger">Failed</forge-badge>
+</ComponentHeader>

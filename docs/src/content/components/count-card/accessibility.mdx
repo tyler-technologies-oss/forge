@@ -1,0 +1,28 @@
+## Screen reader behavior
+
+A count card has no role of its own: its icon, label, count, and other slotted content are read in order as ordinary content. Keep the label and count as plain text so they read naturally in sequence, such as "Revenue $12,450.00". The label and count also show a tooltip with their full text.
+
+## Labeling
+
+Always slot a text `label` so the count has context. Decorative icons in the `icon` slot don't need a name, but an `aria-label` is required on any `forge-icon-button` in the `action` slot, such as "More options".
+
+```html
+<forge-count-card>
+  <forge-icon slot="icon" name="people"></forge-icon>
+  <span slot="label">Total users</span>
+  <span slot="count">1,234</span>
+  <forge-icon-button slot="action" aria-label="More options">
+    <forge-icon name="more_vert"></forge-icon>
+  </forge-icon-button>
+</forge-count-card>
+```
+
+## Color and contrast
+
+Themes change the card's colors, but color shouldn't be the only signal of meaning. Pair a `success`, `error`, or `warning` theme with text or an icon, such as a badge reading "Over budget".
+
+## Keyboard interaction
+
+The card itself isn't focusable. Interactive content you slot into it, such as the `action` icon button, is reachable in its normal order with Tab and activated with Enter or Space.
+
+For a progress indicator in the `body` or `full-width` slot, such as `forge-meter`, give it an accessible label that describes what it measures. Add text alternatives for charts like sparklines.

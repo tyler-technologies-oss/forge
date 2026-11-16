@@ -4,6 +4,12 @@ description: Overriding default component state application-wide via a global co
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="global-configuration" />
+</ComponentHeader>
 
 Tyler Forge provides access to a global configuration object that allows you to override default state for various components that support it.
 This is useful for setting defaults for your application without having to pass the same properties/attributes to every component instance.

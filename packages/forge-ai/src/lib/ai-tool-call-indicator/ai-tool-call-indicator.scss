@@ -1,0 +1,320 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+@use '@tylertech/forge-tokens/sass/animation' as forge-animation;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge/sass/state-layer' as forge-state-layer;
+@use '@tylertech/forge/sass/focus-indicator' as forge-focus-indicator;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+
+@include forge-focus-indicator.keyframes;
+
+$marker-size: 28px;
+
+:host {
+  display: block;
+}
+
+.summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  padding-block: #{forge-spacing.variable(xxsmall)};
+  margin-block: #{forge-spacing.variable(xsmall)};
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #{forge-theme.variable(text-medium)};
+  text-align: start;
+  border-radius: #{forge-shape.variable(medium)};
+  outline: none;
+
+  @include forge-state-layer.standalone;
+}
+
+.status-icon {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  @include forge-typography.style(body1);
+
+  min-width: 0;
+  color: #{forge-theme.variable(text-medium)};
+}
+
+.chevron {
+  flex-shrink: 0;
+  transition: transform #{forge-animation.variable(duration-short4)} #{forge-animation.variable(easing-standard)};
+}
+
+.summary[aria-expanded='true'] .chevron,
+.row-button[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+// Sentinel element for the Forge focus ring. Keep it out of the button's flex
+// flow so its presence doesn't add gap whitespace; the button is positioned
+// relative, so the absolute indicator anchors to it.
+.focus-indicator {
+  position: absolute;
+  display: none;
+}
+
+:host {
+  .summary:focus,
+  .row-button:focus {
+    .focus-indicator {
+      @include forge-focus-indicator.tokens;
+      @include forge-focus-indicator.base;
+      @include forge-focus-indicator.inward;
+
+      &::before {
+        content: '';
+      }
+
+      display: block;
+
+      @include forge-focus-indicator.provide-theme(
+        (
+          shape: forge-shape.variable(large)
+        )
+      );
+    }
+  }
+
+  // Square off the bottom corners of the focus ring when the card header is
+  // expanded so it flushes with the divider above the code body.
+  .code-card__header[aria-expanded='true']:focus .focus-indicator {
+    @include forge-focus-indicator.provide-theme(
+      (
+        shape-end-start: 0px,
+        shape-end-end: 0px
+      )
+    );
+  }
+}
+
+.timeline {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.timeline-content {
+  overflow: hidden;
+  min-height: 0;
+  padding-inline-start: #{forge-spacing.variable(small)};
+}
+
+.timeline-row {
+  position: relative;
+  padding-inline-start: #{forge-spacing.variable(large)};
+  padding-block-end: #{forge-spacing.variable(medium)};
+
+  // Vertical connector line running through the marker centers.
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(#{$marker-size} + 4px);
+    inset-block-end: -4px;
+    inset-inline-start: calc(#{$marker-size} / 2);
+    width: 1px;
+    background-color: #{forge-theme.variable(outline)};
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.row-header {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(small)};
+  width: 100%;
+  min-height: $marker-size;
+
+  // Pull the marker into the padding gutter so the connector line aligns to its center.
+  margin-inline-start: calc(-1 * #{forge-spacing.variable(large)});
+
+  // Keep the marker top-aligned when the card grows (debug mode).
+  &:has(.code-card) {
+    align-items: flex-start;
+  }
+}
+
+.row-button {
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding-block: #{forge-spacing.variable(xsmall)};
+  padding-inline: 0 #{forge-spacing.variable(xsmall)};
+  text-align: start;
+  color: inherit;
+  border-radius: #{forge-shape.variable(large)};
+  outline: none;
+
+  @include forge-state-layer.standalone;
+}
+
+.row-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: $marker-size;
+  height: $marker-size;
+  border-radius: 50%;
+  background-color: #{forge-theme.variable(primary-container)};
+  color: #{forge-theme.variable(primary)};
+
+  :host(:state(debug-mode)) & {
+    margin-block-start: #{forge-spacing.variable(xxsmall)};
+  }
+
+  &--complete {
+    background-color: #{forge-theme.variable(success-container)};
+    color: #{forge-theme.variable(on-success-container)};
+  }
+
+  &--error {
+    background-color: #{forge-theme.variable(error-container)};
+    color: #{forge-theme.variable(on-error-container)};
+  }
+}
+
+.row-label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: #{forge-spacing.variable(xxxsmall)};
+}
+
+.row-name {
+  @include forge-typography.style(label2);
+
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  line-height: normal;
+  font-weight: 500;
+  color: #{forge-theme.variable(text-high)};
+}
+
+.code-card {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #{forge-theme.variable(outline)};
+  border-radius: #{forge-shape.variable(large)};
+  overflow: hidden;
+  background-color: #{forge-theme.variable(surface)};
+}
+
+.code-card__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(small)};
+  width: 100%;
+  padding-block: #{forge-spacing.variable(xsmall)};
+  padding-inline: #{forge-spacing.variable(small)};
+  border: none;
+  cursor: pointer;
+  text-align: start;
+  background-color: #{forge-theme.variable(surface-container-minimum)};
+  border-radius: #{forge-shape.variable(large)} #{forge-shape.variable(large)} 0 0;
+
+  &[aria-expanded='false'] {
+    border-radius: #{forge-shape.variable(large)};
+  }
+
+  &[aria-expanded='true'] {
+    border-block-end: 1px solid #{forge-theme.variable(outline)};
+  }
+}
+
+.code-card__title {
+  display: flex;
+  align-items: center;
+  gap: #{forge-spacing.variable(xsmall)};
+  flex: 1;
+  min-width: 0;
+  color: #{forge-theme.variable(text-medium)};
+}
+
+.code-card__name {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #{forge-theme.variable(text-high)};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-card__status {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-block: #{forge-spacing.variable(xxxsmall)};
+  padding-inline: #{forge-spacing.variable(xsmall)};
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #{forge-theme.variable(text-medium)};
+  background-color: #{forge-theme.variable(surface-container)};
+
+  &[data-status='complete'] {
+    color: #{forge-theme.variable(on-success-container)};
+    background-color: #{forge-theme.variable(success-container)};
+  }
+
+  &[data-status='error'] {
+    color: #{forge-theme.variable(on-error-container)};
+    background-color: #{forge-theme.variable(error-container)};
+  }
+}
+
+.code-card__code {
+  @include forge-scrollbar.base;
+
+  font-family: monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: #{forge-spacing.variable(small)};
+  color: #{forge-theme.variable(text-high)};
+  overflow: auto;
+  max-height: 320px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  .token-key {
+    color: #{forge-theme.variable(primary)};
+  }
+
+  .token-string {
+    color: #{forge-theme.variable(success)};
+  }
+
+  .token-number {
+    color: #{forge-theme.variable(primary)};
+  }
+
+  .token-boolean {
+    color: #{forge-theme.variable(tertiary)};
+  }
+
+  .token-null {
+    color: #{forge-theme.variable(text-medium)};
+  }
+}

@@ -6,16 +6,18 @@ category: feedback
 storybookId: components-busy-indicator--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <div class="relative h-48 w-96 rounded-lg border border-outline">
-    <forge-busy-indicator open mode="inline" title-text="Loading" message="Please wait while we load your data..."></forge-busy-indicator>
-  </div>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+The busy indicator is an overlay component that prevents user interaction while communicating that a system-wide process is in progress. It can either block an entire page or a specific region, where it can inform users about an ongoing operation. It includes a loading animation and descriptive text to inform users about the ongoing operation.
+
+When used in fullscreen, it appears as a modal overlay with a scrim background and includes a loading animation with descriptive text to inform users about the ongoing operation. This component is specifically designed for operations that affect the entire page or application state.
 
 ## Usage
 

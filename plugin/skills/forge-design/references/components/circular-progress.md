@@ -2,6 +2,10 @@
 
 Circular progress indicators display progress along a circular track, for both determinate and indeterminate waits.
 
+## Overview
+
+Circular progress indicators communicate that a specific area or component is loading or processing data. They are designed to be placed close to the content that is being loaded or changed, providing localized feedback without disrupting the entire interface. Circular progress indicators are ideal for inline components and situations where only a portion of the interface is being updated.
+
 ## Usage
 
 `forge-circular-progress` communicates that a single component or a small area of the page is loading or changing, through `determinate`, `progress`, `theme`, and `track`. Place it close to the content it describes, such as inside a [button](./button.md), a list item, or a card, rather than for the whole page. For a page-level or full-region block, use a busy indicator instead, and for a horizontal, linear alternative, use a [linear progress](./linear-progress.md) indicator instead.
@@ -13,6 +17,7 @@ Circular progress indicators display progress along a circular track, for both d
 - Only show a progress indicator when the expected wait is more than a second.
 - Place the indicator inside or directly beside the specific content that's loading or changing.
 - Pick one indicator style — linear or circular — for a given action, and use it consistently everywhere that action appears.
+- Use smooth animations to soften transitions between loading and loaded states.
 
 **Don't**
 

@@ -1,0 +1,28 @@
+## Listbox and option roles
+
+`forge-listbox` has the `listbox` role with a vertical orientation, and each `forge-option` has the `option` role. The listbox sets `aria-multiselectable` when `multiple` is set, `aria-disabled` when `disabled` is set, and `aria-readonly` when `readonly` is set.
+
+## Keyboard interaction
+
+A listbox has a single tab stop. Tab moves focus into the list, and the arrow keys move between options. Selection follows the keys below.
+
+| Key                           | Action                                                                                   |
+| ----------------------------- | ---------------------------------------------------------------------------------------- |
+| Arrow up / Arrow down         | Moves focus to the previous or next option.                                              |
+| Home / End                    | Moves focus to the first or last option.                                                 |
+| Enter / Space                 | Selects the focused option.                                                              |
+| Shift + Arrow up / down       | Moves focus and adds the option to the selection (`multiple` only).                      |
+| Shift + Space                 | Selects the range from the last selected option to the focused option (`multiple` only). |
+| Ctrl/Cmd + Shift + Home / End | Selects from the focused option to the first or last option (`multiple` only).           |
+| Ctrl/Cmd + A                  | Selects every enabled option (`multiple` only).                                          |
+| Printable characters          | Moves focus to the next option whose label starts with the typed text.                   |
+
+## Labeling
+
+Give the listbox an accessible name with `aria-label`, or point `aria-labelledby` at a visible heading or label. Without one, screen readers announce only "listbox". Give `forge-option-group` a visible label through its `label` slot so groups are announced by name.
+
+Disabled options are skipped by selection but remain perceivable. Don't use color or an icon alone to convey an option's meaning; include it in the label.
+
+## Drag and drop
+
+Dragging requires a pointer. Provide another way to reorder or move options for keyboard users, such as buttons that dispatch the listbox's `--shift-up` and `--shift-down` commands.

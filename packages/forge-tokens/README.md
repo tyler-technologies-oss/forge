@@ -73,7 +73,7 @@ The generated token data used by these modules is in `sass/tokens/`. It is an im
 
 ```bash
 pnpm build  # Generates sass/ from tokens/ and src/sass/
-pnpm test
+pnpm test   # Needs a prior build
 pnpm dev   # Builds sass/ and starts the token dev app
 ```
 

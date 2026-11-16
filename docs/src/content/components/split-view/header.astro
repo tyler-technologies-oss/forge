@@ -1,0 +1,16 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="cover" {thumbnail}>
+  <forge-split-view class="h-48">
+    <forge-split-view-panel size="200" accessible-label="Panel one">
+      <div class="p-medium">Panel one</div>
+    </forge-split-view-panel>
+    <forge-split-view-panel size="200" resizable="start" accessible-label="Panel two">
+      <div class="p-medium">Panel two</div>
+    </forge-split-view-panel>
+  </forge-split-view>
+</ComponentHeader>

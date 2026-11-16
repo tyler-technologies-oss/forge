@@ -1,0 +1,17 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader fit="cover" inset="0" {thumbnail}>
+  <forge-app-bar title-text="My Application">
+    <forge-icon slot="logo" name="home"></forge-icon>
+    <forge-icon-button slot="end" aria-label="Notifications" theme="app-bar">
+      <forge-icon name="notifications"></forge-icon>
+    </forge-icon-button>
+    <forge-icon-button slot="end" aria-label="Settings" theme="app-bar">
+      <forge-icon name="settings"></forge-icon>
+    </forge-icon-button>
+  </forge-app-bar>
+</ComponentHeader>

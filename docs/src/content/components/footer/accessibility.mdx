@@ -1,0 +1,19 @@
+## Landmark and list roles
+
+`forge-footer` has the `contentinfo` role, so assistive technology exposes it as the page's footer landmark. Its items are wrapped in a `list`, and each `forge-footer-item` has the `listitem` role, so screen readers announce the number of items.
+
+Only one `contentinfo` landmark should be exposed per page. Don't add `role="contentinfo"` to other elements on the page.
+
+## Keyboard interaction
+
+The footer doesn't manage focus itself. Interactive content you slot into it, like links, follows the normal tab order.
+
+| Key         | Action                                          |
+| ----------- | ----------------------------------------------- |
+| Tab         | Moves focus to the next link in the footer.     |
+| Shift + Tab | Moves focus to the previous link in the footer. |
+| Enter       | Activates the focused link.                     |
+
+## Labeling
+
+Give a slotted graphic link an accessible name through the image's `alt` text, such as "Empowered by Tyler Technologies". If a page has more than one footer-like region, set `aria-label` on the footer to tell them apart.

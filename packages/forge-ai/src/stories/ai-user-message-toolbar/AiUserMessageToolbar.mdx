@@ -1,0 +1,29 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiUserMessageToolbarStories from './AiUserMessageToolbar.stories';
+
+<Meta of={AiUserMessageToolbarStories} />
+
+<Title />
+
+A row of icon buttons for acting on a user's message: a timestamp, resend, edit, and copy. The toolbar only emits events; your app performs the action. `forge-ai-user-message` uses it internally.
+
+<Canvas of={AiUserMessageToolbarStories.Demo} />
+
+## Streaming
+
+While a response is streaming, set `streaming` to hide resend and edit so the user can't interrupt it. Copy stays available.
+
+<Canvas of={AiUserMessageToolbarStories.Streaming} />
+
+## Events
+
+```ts
+toolbar.addEventListener('forge-ai-user-message-toolbar-copy', () => {});
+toolbar.addEventListener('forge-ai-user-message-toolbar-resend', () => {});
+toolbar.addEventListener('forge-ai-user-message-toolbar-edit', () => {});
+```
+
+## API
+
+<CustomArgTypes />

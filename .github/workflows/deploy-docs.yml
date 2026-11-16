@@ -9,6 +9,7 @@ on:
       - 'packages/forge-core/**'
       - 'packages/forge-tailwind/**'
       - 'packages/forge-tokens/**'
+      - 'plugin/package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:

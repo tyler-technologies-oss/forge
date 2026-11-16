@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-checkbox checked>Selected</forge-checkbox>
+  <forge-checkbox>Unselected</forge-checkbox>
+  <forge-checkbox indeterminate>Mixed</forge-checkbox>
+</ComponentHeader>

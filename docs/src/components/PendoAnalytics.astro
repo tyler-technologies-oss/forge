@@ -1,0 +1,79 @@
+---
+/**
+ * PendoAnalytics - Loads the Pendo agent for anonymous usage analytics.
+ *
+ * Visitors aren't identified, so Pendo generates an anonymous visitor id. ClientRouter
+ * navigations are history API changes, which Pendo tracks as page loads on its own.
+ *
+ * Only production builds include it, and it never loads on a local host (such as
+ * `astro preview`), so local traffic stays out of the analytics.
+ */
+import { BUILD_INFO, PENDO_ACCOUNT_ID, PENDO_APP_ID } from "../config/analytics";
+---
+
+{import.meta.env.PROD && (
+<script is:inline define:vars={{ appId: PENDO_APP_ID, accountId: PENDO_ACCOUNT_ID, buildInfo: BUILD_INFO }}>
+  (function () {
+    const LOCAL_HOSTNAMES = ["localhost", "127.0.0.1", "[::1]"];
+    // Inline scripts can re-run on ClientRouter navigations; the agent only needs loading once.
+    if (window.pendo || LOCAL_HOSTNAMES.includes(window.location.hostname)) {
+      return;
+    }
+
+    (function (p, e, n, d, o) {
+      var v, w, x, y, z;
+      o = p[d] = p[d] || {};
+      o._q = o._q || [];
+      v = ["initialize", "identify", "updateOptions", "pageLoad", "track", "trackAgent"];
+      for (w = 0, x = v.length; w < x; ++w)
+        (function (m) {
+          o[m] =
+            o[m] ||
+            function () {
+              o._q[m === v[0] ? "unshift" : "push"]([m].concat([].slice.call(arguments, 0)));
+            };
+        })(v[w]);
+      y = e.createElement(n);
+      y.async = !0;
+      y.src = "https://cdn.pendo.io/agent/static/" + appId + "/pendo.js";
+      z = e.getElementsByTagName(n)[0];
+      z.parentNode.insertBefore(y, z);
+    })(window, document, "script", "pendo");
+
+    const getThemePreference = () => {
+      const stored = localStorage.getItem(".forge-theme");
+      return stored === "light" || stored === "dark" ? stored : "system";
+    };
+
+    const getEnvironment = () => (window.location.hostname === "tylerforge.design" ? "production" : "staging");
+
+    const params = new URLSearchParams(window.location.search);
+    const referralSource = params.get("utm_source") ?? params.get("ref");
+    let theme = getThemePreference();
+
+    pendo.initialize({
+      visitor: {
+        theme,
+        // Only sent when present, so a later visit without the param keeps the original source.
+        ...(referralSource && { referral_source: referralSource }),
+      },
+      account: {
+        id: accountId,
+        environment: getEnvironment(),
+        forge_version: buildInfo.forgeVersion,
+        forge_plugin_version: buildInfo.forgePluginVersion,
+        docsite_version: buildInfo.docsiteVersion,
+      },
+    });
+
+    // The theme toggle stores an explicit choice and updates this attribute.
+    new MutationObserver(() => {
+      const next = getThemePreference();
+      if (next !== theme) {
+        theme = next;
+        pendo.updateOptions({ visitor: { theme } });
+      }
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-forge-theme"] });
+  })();
+</script>
+)}

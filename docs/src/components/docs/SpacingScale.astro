@@ -1,0 +1,54 @@
+---
+/**
+ * SpacingScale — the decorative header on the Spacing page. Each step of the
+ * scale is shown as the space between two objects: a pair of thin edges
+ * separated by a gap at the token's true size, with the gap tinted and measured.
+ * `medium`, the default, gets the strongest tint. Sizes come from the spacing
+ * tokens and colors from theme tokens. Purely visual: hidden from assistive tech.
+ */
+interface Step {
+  token: string;
+  value: string;
+  gap: string;
+  isDefault?: boolean;
+}
+
+const steps: Step[] = [
+  { token: "xxsmall", value: "4", gap: "w-(--forge-spacing-xxsmall)" },
+  { token: "xsmall", value: "8", gap: "w-(--forge-spacing-xsmall)" },
+  { token: "small", value: "12", gap: "w-(--forge-spacing-small)" },
+  { token: "medium", value: "16", gap: "w-(--forge-spacing-medium)", isDefault: true },
+  { token: "large", value: "24", gap: "w-(--forge-spacing-large)" },
+  { token: "xlarge", value: "32", gap: "w-(--forge-spacing-xlarge)" },
+  { token: "xxlarge", value: "48", gap: "w-(--forge-spacing-xxlarge)" },
+  { token: "xxxlarge", value: "56", gap: "w-(--forge-spacing-xxxlarge)" },
+];
+
+const tile = "w-0.5 h-12 rounded-full bg-surface-container shrink-0";
+---
+
+<div class="flex items-end justify-center gap-xlarge" aria-hidden="true">
+  {
+    steps.map(({ token, value, gap, isDefault }) => {
+      const fill = isDefault ? "bg-primary-container-high" : "bg-primary-container-low";
+      const line = "bg-primary";
+      return (
+      <div class="flex flex-col items-center gap-xsmall shrink-0">
+        <div class="flex items-stretch">
+          <div class={tile} />
+          <div class:list={[gap, "relative flex items-center", fill]}>
+            <div class:list={["absolute inset-x-0 h-px", line]} />
+            <div class:list={["absolute left-0 h-2 w-px", line]} />
+            <div class:list={["absolute right-0 h-2 w-px", line]} />
+          </div>
+          <div class={tile} />
+        </div>
+        <div class="flex flex-col items-center">
+          <span class:list={["text-label2", isDefault ? "text-primary" : "text-high"]}>{token}</span>
+          <span class="text-label1 text-low">{value}px</span>
+        </div>
+      </div>
+      );
+    })
+  }
+</div>

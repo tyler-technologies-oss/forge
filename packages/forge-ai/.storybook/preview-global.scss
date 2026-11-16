@@ -1,0 +1,13 @@
+@use './preview-storybook';
+@use '@tylertech/forge/sass/theme/theme-dark';
+
+// Forge tokens, theme, and typography
+@use '@tylertech/forge/dist/forge.css';
+
+.forge-storybook-dark {
+  @include theme-dark.theme-properties;
+
+  .github-logo {
+    filter: invert(1);
+  }
+}

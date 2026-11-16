@@ -15,6 +15,7 @@ const componentsCollection = defineCollection({
     source: z.enum(['core', 'block']).default('core'),
     category: z.enum(categoryIds),
     storybookId: z.string().optional(),
+    playgroundHeight: z.string().optional(),
     figmaUrl: z.string().url().optional(),
   }),
 });
