@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - next
       - release/** # Version branches use the format release/<package-name>/v<version> (e.g., release/forge/v3.10.5)
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}

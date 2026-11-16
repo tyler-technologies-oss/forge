@@ -1,0 +1,23 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "blocks": "0.0.0",
+    "forge-docs": "0.0.0",
+    "@tylertech/forge": "3.26.0",
+    "@tylertech/forge-adapter-codegen": "0.0.0",
+    "@tylertech/forge-ai": "0.16.0",
+    "@tylertech/forge-angular": "9.4.0",
+    "@tylertech/forge-core": "3.6.0",
+    "@tylertech/forge-mcp": "1.4.0",
+    "@tylertech/forge-react": "3.7.0",
+    "@tylertech/forge-rich-text-editor": "0.3.0",
+    "@tylertech/forge-rich-text-editor-angular": "0.2.1",
+    "@tylertech/forge-rich-text-editor-react": "0.1.2",
+    "@tylertech/forge-schematics": "2.1.0",
+    "@tylertech/forge-tailwind": "0.1.0",
+    "@tylertech/forge-tokens": "0.2.0",
+    "@tylertech/forge-plugin": "1.7.0"
+  },
+  "changesets": []
+}
