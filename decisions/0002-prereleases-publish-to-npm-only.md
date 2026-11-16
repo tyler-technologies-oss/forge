@@ -60,8 +60,7 @@ deploy to the CDN as before.
 ## Consequences
 
 - Teams try the next major with `pnpm add @tylertech/forge@next` (and the
-  matching adapter `@next` tags). Snapshot releases from `main` are also npm
-  only.
+  matching adapter `@next` tags).
 - A team that can only consume Forge from the CDN cannot test `next`. If a
   consumer needs that, reverse this decision: removing the
   `github.ref_name != 'next'` condition from the two steps deploys prereleases
