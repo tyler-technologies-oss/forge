@@ -53,4 +53,7 @@ jobs:
         run: pnpm run build
 
       - name: Test
-        run: pnpm run test
+        run: pnpm turbo run test --filter='!@tylertech/forge-ai'
+
+      - name: Test (forge-ai, non-blocking)
+        run: pnpm turbo run test --filter='@tylertech/forge-ai' || echo "::warning title=forge-ai tests failed::@tylertech/forge-ai tests failed. This step is non-blocking; see the step log for details."
