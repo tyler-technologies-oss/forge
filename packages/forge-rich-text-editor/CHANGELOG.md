@@ -1,5 +1,16 @@
 # @tylertech/forge-rich-text-editor
 
+## 0.4.0-next.0
+
+### Breaking Changes
+
+- da34707: require @tylertech/forge 4
+
+### Dependencies
+
+- Updated dependencies [da34707, b9084b7]
+  - @tylertech/forge@4.0.0-next.0
+
 ## 0.3.0
 
 ### Minor Changes

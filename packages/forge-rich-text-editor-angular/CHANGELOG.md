@@ -1,5 +1,12 @@
 # @tylertech/forge-rich-text-editor-angular
 
+## 0.2.2-next.0
+
+### Dependencies
+
+- Updated dependencies [da34707]
+  - @tylertech/forge-rich-text-editor@0.4.0-next.0
+
 ## 0.2.1
 
 ### Patch Changes

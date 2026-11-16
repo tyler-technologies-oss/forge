@@ -19,5 +19,12 @@
     "@tylertech/forge-tokens": "0.2.0",
     "@tylertech/forge-plugin": "1.7.0"
   },
-  "changesets": []
+  "changesets": [
+    "forge-angular-requires-forge-4",
+    "forge-react-requires-forge-4",
+    "forge-rich-text-editor-requires-forge-4",
+    "forge-tailwind-requires-forge-4",
+    "start-4x-prerelease-line",
+    "view-switcher-migrate-to-lit"
+  ]
 }
