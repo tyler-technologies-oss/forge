@@ -1,4 +1,4 @@
-# ADR-0001: Prereleases from `next` are published to npm only, not the CDN
+# ADR-0002: Prereleases from `next` are published to npm only, not the CDN
 
 ## Status
 
