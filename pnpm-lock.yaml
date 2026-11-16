@@ -148,6 +148,9 @@ catalogs:
       specifier: ^8.3.4
       version: 8.3.4
 
+overrides:
+  '@tylertech/forge@^4.0.0-next.0': workspace:*
+
 pnpmfileChecksum: sha256-uUEEHfOyb+QuJr33najRoTHewCySL45tZQb7rdT6/8g=
 
 patchedDependencies:
