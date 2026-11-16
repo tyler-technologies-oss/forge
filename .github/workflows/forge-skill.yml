@@ -21,8 +21,8 @@ env:
 jobs:
   check:
     name: Forge Skill
-    # The release PR bumps the plugin version and consumes the changesets, so there's nothing to check.
-    if: github.head_ref != 'changeset-release/main'
+    # The release PR bumps the plugin version and consumes the changesets, and the main-into-next sync only brings in changes that already shipped, so there's nothing to check.
+    if: github.head_ref != 'changeset-release/main' && github.head_ref != 'sync/main-into-next'
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
