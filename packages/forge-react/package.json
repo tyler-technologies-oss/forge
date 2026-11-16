@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-react",
-  "version": "3.7.0",
+  "version": "4.0.0-next.0",
   "description": "The official Tyler Forge™ components adapter library for React.",
   "author": "Tyler Technologies, Inc.",
   "license": "Apache-2.0",
@@ -40,7 +40,7 @@
     "tslib": "catalog:"
   },
   "peerDependencies": {
-    "@tylertech/forge": "^3.15.0",
+    "@tylertech/forge": "^4.0.0-next.0",
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },

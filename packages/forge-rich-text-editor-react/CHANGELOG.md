@@ -1,5 +1,12 @@
 # @tylertech/forge-rich-text-editor-react
 
+## 0.1.3-next.0
+
+### Dependencies
+
+- Updated dependencies [da34707]
+  - @tylertech/forge-rich-text-editor@0.4.0-next.0
+
 ## 0.1.2
 
 ### Patch Changes

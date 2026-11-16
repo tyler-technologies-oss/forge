@@ -1,5 +1,16 @@
 # v3.4.0 (Tue Jul 28 2026)
 
+## 4.0.0-next.0
+
+### Breaking Changes
+
+- da34707: require @tylertech/forge 4
+
+### Dependencies
+
+- Updated dependencies [da34707, b9084b7]
+  - @tylertech/forge@4.0.0-next.0
+
 ## 3.7.0
 
 ### Features
