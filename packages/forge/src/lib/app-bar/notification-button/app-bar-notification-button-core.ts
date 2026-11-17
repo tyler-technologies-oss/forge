@@ -105,6 +105,7 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
       this._showBadge = value;
       if (this._isInitialized) {
         this._adapter.setBadgeVisible(this._showBadge);
+        this._updateCountDescription();
       }
       this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE, this._showBadge);
     }
@@ -126,6 +127,12 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
 
   private _updateCount(): void {
     this._adapter.setCount(this._dot ? null : this._formatCount());
+    this._updateCountDescription();
+  }
+
+  private _updateCountDescription(): void {
+    const hasCount = this._showBadge && !this._dot && this._count != null && String(this._count).trim() !== '';
+    this._adapter.setCountDescription(hasCount ? `${this._count} unread` : null);
   }
 
   /** Caps whole-number counts above `max` at `max+`, so `100` shows as `99+`. Other values show as given. */

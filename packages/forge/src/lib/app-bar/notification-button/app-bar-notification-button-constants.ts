@@ -11,6 +11,10 @@ const attributes = {
   MAX: 'max'
 };
 
+const selectors = {
+  COUNT: '.forge-app-bar-notification-button__count'
+};
+
 const defaults = {
   MAX: 99
 };
@@ -21,5 +25,6 @@ export const APP_BAR_NOTIFICATION_BUTTON_CONSTANTS = {
   elementName,
   attributes,
   forwardedAttributes,
+  selectors,
   defaults
 };
