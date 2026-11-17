@@ -352,13 +352,22 @@ export abstract class BaseButton extends BaseLitElement {
       if (!this.hasAttribute('tabindex')) {
         this.setAttribute('tabindex', '0');
       }
-      // Restore the consumer's aria-disabled rather than clearing it.
-      setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
-      if (this.#consumerAriaDisabled != null) {
-        this.setAttribute('aria-disabled', this.#consumerAriaDisabled);
-      }
-      this.#consumerAriaDisabled = undefined;
+      this.#restoreConsumerAriaDisabled();
     }
+  }
+
+  /**
+   * Hands `aria-disabled` back to the consumer when the button is re-enabled. If the attribute still holds the
+   * value written while disabled, the consumer's value from before disabling is restored. If the consumer changed
+   * or removed it while disabled, their latest value is kept.
+   */
+  #restoreConsumerAriaDisabled(): void {
+    const ownsAttribute = this.getAttribute('aria-disabled') === 'true';
+    setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: ownsAttribute });
+    if (ownsAttribute && this.#consumerAriaDisabled != null) {
+      this.setAttribute('aria-disabled', this.#consumerAriaDisabled);
+    }
+    this.#consumerAriaDisabled = undefined;
   }
 
   #animateStateLayer(): void {
