@@ -6,7 +6,7 @@ import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
-import { FOCUS_INDICATOR_NO_CLIP_INSET, FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
+import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
 
@@ -327,9 +327,19 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 }
 
 const CLIPPING_OVERFLOW_PATTERN = /auto|scroll|hidden|clip|overlay/;
+const CONTAINING_BLOCK_WILL_CHANGE_PATTERN = /transform|perspective|filter/;
+const CONTAINING_BLOCK_CONTAIN_PATTERN = /paint|layout|strict|content/;
+const NO_CLIP_INSET = '-100vmax';
+const CLIP_TOLERANCE_PX = 0.5;
+
+type ContainingBlockKind = 'in-flow' | 'absolute' | 'fixed';
 
 /**
- * The bounds of the viewport narrowed by every ancestor that clips its overflow.
+ * The bounds of the viewport narrowed by every ancestor that actually clips the element.
+ *
+ * An ancestor only clips the element when it is, or is inside, the element's containing block, so
+ * absolutely and fixed positioned elements skip ancestors that do not contain them. Elements in the
+ * top layer are not clipped by their ancestors at all.
  */
 function getClipBounds(element: HTMLElement): FocusIndicatorBounds {
   const bounds: FocusIndicatorBounds = {
@@ -339,29 +349,73 @@ function getClipBounds(element: HTMLElement): FocusIndicatorBounds {
     bottom: document.documentElement.clientHeight
   };
 
+  if (isInTopLayer(element)) {
+    return bounds;
+  }
+
+  let kind = getContainingBlockKind(getComputedStyle(element));
   let current: Element | null = getFlatTreeParent(element);
   while (current && current !== document.documentElement) {
-    const { overflowX, overflowY, position } = getComputedStyle(current);
-    const clipsX = CLIPPING_OVERFLOW_PATTERN.test(overflowX);
-    const clipsY = CLIPPING_OVERFLOW_PATTERN.test(overflowY);
+    const style = getComputedStyle(current);
+    if (style.display === 'contents' || !containsDescendantOfKind(style, kind)) {
+      current = getFlatTreeParent(current);
+      continue;
+    }
+
+    const isInline = style.display === 'inline';
+    const clipsX = !isInline && CLIPPING_OVERFLOW_PATTERN.test(style.overflowX);
+    const clipsY = !isInline && CLIPPING_OVERFLOW_PATTERN.test(style.overflowY);
     if (clipsX || clipsY) {
-      const clipRect = current.getBoundingClientRect();
+      const { left, top } = current.getBoundingClientRect();
+      const paddingBoxLeft = left + current.clientLeft;
+      const paddingBoxTop = top + current.clientTop;
       if (clipsX) {
-        bounds.left = Math.max(bounds.left, clipRect.left);
-        bounds.right = Math.min(bounds.right, clipRect.right);
+        bounds.left = Math.max(bounds.left, paddingBoxLeft);
+        bounds.right = Math.min(bounds.right, paddingBoxLeft + current.clientWidth);
       }
       if (clipsY) {
-        bounds.top = Math.max(bounds.top, clipRect.top);
-        bounds.bottom = Math.min(bounds.bottom, clipRect.bottom);
+        bounds.top = Math.max(bounds.top, paddingBoxTop);
+        bounds.bottom = Math.min(bounds.bottom, paddingBoxTop + current.clientHeight);
       }
     }
-    if (position === 'fixed') {
+
+    if (isInTopLayer(current)) {
       break;
     }
+    kind = getContainingBlockKind(style);
     current = getFlatTreeParent(current);
   }
 
   return bounds;
+}
+
+function getContainingBlockKind({ position }: CSSStyleDeclaration): ContainingBlockKind {
+  return position === 'absolute' || position === 'fixed' ? position : 'in-flow';
+}
+
+/**
+ * Whether an element with this style is the containing block for a descendant of the given kind.
+ * Every ancestor can clip an in-flow descendant, but an absolutely positioned one is only clipped by
+ * the nearest positioned ancestor and those above it, and a fixed one by ancestors that create a
+ * containing block for fixed descendants, such as a transform.
+ */
+function containsDescendantOfKind(style: CSSStyleDeclaration, kind: ContainingBlockKind): boolean {
+  if (kind === 'in-flow') {
+    return true;
+  }
+  const createsFixedContainingBlock =
+    [style.transform, style.perspective, style.filter, style.backdropFilter].some(value => value && value !== 'none') ||
+    CONTAINING_BLOCK_WILL_CHANGE_PATTERN.test(style.willChange) ||
+    CONTAINING_BLOCK_CONTAIN_PATTERN.test(style.contain);
+  return kind === 'fixed' ? createsFixedContainingBlock : style.position !== 'static' || createsFixedContainingBlock;
+}
+
+function isInTopLayer(element: Element): boolean {
+  try {
+    return element.matches(':popover-open, :modal');
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -381,9 +435,10 @@ function intersect(rect: DOMRect, bounds: FocusIndicatorBounds): FocusIndicatorB
 /**
  * How far the anchor's edge is cut off by its clip bounds. Only a side where the anchor itself is
  * clipped is trimmed, so a fully visible anchor can still draw its indicator outside of a scroll container.
+ * Overflow within a sub-pixel tolerance is ignored so fractional layout and zoom do not trim a visible anchor.
  */
 function toClipInset(overflow: number): string {
-  return overflow > 0 ? `${overflow}px` : FOCUS_INDICATOR_NO_CLIP_INSET;
+  return overflow > CLIP_TOLERANCE_PX ? `${overflow}px` : NO_CLIP_INSET;
 }
 
 function getFlatTreeParent(node: Element): Element | null {
