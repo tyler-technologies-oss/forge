@@ -1,6 +1,7 @@
 import { getShadowElement, deepQuerySelectorAll } from '@tylertech/forge-core';
 import { setDefaultAria } from '../constants.js';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
+import { DIALOG_CONSTANTS } from '../dialog/dialog-constants.js';
 import type { IDialogComponent } from '../dialog/dialog.js';
 import { IBottomSheetComponent } from './bottom-sheet.js';
 import { BOTTOM_SHEET_CONSTANTS } from './bottom-sheet-constants.js';
@@ -30,6 +31,8 @@ export interface IBottomSheetAdapter extends IBaseAdapter {
 export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> implements IBottomSheetAdapter {
   private _dialogElement: IDialogComponent;
   private _surfaceElement: HTMLElement;
+  private _heightFrame?: number;
+  private _pendingHeight = 0;
 
   constructor(component: IBottomSheetComponent) {
     super(component);
@@ -99,13 +102,34 @@ export class BottomSheetAdapter extends BaseAdapter<IBottomSheetComponent> imple
     return this._dialogElement.classList.contains(BOTTOM_SHEET_CONSTANTS.classes.FULLSCREEN);
   }
 
+  /**
+   * Sets the height of the dialog surface while dragging, at most once per frame. The height is set on the
+   * surface itself rather than through an inherited custom property, so only the surface's styles are
+   * recalculated on each move.
+   */
   public setContainerHeight(height: number | null): void {
-    if (height != null) {
-      const percent = Math.min(100, (100 * height) / window.innerHeight);
-      this._dialogElement.style.setProperty('--forge-dialog-max-height', `${percent}%`);
-    } else {
-      this._dialogElement.style.removeProperty('--forge-dialog-max-height');
+    if (height == null) {
+      if (this._heightFrame !== undefined) {
+        cancelAnimationFrame(this._heightFrame);
+        this._heightFrame = undefined;
+      }
+      this._dialogSurfaceElement?.style.removeProperty('max-height');
+      return;
     }
+
+    this._pendingHeight = height;
+    if (this._heightFrame !== undefined) {
+      return;
+    }
+    this._heightFrame = requestAnimationFrame(() => {
+      this._heightFrame = undefined;
+      const percent = Math.min(100, (100 * this._pendingHeight) / window.innerHeight);
+      this._dialogSurfaceElement?.style.setProperty('max-height', `${percent}%`);
+    });
+  }
+
+  private get _dialogSurfaceElement(): HTMLElement | null {
+    return getShadowElement(this._dialogElement, DIALOG_CONSTANTS.selectors.SURFACE) as HTMLElement | null;
   }
 
   public getContainerBounds(): DOMRect {

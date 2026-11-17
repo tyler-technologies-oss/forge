@@ -6,7 +6,7 @@ import { getShadowElement } from '@tylertech/forge-core';
 import { TestHarness } from '../core/testing/test-harness.js';
 import { IBottomSheetComponent } from './bottom-sheet.js';
 import { BACKDROP_CONSTANTS, IBackdropComponent } from '../backdrop/index.js';
-import { task } from '../core/utils/utils.js';
+import { frame, task } from '../core/utils/utils.js';
 import { BOTTOM_SHEET_CONSTANTS, BottomSheetMode } from './bottom-sheet-constants.js';
 import { DIALOG_CONSTANTS } from '../dialog/dialog-constants.js';
 import { IDialogComponent } from '../dialog/index.js';
@@ -289,6 +289,29 @@ describe('Bottom Sheet', () => {
 
     expect(fullscreenSpy).toHaveBeenCalledOnce();
     expect(harness.dialogElement.classList.contains(BOTTOM_SHEET_CONSTANTS.classes.FULLSCREEN)).toBe(true);
+  });
+
+  it('should grow to follow the pointer while dragging, then return when released', async () => {
+    const harness = await createFixture();
+    await harness.showAsync();
+    const startHeight = harness.surfaceElement.getBoundingClientRect().height;
+    const { x, y, width } = harness.surfaceElement.getBoundingClientRect();
+    const mouseX = Math.round(x + width / 2);
+    const dragDistance = 80;
+
+    harness.surfaceElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, clientX: mouseX, clientY: Math.round(y + 1) }));
+    document.body.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, clientX: mouseX, clientY: Math.round(y + 1 - dragDistance / 2) }));
+    document.body.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, clientX: mouseX, clientY: Math.round(y + 1 - dragDistance) }));
+    await frame();
+    await frame();
+    const draggedHeight = harness.surfaceElement.getBoundingClientRect().height;
+
+    document.body.dispatchEvent(new TouchEvent('touchcancel', { bubbles: true }));
+    await harness.enterAnimation();
+    const releasedHeight = harness.surfaceElement.getBoundingClientRect().height;
+
+    expect(draggedHeight).toBeGreaterThan(startHeight);
+    expect(releasedHeight).toBeCloseTo(startHeight, 0);
   });
 
   it('should dispatch open event when opened', async () => {
