@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -9,6 +9,7 @@ import { BACKDROP_CONSTANTS, IBackdropComponent } from '../../backdrop/index.js'
 
 import './modal-drawer.js';
 import { MODAL_DRAWER_CONSTANTS } from './modal-drawer-constants.js';
+import { emulateReducedMotion, getMovementAnimations } from '../../core/testing/reduced-motion.js';
 
 describe('Modal Drawer', () => {
   it('should contain shadow root', async () => {
@@ -175,3 +176,24 @@ async function createFixture({ open = false, direction }: DrawerFixtureConfig = 
   const el = screen.container.querySelector('forge-modal-drawer') as IModalDrawerComponent;
   return new DrawerHarness(el);
 }
+
+describe('Modal drawer with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should fade closed without sliding and finish closing when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const harness = await createFixture({ open: true });
+    await frame();
+    const afterCloseSpy = vi.fn();
+    harness.modalDrawerEl.addEventListener(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE, afterCloseSpy);
+
+    harness.modalDrawerEl.open = false;
+    await frame();
+    await frame();
+
+    expect(getMovementAnimations(harness.modalDrawerEl.shadowRoot as ShadowRoot)).toEqual([]);
+    await vi.waitFor(() => expect(afterCloseSpy).toHaveBeenCalledOnce());
+  });
+});

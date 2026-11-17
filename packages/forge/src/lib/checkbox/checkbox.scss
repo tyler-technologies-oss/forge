@@ -124,10 +124,11 @@
   }
 }
 
-// Reduced motion
-@media (prefers-reduced-motion) {
-  .forge-checkbox {
-    @include override(animation-duration, 0s, value);
+// Reduced motion: keep the color change, show the mark without drawing it
+@media (prefers-reduced-motion: reduce) {
+  :host .forge-checkbox .icon {
+    transition-duration: 0s;
+    transition-delay: 0s;
   }
 }
 

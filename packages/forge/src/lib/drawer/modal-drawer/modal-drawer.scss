@@ -55,3 +55,14 @@
     display: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :host .forge-drawer.modal {
+    transition-property: opacity;
+
+    &:is(.closing, .closed) {
+      opacity: 0;
+      transform: none;
+    }
+  }
+}

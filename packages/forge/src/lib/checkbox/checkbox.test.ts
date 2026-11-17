@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
@@ -10,6 +10,8 @@ import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
 
 import './checkbox.js';
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
+import { frame } from '../core/utils/utils.js';
 
 class CheckboxHarness extends TestHarness<ICheckboxComponent> {
   public rootElement: HTMLElement;
@@ -518,5 +520,25 @@ describe('Checkbox', () => {
       delegate.setLabel('Label');
       expect(delegate.element.innerText).toBe('Label');
     });
+  });
+});
+
+describe('Checkbox with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should change color without moving or scaling when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const screen = render(html`<forge-checkbox>Label</forge-checkbox>`);
+    const el = screen.container.querySelector('forge-checkbox') as ICheckboxComponent;
+    await frame();
+
+    el.checked = true;
+    await frame();
+    const root = el.shadowRoot as ShadowRoot;
+
+    expect(getMovementAnimations(root)).toEqual([]);
+    expect(root.getAnimations().length).toBeGreaterThan(0);
   });
 });

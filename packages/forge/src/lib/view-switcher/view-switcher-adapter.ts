@@ -193,19 +193,28 @@ export class ViewSwitcherAdapter extends BaseAdapter<IViewSwitcherComponent> imp
         // Start the height transition (this will not animate if the height doesn't change)
         this._animateHeight(fromView, toView);
 
-        if (fromView) {
-          // Wait for the transform transition to complete before resolving and completing transition
-          fromView.addEventListener('transitionend', transitionEndHandler);
-        } else {
+        const finish = (): void => {
+          fromView?.removeEventListener('transitionend', transitionEndHandler);
           toView.classList.remove(VIEW_SWITCHER_CONSTANTS.classes.VIEW_HIDDEN);
-        }
+          resolve();
+        };
 
         function transitionEndHandler(evt: TransitionEvent): void {
-          if (evt.propertyName === transitionProp) {
-            fromView.removeEventListener('transitionend', transitionEndHandler);
-            toView.classList.remove(VIEW_SWITCHER_CONSTANTS.classes.VIEW_HIDDEN);
-            resolve();
+          if (evt.target === fromView && evt.propertyName === transitionProp) {
+            finish();
           }
+        }
+
+        // Without a running transition (reduced motion, zero duration), `transitionend` never fires
+        const isTransitioning = fromView
+          ?.getAnimations()
+          .some(animation => animation instanceof CSSTransition && animation.transitionProperty === transitionProp);
+
+        if (fromView && isTransitioning) {
+          // Wait for the view transition to complete before resolving and completing transition
+          fromView.addEventListener('transitionend', transitionEndHandler);
+        } else {
+          finish();
         }
       });
     });

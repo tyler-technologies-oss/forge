@@ -19,6 +19,7 @@ import type { IStateLayerComponent } from '../../state-layer/index.js';
 
 import '../split-view-panel/split-view-panel.js';
 import '../split-view/split-view.js';
+import { emulateReducedMotion, getMovementAnimations } from '../../core/testing/reduced-motion.js';
 
 // Open and close animation duration (300ms) plus a buffer
 const PANEL_ANIMATION_DURATION = 400;
@@ -887,6 +888,23 @@ describe('SplitViewPanelComponent', () => {
       await task(PANEL_ANIMATION_DURATION);
       expect(harness.component.open).toBe(false);
       expect(harness.getPart('root')?.classList.contains(SPLIT_VIEW_PANEL_CONSTANTS.classes.CLOSED)).toBe(true);
+    });
+
+    it('should fade closed without sliding when reduced motion is preferred', async () => {
+      await emulateReducedMotion(true);
+      try {
+        const harness = setupTestContext(true, 1);
+        harness.component.resizable = 'end';
+        const didCloseSpy = vi.fn();
+        harness.component.addEventListener(SPLIT_VIEW_PANEL_CONSTANTS.events.DID_CLOSE, didCloseSpy);
+        harness.component.open = false;
+        await frame();
+
+        expect(getMovementAnimations(harness.component.shadowRoot as ShadowRoot)).toEqual([]);
+        await vi.waitFor(() => expect(didCloseSpy).toHaveBeenCalledOnce());
+      } finally {
+        await emulateReducedMotion(false);
+      }
     });
   });
 

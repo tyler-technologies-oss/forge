@@ -23,6 +23,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    transition: none;
+    transition-property: opacity;
   }
 }

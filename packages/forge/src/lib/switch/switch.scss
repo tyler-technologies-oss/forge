@@ -172,10 +172,18 @@
   }
 }
 
-// Reduced motion
-@media (prefers-reduced-motion) {
-  .switch {
-    @include override(animation-duration, 0s, value);
+// Reduced motion: keep the color and icon fades, move the handle without sliding or scaling
+@media (prefers-reduced-motion: reduce) {
+  :host .handle {
+    transition-duration: 0s;
+
+    &::before {
+      transition-property: background-color, box-shadow;
+    }
+  }
+
+  :host .icon {
+    transition-property: opacity;
   }
 }
 

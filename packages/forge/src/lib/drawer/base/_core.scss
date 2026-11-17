@@ -52,6 +52,18 @@
       transition: none !important;
     }
   }
+
+  // Reduced motion: fade in place instead of sliding
+  @media (prefers-reduced-motion: reduce) {
+    :host .forge-drawer {
+      transition-property: opacity;
+
+      &:is(.closing, .closed) {
+        opacity: 0;
+        transform: none;
+      }
+    }
+  }
 }
 
 @mixin host() {

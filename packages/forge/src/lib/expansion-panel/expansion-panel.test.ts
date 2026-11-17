@@ -1,14 +1,15 @@
 import { html } from 'lit';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
-import { task } from '../core/utils/utils.js';
+import { frame, task } from '../core/utils/utils.js';
 import type { IOpenIconComponent, OpenIconComponent } from '../open-icon/open-icon.js';
 import { EXPANSION_PANEL_CONSTANTS, emulateUserToggle } from './expansion-panel-constants.js';
 import type { ExpansionPanelComponent } from './expansion-panel.js';
 
 import '../open-icon/open-icon.js';
 import './expansion-panel.js';
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
 
 // Animation duration + buffer for transitionend event
 const ANIMATION_TIMEOUT = 500;
@@ -1445,4 +1446,32 @@ describe('Expansion Panel', () => {
     });
     element.dispatchEvent(event);
   }
+});
+
+describe('Expansion panel with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should fade content in without animating its height when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const screen = render(html`
+      <forge-expansion-panel>
+        <button slot="header">Header</button>
+        <div style="height: 100px;">Content</div>
+      </forge-expansion-panel>
+    `);
+    const el = screen.container.querySelector('forge-expansion-panel') as ExpansionPanelComponent;
+    await el.updateComplete;
+    await frame();
+    await frame();
+
+    el.open = true;
+    await el.updateComplete;
+    await frame();
+    const root = el.shadowRoot as ShadowRoot;
+
+    expect(getMovementAnimations(root)).toEqual([]);
+    expect(root.getAnimations().some(animation => animation instanceof CSSTransition && animation.transitionProperty === 'opacity')).toBe(true);
+  });
 });

@@ -209,10 +209,25 @@
   @include animating-position($direction);
 
   $animation-name: string.unique-id();
+  $reduced-motion-animation-name: string.unique-id();
 
   animation-name: $animation-name;
   animation-duration: #{animation.variable(duration-medium2)};
   animation-timing-function: #{animation.variable(easing-standard)};
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: $reduced-motion-animation-name;
+  }
+
+  @keyframes #{$reduced-motion-animation-name} {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
 
   @keyframes #{$animation-name} {
     from {

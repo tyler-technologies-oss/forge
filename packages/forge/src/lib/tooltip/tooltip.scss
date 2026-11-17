@@ -100,3 +100,10 @@ forge-overlay[open] {
     }
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  forge-overlay[open][position-placement] .forge-tooltip {
+    @include override(slidein-x, 0, value);
+    @include override(slidein-y, 0, value);
+  }
+}

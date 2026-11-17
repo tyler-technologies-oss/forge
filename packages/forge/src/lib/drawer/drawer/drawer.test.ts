@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html, nothing } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -7,6 +7,7 @@ import type { IDrawerComponent } from './drawer.js';
 import { BASE_DRAWER_CONSTANTS } from '../base/base-drawer-constants.js';
 
 import './drawer.js';
+import { emulateReducedMotion, getMovementAnimations } from '../../core/testing/reduced-motion.js';
 
 describe('Drawer', () => {
   it('should contain shadow root', async () => {
@@ -177,3 +178,24 @@ async function createFixture({ open = true, direction }: DrawerFixtureConfig = {
   const el = screen.container.querySelector('forge-drawer') as IDrawerComponent;
   return new DrawerHarness(el);
 }
+
+describe('Drawer with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should fade closed without sliding and finish closing when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const harness = await createFixture();
+    await frame();
+    const afterCloseSpy = vi.fn();
+    harness.drawerEl.addEventListener(BASE_DRAWER_CONSTANTS.events.AFTER_CLOSE, afterCloseSpy);
+
+    harness.drawerEl.open = false;
+    await frame();
+    await frame();
+
+    expect(getMovementAnimations(harness.drawerEl.shadowRoot as ShadowRoot)).toEqual([]);
+    await vi.waitFor(() => expect(afterCloseSpy).toHaveBeenCalledOnce());
+  });
+});

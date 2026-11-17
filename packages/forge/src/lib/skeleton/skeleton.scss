@@ -62,3 +62,9 @@
 :host([form-field]) {
   @include form-field;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-skeleton::after {
+    animation: none;
+  }
+}

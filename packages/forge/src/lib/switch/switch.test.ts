@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
@@ -11,6 +11,8 @@ import { SWITCH_CONSTANTS } from './switch-constants.js';
 import { internals } from '../constants.js';
 
 import './switch.js';
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
+import { frame } from '../core/utils/utils.js';
 
 class SwitchHarness extends TestHarness<ISwitchComponent> {
   public rootElement: HTMLElement;
@@ -441,5 +443,25 @@ describe('Switch', () => {
     el[internals].setValidity({ customError: true }, message);
 
     expect(el[internals].validationMessage).toBe(message);
+  });
+});
+
+describe('Switch with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should change color without moving or scaling when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const screen = render(html`<forge-switch>Label</forge-switch>`);
+    const el = screen.container.querySelector('forge-switch') as ISwitchComponent;
+    await frame();
+
+    el.on = true;
+    await frame();
+    const root = el.shadowRoot as ShadowRoot;
+
+    expect(getMovementAnimations(root)).toEqual([]);
+    expect(root.getAnimations().length).toBeGreaterThan(0);
   });
 });

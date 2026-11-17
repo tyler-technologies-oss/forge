@@ -39,3 +39,9 @@
     @include core.form-field;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-skeleton::after {
+    animation: none;
+  }
+}

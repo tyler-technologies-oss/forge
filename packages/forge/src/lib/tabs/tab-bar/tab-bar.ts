@@ -9,7 +9,7 @@ import { playStateLayerAnimation } from '../../constants.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { composedPathFrom } from '../../core/utils/event-utils.js';
-import { supportsScrollIntoViewContainerOption } from '../../core/utils/feature-detection.js';
+import { prefersReducedMotion, supportsScrollIntoViewContainerOption } from '../../core/utils/feature-detection.js';
 import { createFocusGroupRef, focusGroup } from '../../core/utils/focus-group.js';
 import { KeyActionController } from '../../core/utils/key-action.js';
 import { toggleState } from '../../core/utils/utils.js';
@@ -408,9 +408,13 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const scrollAmount = this.vertical ? this._scrollContainer.offsetHeight : this._scrollContainer.offsetWidth;
     const multiplier = direction === 'forward' ? 1 : -1;
     this._scrollContainer.scrollBy({
-      behavior: 'smooth',
+      behavior: this.#scrollBehavior,
       [this.vertical ? 'top' : 'left']: scrollAmount * multiplier
     });
+  }
+
+  get #scrollBehavior(): ScrollBehavior {
+    return prefersReducedMotion() ? 'auto' : 'smooth';
   }
 
   #handleScroll(): void {
@@ -525,7 +529,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     fromIndicator?.getAnimations().forEach(animation => animation.cancel());
     toIndicator.getAnimations().forEach(animation => animation.cancel());
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = prefersReducedMotion();
 
     if (!fromIndicator || !fromRect) {
       if (!reduceMotion) {
@@ -832,7 +836,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     // Progressive enhancement for scrollIntoView's container option
     if (supportsScrollIntoViewContainerOption()) {
-      return tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest', container: 'nearest' } as ScrollIntoViewOptions);
+      return tab.scrollIntoView({ behavior: this.#scrollBehavior, block: 'nearest', inline: 'nearest', container: 'nearest' } as ScrollIntoViewOptions);
     }
 
     // TODO: Remove this manual scroll logic when scrollIntoView's container option is widely supported

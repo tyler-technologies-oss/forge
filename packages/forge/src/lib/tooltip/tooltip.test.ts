@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html, nothing, type TemplateResult } from 'lit';
 import { userEvent } from 'vitest/browser';
@@ -11,6 +11,7 @@ import { OVERLAY_CONSTANTS } from '../overlay/index.js';
 import { type TooltipPlacement, type TooltipTriggerType, type TooltipType, TOOLTIP_CONSTANTS } from './tooltip-constants.js';
 
 import './tooltip.js';
+import { emulateReducedMotion } from '../core/testing/reduced-motion.js';
 
 class TooltipHarness extends TestHarness<ITooltipComponent> {
   public anchorElement: HTMLButtonElement;
@@ -991,5 +992,37 @@ describe('Tooltip', () => {
       expect(harness.element.getAttribute(TOOLTIP_CONSTANTS.attributes.ANCHOR)).toBe('alt-anchor');
       expect(harness.element.getAttribute('target')).toBe('alt-anchor');
     });
+  });
+});
+
+describe('Tooltip with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  const getSlideDistance = (harness: TooltipHarness): number => {
+    const surface = harness.element.shadowRoot?.querySelector('.forge-tooltip') as HTMLElement;
+    const [animation] = surface.getAnimations();
+    animation.pause();
+    animation.currentTime = 0;
+    const start = surface.getBoundingClientRect();
+    animation.finish();
+    const end = surface.getBoundingClientRect();
+    return Math.hypot(start.left - end.left, start.top - end.top);
+  };
+
+  it('should slide in by default', async () => {
+    const harness = await createFixture({ open: true });
+    await frame();
+
+    expect(getSlideDistance(harness)).toBeGreaterThan(0);
+  });
+
+  it('should fade in without sliding when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const harness = await createFixture({ open: true });
+    await frame();
+
+    expect(getSlideDistance(harness)).toBe(0);
   });
 });

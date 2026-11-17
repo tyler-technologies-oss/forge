@@ -38,7 +38,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .content {
-    transition: none;
+    transition-property: opacity;
   }
 }
 

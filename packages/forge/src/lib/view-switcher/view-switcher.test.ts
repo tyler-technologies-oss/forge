@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html, nothing } from 'lit';
 import type { IViewSwitcherComponent } from './view-switcher.js';
@@ -7,6 +7,7 @@ import { VIEW_SWITCHER_CONSTANTS } from './view-switcher-constants.js';
 import { frame, task } from '../core/utils/utils.js';
 
 import './view-switcher.js';
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
 
 describe('View Switcher', () => {
   it('should have shadow root', async () => {
@@ -272,6 +273,26 @@ describe('View Switcher', () => {
     await frame();
 
     expect(harness.viewSwitcher.index).toBe(1);
+    expect(harness.isViewVisible(1)).toBe(true);
+  });
+});
+
+describe('View switcher with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should switch slide views without sliding when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const harness = await createFixture({ animationType: 'slide' });
+    await frame();
+
+    harness.viewSwitcher.index = 1;
+    await frame();
+    await frame();
+
+    expect(getMovementAnimations(harness.viewSwitcher.shadowRoot as ShadowRoot)).toEqual([]);
+    expect(getMovementAnimations(document)).toEqual([]);
     expect(harness.isViewVisible(1)).toBe(true);
   });
 });

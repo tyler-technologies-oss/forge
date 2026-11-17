@@ -1,9 +1,10 @@
 import { html } from 'lit';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import type { ISkeletonComponent } from './skeleton.js';
 
 import './skeleton.js';
+import { emulateReducedMotion } from '../core/testing/reduced-motion.js';
 
 describe('Skeleton', () => {
   it('should initialize', async () => {
@@ -152,5 +153,28 @@ describe('Skeleton', () => {
     expect(el.button).toBe(true);
     expect(el.avatar).toBe(true);
     expect(el.chip).toBe(false);
+  });
+});
+
+describe('Skeleton with reduced motion', () => {
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  it('should show the loading shimmer by default', async () => {
+    const screen = render(html`<forge-skeleton></forge-skeleton>`);
+    const el = screen.container.querySelector('forge-skeleton') as ISkeletonComponent;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.getAnimations().length).toBeGreaterThan(0);
+  });
+
+  it('should not show the loading shimmer when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const screen = render(html`<forge-skeleton></forge-skeleton>`);
+    const el = screen.container.querySelector('forge-skeleton') as ISkeletonComponent;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.getAnimations()).toEqual([]);
   });
 });

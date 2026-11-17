@@ -64,7 +64,8 @@ export class BaseDrawerAdapter extends BaseAdapter<IBaseDrawerComponent> impleme
       this._drawerElement.removeEventListener('transitionend', this._activeTransitionListener);
     }
     this._activeTransitionListener = (evt: TransitionEvent) => {
-      if (evt.propertyName === 'transform') {
+      // Under reduced motion the drawer fades instead of sliding
+      if (evt.target === this._drawerElement && (evt.propertyName === 'transform' || evt.propertyName === 'opacity')) {
         if (this._activeTransitionListener) {
           this._drawerElement.removeEventListener('transitionend', this._activeTransitionListener);
           this._activeTransitionListener = undefined;

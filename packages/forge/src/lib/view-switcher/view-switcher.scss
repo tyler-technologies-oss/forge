@@ -57,3 +57,19 @@ $host-tokens: (height, width);
     opacity: 0;
   }
 }
+
+//
+// Reduced motion: switch slides and height changes at once, keep fades
+//
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-view-switcher {
+    transition-duration: 0s;
+  }
+
+  :host(.slide) {
+    ::slotted(forge-view) {
+      transition-duration: 0s;
+    }
+  }
+}
