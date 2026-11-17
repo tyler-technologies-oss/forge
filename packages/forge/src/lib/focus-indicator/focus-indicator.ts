@@ -1,12 +1,12 @@
 import { autoUpdate } from '@floating-ui/dom';
 import { CUSTOM_ELEMENT_NAME_PROPERTY, tryDefine } from '@tylertech/forge-core';
-import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
-import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
+import { FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
 
@@ -18,6 +18,7 @@ export interface IFocusIndicatorComponent extends IBaseComponent {
   circular: boolean;
   allowFocus: boolean;
   focusMode: FocusIndicatorFocusMode;
+  renderInTopLayer: boolean;
 }
 
 declare global {
@@ -126,6 +127,14 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   @property({ attribute: 'focus-mode' })
   public focusMode: FocusIndicatorFocusMode = 'focusin';
 
+  /**
+   * Controls whether the indicator renders in the top layer using the Popover API. This prevents the indicator from being clipped by ancestors with `overflow` set.
+   * @default false
+   * @attribute render-in-top-layer
+   */
+  @property({ type: Boolean, attribute: 'render-in-top-layer' })
+  public renderInTopLayer = false;
+
   #targetElement: HTMLElement | undefined;
   #internals: ElementInternals;
   #indicatorElement: HTMLDivElement | undefined;
@@ -158,12 +167,6 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#targetElement = undefined;
   }
 
-  public override firstUpdated(): void {
-    if (supportsPopover()) {
-      this.#indicatorElement = this.shadowRoot?.querySelector('.focus-indicator') as HTMLDivElement | undefined;
-    }
-  }
-
   public willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.hasUpdated) {
       if (changedProperties.has('target')) {
@@ -173,12 +176,25 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     if (changedProperties.has('active')) {
       this.#handleActiveChange();
+    }
+
+    if (changedProperties.has('renderInTopLayer')) {
+      toggleState(this.#internals, 'top-layer', this.renderInTopLayer);
+    }
+  }
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('renderInTopLayer')) {
+      this.#indicatorElement = this.renderInTopLayer ? (this.shadowRoot?.querySelector('.top-layer') as HTMLDivElement | undefined) : undefined;
+    }
+
+    if (changedProperties.has('active') || changedProperties.has('renderInTopLayer')) {
       this.#updateTopLayerState();
     }
   }
 
-  public render(): TemplateResult {
-    return html`<div class="focus-indicator" part="indicator" popover="manual"></div>`;
+  public render(): TemplateResult | typeof nothing {
+    return this.renderInTopLayer ? html`<div class="top-layer" part="indicator" popover="manual"></div>` : nothing;
   }
 
   #detachTargetListeners(): void {
@@ -227,24 +243,25 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
   }
 
   #updateTopLayerState(): void {
-    if (!supportsPopover() || !this.#indicatorElement) {
+    this.#stopPositioning();
+
+    if (!this.renderInTopLayer || !supportsPopover() || !this.#indicatorElement) {
       return;
     }
 
     if (this.active) {
       try {
         this.#indicatorElement.showPopover();
-        this.#startPositioning();
       } catch {
         // Popover already shown or error occurred
       }
+      this.#startPositioning();
     } else {
       try {
         this.#indicatorElement.hidePopover();
       } catch {
         // Popover already hidden
       }
-      this.#stopPositioning();
     }
   }
 
@@ -271,62 +288,12 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
 
     this.#indicatorElement.toggleAttribute('inward', this.inward);
     this.#indicatorElement.toggleAttribute('circular', this.circular);
-    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect));
-  }
-
-  /**
-   * Determines whether any part of the anchor is visible on the page by sampling a grid of points
-   * within the portion of its bounds that is inside the viewport. Exits on the first visible point.
-   *
-   * The anchor may be a `pointer-events: none` overlay that hit testing never returns, so a hit on
-   * the target element (or one of its ancestors) also counts as visible. Containment is evaluated
-   * against the flat tree because the target can be a slot wrapper whose slotted content is the hit.
-   */
-  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect): boolean {
-    const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
-    if (!root.elementFromPoint) {
-      return true;
-    }
-
-    const left = Math.max(rect.left, 0);
-    const top = Math.max(rect.top, 0);
-    const right = Math.min(rect.right, document.documentElement.clientWidth);
-    const bottom = Math.min(rect.bottom, document.documentElement.clientHeight);
-    if (left > right || top > bottom) {
-      return false;
-    }
-
-    for (const yRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
-      for (const xRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
-        const x = Math.min(left + (right - left) * xRatio, document.documentElement.clientWidth - 1);
-        const y = Math.min(top + (bottom - top) * yRatio, document.documentElement.clientHeight - 1);
-        const hit = root.elementFromPoint(x, y);
-        if (hit && [anchor, target].some(el => isFlatTreeInclusiveAncestor(el, hit) || isFlatTreeInclusiveAncestor(hit, el))) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   #stopPositioning(): void {
     this.#cleanupAutoUpdate?.();
     this.#cleanupAutoUpdate = undefined;
   }
-}
-
-/**
- * Whether `ancestor` is `node` or contains it when slot assignments and shadow hosts are followed.
- */
-function isFlatTreeInclusiveAncestor(ancestor: Node, node: Node): boolean {
-  let current: Node | null = node;
-  while (current) {
-    if (current === ancestor) {
-      return true;
-    }
-    current = (current as Element).assignedSlot ?? current.parentNode ?? (current as ShadowRoot).host ?? null;
-  }
-  return false;
 }
 
 tryDefine(FOCUS_INDICATOR_TAG_NAME, FocusIndicatorComponent);

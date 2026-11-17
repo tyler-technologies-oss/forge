@@ -7,6 +7,13 @@
 
 :host {
   @include tokens;
+}
+
+:host(:not(:state(top-layer))) {
+  @include base;
+}
+
+:host(:state(top-layer)) {
   @include top-layer-host;
 }
 
@@ -15,33 +22,49 @@
 }
 
 //
-// Indicator Element
+// States
 //
 
-.focus-indicator {
+:host(:not(:state(top-layer)):where(:state(active), [active])) {
+  @include active;
+}
+
+:host(:not(:state(top-layer)):not([inward])) {
+  @include outward;
+}
+
+:host(:not(:state(top-layer))[inward]) {
+  @include inward;
+}
+
+:host(:not(:state(top-layer))[circular]) {
+  @include circular;
+}
+
+//
+// Top Layer Indicator Element
+//
+
+.top-layer {
   @include base;
   @include top-layer-indicator;
 
   &:popover-open {
     @include active;
   }
-
-  &[obscured] {
-    visibility: hidden;
-  }
 }
 
-.focus-indicator:not([inward]) {
+.top-layer:not([inward]) {
   @include outward;
   @include top-layer-outward;
 }
 
-.focus-indicator[inward] {
+.top-layer[inward] {
   @include inward;
   @include top-layer-inward;
 }
 
-.focus-indicator[circular] {
+.top-layer[circular] {
   @include circular;
 }
 
