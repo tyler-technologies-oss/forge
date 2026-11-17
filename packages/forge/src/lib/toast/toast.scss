@@ -1,5 +1,4 @@
 @use './core' as *;
-@use './animations';
 @use '../button';
 @use '../focus-indicator';
 @use '../icon-button';
@@ -162,14 +161,8 @@
 
 @layer media {
   @media (prefers-reduced-motion: reduce) {
-    forge-overlay[open] {
-      .surface {
-        animation-name: fadein;
-
-        &.exiting {
-          animation-name: fadeout;
-        }
-      }
+    .surface {
+      @include override(slide-origin, 0px, value);
     }
   }
 

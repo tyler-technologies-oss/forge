@@ -41,15 +41,25 @@
 }
 
 @mixin open {
-  animation-name: slidein;
-  animation-duration: #{token(enter-duration)};
-  animation-timing-function: #{token(enter-timing)};
+  transition-property: transform, opacity;
+  transition-duration: #{token(enter-duration)};
+  transition-timing-function: #{token(enter-timing)};
+
+  transform: translateY(0);
+  opacity: 1;
+
+  @starting-style {
+    transform: translateY(#{token(slide-origin)});
+    opacity: 0;
+  }
 }
 
 @mixin exit {
-  animation-name: slideout;
-  animation-duration: #{token(exit-duration)};
-  animation-timing-function: #{token(exit-timing)};
+  transition-duration: #{token(exit-duration)};
+  transition-timing-function: #{token(exit-timing)};
+
+  transform: translateY(#{token(slide-origin)});
+  opacity: 0;
 }
 
 @mixin mobile {

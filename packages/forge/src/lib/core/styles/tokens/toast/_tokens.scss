@@ -22,10 +22,10 @@ $tokens: (
   spacing: utils.module-val(toast, spacing, spacing.variable(xsmall)),
   message-padding: utils.module-val(toast, message-padding, spacing.variable(xsmall)),
   // Animation
-  enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium1)),
-  enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-standard)),
-  exit-duration: utils.module-val(toast, exit-duration, animation.variable(duration-short4)),
-  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-standard)),
+  enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium4)),
+  enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-gentle)),
+  exit-duration: utils.module-val(toast, exit-duration, animation.variable(duration-medium4)),
+  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-gentle)),
   slide-origin: utils.module-val(toast, slide-origin, 100%)
 ) !default;
 

@@ -1,5 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
-import { playClassAnimation } from '../core/utils/animation-utils.js';
+import { playClassTransition } from '../core/utils/animation-utils.js';
 import { type ButtonComponent } from '../button/button.js';
 import { BaseAdapter, IBaseAdapter } from '../core/base/base-adapter.js';
 import { type IconButtonComponent } from '../icon-button/icon-button.js';
@@ -52,7 +52,7 @@ export class ToastAdapter extends BaseAdapter<IToastComponent> implements IToast
 
   public async hide(): Promise<boolean> {
     const hideId = ++this._hideId;
-    const finished = await playClassAnimation(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
+    const finished = await playClassTransition(this._surfaceElement, TOAST_CONSTANTS.classes.EXITING);
     if (!finished || hideId !== this._hideId) {
       return false;
     }

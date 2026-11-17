@@ -8,10 +8,12 @@ import { task } from '../core/utils/utils.js';
 import type { IOverlayComponent } from '../overlay/index.js';
 import type { IIconComponent } from '../icon/index.js';
 
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
+
 import './toast.js';
 
-// Animation duration (400ms) used for open/close transitions
-const TOAST_ANIMATION_DURATION = 400;
+// Open and close transition duration (400ms) plus a buffer
+const TOAST_ANIMATION_DURATION = 500;
 
 describe('Toast', () => {
   it('should have shadow root', async () => {
@@ -259,9 +261,10 @@ describe('Toast', () => {
       const el = screen.container.querySelector('forge-toast') as IToastComponent;
       const closeSpy = vi.fn();
       el.addEventListener(TOAST_CONSTANTS.events.CLOSE, closeSpy);
+      await task(TOAST_ANIMATION_DURATION);
 
       el.hide();
-      await frame();
+      await task(TOAST_ANIMATION_DURATION / 4);
       el.open = true;
       await task(TOAST_ANIMATION_DURATION);
 
@@ -269,6 +272,42 @@ describe('Toast', () => {
       expect(el.hasAttribute(TOAST_CONSTANTS.attributes.OPEN)).toBe(true);
       expect(getOverlay(el).open).toBe(true);
       expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should return smoothly from where it is when shown again during the exit animation', async () => {
+      const screen = render(html`<forge-toast open>Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      const surface = el.shadowRoot?.querySelector(TOAST_CONSTANTS.selectors.SURFACE) as HTMLElement;
+      await task(TOAST_ANIMATION_DURATION);
+
+      el.hide();
+      await task(TOAST_ANIMATION_DURATION / 4);
+      const opacityWhenReopened = Number(getComputedStyle(surface).opacity);
+      el.open = true;
+      await frame();
+      const opacityAfterReopen = Number(getComputedStyle(surface).opacity);
+
+      expect(opacityWhenReopened).toBeGreaterThan(0);
+      expect(opacityWhenReopened).toBeLessThan(1);
+      expect(Math.abs(opacityAfterReopen - opacityWhenReopened)).toBeLessThan(0.2);
+    });
+
+    it('should fade without sliding when reduced motion is preferred', async () => {
+      await emulateReducedMotion(true);
+      try {
+        const screen = render(html`<forge-toast open>Test</forge-toast>`);
+        const el = screen.container.querySelector('forge-toast') as IToastComponent;
+        await task(TOAST_ANIMATION_DURATION);
+
+        el.hide();
+        await frame();
+        const root = el.shadowRoot as ShadowRoot;
+
+        expect(getMovementAnimations(root)).toEqual([]);
+        expect(root.getAnimations().some(animation => animation instanceof CSSTransition && animation.transitionProperty === 'opacity')).toBe(true);
+      } finally {
+        await emulateReducedMotion(false);
+      }
     });
 
     it('should dispatch one close event when hide() is called repeatedly', async () => {
