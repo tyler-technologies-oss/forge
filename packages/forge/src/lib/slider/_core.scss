@@ -206,9 +206,13 @@ $_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-ma
   min-inline-size: #{token(label-container-height)};
   min-block-size: #{token(label-container-height)};
   background: #{token(label-container-color)};
-  transition: transform animation.variable(duration-short2) animation.variable(easing-standard);
+  transition:
+    transform animation.variable(duration-short2) animation.variable(easing-standard),
+    opacity animation.variable(duration-short2) animation.variable(easing-standard);
   transform-origin: center bottom;
-  transform: scale(0);
+  transform: scale(0.9);
+  opacity: 0;
+  pointer-events: none;
 }
 
 @mixin handle-label-disabled {
@@ -240,6 +244,7 @@ $_active-track-end-clip: calc(#{$_active-track-end-offset} + #{$_active-track-ma
 
 @mixin handle-label-visible {
   transform: scale(1);
+  opacity: 1;
 }
 
 @mixin input-disabled {

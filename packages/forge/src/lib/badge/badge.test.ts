@@ -126,13 +126,15 @@ describe('Badge', () => {
     expect(el.matches(':state(hide)')).toBe(true);
   });
 
-  it('should set transform when hide attribute is set', async () => {
+  it('should fade out and shrink slightly, not to nothing, when hide attribute is set', async () => {
     const screen = render(html`<forge-badge hide></forge-badge>`);
     const el = screen.container.querySelector('forge-badge') as IBadgeComponent;
     await el.updateComplete;
     const rootEl = el.shadowRoot?.querySelector('.forge-badge') as HTMLElement;
+    const style = getComputedStyle(rootEl);
 
-    expect(getComputedStyle(rootEl).transform).toBe('matrix(0, 0, 0, 0, 0, 0)');
+    expect(style.opacity).toBe('0');
+    expect(style.transform).toBe('matrix(0.9, 0, 0, 0.9, 0, 0)');
   });
 
   it('should be accessible in every color and appearance', async () => {

@@ -33,7 +33,9 @@
 
   pointer-events: none;
 
-  transition: transform #{token(transition-duration)} #{token(transition-easing)};
+  transition:
+    transform #{token(transition-duration)} #{token(transition-easing)},
+    opacity #{token(transition-duration)} #{token(transition-easing)};
 
   font-weight: #{token(font-weight)};
   text-overflow: ellipsis;
@@ -79,5 +81,6 @@
 }
 
 @mixin hide {
-  transform: scale(0);
+  transform: scale(0.9);
+  opacity: 0;
 }

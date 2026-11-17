@@ -268,6 +268,15 @@ describe('Slider', () => {
     expect(ctx.endInputElement.readOnly).toBe(true);
   });
 
+  it('should hide the value label by fading it and shrinking it slightly, not to nothing', async () => {
+    const { el } = await createFixture();
+    const label = el.shadowRoot?.querySelector('.handle-label') as HTMLElement;
+    const style = getComputedStyle(label);
+
+    expect(style.opacity).toBe('0');
+    expect(style.transform).toBe('matrix(0.9, 0, 0, 0.9, 0, 0)');
+  });
+
   it('should accept labeled', async () => {
     const { el, ctx } = await createFixture(html`<forge-slider labeled="false"></forge-slider>`);
 

@@ -209,7 +209,7 @@ input[type='range'] {
 
 @media (prefers-reduced-motion: reduce) {
   .handle-label {
-    transition-duration: 0s;
+    transition-property: opacity;
   }
 }
 

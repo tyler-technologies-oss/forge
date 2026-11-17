@@ -143,3 +143,9 @@ $_semantic-themes: (
     @include strong;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-badge {
+    transition-property: opacity;
+  }
+}
