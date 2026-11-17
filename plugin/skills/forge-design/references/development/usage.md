@@ -242,7 +242,7 @@ adding a CSS transition to the `body` element that fades in the content once a C
 
   body.ready {
     opacity: 1;
-    transition: opacity 200ms ease-in-out;
+    transition: opacity var(--forge-animation-duration-short4) var(--forge-animation-easing-standard);
   }
 </style>
 

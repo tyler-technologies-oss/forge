@@ -1,0 +1,59 @@
+# Motion
+
+How to choose easing and duration for Forge interfaces, and when not to animate at all.
+
+Motion in Forge exists to explain what changed: where a menu came from, that a press was received, that a panel opened. It should be quick and quiet. Forge components already animate this way, so most designs only need motion for custom elements. When they do, use the animation tokens rather than hand-written curves and durations. The full list is on the [animation tokens](https://tylerforge.design/tokens/animation/) page.
+
+## Choose the easing by what the element is doing
+
+| Token                               | Use it for                                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `--forge-animation-easing-standard` | **The default.** Anything entering or leaving the screen, such as popovers, dialogs and menus.    |
+| `--forge-animation-easing-move`     | Something that moves, resizes or rotates while it stays on screen, such as a handle or a chevron. |
+| `--forge-animation-easing-drawer`   | Drawers and sheets sliding in from an edge.                                                       |
+| `--forge-animation-easing-gentle`   | Color, hover and other soft changes.                                                              |
+| `--forge-animation-easing-linear`   | Loops and progress.                                                                               |
+
+Avoid curves that start slowly (ease-in). They delay the moment people are watching most, so the interface feels sluggish. The `accelerate` and `emphasized-*` tokens, and `decelerate`, are deprecated.
+
+## Keep it short
+
+- Keep interface animations under 300ms. Popovers and tooltips take about 150ms, dialogs about 200ms.
+- Make leaving faster than entering. Once someone dismisses something, they're already looking elsewhere.
+- Use the duration tokens (`--forge-animation-duration-short3` for 150ms, `--forge-animation-duration-short4` for 200ms) rather than raw values.
+
+## Don't animate what people repeat
+
+Actions people take many times a day shouldn't animate, because the motion makes them feel slow. That's why:
+
+- The focus indicator appears at once when you press Tab. Apps can bring the grow-and-shrink back with `--forge-focus-indicator-duration`.
+- Choosing a tab with the keyboard moves the indicator at once. Clicking a tab still slides it.
+- Pressing a button or list item shows a flat overlay instead of a ripple. Apps can turn the ripple back on for every state layer:
+
+  ```javascript
+  window.TylerForgeGlobalConfiguration = {
+    'forge-state-layer': { ripple: true }
+  };
+  ```
+
+## Respect reduced motion
+
+When someone asks their device to reduce motion, Forge components fade instead of moving: drawers fade in place, tooltips appear without sliding, and checkboxes and switches keep their color change but drop the movement. Custom motion should do the same. Keep opacity and color changes, and remove sliding, scaling and resizing:
+
+```css
+.my-panel {
+  transition: transform var(--forge-animation-duration-short4) var(--forge-animation-easing-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-panel {
+    transition: opacity var(--forge-animation-duration-short4) var(--forge-animation-easing-standard);
+  }
+}
+```
+
+## Start from what's already moving
+
+- Popovers fade in while growing from 96% of their size, from the side nearest their anchor.
+- Dialogs fade in while growing from 96% of their size, from the center. Full-screen dialogs rise 24px instead.
+- Things never appear from nothing. Start from 90–97% scale with a fade, not from 0.

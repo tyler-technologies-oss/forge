@@ -144,15 +144,15 @@ The color and typography utilities in this package are available for edge cases,
 
 The package extends Tailwind's theme with Forge design tokens:
 
-| Category      | Tailwind Utilities    | Example                                         |
-| ------------- | --------------------- | ----------------------------------------------- |
-| Spacing       | `p-*`, `m-*`, `gap-*` | `p-4`, `p-medium`, `gap-large`                  |
-| Border Radius | `rounded-*`           | `rounded-sm`, `rounded-lg`, &#xA;`rounded-full` |
-| Box Shadow    | `shadow-*`            | `shadow-sm`, `shadow-lg`, `shadow-8`            |
-| Z-Index       | `z-*`                 | `z-surface`, `z-dialog`, `z-tooltip`            |
-| Border Width  | `border-*`            | `border-thin`, `border-medium`                  |
-| Duration      | `duration-*`          | `duration-short-1`, `duration-medium-2`         |
-| Easing        | `ease-*`              | `ease-standard`, `ease-emphasized`              |
+| Category      | Tailwind Utilities    | Example                                                    |
+| ------------- | --------------------- | ---------------------------------------------------------- |
+| Spacing       | `p-*`, `m-*`, `gap-*` | `p-4`, `p-medium`, `gap-large`                             |
+| Border Radius | `rounded-*`           | `rounded-sm`, `rounded-lg`, &#xA;`rounded-full`            |
+| Box Shadow    | `shadow-*`            | `shadow-sm`, `shadow-lg`, `shadow-8`                       |
+| Z-Index       | `z-*`                 | `z-surface`, `z-dialog`, `z-tooltip`                       |
+| Border Width  | `border-*`            | `border-thin`, `border-medium`                             |
+| Duration      | `duration-*`          | `duration-short-1`, `duration-medium-2`                    |
+| Easing        | `ease-*`              | `ease-standard`, `ease-move`, `ease-drawer`, `ease-gentle` |
 
 ### Utility Classes
 

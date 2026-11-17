@@ -854,6 +854,13 @@
       "docsPath": "design/layout.md"
     },
     {
+      "name": "motion",
+      "title": "Motion",
+      "description": "How to choose easing and duration for Forge interfaces, and when not to animate at all.",
+      "status": "stable",
+      "docsPath": "design/motion.md"
+    },
+    {
       "name": "spacing",
       "title": "Spacing",
       "description": "How to apply Tyler Forge's spacing scale so hand-built designs match what Forge components and blocks produce in code.",

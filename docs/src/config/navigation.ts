@@ -58,6 +58,11 @@ export function buildNavigation(components: CollectionEntry<'components'>[]): Na
               href: '/designing/spacing/'
             },
             {
+              id: 'design-motion',
+              label: 'Motion',
+              href: '/designing/motion/'
+            },
+            {
               id: 'design-iconography',
               label: 'Iconography',
               href: '/designing/iconography/'
