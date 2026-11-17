@@ -190,8 +190,8 @@ $host-tokens: (background, foreground);
 //
 
 .forge-app-bar.white {
-  @include override(background, white, value);
-  @include override(foreground, black, value);
+  @include override(background, #{palette.$white}, value);
+  @include override(foreground, #{palette.$black}, value);
   @include override(badge-background, theme.color-variable(red, solid), value);
   @include override(badge-color, theme.color-variable(red, contrast), value);
 
@@ -205,9 +205,9 @@ $host-tokens: (background, foreground);
 .forge-app-bar.white:not(.scoped) {
   @include theme.provide(
     (
-      primary: black,
+      primary: #{palette.$black},
       on-primary: #{palette.$white-alpha-12},
-      on-primary-container-minimum: black,
+      on-primary-container-minimum: #{palette.$black},
       border-primary-default: #{palette.$black-alpha-7},
       text-medium: #{palette.$text-4}
     )
