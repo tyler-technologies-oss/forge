@@ -23,7 +23,10 @@ $tokens: (
   transition-timing: utils.module-val(app-bar, transition-timing, animation.variable(easing-standard)),
   // Scoped theming tokens for app bar children to optionally inherit
   theme-foreground: utils.module-ref(app-bar, theme-foreground, foreground),
-  theme-foreground-muted: utils.module-val(app-bar, theme-foreground-muted, palette-dark.$text-4)
+  theme-foreground-muted: utils.module-val(app-bar, theme-foreground-muted, palette-dark.$text-4),
+  // Strong badges in app bar icon buttons, like the notification button's count
+  badge-background: utils.module-val(app-bar, badge-background, theme.color-variable(amber, solid)),
+  badge-color: utils.module-val(app-bar, badge-color, theme.color-variable(amber, contrast))
 ) !default;
 
 @function get($key) {

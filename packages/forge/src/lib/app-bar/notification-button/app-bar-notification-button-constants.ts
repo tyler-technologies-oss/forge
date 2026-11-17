@@ -7,7 +7,12 @@ const attributes = {
   DOT: 'dot',
   THEME: 'theme',
   SHOW_BADGE: 'show-badge',
-  ICON: 'icon'
+  ICON: 'icon',
+  MAX: 'max'
+};
+
+const defaults = {
+  MAX: 99
 };
 
 const forwardedAttributes = ['aria-label', 'aria-labelledby'];
@@ -15,5 +20,6 @@ const forwardedAttributes = ['aria-label', 'aria-labelledby'];
 export const APP_BAR_NOTIFICATION_BUTTON_CONSTANTS = {
   elementName,
   attributes,
-  forwardedAttributes
+  forwardedAttributes,
+  defaults
 };

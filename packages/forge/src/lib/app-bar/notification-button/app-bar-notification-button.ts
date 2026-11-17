@@ -1,4 +1,4 @@
-import { attachLightTemplate, coerceBoolean, coreProperty, customElement } from '@tylertech/forge-core';
+import { attachLightTemplate, coerceBoolean, coerceNumber, coreProperty, customElement } from '@tylertech/forge-core';
 import { tylIconNotifications } from '@tylertech/tyler-icons';
 import { defineBadgeComponent } from '../../badge/index.js';
 import { BaseComponent, IBaseComponent } from '../../core/base/base-component.js';
@@ -23,6 +23,7 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
   showBadge: boolean;
   theme: string;
   icon: string;
+  max: number;
 }
 /**
  * @tag forge-app-bar-notification-button
@@ -34,12 +35,14 @@ export interface IAppBarNotificationButtonComponent extends IBaseComponent {
  * @property {boolean} [showBadge = false] - Whether to display the badge or not.
  * @property {string} [theme = ""] - The theme to apply to the badge.
  * @property {string} [icon = notifications] - The name of an alternative icon to display.
+ * @property {number} [max = 99] - The largest count to show. Higher whole-number counts show as `max+`, like `99+`.
  *
  * @attribute {string} [count = 0] - The number to display in the badge.
  * @attribute {boolean} [dot = false] - Whether to display the dot variant of the badge or not.
  * @attribute {boolean} [show-badge = false] - Whether to display the badge or not.
  * @attribute {string} [theme = ""] - The theme to apply to the badge.
  * @attribute {string} [icon = notifications] - The name of an alternative icon to display.
+ * @attribute {number} [max = 99] - The largest count to show. Higher whole-number counts show as `max+`, like `99+`.
  * @attribute {string} [aria-label] - The aria-label to apply to the button.
  * @attribute {string} [aria-labelledby] - The id of an element to use as the aria-labelledby attribute.
  */
@@ -58,7 +61,8 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT,
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.THEME,
       APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE,
-      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON
+      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.ICON,
+      APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.MAX
     ];
   }
 
@@ -99,6 +103,9 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
       case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE:
         this.showBadge = coerceBoolean(newValue);
         break;
+      case APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.MAX:
+        this.max = coerceNumber(newValue);
+        break;
     }
   }
 
@@ -116,4 +123,7 @@ export class AppBarNotificationButtonComponent extends BaseComponent implements 
 
   @coreProperty()
   declare public showBadge: boolean;
+
+  @coreProperty()
+  declare public max: number;
 }

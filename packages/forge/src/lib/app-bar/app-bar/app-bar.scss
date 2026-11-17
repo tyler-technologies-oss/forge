@@ -192,6 +192,8 @@ $host-tokens: (background, foreground);
 .forge-app-bar.white {
   @include override(background, white, value);
   @include override(foreground, black, value);
+  @include override(badge-background, theme.color-variable(red, solid), value);
+  @include override(badge-color, theme.color-variable(red, contrast), value);
 
   @include provide-theme(
     (

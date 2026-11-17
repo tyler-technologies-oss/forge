@@ -24,6 +24,7 @@
 
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: #{token(gap)};
   border-radius: #{token(shape)};
   padding-inline: #{token(padding-inline)};
