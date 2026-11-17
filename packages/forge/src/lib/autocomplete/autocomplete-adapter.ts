@@ -335,7 +335,8 @@ export class AutocompleteAdapter extends BaseAdapter<IAutocompleteComponent> imp
     // TODO: Remove in a future release
     const dropdownIcon = this._component.querySelector(AUTOCOMPLETE_CONSTANTS.selectors.DROPDOWN_ICON) as HTMLElement;
     if (dropdownIcon) {
-      dropdownIcon.style.transition = 'transform 120ms linear';
+      dropdownIcon.style.transition =
+        'transform var(--forge-animation-duration-short3, 150ms) var(--forge-animation-easing-move, cubic-bezier(0.77, 0, 0.175, 1))';
       dropdownIcon.style.transform = state ? 'rotateZ(180deg)' : '';
     }
   }

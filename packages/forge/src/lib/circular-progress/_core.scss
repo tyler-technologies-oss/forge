@@ -1,5 +1,6 @@
 @use 'sass:list';
 @use './animation';
+@use '@tylertech/forge-tokens/sass/animation' as forge-animation;
 @use './token-utils' as *;
 
 @forward './token-utils';
@@ -89,7 +90,7 @@ $_cycle-duration: calc(4 * #{token(arc-duration)});
 
 @mixin determinate-progress {
   transition:
-    stroke-dashoffset 500ms #{animation.$determinate-easing},
+    stroke-dashoffset #{forge-animation.variable(duration-long2)} #{forge-animation.variable(easing-standard)},
     stroke #{token(theme-transition-duration)} #{token(theme-transition-timing)};
   stroke: #{token(indicator-color)};
 }

@@ -537,13 +537,16 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
+    // Web Animations can't read CSS variables, so resolve the easing token here
+    const easing = getComputedStyle(toIndicator).getPropertyValue(TAB_CONSTANTS.strings.EASING_PROPERTY).trim() || TAB_CONSTANTS.strings.EASING;
+
     const reduceMotion = prefersReducedMotion();
 
     if (!fromIndicator || !fromRect) {
       if (!reduceMotion) {
         toIndicator.animate([{ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_HIDDEN) }, { opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_VISIBLE) }], {
           duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
-          easing: TAB_CONSTANTS.strings.EASING
+          easing
         });
       }
       return;
@@ -574,7 +577,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     toIndicator.animate(keyframes, {
       duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
-      easing: TAB_CONSTANTS.strings.EASING
+      easing
     });
   }
 

@@ -21,8 +21,8 @@ import '../split-view-panel/split-view-panel.js';
 import '../split-view/split-view.js';
 import { emulateReducedMotion, getMovementAnimations } from '../../core/testing/reduced-motion.js';
 
-// Open and close animation duration (300ms) plus a buffer
-const PANEL_ANIMATION_DURATION = 400;
+// Open (500ms) and close (400ms) animation duration plus a buffer
+const PANEL_ANIMATION_DURATION = 600;
 
 interface SplitViewPanelCoreInternal {
   _adapter: ISplitViewPanelAdapter;

@@ -28,7 +28,8 @@ const events = {
 };
 
 const strings = {
-  EASING: 'cubic-bezier(0.4, 0, 0.2, 1)'
+  EASING: 'cubic-bezier(0.77, 0, 0.175, 1)',
+  EASING_PROPERTY: '--forge-animation-easing-move'
 };
 
 const numbers = {

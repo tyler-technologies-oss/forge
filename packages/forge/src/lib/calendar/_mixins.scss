@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '@tylertech/forge-tokens/sass/animation';
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '../utils/mixins' as utils;
@@ -187,7 +188,7 @@
 }
 
 @mixin menu-button-icon() {
-  transition: transform 200ms;
+  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-move)};
 }
 
 @mixin menu-button-icon-open() {
@@ -366,7 +367,7 @@
 
 @mixin range-single-date() {
   .forge-calendar__range__target {
-    transition: transform 200ms;
+    transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
     transform: scale(1.15);
     transform-origin: center;
   }

@@ -1,3 +1,4 @@
+@use '@tylertech/forge-tokens/sass/animation';
 @use '@tylertech/forge-tokens/sass/typography';
 @use './token-utils' as *;
 
@@ -117,7 +118,7 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  transition: 150ms color linear;
+  transition: color #{animation.variable(duration-short3)} #{animation.variable(easing-gentle)};
   max-height: calc(#{token(content-height)} + 2 * #{token(content-padding-block)});
   min-height: #{token(content-height)};
   width: 100%;

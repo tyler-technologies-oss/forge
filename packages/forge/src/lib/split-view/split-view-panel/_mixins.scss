@@ -203,6 +203,7 @@
   @include closing-animation($direction);
 
   animation-direction: reverse;
+  animation-duration: #{animation.variable(duration-long2)};
 }
 
 @mixin closing-animation($direction: right) {
@@ -212,7 +213,7 @@
   $reduced-motion-animation-name: string.unique-id();
 
   animation-name: $animation-name;
-  animation-duration: #{animation.variable(duration-medium2)};
+  animation-duration: #{animation.variable(duration-medium4)};
   animation-timing-function: #{animation.variable(easing-drawer)};
 
   @media (prefers-reduced-motion: reduce) {
