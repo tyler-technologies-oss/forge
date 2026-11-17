@@ -6,9 +6,16 @@ import { IBaseComponent } from '../core/base/base-component.js';
 import { BaseLitElement } from '../core/base/base-lit-element.js';
 import { supportsPopover } from '../core/utils/feature-detection.js';
 import { locateTargetHeuristic, toggleState } from '../core/utils/utils.js';
-import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
+import { FOCUS_INDICATOR_NO_CLIP_INSET, FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-indicator-constants.js';
 
 import styles from './focus-indicator.scss';
+
+interface FocusIndicatorBounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
 
 export interface IFocusIndicatorComponent extends IBaseComponent {
   targetElement: HTMLElement | undefined;
@@ -253,7 +260,7 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
       return;
     }
 
-    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition());
+    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition(), { animationFrame: true });
   }
 
   #updatePosition(): void {
@@ -269,9 +276,15 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-width', `${targetRect.width}px`);
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-height', `${targetRect.height}px`);
 
+    const clipBounds = getClipBounds(anchor);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-top', toClipInset(clipBounds.top - targetRect.top));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-right', toClipInset(targetRect.right - clipBounds.right));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-bottom', toClipInset(targetRect.bottom - clipBounds.bottom));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-left', toClipInset(clipBounds.left - targetRect.left));
+
     this.#indicatorElement.toggleAttribute('inward', this.inward);
     this.#indicatorElement.toggleAttribute('circular', this.circular);
-    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect));
+    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect, clipBounds));
   }
 
   /**
@@ -282,19 +295,17 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
    * the target element (or one of its ancestors) also counts as visible. Containment is evaluated
    * against the flat tree because the target can be a slot wrapper whose slotted content is the hit.
    */
-  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect): boolean {
+  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect, clipBounds: FocusIndicatorBounds): boolean {
     const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
     if (!root.elementFromPoint) {
       return true;
     }
 
-    const left = Math.max(rect.left, 0);
-    const top = Math.max(rect.top, 0);
-    const right = Math.min(rect.right, document.documentElement.clientWidth);
-    const bottom = Math.min(rect.bottom, document.documentElement.clientHeight);
-    if (left > right || top > bottom) {
+    const visibleRect = intersect(rect, clipBounds);
+    if (!visibleRect) {
       return false;
     }
+    const { left, top, right, bottom } = visibleRect;
 
     for (const yRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
       for (const xRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
@@ -313,6 +324,70 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#cleanupAutoUpdate?.();
     this.#cleanupAutoUpdate = undefined;
   }
+}
+
+const CLIPPING_OVERFLOW_PATTERN = /auto|scroll|hidden|clip|overlay/;
+
+/**
+ * The bounds of the viewport narrowed by every ancestor that clips its overflow.
+ */
+function getClipBounds(element: HTMLElement): FocusIndicatorBounds {
+  const bounds: FocusIndicatorBounds = {
+    left: 0,
+    top: 0,
+    right: document.documentElement.clientWidth,
+    bottom: document.documentElement.clientHeight
+  };
+
+  let current: Element | null = getFlatTreeParent(element);
+  while (current && current !== document.documentElement) {
+    const { overflowX, overflowY, position } = getComputedStyle(current);
+    const clipsX = CLIPPING_OVERFLOW_PATTERN.test(overflowX);
+    const clipsY = CLIPPING_OVERFLOW_PATTERN.test(overflowY);
+    if (clipsX || clipsY) {
+      const clipRect = current.getBoundingClientRect();
+      if (clipsX) {
+        bounds.left = Math.max(bounds.left, clipRect.left);
+        bounds.right = Math.min(bounds.right, clipRect.right);
+      }
+      if (clipsY) {
+        bounds.top = Math.max(bounds.top, clipRect.top);
+        bounds.bottom = Math.min(bounds.bottom, clipRect.bottom);
+      }
+    }
+    if (position === 'fixed') {
+      break;
+    }
+    current = getFlatTreeParent(current);
+  }
+
+  return bounds;
+}
+
+/**
+ * Intersects `rect` with `bounds`, or returns `null` when nothing of the rect is left,
+ * such as when it is scrolled out of a scroll container.
+ */
+function intersect(rect: DOMRect, bounds: FocusIndicatorBounds): FocusIndicatorBounds | null {
+  const result: FocusIndicatorBounds = {
+    left: Math.max(rect.left, bounds.left),
+    top: Math.max(rect.top, bounds.top),
+    right: Math.min(rect.right, bounds.right),
+    bottom: Math.min(rect.bottom, bounds.bottom)
+  };
+  return result.left > result.right || result.top > result.bottom ? null : result;
+}
+
+/**
+ * How far the anchor's edge is cut off by its clip bounds. Only a side where the anchor itself is
+ * clipped is trimmed, so a fully visible anchor can still draw its indicator outside of a scroll container.
+ */
+function toClipInset(overflow: number): string {
+  return overflow > 0 ? `${overflow}px` : FOCUS_INDICATOR_NO_CLIP_INSET;
+}
+
+function getFlatTreeParent(node: Element): Element | null {
+  return node.assignedSlot ?? node.parentElement ?? (node.getRootNode() as ShadowRoot).host ?? null;
 }
 
 /**

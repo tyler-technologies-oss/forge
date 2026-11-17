@@ -41,3 +41,46 @@
   --forge-focus-indicator-shape-start-start: 0;
   --forge-focus-indicator-shape-end-end: 0;
 }
+
+.scroll-demo {
+  display: flex;
+  gap: 8px;
+  border: 1px solid var(--forge-theme-outline);
+  margin-block-end: 16px;
+
+  &--vertical {
+    flex-direction: column;
+    height: 80px;
+    width: 240px;
+    overflow-y: auto;
+  }
+
+  &--horizontal {
+    width: 240px;
+    overflow-x: auto;
+
+    > * {
+      flex: none;
+    }
+  }
+}
+
+.shift-demo {
+  width: 500px;
+  height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--forge-theme-outline);
+
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  &__content {
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  &__spacer {
+    height: 600px;
+  }
+}

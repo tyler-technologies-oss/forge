@@ -357,6 +357,160 @@ describe('FocusIndicator', () => {
 
       expect(indicatorElement.hasAttribute('obscured')).toBe(true);
     });
+
+    it('should hide when the target is scrolled out of view inside a scroll container', async () => {
+      const screen = render(html`
+        <button id="detached" type="button">Simple button</button>
+        <div style="width: 300px; height: 500px;">
+          <div id="scroller" style="width: 300px; height: 100px; overflow-y: auto;">
+            <div style="height: 300px;"></div>
+            <button id="attached" type="button">
+              Button
+              <forge-focus-indicator></forge-focus-indicator>
+            </button>
+            <div style="height: 300px;"></div>
+          </div>
+        </div>
+      `);
+      const detachedButton = screen.container.querySelector('#detached') as HTMLButtonElement;
+      const scroller = screen.container.querySelector('#scroller') as HTMLElement;
+      const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+      const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+
+      await focusKeyboard(detachedButton);
+      button.focus();
+      await new Promise(resolve => setTimeout(resolve, 50));
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement.hasAttribute('obscured')).toBe(false);
+
+      scroller.scrollTop = 0;
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(indicatorElement.hasAttribute('obscured')).toBe(true);
+    });
+
+    it('should hide when the target is scrolled out of view horizontally inside a scroll container', async () => {
+      const screen = render(html`
+        <button id="detached" type="button">Simple button</button>
+        <div style="width: 350px; height: 100px;">
+          <div id="scroller" style="width: 150px; height: 60px; overflow-x: auto; display: flex;">
+            <div style="flex: none; width: 200px;"></div>
+            <button id="attached" type="button" style="flex: none;">
+              Button
+              <forge-focus-indicator></forge-focus-indicator>
+            </button>
+            <div style="flex: none; width: 200px;"></div>
+          </div>
+        </div>
+      `);
+      const detachedButton = screen.container.querySelector('#detached') as HTMLButtonElement;
+      const scroller = screen.container.querySelector('#scroller') as HTMLElement;
+      const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+      const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+
+      await focusKeyboard(detachedButton);
+      button.focus();
+      await new Promise(resolve => setTimeout(resolve, 50));
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      expect(focusIndicator.active).toBe(true);
+      expect(indicatorElement.hasAttribute('obscured')).toBe(false);
+
+      scroller.scrollLeft = 0;
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(indicatorElement.hasAttribute('obscured')).toBe(true);
+    });
+
+    it('should trim the indicator at the scroll container edge when the target is partially scrolled out of view', async () => {
+      const screen = render(html`
+        <button id="detached" type="button">Simple button</button>
+        <div style="width: 350px; height: 100px;">
+          <div id="scroller" style="width: 150px; height: 60px; overflow-x: auto; display: flex;">
+            <div style="flex: none; width: 200px;"></div>
+            <button id="attached" type="button" style="flex: none;">
+              Button
+              <forge-focus-indicator></forge-focus-indicator>
+            </button>
+            <div style="flex: none; width: 200px;"></div>
+          </div>
+        </div>
+      `);
+      const detachedButton = screen.container.querySelector('#detached') as HTMLButtonElement;
+      const scroller = screen.container.querySelector('#scroller') as HTMLElement;
+      const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+      const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+
+      await focusKeyboard(detachedButton);
+      button.focus();
+      await new Promise(resolve => setTimeout(resolve, 50));
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+      scroller.scrollLeft = 200 + button.offsetWidth / 2;
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const buttonRect = button.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      expect(buttonRect.left).toBeLessThan(scrollerRect.left);
+      expect(buttonRect.right).toBeGreaterThan(scrollerRect.left);
+      expect(indicatorElement.hasAttribute('obscured')).toBe(false);
+
+      const [, , , left] = getInsetValues(getComputedStyle(indicatorElement).clipPath);
+      const indicatorRect = indicatorElement.getBoundingClientRect();
+      expect(indicatorRect.left + left).toBeCloseTo(scrollerRect.left, 0);
+    });
+
+    it('should follow the anchor when a scrollbar disappears and shifts the layout', async () => {
+      const screen = render(html`
+        <style>
+          #scroller {
+            width: 500px;
+            height: 200px;
+            overflow-y: auto;
+          }
+          #scroller::-webkit-scrollbar {
+            width: 16px;
+          }
+          #content {
+            width: 300px;
+            margin: 0 auto;
+          }
+          #spacer {
+            height: 600px;
+          }
+        </style>
+        <button id="detached" type="button">Simple button</button>
+        <div id="scroller">
+          <div id="content">
+            <forge-text-field show-clear>
+              <label for="field-input">Label</label>
+              <input id="field-input" type="text" />
+            </forge-text-field>
+            <div id="spacer"></div>
+          </div>
+        </div>
+      `);
+      const detachedButton = screen.container.querySelector('#detached') as HTMLButtonElement;
+      const spacer = screen.container.querySelector('#spacer') as HTMLElement;
+      const textField = screen.container.querySelector('forge-text-field') as HTMLElement;
+      const fieldElement = textField.shadowRoot?.querySelector('forge-field') as HTMLElement;
+
+      await focusKeyboard(detachedButton);
+      await new Promise(resolve => setTimeout(resolve, 50));
+      const focusIndicator = fieldElement.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      const anchor = (focusIndicator.parentElement ?? textField) as HTMLElement;
+      await userEvent.keyboard('k');
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const initialLeft = anchor.getBoundingClientRect().left;
+
+      spacer.remove();
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const shiftedLeft = anchor.getBoundingClientRect().left;
+      expect(shiftedLeft).toBe(initialLeft + 8);
+      expect(indicatorElement.style.getPropertyValue('--_focus-indicator-top-layer-left')).toBe(`${shiftedLeft}px`);
+    });
   });
 });
 
@@ -387,6 +541,10 @@ async function createFixture({ target, inward, circular, allowFocus }: FocusIndi
   const button = screen.container.querySelector('button#attached') as HTMLButtonElement;
   const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
   return { detachedButton, button, focusIndicator };
+}
+
+function getInsetValues(clipPath: string): number[] {
+  return (clipPath.match(/-?\d+(\.\d+)?px/g) ?? []).map(value => parseFloat(value));
 }
 
 async function focusKeyboard(startFocusEl: HTMLElement): Promise<void> {
