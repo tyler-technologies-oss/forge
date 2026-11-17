@@ -38,7 +38,7 @@ export const FOCUS_INDICATOR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-focu
  * @cssproperty --forge-focus-indicator-active-width - The width of the focus indicator when active. When animating this is the max extent.
  * @cssproperty --forge-focus-indicator-color - The color of the focus indicator.
  * @cssproperty --forge-focus-indicator-shape - The shape of the focus indicator.
- * @cssproperty --forge-focus-indicator-duration - The animation duration.
+ * @cssproperty --forge-focus-indicator-duration - The duration of the grow-and-shrink animation when the indicator appears. Defaults to `0s`, so the indicator appears at its final width. Set it, for example to `600ms`, to animate it.
  * @cssproperty --forge-focus-indicator-easing - The animation easing function.
  * @cssproperty --forge-focus-indicator-shape-start-start - The start start shape.
  * @cssproperty --forge-focus-indicator-shape-start-end - The start end shape.

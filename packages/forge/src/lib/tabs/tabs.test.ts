@@ -393,6 +393,30 @@ describe('Tabs', () => {
     expect(changeSpy.mock.calls[0][0].detail).toEqual({ index: 1, name: '' });
   });
 
+  it('should move the indicator without animating when selecting with the keyboard', async () => {
+    const ctx = await createFixture({ activeTab: 0, autoActivate: true });
+    const indicatorAnimations = (): Animation[] =>
+      ctx.tabs.flatMap(tab => (tab.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement).getAnimations());
+
+    ctx.tabs[0].focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await frame();
+
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(indicatorAnimations()).toEqual([]);
+  });
+
+  it('should animate the indicator when a tab is clicked', async () => {
+    const ctx = await createFixture({ activeTab: 0 });
+    const indicatorAnimations = (): Animation[] =>
+      ctx.tabs.flatMap(tab => (tab.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement).getAnimations());
+
+    await ctx.clickTab(1);
+
+    expect(ctx.tabs[1].active).toBe(true);
+    expect(indicatorAnimations().length).toBeGreaterThan(0);
+  });
+
   it('should navigate to last tab when end is pressed', async () => {
     const ctx = await createFixture();
     ctx.tabs[0].focus();

@@ -341,7 +341,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
     evt.preventDefault();
     tab[playStateLayerAnimation]();
-    this.#userActivateTab(tab);
+    this.#userActivateTab(tab, { instant: true });
   }
 
   #handleNavigationKey(evt: KeyboardEvent): void {
@@ -371,12 +371,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   }
 
   #handleTabFocus(element: HTMLElement): void {
-    this.#scrollTabIntoView(element as TabComponent);
+    // Keyboard focus moves without animating, since it repeats with every key press
+    const instant = element.matches(':focus-visible');
+    this.#scrollTabIntoView(element as TabComponent, { instant });
     if (!this.autoActivate) {
       return;
     }
-    if (element.matches(':focus-visible')) {
-      this.#userActivateTab(element as TabComponent);
+    if (instant) {
+      this.#userActivateTab(element as TabComponent, { instant });
     } else {
       (element as TabComponent).active = true;
     }
@@ -408,13 +410,14 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     const scrollAmount = this.vertical ? this._scrollContainer.offsetHeight : this._scrollContainer.offsetWidth;
     const multiplier = direction === 'forward' ? 1 : -1;
     this._scrollContainer.scrollBy({
-      behavior: this.#scrollBehavior,
+      behavior: this.#getScrollBehavior(),
       [this.vertical ? 'top' : 'left']: scrollAmount * multiplier
     });
   }
 
-  get #scrollBehavior(): ScrollBehavior {
-    return prefersReducedMotion() ? 'auto' : 'smooth';
+  /** `instant` rather than `auto`, which would follow the container's `scroll-behavior: smooth`. */
+  #getScrollBehavior({ instant = false } = {}): ScrollBehavior {
+    return instant || prefersReducedMotion() ? 'instant' : 'smooth';
   }
 
   #handleScroll(): void {
@@ -433,7 +436,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   // Tab Activation
   // *****
 
-  #syncActiveTab(): void {
+  #syncActiveTab({ instant = false } = {}): void {
     const tabs = this.#tabs;
     let oldActiveTab: TabComponent | undefined;
     tabs.forEach(tab => {
@@ -448,8 +451,8 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       tab.dispatchEvent(didSyncEvent);
     });
     if (this._activeTabElement) {
-      this.#scrollTabIntoView(this._activeTabElement);
-      this.#animateIndicator(oldActiveTab, this._activeTabElement);
+      this.#scrollTabIntoView(this._activeTabElement, { instant });
+      this.#animateIndicator(oldActiveTab, this._activeTabElement, { instant });
     }
     this.#focusGroupRef.currentElement = this._activeTabElement;
   }
@@ -458,7 +461,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * Activates a tab after emitting the activate and change events, handling focus and animation.
    * @param tab The tab to activate.
    */
-  #userActivateTab(tab: TabComponent): void {
+  #userActivateTab(tab: TabComponent, { instant = false } = {}): void {
     // Do nothing if the tab is not activatable (i.e. already active or disabled)
     if (tab.active || this.disabled || tab.disabled) {
       return;
@@ -474,7 +477,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
     }
 
     this._activeTabElement = tab;
-    this.#syncActiveTab();
+    this.#syncActiveTab({ instant });
   }
 
   /**
@@ -513,8 +516,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
    * Animates the active indicator from one tab to another, or fades it in or out if only one tab is provided.
    * @param from The previous tab displaying the indicator.
    * @param to The next tab to display the indicator.
+   * @param options.instant Whether to move the indicator without animating, such as for keyboard selection.
    */
-  #animateIndicator(from: TabComponent | undefined, to: TabComponent): void {
+  #animateIndicator(from: TabComponent | undefined, to: TabComponent, { instant = false } = {}): void {
     const fromIndicator = from?.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement | undefined;
     const toIndicator = to.shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement | undefined;
 
@@ -528,6 +532,10 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     fromIndicator?.getAnimations().forEach(animation => animation.cancel());
     toIndicator.getAnimations().forEach(animation => animation.cancel());
+
+    if (instant) {
+      return;
+    }
 
     const reduceMotion = prefersReducedMotion();
 
@@ -826,8 +834,9 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
   /**
    * Scrolls the given tab into view within the scroll container if it's not fully visible.
    * @param tab The tab to scroll into view.
+   * @param options.instant Whether to scroll without smooth scrolling, such as for keyboard navigation.
    */
-  async #scrollTabIntoView(tab: TabComponent): Promise<void> {
+  async #scrollTabIntoView(tab: TabComponent, { instant = false } = {}): Promise<void> {
     await new Promise(requestAnimationFrame);
 
     if (!this._scrollable) {
@@ -836,7 +845,12 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     // Progressive enhancement for scrollIntoView's container option
     if (supportsScrollIntoViewContainerOption()) {
-      return tab.scrollIntoView({ behavior: this.#scrollBehavior, block: 'nearest', inline: 'nearest', container: 'nearest' } as ScrollIntoViewOptions);
+      return tab.scrollIntoView({
+        behavior: this.#getScrollBehavior({ instant }),
+        block: 'nearest',
+        inline: 'nearest',
+        container: 'nearest'
+      } as ScrollIntoViewOptions);
     }
 
     // TODO: Remove this manual scroll logic when scrollIntoView's container option is widely supported
@@ -852,7 +866,7 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
 
     if (tabStart < containerStart || tabEnd > containerEnd || tabSize + 2 * TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN > containerSize) {
       const to = this._scrollContainer[this.vertical ? 'scrollTop' : 'scrollLeft'] + tabStart - containerStart - TAB_BAR_CONSTANTS.numbers.SCROLL_MARGIN;
-      this._scrollContainer[this.vertical ? 'scrollTop' : 'scrollLeft'] = to;
+      this._scrollContainer.scrollTo({ [this.vertical ? 'top' : 'left']: to, behavior: this.#getScrollBehavior({ instant }) });
     }
   }
 }

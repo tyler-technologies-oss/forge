@@ -103,6 +103,25 @@ describe('FocusIndicator', () => {
     expect(focusIndicator.active).toBe(true);
   });
 
+  it('should appear at its final width without animating by default', async () => {
+    const { detachedButton, focusIndicator } = await createFixture();
+
+    await focusKeyboard(detachedButton);
+    const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+    expect(indicatorElement.getAnimations().filter(animation => animation.playState === 'running')).toEqual([]);
+  });
+
+  it('should animate when a duration is set', async () => {
+    const { detachedButton, focusIndicator } = await createFixture();
+    focusIndicator.style.setProperty('--forge-focus-indicator-duration', '600ms');
+
+    await focusKeyboard(detachedButton);
+    const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+    expect(indicatorElement.getAnimations().some(animation => animation.playState === 'running')).toBe(true);
+  });
+
   it('should set circular', async () => {
     const { detachedButton, focusIndicator } = await createFixture({ circular: true });
 

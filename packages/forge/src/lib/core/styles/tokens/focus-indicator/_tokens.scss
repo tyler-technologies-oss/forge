@@ -13,7 +13,7 @@ $tokens: (
   color: utils.module-val(focus-indicator, color, theme.variable(focus-indicator)),
   shape: utils.module-val(focus-indicator, shape, shape.variable(extra-small)),
   // Requires unit
-  duration: utils.module-val(focus-indicator, duration, animation.variable(duration-long4)),
+  duration: utils.module-val(focus-indicator, duration, 0s),
   easing: utils.module-val(focus-indicator, easing, animation.variable(easing-emphasized)),
   shape-start-start: utils.module-ref(focus-indicator, shape-start-start, shape),
   shape-start-end: utils.module-ref(focus-indicator, shape-start-end, shape),
