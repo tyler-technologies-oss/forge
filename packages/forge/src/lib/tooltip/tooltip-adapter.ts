@@ -21,7 +21,7 @@ export interface ITooltipAdapter extends IBaseAdapter<ITooltipComponent> {
   addTooltipListener(type: string, listener: EventListener, opts?: AddEventListenerOptions): void;
   removeTooltipListener(type: string, listener: EventListener): void;
   isKeyboardFocused(): boolean;
-  show(): void;
+  show(skipAnimation?: boolean): void;
   hide(): void;
 }
 
@@ -127,7 +127,7 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     return !!this._anchorElement?.matches(':focus-visible');
   }
 
-  public show(): void {
+  public show(skipAnimation = false): void {
     // Tooltips are shown above all content via <forge-overlay>
     // We do this by dynamically creating an overlay element and appending it to the shadow root
     // then we move the tooltip content into the overlay element so that it can be presented.
@@ -154,6 +154,8 @@ export class TooltipAdapter extends BaseAdapter<ITooltipComponent> implements IT
     } else {
       this._overlayElement.boundaryElement = null;
     }
+
+    this._contentElement.classList.toggle(TOOLTIP_CONSTANTS.classes.NO_ANIMATION, skipAnimation);
 
     this._component.shadowRoot?.appendChild(this._overlayElement);
     this._overlayElement.appendChild(this._contentElement);

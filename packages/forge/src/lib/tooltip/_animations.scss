@@ -1,13 +1,19 @@
 @use './token-utils' as *;
 
 @keyframes slidein {
-  from {
+  0% {
     opacity: 0;
+    pointer-events: none;
     transform: translateX(#{token(slidein-x, custom)}) translateY(#{token(slidein-y, custom)});
   }
 
-  to {
+  99.9% {
+    pointer-events: none;
+  }
+
+  100% {
     opacity: 1;
+    pointer-events: auto;
     transform: translateX(0) translateY(0);
   }
 }

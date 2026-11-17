@@ -796,6 +796,89 @@ describe('Tooltip', () => {
     });
   });
 
+  describe('switching between tooltips', () => {
+    const createPairFixture = async (): Promise<{
+      first: ITooltipComponent;
+      second: ITooltipComponent;
+      firstAnchor: HTMLElement;
+      secondAnchor: HTMLElement;
+    }> => {
+      const screen = render(html`
+        <div style="display: flex; flex-direction: column; gap: 120px;">
+          <button type="button" id="first-anchor">First</button>
+          <forge-tooltip delay="500">First tooltip</forge-tooltip>
+          <button type="button" id="second-anchor">Second</button>
+          <forge-tooltip delay="500">Second tooltip</forge-tooltip>
+        </div>
+      `);
+      const container = screen.container.firstElementChild as HTMLElement;
+      const [first, second] = Array.from(container.querySelectorAll('forge-tooltip')) as ITooltipComponent[];
+      return {
+        first,
+        second,
+        firstAnchor: container.querySelector('#first-anchor') as HTMLElement,
+        secondAnchor: container.querySelector('#second-anchor') as HTMLElement
+      };
+    };
+
+    it('should immediately open another tooltip and close the open one when hovering a different anchor', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await createPairFixture();
+
+      await userEvent.hover(firstAnchor);
+      await task(600);
+      expect(first.open).toBe(true);
+
+      await userEvent.hover(secondAnchor);
+      expect(first.open).toBe(false);
+      expect(second.open).toBe(true);
+    });
+
+    it('should skip the animation when switching from one tooltip to another', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await createPairFixture();
+      const getAnimationName = (el: ITooltipComponent): string =>
+        getComputedStyle(el.shadowRoot?.querySelector(TOOLTIP_CONSTANTS.selectors.CONTENT) as HTMLElement).animationName;
+
+      await userEvent.hover(firstAnchor);
+      await task(600);
+      expect(getAnimationName(first)).not.toBe('none');
+
+      await userEvent.hover(secondAnchor);
+      expect(second.open).toBe(true);
+      expect(getAnimationName(second)).toBe('none');
+    });
+
+    it('should apply the delay again after the open tooltip has closed', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await createPairFixture();
+
+      await userEvent.hover(firstAnchor);
+      await task(600);
+      await userEvent.unhover(firstAnchor);
+      await task(TOOLTIP_CONSTANTS.numbers.HOVER_OUTSIDE_THRESHOLD + 50);
+      expect(first.open).toBe(false);
+
+      await userEvent.hover(secondAnchor);
+      expect(second.open).toBe(false);
+    });
+  });
+
+  describe('hover state while animating in', () => {
+    it('should not cover the anchor while the tooltip animates in', async () => {
+      const harness = await createFixture({ triggerType: 'hover', delay: 0 });
+
+      await harness.hoverTrigger();
+      expect(harness.isOpen).toBe(true);
+
+      const { right, top, height } = harness.anchorElement.getBoundingClientRect();
+      const x = right - 2;
+      const y = top + height / 2;
+
+      expect(document.elementFromPoint(x, y)).toBe(harness.anchorElement);
+
+      await task(300);
+      expect(document.elementFromPoint(x, y)).toBe(harness.anchorElement);
+    });
+  });
+
   describe('longpress trigger type', () => {
     it('should open when longpressing the anchor', async () => {
       const harness = await createFixture({ triggerType: 'longpress' });
