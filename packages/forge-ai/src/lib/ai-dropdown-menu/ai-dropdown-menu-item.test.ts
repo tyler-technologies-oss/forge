@@ -342,18 +342,29 @@ describe('ForgeAiDropdownMenuItem', () => {
     });
 
     it('should cancel a pending open when the mouse leaves before the delay', async () => {
-      vi.useFakeTimers();
+      const el = await createItem(submenuItem(html``));
+      // A stale real pointer from earlier tests can deliver a trusted mouseenter that re-arms the hover timer.
+      el.style.pointerEvents = 'none';
+      await settle(el);
+      await settle(submenu(el));
+      const openListener = vi.fn();
+      el.addEventListener('forge-ai-dropdown-menu-open', openListener);
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
       try {
-        const el = await createItem(submenuItem(html``));
-        await vi.advanceTimersByTimeAsync(0);
-
         el.dispatchEvent(new MouseEvent('mouseenter'));
         await vi.advanceTimersByTimeAsync(50);
         el.dispatchEvent(new MouseEvent('mouseleave'));
+        await vi.advanceTimersByTimeAsync(150);
+        await el.updateComplete;
+
+        expect(submenu(el).open).toBe(false);
+        expect(el.getAttribute('aria-expanded')).toBe('false');
+
         await vi.advanceTimersByTimeAsync(500);
         await el.updateComplete;
 
         expect(submenu(el).open).toBe(false);
+        expect(openListener).not.toHaveBeenCalled();
       } finally {
         vi.useRealTimers();
       }
