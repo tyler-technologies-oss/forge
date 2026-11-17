@@ -25,7 +25,7 @@ $tokens: (
   enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium1)),
   enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-decelerate)),
   exit-duration: utils.module-val(toast, exit-duration, animation.variable(duration-short4)),
-  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-emphasized-accelerate)),
+  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-decelerate)),
   slide-origin: utils.module-val(toast, slide-origin, 100%)
 ) !default;
 

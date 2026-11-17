@@ -50,7 +50,7 @@ $tokens: (
   // Animation
   animation-duration: utils.module-val(checkbox, animation-duration, animation.variable(duration-short2)),
   background-animation-timing: utils.module-val(checkbox, background-animation-timing, animation.variable(easing-standard)),
-  icon-animation-timing: utils.module-val(checkbox, icon-animation-timing, animation.variable(easing-emphasized-accelerate))
+  icon-animation-timing: utils.module-val(checkbox, icon-animation-timing, animation.variable(easing-decelerate))
 ) !default;
 
 @function get($key) {

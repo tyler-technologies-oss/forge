@@ -78,7 +78,7 @@ declare global {
  * @cssproperty --forge-step-icon-text-color-active - The text color of the step icon when active. Defaults to the on-primary theme.
  * @cssproperty --forge-step-icon-content-size - The size of the step icon content. Defaults to 24px.
  * @cssproperty --forge-step-icon-size - The size of the step icon. Defaults to 0.875em.
- * @cssproperty --forge-step-icon-transition-duration - The duration of the step icon transition. Defaults to the medium4 animation duration.
+ * @cssproperty --forge-step-icon-transition-duration - The duration of the step icon transition. Defaults to the short4 animation duration.
  * @cssproperty --forge-step-icon-transition-easing - The easing of the step icon transition. Defaults to the standard animation easing.
  * @cssproperty --forge-step-line-color - The color of the step line. Defaults to the outline theme.
  * @cssproperty --forge-step-line-min-width - The minimum width of the step line. Defaults to 10px.

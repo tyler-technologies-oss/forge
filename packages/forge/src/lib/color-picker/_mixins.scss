@@ -63,7 +63,7 @@
         border-radius: 50%;
         top: calc(50% - 8px);
         margin-left: -8px;
-        transition: left 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition: left #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
 
         &--active {
           transition: none;

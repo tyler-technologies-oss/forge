@@ -15,7 +15,7 @@ $tokens: (
   enter-animation-duration: utils.module-val(backdrop, enter-animation-duration, animation.variable(duration-short4)),
   enter-animation-easing: utils.module-val(backdrop, enter-animation-easing, animation.variable(easing-standard)),
   exit-animation-duration: utils.module-val(backdrop, exit-animation-duration, animation.variable(duration-short1)),
-  exit-animation-easing: utils.module-val(backdrop, exit-animation-easing, animation.variable(easing-emphasized-accelerate))
+  exit-animation-easing: utils.module-val(backdrop, exit-animation-easing, animation.variable(easing-decelerate))
 ) !default;
 
 @function get($key) {

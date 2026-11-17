@@ -191,7 +191,7 @@
   height: 18px;
   width: 18px;
   margin-left: 5px;
-  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-accelerate)};
+  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
   display: none !important;
   font-weight: 700;
 }
@@ -350,8 +350,8 @@
   box-sizing: border-box;
   margin-right: #{spacing.variable(xxsmall)};
   transition-property: border-right-width;
-  transition-duration: #{animation.variable(duration-medium1)};
-  transition-timing-function: #{animation.variable(easing-accelerate)};
+  transition-duration: #{animation.variable(duration-short3)};
+  transition-timing-function: #{animation.variable(easing-standard)};
 }
 
 @mixin resize-handle-hover {

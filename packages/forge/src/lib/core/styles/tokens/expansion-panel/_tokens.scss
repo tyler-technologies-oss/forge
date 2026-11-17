@@ -3,7 +3,7 @@
 @use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
-  animation-duration: utils.module-val(expansion-panel, animation-duration, animation.variable(duration-medium4)),
+  animation-duration: utils.module-val(expansion-panel, animation-duration, animation.variable(duration-medium1)),
   animation-easing: utils.module-val(expansion-panel, animation-easing, animation.variable(easing-standard))
 ) !default;
 
