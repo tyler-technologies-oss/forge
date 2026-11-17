@@ -28,7 +28,7 @@ This provides:
 - **Z-index** - `z-surface`, `z-dialog`, `z-tooltip`, etc.
 - **Border width** - `border-thin`, `border-medium`, `border-thick`, etc.
 - **Animation** - `duration-short-1`, `ease-standard`, etc.
-- **Colors** - `bg-surface`, `bg-primary`, `text-high`, `border-outline`, etc.
+- **Colors** - `bg-surface`, `bg-primary-subtle`, `text-high`, `text-on-primary`, `border-error-default`, `ring-focus-indicator`, `bg-categorical-teal`, etc., generated from every Forge theme color token
 - **Typography** - `text-heading4`, `text-body1`, `text-label2`, etc.
 
 ## Examples
