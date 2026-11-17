@@ -514,6 +514,22 @@ describe('Tabs', () => {
     expect(changeSpy).not.toHaveBeenCalled();
   });
 
+  it('should continue the indicator from where it is on screen when the active tab changes mid-animation', async () => {
+    const ctx = await createFixture({ activeTab: 0, width: '600px' });
+    const indicatorLeft = (index: number): number =>
+      (ctx.tabs[index].shadowRoot?.querySelector(TAB_CONSTANTS.selectors.INDICATOR) as HTMLElement).getBoundingClientRect().left;
+    const secondRestLeft = indicatorLeft(1);
+
+    ctx.element.activeTab = 1;
+    await task(TAB_CONSTANTS.numbers.ANIMATION_DURATION / 2);
+    const midSlideLeft = indicatorLeft(1);
+    ctx.element.activeTab = 2;
+    await frame();
+    const thirdStartLeft = indicatorLeft(2);
+
+    expect(Math.abs(thirdStartLeft - midSlideLeft)).toBeLessThan(Math.abs(thirdStartLeft - secondRestLeft));
+  });
+
   describe('when vertical', () => {
     it('should be accessible', async () => {
       const ctx = await createFixture({ vertical: true });

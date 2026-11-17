@@ -518,12 +518,16 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       return;
     }
 
+    // Measure before cancelling so an indicator that's mid-slide starts from where it is on screen
+    const fromRect = fromIndicator?.getBoundingClientRect();
+    const toRect = toIndicator.getBoundingClientRect();
+
     fromIndicator?.getAnimations().forEach(animation => animation.cancel());
     toIndicator.getAnimations().forEach(animation => animation.cancel());
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!fromIndicator) {
+    if (!fromIndicator || !fromRect) {
       if (!reduceMotion) {
         toIndicator.animate([{ opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_HIDDEN) }, { opacity: String(TAB_BAR_CONSTANTS.numbers.OPACITY_VISIBLE) }], {
           duration: TAB_CONSTANTS.numbers.ANIMATION_DURATION,
@@ -532,9 +536,6 @@ export class TabBarComponent extends BaseLitElement implements ITabBarComponent 
       }
       return;
     }
-
-    const fromRect = fromIndicator.getBoundingClientRect();
-    const toRect = toIndicator.getBoundingClientRect();
 
     const fromPos = this.vertical ? fromRect.top : fromRect.left;
     const fromExtent = this.vertical ? fromRect.height : fromRect.width;

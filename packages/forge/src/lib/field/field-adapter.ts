@@ -22,6 +22,7 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   private readonly _containerElement: HTMLElement;
   private readonly _inputContainerElement: HTMLElement;
   private readonly _labelElement: HTMLElement;
+  private _floatingLabelListener?: (evt: AnimationEvent) => void;
   private readonly _labelSlotElement: HTMLSlotElement;
   private readonly _popoverIconElement: HTMLElement;
   private readonly _focusIndicatorElement: IFocusIndicatorComponent;
@@ -77,15 +78,32 @@ export class FieldAdapter extends BaseAdapter<IFieldComponent> implements IField
   public setFloatingLabel(value: boolean): void {
     const className = value ? FIELD_CONSTANTS.classes.FLOATING_IN : FIELD_CONSTANTS.classes.FLOATING_OUT;
     const animationName = value ? FIELD_CONSTANTS.animations.FLOAT_IN_LABEL : FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL;
-    const animationEndListener = (evt: AnimationEvent): void => {
+
+    this._clearFloatingLabel();
+    const listener = (evt: AnimationEvent): void => {
       if (evt.animationName === animationName) {
-        removeClass(className, this._rootElement);
-        this._rootElement.removeEventListener('animationend', animationEndListener);
+        this._clearFloatingLabel();
       }
     };
-
+    this._floatingLabelListener = listener;
     addClass(className, this._rootElement);
-    this._rootElement.addEventListener('animationend', animationEndListener);
+    this._rootElement.addEventListener('animationend', listener);
+
+    // When the label can't animate (not inset, no label, extra-small density) `animationend` never fires
+    requestAnimationFrame(() => {
+      const isAnimating = this._labelElement.getAnimations().some(animation => animation instanceof CSSAnimation && animation.animationName === animationName);
+      if (this._floatingLabelListener === listener && !isAnimating) {
+        this._clearFloatingLabel();
+      }
+    });
+  }
+
+  private _clearFloatingLabel(): void {
+    removeClass([FIELD_CONSTANTS.classes.FLOATING_IN, FIELD_CONSTANTS.classes.FLOATING_OUT], this._rootElement);
+    if (this._floatingLabelListener) {
+      this._rootElement.removeEventListener('animationend', this._floatingLabelListener);
+      this._floatingLabelListener = undefined;
+    }
   }
 
   /**

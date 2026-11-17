@@ -4,7 +4,7 @@ import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
-import { frame } from '../core/utils/utils.js';
+import { frame, task } from '../core/utils/utils.js';
 import { TestHarness } from '../core/testing/test-harness.js';
 import { FIELD_CONSTANTS, type IFieldComponent } from '../field/index.js';
 import type {
@@ -18,6 +18,9 @@ import type {
 } from './base/base-field-constants.js';
 
 import './field.js';
+
+// Floating label animation duration (100ms) plus a buffer
+const FLOAT_ANIMATION_TIMEOUT = 300;
 
 const READONLY_TEST_COLOR = 'rgb(1, 2, 3)';
 const TRANSPARENT = 'rgba(0, 0, 0, 0)';
@@ -726,6 +729,31 @@ describe('Field', () => {
 
       expect(animationSpy).toHaveBeenCalled();
       expect(animationSpy.mock.calls.some((call: [AnimationEvent]) => call[0].animationName === FIELD_CONSTANTS.animations.FLOAT_OUT_LABEL)).toBe(true);
+    });
+
+    it('should clear the float animation state when the label floats out before floating in finishes', async () => {
+      const harness = await createFixture({ labelPosition: 'inset' });
+      harness.addSlottedContent('label');
+      await frame();
+
+      harness.element.floatLabel = true;
+      await frame();
+      harness.element.floatLabel = false;
+      await task(FLOAT_ANIMATION_TIMEOUT);
+
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.FLOATING_IN)).toBe(false);
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.FLOATING_OUT)).toBe(false);
+    });
+
+    it('should not keep the float animation state when the label position does not animate', async () => {
+      const harness = await createFixture({ labelPosition: 'block-start' });
+      harness.addSlottedContent('label');
+      await frame();
+
+      harness.element.floatLabel = true;
+      await task(FLOAT_ANIMATION_TIMEOUT);
+
+      expect(harness.rootElement.classList.contains(FIELD_CONSTANTS.classes.FLOATING_IN)).toBe(false);
     });
 
     it('should float label in without animation', async () => {
