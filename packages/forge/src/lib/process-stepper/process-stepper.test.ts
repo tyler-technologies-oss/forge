@@ -1081,8 +1081,7 @@ describe('ProcessStep', () => {
      * measurement has to count it in.
      */
     async function settledRing(step: ProcessStepComponent): Promise<{ box: DOMRect; outlineWidth: number; element: HTMLElement }> {
-      const indicator = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
-      const element = indicator.shadowRoot?.querySelector('[part="indicator"]') as HTMLElement;
+      const element = step.shadowRoot?.querySelector('forge-focus-indicator') as HTMLElement;
       await Promise.all(element.getAnimations().map(animation => animation.finished));
 
       return { box: element.getBoundingClientRect(), outlineWidth: parseFloat(getComputedStyle(element).outlineWidth), element };
