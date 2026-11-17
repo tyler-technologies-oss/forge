@@ -1,6 +1,5 @@
 import { getShadowElement } from '@tylertech/forge-core';
 import { playClassAnimation } from '../core/utils/animation-utils.js';
-import { prefersReducedMotion } from '../core/utils/feature-detection.js';
 import { VirtualElement } from '../core/utils/position-utils.js';
 import { checkVisibility, frame } from '../core/utils/utils.js';
 import { IOverlayComponent, OVERLAY_CONSTANTS } from '../overlay/index.js';
@@ -90,11 +89,6 @@ export class PopoverAdapter extends OverlayAwareAdapter<IPopoverComponent> imple
 
   public async hide(): Promise<boolean> {
     const hideId = ++this._hideId;
-
-    if (prefersReducedMotion()) {
-      this._closeOverlay();
-      return true;
-    }
 
     await frame();
 

@@ -113,14 +113,23 @@ declare global {
  * @cssproperty --forge-popover-arrow-border-width - The border width of the popover surface and arrow when an arrow is applied.
  * @cssproperty --forge-popover-arrow-ring-width - The ring width of the popover surface and arrow when an arrow is applied.
  * @cssproperty --forge-popover-arrow-clip-path - The clip path to use for the arrow element.
- * @cssproperty --forge-popover-animation-timing - The animation timing function to use for the popover animation.
- * @cssproperty --forge-popover-zoom-duration - The duration of the zoom animation.
- * @cssproperty --forge-popover-zoom-timing - The timing function to use for the zoom animation.
- * @cssproperty --forge-popover-slide-duration - The duration of the slide animation.
- * @cssproperty --forge-popover-slide-timing - The timing function to use for the slide animation.
- * @cssproperty --forge-popover-slide-offset - The start offset to use for the slide animation.
- * @cssproperty --forge-popover-fade-duration - The duration of the fade animation.
- * @cssproperty --forge-popover-fade-timing - The timing function to use for the fade animation.
+ * @cssproperty --forge-popover-animation-enter-duration - The duration of every enter animation, unless a type-specific token is set.
+ * @cssproperty --forge-popover-animation-enter-timing - The timing function of every enter animation, unless a type-specific token is set.
+ * @cssproperty --forge-popover-animation-exit-duration - The duration of every exit animation, unless a type-specific token is set.
+ * @cssproperty --forge-popover-animation-exit-timing - The timing function of every exit animation, unless a type-specific token is set.
+ * @cssproperty --forge-popover-zoom-enter-duration - The duration of the zoom enter animation.
+ * @cssproperty --forge-popover-zoom-enter-timing - The timing function of the zoom enter animation.
+ * @cssproperty --forge-popover-zoom-exit-duration - The duration of the zoom exit animation.
+ * @cssproperty --forge-popover-zoom-exit-timing - The timing function of the zoom exit animation.
+ * @cssproperty --forge-popover-slide-enter-duration - The duration of the slide enter animation.
+ * @cssproperty --forge-popover-slide-enter-timing - The timing function of the slide enter animation.
+ * @cssproperty --forge-popover-slide-exit-duration - The duration of the slide exit animation.
+ * @cssproperty --forge-popover-slide-exit-timing - The timing function of the slide exit animation.
+ * @cssproperty --forge-popover-slide-offset - The distance the slide animation starts from.
+ * @cssproperty --forge-popover-fade-enter-duration - The duration of the fade enter animation.
+ * @cssproperty --forge-popover-fade-enter-timing - The timing function of the fade enter animation.
+ * @cssproperty --forge-popover-fade-exit-duration - The duration of the fade exit animation.
+ * @cssproperty --forge-popover-fade-exit-timing - The timing function of the fade exit animation.
  * @cssproperty --forge-popover-position-block-start - The `block-start` position of the popover.
  * @cssproperty --forge-popover-position-block-end - The `block-end` position of the popover.
  * @cssproperty --forge-popover-position-inline-start - The `inline-start` position of the popover.
