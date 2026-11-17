@@ -26,9 +26,10 @@ Avoid curves that start slowly (ease-in). They delay the moment people are watch
 
 ## Keep it short
 
-- Keep interface animations under 300ms. Popovers and tooltips take about 150ms, dialogs about 200ms.
+- Keep small interface animations under 300ms. Popovers and tooltips take about 150ms, dialogs 250ms to open and 200ms to close.
+- Give large surfaces sliding in from an edge more time, so they feel calm rather than abrupt. Drawers and sheets take 500ms to open and 400ms to close.
 - Make leaving faster than entering. Once someone dismisses something, they're already looking elsewhere.
-- Use the duration tokens (`--forge-animation-duration-short3` for 150ms, `--forge-animation-duration-short4` for 200ms) rather than raw values.
+- Use the duration tokens (`--forge-animation-duration-short3` for 150ms, `--forge-animation-duration-short4` for 200ms, `--forge-animation-duration-medium1` for 250ms, `--forge-animation-duration-medium4` for 400ms, `--forge-animation-duration-long2` for 500ms) rather than raw values.
 
 ## Don't animate what people repeat
 

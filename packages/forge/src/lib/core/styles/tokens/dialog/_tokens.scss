@@ -38,9 +38,9 @@ $tokens: (
   move-transition-easing: utils.module-val(dialog, move-transition-easing, animation.variable(easing-move)),
   moving-opacity: utils.module-val(dialog, moving-opacity, theme.emphasis(medium)),
   // Animation
-  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-short4)),
+  enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-medium1)),
   enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
-  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short3)),
+  exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short4)),
   exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-standard)),
   // Zoom animation
   zoom-opacity: utils.module-val(dialog, zoom-opacity, 0),
@@ -56,15 +56,15 @@ $tokens: (
   nonmodal-elevation: utils.module-val(dialog, nonmodal-elevation, elevation.value(4)),
   // Fullscreen
   fullscreen-enter-animation-duration: utils.module-val(dialog, fullscreen-enter-animation-duration, animation.variable(duration-medium1)),
-  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short3)),
+  fullscreen-exit-animation-duration: utils.module-val(dialog, fullscreen-exit-animation-duration, animation.variable(duration-short4)),
   fullscreen-translate: utils.module-val(dialog, fullscreen-translate, 0 spacing.variable(large)),
   // Custom position
   position-x: utils.module-val(dialog, position-x, 0),
   position-y: utils.module-val(dialog, position-y, 0),
   // Preset
-  preset-sheet-enter-animation-duration: utils.module-val(dialog, preset-sheet-enter-animation-duration, animation.variable(duration-medium2)),
+  preset-sheet-enter-animation-duration: utils.module-val(dialog, preset-sheet-enter-animation-duration, animation.variable(duration-long2)),
   preset-sheet-enter-animation-easing: utils.module-val(dialog, preset-sheet-enter-animation-easing, animation.variable(easing-drawer)),
-  preset-sheet-exit-animation-duration: utils.module-val(dialog, preset-sheet-exit-animation-duration, animation.variable(duration-short4)),
+  preset-sheet-exit-animation-duration: utils.module-val(dialog, preset-sheet-exit-animation-duration, animation.variable(duration-medium4)),
   preset-sheet-exit-animation-easing: utils.module-val(dialog, preset-sheet-exit-animation-easing, animation.variable(easing-drawer))
 ) !default;
 

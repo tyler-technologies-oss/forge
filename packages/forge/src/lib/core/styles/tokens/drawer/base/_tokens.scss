@@ -9,9 +9,9 @@ $tokens: (
   border-color: utils.module-val(drawer, border-color, theme.variable(outline-low)),
   width: utils.module-val(drawer, width, 256px),
   border-width: utils.module-val(drawer, border-width, border.variable(thin)),
-  transition-duration: utils.module-val(drawer, transition-duration, animation.variable(duration-medium1)),
+  transition-duration: utils.module-val(drawer, transition-duration, animation.variable(duration-long2)),
   transition-easing: utils.module-val(drawer, transition-easing, animation.variable(easing-drawer)),
-  transition-duration-close: utils.module-val(drawer, transition-duration-close, animation.variable(duration-short4))
+  transition-duration-close: utils.module-val(drawer, transition-duration-close, animation.variable(duration-medium4))
 ) !default;
 
 @function get($key) {
