@@ -35,13 +35,13 @@ $tokens: (
   move-handle-active-cursor: utils.module-val(dialog, move-handle-active-cursor, grabbing),
   move-handle-spacing: utils.module-val(dialog, move-handle-spacing, calc(spacing.variable(xxsmall) * -1) 0 0),
   move-transition-duration: utils.module-val(dialog, move-transition-duration, animation.variable(duration-short4)),
-  move-transition-easing: utils.module-val(dialog, move-transition-easing, animation.variable(easing-standard)),
+  move-transition-easing: utils.module-val(dialog, move-transition-easing, animation.variable(easing-move)),
   moving-opacity: utils.module-val(dialog, moving-opacity, theme.emphasis(medium)),
   // Animation
   enter-animation-duration: utils.module-val(dialog, enter-animation-duration, animation.variable(duration-short4)),
-  enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-decelerate)),
+  enter-animation-easing: utils.module-val(dialog, enter-animation-easing, animation.variable(easing-standard)),
   exit-animation-duration: utils.module-val(dialog, exit-animation-duration, animation.variable(duration-short3)),
-  exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-decelerate)),
+  exit-animation-easing: utils.module-val(dialog, exit-animation-easing, animation.variable(easing-standard)),
   // Zoom animation
   zoom-opacity: utils.module-val(dialog, zoom-opacity, 0),
   zoom-scale: utils.module-val(dialog, zoom-scale, 0.96),
@@ -63,9 +63,9 @@ $tokens: (
   position-y: utils.module-val(dialog, position-y, 0),
   // Preset
   preset-sheet-enter-animation-duration: utils.module-val(dialog, preset-sheet-enter-animation-duration, animation.variable(duration-medium2)),
-  preset-sheet-enter-animation-easing: utils.module-val(dialog, preset-sheet-enter-animation-easing, animation.variable(easing-emphasized-decelerate)),
+  preset-sheet-enter-animation-easing: utils.module-val(dialog, preset-sheet-enter-animation-easing, animation.variable(easing-drawer)),
   preset-sheet-exit-animation-duration: utils.module-val(dialog, preset-sheet-exit-animation-duration, animation.variable(duration-short4)),
-  preset-sheet-exit-animation-easing: utils.module-val(dialog, preset-sheet-exit-animation-easing, animation.variable(easing-emphasized-decelerate))
+  preset-sheet-exit-animation-easing: utils.module-val(dialog, preset-sheet-exit-animation-easing, animation.variable(easing-drawer))
 ) !default;
 
 @function get($key) {

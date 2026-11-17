@@ -24,7 +24,7 @@ $tokens: (
   lowered-active-shadow: utils.module-val(fab, lowered-active-shadow, elevation.value(1)),
   // Animation
   transition-duration: utils.module-val(fab, transition-duration, animation.variable(duration-short3)),
-  transition-timing: utils.module-val(fab, transition-timing, animation.variable(easing-standard)),
+  transition-timing: utils.module-val(fab, transition-timing, animation.variable(easing-gentle)),
   // Shape
   shape: utils.module-val(fab, shape, shape.variable(extra-large)),
   shape-start-start: utils.module-ref(fab, shape-start-start, shape),

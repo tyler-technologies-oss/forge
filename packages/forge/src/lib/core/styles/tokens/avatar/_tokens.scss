@@ -9,7 +9,7 @@ $tokens: (
   background: utils.module-val(avatar, background, theme.variable(tertiary)),
   color: utils.module-val(avatar, color, theme.variable(on-tertiary)),
   transition-duration: utils.module-val(avatar, transition-duration, animation.variable(duration-short4)),
-  transition-timing: utils.module-val(avatar, transition-timing, animation.variable(easing-standard)),
+  transition-timing: utils.module-val(avatar, transition-timing, animation.variable(easing-move)),
   shape: utils.module-val(avatar, shape, shape.variable(round))
 ) !default;
 

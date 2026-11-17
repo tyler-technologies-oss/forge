@@ -40,7 +40,7 @@ $tokens: (
   active-shadow: utils.module-val(button, active-shadow, none),
   cursor: utils.module-val(button, cursor, pointer),
   transition-duration: utils.module-val(button, transition-duration, animation.variable(duration-short3)),
-  transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-standard)),
+  transition-timing: utils.module-val(button, transition-timing, animation.variable(easing-gentle)),
   // Text
   text-padding-inline: utils.module-val(button, text-padding-inline, spacing.variable(xsmall)),
   // Outlined
@@ -78,7 +78,7 @@ $tokens: (
   link-hover-text-decoration: utils.module-val(button, link-hover-text-decoration, none),
   link-active-opacity: utils.module-val(button, link-active-opacity, theme.emphasis(high)),
   link-transition-duration: utils.module-val(button, link-transition-duration, animation.variable(duration-short3)),
-  link-transition-timing: utils.module-val(button, link-transition-timing, animation.variable(easing-standard)),
+  link-transition-timing: utils.module-val(button, link-transition-timing, animation.variable(easing-gentle)),
   // Disabled
   disabled-cursor: utils.module-val(button, disabled-cursor, not-allowed),
   disabled-text-color: utils.module-val(button, disabled-text-color, theme.variable(text-low)),
@@ -96,7 +96,7 @@ $tokens: (
   link-focus-indicator-offset: utils.module-val(button, link-focus-indicator-offset, 2px),
   // Popover icon
   popover-icon-transition-duration: utils.module-val(button, popover-icon-transition-duration, animation.variable(duration-short3)),
-  popover-icon-transition-timing: utils.module-val(button, popover-icon-transition-timing, animation.variable(easing-standard)),
+  popover-icon-transition-timing: utils.module-val(button, popover-icon-transition-timing, animation.variable(easing-move)),
   popover-icon-open-rotation: utils.module-val(button, popover-icon-open-rotation, 180deg)
 ) !default;
 

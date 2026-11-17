@@ -43,7 +43,7 @@ $tokens: (
   disabled-opacity: utils.module-val(radio, disabled-opacity, theme.emphasis(medium-low)),
   // Animation
   animation-duration: utils.module-val(radio, animation-duration, animation.variable(duration-short4)),
-  animation-timing-function: utils.module-val(radio, animation-timing-function, animation.variable(easing-decelerate)),
+  animation-timing-function: utils.module-val(radio, animation-timing-function, animation.variable(easing-standard)),
   animation-delay: utils.module-val(radio, animation-delay, 0ms)
 ) !default;
 

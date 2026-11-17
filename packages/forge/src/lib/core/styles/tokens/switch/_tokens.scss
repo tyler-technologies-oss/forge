@@ -80,7 +80,7 @@ $tokens: (
   icon-active-off-scale: utils.module-ref(switch, icon-active-off-scale, icon-off-scale),
   // Animation
   animation-duration: utils.module-val(switch, animation-duration, animation.variable(duration-short2)),
-  animation-timing: utils.module-val(switch, animation-timing, animation.variable(easing-standard)),
+  animation-timing: utils.module-val(switch, animation-timing, animation.variable(easing-move)),
   active-animation-timing: utils.module-val(switch, active-animation-timing, animation.variable(easing-linear))
 ) !default;
 

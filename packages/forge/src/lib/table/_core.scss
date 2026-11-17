@@ -191,7 +191,7 @@
   height: 18px;
   width: 18px;
   margin-left: 5px;
-  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+  transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-move)};
   display: none !important;
   font-weight: 700;
 }
@@ -298,7 +298,7 @@
 // The base table body row styles for row interactions.
 @mixin body-row {
   height: variables.$tbody-row-height;
-  transition: background-color #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+  transition: background-color #{animation.variable(duration-short4)} #{animation.variable(easing-gentle)};
 
   &:hover {
     background-color: var(--forge-table-theme-row-hover-background, variables.$row-hover-background);

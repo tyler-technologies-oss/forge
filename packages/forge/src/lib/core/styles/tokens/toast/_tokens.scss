@@ -23,9 +23,9 @@ $tokens: (
   message-padding: utils.module-val(toast, message-padding, spacing.variable(xsmall)),
   // Animation
   enter-duration: utils.module-val(toast, enter-duration, animation.variable(duration-medium1)),
-  enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-decelerate)),
+  enter-timing: utils.module-val(toast, enter-timing, animation.variable(easing-standard)),
   exit-duration: utils.module-val(toast, exit-duration, animation.variable(duration-short4)),
-  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-decelerate)),
+  exit-timing: utils.module-val(toast, exit-timing, animation.variable(easing-standard)),
   slide-origin: utils.module-val(toast, slide-origin, 100%)
 ) !default;
 

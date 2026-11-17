@@ -49,8 +49,8 @@ $tokens: (
   disabled-opacity: utils.module-val(checkbox, disabled-opacity, theme.emphasis(medium-low)),
   // Animation
   animation-duration: utils.module-val(checkbox, animation-duration, animation.variable(duration-short2)),
-  background-animation-timing: utils.module-val(checkbox, background-animation-timing, animation.variable(easing-standard)),
-  icon-animation-timing: utils.module-val(checkbox, icon-animation-timing, animation.variable(easing-decelerate))
+  background-animation-timing: utils.module-val(checkbox, background-animation-timing, animation.variable(easing-gentle)),
+  icon-animation-timing: utils.module-val(checkbox, icon-animation-timing, animation.variable(easing-standard))
 ) !default;
 
 @function get($key) {

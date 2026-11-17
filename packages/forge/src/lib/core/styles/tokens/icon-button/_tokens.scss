@@ -22,7 +22,7 @@ $tokens: (
   shadow: utils.module-val(icon-button, shadow, none),
   // Animation
   transition-duration: utils.module-val(icon-button, transition-duration, animation.variable(duration-short3)),
-  transition-timing: utils.module-val(icon-button, transition-timing, animation.variable(easing-standard)),
+  transition-timing: utils.module-val(icon-button, transition-timing, animation.variable(easing-gentle)),
   // Shape
   shape: utils.module-val(icon-button, shape, shape.variable(full)),
   shape-start-start: utils.module-ref(icon-button, shape-start-start, shape),

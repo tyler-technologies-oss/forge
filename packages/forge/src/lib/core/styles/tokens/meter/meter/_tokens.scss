@@ -17,7 +17,7 @@ $tokens: (
   tickmarks: utils.module-val(meter, tickmarks, 10),
   tickmark-opacity: utils.module-val(meter, tickmark-opacity, color-emphasis.value(medium)),
   transition-duration: utils.module-val(meter, transition-duration, animation.variable(duration-short4)),
-  transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-standard))
+  transition-timing: utils.module-val(meter, transition-timing, animation.variable(easing-move))
 );
 
 @function get($key) {

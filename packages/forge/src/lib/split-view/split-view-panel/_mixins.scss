@@ -213,7 +213,7 @@
 
   animation-name: $animation-name;
   animation-duration: #{animation.variable(duration-medium2)};
-  animation-timing-function: #{animation.variable(easing-standard)};
+  animation-timing-function: #{animation.variable(easing-drawer)};
 
   @media (prefers-reduced-motion: reduce) {
     animation-name: $reduced-motion-animation-name;

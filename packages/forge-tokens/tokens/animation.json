@@ -54,25 +54,49 @@
     "easing": {
       "$type": "cubicBezier",
       "linear": {
-        "$value": [0, 0, 1, 1]
+        "$value": [0, 0, 1, 1],
+        "$description": "Constant speed, for loops and progress"
       },
       "standard": {
-        "$value": [0.2, 0, 0, 1]
+        "$value": [0.23, 1, 0.32, 1],
+        "$description": "Default for elements entering and leaving: starts fast, settles gently"
       },
-      "accelerate": {
-        "$value": [0.3, 0, 1, 1]
+      "move": {
+        "$value": [0.77, 0, 0.175, 1],
+        "$description": "For elements moving, resizing or rotating while on screen: speeds up, then slows down"
+      },
+      "drawer": {
+        "$value": [0.32, 0.72, 0, 1],
+        "$description": "For drawers and sheets sliding in from an edge"
+      },
+      "gentle": {
+        "$value": [0.25, 0.1, 0.25, 1],
+        "$description": "For color, hover and other soft changes, and relaxed notifications such as toasts"
       },
       "decelerate": {
-        "$value": [0, 0, 0, 1]
+        "$value": [0.23, 1, 0.32, 1],
+        "$description": "Same curve as standard",
+        "$deprecated": "Use standard instead"
+      },
+      "accelerate": {
+        "$value": [0.3, 0, 1, 1],
+        "$description": "Starts slowly",
+        "$deprecated": "Use standard instead. Curves that start slowly make interface motion feel sluggish"
       },
       "emphasized": {
-        "$value": [0.2, 0, 0, 1]
+        "$value": [0.2, 0, 0, 1],
+        "$description": "Same curve as the previous standard",
+        "$deprecated": "Use standard instead"
       },
       "emphasized-accelerate": {
-        "$value": [0.3, 0, 0.8, 0.15]
+        "$value": [0.3, 0, 0.8, 0.15],
+        "$description": "Starts slowly",
+        "$deprecated": "Use standard instead. Curves that start slowly make interface motion feel sluggish"
       },
       "emphasized-decelerate": {
-        "$value": [0.05, 0.7, 0.1, 1]
+        "$value": [0.05, 0.7, 0.1, 1],
+        "$description": "Previously used for sheets",
+        "$deprecated": "Use drawer instead"
       }
     }
   }

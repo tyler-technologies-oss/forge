@@ -155,7 +155,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
             }
           }
 
-          animation: forge-field-float-label-in #{animation.variable(duration-short4)} #{animation.variable(easing-decelerate)} forwards;
+          animation: forge-field-float-label-in #{animation.variable(duration-short4)} #{animation.variable(easing-move)} forwards;
         }
       }
 
@@ -171,7 +171,7 @@ $_input-selector: ':where(input, textarea, select, .forge-field__input)';
         }
 
         label {
-          animation: forge-field-float-label-out #{animation.variable(duration-short4)} #{animation.variable(easing-decelerate)} forwards;
+          animation: forge-field-float-label-out #{animation.variable(duration-short4)} #{animation.variable(easing-move)} forwards;
         }
       }
 

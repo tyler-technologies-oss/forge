@@ -6,7 +6,7 @@ $tokens: (
   height: utils.module-val(view-switcher, height, auto),
   width: utils.module-val(view-switcher, width, auto),
   animation-duration: utils.module-val(view-switcher, animation-duration, animation.variable(duration-medium2)),
-  animation-easing: utils.module-val(view-switcher, animation-easing, animation.variable(easing-standard))
+  animation-easing: utils.module-val(view-switcher, animation-easing, animation.variable(easing-move))
 ) !default;
 
 @function get($key) {

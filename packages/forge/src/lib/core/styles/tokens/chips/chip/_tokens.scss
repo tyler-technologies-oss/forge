@@ -66,7 +66,7 @@ $tokens: (
   avatar-spacing-dense: utils.module-val(chip, avatar-spacing-dense, calc(#{spacing.variable(xxsmall)} * -1)),
   // Animation
   transition-duration: utils.module-val(chip, transition-duration, animation.variable(duration-short3)),
-  transition-easing: utils.module-val(chip, transition-easing, animation.variable(easing-standard)),
+  transition-easing: utils.module-val(chip, transition-easing, animation.variable(easing-gentle)),
   checkmark-transition-delay: utils.module-val(chip, checkmark-transition-delay, 50ms)
 ) !default;
 

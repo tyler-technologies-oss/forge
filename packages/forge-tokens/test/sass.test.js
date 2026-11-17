@@ -139,7 +139,7 @@ describe('sass', () => {
     it('should emit custom properties', () => {
       const css = compile(`@use 'animation'; :root { @include animation.properties; }`);
       expect(css).toContain('--forge-animation-duration-short1: 50ms;');
-      expect(css).toContain('--forge-animation-easing-standard: cubic-bezier(0.2, 0, 0, 1);');
+      expect(css).toContain('--forge-animation-easing-standard: cubic-bezier(0.23, 1, 0.32, 1);');
     });
   });
 

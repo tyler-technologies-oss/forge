@@ -37,9 +37,9 @@ $tokens: (
   arrow-ring-width: utils.module-ref(popover, arrow-ring-width, ring-width),
   // Animation
   animation-enter-duration: utils.module-val(popover, animation-enter-duration, animation.variable(duration-short3)),
-  animation-enter-timing: utils.module-val(popover, animation-enter-timing, animation.variable(easing-decelerate)),
+  animation-enter-timing: utils.module-val(popover, animation-enter-timing, animation.variable(easing-standard)),
   animation-exit-duration: utils.module-val(popover, animation-exit-duration, animation.variable(duration-short2)),
-  animation-exit-timing: utils.module-val(popover, animation-exit-timing, animation.variable(easing-decelerate)),
+  animation-exit-timing: utils.module-val(popover, animation-exit-timing, animation.variable(easing-standard)),
   zoom-enter-duration: utils.module-ref(popover, zoom-enter-duration, animation-enter-duration),
   zoom-enter-timing: utils.module-ref(popover, zoom-enter-timing, animation-enter-timing),
   zoom-exit-duration: utils.module-ref(popover, zoom-exit-duration, animation-exit-duration),

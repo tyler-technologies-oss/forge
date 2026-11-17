@@ -22,7 +22,7 @@ $tokens: (
   border-style: utils.module-val(tooltip, border-style, solid),
   border-color: utils.module-val(tooltip, border-color, theme.variable(outline-low)),
   // Animation
-  animation-timing: utils.module-val(tooltip, animation-timing, animation.variable(easing-decelerate)),
+  animation-timing: utils.module-val(tooltip, animation-timing, animation.variable(easing-standard)),
   animation-duration: utils.module-val(tooltip, animation-duration, animation.variable(duration-short3)),
   animation-offset: utils.module-val(tooltip, animation-offset, 24px),
   // Arrow

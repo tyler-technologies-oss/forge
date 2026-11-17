@@ -63,7 +63,7 @@
         border-radius: 50%;
         top: calc(50% - 8px);
         margin-left: -8px;
-        transition: left #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
+        transition: left #{animation.variable(duration-short4)} #{animation.variable(easing-move)};
 
         &--active {
           transition: none;
@@ -128,7 +128,7 @@
           outline: none;
           transition-property: box-shadow, border-color;
           transition-duration: #{animation.variable(duration-short4)};
-          transition-timing-function: #{animation.variable(easing-standard)};
+          transition-timing-function: #{animation.variable(easing-gentle)};
 
           &:hover {
             border-color: #{theme.variable(text-high)};

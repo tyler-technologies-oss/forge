@@ -24,7 +24,7 @@ $tokens: (
   icon-content-size: utils.module-val(step, icon-content-size, 24px),
   icon-size: utils.module-val(step, icon-size, typography.font-size-relative('0875')),
   icon-transition-duration: utils.module-val(step, icon-transition-duration, animation.variable(duration-short4)),
-  icon-transition-easing: utils.module-val(step, icon-transition-easing, animation.variable(easing-standard)),
+  icon-transition-easing: utils.module-val(step, icon-transition-easing, animation.variable(easing-gentle)),
   // Line
   line-color: utils.module-val(step, line-color, theme.variable(outline-low)),
   line-min-width: utils.module-val(step, line-min-width, 10px),

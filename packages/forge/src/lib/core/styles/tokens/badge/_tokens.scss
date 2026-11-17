@@ -35,7 +35,7 @@ $tokens: (
   dot-padding: utils.module-val(badge, dot-padding, 0),
   // Transition
   transition-duration: utils.module-val(badge, transition-duration, animation.variable(duration-short4)),
-  transition-easing: utils.module-val(badge, transition-easing, animation.variable(easing-decelerate))
+  transition-easing: utils.module-val(badge, transition-easing, animation.variable(easing-standard))
 ) !default;
 
 @function get($key) {

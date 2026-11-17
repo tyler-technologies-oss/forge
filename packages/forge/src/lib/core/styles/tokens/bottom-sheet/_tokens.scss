@@ -7,7 +7,7 @@ $tokens: (
   desktop-max-height: utils.module-val(bottom-sheet, desktop-max-height, 50%),
   // Animation
   animation-duration: utils.module-val(bottom-sheet, animation-duration, animation.variable(duration-medium1)),
-  animation-timing: utils.module-val(bottom-sheet, animation-timing, animation.variable(easing-standard))
+  animation-timing: utils.module-val(bottom-sheet, animation-timing, animation.variable(easing-drawer))
 ) !default;
 
 @function get($key) {
