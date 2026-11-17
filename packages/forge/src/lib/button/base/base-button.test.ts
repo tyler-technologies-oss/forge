@@ -277,6 +277,17 @@ describe('BaseButton', () => {
     expect(el.getAttribute('aria-disabled')).toBe('true');
   });
 
+  it('should keep consumer-provided aria-disabled when the button starts disabled and is then enabled', async () => {
+    const screen = render(html`<forge-test-base-button aria-disabled="true" disabled>Button</forge-test-base-button>`);
+    const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
+    await el.updateComplete;
+
+    el.disabled = false;
+    await el.updateComplete;
+
+    expect(el.getAttribute('aria-disabled')).toBe('true');
+  });
+
   it('should not restore aria-disabled when the consumer removes it while disabled', async () => {
     const screen = render(html`<forge-test-base-button aria-disabled="true">Button</forge-test-base-button>`);
     const el = screen.container.querySelector('forge-test-base-button') as ButtonComponent;
