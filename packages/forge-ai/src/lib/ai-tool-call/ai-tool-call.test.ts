@@ -18,6 +18,7 @@ const RENDERER_TAG = 'forge-ai-test-tool-renderer';
 
 class TestToolRendererElement extends HTMLElement implements IToolRenderer {
   public toolCall!: ToolCall;
+  public toolDefinition?: AnyToolDefinition;
 }
 customElements.define(RENDERER_TAG, TestToolRendererElement);
 
@@ -73,6 +74,30 @@ describe('AiToolCallComponent', () => {
     expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeTruthy();
   });
 
+  it('should render the element renderer when the call errors and the tool opts into rendererOnly', async () => {
+    const el = await createElement(createToolCall({ status: 'error' }), { name: 'report', rendererOnly: true, renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeTruthy();
+  });
+
+  it('should render the element renderer when the call is cancelled and the tool opts into rendererOnly', async () => {
+    const el = await createElement(createToolCall({ status: 'cancelled' }), { name: 'report', rendererOnly: true, renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeTruthy();
+  });
+
+  it('should render nothing when the call is cancelled and the tool does not opt into rendererOnly', async () => {
+    const el = await createElement(createToolCall({ status: 'cancelled' }), { name: 'report', renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeNull();
+  });
+
+  it('should render nothing when the call errors and the tool does not opt into rendererOnly', async () => {
+    const el = await createElement(createToolCall({ status: 'error' }), { name: 'report', renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeNull();
+  });
+
   it('should update the mounted element renderer in place when the tool call changes', async () => {
     const definition: AnyToolDefinition = { name: 'report', renderOnStart: true, renderer: { elementTag: RENDERER_TAG } };
     const el = await createElement(createToolCall({ status: 'executing' }), definition);
@@ -84,6 +109,26 @@ describe('AiToolCallComponent', () => {
 
     expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBe(rendered);
     expect(rendered?.toolCall).toBe(next);
+  });
+
+  it('should pass the tool definition to a newly created element renderer', async () => {
+    const definition: AnyToolDefinition = { name: 'report', renderer: { elementTag: RENDERER_TAG } };
+    const el = await createElement(createToolCall(), definition);
+
+    expect(el.shadowRoot?.querySelector<TestToolRendererElement>(RENDERER_TAG)?.toolDefinition).toBe(definition);
+  });
+
+  it('should refresh the tool definition on the mounted element renderer when the definition changes', async () => {
+    const definition: AnyToolDefinition = { name: 'report', renderer: { elementTag: RENDERER_TAG } };
+    const el = await createElement(createToolCall(), definition);
+    const rendered = el.shadowRoot?.querySelector<TestToolRendererElement>(RENDERER_TAG);
+    const next: AnyToolDefinition = { name: 'report', description: 'Updated', renderer: { elementTag: RENDERER_TAG } };
+
+    el.toolDefinition = next;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBe(rendered);
+    expect(rendered?.toolDefinition).toBe(next);
   });
 
   it('should render the output of a render-function renderer with the tool call and context', async () => {

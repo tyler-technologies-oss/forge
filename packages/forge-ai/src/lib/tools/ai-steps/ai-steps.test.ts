@@ -91,7 +91,7 @@ describe('StepsToolElement', () => {
   });
 
   it('should stop reporting running once the tool call settles', async () => {
-    for (const status of ['complete', 'error'] as const) {
+    for (const status of ['complete', 'error', 'cancelled'] as const) {
       const { steps } = await renderTool(createToolCall({ status }));
       expect(steps.running, `status: ${status}`).toBe(false);
     }

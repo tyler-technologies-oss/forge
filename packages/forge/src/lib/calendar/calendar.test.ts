@@ -8,6 +8,8 @@ import { CALENDAR_CONSTANTS, CALENDAR_MENU_CONSTANTS, type ICalendarComponent, t
 
 import './calendar.js';
 
+const DAYS_IN_WEEK = 7;
+
 describe('Calendar', () => {
   it('should instatiate component with shadow dom', async () => {
     const harness = await createFixture();
@@ -32,6 +34,18 @@ describe('Calendar', () => {
   it('should contain the next button', async () => {
     const harness = await createFixture();
     expect(harness.nextButton).toBeTruthy();
+  });
+
+  it('should give every week row a grid cell for each day when the month has empty leading and trailing days', async () => {
+    const screen = render(html`<forge-calendar month="1" year="2026"></forge-calendar>`);
+    const harness = new CalendarHarness(screen.container.querySelector('forge-calendar') as ICalendarComponent);
+    await task();
+
+    const weekRows = Array.from(harness.dateGrid.querySelectorAll('[role="row"]')).filter(row => !row.querySelector('[role="columnheader"]'));
+    const cellCounts = weekRows.map(row => row.querySelectorAll(':scope > [role="gridcell"]').length);
+
+    expect(cellCounts.length).toBeGreaterThan(0);
+    expect(cellCounts.every(count => count === DAYS_IN_WEEK)).toBe(true);
   });
 
   it('should show this year by default', async () => {

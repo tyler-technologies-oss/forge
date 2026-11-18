@@ -543,6 +543,102 @@ describe('AiMessageThreadComponent', () => {
       expect(container(el).scrollTop).toBe(0);
     });
 
+    describe('scroll request', () => {
+      const requestScroll = (el: AiMessageThreadComponent): void => {
+        container(el)
+          .querySelector('.message-thread-content')!
+          .dispatchEvent(new CustomEvent('forge-ai-message-thread-scroll-request', { bubbles: true, composed: true }));
+      };
+
+      it('should scroll to the bottom when a scroll request arrives while pinned to the bottom', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+
+        requestScroll(el);
+
+        await vi.waitFor(() => {
+          expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
+        });
+      });
+
+      it('should scroll smoothly when a scroll request arrives while pinned to the bottom', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+        const scrollTo = vi.spyOn(c, 'scrollTo');
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(scrollTo).toHaveBeenCalledTimes(1);
+        expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
+      });
+
+      it('should cancel a pending scroll request when the thread disconnects', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+        const scrollTo = vi.spyOn(c, 'scrollTo');
+
+        requestScroll(el);
+        el.remove();
+        await frame();
+        await frame();
+
+        expect(scrollTo).not.toHaveBeenCalled();
+      });
+
+      it('should coalesce scroll requests that arrive in the same frame when auto-scroll is on', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const scrollToBottom = vi.spyOn(el, 'scrollToBottom');
+
+        requestScroll(el);
+        requestScroll(el);
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(scrollToBottom).toHaveBeenCalledTimes(1);
+      });
+
+      it('should not scroll when a scroll request arrives after the user scrolled up', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        container(el).scrollTop = 0;
+        container(el).dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(container(el).scrollTop).toBe(0);
+      });
+
+      it('should not scroll when a scroll request arrives while auto-scroll is off', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'off' });
+        await settle(el);
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(container(el).scrollTop).toBe(0);
+      });
+    });
+
     it('should update scroll state when content resizes', async () => {
       const el = await createElement(manyUserItems(40));
       await settle(el);
@@ -599,6 +695,34 @@ describe('AiMessageThreadComponent', () => {
       await el.updateComplete;
 
       expect(el.shadowRoot!.querySelector('forge-ai-user-message')!.textContent).toContain('Persist');
+    });
+  });
+});
+
+describe('AiMessageThreadComponent markdown streaming', () => {
+  const CONTENT = 'Cost<Budget Review Q3';
+
+  async function renderedText(item: MessageItem): Promise<string> {
+    const el = await createElement([item]);
+    return container(el).textContent?.replace(/\s+/g, ' ') ?? '';
+  }
+
+  [
+    ['a complete assistant message', { role: 'assistant', status: 'complete' }],
+    ['an error message', { role: 'assistant', status: 'error' }],
+    ['a user message', { role: 'user' }]
+  ].forEach(([label, overrides]) => {
+    it(`should keep text after a "<" in ${label}`, async () => {
+      expect(await renderedText(msgItem({ content: CONTENT, ...(overrides as Partial<ChatMessage>) }))).toContain(CONTENT);
+    });
+  });
+
+  ['streaming', 'pending'].forEach(status => {
+    it(`should repair partial markup in a ${status} assistant message`, async () => {
+      const rendered = await renderedText(msgItem({ role: 'assistant', content: CONTENT, status: status as ChatMessage['status'] }));
+
+      expect(rendered).toContain('Cost');
+      expect(rendered).not.toContain(CONTENT);
     });
   });
 });

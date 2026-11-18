@@ -278,7 +278,8 @@ $marker-size: 28px;
     background-color: #{forge-theme.variable(success-container)};
   }
 
-  &[data-status='error'] {
+  &[data-status='error'],
+  &[data-status='cancelled'] {
     color: #{forge-theme.variable(on-error-container)};
     background-color: #{forge-theme.variable(error-container)};
   }
