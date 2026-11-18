@@ -169,7 +169,7 @@ export class AiMessageThreadComponent extends LitElement {
     }
     this.#pendingScrollRequest = requestAnimationFrame(() => {
       this.#pendingScrollRequest = undefined;
-      this.scrollToBottom({ behavior: 'instant' });
+      this.scrollToBottom();
     });
   };
 

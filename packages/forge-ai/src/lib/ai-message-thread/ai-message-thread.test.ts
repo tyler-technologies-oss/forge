@@ -565,6 +565,40 @@ describe('AiMessageThreadComponent', () => {
         });
       });
 
+      it('should scroll smoothly when a scroll request arrives while pinned to the bottom', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+        const scrollTo = vi.spyOn(c, 'scrollTo');
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(scrollTo).toHaveBeenCalledTimes(1);
+        expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
+      });
+
+      it('should cancel a pending scroll request when the thread disconnects', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+        const scrollTo = vi.spyOn(c, 'scrollTo');
+
+        requestScroll(el);
+        el.remove();
+        await frame();
+        await frame();
+
+        expect(scrollTo).not.toHaveBeenCalled();
+      });
+
       it('should coalesce scroll requests that arrive in the same frame when auto-scroll is on', async () => {
         const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
         await settle(el);
