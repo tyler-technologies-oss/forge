@@ -27,7 +27,7 @@ The toolbar appears once the response is `complete` and contains text. Set `enab
 
 ### Tool calls
 
-Pass `tools` as a `Map` of tool name to tool definition. Consecutive tool calls are summarized in a [tool call indicator](?path=/docs/components-tools-reasoning-tool-call-indicator--docs), and a call whose definition has a `renderer` also renders its result with [`forge-ai-tool-call`](?path=/docs/components-tools-reasoning-tool-call--docs). Calls without a renderer only appear in the indicator. Set `hideIndicator: true` on a definition that has a `renderer` to keep its calls out of the indicator and render them directly. Until the renderer is shown, the thinking indicator stands in for it.
+Pass `tools` as a `Map` of tool name to tool definition. Consecutive tool calls are summarized in a [tool call indicator](?path=/docs/components-tools-reasoning-tool-call-indicator--docs), and a call whose definition has a `renderer` also renders its result with [`forge-ai-tool-call`](?path=/docs/components-tools-reasoning-tool-call--docs). Calls without a renderer only appear in the indicator. Set `hideIndicator: true` on a definition that has a `renderer` to keep its calls out of the indicator and render them directly. Until the renderer is shown, the thinking indicator stands in for it. If the call ends in `error`, the renderer stays shown, since no indicator row reports the failure.
 
 <Canvas of={AiAssistantResponseStories.WithToolCall} />
 

@@ -3,12 +3,16 @@ import type { AnyToolDefinition, ToolCall } from '../types/index.js';
 /**
  * Whether a tool call's renderer should currently be shown: once the call is complete,
  * or immediately (while still parsing/executing) if the tool opted into `renderOnStart`.
+ * A `hideIndicator` tool also keeps its renderer shown when the call errors, since no indicator row reports the failure.
  */
 export function shouldShowToolRenderer(toolCall: ToolCall, toolDefinition?: AnyToolDefinition): boolean {
   if (!toolDefinition?.renderer) {
     return false;
   }
   if (toolCall.status === 'complete') {
+    return true;
+  }
+  if (toolDefinition.hideIndicator && toolCall.status === 'error') {
     return true;
   }
   return !!toolDefinition.renderOnStart && (toolCall.status === 'parsing' || toolCall.status === 'executing' || toolCall.status === 'cancelled');
