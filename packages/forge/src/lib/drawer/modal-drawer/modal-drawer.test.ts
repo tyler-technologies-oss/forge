@@ -136,6 +136,20 @@ describe('Modal Drawer', () => {
 
     expect(harness.isInert).toBe(true);
   });
+
+  it('should use the default elevation as the shadow when open', async () => {
+    const harness = await createFixture({ open: true });
+
+    expect(harness.boxShadow).toContain('rgba(0, 0, 0, 0.2) 0px 11px 15px -7px');
+  });
+
+  it('should use the elevation property as the shadow when open', async () => {
+    const harness = await createFixture({ open: true });
+
+    harness.modalDrawerEl.style.setProperty('--forge-modal-drawer-elevation', '0 0 0 1px rgb(1, 2, 3)');
+
+    expect(harness.boxShadow).toBe('rgb(1, 2, 3) 0px 0px 0px 1px');
+  });
 });
 
 class DrawerHarness {
@@ -157,6 +171,10 @@ class DrawerHarness {
     return new Promise(resolve => {
       this._rootElement.addEventListener('transitionend', () => resolve(), { once: true });
     });
+  }
+
+  public get boxShadow(): string {
+    return getComputedStyle(this._rootElement).boxShadow;
   }
 
   public get isInert(): boolean {

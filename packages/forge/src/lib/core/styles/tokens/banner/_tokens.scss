@@ -3,15 +3,23 @@
 @use '@tylertech/forge-tokens/sass/spacing';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/shape';
 @use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(banner, background, theme.variable(info-container)),
   color: utils.module-val(banner, color, theme.variable(text-high)),
   icon-color: utils.module-val(banner, icon-color, theme.variable(on-info-container)),
+  shape: utils.module-val(banner, shape, 0),
+  outlined-background: utils.module-val(banner, outlined-background, theme.variable(info-container-minimum)),
+  outlined-border-width: utils.module-val(banner, outlined-border-width, border.variable(thin)),
+  outlined-border-color: utils.module-val(banner, outlined-border-color, theme.variable(info-container)),
+  outlined-shape: utils.module-val(banner, outlined-shape, shape.variable(medium)),
   gap: utils.module-val(banner, gap, spacing.variable(small)),
   padding-inline: utils.module-val(banner, padding-inline, spacing.variable(large)),
   padding-block: utils.module-val(banner, padding-block, spacing.variable(small)),
+  min-height: utils.module-val(banner, min-height, 0),
+  dismissible-padding-inline-end: utils.module-ref(banner, dismissible-padding-inline-end, padding-inline),
   transition-duration: utils.module-val(banner, transition-duration, animation.variable(duration-short4)),
   transition-easing: utils.module-val(banner, transition-easing, animation.variable(easing-standard))
 ) !default;

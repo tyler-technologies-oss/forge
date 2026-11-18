@@ -1,6 +1,7 @@
 @use './core' as *;
 @use './animations';
 @use '../button';
+@use '../focus-indicator';
 @use '../icon-button';
 @use '@tylertech/forge-tokens/sass/theme';
 @use '../utils/mixins-media' as media;
@@ -30,6 +31,11 @@
 
   .surface {
     @include surface;
+    @include focus-indicator.provide-theme(
+      (
+        color: #{token(focus-indicator-color)}
+      )
+    );
   }
 
   .message {
@@ -39,7 +45,8 @@
   forge-button.action-button {
     @include button.provide-theme(
       (
-        primary-color: #{token(action-color)}
+        primary-color: #{token(action-color)},
+        text-color: #{token(action-color)}
       )
     );
   }

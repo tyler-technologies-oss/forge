@@ -1092,7 +1092,23 @@ describe('Dialog', () => {
     });
   });
 
+  describe('elevation', () => {
+    it('should use the elevation as the shadow when modal', async () => {
+      const harness = await createFixture({ open: true });
+      harness.element.style.setProperty('--forge-dialog-elevation', '0 0 0 1px rgb(1, 2, 3)');
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toBe('rgb(1, 2, 3) 0px 0px 0px 1px');
+    });
+  });
+
   describe('nonmodal', () => {
+    it('should use the nonmodal elevation as the shadow', async () => {
+      const harness = await createFixture({ open: true, mode: 'nonmodal' });
+      harness.element.style.setProperty('--forge-dialog-nonmodal-elevation', '0 0 0 1px rgb(1, 2, 3)');
+
+      expect(getComputedStyle(harness.surfaceElement).boxShadow).toBe('rgb(1, 2, 3) 0px 0px 0px 1px');
+    });
+
     it('should not show backdrop', async () => {
       const harness = await createFixture({ open: true, mode: 'nonmodal' });
 

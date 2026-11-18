@@ -146,6 +146,8 @@ declare global {
  * @slot previous-year-button-text - Text to display in the previous year button's tooltip.
  * @slot next-years-button-text - Text to display in the next years button's tooltip.
  * @slot previous-years-button-text - Text to display in the previous years button's tooltip.
+ *
+ * @cssproperty --forge-calendar-theme-today-color - The text and border color of the date that represents today.
  */
 @customElement({
   name: CALENDAR_CONSTANTS.elementName,

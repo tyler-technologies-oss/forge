@@ -1,0 +1,7 @@
+@use './theme/theme-radix';
+
+:root {
+  @include theme-radix.theme-properties;
+}
+
+@include theme-radix.scoped-properties;

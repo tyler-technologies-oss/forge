@@ -75,6 +75,9 @@ export class TextFieldCore extends BaseFieldCore<ITextFieldAdapter> implements I
       case 'placeholder':
         this._tryFloatLabel();
         break;
+      case 'readonly':
+        this._adapter.setFieldProperty('readonly', value !== null);
+        break;
     }
   }
 

@@ -27,7 +27,40 @@ const meta = {
     ...generateCustomElementArgTypes({
       tagName: component,
       controls: {
-        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS, 'info-primary', 'info-secondary'] }
+        theme: { control: 'select', options: ['default', ...GLOBAL_THEME_OPTIONS, 'info-primary', 'info-secondary', 'critical'] },
+        variant: { control: 'select', options: ['tonal', 'outlined'] },
+        color: {
+          control: 'select',
+          options: [
+            undefined,
+            'gray',
+            'gold',
+            'bronze',
+            'brown',
+            'yellow',
+            'amber',
+            'orange',
+            'tomato',
+            'red',
+            'ruby',
+            'crimson',
+            'pink',
+            'plum',
+            'purple',
+            'violet',
+            'iris',
+            'indigo',
+            'blue',
+            'cyan',
+            'teal',
+            'jade',
+            'green',
+            'grass',
+            'lime',
+            'mint',
+            'sky'
+          ]
+        }
       }
     })
   },
@@ -35,6 +68,7 @@ const meta = {
     text: 'Status',
     dot: false,
     theme: 'default',
+    variant: 'tonal',
     strong: false,
     hide: false
   }
@@ -79,6 +113,59 @@ export const Strong: Story = {
       <forge-badge strong theme="warning">Warning</forge-badge>
       <forge-badge strong theme="info">Info</forge-badge>
       <forge-badge strong theme="info-secondary">Info (secondary)</forge-badge>
+    </div>
+  `
+};
+
+export const Outlined: Story = {
+  ...standaloneStoryParams,
+  args: {
+    variant: 'outlined'
+  },
+  render: () => html`
+    <div style="display: flex; gap: 8px;">
+      <forge-badge variant="outlined" theme="default">Default</forge-badge>
+      <forge-badge variant="outlined" theme="success">Success</forge-badge>
+      <forge-badge variant="outlined" theme="error">Error</forge-badge>
+      <forge-badge variant="outlined" theme="warning">Warning</forge-badge>
+      <forge-badge variant="outlined" theme="info">Info</forge-badge>
+      <forge-badge variant="outlined" theme="critical">Critical</forge-badge>
+    </div>
+  `
+};
+
+export const Colors: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+      ${[
+        'gray',
+        'gold',
+        'bronze',
+        'brown',
+        'yellow',
+        'amber',
+        'orange',
+        'tomato',
+        'red',
+        'ruby',
+        'crimson',
+        'pink',
+        'plum',
+        'purple',
+        'violet',
+        'iris',
+        'indigo',
+        'blue',
+        'cyan',
+        'teal',
+        'jade',
+        'green',
+        'grass',
+        'lime',
+        'mint',
+        'sky'
+      ].map(color => html`<forge-badge color=${color}>${color}</forge-badge>`)}
     </div>
   `
 };

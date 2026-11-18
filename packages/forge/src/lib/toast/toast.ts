@@ -90,6 +90,7 @@ declare global {
  * @cssproperty --forge-toast-shape - The shape of the toast.
  * @cssproperty --forge-toast-elevation - The elevation of the toast.
  * @cssproperty --forge-toast-action-color - The text color of the action button.
+ * @cssproperty --forge-toast-focus-indicator-color - The color of the focus indicators within the toast. Defaults to the primary theme.
  * @cssproperty --forge-toast-min-width - The minimum width of the toast.
  * @cssproperty --forge-toast-max-width - The maximum width of the toast.
  * @cssproperty --forge-toast-min-height - The minimum height of the toast.

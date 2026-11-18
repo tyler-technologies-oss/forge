@@ -26,6 +26,13 @@
   padding-block: #{token(padding-block)};
 }
 
+// The outlined border is an inset ring so tonal and outlined messages are the same size
+@mixin outlined {
+  @include override(background, outlined-background);
+
+  box-shadow: inset 0 0 0 #{token(outlined-border-width)} #{token(outlined-border-color)};
+}
+
 @mixin container {
   display: flex;
   flex-direction: column;

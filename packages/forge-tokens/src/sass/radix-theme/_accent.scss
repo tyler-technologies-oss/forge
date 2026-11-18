@@ -1,0 +1,143 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+@use '../config';
+@use '../utils';
+@use '../tokens/radix-color-palette' as palette-light;
+@use '../tokens/radix-color-palette-dark' as palette-dark;
+
+///
+/// The Radix accent hues that components can use for categorical (non-semantic) color, such as `color="plum"`.
+///
+$accent-hues: (
+  'gray',
+  'gold',
+  'bronze',
+  'brown',
+  'yellow',
+  'amber',
+  'orange',
+  'tomato',
+  'red',
+  'ruby',
+  'crimson',
+  'pink',
+  'plum',
+  'purple',
+  'violet',
+  'iris',
+  'indigo',
+  'blue',
+  'cyan',
+  'teal',
+  'jade',
+  'green',
+  'grass',
+  'lime',
+  'mint',
+  'sky'
+);
+
+///
+/// The palette steps emitted for each accent hue: subtle and default backgrounds, a subtle border, low and high contrast
+/// text, a solid fill, and the text color on the solid fill.
+///
+$accent-steps: (a2, a3, a6, a11, a12, 9, solid, contrast);
+
+// Hues whose step 9 doesn't reach WCAG AA (4.5:1) with their contrast color, and the step `solid` uses instead. Every other
+// hue keeps Radix's step 9 so hues stay consistent from step to step. In the dark theme, step 8 is darker than step 9.
+$_solid-shifts: (
+  light: (
+    step: 11,
+    hues: (
+      'gray',
+      'gold',
+      'bronze',
+      'brown',
+      'orange',
+      'tomato',
+      'red',
+      'ruby',
+      'crimson',
+      'pink',
+      'blue',
+      'cyan',
+      'teal',
+      'jade',
+      'green',
+      'grass'
+    )
+  ),
+  dark: (
+    step: 8,
+    hues: (
+      'gold',
+      'bronze',
+      'brown',
+      'orange',
+      'tomato',
+      'red',
+      'ruby',
+      'crimson',
+      'pink',
+      'blue',
+      'cyan',
+      'teal',
+      'jade',
+      'green',
+      'grass'
+    )
+  )
+);
+
+$_light: meta.module-variables(palette-light);
+$_dark: meta.module-variables(palette-dark);
+
+@function _value($palette, $hue, $step, $mode: light) {
+  @if $step == solid {
+    $shift: map.get($_solid-shifts, $mode);
+    @if list.index(map.get($shift, hues), $hue) {
+      $step: map.get($shift, step);
+    } @else {
+      $step: 9;
+    }
+  }
+  @return map.get($palette, '#{$hue}-#{$step}');
+}
+
+///
+/// Gets a CSS custom property reference for an accent hue step, with the light palette value as the fallback.
+///
+@function color-variable($hue, $step, $prefix: config.$prefix) {
+  @if not list.index($accent-hues, $hue) {
+    @error 'Invalid accent hue: #{$hue}';
+  }
+  @if not list.index($accent-steps, $step) {
+    @error 'Invalid accent step: #{$step}';
+  }
+  @return var(--#{$prefix}-color-#{$hue}-#{$step}, #{_value($_light, $hue, $step)});
+}
+
+@mixin _accent-properties($palette, $mode) {
+  @each $hue in $accent-hues {
+    @each $step in $accent-steps {
+      // The dark palette omits most contrast colors because Radix uses the same contrast color in both themes
+      $value: _value($palette, $hue, $step, $mode) or _value($_light, $hue, $step);
+      @include utils.declare-var(color, '#{$hue}-#{$step}', $value);
+    }
+  }
+}
+
+///
+/// Emits the light theme accent color custom properties, such as `--forge-color-plum-a3`.
+///
+@mixin accent-properties {
+  @include _accent-properties($_light, light);
+}
+
+///
+/// Emits the dark theme accent color custom properties.
+///
+@mixin accent-properties-dark {
+  @include _accent-properties($_dark, dark);
+}

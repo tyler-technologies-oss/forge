@@ -18,10 +18,21 @@
   transition-duration: #{token(transition-duration)};
   transition-timing-function: #{token(transition-easing)};
 
+  min-height: #{token(min-height)};
+  border-radius: #{token(shape)};
+
   background: #{token(background)};
   color: #{token(color)};
 
   opacity: 1;
+}
+
+// The outlined border is an inset ring so tonal and outlined banners are the same size
+@mixin outlined {
+  @include override(background, outlined-background);
+  @include override(shape, outlined-shape);
+
+  box-shadow: inset 0 0 0 #{token(outlined-border-width)} #{token(outlined-border-color)};
 }
 
 @mixin inner {
@@ -50,5 +61,10 @@
 
 @mixin dismissed {
   grid-template-rows: 0fr;
+  min-height: 0;
   opacity: 0;
+}
+
+@mixin dismissible {
+  padding-inline-end: #{token(dismissible-padding-inline-end)};
 }

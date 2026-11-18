@@ -18,7 +18,10 @@ $tokens: (
   gap: utils.module-val(inline-message, gap, spacing.variable(small)),
   icon-gap: utils.module-ref(inline-message, icon-gap, gap),
   content-gap: utils.module-ref(inline-message, content-gap, gap),
-  icon-color: utils.module-val(inline-message, icon-color, theme.variable(on-info-container-low))
+  icon-color: utils.module-val(inline-message, icon-color, theme.variable(on-info-container-low)),
+  outlined-background: utils.module-val(inline-message, outlined-background, theme.variable(info-container-minimum)),
+  outlined-border-width: utils.module-val(inline-message, outlined-border-width, border.variable(thin)),
+  outlined-border-color: utils.module-val(inline-message, outlined-border-color, theme.variable(info-container))
 ) !default;
 
 @function get($key) {

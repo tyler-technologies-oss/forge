@@ -27,6 +27,8 @@ The `@tylertech/forge` package follows the following format:
   - `forge-core.css`: The optional Forge core stylesheet. Typically useful when using the `<forge-scaffold>` for your outer page layout.
   - `forge-tokens.css`: The optional Forge tokens stylesheet. Contains all design tokens used in the Forge components so your application has access to them as well.
   - `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
+  - `forge-radix.css`: The optional Radix theme (must be loaded after `forge.css`). See [Theming](?path=/docs/getting-started-theming--docs#radix-theme-opt-in).
+  - `forge-radix-dark.css`: The Radix dark theme. Load it instead of `forge-dark.css`.
   - `forge.css`: The pre-built Forge global stylesheet. Contains all global stylesheets. You should prefer to load individual stylesheets instead of this global stylesheet in production.
 - `esm/`: Contains the unbundled ESM JavaScript sources as the main entry to the package (uses bare module specifiers).
 - `sass/`: Contains all Sass stylesheets as a copy directly from the library. This allows you to utilize the same Sass utilities that Forge does within your own application and/or library.

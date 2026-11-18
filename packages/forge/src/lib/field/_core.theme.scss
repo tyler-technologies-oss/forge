@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/theme';
+@use '../core/styles/tokens/field/tokens';
 @use './token-utils' as *;
 
 $tonal-backgrounds: (
@@ -34,7 +35,7 @@ $filled-backgrounds: (
   info: theme.variable(info-container-minimum)
 );
 $outline-colors: (
-  default: theme.variable(outline-low),
+  default: token(default-outline-color),
   primary: theme.variable(primary),
   secondary: theme.variable(on-secondary-container),
   tertiary: theme.variable(tertiary),
@@ -44,7 +45,7 @@ $outline-colors: (
   info: theme.variable(info)
 );
 $outline-colors-hover: (
-  default: theme.variable(outline-high),
+  default: token(default-outline-color-hover),
   primary: theme.variable(on-primary-container),
   secondary: theme.variable(on-secondary-container),
   tertiary: theme.variable(on-tertiary-container),
@@ -164,4 +165,17 @@ $elevations: (
 
 @mixin invalid-support-text-color {
   color: #{theme.variable(error)};
+}
+
+@mixin readonly-outline($theme) {
+  #{declare(outline-color)}: var(--forge-field-readonly-outline-color, var(--forge-field-outline-color, #{map.get($outline-colors, $theme)}));
+  #{declare(outline-color-hover)}: var(--forge-field-readonly-outline-color, var(--forge-field-outline-color-hover, #{map.get($outline-colors-hover, $theme)}));
+}
+
+@mixin readonly-background($variant) {
+  @if $variant == outlined {
+    #{declare(background)}: var(--forge-field-readonly-background, #{map.get(tokens.$tokens, background)});
+  } @else {
+    #{declare(background)}: var(--forge-field-readonly-background, #{token(filled-background, custom)});
+  }
 }

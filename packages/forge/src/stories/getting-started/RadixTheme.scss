@@ -1,0 +1,37 @@
+@use '@tylertech/forge-tokens/sass/theme';
+@use '../../lib/theme/theme-dark';
+@use '../../lib/theme/theme-radix';
+
+.theme-panel {
+  padding: 24px;
+  border-radius: 8px;
+  background: var(--forge-theme-surface);
+  color: var(--forge-theme-text-high);
+  outline: 1px solid var(--forge-theme-outline);
+}
+
+.theme-panel--default-light {
+  @include theme.properties;
+}
+
+.theme-panel--default-dark {
+  @include theme-dark.theme-properties;
+}
+
+.theme-panel--radix-light {
+  @include theme-radix.theme-properties;
+}
+
+.theme-panel--radix-dark {
+  @include theme-radix.theme-properties-dark;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.theme-panel h3 {
+  margin: 0 0 16px;
+}
