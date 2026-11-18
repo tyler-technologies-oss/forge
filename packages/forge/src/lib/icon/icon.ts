@@ -129,6 +129,15 @@ export class IconComponent extends BaseLitElement implements IIconComponent {
   #visibilityObserver?: IntersectionObserver;
   #registrationListener?: () => void;
 
+  public connectedCallback(): void {
+    super.connectedCallback();
+
+    // Disconnecting stops the wait for the icon's registration, so pick it up again when reconnected
+    if (this.hasUpdated) {
+      this.#safeApplyIcon();
+    }
+  }
+
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#visibilityObserver?.disconnect();

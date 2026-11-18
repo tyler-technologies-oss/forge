@@ -312,6 +312,23 @@ describe('Icon', () => {
       IconRegistry.remove(tylIconFace.name);
     });
 
+    it('should render once registered after being moved while waiting for registration', async () => {
+      const screen = render(html`<div><forge-icon name=${tylIconFace.name}></forge-icon></div>`);
+      const container = screen.container.firstElementChild as HTMLElement;
+      const el = container.querySelector('forge-icon') as IconComponent;
+      await el.updateComplete;
+      // Let the icon start waiting for the registration
+      await task();
+
+      el.remove();
+      IconRegistry.define(tylIconFace);
+      container.append(el);
+      await waitForIconRender(el);
+
+      expect(el.shadowRoot?.querySelector('svg')).toBeTruthy();
+      IconRegistry.remove(tylIconFace.name);
+    });
+
     it('should set icon via src property', async () => {
       const screen = render(html`<forge-icon src=${tylIconFace.data}></forge-icon>`);
       const el = screen.container.querySelector('forge-icon') as IconComponent;
