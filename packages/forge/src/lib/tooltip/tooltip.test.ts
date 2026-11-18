@@ -845,6 +845,7 @@ describe('Tooltip', () => {
       await userEvent.hover(secondAnchor);
       expect(second.open).toBe(true);
       expect(getAnimationName(second)).toBe('none');
+      await expect(second).toBeAccessible();
     });
 
     it('should apply the delay again after the open tooltip has closed', async () => {
