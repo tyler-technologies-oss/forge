@@ -1,5 +1,23 @@
 # @tylertech/forge-ai
 
+## 0.16.1
+
+### Features
+
+- 3a3f161: **tool-call**: add `cancelled` tool call status for calls that end without a result
+
+  Widening `ToolCall['status']` can break exhaustive status switches in consumer code.
+- 3a3f161: **tool-call**: pass `toolDefinition` to element tool renderers
+- 3a3f161: **assistant-response**: add `rendererOnly` to tool definitions so a tool call shows only its renderer, with no tool call indicator row; the renderer stays shown when the call errors or is cancelled
+
+### Bug Fixes
+
+- a75d0da: **markdown**: add `setTrustedImageOrigin()` for bundled consumers, enforce sanitizer forbid lists inside hooks, leave anchors without `href` inert, and keep `aria-*`/`role` attributes
+- 3a3f161: **message-thread**: keep the thread pinned to the bottom when a tool renderer requests a scroll
+- 57092e5: **tooltip**: keep the anchor's hover state while the tooltip animates in
+- 57092e5: **tooltip**: open a hovered anchor's tooltip immediately, without the delay or slide-in animation, while another tooltip is open
+- 57092e5: **tooltip**: skip the slide animation and keep the fade when the user prefers reduced motion
+
 ## 0.16.0
 
 ### Breaking Changes
