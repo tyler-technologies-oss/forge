@@ -8,6 +8,7 @@ import type { ForgeAiResponseMessageToolbarFeedbackEventData } from '../ai-respo
 
 import '../ai-response-message-toolbar/index.js';
 import '../ai-tool-call/ai-tool-call.js';
+import { shouldShowToolRenderer } from '../ai-tool-call/utils.js';
 import '../ai-tool-call-indicator/index.js';
 import '../ai-thinking-indicator/index.js';
 
@@ -133,6 +134,9 @@ export class AiAssistantResponseComponent extends LitElement {
       if (child.type === 'text') {
         flushIndicator();
         results.push(this.#renderTextChunk(child));
+      } else if (this.tools?.get(child.data.name)?.hideIndicator) {
+        flushIndicator();
+        results.push(this.#renderToolCall(child.data));
       } else {
         toolBuffer.push(child.data);
       }
@@ -216,6 +220,10 @@ export class AiAssistantResponseComponent extends LitElement {
     // truly settled tool call should let the indicator reappear to signal a gap before the next step.
     const hasActiveToolCall = this.response.children.some(child => {
       if (child.type !== 'toolCall') {
+        return false;
+      }
+      const definition = this.tools?.get(child.data.name);
+      if (definition?.hideIndicator && shouldShowToolRenderer(child.data, definition)) {
         return false;
       }
       return child.data.status === 'parsing' || child.data.status === 'executing' || child.data.status === 'pending';

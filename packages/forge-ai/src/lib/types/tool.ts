@@ -179,6 +179,11 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
   renderer?: ToolRenderer;
   /** If true, renderer shows immediately on tool call start (default: false). */
   renderOnStart?: boolean;
+  /**
+   * If true, calls to this tool never appear in the tool call indicator and are rendered directly by `renderer`.
+   * While the renderer is shown, the call does not keep the thinking indicator hidden. Requires `renderer`.
+   */
+  hideIndicator?: boolean;
   /** Canvas behavior for hosts that provide a canvas panel. Requires `renderer`. */
   canvas?: ToolCanvasConfig<TArgs, TResult>;
   /** Called when tool call starts (before args stream). */
