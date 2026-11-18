@@ -1,3 +1,4 @@
+@use '@tylertech/forge-tokens/sass/typography';
 @use './styles/content';
 @use './styles/options';
 @use './styles/flex';
@@ -14,4 +15,12 @@ body.ready {
 
 * {
   box-sizing: border-box;
+}
+
+#page-app-bar {
+  --forge-app-bar-logo-font-size: 32px;
+
+  &::part(title) {
+    @include typography.style(heading2);
+  }
 }
