@@ -238,6 +238,13 @@ describe('AiAssistantResponseComponent', () => {
       expect(calls[0].toolCall.id).toBe('a');
     });
 
+    it('should fall back to the tool call indicator when a hideIndicator tool has no renderer', async () => {
+      const tools = toolsMap({ name: 'widget', hideIndicator: true });
+      const el = await createElement(response({ children: [tool({ name: 'widget' })] }), { tools });
+
+      expect(el.shadowRoot!.querySelector('forge-ai-tool-call-indicator')).toBeTruthy();
+    });
+
     it('should group neighbouring tool calls in separate indicators when a hideIndicator call sits between them', async () => {
       const tools = toolsMap({ name: 'widget', hideIndicator: true, renderer: { elementTag: 'x-widget' } }, { name: 'search' });
       const el = await createElement(
@@ -425,18 +432,32 @@ describe('AiAssistantResponseComponent', () => {
       expect(indicator(el)).toBeNull();
     });
 
-    it('should hide while a hideIndicator tool call is executing and its renderer is not shown', async () => {
+    it('should show while a hideIndicator tool call is executing and its renderer is not shown', async () => {
       const tools = toolsMap({ name: 'widget', hideIndicator: true, renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
+
+      expect(indicator(el)).toBeTruthy();
+    });
+
+    it('should hide while a hideIndicator tool call is executing and its renderer is shown', async () => {
+      const tools = toolsMap({ name: 'widget', hideIndicator: true, renderOnStart: true, renderer: { elementTag: 'x-widget' } });
       const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
 
       expect(indicator(el)).toBeNull();
     });
 
-    it('should show while a hideIndicator tool call is executing and its renderer is shown', async () => {
-      const tools = toolsMap({ name: 'widget', hideIndicator: true, renderOnStart: true, renderer: { elementTag: 'x-widget' } });
+    it('should hide while a flagged tool call without a renderer is executing', async () => {
+      const tools = toolsMap({ name: 'widget', hideIndicator: true });
       const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
 
-      expect(indicator(el)).toBeTruthy();
+      expect(indicator(el)).toBeNull();
+    });
+
+    it('should hide while an ordinary tool call with a renderer is executing', async () => {
+      const tools = toolsMap({ name: 'widget', renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
+
+      expect(indicator(el)).toBeNull();
     });
 
     it('should show once all tool calls are settled', async () => {

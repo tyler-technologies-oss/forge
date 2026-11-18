@@ -134,7 +134,7 @@ export class AiAssistantResponseComponent extends LitElement {
       if (child.type === 'text') {
         flushIndicator();
         results.push(this.#renderTextChunk(child));
-      } else if (this.tools?.get(child.data.name)?.hideIndicator) {
+      } else if (this.#rendersWithoutIndicator(child.data)) {
         flushIndicator();
         results.push(this.#renderToolCall(child.data));
       } else {
@@ -144,6 +144,11 @@ export class AiAssistantResponseComponent extends LitElement {
 
     flushIndicator();
     return results;
+  }
+
+  #rendersWithoutIndicator(toolCall: ToolCall): boolean {
+    const definition = this.tools?.get(toolCall.name);
+    return !!definition?.hideIndicator && !!definition.renderer;
   }
 
   #handleToolbarAction(event: CustomEvent<{ action: string }>): void {
@@ -218,12 +223,13 @@ export class AiAssistantResponseComponent extends LitElement {
     // This is intentionally based on the tool call's real status, not on whether its renderer
     // has mounted: a renderOnStart tool awaiting user input should keep this hidden, while a
     // truly settled tool call should let the indicator reappear to signal a gap before the next step.
+    // A hideIndicator call with no renderer shown yet has no signal of its own, so it does not count.
     const hasActiveToolCall = this.response.children.some(child => {
       if (child.type !== 'toolCall') {
         return false;
       }
       const definition = this.tools?.get(child.data.name);
-      if (definition?.hideIndicator && shouldShowToolRenderer(child.data, definition)) {
+      if (definition?.hideIndicator && definition.renderer && !shouldShowToolRenderer(child.data, definition)) {
         return false;
       }
       return child.data.status === 'parsing' || child.data.status === 'executing' || child.data.status === 'pending';

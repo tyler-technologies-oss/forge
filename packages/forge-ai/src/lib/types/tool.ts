@@ -183,7 +183,9 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
   renderOnStart?: boolean;
   /**
    * If true, calls to this tool never appear in the tool call indicator and are rendered directly by `renderer`.
-   * While the renderer is shown, the call does not keep the thinking indicator hidden. Requires `renderer`.
+   * Until the renderer is shown, the thinking indicator is displayed instead; once it is shown, the renderer
+   * itself signals activity and the thinking indicator stays hidden. Requires `renderer`: a flagged tool
+   * without one falls back to the normal tool call indicator.
    */
   hideIndicator?: boolean;
   /** Canvas behavior for hosts that provide a canvas panel. Requires `renderer`. */
