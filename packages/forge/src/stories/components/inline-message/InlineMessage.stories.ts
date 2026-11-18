@@ -26,7 +26,10 @@ const meta = {
   argTypes: {
     ...generateCustomElementArgTypes({
       tagName: component,
-      controls: { theme: { control: { type: 'select' }, options: GLOBAL_THEME_OPTIONS } }
+      controls: {
+        theme: { control: { type: 'select' }, options: ['default', ...GLOBAL_THEME_OPTIONS, 'critical', 'info-secondary'] },
+        variant: { control: { type: 'select' }, options: ['tonal', 'outlined'] }
+      }
     })
   },
   args: {
@@ -78,6 +81,22 @@ export const Themed: Story = {
         <forge-icon slot="icon" name="info"></forge-icon>
         <p>Qui nulla anim sunt eiusmod eiusmod id esse veniam proident ea adipisicing ad exercitation.</p>
       </forge-inline-message>
+    </div>
+  `
+};
+
+export const Outlined: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <div style="display: flex; gap: 16px; flex-direction: column">
+      ${['default', 'info', 'success', 'warning', 'error'].map(
+        theme => html`
+          <forge-inline-message variant="outlined" theme=${theme}>
+            <forge-icon slot="icon" name="info"></forge-icon>
+            <p>Qui nulla anim sunt eiusmod eiusmod id esse veniam proident ea adipisicing ad exercitation.</p>
+          </forge-inline-message>
+        `
+      )}
     </div>
   `
 };

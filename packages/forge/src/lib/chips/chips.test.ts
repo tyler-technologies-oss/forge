@@ -237,6 +237,55 @@ describe('Chips', () => {
       expect(el.shadowRoot).not.toBeNull();
     });
 
+    it('should not tint the border by default', async () => {
+      const screen = render(html`<forge-chip>Test</forge-chip>`);
+      const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      const chip = el.shadowRoot?.querySelector('.forge-chip') as HTMLElement;
+
+      expect(getComputedStyle(chip).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+    });
+
+    it('should draw the border color over the border tint', async () => {
+      const screen = render(html`<forge-chip>Test</forge-chip>`);
+      const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      const chip = el.shadowRoot?.querySelector('.forge-chip') as HTMLElement;
+
+      el.style.setProperty('--forge-chip-border-color', 'rgb(1, 2, 3)');
+
+      expect(getComputedStyle(chip).outlineColor).toBe('rgb(1, 2, 3)');
+      expect(getComputedStyle(chip).outlineWidth).toBe(getComputedStyle(chip).borderTopWidth);
+      expect(getComputedStyle(chip).outlineOffset).toBe(`-${getComputedStyle(chip).borderTopWidth}`);
+    });
+
+    it('should use the border tint as the border color when set', async () => {
+      const screen = render(html`<forge-chip>Test</forge-chip>`);
+      const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      const chip = el.shadowRoot?.querySelector('.forge-chip') as HTMLElement;
+
+      el.style.setProperty('--forge-chip-border-tint', 'rgb(4, 5, 6)');
+
+      expect(getComputedStyle(chip).borderTopColor).toBe('rgb(4, 5, 6)');
+    });
+
+    it('should use the invalid border tint when invalid', async () => {
+      const screen = render(html`<forge-chip invalid>Test</forge-chip>`);
+      const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      const chip = el.shadowRoot?.querySelector('.forge-chip') as HTMLElement;
+
+      el.style.setProperty('--forge-chip-border-tint', 'rgb(4, 5, 6)');
+      el.style.setProperty('--forge-chip-invalid-border-tint', 'rgb(7, 8, 9)');
+
+      expect(getComputedStyle(chip).borderTopColor).toBe('rgb(7, 8, 9)');
+    });
+
+    it('should not use the border tint for field chips', async () => {
+      const screen = render(html`<forge-chip type="field">Test</forge-chip>`);
+      const el = screen.container.querySelector('forge-chip') as IChipComponent;
+      const chip = el.shadowRoot?.querySelector('.forge-chip') as HTMLElement;
+
+      expect(getComputedStyle(chip).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+    });
+
     it('should be accessible', async () => {
       const screen = render(html`<forge-chip>Test</forge-chip>`);
       const el = screen.container.querySelector('forge-chip') as IChipComponent;

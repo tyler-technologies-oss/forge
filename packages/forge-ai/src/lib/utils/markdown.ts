@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import DOMPurify, { type Config, type UponSanitizeAttributeHookEvent } from 'dompurify';
+import DOMPurify, { type Config, type UponSanitizeAttributeHookEvent, type UponSanitizeElementHookEvent } from 'dompurify';
 import remend, { type RemendOptions } from 'remend';
 
 export interface RenderMarkdownOptions {
@@ -51,7 +51,7 @@ const FORBID_TAGS = [
 
 /**
  * Rendered content is model output and therefore attacker-influenced. Only images from the trusted
- * origin (see `TRUSTED_ORIGIN`) or `data:image/*` load inline; any other source becomes a link the
+ * origin (see `setTrustedImageOrigin`) or `data:image/*` load inline; any other source becomes a link the
  * user must click. Fetching elements and attributes are forbidden; `<img>`, `<video>`, `<audio>`
  * and CSS-parsed attributes are handled by the hooks below.
  */
@@ -98,9 +98,12 @@ const URL_ATTRS = new Set(['href', 'xlink:href', 'src', 'alt', 'title']);
 // Checked on HTML elements too, so the guard holds even if one is later honoured there.
 const CSS_PRESENTATION_ATTRS = new Set(['mask', 'fill', 'stroke', 'filter', 'clip-path', 'cursor', 'marker-start', 'marker-mid', 'marker-end']);
 
-function scriptOrigin(): string | undefined {
+const SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+const ACCESSIBILITY_ATTR = /^(aria-.+|role)$/;
+
+function httpOrigin(value: string): string | undefined {
   try {
-    const url = new URL(import.meta.url);
+    const url = new URL(value);
     return /^https?:$/.test(url.protocol) ? url.origin : undefined;
   } catch {
     return undefined;
@@ -114,17 +117,34 @@ function scriptOrigin(): string | undefined {
  * request elsewhere). Falls back to the page origin when the module URL is not http(s), e.g. after
  * a bundler rewrites it.
  */
-const TRUSTED_ORIGIN = scriptOrigin() ?? self.origin;
+export function resolveTrustedOrigin({ moduleUrl, pageOrigin }: { moduleUrl: string; pageOrigin: string }): string {
+  return httpOrigin(moduleUrl) ?? pageOrigin;
+}
+
+let trustedOrigin = resolveTrustedOrigin({ moduleUrl: import.meta.url, pageOrigin: self.origin });
 
 /**
- * Where relative sources resolve when the trusted origin is not the page's own: a relative path in
- * the output then means the embedding service, so it must not resolve against the host page.
+ * Sets the origin images may load from inline, overriding the one forge-ai was served from. Needed
+ * when forge-ai is bundled into the host page's own JavaScript, where the module URL is the host
+ * page rather than the service that owns the content. Call it before rendering; accepts a URL
+ * and uses its origin. A non-http(s) URL trusts no origin.
  */
-const EMBEDDED_BASE = TRUSTED_ORIGIN === self.origin ? undefined : TRUSTED_ORIGIN;
+export function setTrustedImageOrigin(url: string): void {
+  trustedOrigin = httpOrigin(url) ?? OPAQUE_ORIGIN;
+}
+
+/**
+ * Where relative sources and links resolve when the trusted origin is not the page's own: a
+ * relative path in the output then means the embedding service, so it must not resolve against
+ * the host page.
+ */
+function embeddedBase(): string | undefined {
+  return trustedOrigin === self.origin || trustedOrigin === OPAQUE_ORIGIN ? undefined : trustedOrigin;
+}
 
 function resolveUrl(value: string): URL | undefined {
   try {
-    return new URL(value, EMBEDDED_BASE ?? document.baseURI);
+    return new URL(value, embeddedBase() ?? document.baseURI);
   } catch {
     return undefined;
   }
@@ -134,7 +154,7 @@ function isInlineLoadable(url: URL): boolean {
   if (url.protocol === 'data:') {
     return /^data:image\//i.test(url.href);
   }
-  return url.origin !== OPAQUE_ORIGIN && url.origin === TRUSTED_ORIGIN;
+  return url.origin !== OPAQUE_ORIGIN && url.origin === trustedOrigin;
 }
 
 function callsUnsafeCssFunction(value: string): boolean {
@@ -144,31 +164,45 @@ function callsUnsafeCssFunction(value: string): boolean {
 /**
  * SVG and MathML presentation attributes are parsed as CSS. Escapes, strings and functions such as
  * `attr()` or `image-set()` can all reference another origin, so only plain values and known-safe
- * functions survive there.
+ * functions survive there. Accessibility attributes are never parsed as CSS.
  */
-function dropFetchingCssAttribute(node: Element, data: UponSanitizeAttributeHookEvent): void {
-  if (URL_ATTRS.has(data.attrName)) {
-    return;
+function isFetchingCssAttribute({ node, attrName, attrValue }: { node: Element } & Pick<UponSanitizeAttributeHookEvent, 'attrName' | 'attrValue'>): boolean {
+  if (URL_ATTRS.has(attrName) || ACCESSIBILITY_ATTR.test(attrName)) {
+    return false;
   }
-  const isParsedAsCss = node.namespaceURI !== HTML_NAMESPACE || CSS_PRESENTATION_ATTRS.has(data.attrName);
-  const isFetching =
-    EXTERNAL_CSS_URL.test(data.attrValue) || (isParsedAsCss && (CSS_ESCAPE_OR_STRING.test(data.attrValue) || callsUnsafeCssFunction(data.attrValue)));
-  if (isFetching) {
-    data.keepAttr = false;
-  }
+  const isParsedAsCss = node.namespaceURI !== HTML_NAMESPACE || CSS_PRESENTATION_ATTRS.has(attrName);
+  return EXTERNAL_CSS_URL.test(attrValue) || (isParsedAsCss && (CSS_ESCAPE_OR_STRING.test(attrValue) || callsUnsafeCssFunction(attrValue)));
 }
 
-// Force every surviving anchor — including raw `<a>` markup emitted by the agent
-// that bypasses the marked link renderer — to open in a new tab with a safe
-// `rel`. Unsafe protocols are already stripped by DOMPurify's default policy.
 function sanitizeElement(node: Element): void {
   if (node.nodeName === 'A') {
-    node.setAttribute('target', '_blank');
-    node.setAttribute('rel', 'noreferrer noopener');
+    sanitizeAnchor(node);
   } else if (node.nodeName === 'IMG') {
     sanitizeImage(node);
   } else if (node.nodeName in DEFAULT_MEDIA_LABELS) {
     replaceMedia(node);
+  }
+}
+
+/**
+ * Makes every surviving anchor that still has a destination, including raw `<a>` markup that
+ * bypasses the marked link renderer, open in a new tab with a safe `rel`. Anchors without an
+ * `href` (e.g. stripped by a host hook) are left inert. When embedded, a relative destination is
+ * made absolute so it opens on the embedding service rather than the host page. Unsafe protocols
+ * are already stripped by DOMPurify's default policy.
+ */
+function sanitizeAnchor(anchor: Element): void {
+  const href = anchor.getAttribute('href')?.trim();
+  if (href === undefined) {
+    return;
+  }
+  anchor.setAttribute('target', '_blank');
+  anchor.setAttribute('rel', 'noreferrer noopener');
+  if (embeddedBase() && href && !href.startsWith('#') && !SCHEME.test(href)) {
+    const url = resolveUrl(href);
+    if (url) {
+      anchor.setAttribute('href', url.href);
+    }
   }
 }
 
@@ -184,7 +218,7 @@ function sanitizeImage(img: Element): void {
   }
   const url = resolveUrl(src);
   if (url && isInlineLoadable(url)) {
-    if (EMBEDDED_BASE && url.protocol !== 'data:') {
+    if (embeddedBase() && url.protocol !== 'data:') {
       img.setAttribute('src', url.href);
     }
     return;
@@ -223,15 +257,33 @@ function createFallback({ node, url, label }: { node: Element; url: URL | undefi
 
 /**
  * The DOMPurify singleton is shared with the host app, so these hooks are attached only for the
- * duration of forge-ai's own (synchronous) sanitize calls and never reach the host's.
+ * duration of forge-ai's own (synchronous) sanitize calls and never reach the host's. They also
+ * enforce the forbid lists themselves, since a host `DOMPurify.setConfig()` makes DOMPurify ignore
+ * the config passed here, and they run after any host hook so a host `forceKeepAttr` can't undo them.
  */
 function sanitize(rawHtml: string, config: Config): string {
-  DOMPurify.addHook('uponSanitizeAttribute', dropFetchingCssAttribute);
+  const forbiddenTags = new Set((config.FORBID_TAGS ?? []).map(tag => tag.toLowerCase()));
+  const forbiddenAttrs = new Set((config.FORBID_ATTR ?? []).map(attr => attr.toLowerCase()));
+  const enforceForbiddenTag = (_node: Node, { tagName, allowedTags }: UponSanitizeElementHookEvent): void => {
+    if (forbiddenTags.has(tagName)) {
+      allowedTags[tagName] = false;
+    }
+  };
+  const enforceForbiddenAttribute = (node: Element, data: UponSanitizeAttributeHookEvent): void => {
+    if (forbiddenAttrs.has(data.attrName) || isFetchingCssAttribute({ node, ...data })) {
+      data.keepAttr = false;
+      data.forceKeepAttr = false;
+    }
+  };
+
+  DOMPurify.addHook('uponSanitizeElement', enforceForbiddenTag);
+  DOMPurify.addHook('uponSanitizeAttribute', enforceForbiddenAttribute);
   DOMPurify.addHook('afterSanitizeAttributes', sanitizeElement);
   try {
     return DOMPurify.sanitize(rawHtml, config);
   } finally {
-    DOMPurify.removeHook('uponSanitizeAttribute', dropFetchingCssAttribute);
+    DOMPurify.removeHook('uponSanitizeElement', enforceForbiddenTag);
+    DOMPurify.removeHook('uponSanitizeAttribute', enforceForbiddenAttribute);
     DOMPurify.removeHook('afterSanitizeAttributes', sanitizeElement);
   }
 }

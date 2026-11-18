@@ -53,35 +53,52 @@
 // Theme
 //
 
-@each $theme in [primary secondary tertiary success warning] {
+@mixin theme-colors($container, $on-container, $border) {
+  @include override(background, theme.variable(#{$container}-container-low), value);
+  @include override(icon-color, theme.variable(on-#{$on-container}-container-low), value);
+  @include override(border-color, theme.variable(#{$border}-container), value);
+  @include override(outlined-background, theme.variable(#{$container}-container-minimum), value);
+  @include override(outlined-border-color, theme.variable(#{$border}-container), value);
+}
+
+@each $theme in [primary tertiary success warning] {
   :host([theme='#{$theme}']) {
     .forge-inline-message {
-      @if $theme == 'secondary' {
-        @include override(background, theme.variable(secondary-container), value);
-        @include override(icon-color, theme.variable(on-secondary-container), value);
-        @include override(border-color, theme.variable(secondary), value);
-      } @else {
-        @include override(background, theme.variable(#{$theme}-container-low), value);
-        @include override(icon-color, theme.variable(on-#{$theme}-container-low), value);
-        @include override(border-color, theme.variable(#{$theme}-container), value);
-      }
+      @include theme-colors($theme, $theme, $theme);
     }
   }
 }
 
-// Map both "error" and "danger" for backwards compatibility with "danger" theme
-:host(:is([theme='error'], [theme='danger'])) {
+:host([theme='secondary']) {
   .forge-inline-message {
-    @include override(background, theme.variable(error-container-low), value);
-    @include override(icon-color, theme.variable(on-error-container-low), value);
-    @include override(border-color, theme.variable(error-container), value);
+    @include override(background, theme.variable(secondary-container), value);
+    @include override(icon-color, theme.variable(on-secondary-container), value);
+    @include override(border-color, theme.variable(secondary), value);
+    @include override(outlined-background, theme.variable(secondary-container-minimum), value);
+    @include override(outlined-border-color, theme.variable(secondary), value);
   }
 }
 
-:host([theme='info-secondary']) {
+// "critical" and the legacy "danger" render as "error"
+:host(:is([theme='error'], [theme='critical'], [theme='danger'])) {
   .forge-inline-message {
-    @include override(background, theme.variable(surface-container-low), value);
-    @include override(icon-color, theme.variable(on-surface-container-low), value);
-    @include override(border-color, theme.variable(surface-container), value);
+    @include theme-colors(error, error, error);
+  }
+}
+
+// The neutral "default" theme, also used by the legacy info-secondary theme
+:host(:is([theme='default'], [theme='info-secondary'])) {
+  .forge-inline-message {
+    @include theme-colors(surface, surface, surface);
+  }
+}
+
+//
+// Outlined
+//
+
+:host([variant='outlined']) {
+  .forge-inline-message {
+    @include outlined;
   }
 }

@@ -1,11 +1,17 @@
 @use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/theme';
 
 @mixin base {
   position: absolute;
   top: 0;
   z-index: #{elevation.z-index-variable(dialog)};
 
-  box-shadow: #{elevation.value(24)};
+  box-shadow: var(
+    --forge-modal-drawer-elevation,
+    0 0 0 #{border.variable(thin)} color-mix(in srgb, #{theme.variable(outline-low)} 20%, transparent),
+    #{elevation.value(24)}
+  );
 
   max-width: 80%;
 }

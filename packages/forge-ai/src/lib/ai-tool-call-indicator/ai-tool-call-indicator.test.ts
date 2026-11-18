@@ -195,6 +195,13 @@ describe('AiToolCallIndicatorComponent', () => {
       expect(summaryText(el)).toBe('Used 1 tool');
     });
 
+    it('should treat cancelled calls as settled when they end without a result', async () => {
+      const el = await createElement([makeCall({ status: 'cancelled' })]);
+
+      expect(summaryText(el)).toBe('Used 1 tool');
+      expect(summary(el)!.querySelector('forge-ai-spinner')).toBeNull();
+    });
+
     it('should treat a call with a visible renderer as settled', async () => {
       const tools = new Map<string, AnyToolDefinition>([['search', { name: 'search', renderOnStart: true, renderer: { elementTag: 'x-y' } }]]);
       const el = await createElement([makeCall({ status: 'executing' })], { tools });
@@ -283,6 +290,15 @@ describe('AiToolCallIndicatorComponent', () => {
       expect(markers[0].querySelector('forge-ai-spinner')).toBeTruthy();
       expect(markers[1].classList.contains('row-marker--complete')).toBe(true);
       expect(markers[2].classList.contains('row-marker--error')).toBe(true);
+    });
+
+    it('should render the error marker without a spinner for a cancelled row', async () => {
+      const el = await createElement([makeCall({ status: 'cancelled' })]);
+
+      const marker = el.shadowRoot!.querySelector('.row-marker')!;
+
+      expect(marker.classList.contains('row-marker--error')).toBe(true);
+      expect(marker.querySelector('forge-ai-spinner')).toBeNull();
     });
 
     it('should show a duration badge in milliseconds or seconds', async () => {

@@ -27,4 +27,8 @@
       focus-indicator-color: #{token(color)}
     )
   );
+
+  &--outlined {
+    @include core.outlined;
+  }
 }

@@ -14,6 +14,11 @@ themeSelect.addEventListener('change', ({ detail }: CustomEvent<string>) => {
   getAllInlineMessages().forEach(el => el.setAttribute('theme', detail));
 });
 
+const variantSelect = document.getElementById('opt-variant') as ISelectComponent;
+variantSelect.addEventListener('change', ({ detail }: CustomEvent<string>) => {
+  getAllInlineMessages().forEach(el => el.setAttribute('variant', detail));
+});
+
 function getAllInlineMessages(): NodeListOf<HTMLElement> {
   return document.querySelectorAll(INLINE_MESSAGE_CONSTANTS.elementName);
 }

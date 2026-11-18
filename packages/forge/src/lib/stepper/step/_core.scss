@@ -143,13 +143,13 @@
 }
 
 @mixin label-selected {
-  color: #{token(primary-color)};
+  color: var(--forge-step-selected-label-color, #{token(primary-color)});
 
   font-weight: 500;
 }
 
 @mixin label-error {
-  color: #{token(error-color)};
+  color: var(--forge-step-error-label-color, #{token(error-color)});
 }
 
 @mixin optional-label {
@@ -165,13 +165,13 @@
 }
 
 @mixin optional-label-selected {
-  color: #{token(primary-color)};
+  color: var(--forge-step-selected-label-color, #{token(primary-color)});
 
   font-weight: 500;
 }
 
 @mixin optional-label-error {
-  color: #{token(error-color)};
+  color: var(--forge-step-error-label-color, #{token(error-color)});
 }
 
 @mixin line-clustered {

@@ -65,6 +65,77 @@ const toolCallResponse: AssistantResponse = {
   ]
 };
 
+const rendererOnlyResponse: AssistantResponse = {
+  id: 'response-4',
+  status: 'complete',
+  timestamp: 1700000000000,
+  children: [
+    { type: 'text', messageId: 'message-1', status: 'complete', content: 'Let me look that up and put together a summary.' },
+    {
+      type: 'toolCall',
+      data: {
+        id: 'tool-call-2',
+        messageId: 'message-1',
+        name: 'searchDocs',
+        args: { query: 'generics' },
+        result: { count: 3 },
+        status: 'complete',
+        type: 'agent',
+        startTimestamp: 1000,
+        endTimestamp: 1300
+      }
+    },
+    {
+      type: 'toolCall',
+      data: {
+        id: 'tool-call-3',
+        messageId: 'message-1',
+        name: 'showSummary',
+        args: { title: 'Generics overview' },
+        result: { points: 3 },
+        status: 'complete',
+        type: 'agent',
+        startTimestamp: 1300,
+        endTimestamp: 1500
+      }
+    },
+    {
+      type: 'toolCall',
+      data: {
+        id: 'tool-call-4',
+        messageId: 'message-1',
+        name: 'searchDocs',
+        args: { query: 'constraints' },
+        result: { count: 2 },
+        status: 'complete',
+        type: 'agent',
+        startTimestamp: 1500,
+        endTimestamp: 1800
+      }
+    },
+    { type: 'text', messageId: 'message-2', status: 'complete', content: 'Here is what I found.' }
+  ]
+};
+
+const rendererOnlyTools = new Map<string, ToolDefinition>([
+  ['searchDocs', { name: 'searchDocs', displayName: 'Search docs' }],
+  [
+    'showSummary',
+    {
+      name: 'showSummary',
+      displayName: 'Show summary',
+      rendererOnly: true,
+      renderer: createToolRenderer({
+        render: toolCall => {
+          const element = document.createElement('p');
+          element.textContent = `Summary: ${toolCall.args.title}`;
+          return element;
+        }
+      })
+    }
+  ]
+]);
+
 const thinkingResponse: AssistantResponse = {
   id: 'response-3',
   status: 'streaming',
@@ -138,6 +209,19 @@ export const Thinking: Story = {
     <forge-ai-assistant-response
       .response=${thinkingResponse}
       .tools=${tools}
+      ?enable-reactions=${args.enableReactions}
+      ?debug-mode=${args.debugMode}
+      ?show-thinking=${args.showThinking}>
+    </forge-ai-assistant-response>
+  `
+};
+
+/** A tool with `rendererOnly` shows only its renderer, with no tool call indicator row. Tool calls on either side are summarized in separate indicators. */
+export const WithRendererOnly: Story = {
+  render: args => html`
+    <forge-ai-assistant-response
+      .response=${rendererOnlyResponse}
+      .tools=${rendererOnlyTools}
       ?enable-reactions=${args.enableReactions}
       ?debug-mode=${args.debugMode}
       ?show-thinking=${args.showThinking}>

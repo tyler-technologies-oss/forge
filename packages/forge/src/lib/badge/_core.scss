@@ -40,6 +40,19 @@
   white-space: nowrap;
 }
 
+// The outlined border is an inset ring so outlined badges are the same size as tonal ones
+@mixin outlined {
+  @include override(background, outlined-background);
+  @include override(color, outlined-color);
+
+  box-shadow: inset 0 0 0 #{token(outlined-border-width)} #{token(outlined-border-color)};
+}
+
+@mixin strong {
+  @include override(background, strong-background);
+  @include override(color, strong-color);
+}
+
 @mixin content {
   overflow: hidden;
   white-space: nowrap;

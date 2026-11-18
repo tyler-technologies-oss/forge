@@ -148,7 +148,7 @@ export class AiToolCallIndicatorComponent extends LitElement {
     }
     const hasArgs = !!toolCall.args && Object.keys(toolCall.args).length > 0;
     const showResult = toolCall.status === 'complete' && toolCall.result !== undefined;
-    const showError = toolCall.status === 'error';
+    const showError = toolCall.status === 'error' || toolCall.status === 'cancelled';
     return hasArgs || showResult || showError;
   }
 
@@ -194,7 +194,7 @@ export class AiToolCallIndicatorComponent extends LitElement {
   }
 
   #statusMarker(toolCall: ToolCall): TemplateResult {
-    if (toolCall.status === 'error') {
+    if (toolCall.status === 'error' || toolCall.status === 'cancelled') {
       return html`<span class="row-marker row-marker--error">${this.#errorIcon}</span>`;
     }
     if (isToolCallSettled(toolCall, this.tools?.get(toolCall.name))) {

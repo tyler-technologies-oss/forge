@@ -38,7 +38,7 @@ const meta = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['pending', 'parsing', 'executing', 'complete', 'error'],
+      options: ['pending', 'parsing', 'executing', 'complete', 'error', 'cancelled'],
       description: 'The status of the tool call. The renderer shows once the call is `complete`, or earlier if `renderOnStart` is set'
     },
     renderOnStart: {

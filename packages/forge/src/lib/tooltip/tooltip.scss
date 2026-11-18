@@ -25,6 +25,16 @@
   @include base;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .forge-tooltip {
+    animation-name: fadein;
+  }
+}
+
+.forge-tooltip.no-animation {
+  animation: none;
+}
+
 //
 // Tooltips are visually hidden by default so that `aria-labelledby` and `aria-describedby` can be used, but
 // when they are open we remove the visually hidden styles and replace with the <forge-overlay> to visually

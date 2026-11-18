@@ -20,6 +20,10 @@
     @include core.title;
   }
 
+  &--outlined {
+    @include core.outlined;
+  }
+
   &__icon {
     @include core.icon;
 

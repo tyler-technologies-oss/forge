@@ -31,6 +31,7 @@ export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
  * @cssproperty --forge-toolbar-height - Controls the height.
  * @cssproperty --forge-toolbar-min-height - Controls the minimum height. Defaults to the toolbar height.
  * @cssproperty --forge-theme-surface - Controls the background-color of the toolbar.
+ * @cssproperty --forge-theme-surface-elevated-translucent - Controls the background-color of the toolbar when it is defined by the theme (takes precedence over `--forge-theme-surface`).
  * @cssproperty --forge-toolbar-divider-width - Controls the divider width.
  * @cssproperty --forge-toolbar-divider-style - Controls the divider style.
  * @cssproperty --forge-toolbar-divider-color - Controls the divider color.
@@ -39,6 +40,7 @@ export const TOOLBAR_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-toolbar';
  * @cssproperty --forge-toolbar-start-end-shape - Controls the border radius of the top right corner.
  * @cssproperty --forge-toolbar-end-start-shape - Controls the border radius of the bottom left corner.
  * @cssproperty --forge-toolbar-end-end-shape - Controls the border radius of the bottom right corner.
+ * @cssproperty --forge-toolbar-backdrop-filter - The backdrop filter applied behind the toolbar. Defaults to `none`.
  * @cssproperty --forge-toolbar-padding - Controls the left and right padding using the padding-inline style.
  * @cssproperty --forge-toolbar-padding-block - Controls the top and bottom padding using the padding-block style.
  * @cssproperty --forge-toolbar-padding-inline - Controls the left and right padding using the padding-block style.

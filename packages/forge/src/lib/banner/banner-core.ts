@@ -1,16 +1,18 @@
 import { IBannerAdapter } from './banner-adapter.js';
-import { BannerTheme, BANNER_CONSTANTS } from './banner-constants.js';
+import { BannerTheme, BannerVariant, BANNER_CONSTANTS } from './banner-constants.js';
 
 export interface IBannerCore {
   dismissed: boolean;
   persistent: boolean;
   theme: BannerTheme;
+  variant: BannerVariant;
 }
 
 export class BannerCore implements IBannerCore {
   private _dismissed = false;
   private _persistent = false;
   private _theme: BannerTheme = BANNER_CONSTANTS.defaults.THEME;
+  private _variant: BannerVariant = BANNER_CONSTANTS.defaults.VARIANT;
   private _dismissListener: EventListener = this._onDismiss.bind(this);
 
   constructor(private _adapter: IBannerAdapter) {}
@@ -97,6 +99,16 @@ export class BannerCore implements IBannerCore {
     if (this._theme !== value) {
       this._theme = value ?? BANNER_CONSTANTS.defaults.THEME;
       this._adapter.setHostAttribute(BANNER_CONSTANTS.attributes.THEME, this._theme);
+    }
+  }
+
+  public get variant(): BannerVariant {
+    return this._variant;
+  }
+  public set variant(value: BannerVariant) {
+    if (this._variant !== value) {
+      this._variant = value ?? BANNER_CONSTANTS.defaults.VARIANT;
+      this._adapter.setHostAttribute(BANNER_CONSTANTS.attributes.VARIANT, this._variant);
     }
   }
 }

@@ -10,6 +10,13 @@ import { FOCUS_INDICATOR_SAMPLE_RATIOS, FocusIndicatorFocusMode } from './focus-
 
 import styles from './focus-indicator.scss';
 
+interface FocusIndicatorBounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
 export interface IFocusIndicatorComponent extends IBaseComponent {
   targetElement: HTMLElement | undefined;
   target: string | null;
@@ -253,7 +260,7 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
       return;
     }
 
-    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition());
+    this.#cleanupAutoUpdate = autoUpdate(this.#targetElement, this.#indicatorElement, () => this.#updatePosition(), { animationFrame: true });
   }
 
   #updatePosition(): void {
@@ -269,9 +276,15 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-width', `${targetRect.width}px`);
     this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-height', `${targetRect.height}px`);
 
+    const clipBounds = getClipBounds(anchor);
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-top', toClipInset(clipBounds.top - targetRect.top));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-right', toClipInset(targetRect.right - clipBounds.right));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-bottom', toClipInset(targetRect.bottom - clipBounds.bottom));
+    this.#indicatorElement.style.setProperty('--_focus-indicator-top-layer-clip-left', toClipInset(clipBounds.left - targetRect.left));
+
     this.#indicatorElement.toggleAttribute('inward', this.inward);
     this.#indicatorElement.toggleAttribute('circular', this.circular);
-    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect));
+    this.#indicatorElement.toggleAttribute('obscured', !this.#isAnchorVisible(anchor, this.#targetElement, targetRect, clipBounds));
   }
 
   /**
@@ -282,19 +295,17 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
    * the target element (or one of its ancestors) also counts as visible. Containment is evaluated
    * against the flat tree because the target can be a slot wrapper whose slotted content is the hit.
    */
-  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect): boolean {
+  #isAnchorVisible(anchor: HTMLElement, target: HTMLElement, rect: DOMRect, clipBounds: FocusIndicatorBounds): boolean {
     const root = anchor.getRootNode() as Partial<DocumentOrShadowRoot>;
     if (!root.elementFromPoint) {
       return true;
     }
 
-    const left = Math.max(rect.left, 0);
-    const top = Math.max(rect.top, 0);
-    const right = Math.min(rect.right, document.documentElement.clientWidth);
-    const bottom = Math.min(rect.bottom, document.documentElement.clientHeight);
-    if (left > right || top > bottom) {
+    const visibleRect = intersect(rect, clipBounds);
+    if (!visibleRect) {
       return false;
     }
+    const { left, top, right, bottom } = visibleRect;
 
     for (const yRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
       for (const xRatio of FOCUS_INDICATOR_SAMPLE_RATIOS) {
@@ -313,6 +324,125 @@ export class FocusIndicatorComponent extends BaseLitElement implements IFocusInd
     this.#cleanupAutoUpdate?.();
     this.#cleanupAutoUpdate = undefined;
   }
+}
+
+const CLIPPING_OVERFLOW_PATTERN = /auto|scroll|hidden|clip|overlay/;
+const CONTAINING_BLOCK_WILL_CHANGE_PATTERN = /transform|perspective|filter/;
+const CONTAINING_BLOCK_CONTAIN_PATTERN = /paint|layout|strict|content/;
+const NO_CLIP_INSET = '-100vmax';
+const CLIP_TOLERANCE_PX = 0.5;
+
+type ContainingBlockKind = 'in-flow' | 'absolute' | 'fixed';
+
+/**
+ * The bounds of the viewport narrowed by every ancestor that actually clips the element.
+ *
+ * An ancestor only clips the element when it is, or is inside, the element's containing block, so
+ * absolutely and fixed positioned elements skip ancestors that do not contain them. Elements in the
+ * top layer are not clipped by their ancestors at all.
+ */
+function getClipBounds(element: HTMLElement): FocusIndicatorBounds {
+  const bounds: FocusIndicatorBounds = {
+    left: 0,
+    top: 0,
+    right: document.documentElement.clientWidth,
+    bottom: document.documentElement.clientHeight
+  };
+
+  if (isInTopLayer(element)) {
+    return bounds;
+  }
+
+  let kind = getContainingBlockKind(getComputedStyle(element));
+  let current: Element | null = getFlatTreeParent(element);
+  while (current && current !== document.documentElement) {
+    const style = getComputedStyle(current);
+    if (style.display === 'contents' || !containsDescendantOfKind(style, kind)) {
+      current = getFlatTreeParent(current);
+      continue;
+    }
+
+    const isInline = style.display === 'inline';
+    const clipsX = !isInline && CLIPPING_OVERFLOW_PATTERN.test(style.overflowX);
+    const clipsY = !isInline && CLIPPING_OVERFLOW_PATTERN.test(style.overflowY);
+    if (clipsX || clipsY) {
+      const { left, top } = current.getBoundingClientRect();
+      const paddingBoxLeft = left + current.clientLeft;
+      const paddingBoxTop = top + current.clientTop;
+      if (clipsX) {
+        bounds.left = Math.max(bounds.left, paddingBoxLeft);
+        bounds.right = Math.min(bounds.right, paddingBoxLeft + current.clientWidth);
+      }
+      if (clipsY) {
+        bounds.top = Math.max(bounds.top, paddingBoxTop);
+        bounds.bottom = Math.min(bounds.bottom, paddingBoxTop + current.clientHeight);
+      }
+    }
+
+    if (isInTopLayer(current)) {
+      break;
+    }
+    kind = getContainingBlockKind(style);
+    current = getFlatTreeParent(current);
+  }
+
+  return bounds;
+}
+
+function getContainingBlockKind({ position }: CSSStyleDeclaration): ContainingBlockKind {
+  return position === 'absolute' || position === 'fixed' ? position : 'in-flow';
+}
+
+/**
+ * Whether an element with this style is the containing block for a descendant of the given kind.
+ * Every ancestor can clip an in-flow descendant, but an absolutely positioned one is only clipped by
+ * the nearest positioned ancestor and those above it, and a fixed one by ancestors that create a
+ * containing block for fixed descendants, such as a transform.
+ */
+function containsDescendantOfKind(style: CSSStyleDeclaration, kind: ContainingBlockKind): boolean {
+  if (kind === 'in-flow') {
+    return true;
+  }
+  const createsFixedContainingBlock =
+    [style.transform, style.perspective, style.filter, style.backdropFilter].some(value => value && value !== 'none') ||
+    CONTAINING_BLOCK_WILL_CHANGE_PATTERN.test(style.willChange) ||
+    CONTAINING_BLOCK_CONTAIN_PATTERN.test(style.contain);
+  return kind === 'fixed' ? createsFixedContainingBlock : style.position !== 'static' || createsFixedContainingBlock;
+}
+
+function isInTopLayer(element: Element): boolean {
+  try {
+    return element.matches(':popover-open, :modal');
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Intersects `rect` with `bounds`, or returns `null` when nothing of the rect is left,
+ * such as when it is scrolled out of a scroll container.
+ */
+function intersect(rect: DOMRect, bounds: FocusIndicatorBounds): FocusIndicatorBounds | null {
+  const result: FocusIndicatorBounds = {
+    left: Math.max(rect.left, bounds.left),
+    top: Math.max(rect.top, bounds.top),
+    right: Math.min(rect.right, bounds.right),
+    bottom: Math.min(rect.bottom, bounds.bottom)
+  };
+  return result.left > result.right || result.top > result.bottom ? null : result;
+}
+
+/**
+ * How far the anchor's edge is cut off by its clip bounds. Only a side where the anchor itself is
+ * clipped is trimmed, so a fully visible anchor can still draw its indicator outside of a scroll container.
+ * Overflow within a sub-pixel tolerance is ignored so fractional layout and zoom do not trim a visible anchor.
+ */
+function toClipInset(overflow: number): string {
+  return overflow > CLIP_TOLERANCE_PX ? `${overflow}px` : NO_CLIP_INSET;
+}
+
+function getFlatTreeParent(node: Element): Element | null {
+  return node.assignedSlot ?? node.parentElement ?? (node.getRootNode() as ShadowRoot).host ?? null;
 }
 
 /**
