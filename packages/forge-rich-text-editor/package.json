@@ -100,7 +100,7 @@
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-prettier": "catalog:",
     "glob": "catalog:",
-    "minimatch": "^10.2.5",
+    "minimatch": "^11.0.1",
     "ora": "^9.3.0",
     "playwright": "catalog:",
     "prettier": "catalog:",
