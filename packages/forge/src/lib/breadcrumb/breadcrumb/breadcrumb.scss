@@ -1,0 +1,53 @@
+@use './core';
+
+//
+// Host
+//
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+//
+// Base
+//
+
+.forge-breadcrumb {
+  @include core.tokens;
+}
+
+.forge-breadcrumb {
+  @include core.base;
+}
+
+.list {
+  @include core.list;
+
+  &.scroll {
+    @include core.scroll;
+
+    ::slotted(*) {
+      @include core.slotted-scroll-buttons;
+    }
+  }
+}
+
+.scroll-button {
+  @include core.scroll-button;
+
+  &-previous:not(.disabled) {
+    @include core.scroll-button-previous;
+  }
+
+  &-next:not(.disabled) {
+    @include core.scroll-button-next;
+  }
+
+  &.disabled {
+    @include core.scroll-button-disabled;
+  }
+}

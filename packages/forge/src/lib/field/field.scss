@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use './core';
-@use '../core/styles/shape';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../focus-indicator';
 @use '../state-layer';
 @use '../utils/mixins' as utils;

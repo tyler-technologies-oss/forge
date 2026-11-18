@@ -30,6 +30,8 @@ async function bundleManifests() {
     process.exit(1);
   }
 
+  const versions = {};
+
   // Copy and rename manifest files
   for (const pkg of PACKAGES) {
     try {
@@ -58,11 +60,16 @@ async function bundleManifests() {
       const outputPath = join(outputDir, pkg.outputName);
       await writeFile(outputPath, manifestContent, 'utf-8');
 
-      console.log(`✓ Bundled ${pkg.name} → ${pkg.outputName}`);
+      const packageJson = JSON.parse(await readFile(join(projectRoot, 'node_modules', pkg.name, 'package.json'), 'utf-8'));
+      versions[pkg.outputName] = packageJson.version;
+
+      console.log(`✓ Bundled ${pkg.name}@${packageJson.version} → ${pkg.outputName}`);
     } catch (error) {
       console.error(`Failed to bundle ${pkg.name}:`, error);
     }
   }
+
+  await writeFile(join(outputDir, 'versions.json'), JSON.stringify(versions, null, 2), 'utf-8');
 }
 
 // Run the bundling process

@@ -1,0 +1,44 @@
+<div class="ai-fields">
+  <forge-text-field class="forge-ai" data-ai required>
+    <label slot="label">Location</label>
+    <input type="text" value="Transylvania Castle" />
+    <span slot="support-text">Support message</span>
+  </forge-text-field>
+
+  <forge-text-field class="forge-ai" data-ai>
+    <label slot="label">Notes</label>
+    <textarea>Garlic is not an effective deterrent.</textarea>
+    <span slot="support-text">Multiline</span>
+  </forge-text-field>
+
+  <forge-date-picker class="forge-ai" data-ai>
+    <forge-text-field required>
+      <label for="ai-date">AI takeover prediction</label>
+      <input type="text" id="ai-date" value="08/29/2028" autocomplete="off" />
+      <span slot="support-text">Will it erase us?</span>
+    </forge-text-field>
+  </forge-date-picker>
+
+  <forge-time-picker class="forge-ai" data-ai>
+    <forge-text-field>
+      <label for="ai-time">Estimated arrival</label>
+      <input type="text" id="ai-time" autocomplete="off" />
+    </forge-text-field>
+  </forge-time-picker>
+
+  <forge-select class="forge-ai" data-ai label="Which AI strikes first?" value="grok" required>
+    <forge-option value="grok">Grok</forge-option>
+    <forge-option value="gemini">Gemini</forge-option>
+    <forge-option value="claude">Claude</forge-option>
+    <span slot="support-text">Bets on which one escapes</span>
+  </forge-select>
+
+  <forge-autocomplete class="forge-ai" data-ai>
+    <forge-text-field popover-icon>
+      <label for="ai-autocomplete">Favorite robot</label>
+      <input type="text" id="ai-autocomplete" />
+    </forge-text-field>
+  </forge-autocomplete>
+</div>
+
+<script type="module" src="ai.ts"></script>

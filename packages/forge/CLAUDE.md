@@ -94,8 +94,13 @@ export class ExampleComponent extends BaseComponent {
 
 - `src/lib/` - All components
 - `src/lib/core/` - Base classes, mixins, utils
+- `src/lib/core/styles/` - Sass for component tokens. The global tokens (theme, typography, spacing, shape, border, elevation, animation) live in `packages/forge-tokens`. The global-token modules here are deprecated forwarding shims for consumers: use `@tylertech/forge-tokens/sass/*` in forge code, never the shims (they emit a deprecation warning)
 - `src/lib/core/base/` - `BaseComponent`, `BaseLitElement`
 - `src/stories/` - Storybook stories
+
+## Shared styles
+
+`packages/forge-ai` compiles Forge component CSS and Sass into its own styles at build time. Forge releases do not reach it until forge-ai is released, so a user-visible style fix should also include a `@tylertech/forge-ai` patch changeset.
 
 ## Commands
 

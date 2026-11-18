@@ -1,0 +1,141 @@
+---
+title: Count Card
+description: A count card displays a count or key metric with an icon and label, for dashboards and summary views.
+status: stable
+source: core
+category: layout
+storybookId: components-count-card--demo
+---
+
+import Header from './header.astro';
+import Example from '../../../components/Example.astro';
+import Rules from '../../../components/Rules.astro';
+import Rule from '../../../components/Rule.astro';
+import AnatomyDemo from '../../../components/docs/AnatomyDemo.astro';
+import AnatomyMarker from '../../../components/docs/AnatomyMarker.astro';
+
+<Header />
+
+## Overview
+
+A count card highlights a single number or metric alongside an icon and a short label, so people can scan key figures at a glance. It's built for dashboards and summary views, where several count cards sit side by side to summarize the state of a system.
+
+Count cards can carry supporting details, such as a trend badge, a progress meter, or a sparkline, and a card-level action menu.
+
+## Usage
+
+`forge-count-card` is built from named slots (`icon`, `label`, `header-end`, `action`, `count`, `count-end`, `body`, and `full-width`) plus `theme` to apply semantic color and `no-border` to remove the border. Every slot is optional, but include at least an icon and a count, and use the same slots across the cards on a page so they stay aligned in a grid. Put a `forge-icon-button` in `action`, not `header-end`, so its 48px touch target aligns correctly. Use a count card for a single metric; for a general container with a header, body, and footer, use a <a href={`${import.meta.env.BASE_URL}components/structured-card/usage/`}>structured card</a> instead.
+
+## Slot locations
+
+<AnatomyDemo>
+  <forge-count-card class="w-full max-w-sm my-large" style="--forge-card-overflow: visible">
+    <span slot="icon" class="relative inline-flex">
+      <forge-icon name="attach_money"></forge-icon>
+      <AnatomyMarker label={1} title="Icon" description="An icon in a styled container at the start of the header." placement="top-start" outside />
+    </span>
+    <span slot="label" class="relative inline-block">
+      Revenue
+      <AnatomyMarker label={2} title="Label" description="Short text that explains what the count represents." placement="top" outside />
+    </span>
+    <span slot="header-end" class="relative inline-flex">
+      <forge-badge theme="success">+12%</forge-badge>
+      <AnatomyMarker label={3} title="Header end" description="A badge or small accessory at the end of the header." placement="top-end" outside />
+    </span>
+    <span slot="action" class="relative inline-flex">
+      <forge-icon-button aria-label="More options">
+        <forge-icon name="more_vert"></forge-icon>
+      </forge-icon-button>
+      <AnatomyMarker label={4} title="Action" description="A forge-icon-button for card-level actions, such as a menu." placement="top-end" outside />
+    </span>
+    <span slot="count" class="relative inline-block">
+      $12,450.00
+      <AnatomyMarker label={5} title="Count" description="The main value, shown prominently below the header." placement="bottom-start" outside />
+    </span>
+    <span slot="count-end" class="relative inline-flex">
+      <forge-badge>USD</forge-badge>
+      <AnatomyMarker label={6} title="Count end" description="Units or secondary values after the count." placement="bottom-end" outside />
+    </span>
+    <div slot="body" class="relative">
+      <div class="striped-box h-12"></div>
+      <AnatomyMarker label={7} title="Body" description="Supporting details below the count, like a progress meter or timestamp." />
+    </div>
+    <div slot="full-width" class="relative">
+      <div class="striped-box h-12"></div>
+      <AnatomyMarker label={8} title="Full width" description="Edge-to-edge content below everything else, ideal for sparklines or progress indicators." />
+    </div>
+  </forge-count-card>
+</AnatomyDemo>
+
+## Rules
+
+<Rules>
+  <Rule
+    variant="do"
+    rules={[
+      "Use the same slots across all count cards on a page, and always include an icon and a count.",
+      "Keep labels short so they fit on one line.",
+      "Put icon buttons in the action slot, not header-end.",
+      "Use theme to convey meaning, like success or error, and pair color with text or an icon.",
+      "Arrange several count cards in a responsive grid.",
+    ]}
+  />
+
+  <Rule
+    variant="dont"
+    rules={[
+      "Don't use a count card for content that isn't a single metric.",
+      "Don't put long text or complex layouts in the count slot.",
+      "Don't rely on theme color alone to communicate status.",
+      "Don't mix cards with different structures in the same row.",
+    ]}
+  />
+</Rules>
+
+## Basic usage
+
+Slot an icon, a label, and a count. Add a badge to `header-end` for supporting context.
+
+<Example description="A count card with an icon, label, header badge, and count."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/demo/demo.html"
+/>
+
+## Multiple cards
+
+Count cards work well in a grid to build a dashboard-style summary.
+
+<Example description="Four count cards in a responsive grid."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/multiple-cards/multiple-cards.html"
+/>
+
+## With full width
+
+Use the `full-width` slot for content that spans the card's width below the count, such as a sparkline or progress indicator.
+
+<Example description="A count card with a sparkline spanning its full width."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/with-full-width/with-full-width.html"
+/>
+
+## Additional body content
+
+Use the `body` slot to add supporting content below the count, such as a progress meter or a last-updated time.
+
+<Example description="A count card with a trend badge, a meter, and a last-updated line in the body."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/additional-body-content/additional-body-content.html"
+/>
+
+## With menu
+
+Use the `action` slot to add an icon button that opens a card-level menu.
+
+<Example description="A count card with an icon button that opens an options menu."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/with-menu/with-menu.html"
+/>
+
+## Themes
+
+Set `theme` to `primary`, `secondary`, `tertiary`, `success`, `error`, `warning`, `info`, or `info-secondary` to apply semantic color. The default is `none`.
+
+<Example description="Count cards in each available theme."
+  blockUrl="https://forge.tylerdev.io/blocks/v1/components/count-card/themes/themes.html"
+/>

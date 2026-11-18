@@ -1,0 +1,85 @@
+---
+/**
+ * AnatomyMarker — a numbered callout pinned over one region of an anatomy demo,
+ * keyed to a table of parts below the demo. Hovering or focusing the marker
+ * opens a popover describing the region.
+ *
+ * The marker is absolutely positioned so it never shifts the demo's layout.
+ * Place it inside the region it labels and make that region (or a wrapper
+ * around it) `relative`; `placement` picks where in the region it sits.
+ *
+ *   <div slot="body-header" class="relative">
+ *     <forge-toolbar>…</forge-toolbar>
+ *     <AnatomyMarker
+ *       label={3}
+ *       title="Body header"
+ *       description="Page title and page-level actions."
+ *       placement="center" />
+ *   </div>
+ *
+ * The popover anchors to its previous sibling (the button), so the two must
+ * stay adjacent. Use inside an AnatomyDemo so the rest of the demo is inert.
+ */
+type Placement =
+  | "top-start"
+  | "top"
+  | "top-end"
+  | "start"
+  | "center"
+  | "end"
+  | "bottom-start"
+  | "bottom"
+  | "bottom-end";
+
+interface Props {
+  label: string | number;
+  title: string;
+  description?: string;
+  placement?: Placement;
+  /**
+   * Centers the marker on the region's edge or corner instead of insetting it,
+   * like a notification badge. Use for small targets such as a single button,
+   * where an inset marker would cover the control.
+   */
+  outside?: boolean;
+}
+
+const PLACEMENT_CLASSES: Record<Placement, string> = {
+  "top-start": "top-xsmall start-xsmall",
+  top: "top-xsmall left-1/2 -translate-x-1/2",
+  "top-end": "top-xsmall end-xsmall",
+  start: "top-1/2 start-xsmall -translate-y-1/2",
+  center: "top-1/2 left-1/2 -translate-1/2",
+  end: "top-1/2 end-xsmall -translate-y-1/2",
+  "bottom-start": "bottom-xsmall start-xsmall",
+  bottom: "bottom-xsmall left-1/2 -translate-x-1/2",
+  "bottom-end": "bottom-xsmall end-xsmall",
+};
+
+const OUTSIDE_PLACEMENT_CLASSES: Record<Placement, string> = {
+  "top-start": "top-0 left-0 -translate-1/2",
+  top: "top-0 left-1/2 -translate-1/2",
+  "top-end": "top-0 right-0 translate-x-1/2 -translate-y-1/2",
+  start: "top-1/2 left-0 -translate-1/2",
+  center: "top-1/2 left-1/2 -translate-1/2",
+  end: "top-1/2 right-0 translate-x-1/2 -translate-y-1/2",
+  "bottom-start": "bottom-0 left-0 -translate-x-1/2 translate-y-1/2",
+  bottom: "bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2",
+  "bottom-end": "bottom-0 right-0 translate-1/2",
+};
+
+const { label, title, description, placement = "top-start", outside = false } = Astro.props;
+const placementClasses = (outside ? OUTSIDE_PLACEMENT_CLASSES : PLACEMENT_CLASSES)[placement];
+---
+
+<div data-anatomy-marker class:list={["absolute z-10", placementClasses]}>
+  <forge-icon-button variant="filled" theme="secondary" density="small" aria-label={`${label}: ${title}`}>
+    <span class="text-label3">{label}</span>
+  </forge-icon-button>
+  <forge-popover trigger-type="hover, focus" placement="bottom" arrow class="[--forge-popover-max-width:280px]">
+    <div class="p-small flex flex-col gap-xxsmall">
+      <span class="text-label1">{title}</span>
+      {description && <span class="text-body1 text-medium">{description}</span>}
+    </div>
+  </forge-popover>
+</div>

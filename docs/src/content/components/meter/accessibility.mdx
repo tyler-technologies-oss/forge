@@ -1,0 +1,7 @@
+## Labeling
+
+Always give a meter an accessible label — associate it with a `<label>` element, or set `aria-label`/`aria-labelledby` directly. Text placed in the meter's label slot isn't accessible on its own; it still needs to be linked to the meter one of those ways. For a grouped meter, also provide a <a href={`${import.meta.env.BASE_URL}components/key/usage/`}>key</a> naming each meter's color and, optionally, its value.
+
+## Automatic ARIA
+
+The meter automatically applies ARIA attributes reflecting its `value`, `min`, and `max`. If the value isn't naturally a percentage — a discrete count, or a textual quantifier like "low"/"medium"/"high" — set `aria-valuetext` to a string describing how it should be read instead.

@@ -1,26 +1,6 @@
-<forge-card no-padding style="height: auto;">
+<forge-card no-padding class="max-w-lg [--forge-card-height:auto]">
   <forge-scaffold>
-    <div slot="header">
-      <forge-toolbar no-border>
-        <div slot="start" class="flex flex-col gap-xxxsmall">
-          <div class="flex items-center gap-xsmall">
-            <h2 class="text-heading4">Atlassian MCP</h2>
-            <forge-icon name="verified" style="color: var(--forge-theme-primary);"></forge-icon>
-          </div>
-        </div>
-        <forge-icon-button slot="end" aria-label="More options" density="medium">
-          <forge-icon name="more_vert"></forge-icon>
-        </forge-icon-button>
-      </forge-toolbar>
-      <div class="bg-surface">
-        <forge-tab-bar active-tab="0" clustered>
-          <forge-tab id="tabbed-card-overview">Overview</forge-tab>
-          <forge-tab id="tabbed-card-resources">Resources</forge-tab>
-          <forge-tab id="tabbed-card-tools">Tools</forge-tab>
-          <forge-tab id="tabbed-card-prompts">Prompts</forge-tab>
-        </forge-tab-bar>
-      </div>
-    </div>
+    {{> card-header title="Atlassian MCP" titleIcon="verified" titleIconLabel="Verified" action1="more_vert" action1Label="More options" tab1="Overview" tab1Id="tabbed-card-overview" tab2="Resources" tab2Id="tabbed-card-resources" tab3="Tools" tab3Id="tabbed-card-tools" tab4="Prompts" tab4Id="tabbed-card-prompts"}}
 
     <div slot="body">
       <forge-tab-panel for="tabbed-card-overview">
@@ -131,9 +111,9 @@
     </div>
 
     <forge-toolbar slot="footer" inverted>
-      <div slot="end" class="flex items-center gap-small">
-        <forge-button variant="outlined">Cancel</forge-button>
-        <forge-button variant="raised">Save</forge-button>
+      <div slot="end" class="flex items-center gap-medium">
+        <forge-button variant="tonal">Cancel</forge-button>
+        <forge-button variant="filled">Save</forge-button>
       </div>
     </forge-toolbar>
   </forge-scaffold>

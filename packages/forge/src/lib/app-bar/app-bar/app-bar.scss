@@ -4,8 +4,8 @@
 @use '../../state-layer';
 @use '../../tabs/tab-bar';
 @use '../../tabs/tab';
-@use '../../core/styles/theme';
-@use '../../core/styles/tokens/theme/color-emphasis';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/color-emphasis';
 
 //
 // Host

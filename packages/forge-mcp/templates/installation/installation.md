@@ -10,32 +10,40 @@ npm install @tylertech/forge@latest
 
 ## ES Module Import
 
-After installing via npm, you can import Tyler Forge components in your JavaScript/TypeScript files:
+After installing via npm, register each component you use with a side-effect import from its subpath. Importing the subpath registers the custom element automatically:
 
 ```javascript
-// Import all components
-import { defineButtonComponent } from '@tylertech/forge';
-
-defineButtonComponent();
+import '@tylertech/forge/button';
+import '@tylertech/forge/text-field';
+import '@tylertech/forge/app-layout';
 ```
+
+> ⚠️ Only import the components you use. Do not use definition functions (e.g. `defineButtonComponent()`, `defineComponents()`) or import all components at once.
+
+Import components as early as possible in your application bootstrapping process so they are registered before your application renders, avoiding FOUC (Flash of Unstyled Content).
 
 ## CSS Styles
 
-Tyler Forge requires CSS for proper styling. Include the CSS file in your project:
+Tyler Forge requires its global stylesheet for proper styling. If your project uses a bundler that supports CSS imports, import it in your main JavaScript file:
 
-If you're using Sass, you can import the Sass files:
+```javascript
+import "@tylertech/forge/dist/forge.css";
+```
+
+If you're using Sass:
 
 ```scss
-@import "@tylertech/forge/dist/forge-core";
 @import "@tylertech/forge/dist/forge";
 ```
 
-If you're project uses a bundler that supports CSS imports, you can import the CSS files directly:
+### Optional Stylesheets
+
+- `forge-core.css`: The Forge core stylesheet. Typically useful when using `<forge-scaffold>` for your outer page layout.
+- `forge-tokens.css`: All design tokens used in the Forge components, so your application has access to them as well.
+- `forge-dark.css`: The default Forge dark theme (must be loaded after `forge.css`).
 
 ```javascript
-// In your main JavaScript file
 import "@tylertech/forge/dist/forge-core.css";
-import "@tylertech/forge/dist/forge.css";
 ```
 
 ## Next Steps

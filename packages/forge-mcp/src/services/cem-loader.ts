@@ -21,6 +21,7 @@ const FORGE_PACKAGE_NAME = '@tylertech/forge';
 export class CEMLoader {
   private _cemData: CustomElementsManifest | null = null;
   private _componentsMap: Map<string, CEMComponentDeclaration> = new Map();
+  private _componentPackageMap: Map<string, PackageManifest> = new Map();
   private _packageDiscovery: PackageDiscoveryService;
   private _bundledManifestLoader: BundledManifestLoader;
   private _loadedPackages: PackageManifest[] = [];
@@ -123,6 +124,18 @@ export class CEMLoader {
         }
       }
     }
+
+    this._componentPackageMap.clear();
+
+    for (const pkg of this._loadedPackages) {
+      for (const module of (pkg.content as CustomElementsManifest).modules) {
+        for (const declaration of module.declarations) {
+          if (declaration.kind === 'class' && declaration.customElement && declaration.tagName) {
+            this._componentPackageMap.set(declaration.tagName, pkg);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -137,6 +150,13 @@ export class CEMLoader {
    */
   public getComponent(tagName: string): CEMComponentDeclaration | undefined {
     return this._componentsMap.get(tagName);
+  }
+
+  /**
+   * Get the package manifest a component was loaded from, including its version and source
+   */
+  public getComponentPackage(tagName: string): PackageManifest | undefined {
+    return this._componentPackageMap.get(tagName);
   }
 
   /**

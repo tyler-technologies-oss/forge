@@ -1,0 +1,11 @@
+## Equivalent actions
+
+Only one of `end-large` and `end-small` is visible at a time, and the other is hidden. Make both slots expose the same actions so keyboard and screen reader users can reach everything at any size.
+
+## Labeling
+
+Give every icon button in the toolbar an `aria-label`, such as "Back" or "More actions", since it has no visible text. If you use a menu in `end-small`, label its trigger button as well.
+
+## Keyboard interaction
+
+The responsive toolbar is a layout container with no keyboard behavior of its own. Slotted controls follow the natural tab order: `before-start`, `start`, the visible end slot, then `after-end`. See <a href={`${import.meta.env.BASE_URL}components/menu/accessibility/`}>menu</a> for the keys supported by an overflow menu.

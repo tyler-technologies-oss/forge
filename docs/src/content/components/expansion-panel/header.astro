@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-96">
+    <forge-expansion-panel open>
+      <button slot="header" type="button" aria-controls="panel-content" aria-expanded="true">Panel header</button>
+      <div id="panel-content" role="group" class="p-medium">Expansion panels reveal and hide supporting content.</div>
+    </forge-expansion-panel>
+  </div>
+</ComponentHeader>

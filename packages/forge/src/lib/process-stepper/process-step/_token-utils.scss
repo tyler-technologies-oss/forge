@@ -1,5 +1,5 @@
 @use '../../core/styles/tokens/process-stepper/process-step/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: process-step;
 $_tokens: tokens.$tokens;

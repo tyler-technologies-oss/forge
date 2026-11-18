@@ -1,0 +1,11 @@
+## Labeling
+
+Give the field's `<input>` an `id` and bind a `<label>` to it with a matching `for` attribute. Give each member chip a descriptive `aria-label` or `aria-labelledby` so a screen reader can announce what value it represents.
+
+## Keyboard interaction
+
+Member chips must be reachable with the Left and Right arrow keys, with a distinct visual cue showing which chip is currently focused. Backspace and Delete should remove whichever chip currently has that keyboard focus.
+
+## Disabled state
+
+When the field is disabled, the field itself and every member chip need to appear — and behave — disabled. A disabled field with interactive-looking chips is a common gap to check for.

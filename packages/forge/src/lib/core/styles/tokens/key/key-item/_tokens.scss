@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../spacing';
-@use '../../../theme';
-@use '../../../typography';
-@use '../../../utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   icon-color: utils.module-val(key-item, icon-color, theme.variable(tertiary)),

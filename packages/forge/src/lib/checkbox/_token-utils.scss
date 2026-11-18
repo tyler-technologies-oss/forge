@@ -1,5 +1,5 @@
 @use '../core/styles/tokens/checkbox/tokens';
-@use '../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: checkbox;
 $_tokens: tokens.$tokens;

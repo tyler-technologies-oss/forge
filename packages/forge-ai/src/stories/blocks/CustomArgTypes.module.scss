@@ -1,0 +1,32 @@
+.container {
+  position: relative;
+}
+
+.codeLink {
+  position: absolute;
+  top: -54px;
+  left: 54px;
+}
+
+.subcomponentHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.section {
+  margin-block: 24px 32px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:is(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) {
+  th,
+  td {
+    text-align: start;
+  }
+}

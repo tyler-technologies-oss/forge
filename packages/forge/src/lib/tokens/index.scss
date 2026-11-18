@@ -1,1 +1,8 @@
-@forward '../core/styles';
+@forward '@tylertech/forge-tokens/sass/animation' as animation-*;
+@forward '@tylertech/forge-tokens/sass/border' as border-*;
+@forward '@tylertech/forge-tokens/sass/elevation' as elevation-*;
+@forward '../core/styles/scrollbar' as scrollbar-*;
+@forward '@tylertech/forge-tokens/sass/shape' as shape-*;
+@forward '@tylertech/forge-tokens/sass/spacing' as spacing-*;
+@forward '@tylertech/forge-tokens/sass/theme' as theme-*;
+@forward '@tylertech/forge-tokens/sass/typography' as typography-*;

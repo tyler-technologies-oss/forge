@@ -1,5 +1,5 @@
-@use '../../core/styles/spacing';
-@use '../../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../meter/core' as meter;
 @use './token-utils' as *;
 

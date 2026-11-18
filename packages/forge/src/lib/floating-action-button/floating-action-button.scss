@@ -1,5 +1,5 @@
 @use './core' as *;
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../state-layer' as state-layer;
 @use '../focus-indicator' as focus-indicator;
 

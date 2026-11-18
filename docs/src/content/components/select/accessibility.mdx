@@ -1,0 +1,17 @@
+## Keyboard interaction
+
+| Key                                    | Action                                                                                             |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Space / Arrow up / Arrow down (closed) | Opens the select. The arrow keys also highlight the first option.                                  |
+| Escape / Space (open)                  | Closes the select.                                                                                 |
+| Tab / Enter                            | Selects the focused option and closes the select. If "Select all" is focused, toggles all options. |
+| Arrow down / Arrow up                  | Highlights the next or previous option.                                                            |
+| Home / End                             | Highlights the first or last option that isn't disabled.                                           |
+
+In multiple-select mode, Enter toggles the focused option's selected state instead of closing the select.
+
+## Accessible label
+
+Set the `label` property to give the select a visible label. `forge-select` also uses it as the `aria-label` on the host element (which has `role="combobox"`).
+
+If you need an accessible name that differs from the visible label, or you aren't showing a label at all, set `aria-label` or `aria-labelledby` on `forge-select` directly. An `aria-label` you provide is preserved and won't be overwritten by the `label` property.

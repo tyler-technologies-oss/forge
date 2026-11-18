@@ -1,6 +1,6 @@
 // @deprecated - This file is deprecated and will be removed in the next major version of the library.
 
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 .forge-dialog {
   &--scrollable {

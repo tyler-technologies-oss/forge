@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-split-button variant="filled">
+    <forge-button variant="filled">Save</forge-button>
+    <forge-menu>
+      <forge-button variant="filled" aria-label="Show menu" popover-icon aria-haspopup="true"></forge-button>
+    </forge-menu>
+  </forge-split-button>
+</ComponentHeader>

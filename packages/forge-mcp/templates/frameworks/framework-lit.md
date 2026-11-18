@@ -34,18 +34,15 @@ npm install @tylertech/forge
 
 ## USAGE: Component Import Pattern
 
-**Import component definitions and use in Lit templates:**
+**Register components with side-effect imports and use in Lit templates:**
 
 ```typescript
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
 
-// ALWAYS define the components you plan to use from @tylertech/forge using definition functions
-defineButtonComponent();
-defineCardComponent();
-
-// ALWAYS register subpath-only components (e.g. busy-indicator) using side-effect imports
+// ALWAYS register the components you plan to use with side-effect imports (do not use definition functions)
+import '@tylertech/forge/button';
+import '@tylertech/forge/card';
 import '@tylertech/forge/busy-indicator';
 
 @customElement('my-app')
@@ -77,10 +74,8 @@ export class MyApp extends LitElement {
 ```typescript
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { defineTextFieldComponent, defineSwitchComponent } from '@tylertech/forge';
-
-defineTextFieldComponent();
-defineSwitchComponent();
+import '@tylertech/forge/text-field';
+import '@tylertech/forge/switch';
 
 @customElement('user-form')
 export class UserForm extends LitElement {

@@ -1,0 +1,87 @@
+{
+  "shape": {
+    "$type": "dimension",
+    "extra-small": {
+      "$value": "1px"
+    },
+    "extra-small-block-start": {
+      "$value": "{shape.extra-small} {shape.extra-small} 0 0"
+    },
+    "extra-small-block-end": {
+      "$value": "0 0 {shape.extra-small} {shape.extra-small}"
+    },
+    "extra-small-inline-start": {
+      "$value": "{shape.extra-small} 0 0 {shape.extra-small}"
+    },
+    "extra-small-inline-end": {
+      "$value": "0 {shape.extra-small} {shape.extra-small} 0"
+    },
+    "small": {
+      "$value": "2px"
+    },
+    "small-block-start": {
+      "$value": "{shape.small} {shape.small} 0 0"
+    },
+    "small-block-end": {
+      "$value": "0 0 {shape.small} {shape.small}"
+    },
+    "small-inline-start": {
+      "$value": "{shape.small} 0 0 {shape.small}"
+    },
+    "small-inline-end": {
+      "$value": "0 {shape.small} {shape.small} 0"
+    },
+    "medium": {
+      "$value": "4px"
+    },
+    "medium-block-start": {
+      "$value": "{shape.medium} {shape.medium} 0 0"
+    },
+    "medium-block-end": {
+      "$value": "0 0 {shape.medium} {shape.medium}"
+    },
+    "medium-inline-start": {
+      "$value": "{shape.medium} 0 0 {shape.medium}"
+    },
+    "medium-inline-end": {
+      "$value": "0 {shape.medium} {shape.medium} 0"
+    },
+    "large": {
+      "$value": "8px"
+    },
+    "large-block-start": {
+      "$value": "{shape.large} {shape.large} 0 0"
+    },
+    "large-block-end": {
+      "$value": "0 0 {shape.large} {shape.large}"
+    },
+    "large-inline-start": {
+      "$value": "{shape.large} 0 0 {shape.large}"
+    },
+    "large-inline-end": {
+      "$value": "0 {shape.large} {shape.large} 0"
+    },
+    "extra-large": {
+      "$value": "16px"
+    },
+    "extra-large-block-start": {
+      "$value": "{shape.extra-large} {shape.extra-large} 0 0"
+    },
+    "extra-large-block-end": {
+      "$value": "0 0 {shape.extra-large} {shape.extra-large}"
+    },
+    "extra-large-inline-start": {
+      "$value": "{shape.extra-large} 0 0 {shape.extra-large}"
+    },
+    "extra-large-inline-end": {
+      "$value": "0 {shape.extra-large} {shape.extra-large} 0"
+    },
+    "full": {
+      "$value": "9999px",
+      "$description": "Pill shaped"
+    },
+    "round": {
+      "$value": "50%"
+    }
+  }
+}

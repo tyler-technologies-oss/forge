@@ -1,0 +1,493 @@
+---
+/**
+ * ApiReference — renders a component's public API from CEM data.
+ *
+ * One <forge-structured-card> per API section (Properties, Events, Slots,
+ * CSS Parts, CSS Custom Properties, Methods). Properties + attributes are
+ * merged into a single row so authors see the JS name and the HTML attribute
+ * side by side.
+ */
+import { CODE_THEMES } from "../config/code-themes";
+import type {
+  ComponentApi,
+  ComponentPropAttr,
+  ComponentEvent,
+  ComponentSlot,
+  ComponentCssPart,
+  ComponentCssProperty,
+  ComponentMethod,
+} from "../data/components";
+import { resolveTypeValues } from "../data/type-resolver";
+import { Code } from "astro:components";
+
+interface Props {
+  api: ComponentApi;
+  source?: "core" | "block";
+}
+
+const { api, source = "core" } = Astro.props;
+
+/**
+ * Derive the side-effect import snippet shown at the top of the API tab.
+ * `source` comes from the MDX frontmatter (`core` → `@tylertech/forge`,
+ * `block` ships without an import); `importSubpath` comes from the
+ * CEM module path. `block` components ship without an import — we skip.
+ */
+function buildImportSnippet(): string | undefined {
+  if (source === "block" || !api.importSubpath) return undefined;
+  return `import "@tylertech/forge/${api.importSubpath}";`;
+}
+
+const importSnippet = buildImportSnippet();
+
+interface CodeCell {
+  kind: "code";
+  code: string;
+  wrap?: boolean;
+}
+
+interface TypeCell {
+  kind: "type";
+  type: string;
+  members: string[];
+  values?: string[];
+}
+
+type Cell = string | CodeCell | TypeCell;
+
+const EMPTY_CELL = "—";
+const TYPE_OPENERS = "<([{";
+const TYPE_CLOSERS = ">)]}";
+
+/**
+ * Split a type into its top-level union members so each one can wrap onto its
+ * own line. Members nested in generics, tuples, objects or template literals
+ * stay intact, and function types are never split because a `|` after `=>`
+ * belongs to the return type.
+ */
+function splitUnion(typeText: string): string[] {
+  const members: string[] = [];
+  let depth = 0;
+  let inTemplate = false;
+  let start = 0;
+
+  for (let index = 0; index < typeText.length; index++) {
+    const char = typeText[index];
+    if (char === "`") {
+      inTemplate = !inTemplate;
+      continue;
+    }
+    if (inTemplate) {
+      continue;
+    }
+    if (char === ">" && typeText[index - 1] === "=") {
+      if (depth === 0) {
+        return [typeText.trim()];
+      }
+      continue;
+    }
+    if (TYPE_OPENERS.includes(char)) {
+      depth++;
+    } else if (TYPE_CLOSERS.includes(char)) {
+      depth--;
+    } else if (char === "|" && depth === 0) {
+      members.push(typeText.slice(start, index).trim());
+      start = index + 1;
+    }
+  }
+
+  members.push(typeText.slice(start).trim());
+  return members.filter(Boolean);
+}
+
+/**
+ * Build a type cell, attaching resolved literal values when the CEM type name
+ * matches a known Forge type alias. The badges render the union members; the
+ * popover renders the values.
+ */
+function typeCell(typeText: string): Cell {
+  const members = splitUnion(typeText);
+  if (!members.length) {
+    return EMPTY_CELL;
+  }
+  const values = resolveTypeValues(typeText);
+  return { kind: "type", type: typeText, members, values };
+}
+
+/** Split after each `<` so generics like `CustomEvent<Detail>` can wrap. */
+function genericSegments(member: string): string[] {
+  return member.split(/(?<=<)/);
+}
+
+/**
+ * Unwrap `CustomEvent<Detail>` to `Detail`. Native events (`PointerEvent`,
+ * `ToggleEvent`) are shown as-is, since the event object itself carries the
+ * data.
+ */
+function eventDetailType(typeText: string): string {
+  return typeText.trim().match(/^CustomEvent<(.+)>$/)?.[1] ?? typeText;
+}
+
+function codeCell(code: string, wrap = false): CodeCell {
+  return { kind: "code", code, wrap };
+}
+
+interface TableColumn<T> {
+  header: string;
+  render: (item: T) => Cell;
+  align?: "start" | "end";
+  nowrap?: boolean;
+}
+
+interface ApiSection<T> {
+  title: string;
+  data: T[] | undefined;
+  columns: TableColumn<T>[];
+}
+
+const sections: ApiSection<
+  | ComponentPropAttr
+  | ComponentEvent
+  | ComponentSlot
+  | ComponentCssPart
+  | ComponentCssProperty
+  | ComponentMethod
+>[] = [
+  {
+    title: "Properties",
+    data: api.propsAndAttrs,
+    columns: [
+      {
+        header: "Property",
+        render: (i) => {
+          const { property } = i as ComponentPropAttr;
+          return property ? codeCell(property) : EMPTY_CELL;
+        },
+        nowrap: true,
+      },
+      {
+        header: "Attribute",
+        render: (i) => {
+          const { attribute } = i as ComponentPropAttr;
+          return attribute ? codeCell(attribute) : EMPTY_CELL;
+        },
+        nowrap: true,
+      },
+      {
+        header: "Type",
+        render: (i) => typeCell((i as ComponentPropAttr).type),
+      },
+      {
+        header: "Default",
+        render: (i) => {
+          const { default: defaultValue } = i as ComponentPropAttr;
+          return defaultValue ? codeCell(defaultValue, true) : EMPTY_CELL;
+        },
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentPropAttr).description,
+      },
+    ],
+  },
+  {
+    title: "Events",
+    data: api.events,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => codeCell((i as ComponentEvent).name),
+        nowrap: true,
+      },
+      {
+        header: "Detail",
+        render: (i) => typeCell(eventDetailType((i as ComponentEvent).type)),
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentEvent).description,
+      },
+    ],
+  },
+  {
+    title: "Slots",
+    data: api.slots,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => codeCell((i as ComponentSlot).name || "(default)"),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentSlot).description,
+      },
+    ],
+  },
+  {
+    title: "CSS Parts",
+    data: api.cssParts,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => codeCell(`::part(${(i as ComponentCssPart).name})`),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentCssPart).description,
+      },
+    ],
+  },
+  {
+    title: "CSS Custom Properties",
+    data: api.cssProperties,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => codeCell((i as ComponentCssProperty).name),
+        nowrap: true,
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentCssProperty).description,
+      },
+    ],
+  },
+  {
+    title: "Methods",
+    data: api.methods,
+    columns: [
+      {
+        header: "Name",
+        render: (i) => codeCell((i as ComponentMethod).name),
+        nowrap: true,
+      },
+      {
+        header: "Returns",
+        render: (i) => typeCell((i as ComponentMethod).returnType ?? "void"),
+      },
+      {
+        header: "Description",
+        render: (i) => (i as ComponentMethod).description,
+      },
+    ],
+  },
+];
+
+const activeSections = sections.filter((s) => s.data?.length);
+
+const cellClass = "px-medium py-small align-middle";
+
+const badgeClass =
+  "[--forge-badge-background:var(--forge-theme-surface-dim)]";
+
+const wrappingBadgeClass = `${badgeClass} [--forge-badge-height:auto]`;
+
+function sectionId(sectionTitle: string): string {
+  return `api-section-${sectionTitle.replace(/\s+/g, "-").toLowerCase()}`;
+}
+---
+
+<div class="flex flex-col gap-large api-content">
+  <!-- <div class="flex items-center gap-small">
+    <forge-badge theme="primary" class="square-badge">
+      <code>{`<${api.tagName}>`}</code>
+    </forge-badge>
+  </div> -->
+
+  {api.summary && <p class="text-body1 text-medium m-0">{api.summary}</p>}
+
+  {
+    importSnippet && (
+      <Code code={importSnippet} lang="ts" themes={CODE_THEMES} class="p-medium" />
+    )
+  }
+
+  {
+    activeSections.map((section) => (
+      <forge-structured-card heading-level="3" body-spacing="none">
+        <span slot="title" id={sectionId(section.title)} class="text-heading3">
+          {section.title}
+        </span>
+        <div slot="body" class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b border-outline">
+                {section.columns.map((col, colIndex) => (
+                  <th
+                    class:list={[
+                      cellClass,
+                      "text-body1 font-medium text-high",
+                      col.align === "end" ? "text-end" : "text-start",
+                      col.nowrap && "whitespace-nowrap",
+                      colIndex === section.columns.length - 1 &&
+                        "w-full min-w-[200px]",
+                    ]}>
+                    {col.header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {section.data!.map((item, rowIndex) => (
+                <tr class="border-b border-outline last:border-b-0">
+                  {section.columns.map((col, colIndex) => {
+                    const value = col.render(item);
+                    const anchorId = `type-${api.tagName}-${section.title.replace(/\s+/g, "-").toLowerCase()}-${rowIndex}-${colIndex}`;
+                    return (
+                      <td
+                        class:list={[
+                          cellClass,
+                          col.nowrap && "whitespace-nowrap",
+                        ]}>
+                        {typeof value === "string" ? (
+                          <span class="text-body1 text-high">{value}</span>
+                        ) : value.kind === "code" ? (
+                          <forge-badge
+                            theme="info-secondary"
+                            class:list={[
+                              "square-badge",
+                              value.wrap ? wrappingBadgeClass : badgeClass,
+                            ]}>
+                            <code
+                              class:list={[
+                                "font-normal",
+                                value.wrap && "whitespace-normal",
+                              ]}>
+                              {value.code}
+                            </code>
+                          </forge-badge>
+                        ) : (
+                          <span class="flex flex-wrap items-center gap-xxsmall">
+                            {value.members.map((member, memberIndex) => (
+                              <span class="inline-flex items-center gap-xxsmall">
+                                {memberIndex > 0 && (
+                                  <span class="text-label2 text-medium">|</span>
+                                )}
+                                <forge-badge
+                                  theme="info-secondary"
+                                  class:list={["square-badge", wrappingBadgeClass]}>
+                                  <code class="font-normal whitespace-normal">
+                                    {genericSegments(member).map(
+                                      (segment, segmentIndex) => (
+                                        <>
+                                          {segmentIndex > 0 && <wbr />}
+                                          {segment}
+                                        </>
+                                      )
+                                    )}
+                                  </code>
+                                </forge-badge>
+                              </span>
+                            ))}
+                            {value.values && (
+                              <>
+                                <forge-icon-button
+                                  dense
+                                  id={anchorId}
+                                  aria-label={`Show values for ${value.type}`}>
+                                  <forge-icon name="info_outline" external />
+                                </forge-icon-button>
+                                <forge-popover
+                                  anchor={anchorId}
+                                  placement="right">
+                                  <forge-toolbar
+                                    no-border
+                                    class="bg-primary-container-minimum">
+                                    <forge-badge
+                                      slot="start"
+                                      theme="info-secondary"
+                                      class="square-badge">
+                                      <code class="font-normal">
+                                        {value.type}
+                                      </code>
+                                    </forge-badge>
+                                    <forge-icon-button
+                                      slot="end"
+                                      dense
+                                      aria-label="Close"
+                                      data-popover-close>
+                                      <forge-icon name="close" />
+                                    </forge-icon-button>
+                                  </forge-toolbar>
+
+                                  <forge-list
+                                    noninteractive
+                                    class="type-values-list">
+                                    {value.values.map((v) => (
+                                      <forge-list-item>{v}</forge-list-item>
+                                    ))}
+                                  </forge-list>
+                                </forge-popover>
+                              </>
+                            )}
+                          </span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </forge-structured-card>
+    ))
+  }
+</div>
+
+<style>
+  /*
+   * Scoped styles compile in isolation, so `@apply` needs an `@reference`
+   * to see forge-tailwind utilities. Every value below routes through a
+   * Forge token — no raw sizes, no ad-hoc colors.
+   */
+  @reference "../styles/global.css";
+
+  /*
+   * Popover value list — forge-list handles row height, hover, and dividers.
+   * Only tweak is a tight block padding so the popover hugs the list.
+   */
+  :global(forge-popover:has(.type-values-list)) {
+    --forge-popover-padding: 0;
+    --forge-popover-min-width: 320px;
+  }
+
+  /*
+   * Import snippet — Shiki emits `<pre class="astro-code">` with theme-baked
+   * inline styles, so we just handle padding + spacing between the label and
+   * the code block via forge-tailwind utilities.
+   */
+  .import-snippet {
+    @apply flex flex-col gap-xxsmall;
+  }
+
+  .import-snippet :global(pre.astro-code) {
+    @apply m-0 p-medium overflow-x-auto text-label1 rounded-md;
+  }
+</style>
+
+<script>
+  /**
+   * Close the type-value popover when its toolbar close button is clicked.
+   * The close button lives inside <forge-popover>'s default slot, so we walk
+   * up to the enclosing popover and toggle `.open = false`.
+   */
+  function initTypePopoverClose(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-popover-close]")
+      .forEach((btn) => {
+        if (btn.dataset.initialized === "true") return;
+        btn.dataset.initialized = "true";
+        btn.addEventListener("click", () => {
+          const popover = btn.closest("forge-popover") as
+            | (HTMLElement & { open: boolean })
+            | null;
+          if (popover) popover.open = false;
+        });
+      });
+  }
+
+  document.addEventListener("astro:page-load", initTypePopoverClose);
+</script>

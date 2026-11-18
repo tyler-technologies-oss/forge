@@ -1,5 +1,5 @@
 @use '../../core/styles/tokens/radio/tokens';
-@use '../../core/styles/tokens/token-utils';
+@use '@tylertech/forge-tokens/sass/token-utils';
 
 $_module: radio;
 $_tokens: tokens.$tokens;

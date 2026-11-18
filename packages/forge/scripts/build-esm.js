@@ -45,7 +45,7 @@ const scssPlugin = () => ({
     if (!id.endsWith('.scss')) {
       return null;
     }
-    const result = sass.compile(id, { style: 'compressed' });
+    const result = sass.compile(id, { style: 'compressed', loadPaths: ['node_modules'] });
     return {
       code: `export default ${JSON.stringify(result.css)};`,
       map: null

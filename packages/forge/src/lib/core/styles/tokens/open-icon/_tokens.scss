@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../utils';
-@use '../../animation';
-@use '../../theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/theme';
 
 $tokens: (
   color: utils.module-val(open-icon, color, theme.variable(text-high)),

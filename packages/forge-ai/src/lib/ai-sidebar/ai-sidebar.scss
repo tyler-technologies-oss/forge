@@ -1,0 +1,135 @@
+@use '@tylertech/forge/dist/drawer/forge-drawer';
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge-tokens/sass/animation' as forge-animation;
+@use '@tylertech/forge-tokens/sass/shape' as forge-shape;
+
+:host {
+  display: block;
+  width: auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+.animation-container {
+  --forge-drawer-width: 420px;
+  width: var(--forge-drawer-width);
+  height: 100%;
+  position: relative;
+  transition: width 250ms cubic-bezier(0.2, 0, 0, 1);
+  overflow: hidden;
+
+  &--closed {
+    width: 0;
+  }
+
+  &--closing {
+    width: 0;
+  }
+
+  &--open {
+    width: var(--forge-drawer-width);
+  }
+
+  &--resizing {
+    transition: none;
+  }
+}
+
+.forge-drawer {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: var(--forge-drawer-width);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &--resizing {
+    user-select: none;
+    transition: none;
+  }
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 10;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #{forge-theme.variable(outline)};
+    opacity: 0;
+    transition: all #{forge-animation.variable(duration-short4)} #{forge-animation.variable(easing-standard)};
+  }
+
+  &__grip {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    translate: 0 -50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 6px;
+    height: 32px;
+    color: #{forge-theme.variable(text-low)};
+    background-color: #{forge-theme.variable(surface)};
+    border: 1px solid #{forge-theme.variable(outline)};
+    border-inline-start: none;
+    border-start-end-radius: #{forge-shape.variable(medium)};
+    border-end-end-radius: #{forge-shape.variable(medium)};
+    pointer-events: none;
+    transition:
+      color #{forge-animation.variable(duration-short4)} #{forge-animation.variable(easing-standard)},
+      border-color #{forge-animation.variable(duration-short4)} #{forge-animation.variable(easing-standard)};
+
+    svg {
+      flex-shrink: 0;
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+  }
+
+  &:hover::before {
+    opacity: 0.4;
+    width: 2px;
+    background-color: #{forge-theme.variable(primary)};
+  }
+
+  &:focus-visible {
+    outline: 2px solid #{forge-theme.variable(primary)};
+    outline-offset: -2px;
+
+    &::before {
+      opacity: 0.6;
+      width: 2px;
+      background-color: #{forge-theme.variable(primary)};
+    }
+  }
+
+  &--active::before {
+    opacity: 0.8;
+    width: 3px;
+    background-color: #{forge-theme.variable(primary)};
+  }
+
+  &:hover .resize-handle__grip,
+  &:focus-visible .resize-handle__grip,
+  &--active .resize-handle__grip {
+    color: #{forge-theme.variable(primary)};
+    border-color: #{forge-theme.variable(primary)};
+  }
+}

@@ -1,0 +1,51 @@
+<%-
+include('./src/partials/page.ejs', {
+  page: {
+    title: 'AI',
+    includePath: './pages/ai/ai.ejs',
+    options: [
+      { type: 'switch', label: 'AI styles', id: 'opt-ai', defaultValue: true },
+      {
+        type: 'select',
+        label: 'Variant',
+        id: 'opt-variant',
+        defaultValue: 'outlined',
+        options: [
+          { label: 'Plain', value: 'plain' },
+          { label: 'Outlined (default)', value: 'outlined' },
+          { label: 'Tonal', value: 'tonal' },
+          { label: 'Filled', value: 'filled' },
+          { label: 'Raised', value: 'raised' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Shape',
+        id: 'opt-shape',
+        defaultValue: 'default',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Squared', value: 'squared' },
+          { label: 'Rounded', value: 'rounded' }
+        ]
+      },
+      {
+        type: 'select',
+        label: 'Density',
+        id: 'opt-density',
+        defaultValue: 'default',
+        options: [
+          { label: 'Extra small', value: 'extra-small' },
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Default', value: 'default' },
+          { label: 'Large', value: 'large' },
+          { label: 'Extra large', value: 'extra-large' }
+        ]
+      },
+      { type: 'switch', label: 'Invalid', id: 'opt-invalid' },
+      { type: 'switch', label: 'Disabled', id: 'opt-disabled' }
+    ]
+  }
+})
+%>

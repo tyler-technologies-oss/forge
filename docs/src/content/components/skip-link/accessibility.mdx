@@ -1,0 +1,11 @@
+## Skip target
+
+The target element needs `tabindex="-1"` if it isn't already focusable, so the browser can move focus to it after navigation without adding it to the normal tab order.
+
+## Don't overuse it
+
+You may use more than one skip link to reach multiple areas of a page, but be judicious — assistive technology users already have their own methods for navigating between landmarks, and too many skip links can become their own source of frustration rather than a convenience.
+
+## Safari behavior
+
+In Safari, a skip link doesn't behave quite like it does in other browsers, because Safari never includes anchor links in the tab order. Screen reader users can still perceive and use the skip link to navigate the page — this only affects sighted keyboard-only navigation.

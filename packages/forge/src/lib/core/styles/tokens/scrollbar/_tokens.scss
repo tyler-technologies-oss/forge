@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../utils';
-@use '../../shape';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/shape';
 
 $tokens: (
   height: utils.module-val(scrollbar, height, 16px),

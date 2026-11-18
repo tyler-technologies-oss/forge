@@ -2,10 +2,18 @@ import { access, readFile } from 'fs/promises';
 import { join } from 'path';
 import { getProjectDiscoveryService, ProjectDiscoveryService } from './project-discovery.js';
 
+/**
+ * Where a manifest was loaded from: the user's installed package, the latest
+ * published release on npm, or the snapshot bundled with this server.
+ */
+export type PackageManifestSource = 'installed' | 'latest' | 'bundled';
+
 export interface PackageManifest {
   packageName: string;
   manifestPath: string;
   content: any;
+  source: PackageManifestSource;
+  version?: string;
 }
 
 export interface PackageDiscoveryOptions {
@@ -60,7 +68,9 @@ export class PackageDiscoveryService {
         const manifest: PackageManifest = {
           packageName,
           manifestPath,
-          content: JSON.parse(content)
+          content: JSON.parse(content),
+          source: 'installed',
+          version: await this._readPackageVersion(packagePath)
         };
 
         this._manifestCache.set(cacheKey, manifest);
@@ -156,6 +166,15 @@ export class PackageDiscoveryService {
   public clearCache(): void {
     this._manifestCache.clear();
     this._projectDiscovery.clearCache();
+  }
+
+  private async _readPackageVersion(packagePath: string): Promise<string | undefined> {
+    try {
+      const packageJson = JSON.parse(await readFile(join(packagePath, 'package.json'), 'utf-8'));
+      return packageJson.version;
+    } catch {
+      return undefined;
+    }
   }
 
   /**

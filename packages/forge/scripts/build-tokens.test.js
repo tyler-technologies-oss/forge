@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { buildTokens, extractThemeTokens, getThemeCategory, groupTokensByCategory } from './build-tokens.js';
+import { buildTokens, findMissingDescriptions, extractThemeTokens, getThemeCategory, groupTokensByCategory } from './build-tokens.js';
 
 describe('build-tokens', () => {
   describe('buildTokens', () => {
@@ -23,7 +23,7 @@ describe('build-tokens', () => {
     });
 
     it('should write the current schema version when building the manifest', () => {
-      expect(manifest.schemaVersion).toBe('1.1.0');
+      expect(manifest.schemaVersion).toBe('1.2.0');
     });
 
     it('should include both global and theme categories when building the manifest', () => {
@@ -37,6 +37,17 @@ describe('build-tokens', () => {
 
       expect(token?.value).toBeTruthy();
       expect(token).not.toHaveProperty('values');
+    });
+
+    it('should describe every category and token when building the manifest', () => {
+      const undescribedCategories = manifest.categories.filter(({ description }) => !description).map(({ name }) => name);
+      const undescribedTokens = manifest.categories
+        .flatMap(({ tokens }) => tokens)
+        .filter(({ description }) => !description)
+        .map(({ name }) => name);
+
+      expect(undescribedCategories).toEqual([]);
+      expect(undescribedTokens).toEqual([]);
     });
 
     it('should include theme tokens with light and dark values when building the manifest', () => {
@@ -95,6 +106,28 @@ describe('build-tokens', () => {
         { name: '--forge-spacing-sm', value: '8px' }
       ]);
       expect(groups[1].tokens[0].values).toEqual(values);
+    });
+
+    it('should attach descriptions when the category and token are known', () => {
+      const [group] = groupTokensByCategory([{ category: 'spacing', name: '--forge-spacing-medium', value: '16px' }]);
+
+      expect(group.description).toBeTruthy();
+      expect(group.tokens[0].description).toBeTruthy();
+    });
+  });
+
+  describe('findMissingDescriptions', () => {
+    it('should list undescribed categories and tokens when descriptions are missing', () => {
+      const missing = findMissingDescriptions([
+        { name: 'spacing', description: 'Spacing.', tokens: [{ name: '--forge-spacing-a', description: 'A.' }, { name: '--forge-spacing-b' }] },
+        { name: 'unknown', tokens: [{ name: '--forge-unknown-a', description: 'A.' }] }
+      ]);
+
+      expect(missing).toEqual(['--forge-spacing-b', 'category "unknown"']);
+    });
+
+    it('should return an empty list when everything is described', () => {
+      expect(findMissingDescriptions([{ name: 'spacing', description: 'Spacing.', tokens: [{ name: '--forge-spacing-a', description: 'A.' }] }])).toEqual([]);
     });
   });
 });

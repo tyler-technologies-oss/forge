@@ -1,0 +1,152 @@
+---
+import type { SvgComponent } from "astro/types";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DesignIllustration from "../assets/images/home/design.svg";
+import DevelopIllustration from "../assets/images/home/develop.svg";
+import LibrariesIllustration from "../assets/images/home/libraries.svg";
+import MigrateIllustration from "../assets/images/home/migrate.svg";
+import IconsIllustration from "../assets/images/home/icons.svg";
+import DesignTokensIllustration from "../assets/images/home/design-tokens.svg";
+import ComponentsIllustration from "../assets/images/home/components.svg";
+import BlocksIllustration from "../assets/images/home/blocks.svg";
+import heroImage from "../assets/images/home/hero.svg";
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const ILLUSTRATION_SIZE = 64;
+
+interface HomeLink {
+  title: string;
+  description?: string;
+  href: string;
+  illustration?: SvgComponent;
+  hidden?: boolean;
+}
+
+const links: HomeLink[] = [
+  {
+    title: "Design",
+    description: "The basics to get started as a designer using Forge",
+    href: `${baseUrl}designing/getting-started/`,
+    illustration: DesignIllustration,
+  },
+  {
+    title: "Develop",
+    description: "Get set up for building out applications using Forge",
+    href: `${baseUrl}developing/installation/`,
+    illustration: DevelopIllustration,
+  },
+  {
+    title: "Libraries",
+    description: "The basics to get started as a designer using Forge",
+    href: `${baseUrl}designing/getting-started/`,
+    illustration: LibrariesIllustration,
+    hidden: true,
+  },
+  {
+    title: "Migrate",
+    description: "How to update and upgrade to newer Forge releases",
+    href: `${baseUrl}about/changelog/`,
+    illustration: MigrateIllustration,
+    hidden: true,
+  },
+  {
+    title: "Icons",
+    description: "Browse and use the Tyler icon library in your applications",
+    href: `${baseUrl}icons/library/`,
+    illustration: IconsIllustration,
+  },
+  {
+    title: "Design Tokens",
+    description: "The colors, typography, and spacing values behind Forge",
+    href: `${baseUrl}tokens/`,
+    illustration: DesignTokensIllustration,
+  },
+  {
+    title: "Components",
+    description: "Explore the full set of Forge components and their usage",
+    href: `${baseUrl}components/`,
+    illustration: ComponentsIllustration,
+  },
+  {
+    title: "Blocks",
+    description: "Pre-built patterns to jump-start your application layouts",
+    href: `${baseUrl}blocks/`,
+    illustration: BlocksIllustration,
+  },
+];
+
+const visibleLinks = links.filter(({ hidden }) => !hidden);
+---
+
+<BaseLayout title="Home" flush searchable={false}>
+  <div class="flex flex-col min-h-full">
+    <section
+      class="h-[400px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">
+      <img
+        src={heroImage.src}
+        alt=""
+        class="absolute inset-0 -z-10 size-full object-cover mix-blend-luminosity opacity-40"
+      />
+      <h1 class="m-0">
+        <img
+          src="https://forge.tylerdev.io/forge/v3/forge-logo-full-white.svg"
+          alt="Tyler Forge design system"
+          class="block w-[400px] max-w-full"
+        />
+      </h1>
+      <p class="text-body4 m-0 max-w-[760px]">
+        The enterprise-grade design system for public sector software. Built by
+        Tyler Tech.
+      </p>
+    </section>
+
+    <section class="flex-1 bg-primary-container-minimum p-xlarge">
+      <ul
+        class="home-links grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-xlarge list-none m-0 p-0">
+        {
+          visibleLinks.map(({ title, description, href, illustration: Illustration }) => (
+            <li class="m-0">
+              <forge-card class="p-0 h-full">
+                <forge-button-area class="h-full">
+                  <a slot="button" href={href} aria-label={title} />
+                  <div class="h-full flex flex-col items-center gap-large text-center py-xlarge px-large">
+                    {Illustration ? (
+                      <Illustration
+                        width={ILLUSTRATION_SIZE}
+                        height={ILLUSTRATION_SIZE}
+                        class="block shrink-0"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <div class="striped-box size-16 shrink-0 rounded-full p-0" aria-hidden="true" />
+                    )}
+                    <h2 class="text-heading5 text-(--forge-theme-on-primary-container) m-0">
+                      {title}
+                    </h2>
+                    {description && (
+                      <p class="text-body2 m-0">{description}</p>
+                    )}
+                  </div>
+                </forge-button-area>
+              </forge-card>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Forge component CSS variables, not representable as Tailwind utilities. */
+  .home-links forge-card {
+    --forge-card-shape: var(--forge-shape-extra-large);
+    --forge-card-outline-color: var(--forge-theme-primary-container-high);
+    --forge-card-height: 100%;
+  }
+
+  .home-links forge-button-area {
+    --forge-button-area-shape: var(--forge-shape-extra-large);
+  }
+</style>

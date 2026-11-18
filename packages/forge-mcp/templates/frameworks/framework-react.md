@@ -51,15 +51,14 @@ If a `slot` attribute is present on any elements within a parent `<forge-*>` ele
 
 ## USAGE: Component Import Pattern
 
-**Import both React wrapper and component definition:**
+**Import both the React wrapper and the component's side-effect import:**
 
 ```jsx
 import { ForgeButton, ForgeCard } from '@tylertech/forge-react';
-import { defineButtonComponent, defineCardComponent } from '@tylertech/forge';
 
-// ALWAYS define the components you plan to use
-defineButtonComponent();
-defineCardComponent();
+// ALWAYS register the components you plan to use with side-effect imports (do not use definition functions)
+import '@tylertech/forge/button';
+import '@tylertech/forge/card';
 
 // Forge component names in React that uses the "wrappers" use the PascalCase naming convention. Ex. <forge-button> -> <ForgeButton>
 function App() {

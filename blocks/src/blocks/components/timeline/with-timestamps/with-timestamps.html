@@ -1,0 +1,26 @@
+<!--
+  @block Timeline — With Timestamps
+  @type component
+  @description Timestamps as date headings between timeline items, and as times before, after, or inside an item's detail.
+  @tags timeline, with-timestamps, storybook, component-example
+-->
+<forge-timeline>
+  <forge-timestamp datetime="2024-03-15"></forge-timestamp>
+  <forge-timeline-item>
+    <span>Timestamp after</span>
+    <forge-timestamp datetime="2024-03-15T14:30:00" format="HH:mm" separator="start"></forge-timestamp>
+  </forge-timeline-item>
+  <forge-timeline-item>
+    <forge-timestamp datetime="2024-03-15T12:15:00" format="HH:mm" separator="end"></forge-timestamp>
+    <span>Timestamp before</span>
+  </forge-timeline-item>
+  <forge-timestamp datetime="2024-03-14"></forge-timestamp>
+  <forge-timeline-item>
+    <span>No timestamp separator</span>
+    <forge-timestamp datetime="2024-03-14T16:45:00" format="HH:mm"></forge-timestamp>
+  </forge-timeline-item>
+  <forge-timeline-item>
+    <span>Timestamp in detail</span>
+    <div slot="detail">Posted at <forge-timestamp datetime="2024-03-14T16:45:00" format="HH:mm"></forge-timestamp></div>
+  </forge-timeline-item>
+</forge-timeline>

@@ -1,0 +1,18 @@
+<!--
+  @block Button Area — As a Link
+  @type component
+  @description A button area wrapping an anchor so the whole card navigates when clicked.
+  @tags button-area, as-a-link, anchor, link, navigation, storybook, component-example
+-->
+<forge-card class="p-0 w-[320px] max-w-full">
+  <forge-button-area>
+    <a slot="button" href="javascript: void(0);" aria-labelledby="button-area-link-heading"></a>
+    <div class="flex items-center gap-xsmall p-medium">
+      <div class="me-auto">
+        <div class="text-heading3" id="button-area-link-heading">Page title</div>
+        <div>Click anywhere to navigate.</div>
+      </div>
+      <forge-icon name="chevron_right"></forge-icon>
+    </div>
+  </forge-button-area>
+</forge-card>

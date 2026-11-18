@@ -1,0 +1,12 @@
+---
+/**
+ * Table — replaces markdown (GFM pipe) tables rendered from MDX with Forge's
+ * `.forge-data-table` styling. Raw `<table>` JSX in MDX is not mapped.
+ */
+---
+
+<div class="overflow-x-auto">
+  <table class="forge-data-table">
+    <slot />
+  </table>
+</div>

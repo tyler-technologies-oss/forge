@@ -1,0 +1,26 @@
+# App Launcher
+
+The app launcher lets a user switch between related apps, browse every available app, and jump to custom links, from the app bar's end slot.
+
+## Overview
+
+App launcher is a persistent navigation component for users to switch context. It is a personal local map to navigate a product ecosystem. It lives in the user information section of app bar and is represented by the apps icon.
+
+## Usage
+
+`forge-app-launcher` opens a grid of `relatedApps` and `allApps` — each an object with `label`, `uri`, `iconName`, and an optional `target` — set as JS properties rather than HTML attributes, plus any number of custom `forge-app-launcher-link` entries in its default slot. It automatically switches between a popover on desktop and a dialog on mobile. Place it in the app bar's `end` slot, alongside the other [app bar](./app-bar.md) action buttons. Use it when people regularly need to jump between related applications in a larger ecosystem; for in-app navigation, use a [drawer](./drawer.md) or [menu](./menu.md) instead.
+
+## Rules
+
+**Do**
+
+- Populate relatedApps with only the handful of apps most relevant to the user's current context.
+- Reserve allApps for the complete catalog, surfaced through the launcher's own search and "view all" flow.
+- Give every app option a real iconName so entries are easy to scan visually.
+- Use app-launcher-link entries for a small number of fixed resources, like documentation or support — not for switching between apps.
+
+**Don't**
+
+- Don't use the app launcher for primary in-app navigation — use a drawer or menu instead.
+- Don't populate relatedApps with more than a handful of apps — that defeats its purpose as a shortlist.
+- Don't leave the header and section titles at generic defaults if your ecosystem has its own established terminology for them.

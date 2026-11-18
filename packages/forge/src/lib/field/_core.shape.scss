@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../core/styles/shape';
+@use '@tylertech/forge-tokens/sass/shape';
 @use './token-utils' as *;
 
 $heights: (

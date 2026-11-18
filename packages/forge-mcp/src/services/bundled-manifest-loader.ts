@@ -4,6 +4,9 @@ import { fileURLToPath } from 'url';
 import { PackageManifest } from './package-discovery.js';
 import { CustomElementsManifest } from '../types/index.js';
 
+// Written by scripts/bundle-manifests.js, maps each bundled manifest filename to its package version
+const BUNDLED_VERSIONS_FILENAME = 'versions.json';
+
 export interface BundledManifestLoaderOptions {
   /**
    * Path to the bundled manifests directory. If not provided, will use default location
@@ -69,7 +72,9 @@ export class BundledManifestLoader {
       const manifest: PackageManifest = {
         packageName,
         manifestPath: filePath,
-        content: parsedContent
+        content: parsedContent,
+        source: 'bundled',
+        version: (await this._loadBundledVersions())[filename]
       };
 
       this._manifestCache.set(cacheKey, manifest);
@@ -99,6 +104,14 @@ export class BundledManifestLoader {
    */
   public clearCache(): void {
     this._manifestCache.clear();
+  }
+
+  private async _loadBundledVersions(): Promise<Record<string, string>> {
+    try {
+      return JSON.parse(await readFile(join(this._bundledManifestsPath, BUNDLED_VERSIONS_FILENAME), 'utf-8'));
+    } catch {
+      return {};
+    }
   }
 
   /**

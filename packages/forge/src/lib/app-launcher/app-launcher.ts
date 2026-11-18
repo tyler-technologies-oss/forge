@@ -74,6 +74,8 @@ export const APP_LAUNCHER_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-app-lau
  * @dependency forge-text-field
  * @dependency forge-toolbar
  *
+ * @fires {ToggleEvent} toggle - Dispatched when the app launcher opens or closes.
+ *
  * @slot header-title - Title text for the app launcher header
  * @slot related-apps-title - Title text for the related apps section
  * @slot all-apps-title - Title text for the all apps view
@@ -216,6 +218,16 @@ export class AppLauncherComponent extends BaseLitElement implements IAppLauncher
         this._appView = 'related';
       }
     }
+  }
+
+  public override updated(changedProperties: PropertyValues<this>): void {
+    if (!changedProperties.has('open')) {
+      return;
+    }
+    if (!this.open && changedProperties.get('open') === undefined) {
+      return;
+    }
+    this.#dispatchToggleEvent();
   }
 
   public render(): TemplateResult {
@@ -445,6 +457,17 @@ export class AppLauncherComponent extends BaseLitElement implements IAppLauncher
         <a href="${app.uri}" target="${app.target || '_blank'}">${app.label}</a>
       </forge-list-item>
     `;
+  }
+
+  #dispatchToggleEvent(): void {
+    this.dispatchEvent(
+      new ToggleEvent('toggle', {
+        oldState: this.open ? 'closed' : 'open',
+        newState: this.open ? 'open' : 'closed',
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   #setupMediaQuery(): void {

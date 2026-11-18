@@ -1,6 +1,8 @@
 @use 'sass:math';
 @use 'sass:map';
 
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/shape/tokens" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/tokens/shape" from @tylertech/forge-tokens instead.';
+
 $base: 4px !default;
 $extra-small: math.div($base, 4) !default; // 1px
 $small: math.div($base, 2) !default; // 2px

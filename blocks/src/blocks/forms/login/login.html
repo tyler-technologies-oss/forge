@@ -1,13 +1,14 @@
 <!--
   @block Login Form
   @type template
+  @responsive
   @description Centered authentication form card displayed over a gradient background, featuring credential input fields with labels, a remember-me checkbox, a forgot password link, a primary submit button, a visual divider, and a secondary registration link
   @tags authentication, login, form, card, centered, scaffold, toolbar
 -->
 <body class="gradient-bg p-8 min-h-screen flex items-center justify-center">
   <forge-card class="max-w-md w-full" no-padding>
     <forge-scaffold>
-      {{> simple-toolbar slot="header" title="Sign In"}}
+      {{> card-header title="Sign In"}}
 
       <div slot="body" class="p-medium">
         <form id="login-form" class="flex flex-col gap-medium">

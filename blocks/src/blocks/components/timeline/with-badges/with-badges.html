@@ -1,0 +1,20 @@
+<!--
+  @block Timeline — With Badges
+  @type component
+  @description Timeline items with a badge in the marker slot, themed to match each item's status.
+  @tags timeline, with-badges, storybook, component-example
+-->
+<forge-timeline>
+  <forge-timeline-item>
+    <forge-badge slot="marker">New</forge-badge>
+    <span>Feature Added</span>
+  </forge-timeline-item>
+  <forge-timeline-item theme="error">
+    <forge-badge slot="marker" theme="error">Error</forge-badge>
+    <span>Build Failed</span>
+  </forge-timeline-item>
+  <forge-timeline-item theme="success">
+    <forge-badge slot="marker" theme="success">Done</forge-badge>
+    <span>Tests Passed</span>
+  </forge-timeline-item>
+</forge-timeline>

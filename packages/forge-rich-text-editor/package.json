@@ -87,6 +87,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@tylertech-eslint/eslint-plugin": "catalog:",
     "@tylertech/forge": "workspace:*",
+    "@tylertech/forge-tokens": "workspace:*",
     "@tylertech/stylelint-rules": "catalog:",
     "@types/node": "catalog:",
     "@vitest/browser": "^4.1.2",

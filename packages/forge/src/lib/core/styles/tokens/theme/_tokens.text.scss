@@ -1,27 +1,13 @@
 @use 'sass:map';
-@use './color-emphasis';
-@use './tokens.surface' as surface;
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
 
-// Light
-$tokens: (
-  text-high: rgba(#000, color-emphasis.value(highest)),
-  text-high-inverse: rgba(#fff, color-emphasis.value(highest)),
-  text-medium: rgba(#000, color-emphasis.value(medium-high)),
-  text-medium-inverse: rgba(#fff, color-emphasis.value(medium-high)),
-  text-low: rgba(#000, color-emphasis.value(medium-low)),
-  text-low-inverse: rgba(#fff, color-emphasis.value(medium-low)),
-  text-lowest: rgba(#000, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#fff, color-emphasis.value(lower))
-);
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.text" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
 
-// Dark
-$tokens-dark: (
-  text-high: rgba(#fff, color-emphasis.value(highest)),
-  text-high-inverse: rgba(#000, color-emphasis.value(highest)),
-  text-medium: rgba(#fff, color-emphasis.value(medium-high)),
-  text-medium-inverse: rgba(#000, color-emphasis.value(medium-high)),
-  text-low: rgba(#fff, color-emphasis.value(medium-low)),
-  text-low-inverse: rgba(#000, color-emphasis.value(medium-low)),
-  text-lowest: rgba(#fff, color-emphasis.value(lower)),
-  text-lowest-inverse: rgba(#000, color-emphasis.value(lower))
-);
+$_keys: (text-high, text-high-inverse, text-medium, text-medium-inverse, text-low, text-low-inverse, text-lowest, text-lowest-inverse);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

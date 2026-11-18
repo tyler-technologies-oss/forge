@@ -1,0 +1,31 @@
+<!--
+  @block Process Stepper — With Details
+  @type component
+  @description Vertical process stepper with label-values, read-only checkboxes, and an action button in step detail slots.
+  @tags process-stepper, with-details, storybook, component-example
+-->
+<forge-process-stepper>
+  <forge-process-step state="completed">
+    Application received
+    <forge-label-value slot="detail" inline class="block">
+      <span slot="label">Received</span>
+      <span slot="value">Jul 17, 2026</span>
+    </forge-label-value>
+    <forge-label-value slot="detail" inline class="block">
+      <span slot="label">Received by</span>
+      <span slot="value">J. Rivera</span>
+    </forge-label-value>
+  </forge-process-step>
+  <forge-process-step state="completed">
+    Fees paid
+    <forge-checkbox slot="detail" readonly class="block">Subtask one</forge-checkbox>
+    <forge-checkbox slot="detail" readonly class="block">Subtask two</forge-checkbox>
+    <forge-checkbox slot="detail" readonly class="block">Subtask three</forge-checkbox>
+  </forge-process-step>
+  <forge-process-step state="completed">
+    Internal review
+    <forge-button slot="detail" variant="outlined">Review</forge-button>
+  </forge-process-step>
+  <forge-process-step state="current">Documents approved</forge-process-step>
+  <forge-process-step>Record issued</forge-process-step>
+</forge-process-stepper>

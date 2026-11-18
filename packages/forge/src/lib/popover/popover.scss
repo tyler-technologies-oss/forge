@@ -1,6 +1,6 @@
 @use './core' as *;
 @use './animations';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../overlay';
 
 @layer base, animation, preset, reduced-motion;

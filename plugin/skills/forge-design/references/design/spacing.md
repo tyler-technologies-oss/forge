@@ -1,0 +1,99 @@
+# Spacing
+
+How to apply Tyler Forge's spacing scale so hand-built designs match what Forge components and blocks produce in code.
+
+Forge uses a single spacing scale for every padding, margin, and gap. If a value isn't on the scale, it doesn't belong in a Forge design. Developers build with these tokens directly (`--forge-spacing-medium`, `--forge-spacing-large`), so off-scale values in a mockup either get rounded to the nearest token or end up as one-off CSS.
+
+The guidance here comes from the patterns repeated across Forge's [blocks](https://tylerforge.design/blocks/), the reference implementations developers start from. When your design follows the same rhythm, the handoff is close to one-to-one.
+
+## The scale
+
+Set these up as number variables (or a spacing collection) in Figma, named to match the tokens. The full list is on the [spacing tokens](https://tylerforge.design/tokens/spacing/) page.
+
+| Token                          | Value | Typical use                                                                           |
+| ------------------------------ | ----- | ------------------------------------------------------------------------------------- |
+| `--forge-spacing-xxxsmall`     | 2px   | Optical nudges only                                                                   |
+| `--forge-spacing-xxsmall`      | 4px   | Icon-to-text inside a link, badge, or metric                                          |
+| `--forge-spacing-xsmall`       | 8px   | Icon buttons in a row, label to its control                                           |
+| `--forge-spacing-small`        | 12px  | Compact card padding, stacked checkboxes                                              |
+| **`--forge-spacing-medium`**   | 16px  | **The default.** Container padding, buttons in a group, gaps between fields and cards |
+| `--forge-spacing-medium-large` | 20px  | Rarely used; prefer `--forge-spacing-medium` or `--forge-spacing-large`               |
+| `--forge-spacing-large`        | 24px  | Vertical rhythm between rows of form fields, label/value columns                      |
+| `--forge-spacing-xlarge`       | 32px  | Between major sections of a long form or page                                         |
+| `--forge-spacing-xxlarge`      | 48px  | Large section breaks, empty-state framing                                             |
+| `--forge-spacing-xxxlarge`     | 56px  | Page-level separation on marketing or landing layouts                                 |
+
+**Medium is the default**
+
+Across all blocks, `--forge-spacing-medium` (16px) is used more than every other spacing value combined. If you're unsure, start at `--forge-spacing-medium` and only move off it
+with a reason.
+
+## Spacing by relationship
+
+Pick spacing based on how closely two things are related, not on how much room is available. The closer the relationship, the smaller the gap.
+
+| Relationship                    | Spacing                                              | Example from blocks                                                                             |
+| ------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Parts of one element            | `--forge-spacing-xxsmall`                            | An icon and its count in a view-count metric                                                    |
+| A label and the thing it labels | `--forge-spacing-xsmall`                             | A facet title above its checkbox list; a file picker's label                                    |
+| Siblings in a control group     | `--forge-spacing-xsmall` to `--forge-spacing-medium` | Icon buttons in a toolbar (`--forge-spacing-xsmall`); action buttons (`--forge-spacing-medium`) |
+| Peer content blocks             | `--forge-spacing-medium`                             | Fields in a short form; cards in a grid                                                         |
+| Rows in a multi-column form     | `--forge-spacing-large`                              | Rows in a 6-column grid form (horizontal gap stays `--forge-spacing-medium`)                    |
+| Distinct sections               | `--forge-spacing-xlarge`                             | "Project Details" → "Timeline" in a long form                                                   |
+
+## Container padding
+
+Every surface that holds content uses the same inset, so edges line up from the app shell down to the smallest card.
+
+- **Page body:** `--forge-spacing-medium` on all sides. The body region of `forge-app-layout` is padded with it in every app layout block.
+- **Cards, dialogs, drawers, and sheets:** `--forge-spacing-medium`. This is the built-in default for `forge-card`, and blocks use the same padding for dialog and drawer bodies.
+- **Toolbars:** `--forge-spacing-medium` horizontal, 0 vertical. Height is fixed at 56px, so contents center vertically.
+- **Compact nested surfaces:** `--forge-spacing-small`. Use this for a tonal card inside another card, like a settings row inside a form or the context switcher in a nav drawer.
+- **Standalone, centered content:** `--forge-spacing-large`. Used around content that floats on a page background, like a login card or a centered grid of cards.
+
+Don't stack padding. When a card sits in a padded body, the card's padding is measured from the card's edge, not added to the body's padding. When content needs to go edge to edge, like a table in a card, remove the card's padding entirely so the table's own cells provide the inset.
+
+## Forms
+
+Forms produce most of the spacing questions, and blocks follow a consistent rhythm:
+
+- **Simple, single-column forms:** `--forge-spacing-medium` between every field.
+- **Two-column forms:** `--forge-spacing-medium` between columns and between rows. Collapse to one column below 768px.
+- **Long forms on a 6-column grid:** `--forge-spacing-medium` between columns, **`--forge-spacing-large` between rows**. The larger vertical gap keeps labels from reading as part of the field above.
+- **Section heading to first field:** `--forge-spacing-medium`.
+- **Between sections:** `--forge-spacing-xlarge`, with a divider centered in that space.
+- **Checkbox and radio groups:** stacked with no extra gap (the controls include their own touch target), with the group label `--forge-spacing-xsmall` to `--forge-spacing-small` above.
+- **Form actions:** in a footer toolbar, end-aligned, `--forge-spacing-medium` between buttons.
+
+Labels sit above fields (`label-position="block-start"`) in every form block. The space between label and input is built into the field, so don't add your own.
+
+## Built-in component sizes
+
+These sizes are fixed by the components. Draw them exactly, and lay out other content around them.
+
+| Element                          | Size                                                   |
+| -------------------------------- | ------------------------------------------------------ |
+| App bar                          | 56px tall                                              |
+| Toolbar (header, footer)         | 56px tall, 16px horizontal padding                     |
+| Text field / select              | 40px tall, 12px horizontal padding                     |
+| Button                           | 36px tall, 16px horizontal padding, 64px minimum width |
+| Dense button                     | 24px tall                                              |
+| Icon button (default)            | 48px                                                   |
+| Icon button (`density="medium"`) | 36px, used in toolbars and the app bar                 |
+| List item                        | 48px; 32px dense; 72px two-line; 88px three-line       |
+| List item icon to text           | 24px (8px dense)                                       |
+| Navigation drawer                | 320px wide                                             |
+| Side drawer / sidesheet          | 256px wide                                             |
+| Mini drawer                      | 56px wide (expands to 256px on hover)                  |
+
+## Don'ts
+
+**Don't**
+
+- Use off-scale values like 10px, 15px, or 18px. Round to the nearest token.
+- Add space inside components. Fields, buttons, list items, and toolbars carry their own internal spacing, so your spacing goes between components, not inside them.
+- Fill space just because it's there. Wide screens get more columns or a max-width container, not bigger gaps.
+- Use a divider and large spacing for the same break. A divider replaces some of the space, so center it in the gap rather than adding it on top.
+- Put margins on flex or grid children to space them. Set `gap` on the container to a spacing token such as `--forge-spacing-medium` instead.
+
+For how these values come together in a full application, see [Layout](./layout.md).

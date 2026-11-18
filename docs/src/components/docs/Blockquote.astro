@@ -1,0 +1,26 @@
+---
+/**
+ * Blockquote — a callout-style quote with a Forge-token border-accented
+ * inline-start edge, replacing the browser's default blockquote box model.
+ */
+---
+
+<blockquote
+  class="p-small text-high bg-primary-container-minimum my-medium mx-0 min-h-8 flex items-center rounded-lg">
+  <span class="blockquote-body">
+    <slot />
+  </span>
+</blockquote>
+
+<style lang="scss">
+  /* Slotted MDX content isn't part of this component's own template, so
+     Astro's scoping can't reach it without :global() — same pattern as
+     InlineMessage's `.inline-message-body :global(p)`. */
+
+  @use "@tylertech/forge/sass/typography" as forge-typography;
+  blockquote .blockquote-body :global(p) {
+    @include forge-typography.style(label2);
+    margin: 0;
+    background-color: transparent;
+  }
+</style>

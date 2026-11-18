@@ -1,0 +1,9 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-timestamp datetime="2025-01-15T14:30:00" format="MMM d, yyyy h:mm a"></forge-timestamp>
+</ComponentHeader>

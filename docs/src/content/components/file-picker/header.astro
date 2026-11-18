@@ -1,0 +1,15 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-96">
+    <forge-file-picker>
+      <span slot="primary">Drag files here or</span>
+      <forge-button variant="outlined">Select files</forge-button>
+      <span slot="helper-text">Any file type, up to 10 MB</span>
+    </forge-file-picker>
+  </div>
+</ComponentHeader>

@@ -1,6 +1,6 @@
 @use './core' as *;
 @use './animation';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 //
 // Host styles

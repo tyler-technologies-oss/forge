@@ -1,0 +1,10 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-button variant="raised">Shortcut target</forge-button>
+  <forge-keyboard-shortcut target key="a"></forge-keyboard-shortcut>
+</ComponentHeader>

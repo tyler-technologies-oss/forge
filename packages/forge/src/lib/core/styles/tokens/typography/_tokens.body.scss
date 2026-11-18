@@ -1,44 +1,12 @@
-@use '../../theme';
-@use '../../utils';
-@use './scale';
-@use './type-utils';
-@use './tokens.core' as core;
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/typography/tokens' as typography;
 
-$body1: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(body, font-size, '0875'),
-    line-height: type-utils.font-size-relative(body, line-height, '1125'),
-    letter-spacing: type-utils.calc-letter-spacing(0.5, scale.value('0875'))
-  )
-) !default;
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/typography/tokens.body" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/typography/tokens" from @tylertech/forge-tokens instead.';
 
-$body2: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(body, font-size, '1000'),
-    line-height: type-utils.font-size-relative(body, line-height, '1375'),
-    letter-spacing: type-utils.calc-letter-spacing(0.25, scale.value('1000'))
-  )
-) !default;
-
-$body3: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(body, font-size, '1125'),
-    line-height: type-utils.font-size-relative(body, line-height, '1500'),
-    letter-spacing: type-utils.calc-letter-spacing(0.15, scale.value('1125'))
-  )
-) !default;
-
-$body4: utils.inherit-map(
-  core.$base,
-  (
-    font-size: type-utils.font-size-relative(body, font-size, '1250'),
-    line-height: type-utils.font-size-relative(body, line-height, '1750'),
-    letter-spacing: type-utils.calc-letter-spacing(0.1, scale.value('1250'))
-  )
-) !default;
+$body1: map.get(typography.$tokens, body1) !default;
+$body2: map.get(typography.$tokens, body2) !default;
+$body3: map.get(typography.$tokens, body3) !default;
+$body4: map.get(typography.$tokens, body4) !default;
 
 $tokens: (
   body1: $body1,

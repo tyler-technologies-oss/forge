@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   display: utils.module-val(state-layer, display, flex),

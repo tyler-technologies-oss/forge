@@ -95,6 +95,29 @@ describe('User Profile', () => {
     expect(harness.popoverAvatar.imageUrl).toBe(testImageUrl);
   });
 
+  it('should apply custom avatar background and color to both avatars when set on the host', async () => {
+    const harness = await createFixture();
+    harness.element.style.setProperty('--forge-avatar-background', 'rgb(255, 0, 0)');
+    harness.element.style.setProperty('--forge-avatar-color', 'rgb(0, 0, 255)');
+
+    const buttonRoot = getShadowElement(harness.buttonAvatar, '.forge-avatar');
+    const popoverRoot = getShadowElement(harness.popoverAvatar, '.forge-avatar');
+
+    expect(getComputedStyle(buttonRoot).backgroundColor).toBe('rgb(255, 0, 0)');
+    expect(getComputedStyle(popoverRoot).backgroundColor).toBe('rgb(255, 0, 0)');
+    expect(getComputedStyle(popoverRoot).color).toBe('rgb(0, 0, 255)');
+  });
+
+  it('should use a different default background for the popover avatar when no custom value is set', async () => {
+    const harness = await createFixture();
+
+    const buttonRoot = getShadowElement(harness.buttonAvatar, '.forge-avatar');
+    const popoverRoot = getShadowElement(harness.popoverAvatar, '.forge-avatar');
+
+    expect(getComputedStyle(popoverRoot).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    expect(getComputedStyle(popoverRoot).backgroundColor).not.toBe(getComputedStyle(buttonRoot).backgroundColor);
+  });
+
   it('should control popover state via open property', async () => {
     const harness = await createFixture();
 

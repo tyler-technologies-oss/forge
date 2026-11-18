@@ -1,6 +1,6 @@
 @use 'sass:string';
-@use '../../core/styles/animation';
-@use '../../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/theme';
 @use './variables';
 
 @mixin core-styles() {

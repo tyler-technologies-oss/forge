@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": "./changelog.mjs",
   "commit": false,
   "fixed": [],
   "linked": [],
@@ -8,11 +8,16 @@
   "baseBranch": "main",
   "updateInternalDependencies": "minor",
   "privatePackages": {
-    "version": false,
+    "version": true,
     "tag": false
   },
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "out-of-range",
     "onlyUpdatePeerDependentsWhenOutOfRange": true
-  }
+  },
+  "ignore": [
+    "blocks",
+    "forge-docs",
+    "@tylertech/forge-adapter-codegen"
+  ]
 }

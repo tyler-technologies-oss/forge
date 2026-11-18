@@ -2,7 +2,7 @@
 @use '../utils/mixins' as utils;
 @use './animations';
 @use '../backdrop';
-@use '../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/theme';
 
 $can-animate: '[visible]:not([animation-type=none])';
 

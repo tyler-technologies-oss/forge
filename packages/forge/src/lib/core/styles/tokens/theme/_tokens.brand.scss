@@ -1,17 +1,13 @@
 @use 'sass:map';
-@use '../../utils';
-@use './token-utils';
-@use './tokens.surface' as surface;
-@use '../color-palette';
+@use '@tylertech/forge-tokens/sass/theme/tokens' as theme;
 
-// Light
-$tokens: (
-  brand: color-palette.$indigo-800,
-  on-brand: color-palette.$white
-);
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles/tokens/theme/tokens.brand" will be removed in the next major version of @tylertech/forge. Use "@tylertech/forge-tokens/sass/theme/tokens" from @tylertech/forge-tokens instead.';
 
-// Dark
-$tokens-dark: (
-  brand: color-palette.$grey-900,
-  on-brand: color-palette.$white
-);
+$_keys: (brand, on-brand);
+
+$tokens: ();
+$tokens-dark: ();
+@each $key in $_keys {
+  $tokens: map.set($tokens, $key, map.get(theme.$tokens, $key));
+  $tokens-dark: map.set($tokens-dark, $key, map.get(theme.$tokens-dark, $key));
+}

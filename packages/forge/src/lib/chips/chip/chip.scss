@@ -3,8 +3,8 @@
 @use '../../icon-button';
 @use '../../focus-indicator';
 @use '../../state-layer';
-@use '../../core/styles/theme';
-@use '../../core/styles/typography';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
 
 //
 // Host

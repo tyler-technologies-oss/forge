@@ -1,0 +1,16 @@
+<!--
+  @block Breadcrumb — With Icons
+  @type component
+  @description Breadcrumb items with leading icons, including items inside the overflow menu.
+  @tags breadcrumb, icons, overflow-menu, storybook, component-example
+-->
+<forge-breadcrumb aria-label="Breadcrumb">
+  <forge-breadcrumb-item href="#" home></forge-breadcrumb-item>
+  <forge-breadcrumb-overflow-menu>
+    <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Section</forge-breadcrumb-item>
+    <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Subsection</forge-breadcrumb-item>
+    <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Category</forge-breadcrumb-item>
+  </forge-breadcrumb-overflow-menu>
+  <forge-breadcrumb-item href="#"><forge-icon slot="start" name="folder"></forge-icon>Parent</forge-breadcrumb-item>
+  <forge-breadcrumb-item current><forge-icon slot="start" name="folder"></forge-icon>Current page</forge-breadcrumb-item>
+</forge-breadcrumb>

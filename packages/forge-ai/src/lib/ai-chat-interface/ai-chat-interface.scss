@@ -1,0 +1,55 @@
+@use '@tylertech/forge-tokens/sass/spacing' as forge-spacing;
+@use '@tylertech/forge-tokens/sass/typography' as forge-typography;
+@use '@tylertech/forge-tokens/sass/theme' as forge-theme;
+@use '@tylertech/forge/sass/core/styles/scrollbar' as forge-scrollbar;
+
+:host {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+
+  --_ai-chat-interface-message-container-padding: 0;
+}
+
+.ai-chat-interface {
+  @include forge-typography.style(body1);
+  color: #{forge-theme.variable(on-surface)};
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(to top, #{forge-theme.variable(primary-container-minimum)}, #{forge-theme.variable(surface)});
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.messages-container {
+  @include forge-scrollbar.base;
+
+  padding: var(--forge-ai-chat-interface-message-container-padding, var(--_ai-chat-interface-message-container-padding));
+  overflow-y: auto;
+  display: grid;
+  flex-grow: 1;
+  gap: #{forge-spacing.variable(medium)};
+
+  // Safari-specific: force scrollbar to always show
+  @media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+      overflow-y: scroll;
+    }
+  }
+}
+
+.suggestions-container {
+  padding-inline: #{forge-spacing.variable(medium)};
+  padding-block-start: #{forge-spacing.variable(medium)};
+}
+
+.attachments-container {
+  padding-block-end: #{forge-spacing.variable(medium)};
+  padding: #{forge-spacing.variable(xsmall)} #{forge-spacing.variable(medium)} 0;
+}
+
+.prompt-container {
+  padding: #{forge-spacing.variable(medium)};
+}

@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '../../../utils';
-@use '../../../theme';
-@use '../../../spacing';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 $tokens: (
   label-color: utils.module-val(option-group, label-color, theme.variable(text-medium)),

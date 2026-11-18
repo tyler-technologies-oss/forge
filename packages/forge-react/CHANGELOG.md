@@ -1,5 +1,11 @@
 # v3.4.0 (Tue Jul 28 2026)
 
+## 3.7.0
+
+### Features
+
+- d1c657b: **breadcrumb**: add proxies for `forge-breadcrumb`, `forge-breadcrumb-item`, and `forge-breadcrumb-overflow-menu`
+
 ## 3.6.0
 
 ### Minor Changes

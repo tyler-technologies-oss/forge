@@ -1,9 +1,9 @@
 @use 'sass:map';
-@use '../../theme';
-@use '../../shape';
-@use '../../spacing';
-@use '../../border';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(inline-message, background, theme.variable(info-container-low)),

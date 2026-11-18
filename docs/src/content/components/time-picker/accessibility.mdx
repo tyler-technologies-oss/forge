@@ -1,0 +1,11 @@
+## Labeling
+
+Add an `aria-label` to the `<input>` if you're not pairing it with a `<label for>` — the time picker doesn't infer one on its own.
+
+## Automatic ARIA attributes
+
+The component applies `role="combobox"`, `aria-live`, `aria-atomic`, `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-activedescendant`, and `aria-disabled` to the input for you, so you don't need to set those yourself.
+
+## Keyboard interaction
+
+As you arrow through the dropdown, the highlighted option is announced via `aria-activedescendant`.

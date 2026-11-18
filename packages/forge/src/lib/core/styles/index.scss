@@ -1,8 +1,9 @@
-@forward './animation' as animation-*;
-@forward './border' as border-*;
-@forward './elevation' as elevation-*;
+@forward '@tylertech/forge-tokens/sass/animation' as animation-*;
+@forward '@tylertech/forge-tokens/sass/border' as border-*;
+@forward '@tylertech/forge-tokens/sass/elevation' as elevation-*;
 @forward './scrollbar' as scrollbar-*;
-@forward './shape' as shape-*;
-@forward './spacing' as spacing-*;
-@forward './theme' as theme-*;
-@forward './typography' as typography-*;
+@forward '@tylertech/forge-tokens/sass/shape' as shape-*;
+@forward '@tylertech/forge-tokens/sass/spacing' as spacing-*;
+@forward '@tylertech/forge-tokens/sass/theme' as theme-*;
+@forward '@tylertech/forge-tokens/sass/typography' as typography-*;
+@warn 'Deprecated: "@tylertech/forge/sass/core/styles" will be removed in the next major version of @tylertech/forge. Import the modules from @tylertech/forge-tokens instead, for example "@tylertech/forge-tokens/sass/theme".';

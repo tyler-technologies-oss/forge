@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../theme';
-@use '../../../border';
-@use '../../../animation';
-@use '../../../utils';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   background: utils.module-val(drawer, background, theme.variable(surface)),

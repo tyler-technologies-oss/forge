@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '../../animation';
-@use '../../utils';
+@use '@tylertech/forge-tokens/sass/animation';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   animation-duration: utils.module-val(expansion-panel, animation-duration, animation.variable(duration-medium4)),

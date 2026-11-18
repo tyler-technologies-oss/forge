@@ -1,0 +1,27 @@
+<!--
+  @block Text Assist Menu
+  @type pattern
+  @description Text area and text field with an end-slot icon button that opens a menu of AI-style text editing intents such as check grammar, elaborate, and change tone.
+  @tags text-field, textarea, menu, icon-button, text-assist, rewrite, grammar, tone, form
+-->
+<div class="flex flex-col gap-large max-w-[500px]">
+  <forge-text-field label-position="block-start">
+    <label slot="label" for="assist-textarea">Notes</label>
+    <textarea id="assist-textarea" rows="4">I write gud. Me and him goes to the meeting yesterday and we discussed alot of things</textarea>
+    <forge-menu slot="end" id="assist-menu-textarea" placement="bottom-end">
+      <forge-icon-button density="small" aria-label="Edit text with assistant" aria-haspopup="true">
+        <forge-icon name="auto_fix_high"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+  </forge-text-field>
+
+  <forge-text-field label-position="block-start">
+    <label slot="label" for="assist-input">Subject</label>
+    <input type="text" id="assist-input" value="I write gud" />
+    <forge-menu slot="end" id="assist-menu-input" placement="bottom-end">
+      <forge-icon-button density="small" aria-label="Edit text with assistant" aria-haspopup="true">
+        <forge-icon name="auto_fix_high"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
+  </forge-text-field>
+</div>

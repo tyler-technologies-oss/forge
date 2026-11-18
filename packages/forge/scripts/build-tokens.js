@@ -1,10 +1,12 @@
 import * as sass from 'sass';
 import { writeFile } from 'fs/promises';
 import { resolve } from 'path';
+import { describeCategory, describeToken } from './token-descriptions.js';
 
 const TOKENS_ENTRY = 'src/lib/forge-tokens.scss';
 const STYLES_PATH = 'src/lib/core/styles';
-const SCHEMA_VERSION = '1.1.0';
+const NODE_MODULES_PATH = 'node_modules';
+const SCHEMA_VERSION = '1.2.0';
 const CUSTOM_PROPERTY_PATTERN = /(--forge-([a-z0-9]+)-[a-z0-9-]+):\s*([^;]+);/g;
 
 const CATEGORY_BY_PREFIX = {
@@ -18,8 +20,8 @@ const CATEGORY_BY_PREFIX = {
 };
 
 const THEME_TOKEN_PREFIX = '--forge-theme-';
-const THEME_LIGHT_SOURCE = `@use 'theme'; :root { @include theme.properties; }`;
-const THEME_DARK_SOURCE = `@use 'theme'; :root { @include theme.properties-dark; }`;
+const THEME_LIGHT_SOURCE = `@use '@tylertech/forge-tokens/sass/theme'; :root { @include theme.properties; }`;
+const THEME_DARK_SOURCE = `@use '@tylertech/forge-tokens/sass/theme'; :root { @include theme.properties-dark; }`;
 const THEME_ROLES = ['brand', 'primary', 'secondary', 'tertiary', 'surface', 'text', 'success', 'error', 'warning', 'info', 'outline'];
 
 /**
@@ -39,11 +41,11 @@ function parseCustomProperties(css) {
 }
 
 function compileCustomProperties(entry) {
-  return parseCustomProperties(sass.compile(resolve(entry), { style: 'expanded', quietDeps: true }).css);
+  return parseCustomProperties(sass.compile(resolve(entry), { style: 'expanded', loadPaths: [resolve(NODE_MODULES_PATH)], quietDeps: true }).css);
 }
 
 function compileThemeCustomProperties(source) {
-  const { css } = sass.compileString(source, { loadPaths: [resolve(STYLES_PATH)], style: 'expanded', quietDeps: true });
+  const { css } = sass.compileString(source, { loadPaths: [resolve(STYLES_PATH), resolve(NODE_MODULES_PATH)], style: 'expanded', quietDeps: true });
   return parseCustomProperties(css);
 }
 
@@ -80,21 +82,39 @@ export function extractDesignTokens(entry = TOKENS_ENTRY) {
 }
 
 /**
- * Groups tokens by category, preserving the order in which categories first appear.
+ * Groups tokens by category, preserving the order in which categories first appear, and attaches descriptions when known.
  *
  * @param {{ category: string; name: string; value: string; values?: { light: string; dark: string } }[]} tokens The flat list of extracted tokens.
- * @returns {{ name: string; tokens: { name: string; value: string; values?: { light: string; dark: string } }[] }[]} One entry per category.
+ * @returns {{ name: string; description?: string; tokens: { name: string; value: string; values?: { light: string; dark: string }; description?: string }[] }[]} One entry per category.
  */
 export function groupTokensByCategory(tokens) {
   const categories = new Map();
 
   for (const { category, name, value, values } of tokens) {
-    const group = categories.get(category) ?? { name: category, tokens: [] };
-    group.tokens.push(values ? { name, value, values } : { name, value });
+    const description = describeToken(name);
+    const group = categories.get(category) ?? { name: category, ...optional('description', describeCategory(category)), tokens: [] };
+    group.tokens.push({ name, value, ...(values && { values }), ...optional('description', description) });
     categories.set(category, group);
   }
 
   return [...categories.values()];
+}
+
+function optional(key, value) {
+  return value === undefined ? {} : { [key]: value };
+}
+
+/**
+ * Finds categories and tokens that have no description.
+ *
+ * @param {{ name: string; description?: string; tokens: { name: string; description?: string }[] }[]} categories The grouped categories.
+ * @returns {string[]} The names of the categories and tokens missing a description.
+ */
+export function findMissingDescriptions(categories) {
+  return categories.flatMap(({ name, description, tokens }) => [
+    ...(description ? [] : [`category "${name}"`]),
+    ...tokens.filter(token => !token.description).map(token => token.name)
+  ]);
 }
 
 /**
@@ -102,7 +122,13 @@ export function groupTokensByCategory(tokens) {
  */
 export async function buildTokens({ entry = TOKENS_ENTRY, outfile = 'design-tokens.json' } = {}) {
   const tokens = [...extractDesignTokens(entry), ...extractThemeTokens()];
-  const manifest = { schemaVersion: SCHEMA_VERSION, categories: groupTokensByCategory(tokens) };
+  const categories = groupTokensByCategory(tokens);
+  const missing = findMissingDescriptions(categories);
+  if (missing.length) {
+    throw new Error(`Missing design token descriptions. Add them to scripts/token-descriptions.js:\n${missing.join('\n')}`);
+  }
+
+  const manifest = { schemaVersion: SCHEMA_VERSION, categories };
   await writeFile(outfile, `${JSON.stringify(manifest, null, 2)}\n`);
 }
 

@@ -1,5 +1,5 @@
-@use '../../core/styles/typography';
-@use '../../core/styles/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+@use '@tylertech/forge-tokens/sass/theme';
 @use '../../core/styles/scrollbar';
 @use './variables';
 @use '../../focus-indicator';

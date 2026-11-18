@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../../../spacing';
-@use '../../../theme';
-@use '../../../border';
-@use '../../../utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/utils';
 
 $tokens: (
   marker-size: utils.module-val(process-step, marker-size, 20px),

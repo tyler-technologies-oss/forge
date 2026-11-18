@@ -1,8 +1,8 @@
 @use './core';
 @use './token-utils' as *;
-@use '../core/styles/spacing';
-@use '../core/styles/theme';
-@use '../core/styles/animation';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/animation';
 @use '../focus-indicator';
 
 $_input-selector: ':where(input, textarea, select, .forge-field__input)';

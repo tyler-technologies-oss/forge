@@ -22,6 +22,7 @@ export interface IChipFieldAdapter extends IBaseFieldAdapter {
   addInputListener(type: string, listener: EventListener): void;
   removeInputListener(type: string, listener: EventListener): void;
   clickInput(): void;
+  isInputLabelTarget(target: EventTarget | null): boolean;
   tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void;
   removeValueChangeListener(): void;
   getSlottedMemberElements(): HTMLElement[];
@@ -100,6 +101,11 @@ export class ChipFieldAdapter extends BaseFieldAdapter implements IChipFieldAdap
 
   public clickInput(): void {
     this._inputElement?.click();
+  }
+
+  public isInputLabelTarget(target: EventTarget | null): boolean {
+    const label = target instanceof Element ? target.closest('label') : null;
+    return !!label && !!this._inputElement && label.control === this._inputElement;
   }
 
   public tryAddValueChangeListener(context: unknown, listener: ChipFieldValueChangeListener): void {
