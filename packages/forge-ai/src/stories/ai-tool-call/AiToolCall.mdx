@@ -22,7 +22,7 @@ element.toolDefinition = definition;
 element.toolCall = toolCall;
 ```
 
-Nothing is rendered when the tool definition has no `renderer`, or until the call is ready to show. A call is ready once its `status` is `complete`. Set `renderOnStart: true` on the definition to render while the call is still `parsing` or `executing`.
+Nothing is rendered when the tool definition has no `renderer`, or until the call is ready to show. A call is ready once its `status` is `complete`. Set `renderOnStart: true` on the definition to render while the call is still `parsing` or `executing`. A `renderOnStart` renderer also stays shown when the status is `cancelled`.
 
 <Canvas of={AiToolCallStories.RenderOnStart} />
 
@@ -47,7 +47,7 @@ const getCurrentWeather = {
 };
 ```
 
-**Element:** register a custom element and pass its tag. The tool call is assigned to its `toolCall` property, and the same element is updated in place as the call changes.
+**Element:** register a custom element and pass its tag. The tool call is assigned to its `toolCall` property, the tool definition to its `toolDefinition` property, and the same element is updated in place as the call changes.
 
 ```ts
 const getCurrentWeather = {
@@ -56,7 +56,7 @@ const getCurrentWeather = {
 };
 ```
 
-Type the element with `IToolRenderer` from `@tylertech/forge-ai/types` to declare the `toolCall` property.
+Type the element with `IToolRenderer` from `@tylertech/forge-ai/types` to declare the `toolCall` and `toolDefinition` properties. `toolDefinition` lets the renderer read the tool's name, description and parameters.
 
 ### Built-in renderers
 
