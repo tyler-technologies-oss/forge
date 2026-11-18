@@ -28,6 +28,14 @@ The thread emits `forge-ai-message-thread-copy`, `-resend`, `-thumbs-up` and `-t
 
 <Canvas of={AiMessageThreadStories.WithToolCalls} />
 
+### Tool renderer growth
+
+When a custom tool renderer changes size after it is first rendered, it can ask the thread to keep the latest content in view by dispatching a `forge-ai-message-thread-scroll-request` event. The thread follows it only while auto-scroll is on and the user is at the bottom.
+
+```js
+this.dispatchEvent(new CustomEvent('forge-ai-message-thread-scroll-request', { bubbles: true, composed: true }));
+```
+
 ### Errored tool calls
 
 <Canvas of={AiMessageThreadStories.WithErroredToolCalls} />

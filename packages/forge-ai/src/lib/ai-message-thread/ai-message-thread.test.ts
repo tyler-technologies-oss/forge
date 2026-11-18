@@ -543,6 +543,54 @@ describe('AiMessageThreadComponent', () => {
       expect(container(el).scrollTop).toBe(0);
     });
 
+    describe('scroll request', () => {
+      const requestScroll = (el: AiMessageThreadComponent): void => {
+        container(el)
+          .querySelector('.message-thread-content')!
+          .dispatchEvent(new CustomEvent('forge-ai-message-thread-scroll-request', { bubbles: true, composed: true }));
+      };
+
+      it('should scroll to the bottom when a scroll request arrives while pinned to the bottom', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const c = container(el);
+        c.scrollTop = c.scrollHeight - c.clientHeight - 50;
+        c.dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+
+        requestScroll(el);
+
+        await vi.waitFor(() => {
+          expect(c.scrollTop + c.clientHeight).toBeGreaterThanOrEqual(c.scrollHeight - 2);
+        });
+      });
+
+      it('should not scroll when a scroll request arrives after the user scrolled up', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        container(el).scrollTop = 0;
+        container(el).dispatchEvent(new Event('scroll'));
+        await el.updateComplete;
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(container(el).scrollTop).toBe(0);
+      });
+
+      it('should not scroll when a scroll request arrives while auto-scroll is off', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'off' });
+        await settle(el);
+
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(container(el).scrollTop).toBe(0);
+      });
+    });
+
     it('should update scroll state when content resizes', async () => {
       const el = await createElement(manyUserItems(40));
       await settle(el);

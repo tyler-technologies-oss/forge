@@ -158,6 +158,13 @@ export class AiMessageThreadComponent extends LitElement {
     this.#checkScrollState();
   };
 
+  #handleScrollRequest = (): void => {
+    if (this.autoScroll !== 'on') {
+      return;
+    }
+    requestAnimationFrame(() => this.scrollToBottom({ behavior: 'instant' }));
+  };
+
   public scrollToBottom({ force = false, behavior = 'smooth' }: { force?: boolean; behavior?: ScrollBehavior } = {}): void {
     if (!force && !this.#canAutoScroll) {
       return;
@@ -365,7 +372,10 @@ export class AiMessageThreadComponent extends LitElement {
 
   public override render(): TemplateResult {
     return html`
-      <div class="message-thread" @scroll=${this.autoScroll ? this.#handleScroll : undefined}>
+      <div
+        class="message-thread"
+        @scroll=${this.autoScroll ? this.#handleScroll : undefined}
+        @forge-ai-message-thread-scroll-request=${this.#handleScrollRequest}>
         ${this.#scrollToBottomButton}
         <div class="message-thread-content">${this.#emptyState} ${this.#messages} ${this.#thinkingIndicator}</div>
       </div>
