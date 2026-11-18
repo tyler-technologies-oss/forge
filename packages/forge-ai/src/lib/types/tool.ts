@@ -109,6 +109,8 @@ export interface IToolRenderer<TArgs = Record<string, unknown>, TResult = unknow
   presentation?: ToolPresentation;
   /** Assigned by the host to let the renderer open and close the canvas. */
   canvas?: ToolCanvas;
+  /** Assigned by the host so the renderer can read the tool's name, description and parameters. */
+  toolDefinition?: AnyToolDefinition;
 }
 
 /**

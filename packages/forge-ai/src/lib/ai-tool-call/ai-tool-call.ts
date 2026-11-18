@@ -174,6 +174,7 @@ export class AiToolCallComponent extends LitElement {
         existing.toolCall = this.toolCall;
         existing.presentation = this.#presentation;
         existing.canvas = canvas;
+        existing.toolDefinition = this.toolDefinition;
         return;
       }
 
@@ -181,6 +182,7 @@ export class AiToolCallComponent extends LitElement {
       element.toolCall = this.toolCall;
       element.presentation = this.#presentation;
       element.canvas = canvas;
+      element.toolDefinition = this.toolDefinition;
       this.#replaceRenderedElement(container, element);
     } else if (renderer?.render && (changed || !mounted || canvas !== this.#renderedCanvas)) {
       this.#renderedCanvas = canvas;

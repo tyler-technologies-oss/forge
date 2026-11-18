@@ -18,6 +18,7 @@ const RENDERER_TAG = 'forge-ai-test-tool-renderer';
 
 class TestToolRendererElement extends HTMLElement implements IToolRenderer {
   public toolCall!: ToolCall;
+  public toolDefinition?: AnyToolDefinition;
 }
 customElements.define(RENDERER_TAG, TestToolRendererElement);
 
@@ -84,6 +85,26 @@ describe('AiToolCallComponent', () => {
 
     expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBe(rendered);
     expect(rendered?.toolCall).toBe(next);
+  });
+
+  it('should pass the tool definition to a newly created element renderer', async () => {
+    const definition: AnyToolDefinition = { name: 'report', renderer: { elementTag: RENDERER_TAG } };
+    const el = await createElement(createToolCall(), definition);
+
+    expect(el.shadowRoot?.querySelector<TestToolRendererElement>(RENDERER_TAG)?.toolDefinition).toBe(definition);
+  });
+
+  it('should refresh the tool definition on the mounted element renderer when the definition changes', async () => {
+    const definition: AnyToolDefinition = { name: 'report', renderer: { elementTag: RENDERER_TAG } };
+    const el = await createElement(createToolCall(), definition);
+    const rendered = el.shadowRoot?.querySelector<TestToolRendererElement>(RENDERER_TAG);
+    const next: AnyToolDefinition = { name: 'report', description: 'Updated', renderer: { elementTag: RENDERER_TAG } };
+
+    el.toolDefinition = next;
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBe(rendered);
+    expect(rendered?.toolDefinition).toBe(next);
   });
 
   it('should render the output of a render-function renderer with the tool call and context', async () => {
