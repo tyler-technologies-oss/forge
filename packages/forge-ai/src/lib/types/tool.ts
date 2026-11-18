@@ -109,6 +109,8 @@ export interface IToolRenderer<TArgs = Record<string, unknown>, TResult = unknow
   presentation?: ToolPresentation;
   /** Assigned by the host to let the renderer open and close the canvas. */
   canvas?: ToolCanvas;
+  /** Assigned by the host so the renderer can read the tool's name, description and parameters. */
+  toolDefinition?: AnyToolDefinition;
 }
 
 /**
@@ -179,6 +181,13 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
   renderer?: ToolRenderer;
   /** If true, renderer shows immediately on tool call start (default: false). */
   renderOnStart?: boolean;
+  /**
+   * If true, the renderer is the only UI for this call: no tool call indicator row or other call chrome is shown
+   * for it, and the renderer stays shown when the call errors or is cancelled, since nothing else can report them.
+   * Requires `renderer`: a tool without one falls back to the tool call indicator. The thinking indicator stands in
+   * while the renderer is not yet shown, when `show-thinking` is enabled.
+   */
+  rendererOnly?: boolean;
   /** Canvas behavior for hosts that provide a canvas panel. Requires `renderer`. */
   canvas?: ToolCanvasConfig<TArgs, TResult>;
   /** Called when tool call starts (before args stream). */
@@ -208,7 +217,11 @@ export interface ToolCall<TArgs = Record<string, unknown>, TResult = unknown> {
   argsBuffer?: string;
   /** Handler return value once the call completes; an `{ error }` object if the handler threw. */
   result?: TResult;
-  status: 'pending' | 'parsing' | 'executing' | 'complete' | 'error';
+  /**
+   * Lifecycle status. `cancelled` means the call ended without a result, for example because the run was
+   * aborted or the stream ended before the call finished.
+   */
+  status: 'pending' | 'parsing' | 'executing' | 'complete' | 'error' | 'cancelled';
   type: ToolType;
   startTimestamp?: number;
   endTimestamp?: number;

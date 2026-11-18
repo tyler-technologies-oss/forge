@@ -227,6 +227,50 @@ describe('AiAssistantResponseComponent', () => {
       expect(calls[0].toolCall.id).toBe('a');
     });
 
+    it('should render a rendererOnly tool call directly without an indicator row', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true, renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ children: [tool({ id: 'a', name: 'widget' })] }), { tools });
+
+      const calls = el.shadowRoot!.querySelectorAll<HTMLElement & { toolCall: ToolCall }>('forge-ai-tool-call');
+
+      expect(el.shadowRoot!.querySelectorAll('forge-ai-tool-call-indicator')).toHaveLength(0);
+      expect(calls).toHaveLength(1);
+      expect(calls[0].toolCall.id).toBe('a');
+    });
+
+    it('should fall back to the tool call indicator when a rendererOnly tool has no renderer', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true });
+      const el = await createElement(response({ children: [tool({ name: 'widget' })] }), { tools });
+
+      expect(el.shadowRoot!.querySelector('forge-ai-tool-call-indicator')).toBeTruthy();
+    });
+
+    it('should group neighbouring tool calls in separate indicators when a rendererOnly call sits between them', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true, renderer: { elementTag: 'x-widget' } }, { name: 'search' });
+      const el = await createElement(
+        response({
+          children: [
+            tool({ id: 'a', name: 'search' }),
+            tool({ id: 'b', name: 'search' }),
+            tool({ id: 'w', name: 'widget' }),
+            tool({ id: 'c', name: 'search' }),
+            tool({ id: 'd', name: 'search' })
+          ]
+        }),
+        { tools }
+      );
+
+      const container = el.shadowRoot!.querySelector('.assistant-response')!;
+      const tags = Array.from(container.children).map(c => c.tagName.toLowerCase());
+      const indicators = el.shadowRoot!.querySelectorAll<HTMLElement & { toolCalls: ToolCall[] }>('forge-ai-tool-call-indicator');
+
+      expect(tags).toEqual(['forge-ai-tool-call-indicator', 'forge-ai-tool-call', 'forge-ai-tool-call-indicator']);
+      expect(Array.from(indicators).map(i => i.toolCalls.map(t => t.id))).toEqual([
+        ['a', 'b'],
+        ['c', 'd']
+      ]);
+    });
+
     it('should not render tool call elements when no tools are provided', async () => {
       const el = await createElement(response({ children: [tool()] }));
 
@@ -384,6 +428,40 @@ describe('AiAssistantResponseComponent', () => {
 
     it.each(['pending', 'parsing', 'executing'] as const)('should hide while a tool call is %s', async status => {
       const el = await createElement(response({ status: 'streaming', children: [tool({ status })] }), { thinking: true });
+
+      expect(indicator(el)).toBeNull();
+    });
+
+    it('should show the thinking indicator again when a tool call is cancelled', async () => {
+      const el = await createElement(response({ status: 'streaming', children: [tool({ status: 'cancelled' })] }), { thinking: true });
+
+      expect(indicator(el)).toBeTruthy();
+    });
+
+    it('should show while a rendererOnly tool call is executing and its renderer is not shown', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true, renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
+
+      expect(indicator(el)).toBeTruthy();
+    });
+
+    it('should hide while a rendererOnly tool call is executing and its renderer is shown', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true, renderOnStart: true, renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
+
+      expect(indicator(el)).toBeNull();
+    });
+
+    it('should hide while a flagged tool call without a renderer is executing', async () => {
+      const tools = toolsMap({ name: 'widget', rendererOnly: true });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
+
+      expect(indicator(el)).toBeNull();
+    });
+
+    it('should hide while an ordinary tool call with a renderer is executing', async () => {
+      const tools = toolsMap({ name: 'widget', renderer: { elementTag: 'x-widget' } });
+      const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });
 
       expect(indicator(el)).toBeNull();
     });

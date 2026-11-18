@@ -14,11 +14,11 @@ Pass `toolCalls`, plus an optional `tools` map keyed by tool name so each row sh
 
 ## Status
 
-The indicator renders whatever `status` each tool call has. It shows the running summary while any call is not `complete` or `error`. A call whose tool renders its own UI early (`renderOnStart`) counts as settled.
+The indicator renders whatever `status` each tool call has. It shows the running summary while any call is not `complete`, `error` or `cancelled`. A call whose tool renders its own UI early (`renderOnStart`) counts as settled.
 
 <Canvas of={AiToolCallIndicatorStories.Running} />
 
-A failed call is a `status: 'error'` entry.
+A failed call is a `status: 'error'` entry. A call that ends without a result is `status: 'cancelled'`; it is shown like an error and is not treated as running.
 
 <Canvas of={AiToolCallIndicatorStories.FailedToolCall} />
 

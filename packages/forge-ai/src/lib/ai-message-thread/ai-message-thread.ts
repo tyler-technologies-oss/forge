@@ -109,6 +109,7 @@ export class AiMessageThreadComponent extends LitElement {
   readonly #markdownController = new MarkdownStreamController(this);
   readonly #resizeObserver = new ResizeObserver(() => this.#checkScrollState());
   #canAutoScroll = true;
+  #pendingScrollRequest: number | undefined;
 
   public override connectedCallback(): void {
     super.connectedCallback();
@@ -120,6 +121,10 @@ export class AiMessageThreadComponent extends LitElement {
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#resizeObserver.disconnect();
+    if (this.#pendingScrollRequest !== undefined) {
+      cancelAnimationFrame(this.#pendingScrollRequest);
+      this.#pendingScrollRequest = undefined;
+    }
   }
 
   public override firstUpdated(): void {
@@ -156,6 +161,16 @@ export class AiMessageThreadComponent extends LitElement {
 
   #handleScroll = (): void => {
     this.#checkScrollState();
+  };
+
+  #handleScrollRequest = (): void => {
+    if (this.autoScroll !== 'on' || this.#pendingScrollRequest !== undefined) {
+      return;
+    }
+    this.#pendingScrollRequest = requestAnimationFrame(() => {
+      this.#pendingScrollRequest = undefined;
+      this.scrollToBottom();
+    });
   };
 
   public scrollToBottom({ force = false, behavior = 'smooth' }: { force?: boolean; behavior?: ScrollBehavior } = {}): void {
@@ -365,7 +380,10 @@ export class AiMessageThreadComponent extends LitElement {
 
   public override render(): TemplateResult {
     return html`
-      <div class="message-thread" @scroll=${this.autoScroll ? this.#handleScroll : undefined}>
+      <div
+        class="message-thread"
+        @scroll=${this.autoScroll ? this.#handleScroll : undefined}
+        @forge-ai-message-thread-scroll-request=${this.#handleScrollRequest}>
         ${this.#scrollToBottomButton}
         <div class="message-thread-content">${this.#emptyState} ${this.#messages} ${this.#thinkingIndicator}</div>
       </div>

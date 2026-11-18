@@ -31,7 +31,7 @@ export const AiToolCallComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai
 /**
  * @tag forge-ai-tool-call
  *
- * @event {CustomEvent<void>} forge-ai-message-thread-scroll-request - Fired when the rendered content changes size and the containing message thread should scroll to keep it in view.
+ * @event {CustomEvent<void>} forge-ai-message-thread-scroll-request - Fired when a tool renderer element is mounted or replaced, so the containing message thread can scroll to keep it in view.
  */
 @customElement(AiToolCallComponentTagName)
 export class AiToolCallComponent extends LitElement {
@@ -174,6 +174,7 @@ export class AiToolCallComponent extends LitElement {
         existing.toolCall = this.toolCall;
         existing.presentation = this.#presentation;
         existing.canvas = canvas;
+        existing.toolDefinition = this.toolDefinition;
         return;
       }
 
@@ -181,6 +182,7 @@ export class AiToolCallComponent extends LitElement {
       element.toolCall = this.toolCall;
       element.presentation = this.#presentation;
       element.canvas = canvas;
+      element.toolDefinition = this.toolDefinition;
       this.#replaceRenderedElement(container, element);
     } else if (renderer?.render && (changed || !mounted || canvas !== this.#renderedCanvas)) {
       this.#renderedCanvas = canvas;
