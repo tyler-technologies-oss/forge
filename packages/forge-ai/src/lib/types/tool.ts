@@ -183,8 +183,8 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
   renderOnStart?: boolean;
   /**
    * If true, calls to this tool never appear in the tool call indicator and are rendered directly by `renderer`.
-   * Until the renderer is shown, the thinking indicator is displayed instead; once it is shown, the renderer
-   * itself signals activity and the thinking indicator stays hidden. The renderer also stays shown when the
+   * With `show-thinking` on, the thinking indicator is displayed until the renderer is shown; once it is shown,
+   * the renderer itself signals activity and the thinking indicator stays hidden. The renderer also stays shown when the
    * call ends in `error` or `cancelled`, because no indicator row reports either. Requires `renderer`: a flagged tool
    * without one falls back to the normal tool call indicator.
    */

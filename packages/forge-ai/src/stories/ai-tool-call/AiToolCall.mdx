@@ -22,7 +22,7 @@ element.toolDefinition = definition;
 element.toolCall = toolCall;
 ```
 
-Nothing is rendered when the tool definition has no `renderer`, or until the call is ready to show. A call is ready once its `status` is `complete`. Set `renderOnStart: true` on the definition to render while the call is still `parsing` or `executing`. A `renderOnStart` renderer also stays shown when the status is `cancelled`.
+Nothing is rendered when the tool definition has no `renderer`, or until the call is ready to show. A call is ready once its `status` is `complete`. Set `renderOnStart: true` on the definition to render while the call is still `parsing` or `executing`. A `renderOnStart` renderer also stays shown when the status is `cancelled`. A renderer on a `hideIndicator` tool is also shown when the call ends in `error` or `cancelled`, since no tool call indicator row reports either.
 
 <Canvas of={AiToolCallStories.RenderOnStart} />
 
