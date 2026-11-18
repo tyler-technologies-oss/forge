@@ -1,0 +1,79 @@
+{
+  "name": "Forge 3.0",
+  "operations": [
+    {
+      "files": "**/*.{ts,js,tsx,jsx,scss,css,less,html,htm,mdx,md,aspx,asp,cshtml,java,php,erb,rb}",
+      "once": true,
+      "patterns": [
+        { "from": "forge-typography--body1", "to": "forge-typography--temp-body2" },
+        { "from": "forge-typography--body2", "to": "forge-typography--body1" },
+        { "from": "forge-typography--temp-body2", "to": "forge-typography--body2" },
+        { "from": "IPaginatorChangeEvent", "to": "IPaginatorChangeEventData" }
+      ]
+    },
+    {
+      "files": "**/*.{ts,js,tsx,jsx,scss,css,less,html,htm,mdx,md,aspx,asp,cshtml,java,php,erb,rb}",
+      "patterns": [
+        { "from": "forge-typography--caption", "to": "forge-typography--label1" },
+        { "from": "forge-typography--subtitle1-secondary", "to": "forge-typography--heading2" },
+        { "from": "forge-typography--subtitle1", "to": "forge-typography--subheading2" },
+        { "from": "forge-typography--subtitle2-secondary", "to": "forge-typography--subheading1" },
+        { "from": "forge-typography--subtitle2", "to": "forge-typography--heading1" },
+        { "from": "forge-typography--headline1", "to": "forge-typography--display6" },
+        { "from": "forge-typography--headline2", "to": "forge-typography--heading8" },
+        { "from": "forge-typography--headline3", "to": "forge-typography--subheading7" },
+        { "from": "forge-typography--headline4", "to": "forge-typography--subheading5" },
+        { "from": "forge-typography--headline5", "to": "forge-typography--heading4" },
+        { "from": "forge-typography--headline6", "to": "forge-typography--subheading2" },
+        { "from": "forge-typography--title", "to": "forge-typography--subheading4" },
+        { "from": "class=\"forge-typography\"", "to": "" },
+        { "from": "@tylertech\/forge\/styles\/", "to": "@tylertech/forge/sass/" },
+        { "from": "\\[['\"]_foundation['\"]\\]", "to": "['_core']" },
+        { "from": "._foundation", "to": "._core" },
+
+        { "from": "forge-popup", "to": "forge-popover" },
+        { "from": "forgePopup", "to": "forgePopover" },
+        { "from": "ForgePopupModule", "to": "ForgePopoverModule" },
+        { "from": "PopupService", "to": "PopoverService" },
+        { "from": "PopupDirective", "to": "PopoverDirective" },
+
+        { "from": "float-label-type=\"always\"", "to": "float-label" },
+        { "from": "floatLabelType = 'always'", "to": "floatLabel = true" },
+        { "from": "floatLabelType = \"always\"", "to": "floatLabel = true" },
+
+        { "from": "forge-switch-select", "to": "forge-switch-change" },
+        { "from": "forge-tab-bar-activate", "to": "forge-tab-bar-change" },
+        { "from": "ITabBarActivateEventData", "to": "ITabBarChangeEventData" },
+        { "from": "forge-tab-interacted", "to": "forge-tab-select" },
+
+        { "from": "--mdc-theme-primary", "to": "--forge-theme-primary" },
+        { "from": "--mdc-theme-on-primary", "to": "--forge-theme-on-primary" },
+        { "from": "--mdc-theme-secondary", "to": "--forge-theme-secondary" },
+        { "from": "--mdc-theme-on-secondary", "to": "--forge-theme-on-secondary" },
+        { "from": "--mdc-theme-background", "to": "--forge-theme-surface-dim" },
+        { "from": "--mdc-theme-surface", "to": "--forge-theme-surface" },
+        { "from": "--mdc-theme-on-surface", "to": "--forge-theme-on-surface" },
+        { "from": "--mdc-theme-error", "to": "--forge-theme-error" },
+        { "from": "--mdc-theme-on-error", "to": "--forge-theme-on-error" },
+        { "from": "--mdc-theme-text-primary-on-background", "to": "--forge-theme-text-high" },
+        { "from": "--mdc-theme-text-secondary-on-background", "to": "--forge-theme-text-medium" },
+        { "from": "--mdc-theme-text-hint-on-background", "to": "--forge-theme-text-low" },
+        { "from": "--mdc-theme-text-disabled-on-background", "to": "--forge-theme-text-lowest" },
+        { "from": "--mdc-theme-text-icon-on-background", "to": "--forge-theme-text-medium" },
+        { "from": "--mdc-theme-text-primary-on-light", "to": "--forge-theme-text-high" },
+        { "from": "--mdc-theme-text-secondary-on-light", "to": "--forge-theme-text-medium" },
+        { "from": "--mdc-theme-text-disabled-on-light", "to": "--forge-theme-text-low" },
+        { "from": "--mdc-theme-text-primary-on-dark", "to": "--forge-theme-text-high-inverse" },
+        { "from": "--forge-drawer-mini-width", "to": "--forge-mini-drawer-width" },
+
+        { "from": "--forge-file-picker-max-content-width", "to": "--forge-file-picker-max-width" },
+        { "from": "--forge-inline-message-background-color", "to": "--forge-inline-message-background" },
+        { "from": "--forge-avatar-theme-background", "to": "--forge-avatar-background" },
+        { "from": "--forge-icon-theme-color", "to": "--forge-icon-color" },
+        { "from": "--forge-tooltip-theme-background", "to": "--forge-tooltip-background" },
+        { "from": "--forge-page-state-vertical-margin", "to": "--forge-page-state-spacing" },
+        { "from": "--forge-theme-danger", "to": "--forge-theme-error" }
+      ]
+    }
+  ]
+}
