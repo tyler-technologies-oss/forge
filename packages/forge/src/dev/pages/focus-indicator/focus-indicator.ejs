@@ -65,6 +65,44 @@
   </div>
 
 
+  <!-- Scrolled out of view: focus an item, then scroll it out of the container (FORGE-338) -->
+  <section>
+    <h2>Scroll containers</h2>
+    <p>Tab to a button, then scroll it out of view. The indicator should hide with it.</p>
+    <div class="scroll-demo scroll-demo--vertical" id="vertical-scroller">
+      <button type="button" class="example-target">Vertical 1<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Vertical 2<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Vertical 3<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Vertical 4<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Vertical 5<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Vertical 6<forge-focus-indicator></forge-focus-indicator></button>
+    </div>
+    <div class="scroll-demo scroll-demo--horizontal" id="horizontal-scroller">
+      <button type="button" class="example-target">Horizontal 1<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Horizontal 2<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Horizontal 3<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Horizontal 4<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Horizontal 5<forge-focus-indicator></forge-focus-indicator></button>
+      <button type="button" class="example-target">Horizontal 6<forge-focus-indicator></forge-focus-indicator></button>
+    </div>
+  </section>
+
+  <!-- Layout shift: the scrollbar appears and disappears and moves the field (FORGE-296) -->
+  <section>
+    <h2>Layout shift</h2>
+    <p>Focus the field with the keyboard, then click the button. The button doesn't take focus, so the indicator stays active while the scrollbar appears and disappears and it should stay on the field.</p>
+    <forge-button id="toggle-shift-content" variant="outlined">Toggle tall content</forge-button>
+    <div class="shift-demo" id="shift-scroller">
+      <div class="shift-demo__content">
+        <forge-text-field show-clear>
+          <label for="shift-input">Filter</label>
+          <input id="shift-input" type="text" />
+        </forge-text-field>
+        <div class="shift-demo__spacer" id="shift-spacer"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- CSS-only example -->
   <button type="button" class="forge-focus-indicator forge-focus-indicator__target">Button CSS-only</button>
   <button type="button" class="forge-focus-indicator__target">

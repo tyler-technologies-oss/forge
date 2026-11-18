@@ -64,6 +64,10 @@ $outward-inset-calc: calc(-1 * #{token(outward-offset)});
   left: calc(#{token(top-layer-left, value)} + $outward-inset-calc);
   width: calc(#{token(top-layer-width, value)} - 2 * $outward-inset-calc);
   height: calc(#{token(top-layer-height, value)} - 2 * $outward-inset-calc);
+  clip-path: inset(
+    calc(#{token(top-layer-clip-top, value)} + #{token(outward-offset)}) calc(#{token(top-layer-clip-right, value)} + #{token(outward-offset)})
+      calc(#{token(top-layer-clip-bottom, value)} + #{token(outward-offset)}) calc(#{token(top-layer-clip-left, value)} + #{token(outward-offset)})
+  );
 }
 
 @mixin top-layer-inward {
@@ -71,6 +75,10 @@ $outward-inset-calc: calc(-1 * #{token(outward-offset)});
   left: calc(#{token(top-layer-left, value)} + #{token(inward-offset)});
   width: calc(#{token(top-layer-width, value)} - 2 * #{token(inward-offset)});
   height: calc(#{token(top-layer-height, value)} - 2 * #{token(inward-offset)});
+  clip-path: inset(
+    calc(#{token(top-layer-clip-top, value)} - #{token(inward-offset)}) calc(#{token(top-layer-clip-right, value)} - #{token(inward-offset)})
+      calc(#{token(top-layer-clip-bottom, value)} - #{token(inward-offset)}) calc(#{token(top-layer-clip-left, value)} - #{token(inward-offset)})
+  );
 }
 
 @mixin standalone($type: 'outward', $selector: '::after', $pseudo-class: ':focus-visible', $focus-target: null) {
