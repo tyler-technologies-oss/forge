@@ -40,8 +40,8 @@ const gridCells = Array.from(document.querySelectorAll<HTMLElement>('#component-
 const listElement = document.getElementById('component-list') as ListComponent;
 const searchField = document.getElementById('search-field') as HTMLInputElement;
 const searchFieldInput = searchField.querySelector('input') as HTMLInputElement;
-const contentTitleElement = document.querySelector('#content-title') as Element;
-const originalComponentCount = updateContentTitle(componentGroups);
+const filterBadge = document.getElementById('filter-badge') as HTMLElement;
+const originalComponentCount = getComponentCount(componentGroups);
 
 const url = new URL(document.location.href);
 const existingFilter = url.searchParams.get('q');
@@ -101,7 +101,7 @@ function onSearch(filter: string): void {
   const elements = buildComponentsList(groups);
   listElement.replaceChildren(...elements);
   filterGrid(filter);
-  updateContentTitle(groups, getComponentCount(groups) !== originalComponentCount);
+  filterBadge.hidden = getComponentCount(groups) === originalComponentCount;
   updateQueryString(filter);
 }
 
@@ -112,25 +112,6 @@ function updateQueryString(filter: string): void {
     url.searchParams.delete('q');
   }
   history.pushState(null, '', url);
-}
-
-/**
- * Updates the card header text with the component count.
- */
-function updateContentTitle(groups: IComponentGroup[], filtered = false): number {
-  const count = getComponentCount(groups);
-  const titleText = `Components (${count}${filtered ? ` of ${originalComponentCount}` : ''})`;
-  if (filtered) {
-    contentTitleElement.innerHTML = `
-      <div class="flex">
-        ${titleText}
-        <forge-badge>Filtered</forge-badge>
-      </div>
-    `;
-  } else {
-    contentTitleElement.textContent = titleText;
-  }
-  return count;
 }
 
 /**

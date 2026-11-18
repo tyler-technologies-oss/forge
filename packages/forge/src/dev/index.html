@@ -1,1 +1,34 @@
-<%- include('./src/partials/page.ejs', { page: { contentTitle: 'Components', includePath: 'index.ejs' } }) %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./src/partials/head.ejs', { title: undefined }) %>
+  </head>
+  <body>
+    <forge-scaffold class="component-index">
+      <%- include('./src/partials/header.ejs', { title: undefined }); %>
+
+      <!-- Search and view -->
+      <forge-toolbar slot="body-header" class="component-toolbar">
+        <div slot="start" class="component-toolbar__search">
+          <forge-text-field show-clear density="small" id="search-field" class="component-search">
+            <forge-icon slot="leading" name="search"></forge-icon>
+            <input type="text" aria-label="Search components" aria-controls="component-grid component-list" />
+          </forge-text-field>
+          <forge-badge id="filter-badge" hidden>Filtered</forge-badge>
+        </div>
+        <forge-button-toggle-group slot="end" id="view-toggle" class="component-view-toggle" aria-label="View">
+          <forge-button-toggle value="grid">
+            <forge-icon name="grid_view"></forge-icon>
+            <span>Grid</span>
+          </forge-button-toggle>
+          <forge-button-toggle value="list">
+            <forge-icon name="view_list"></forge-icon>
+            <span>List</span>
+          </forge-button-toggle>
+        </forge-button-toggle-group>
+      </forge-toolbar>
+
+      <main slot="body" class="component-index__body"><%- include('index.ejs'); %></main>
+    </forge-scaffold>
+  </body>
+</html>

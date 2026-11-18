@@ -1,4 +1,4 @@
-import { defineComponents, ToastComponent } from '@tylertech/forge';
+import { defineComponents, ToastComponent } from '@tylertech/forge/index';
 import type {
   IAutocompleteComponent,
   IBottomSheetComponent,
@@ -10,7 +10,7 @@ import type {
   ITabBarChangeEventData,
   ITableComponent,
   IViewSwitcherComponent
-} from '@tylertech/forge';
+} from '@tylertech/forge/index';
 import { IconRegistry } from '@tylertech/forge/icon';
 import {
   tylIconAdd,

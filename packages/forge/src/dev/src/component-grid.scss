@@ -5,20 +5,44 @@ $breakpoint-xl: 80rem;
 $breakpoint-2xl: 96rem;
 $font-weight-medium: 500;
 $search-inline-size: 320px;
-$toolbar-z-index: 2;
 $hairline: 1px solid var(--forge-theme-outline);
 $cell-border: 1px solid var(--forge-theme-outline-low);
 
 .component-toolbar {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: $toolbar-z-index;
-  margin-block-end: var(--forge-spacing-medium);
   background: var(--forge-theme-surface-elevated);
 }
 
+.component-toolbar__search {
+  display: flex;
+  align-items: center;
+  column-gap: var(--forge-spacing-medium);
+  inline-size: 100%;
+}
+
+.component-index__body {
+  overflow: auto;
+}
+
+.component-view--list {
+  box-sizing: border-box;
+  max-inline-size: 44rem;
+  margin-inline: auto;
+  padding-inline: var(--forge-spacing-large);
+  padding-block-end: calc(var(--forge-spacing-xxlarge) * 2);
+}
+
 .component-search {
-  inline-size: min(#{$search-inline-size}, 100%);
+  flex: none;
+  inline-size: $search-inline-size;
+}
+
+// The group's own 4px padding and 1px outline on each side bring the total to 40px
+.component-view-toggle {
+  --forge-button-toggle-group-height: 30px;
+
+  forge-icon {
+    --forge-icon-font-size: 18px;
+  }
 }
 
 .component-view[hidden] {
