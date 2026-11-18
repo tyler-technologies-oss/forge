@@ -313,8 +313,11 @@ describe('ForgeAiTooltipComponent', () => {
   describe('switching between tooltips', () => {
     const SHOW_DELAY = 100;
     const SWITCH_GRACE_PERIOD = 100;
+    const LONG_SHOW_DELAY = 5000;
 
-    const renderPair = async (): Promise<{
+    const renderPair = async (
+      showDelay = SHOW_DELAY
+    ): Promise<{
       first: ForgeAiTooltipComponent;
       second: ForgeAiTooltipComponent;
       firstAnchor: HTMLButtonElement;
@@ -325,8 +328,8 @@ describe('ForgeAiTooltipComponent', () => {
       const secondAnchor = createAnchor('second-anchor');
       secondAnchor.style.top = '500px';
       await renderFixture<ForgeAiTooltipComponent>(
-        html`<forge-ai-tooltip for="anchor" text="First" delay=${SHOW_DELAY}></forge-ai-tooltip>
-          <forge-ai-tooltip for="second-anchor" text="Second" delay=${SHOW_DELAY}></forge-ai-tooltip>`,
+        html`<forge-ai-tooltip for="anchor" text="First" delay=${showDelay}></forge-ai-tooltip>
+          <forge-ai-tooltip for="second-anchor" text="Second" delay=${showDelay}></forge-ai-tooltip>`,
         'forge-ai-tooltip'
       );
       const [first, second] = Array.from(document.querySelectorAll<ForgeAiTooltipComponent>('forge-ai-tooltip'));
@@ -395,7 +398,7 @@ describe('ForgeAiTooltipComponent', () => {
     });
 
     it('should not switch instantly when the open tooltip was not opened by hover', async () => {
-      const { first, second, secondAnchor } = await renderPair();
+      const { first, second, secondAnchor } = await renderPair(LONG_SHOW_DELAY);
       first.show();
       await settle(first);
 
