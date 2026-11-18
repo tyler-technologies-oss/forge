@@ -1,5 +1,5 @@
 ---
-'@tylertech/forge-ai': minor
+'@tylertech/forge-ai': patch
 ---
 
 feat(assistant-response): add `hideIndicator` to tool definitions to render a tool call without the tool call indicator; the renderer stays shown when the call errors

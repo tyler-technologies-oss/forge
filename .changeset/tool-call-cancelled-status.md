@@ -1,5 +1,5 @@
 ---
-'@tylertech/forge-ai': minor
+'@tylertech/forge-ai': patch
 ---
 
 feat(tool-call): add `cancelled` tool call status for calls that end without a result
