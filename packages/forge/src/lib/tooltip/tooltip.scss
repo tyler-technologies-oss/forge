@@ -25,6 +25,12 @@
   @include base;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .forge-tooltip {
+    animation-name: fadein;
+  }
+}
+
 .forge-tooltip.no-animation {
   animation: none;
 }
