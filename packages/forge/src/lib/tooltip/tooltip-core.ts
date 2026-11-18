@@ -22,6 +22,13 @@ export interface ITooltipCore {
   syncTooltipAria(): void;
 }
 
+interface IActiveHoverTooltip {
+  readonly owner: object;
+  readonly hide: () => void;
+}
+
+let activeHoverTooltip: IActiveHoverTooltip | undefined;
+
 export class TooltipCore extends WithLongpressListener(Object) implements ITooltipCore {
   private _open = false;
   private _type: TooltipType = TOOLTIP_CONSTANTS.defaults.TYPE;
@@ -159,13 +166,16 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     triggerTypes.forEach(triggerType => triggerRemovers[triggerType]());
   }
 
-  private _show(): void {
+  private _show(skipAnimation = false): void {
     if (!this._adapter.hasContent) {
       return;
     }
 
     this._open = true;
-    this._adapter.show();
+    if (this._isHoveringAnchor) {
+      activeHoverTooltip = { owner: this, hide: () => this._onTryHide() };
+    }
+    this._adapter.show(skipAnimation);
     this._attachTooltipHoverListeners();
     this._attachAnchorOpenHoverListeners();
     DismissibleStack.instance.add(this._adapter.hostElement);
@@ -179,6 +189,9 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     window.clearTimeout(this._longpressVisibilityTimeout);
     this._isHoveringTooltip = false;
     this._isHoveringAnchor = false;
+    if (activeHoverTooltip?.owner === this) {
+      activeHoverTooltip = undefined;
+    }
 
     this._detachTooltipHoverListeners();
     this._detachAnchorOpenHoverListeners();
@@ -241,6 +254,12 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     window.clearTimeout(this._hoverOutsideTimeout);
     this._adapter.addAnchorListener('mousedown', this._hoverEndListener);
     this._adapter.addAnchorListener('mouseleave', this._hoverEndListener);
+
+    if (activeHoverTooltip && activeHoverTooltip.owner !== this) {
+      activeHoverTooltip.hide();
+      this._onTryShow(true);
+      return;
+    }
 
     if (this._delay) {
       this._hoverTimeout = window.setTimeout(() => {
@@ -333,9 +352,9 @@ export class TooltipCore extends WithLongpressListener(Object) implements IToolt
     }, TOOLTIP_CONSTANTS.numbers.LONGPRESS_VISIBILITY_DURATION);
   }
 
-  private _onTryShow(): void {
+  private _onTryShow(skipAnimation = false): void {
     if (!this._open) {
-      this._show();
+      this._show(skipAnimation);
     }
   }
 
