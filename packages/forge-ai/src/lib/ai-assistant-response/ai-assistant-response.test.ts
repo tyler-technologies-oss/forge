@@ -432,6 +432,12 @@ describe('AiAssistantResponseComponent', () => {
       expect(indicator(el)).toBeNull();
     });
 
+    it('should show the thinking indicator again when a tool call is cancelled', async () => {
+      const el = await createElement(response({ status: 'streaming', children: [tool({ status: 'cancelled' })] }), { thinking: true });
+
+      expect(indicator(el)).toBeTruthy();
+    });
+
     it('should show while a hideIndicator tool call is executing and its renderer is not shown', async () => {
       const tools = toolsMap({ name: 'widget', hideIndicator: true, renderer: { elementTag: 'x-widget' } });
       const el = await createElement(response({ status: 'streaming', children: [tool({ name: 'widget', status: 'executing' })] }), { thinking: true, tools });

@@ -43,6 +43,14 @@ describe('shouldShowToolRenderer', () => {
     expect(shouldShowToolRenderer(createToolCall('error'), createDefinition({ hideIndicator: true }))).toBe(true);
   });
 
+  it('should be true for status "cancelled" when the tool opts into hideIndicator', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ hideIndicator: true }))).toBe(true);
+  });
+
+  it('should be true for status "cancelled" when the tool opts into hideIndicator and renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ hideIndicator: true, renderOnStart: true }))).toBe(true);
+  });
+
   it('should be false for status "error" when the tool does not opt into hideIndicator', () => {
     expect(shouldShowToolRenderer(createToolCall('error'), createDefinition())).toBe(false);
   });

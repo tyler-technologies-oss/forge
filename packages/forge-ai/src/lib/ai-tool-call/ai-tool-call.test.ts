@@ -80,6 +80,18 @@ describe('AiToolCallComponent', () => {
     expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeTruthy();
   });
 
+  it('should render the element renderer when the call is cancelled and the tool opts into hideIndicator', async () => {
+    const el = await createElement(createToolCall({ status: 'cancelled' }), { name: 'report', hideIndicator: true, renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeTruthy();
+  });
+
+  it('should render nothing when the call is cancelled and the tool does not opt into hideIndicator', async () => {
+    const el = await createElement(createToolCall({ status: 'cancelled' }), { name: 'report', renderer: { elementTag: RENDERER_TAG } });
+
+    expect(el.shadowRoot?.querySelector(RENDERER_TAG)).toBeNull();
+  });
+
   it('should render nothing when the call errors and the tool does not opt into hideIndicator', async () => {
     const el = await createElement(createToolCall({ status: 'error' }), { name: 'report', renderer: { elementTag: RENDERER_TAG } });
 
