@@ -182,13 +182,12 @@ export interface ToolDefinition<TArgs = Record<string, unknown>, TResult = strin
   /** If true, renderer shows immediately on tool call start (default: false). */
   renderOnStart?: boolean;
   /**
-   * If true, calls to this tool never appear in the tool call indicator and are rendered directly by `renderer`.
-   * With `show-thinking` on, the thinking indicator is displayed until the renderer is shown; once it is shown,
-   * the renderer itself signals activity and the thinking indicator stays hidden. The renderer also stays shown when the
-   * call ends in `error` or `cancelled`, because no indicator row reports either. Requires `renderer`: a flagged tool
-   * without one falls back to the normal tool call indicator.
+   * If true, the renderer is the only UI for this call: no tool call indicator row or other call chrome is shown
+   * for it, and the renderer stays shown when the call errors or is cancelled, since nothing else can report them.
+   * Requires `renderer`: a tool without one falls back to the tool call indicator. The thinking indicator stands in
+   * while the renderer is not yet shown, when `show-thinking` is enabled.
    */
-  hideIndicator?: boolean;
+  rendererOnly?: boolean;
   /** Canvas behavior for hosts that provide a canvas panel. Requires `renderer`. */
   canvas?: ToolCanvasConfig<TArgs, TResult>;
   /** Called when tool call starts (before args stream). */

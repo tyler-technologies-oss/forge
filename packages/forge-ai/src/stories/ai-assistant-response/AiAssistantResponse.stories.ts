@@ -65,7 +65,7 @@ const toolCallResponse: AssistantResponse = {
   ]
 };
 
-const hideIndicatorResponse: AssistantResponse = {
+const rendererOnlyResponse: AssistantResponse = {
   id: 'response-4',
   status: 'complete',
   timestamp: 1700000000000,
@@ -117,14 +117,14 @@ const hideIndicatorResponse: AssistantResponse = {
   ]
 };
 
-const hideIndicatorTools = new Map<string, ToolDefinition>([
+const rendererOnlyTools = new Map<string, ToolDefinition>([
   ['searchDocs', { name: 'searchDocs', displayName: 'Search docs' }],
   [
     'showSummary',
     {
       name: 'showSummary',
       displayName: 'Show summary',
-      hideIndicator: true,
+      rendererOnly: true,
       renderer: createToolRenderer({
         render: toolCall => {
           const element = document.createElement('p');
@@ -216,12 +216,12 @@ export const Thinking: Story = {
   `
 };
 
-/** A tool with `hideIndicator` renders directly, outside the tool call indicator. Tool calls on either side are summarized in separate indicators. */
-export const WithHideIndicator: Story = {
+/** A tool with `rendererOnly` shows only its renderer, with no tool call indicator row. Tool calls on either side are summarized in separate indicators. */
+export const WithRendererOnly: Story = {
   render: args => html`
     <forge-ai-assistant-response
-      .response=${hideIndicatorResponse}
-      .tools=${hideIndicatorTools}
+      .response=${rendererOnlyResponse}
+      .tools=${rendererOnlyTools}
       ?enable-reactions=${args.enableReactions}
       ?debug-mode=${args.debugMode}
       ?show-thinking=${args.showThinking}>

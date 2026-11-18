@@ -39,28 +39,28 @@ describe('shouldShowToolRenderer', () => {
     expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition())).toBe(false);
   });
 
-  it('should be true for status "error" when the tool opts into hideIndicator', () => {
-    expect(shouldShowToolRenderer(createToolCall('error'), createDefinition({ hideIndicator: true }))).toBe(true);
+  it('should be true for status "error" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('error'), createDefinition({ rendererOnly: true }))).toBe(true);
   });
 
-  it('should be true for status "cancelled" when the tool opts into hideIndicator', () => {
-    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ hideIndicator: true }))).toBe(true);
+  it('should be true for status "cancelled" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ rendererOnly: true }))).toBe(true);
   });
 
-  it('should be true for status "cancelled" when the tool opts into hideIndicator and renderOnStart', () => {
-    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ hideIndicator: true, renderOnStart: true }))).toBe(true);
+  it('should be true for status "cancelled" when the tool opts into rendererOnly and renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ rendererOnly: true, renderOnStart: true }))).toBe(true);
   });
 
-  it('should be false for status "error" when the tool does not opt into hideIndicator', () => {
+  it('should be false for status "error" when the tool does not opt into rendererOnly', () => {
     expect(shouldShowToolRenderer(createToolCall('error'), createDefinition())).toBe(false);
   });
 
-  it('should be true for status "complete" when the tool opts into hideIndicator', () => {
-    expect(shouldShowToolRenderer(createToolCall('complete'), createDefinition({ hideIndicator: true }))).toBe(true);
+  it('should be true for status "complete" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('complete'), createDefinition({ rendererOnly: true }))).toBe(true);
   });
 
-  it.each(['pending', 'executing'] as const)('should be false for status "%s" when the tool opts into hideIndicator without renderOnStart', status => {
-    expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ hideIndicator: true }))).toBe(false);
+  it.each(['pending', 'executing'] as const)('should be false for status "%s" when the tool opts into rendererOnly without renderOnStart', status => {
+    expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ rendererOnly: true }))).toBe(false);
   });
 
   it.each(['pending', 'error'] as const)('should be false for status "%s" even with renderOnStart', status => {
