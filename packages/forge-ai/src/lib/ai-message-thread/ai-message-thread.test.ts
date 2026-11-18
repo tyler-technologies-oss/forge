@@ -565,6 +565,20 @@ describe('AiMessageThreadComponent', () => {
         });
       });
 
+      it('should coalesce scroll requests that arrive in the same frame when auto-scroll is on', async () => {
+        const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
+        await settle(el);
+        const scrollToBottom = vi.spyOn(el, 'scrollToBottom');
+
+        requestScroll(el);
+        requestScroll(el);
+        requestScroll(el);
+        await frame();
+        await frame();
+
+        expect(scrollToBottom).toHaveBeenCalledTimes(1);
+      });
+
       it('should not scroll when a scroll request arrives after the user scrolled up', async () => {
         const el = await createElement(manyUserItems(40), { autoScroll: 'on' });
         await settle(el);

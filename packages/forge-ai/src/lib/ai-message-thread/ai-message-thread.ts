@@ -109,6 +109,7 @@ export class AiMessageThreadComponent extends LitElement {
   readonly #markdownController = new MarkdownStreamController(this);
   readonly #resizeObserver = new ResizeObserver(() => this.#checkScrollState());
   #canAutoScroll = true;
+  #pendingScrollRequest: number | undefined;
 
   public override connectedCallback(): void {
     super.connectedCallback();
@@ -120,6 +121,10 @@ export class AiMessageThreadComponent extends LitElement {
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#resizeObserver.disconnect();
+    if (this.#pendingScrollRequest !== undefined) {
+      cancelAnimationFrame(this.#pendingScrollRequest);
+      this.#pendingScrollRequest = undefined;
+    }
   }
 
   public override firstUpdated(): void {
@@ -159,10 +164,13 @@ export class AiMessageThreadComponent extends LitElement {
   };
 
   #handleScrollRequest = (): void => {
-    if (this.autoScroll !== 'on') {
+    if (this.autoScroll !== 'on' || this.#pendingScrollRequest !== undefined) {
       return;
     }
-    requestAnimationFrame(() => this.scrollToBottom({ behavior: 'instant' }));
+    this.#pendingScrollRequest = requestAnimationFrame(() => {
+      this.#pendingScrollRequest = undefined;
+      this.scrollToBottom({ behavior: 'instant' });
+    });
   };
 
   public scrollToBottom({ force = false, behavior = 'smooth' }: { force?: boolean; behavior?: ScrollBehavior } = {}): void {
