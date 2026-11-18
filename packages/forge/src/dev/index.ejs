@@ -1,11 +1,32 @@
-<!-- Filter field-->
-<forge-text-field show-clear id="search-field">
-  <forge-icon slot="leading" name="search"></forge-icon>
-  <input type="text" placeholder="Filter..." />
-</forge-text-field>
+<!-- Search and view -->
+<forge-toolbar class="component-toolbar" no-border>
+  <forge-text-field slot="start" show-clear density="small" id="search-field" class="component-search">
+    <forge-icon slot="leading" name="search"></forge-icon>
+    <input type="search" aria-label="Search components" aria-controls="component-grid component-list" />
+  </forge-text-field>
+  <forge-button-toggle-group slot="end" id="view-toggle" aria-label="View" density="small">
+    <forge-button-toggle value="grid">
+      <forge-icon name="grid_view"></forge-icon>
+      <span>Grid</span>
+    </forge-button-toggle>
+    <forge-button-toggle value="list">
+      <forge-icon name="view_list"></forge-icon>
+      <span>List</span>
+    </forge-button-toggle>
+  </forge-button-toggle-group>
+</forge-toolbar>
 
-<!-- Component list -->
-<forge-list id="component-list"></forge-list>
+<!-- Grid view -->
+<div class="component-view" data-view="grid">
+  <p class="component-grid__empty" id="component-grid-empty" hidden>No components match your search.</p>
+  <%- include('./src/partials/component-grid.ejs'); %>
+</div>
+
+<!-- List view -->
+<div class="component-view" data-view="list" hidden>
+  <forge-list id="component-list"></forge-list>
+</div>
 
 <script type="module" src="src/index.ts"></script>
+<script type="module" src="src/component-grid.ts"></script>
 <script type="module" src="src/component-list.ts"></script>

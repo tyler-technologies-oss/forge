@@ -1,5 +1,6 @@
 import componentsJson from '$src/components.json';
 import { IconRegistry } from '@tylertech/forge/icon';
+import type { IButtonToggleGroupComponent } from '@tylertech/forge/button-toggle';
 import { ListComponent } from '@tylertech/forge/list';
 import { tylIconChevronRight } from '@tylertech/tyler-icons';
 import './component-list.scss';
@@ -17,7 +18,25 @@ interface IComponentIdentifier {
   tags?: string[];
 }
 
+type ComponentView = 'grid' | 'list';
+
+const VIEW_PARAM = 'view';
+const VIEW_STORAGE_KEY = 'forge-dev-component-view';
+const DEFAULT_VIEW: ComponentView = 'grid';
+
 const componentGroups: IComponentGroup[] = createComponentGroups(componentsJson); // Group components alphabetically
+const viewToggle = document.getElementById('view-toggle') as IButtonToggleGroupComponent;
+const viewElements = Array.from(document.querySelectorAll<HTMLElement>('.component-view'));
+const gridEmptyMessage = document.getElementById('component-grid-empty') as HTMLElement;
+const tagsByPath = new Map((componentsJson as IComponentIdentifier[]).map(({ path, tags }) => [path, tags ?? []]));
+const gridCells = Array.from(document.querySelectorAll<HTMLElement>('#component-grid > .cell')).map(cell => {
+  const link = cell.querySelector<HTMLAnchorElement>('.cell__label');
+  return {
+    cell,
+    label: link?.textContent?.trim().toLowerCase() ?? '',
+    tags: tagsByPath.get(link?.getAttribute('href') ?? '') ?? []
+  };
+});
 const listElement = document.getElementById('component-list') as ListComponent;
 const searchField = document.getElementById('search-field') as HTMLInputElement;
 const searchFieldInput = searchField.querySelector('input') as HTMLInputElement;
@@ -26,6 +45,13 @@ const originalComponentCount = updateContentTitle(componentGroups);
 
 const url = new URL(document.location.href);
 const existingFilter = url.searchParams.get('q');
+
+setView(getInitialView());
+viewToggle.addEventListener('forge-button-toggle-group-change', ({ detail }: CustomEvent<ComponentView>) => {
+  if (detail) {
+    setView(detail, { remember: true });
+  }
+});
 
 // Check if we have an existing filter set via URL
 if (existingFilter) {
@@ -74,6 +100,7 @@ function onSearch(filter: string): void {
   });
   const elements = buildComponentsList(groups);
   listElement.replaceChildren(...elements);
+  filterGrid(filter);
   updateContentTitle(groups, getComponentCount(groups) !== originalComponentCount);
   updateQueryString(filter);
 }
@@ -151,4 +178,58 @@ function buildComponentsList(groups: IComponentGroup[]): HTMLElement[] {
   }
 
   return elements;
+}
+
+/**
+ * Shows or hides the grid's demo cells to match the filter, by name or tag.
+ */
+function filterGrid(filter: string): void {
+  gridCells.forEach(({ cell, label, tags }) => {
+    cell.hidden = !!filter && !label.includes(filter) && !tags.some(tag => tag.toLowerCase().includes(filter));
+  });
+  gridEmptyMessage.hidden = gridCells.some(({ cell }) => !cell.hidden);
+}
+
+/**
+ * Picks the view from the URL, then the last choice, then the default.
+ */
+function getInitialView(): ComponentView {
+  const fromUrl = url.searchParams.get(VIEW_PARAM);
+  if (isComponentView(fromUrl)) {
+    return fromUrl;
+  }
+  let stored: string | null = null;
+  try {
+    stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+  } catch {
+    stored = null;
+  }
+  return isComponentView(stored) ? stored : DEFAULT_VIEW;
+}
+
+function isComponentView(value: string | null): value is ComponentView {
+  return value === 'grid' || value === 'list';
+}
+
+/**
+ * Shows the chosen view and keeps the toggle, URL and stored choice in step.
+ */
+function setView(view: ComponentView, { remember = false } = {}): void {
+  viewToggle.value = view;
+  viewElements.forEach(element => (element.hidden = element.dataset.view !== view));
+
+  if (view === DEFAULT_VIEW) {
+    url.searchParams.delete(VIEW_PARAM);
+  } else {
+    url.searchParams.set(VIEW_PARAM, view);
+  }
+  history.replaceState(null, '', url);
+
+  if (remember) {
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+    } catch {
+      // Storage can be unavailable, such as in a private window; the URL still records the view
+    }
+  }
 }
