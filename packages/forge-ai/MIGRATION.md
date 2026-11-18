@@ -162,6 +162,8 @@ User-facing strings that referred to a "chatbot" now use neutral wording, becaus
 - `picture`, `source`, `track`, svg `image`/`feImage` and `mglyph` elements are removed.
 - CSS functions that could load another origin are dropped from svg/mathml presentation attributes.
 - forge-ai's DOMPurify hooks (`target="_blank"` and `rel` on links, image/media handling) are attached only during forge-ai's own sanitize calls. Links rendered by forge-ai still get `target`/`rel`, but the host's own `DOMPurify.sanitize` calls no longer receive them.
+- New `setTrustedImageOrigin(url)` (from `@tylertech/forge-ai/utils`) overrides the trusted image origin. Call it before rendering when forge-ai is bundled into your page's own JavaScript, otherwise the host page is trusted and your service's images render as links. Relative image sources and links then resolve against that origin. A non-http(s) URL trusts no origin.
+- Anchors without an `href` (for example stripped by a host hook) get no `target`/`rel`.
 - New `renderInlineMarkdown(content, { links: false })` option renders links as text, for use inside interactive elements such as a `<button>`.
 
 ## Public API and typing changes
