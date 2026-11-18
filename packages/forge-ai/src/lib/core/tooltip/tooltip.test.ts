@@ -310,6 +310,124 @@ describe('ForgeAiTooltipComponent', () => {
     });
   });
 
+  describe('switching between tooltips', () => {
+    const SHOW_DELAY = 100;
+    const SWITCH_GRACE_PERIOD = 100;
+
+    const renderPair = async (): Promise<{
+      first: ForgeAiTooltipComponent;
+      second: ForgeAiTooltipComponent;
+      firstAnchor: HTMLButtonElement;
+      secondAnchor: HTMLButtonElement;
+    }> => {
+      await page.viewport(1280, 800);
+      const firstAnchor = createAnchor();
+      const secondAnchor = createAnchor('second-anchor');
+      secondAnchor.style.top = '500px';
+      await renderFixture<ForgeAiTooltipComponent>(
+        html`<forge-ai-tooltip for="anchor" text="First" delay=${SHOW_DELAY}></forge-ai-tooltip>
+          <forge-ai-tooltip for="second-anchor" text="Second" delay=${SHOW_DELAY}></forge-ai-tooltip>`,
+        'forge-ai-tooltip'
+      );
+      const [first, second] = Array.from(document.querySelectorAll<ForgeAiTooltipComponent>('forge-ai-tooltip'));
+      await second.updateComplete;
+      return { first, second, firstAnchor, secondAnchor };
+    };
+
+    const tooltipAnimationName = (el: ForgeAiTooltipComponent): string => getComputedStyle(el.shadowRoot!.querySelector('.ai-tooltip')!).animationName;
+
+    it('should immediately open another tooltip and close the open one when hovering a different anchor', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await renderPair();
+
+      await userEvent.hover(firstAnchor);
+      await vi.waitFor(() => expect(first.open).toBe(true));
+
+      await userEvent.hover(secondAnchor);
+
+      expect(first.open).toBe(false);
+      expect(second.open).toBe(true);
+    });
+
+    it('should skip the animation when switching from one tooltip to another', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await renderPair();
+
+      await userEvent.hover(firstAnchor);
+      await vi.waitFor(() => expect(first.open).toBe(true));
+      await settle(first);
+      expect(tooltipAnimationName(first)).not.toBe('none');
+
+      await userEvent.hover(secondAnchor);
+      await settle(second);
+
+      expect(second.open).toBe(true);
+      expect(tooltipAnimationName(second)).toBe('none');
+    });
+
+    it('should animate again when the tooltip is reopened after switching', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await renderPair();
+      await userEvent.hover(firstAnchor);
+      await vi.waitFor(() => expect(first.open).toBe(true));
+      await userEvent.hover(secondAnchor);
+      await settle(second);
+
+      await userEvent.unhover(secondAnchor);
+      expect(second.open).toBe(false);
+      await userEvent.hover(secondAnchor);
+      await vi.waitFor(() => expect(second.open).toBe(true));
+      await settle(second);
+
+      expect(tooltipAnimationName(second)).not.toBe('none');
+    });
+
+    it('should apply the delay again after the open tooltip has closed', async () => {
+      const { first, second, firstAnchor, secondAnchor } = await renderPair();
+
+      await userEvent.hover(firstAnchor);
+      await vi.waitFor(() => expect(first.open).toBe(true));
+      await userEvent.unhover(firstAnchor);
+      expect(first.open).toBe(false);
+      await new Promise(resolve => setTimeout(resolve, SWITCH_GRACE_PERIOD + 50));
+
+      await userEvent.hover(secondAnchor);
+
+      expect(second.open).toBe(false);
+      await vi.waitFor(() => expect(second.open).toBe(true));
+    });
+
+    it('should not switch instantly when the open tooltip was not opened by hover', async () => {
+      const { first, second, secondAnchor } = await renderPair();
+      first.show();
+      await settle(first);
+
+      await userEvent.hover(secondAnchor);
+
+      expect(second.open).toBe(false);
+      expect(first.open).toBe(true);
+    });
+  });
+
+  describe('hover state while animating in', () => {
+    it('should not intercept pointer events while the tooltip animates in', async () => {
+      const { el, anchor } = await renderTooltip(html`<forge-ai-tooltip for="anchor" text="Hello" delay="0"></forge-ai-tooltip>`);
+
+      await userEvent.hover(anchor);
+      await el.updateComplete;
+
+      const tooltip = el.shadowRoot!.querySelector('forge-ai-overlay .ai-tooltip')!;
+      expect(getComputedStyle(tooltip).pointerEvents).toBe('none');
+    });
+
+    it('should make the tooltip interactive once the animation finishes', async () => {
+      const { el, anchor } = await renderTooltip(html`<forge-ai-tooltip for="anchor" text="Hello" delay="0"></forge-ai-tooltip>`);
+
+      await userEvent.hover(anchor);
+      await settle(el);
+
+      const tooltip = el.shadowRoot!.querySelector('forge-ai-overlay .ai-tooltip')!;
+      await vi.waitFor(() => expect(getComputedStyle(tooltip).pointerEvents).toBe('auto'));
+    });
+  });
+
   describe('focus trigger', () => {
     it('should open on focus and close on blur but ignore hover', async () => {
       const { el, anchor } = await renderTooltip(html`<forge-ai-tooltip for="anchor" text="Hello" trigger="focus" delay="0"></forge-ai-tooltip>`);

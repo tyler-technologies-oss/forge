@@ -26,6 +26,15 @@ export interface TooltipToggleEventDetail {
 export type TooltipPlacement = OverlayPlacement;
 export type TooltipTrigger = 'hover' | 'focus' | 'click' | 'manual';
 
+const SWITCH_GRACE_PERIOD_MS = 100;
+
+interface ActiveHoverTooltip {
+  readonly owner: ForgeAiTooltipComponent;
+  readonly hide: () => void;
+}
+
+let activeHoverTooltip: ActiveHoverTooltip | undefined;
+
 /**
  * @summary A tooltip component with accessibility features and dynamic positioning.
  *
@@ -95,6 +104,9 @@ export class ForgeAiTooltipComponent extends LitElement {
 
   #showTimeout: number | null = null;
   #hideTimeout: number | null = null;
+  #lingerTimeout: number | null = null;
+  #isHoveringAnchor = false;
+  #skipAnimation = false;
 
   public override connectedCallback(): void {
     super.connectedCallback();
@@ -115,6 +127,7 @@ export class ForgeAiTooltipComponent extends LitElement {
     super.disconnectedCallback();
     this._detachEventListeners();
     this._clearTimeouts();
+    this.#clearActiveHoverTooltip();
     document.removeEventListener('keydown', this._handleKeyDown);
   }
 
@@ -140,6 +153,11 @@ export class ForgeAiTooltipComponent extends LitElement {
           }
         });
       } else {
+        if (this.#isHoveringAnchor) {
+          this.#clearActiveHoverTooltip();
+        }
+        this.#isHoveringAnchor = false;
+        this.#skipAnimation = false;
         document.removeEventListener('keydown', this._handleKeyDown);
       }
     }
@@ -186,8 +204,8 @@ export class ForgeAiTooltipComponent extends LitElement {
 
     switch (this.trigger) {
       case 'hover':
-        this._anchorElement.addEventListener('mouseenter', this._handleShow);
-        this._anchorElement.addEventListener('mouseleave', this._handleHide);
+        this._anchorElement.addEventListener('mouseenter', this._handleHoverStart);
+        this._anchorElement.addEventListener('mouseleave', this._handleHoverEnd);
         this._anchorElement.addEventListener('focusin', this._handleShow);
         this._anchorElement.addEventListener('focusout', this._handleHide);
         this._anchorElement.addEventListener('click', this._handleAnchorClick);
@@ -208,22 +226,45 @@ export class ForgeAiTooltipComponent extends LitElement {
       return;
     }
 
-    this._anchorElement.removeEventListener('mouseenter', this._handleShow);
-    this._anchorElement.removeEventListener('mouseleave', this._handleHide);
+    this._anchorElement.removeEventListener('mouseenter', this._handleHoverStart);
+    this._anchorElement.removeEventListener('mouseleave', this._handleHoverEnd);
     this._anchorElement.removeEventListener('focusin', this._handleShow);
     this._anchorElement.removeEventListener('focusout', this._handleHide);
     this._anchorElement.removeEventListener('click', this._handleToggle);
     this._anchorElement.removeEventListener('click', this._handleAnchorClick);
   }
 
+  private _handleHoverStart = (): void => {
+    this.#isHoveringAnchor = true;
+    this.#clearLingerTimeout();
+
+    const active = activeHoverTooltip;
+    if (active && active.owner !== this) {
+      this._clearTimeouts();
+      active.hide();
+      this.#openTooltip(true);
+      return;
+    }
+
+    this._handleShow();
+  };
+
+  private _handleHoverEnd = (): void => {
+    this.#isHoveringAnchor = false;
+    this._handleHide();
+
+    if (activeHoverTooltip?.owner === this) {
+      this.#clearLingerTimeout();
+      this.#lingerTimeout = window.setTimeout(() => this.#clearActiveHoverTooltip(), this.hideDelay + SWITCH_GRACE_PERIOD_MS);
+    }
+  };
+
   private _handleShow = (): void => {
     this._clearTimeouts();
     if (this.delay > 0) {
-      this.#showTimeout = window.setTimeout(() => {
-        this.open = true;
-      }, this.delay);
+      this.#showTimeout = window.setTimeout(() => this.#openTooltip(), this.delay);
     } else {
-      this.open = true;
+      this.#openTooltip();
     }
   };
 
@@ -252,6 +293,28 @@ export class ForgeAiTooltipComponent extends LitElement {
       this.open = false;
     }
   };
+
+  #openTooltip(skipAnimation = false): void {
+    if (this.#isHoveringAnchor) {
+      activeHoverTooltip = { owner: this, hide: () => this.hide() };
+    }
+    this.#skipAnimation = skipAnimation;
+    this.open = true;
+  }
+
+  #clearActiveHoverTooltip(): void {
+    this.#clearLingerTimeout();
+    if (activeHoverTooltip?.owner === this) {
+      activeHoverTooltip = undefined;
+    }
+  }
+
+  #clearLingerTimeout(): void {
+    if (this.#lingerTimeout) {
+      clearTimeout(this.#lingerTimeout);
+      this.#lingerTimeout = null;
+    }
+  }
 
   private _clearTimeouts(): void {
     if (this.#showTimeout) {
@@ -311,6 +374,10 @@ export class ForgeAiTooltipComponent extends LitElement {
   }
 
   public override render(): TemplateResult {
+    const tooltipClasses = {
+      'ai-tooltip': true,
+      'ai-tooltip--no-animation': this.#skipAnimation
+    };
     const contentClasses = {
       'tooltip-content': true,
       'tooltip-content--hidden': !this.open
@@ -328,7 +395,7 @@ export class ForgeAiTooltipComponent extends LitElement {
               shift
               .open=${this.open}
               @forge-ai-overlay-toggle=${this._onOverlayToggle}>
-              <div class="ai-tooltip">
+              <div class=${classMap(tooltipClasses)}>
                 <div class="ai-tooltip__arrow"></div>
                 ${this.#tooltipContent}
               </div>
