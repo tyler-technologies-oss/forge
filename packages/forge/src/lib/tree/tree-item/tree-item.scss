@@ -1,6 +1,7 @@
 @use './core' as *;
 @use '../../circular-progress';
 @use '../../focus-indicator';
+@use '../../open-icon';
 @use '../../state-layer';
 
 //
@@ -58,6 +59,14 @@
     &::after {
       @include indent-line;
     }
+
+    &.animating {
+      @include children-animating;
+    }
+  }
+
+  .children-content {
+    @include children-content;
   }
 
   .children-header,
@@ -122,7 +131,11 @@
   }
 
   .children {
-    display: none;
+    @include children-closed;
+
+    &:not(.animating) {
+      display: none;
+    }
   }
 }
 
@@ -175,6 +188,18 @@ forge-focus-indicator {
 
   // Ensure the focus indicator appears above sibling items
   z-index: 1;
+}
+
+//
+// Default expand icon turns in step with the children
+//
+
+.default-expand-icon {
+  @include open-icon.provide-theme(
+    (
+      half-animation-duration: #{token(expand-duration)}
+    )
+  );
 }
 
 //

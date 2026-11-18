@@ -83,12 +83,40 @@
 }
 
 @mixin children {
-  display: flex;
-  flex-direction: column;
-  gap: #{token(gap)};
+  display: grid;
+  grid-template-rows: 1fr;
   position: relative;
 
   margin-block-start: #{token(gap)};
+}
+
+@mixin children-content {
+  display: flex;
+  flex-direction: column;
+  gap: #{token(gap)};
+
+  min-block-size: 0;
+}
+
+@mixin children-animating {
+  transition-property: grid-template-rows, margin-block-start;
+  transition-duration: #{token(expand-duration)};
+  transition-timing-function: #{token(expand-easing)};
+
+  > .children-content {
+    overflow: clip;
+
+    transition: opacity #{token(expand-duration)} #{token(expand-easing)};
+  }
+}
+
+@mixin children-closed {
+  grid-template-rows: 0fr;
+  margin-block-start: 0;
+
+  > .children-content {
+    opacity: 0;
+  }
 }
 
 @mixin indent-line {

@@ -25,6 +25,9 @@ $tokens: (
   indent-line-width: utils.module-val(tree-item, indent-line-width, border.variable(thin)),
   indent-line-color: utils.module-val(tree-item, indent-line-color, theme.variable(outline-low)),
   indent-line-offset: utils.module-val(tree-item, indent-line-offset, 11.5px),
+  // Expand and collapse
+  expand-duration: utils.module-val(tree-item, expand-duration, animation.variable(duration-short4)),
+  expand-easing: utils.module-val(tree-item, expand-easing, animation.variable(easing-move)),
   // Disabled
   disabled-opacity: utils.module-val(tree-item, disabled-opacity, theme.emphasis(medium-low))
 ) !default;

@@ -2,10 +2,11 @@ import { consume } from '@lit/context';
 import { tryDefine } from '@tylertech/forge-core';
 import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
-import { property, queryAssignedNodes, state } from 'lit/decorators.js';
+import { property, query, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
+import { prefersReducedMotion } from '../../core/utils/feature-detection.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { IconRegistry } from '../../icon/index.js';
 import { ITreeContext, TREE_CONTEXT } from '../tree/index.js';
@@ -17,6 +18,8 @@ import '../../open-icon/index.js';
 import styles from './tree-item.scss';
 
 export type TreeItemCheckboxIcon = 'check_box_outline_blank' | 'check_box' | 'indeterminate_check_box';
+const TREE_ITEM_ANIMATING_CLASS = 'animating';
+
 export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed' | 'selected';
 
 /**
@@ -29,6 +32,9 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
  * @event {CustomEvent<unknown>} forge-tree-item-select - Dispatched when the user selects a tree item.
  * @event {CustomEvent<void>} forge-tree-item-open - Dispatched when the user opens a tree item.
  * @event {CustomEvent<void>} forge-tree-item-close - Dispatched when the user closes a tree item.
+ *
+ * @cssproperty --forge-tree-item-expand-duration - The duration of the children opening and closing, and of the default expand icon turning. Keyboard opening and closing doesn't animate.
+ * @cssproperty --forge-tree-item-expand-easing - The easing of the children opening and closing.
  */
 export class TreeItemComponent extends LitElement {
   public static styles = unsafeCSS(styles);
@@ -119,6 +125,9 @@ export class TreeItemComponent extends LitElement {
   @state() private _checkboxIcon: TreeItemCheckboxIcon = 'check_box_outline_blank';
 
   @queryAssignedNodes({ slot: 'children', flatten: true }) private _children: NodeListOf<HTMLElement>;
+  @query('.children') private _childrenElement?: HTMLElement;
+
+  private _childrenAnimationId = 0;
 
   private _internals: ElementInternals;
 
@@ -240,12 +249,14 @@ export class TreeItemComponent extends LitElement {
           <forge-focus-indicator target=":host" focus-mode="focus" inward></forge-focus-indicator>
         </div>
         <div role="group" class="children" part="children">
-          <div class="children-header" part="children-header">
-            <slot name="children-header"></slot>
-          </div>
-          <slot name="children" @slotchange="${this._detectChildren}"></slot>
-          <div class="children-footer" part="children-footer">
-            <slot name="children-footer"></slot>
+          <div class="children-content">
+            <div class="children-header" part="children-header">
+              <slot name="children-header"></slot>
+            </div>
+            <slot name="children" @slotchange="${this._detectChildren}"></slot>
+            <div class="children-footer" part="children-footer">
+              <slot name="children-footer"></slot>
+            </div>
           </div>
         </div>
       </div>
@@ -357,9 +368,45 @@ export class TreeItemComponent extends LitElement {
     setDefaultAria(this, this._internals, {
       ariaExpanded: this.leaf || this.openDisabled ? null : this.open ? 'true' : 'false'
     });
-    toggleState(this._internals, 'open', !this.leaf && this.open);
+    const isOpen = !this.leaf && this.open;
+    const animate = isOpen !== this._internals.states.has('open') && this._canAnimateChildren();
+    if (animate) {
+      this._startChildrenAnimation();
+    }
+    toggleState(this._internals, 'open', isOpen);
+    if (animate) {
+      this._finishChildrenAnimation();
+    }
     if (this.open) {
       this._dispatchUpdate('opened');
+    }
+  }
+
+  /**
+   * Children animate when opened or closed by pointer or from code, but not from the keyboard (when the item
+   * has visible focus), on the first render, or when the user prefers reduced motion.
+   */
+  private _canAnimateChildren(): boolean {
+    return this.hasUpdated && !!this._childrenElement && !this.matches(':focus-visible') && !prefersReducedMotion();
+  }
+
+  private _startChildrenAnimation(): void {
+    this._childrenAnimationId++;
+    this._childrenElement?.classList.add(TREE_ITEM_ANIMATING_CLASS);
+    // Lay out the starting size before the open state changes, so the change transitions from it
+    this._childrenElement?.getBoundingClientRect();
+  }
+
+  private async _finishChildrenAnimation(): Promise<void> {
+    const element = this._childrenElement;
+    if (!element) {
+      return;
+    }
+    const animationId = this._childrenAnimationId;
+    const transitions = element.getAnimations().filter(animation => animation instanceof CSSTransition);
+    await Promise.allSettled(transitions.map(transition => transition.finished));
+    if (animationId === this._childrenAnimationId) {
+      element.classList.remove(TREE_ITEM_ANIMATING_CLASS);
     }
   }
 

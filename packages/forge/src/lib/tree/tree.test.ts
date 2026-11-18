@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
-import { frame } from '../core/utils/utils.js';
+import { frame, task } from '../core/utils/utils.js';
+import { emulateReducedMotion, getMovementAnimations } from '../core/testing/reduced-motion.js';
 import type { TreeComponent } from './tree/tree.js';
 import type { TreeItemComponent } from './tree-item/index.js';
 import { TreeSelectionController } from './tree/tree-selection-controller.js';
@@ -1894,5 +1895,79 @@ describe('Tree', () => {
         expect(isIndeterminate(parent)).toBe(true);
       });
     });
+  });
+});
+
+describe('Tree item expand animation', () => {
+  // Expand duration (200ms) plus a buffer
+  const EXPAND_TIMEOUT = 300;
+
+  afterEach(async () => {
+    await emulateReducedMotion(false);
+  });
+
+  const createExpandFixture = async (): Promise<{ harness: TreeHarness; parent: TreeItemComponent }> => {
+    const screen = render(html`
+      <forge-tree>
+        <forge-tree-item .value=${'parent'}>
+          Parent
+          <forge-tree-item slot="children" .value=${'child1'}>Child 1</forge-tree-item>
+          <forge-tree-item slot="children" .value=${'child2'}>Child 2</forge-tree-item>
+        </forge-tree-item>
+      </forge-tree>
+    `);
+    const tree = screen.container.querySelector('forge-tree') as TreeComponent;
+    await frame();
+    const harness = new TreeHarness(tree);
+    const parent = harness.treeItems.find(item => item.value === 'parent') as TreeItemComponent;
+    return { harness, parent };
+  };
+
+  const childrenOf = (item: TreeItemComponent): HTMLElement => item.shadowRoot?.querySelector('.children') as HTMLElement;
+
+  it('should grow the children open and shrink them closed when the expand icon is clicked', async () => {
+    const { harness, parent } = await createExpandFixture();
+
+    await harness.clickExpandIcon(parent);
+    const opening = getMovementAnimations(parent.shadowRoot as ShadowRoot);
+    await task(EXPAND_TIMEOUT);
+
+    await harness.clickExpandIcon(parent);
+    const closing = getMovementAnimations(parent.shadowRoot as ShadowRoot);
+    const displayWhileClosing = getComputedStyle(childrenOf(parent)).display;
+    await task(EXPAND_TIMEOUT);
+
+    expect(opening.length).toBeGreaterThan(0);
+    expect(closing.length).toBeGreaterThan(0);
+    expect(displayWhileClosing).not.toBe('none');
+    expect(getComputedStyle(childrenOf(parent)).display).toBe('none');
+  });
+
+  it('should open and close at once from the keyboard', async () => {
+    const { parent } = await createExpandFixture();
+
+    parent.focus();
+    await frame();
+    await userEvent.keyboard('{ArrowRight}');
+    await frame();
+
+    expect(parent.open).toBe(true);
+    expect(getMovementAnimations(parent.shadowRoot as ShadowRoot)).toEqual([]);
+
+    await userEvent.keyboard('{ArrowLeft}');
+    await frame();
+
+    expect(parent.open).toBe(false);
+    expect(getComputedStyle(childrenOf(parent)).display).toBe('none');
+  });
+
+  it('should open at once when reduced motion is preferred', async () => {
+    await emulateReducedMotion(true);
+    const { harness, parent } = await createExpandFixture();
+
+    await harness.clickExpandIcon(parent);
+
+    expect(parent.open).toBe(true);
+    expect(getMovementAnimations(parent.shadowRoot as ShadowRoot)).toEqual([]);
   });
 });

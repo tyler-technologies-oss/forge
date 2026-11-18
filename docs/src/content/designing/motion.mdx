@@ -28,6 +28,7 @@ Avoid curves that start slowly (ease-in). They delay the moment people are watch
 
 - Keep small interface animations under 300ms. Popovers and tooltips take about 150ms, dialogs 250ms to open and 200ms to close.
 - Give large surfaces sliding in from an edge more time, so they feel calm rather than abrupt. Drawers and sheets take 500ms to open and 400ms to close.
+- Panels that grow and shrink in place, such as expansion panels, take 250ms. Tree items, which people open and close often while they look for something, take 200ms.
 - Make leaving faster than entering. Once someone dismisses something, they're already looking elsewhere.
 - Use the duration tokens (`--forge-animation-duration-short3` for 150ms, `--forge-animation-duration-short4` for 200ms, `--forge-animation-duration-medium1` for 250ms, `--forge-animation-duration-medium4` for 400ms, `--forge-animation-duration-long2` for 500ms) rather than raw values.
 
@@ -37,6 +38,7 @@ Actions people take many times a day shouldn't animate, because the motion makes
 
 - The focus indicator appears at once when you press Tab. Apps can bring the grow-and-shrink back with `--forge-focus-indicator-duration`.
 - Choosing a tab with the keyboard moves the indicator at once. Clicking a tab still slides it.
+- Opening and closing tree items with the arrow keys is instant. Clicking still animates.
 - Pressing a button or list item shows a flat overlay instead of a ripple. Apps can turn the ripple back on for every state layer:
 
   ```javascript
