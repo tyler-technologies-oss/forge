@@ -31,13 +31,21 @@ describe('shouldShowToolRenderer', () => {
     expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ renderOnStart: true }))).toBe(true);
   });
 
+  it('should be true for status "cancelled" with renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ renderOnStart: true }))).toBe(true);
+  });
+
+  it('should be false for status "cancelled" without renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition())).toBe(false);
+  });
+
   it.each(['pending', 'error'] as const)('should be false for status "%s" even with renderOnStart', status => {
     expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ renderOnStart: true }))).toBe(false);
   });
 });
 
 describe('isToolCallSettled', () => {
-  it.each(['complete', 'error'] as const)('should be true for status "%s" without a definition', status => {
+  it.each(['complete', 'error', 'cancelled'] as const)('should be true for status "%s" without a definition', status => {
     expect(isToolCallSettled(createToolCall(status))).toBe(true);
   });
 

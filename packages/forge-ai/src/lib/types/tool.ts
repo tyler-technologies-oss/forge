@@ -208,7 +208,11 @@ export interface ToolCall<TArgs = Record<string, unknown>, TResult = unknown> {
   argsBuffer?: string;
   /** Handler return value once the call completes; an `{ error }` object if the handler threw. */
   result?: TResult;
-  status: 'pending' | 'parsing' | 'executing' | 'complete' | 'error';
+  /**
+   * Lifecycle status. `cancelled` means the call ended without a result, for example because the run was
+   * aborted or the stream ended before the call finished.
+   */
+  status: 'pending' | 'parsing' | 'executing' | 'complete' | 'error' | 'cancelled';
   type: ToolType;
   startTimestamp?: number;
   endTimestamp?: number;

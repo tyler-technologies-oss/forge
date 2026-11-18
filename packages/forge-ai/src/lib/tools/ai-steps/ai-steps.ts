@@ -44,7 +44,7 @@ export class StepsToolElement extends LitElement implements IToolRenderer<StepsD
 
   get #running(): boolean {
     const status = this.toolCall?.status;
-    return status !== 'complete' && status !== 'error';
+    return status !== 'complete' && status !== 'error' && status !== 'cancelled';
   }
 
   public override render(): TemplateResult {

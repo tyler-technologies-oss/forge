@@ -11,7 +11,7 @@ export function shouldShowToolRenderer(toolCall: ToolCall, toolDefinition?: AnyT
   if (toolCall.status === 'complete') {
     return true;
   }
-  return !!toolDefinition.renderOnStart && (toolCall.status === 'parsing' || toolCall.status === 'executing');
+  return !!toolDefinition.renderOnStart && (toolCall.status === 'parsing' || toolCall.status === 'executing' || toolCall.status === 'cancelled');
 }
 
 /**
@@ -20,5 +20,5 @@ export function shouldShowToolRenderer(toolCall: ToolCall, toolDefinition?: AnyT
  * its own renderer to the user, which makes a redundant "running" spinner misleading.
  */
 export function isToolCallSettled(toolCall: ToolCall, toolDefinition?: AnyToolDefinition): boolean {
-  return toolCall.status === 'complete' || toolCall.status === 'error' || shouldShowToolRenderer(toolCall, toolDefinition);
+  return toolCall.status === 'complete' || toolCall.status === 'error' || toolCall.status === 'cancelled' || shouldShowToolRenderer(toolCall, toolDefinition);
 }
