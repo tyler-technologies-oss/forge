@@ -7,6 +7,7 @@ export interface IAppBarNotificationButtonCore {
   theme: string;
   showBadge: boolean;
   icon: string;
+  max: number;
 }
 
 export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCore {
@@ -16,13 +17,14 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
   private _showBadge = false;
   private _isInitialized = false;
   private _icon = 'notifications';
+  private _max = APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.defaults.MAX;
 
   constructor(private _adapter: IAppBarNotificationButtonAdapter) {}
 
   public initialize(): void {
     this._adapter.initialize();
     this._adapter.setBadgeType(this._dot);
-    this._adapter.setCount(this._dot ? null : this._count);
+    this._updateCount();
     this._adapter.setBadgeTheme(this._theme);
     this._adapter.setBadgeVisible(this._showBadge);
     this._adapter.setIcon(this._icon);
@@ -54,11 +56,7 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
     if (this._count !== value) {
       this._count = value;
       if (this._isInitialized) {
-        if (this._dot) {
-          this._adapter.setCount(null);
-        } else {
-          this._adapter.setCount(this._count);
-        }
+        this._updateCount();
 
         if (typeof this._count === 'string') {
           this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.COUNT, this._count);
@@ -79,11 +77,7 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
       this._dot = value;
       if (this._isInitialized) {
         this._adapter.setBadgeType(this._dot);
-        if (this._dot) {
-          this._adapter.setCount(null);
-        } else {
-          this._adapter.setCount(this._count);
-        }
+        this._updateCount();
       }
       this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.DOT, this._dot);
     }
@@ -111,8 +105,42 @@ export class AppBarNotificationButtonCore implements IAppBarNotificationButtonCo
       this._showBadge = value;
       if (this._isInitialized) {
         this._adapter.setBadgeVisible(this._showBadge);
+        this._updateCountDescription();
       }
       this._adapter.toggleHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.SHOW_BADGE, this._showBadge);
     }
+  }
+
+  public get max(): number {
+    return this._max;
+  }
+  public set max(value: number) {
+    value = Number(value);
+    if (this._max !== value) {
+      this._max = value;
+      if (this._isInitialized) {
+        this._updateCount();
+      }
+      this._adapter.setHostAttribute(APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.attributes.MAX, String(this._max));
+    }
+  }
+
+  private _updateCount(): void {
+    this._adapter.setCount(this._dot ? null : this._formatCount());
+    this._updateCountDescription();
+  }
+
+  private _updateCountDescription(): void {
+    const hasCount = this._showBadge && !this._dot && this._count != null && String(this._count).trim() !== '';
+    this._adapter.setCountDescription(hasCount ? `${this._count} unread` : null);
+  }
+
+  /** Caps whole-number counts above `max` at `max+`, so `100` shows as `99+`. Other values show as given. */
+  private _formatCount(): string | number | null | undefined {
+    const count = typeof this._count === 'string' && /^\d+$/.test(this._count.trim()) ? Number(this._count) : this._count;
+    if (typeof count !== 'number' || !Number.isFinite(this._max) || this._max <= 0) {
+      return this._count;
+    }
+    return count > this._max ? `${this._max}+` : this._count;
   }
 }

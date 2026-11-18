@@ -121,6 +121,96 @@ describe('App Bar Notification Button', () => {
     expect(badgeEl.textContent).toBe('5');
   });
 
+  it('should cap counts above 99 at 99+ by default', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="10490"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    expect(el.max).toBe(99);
+    expect(badgeEl.textContent).toBe('99+');
+  });
+
+  it('should show counts up to the max as given', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="99"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    expect(badgeEl.textContent).toBe('99');
+  });
+
+  it('should cap counts at a custom max', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge max="9" count="12"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    expect(badgeEl.textContent).toBe('9+');
+  });
+
+  it('should update the capped count when max changes', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="150"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    el.max = 999;
+
+    expect(badgeEl.textContent).toBe('150');
+  });
+
+  it('should show non-numeric counts as given', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="New"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    expect(badgeEl.textContent).toBe('New');
+  });
+
+  it('should describe the button with the full count when the badge is capped', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="10490"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+    const description = (): string | null | undefined => document.getElementById(iconButtonEl.getAttribute('aria-describedby') ?? '')?.textContent;
+
+    expect(description()).toBe('10490 unread');
+  });
+
+  it('should update the description when the count changes', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge count="3"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+    const description = (): string | null | undefined => document.getElementById(iconButtonEl.getAttribute('aria-describedby') ?? '')?.textContent;
+
+    el.count = 12;
+
+    expect(description()).toBe('12 unread');
+  });
+
+  it('should not describe the button when the badge is hidden', async () => {
+    const screen = render(html`<forge-app-bar-notification-button count="3"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+
+    expect(iconButtonEl.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('should not describe the button when the badge is a dot', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge dot count="3"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+
+    expect(iconButtonEl.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('should describe the button once the badge is shown', async () => {
+    const screen = render(html`<forge-app-bar-notification-button count="3"></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const iconButtonEl = el.querySelector('forge-icon-button') as HTMLElement;
+    const description = (): string | null | undefined => document.getElementById(iconButtonEl.getAttribute('aria-describedby') ?? '')?.textContent;
+
+    el.showBadge = true;
+
+    expect(description()).toBe('3 unread');
+  });
+
   it('should show dot badge', async () => {
     const screen = render(html`<forge-app-bar-notification-button show-badge dot></forge-app-bar-notification-button>`);
     const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
@@ -137,6 +227,15 @@ describe('App Bar Notification Button', () => {
     el.dot = true;
 
     expect(badgeEl.dot).toBe(true);
+  });
+
+  it('should render a strong badge without a theme by default', async () => {
+    const screen = render(html`<forge-app-bar-notification-button show-badge></forge-app-bar-notification-button>`);
+    const el = screen.container.querySelector('forge-app-bar-notification-button') as IAppBarNotificationButtonComponent;
+    const badgeEl = el.querySelector('forge-badge') as IBadgeComponent;
+
+    expect(badgeEl.strong).toBe(true);
+    expect(badgeEl.hasAttribute('theme')).toBe(false);
   });
 
   it('should set badge theme', async () => {

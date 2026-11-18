@@ -37,7 +37,7 @@
   }
 
   .ProseMirror-selectednode {
-    outline: 2px solid #8cf;
+    outline: var(--forge-border-medium) solid var(--forge-theme-focus-indicator);
   }
 
   li.ProseMirror-selectednode {
@@ -50,7 +50,7 @@
       right: -2px;
       top: -2px;
       bottom: -2px;
-      border: 2px solid #8cf;
+      border: var(--forge-border-medium) solid var(--forge-theme-focus-indicator);
       pointer-events: none;
     }
   }
@@ -165,7 +165,7 @@
     }
 
     &:focus-visible {
-      outline: var(--forge-border-medium) solid var(--forge-theme-primary);
+      outline: var(--forge-border-medium) solid var(--forge-theme-focus-indicator);
       outline-offset: 2px;
       border-radius: var(--forge-shape-xsmall);
     }

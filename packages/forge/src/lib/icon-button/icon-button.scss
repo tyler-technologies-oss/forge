@@ -5,8 +5,10 @@
 @use '../state-layer';
 @use '../focus-indicator';
 @use '../badge';
+@use '../core/styles/tokens/badge/tokens' as badge-tokens;
 @use '../circular-progress';
 @use '../app-bar/app-bar';
+@use '@tylertech/forge-tokens/sass/spacing';
 
 //
 // Host
@@ -347,4 +349,24 @@ forge-state-layer {
       focus-indicator-color: #{app-bar.token(theme-foreground)}
     )
   );
+
+  // Counts are at least as wide as they're tall, so one-digit counts are circles
+  ::slotted(forge-badge[slot='badge']:not([dot])) {
+    @include badge.provide-theme(
+      (
+        min-width: #{badge-tokens.get(height)},
+        padding-inline: #{spacing.variable(xxsmall)}
+      )
+    );
+  }
+
+  // Themed and colored badges keep their own colors
+  ::slotted(forge-badge[slot='badge']:is(:not([theme]), [theme='default']):not([color])) {
+    @include badge.provide-theme(
+      (
+        strong-background: #{app-bar.token(badge-background)},
+        strong-color: #{app-bar.token(badge-color)}
+      )
+    );
+  }
 }

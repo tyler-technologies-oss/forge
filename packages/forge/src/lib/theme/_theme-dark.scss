@@ -13,7 +13,10 @@
   // App bar
   @include app-bar.provide-theme(
     (
-      elevation: inset 0 -1px 0 #{theme.variable(outline-low)} // App bars use a hairline instead of a shadow in dark theme
+      elevation: inset 0 -1px 0 #{theme.variable(outline-low)},
+      // Amber blends into the dark app bar's light text, so strong badges use red instead
+      badge-background: theme.color-variable(red, solid),
+      badge-color: theme.color-variable(red, contrast)
     )
   );
 

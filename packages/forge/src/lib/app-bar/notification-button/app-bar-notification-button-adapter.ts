@@ -1,4 +1,4 @@
-import { getLightElement, toggleAttribute } from '@tylertech/forge-core';
+import { getLightElement, randomChars, toggleAttribute } from '@tylertech/forge-core';
 import { IBadgeComponent } from '../../badge/index.js';
 import { BaseAdapter, IBaseAdapter } from '../../core/base/base-adapter.js';
 import { forwardAttributes } from '../../core/utils/reflect-utils.js';
@@ -16,12 +16,14 @@ export interface IAppBarNotificationButtonAdapter extends IBaseAdapter {
   setBadgeType(dot: boolean): void;
   setBadgeTheme(theme: string): void;
   setBadgeVisible(isVisible: boolean): void;
+  setCountDescription(value: string | null): void;
 }
 
 export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotificationButtonComponent> implements IAppBarNotificationButtonAdapter {
   private _iconButtonElement: IconButtonComponent;
   private _badgeElement: IBadgeComponent;
   private _iconElement: IIconComponent;
+  private _countElement: HTMLElement;
   private _forwardObserver?: MutationObserver;
 
   constructor(component: IAppBarNotificationButtonComponent) {
@@ -36,6 +38,8 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
     this._iconButtonElement = getLightElement(this._component, ICON_BUTTON_CONSTANTS.elementName) as IconButtonComponent;
     this._badgeElement = getLightElement(this._component, 'forge-badge') as IBadgeComponent;
     this._iconElement = getLightElement(this._component, ICON_CONSTANTS.elementName) as IIconComponent;
+    this._countElement = getLightElement(this._component, APP_BAR_NOTIFICATION_BUTTON_CONSTANTS.selectors.COUNT) as HTMLElement;
+    this._countElement.id ||= `forge-app-bar-notification-button-count-${randomChars()}`;
 
     const originalAriaLabelledby = this._iconButtonElement.getAttribute('aria-labelledby');
 
@@ -66,5 +70,11 @@ export class AppBarNotificationButtonAdapter extends BaseAdapter<IAppBarNotifica
 
   public setBadgeVisible(isVisible: boolean): void {
     this._badgeElement.hide = !isVisible;
+  }
+
+  /** Describes the button with the full count, since the badge may show a capped value like `99+`. */
+  public setCountDescription(value: string | null): void {
+    this._countElement.textContent = value ?? '';
+    toggleAttribute(this._iconButtonElement, value !== null, 'aria-describedby', this._countElement.id);
   }
 }

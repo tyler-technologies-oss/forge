@@ -77,7 +77,7 @@ Example (A help button opening a menu of options.): `get_forge_blocks(blockId: "
 
 ## Notification button
 
-`forge-app-bar-notification-button` pairs a preset bell icon with a [badge](./badge.md), controlled through `showBadge`, `count`, `dot`, and `theme`.
+`forge-app-bar-notification-button` pairs a preset bell icon with a [badge](./badge.md), controlled through `showBadge`, `count`, `max`, `dot`, and `theme`. The badge is amber on the default app bar and red in dark theme and on the `white` app bar. Setting `theme` on the button overrides this color. Counts above `max` (99 by default) show as `99+`, so the badge stays compact. One-digit counts are circles. Screen readers hear the full count as the button's description, like "10490 unread", even when the badge shows `99+`.
 
 Example (A notification button showing an unread dot.): `get_forge_blocks(blockId: "components/app-bar/notifications/demo/demo")`
 

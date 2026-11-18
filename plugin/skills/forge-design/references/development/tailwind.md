@@ -174,6 +174,8 @@ The package also ships pre-built classes for common Forge layout patterns:
 
 Use `bg-*` utilities for Forge surface and semantic background colors.
 
+Every surface and container token has a utility, including `bg-surface-elevated`, `bg-surface-elevated-translucent`, `bg-surface-translucent`, `bg-surface-container-highest`, and `bg-surface-container-maximum`, which aren't shown below.
+
 ### Surface
 
 | Class                          | Description                |
@@ -206,6 +208,8 @@ Use `bg-*` utilities for Forge surface and semantic background colors.
 
 ### Secondary
 
+`secondary` is deprecated. Use `primary` or a status role instead.
+
 | Class                            | Description                 |
 | -------------------------------- | --------------------------- |
 | `bg-secondary`                   | Secondary color             |
@@ -215,6 +219,8 @@ Use `bg-*` utilities for Forge surface and semantic background colors.
 | `bg-secondary-container-high`    | High secondary container    |
 
 ### Tertiary
+
+`tertiary` is deprecated. Use `primary` or a status role instead.
 
 | Class                           | Description                |
 | ------------------------------- | -------------------------- |
@@ -283,21 +289,30 @@ Use `text-*` utilities for text emphasis levels and semantic colors.
 
 ### Semantic
 
-| Color | Class            | Description     |
-| ----- | ---------------- | --------------- |
-| Aa    | `text-brand`     | Brand color     |
-| Aa    | `text-primary`   | Primary color   |
-| Aa    | `text-secondary` | Secondary color |
-| Aa    | `text-tertiary`  | Tertiary color  |
-| Aa    | `text-success`   | Success color   |
-| Aa    | `text-error`     | Error color     |
-| Aa    | `text-warning`   | Warning color   |
-| Aa    | `text-info`      | Info color      |
+| Color | Class            | Description                                                 |
+| ----- | ---------------- | ----------------------------------------------------------- |
+| Aa    | `text-brand`     | Brand color                                                 |
+| Aa    | `text-primary`   | Primary color                                               |
+| Aa    | `text-secondary` | Secondary color (deprecated)                                |
+| Aa    | `text-tertiary`  | Tertiary color (deprecated)                                 |
+| Aa    | `text-success`   | Success text, readable at 4.5:1                             |
+| Aa    | `text-error`     | Error text, readable at 4.5:1 (same as `text-critical`)     |
+| Aa    | `text-warning`   | Warning text, readable at 4.5:1                             |
+| Aa    | `text-info`      | Info text, readable at 4.5:1 (same as `text-informational`) |
 
 ```html
 <p class="text-high">High emphasis text</p>
 <p class="text-medium">Medium emphasis text</p>
 <p class="text-primary">Primary colored text</p>
+```
+
+### Text on color
+
+Every `on-*` theme token has a matching `text-on-*` utility, for text on the background of the same name: `text-on-primary` on `bg-primary`, `text-on-error-container` on `bg-error-container`, `text-on-surface-inverse` on `bg-surface-inverse`, and so on.
+
+```html
+<div class="bg-primary text-on-primary">Solid primary</div>
+<div class="bg-error-container text-on-error-container">Error container</div>
 ```
 
 ## Border Colors
@@ -340,6 +355,68 @@ Use `border-*` utilities for outline and semantic border colors.
 <div class="border border-outline">...</div>
 <div class="border border-primary">...</div>
 ```
+
+### Role borders
+
+Each role has a border ramp from subtle to strongest: `border-{role}-subtle`, `border-{role}-default`, `border-{role}-strong`, and `border-{role}-strongest`, for `primary`, `success`, `error`, `warning`, `info`, and `neutral`.
+
+```html
+<div class="border border-error-default bg-error-subtle">...</div>
+```
+
+## Subtle and Default Backgrounds
+
+`bg-{role}-subtle` and `bg-{role}-default` are the tinted backgrounds that tonal components like badges and chips use, for `primary`, `success`, `error`, `warning`, `info`, and `neutral`. Pair them with `border-{role}-*` and `text-on-{role}-container-*`.
+
+<div class="flex gap-4 flex-wrap my-6">
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-20 h-20 rounded-lg bg-primary-subtle border border-primary-subtle" />
+
+    <code class="text-label1 text-medium">bg-primary-subtle</code>
+  </div>
+
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-20 h-20 rounded-lg bg-primary-default border border-primary-default" />
+
+    <code class="text-label1 text-medium">bg-primary-default</code>
+  </div>
+
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-20 h-20 rounded-lg bg-error-subtle border border-error-subtle" />
+
+    <code class="text-label1 text-medium">bg-error-subtle</code>
+  </div>
+
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-20 h-20 rounded-lg bg-neutral-default border border-neutral-default" />
+
+    <code class="text-label1 text-medium">bg-neutral-default</code>
+  </div>
+</div>
+
+## Focus Rings
+
+`ring-focus-indicator` and `outline-focus-indicator` use the same color as Forge focus rings in light and dark themes. `ring-outline-*` and the role rings, like `ring-primary`, are also available.
+
+```html
+<button class="focus-visible:outline-2 focus-visible:outline-focus-indicator">...</button>
+```
+
+## Categorical Colors
+
+`bg-categorical-*`, `text-categorical-*`, and `border-categorical-*` use the decorative hues for charts and other data that has no meaning of its own: `indigo`, `blue`, `sky`, `cyan`, `teal`, `green`, `grass`, `lime`, `yellow`, `amber`, `orange`, `tomato`, `red`, `pink`, `purple`, `violet`, `brown`, `gray`, and `slate`.
+
+<div class="flex gap-2 flex-wrap my-6">
+  <div class="w-8 h-8 rounded-sm bg-categorical-indigo" />
+
+  <div class="w-8 h-8 rounded-sm bg-categorical-teal" />
+
+  <div class="w-8 h-8 rounded-sm bg-categorical-amber" />
+
+  <div class="w-8 h-8 rounded-sm bg-categorical-tomato" />
+
+  <div class="w-8 h-8 rounded-sm bg-categorical-purple" />
+</div>
 
 ## Typography
 
