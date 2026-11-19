@@ -144,7 +144,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
           : nothing}
         ${this.column?.columnDef.meta?.renamable && typeof this.column?.columnDef.header === 'string'
           ? html`
-              <forge-dropdown-menu-item>
+              <forge-dropdown-menu-item @click="${() => this.#rename()}">
                 <forge-icon slot="start" name="edit"></forge-icon>
                 <span>Rename</span>
               </forge-dropdown-menu-item>
@@ -220,6 +220,21 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
 
     [order[from], order[to]] = [order[to], order[from]];
     table.setColumnOrder(order);
+  }
+
+  #rename(): void {
+    const columnId = this.column?.id;
+    if (!columnId) {
+      return;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent<ColumnMenuActionEventDetail>(COLUMN_MENU_ACTION_EVENT, {
+        detail: { columnId, action: 'rename' },
+        bubbles: true,
+        composed: true
+      })
+    );
   }
 
   /**

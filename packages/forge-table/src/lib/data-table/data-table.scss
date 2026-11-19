@@ -12,6 +12,8 @@
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/typography';
 
+$rename-input-height: 24px;
+
 :host {
   > * {
     @include scrollbar.base;
@@ -90,13 +92,28 @@ table {
           }
 
           .rename-field {
+            @include focus-indicator.standalone($type: 'outward', $selector: '::after', $focus-target: 'input');
+
+            position: relative;
+            display: inline-flex;
             flex: 0 0 auto;
             background-color: #{theme.variable(surface-container-minimum)};
           }
 
           .rename-input {
-            field-sizing: content;
+            box-sizing: border-box;
+            block-size: #{$rename-input-height};
             min-inline-size: 4ch;
+            margin: 0;
+            padding-block: 0;
+            padding-inline: #{spacing.variable(xsmall)};
+            padding-inline: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            field-sizing: content;
           }
         }
 

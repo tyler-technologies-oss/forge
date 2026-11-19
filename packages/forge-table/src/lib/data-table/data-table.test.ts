@@ -275,11 +275,11 @@ async function chooseMenuAction(harness: DataTableHarness, columnId: string, lab
   const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
   (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
   const item = await vi.waitFor(() => {
-    const match = [...document.querySelectorAll('forge-list-item')].find(i => i.textContent?.trim() === label);
+    const match = [...(menu?.shadowRoot?.querySelectorAll('forge-dropdown-menu-item') ?? [])].find(i => i.textContent?.trim() === label);
     expect(match).toBeTruthy();
     return match as HTMLElement;
   });
-  await userEvent.click(item.querySelector('button') as HTMLElement);
+  await userEvent.click(item);
   await settle(harness.element);
 }
 
@@ -1469,11 +1469,11 @@ describe('DataTable', () => {
       const harness = await createFixture({ columns });
       const getMenuLabels = async (columnId: string): Promise<Array<string | undefined>> => {
         const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu') as HTMLElement;
+        const getItems = (): Element[] => [...(menu.shadowRoot?.querySelectorAll('forge-dropdown-menu-item') ?? [])];
         (menu.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
-        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBeGreaterThan(0));
-        const labels = [...document.querySelectorAll('forge-list-item')].map(item => item.textContent?.trim());
+        await vi.waitFor(() => expect(getItems().length).toBeGreaterThan(0));
+        const labels = getItems().map(item => item.textContent?.trim());
         await userEvent.keyboard('{Escape}');
-        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBe(0));
         return labels;
       };
 

@@ -8,7 +8,7 @@ Lit-based data table Web Component for `@tylertech/forge`, built on
 
 Lifted out of the base `@tylertech/forge` package into its own so consumers of the main library do not
 pay for TanStack. `@tylertech/forge` is a **peerDependency** — the table renders Forge elements
-(`forge-checkbox`, `forge-popover`, `forge-dropdown-menu`, `forge-list`, `forge-text-field` (column rename), `forge-tooltip`, `forge-date-picker`, and with the
+(`forge-checkbox`, `forge-popover`, `forge-dropdown-menu`, `forge-list`, `forge-tooltip`, `forge-date-picker`, and with the
 filter feature `forge-select`) and does not bundle them.
 
 The element is **`forge-data-table`**, not `forge-table`: `forge-table` is an existing, unrelated element
@@ -112,7 +112,7 @@ component out of a release. To publish: remove `private`, add a changeset, and r
   Takes the TanStack `column` and `table` as properties; right-clicking a header cell calls its `openMenu()` (and prevents the browser menu), so the column menu is also the context menu, and columns are unhidden through `showColumn`, `columnVisibility` or the toolbar's `columns` button; sort, move, hide and pin (to the start) are applied directly, while
   rename (offered when `ColumnDef.renamable` is set and the header is a string) and maximize only dispatch `forge-data-table-column-menu-action` (every action dispatches it). It assigns `forge-menu`'s `options` in
   `firstUpdated` because `forge-menu` drops an `options` value that Lit sets during the first render.
-  The data table owns renaming, in `ColumnRenameController` (`features/column-rename.ts`): `ColumnDef.renamable` (carried as `meta.renamable`) opts a column in, the action swaps the header text for an inline `forge-text-field` (Enter or blur commits,
+  The data table owns renaming, in `ColumnRenameController` (`features/column-rename.ts`): `ColumnDef.renamable` (carried as `meta.renamable`) opts a column in, the action swaps the header text for an inline native text input (Enter or blur commits,
   Escape cancels, blank or unchanged is ignored), and renames live in an override map applied over the mapped columns (`applyColumnHeaders`), so
   `columns` is never mutated and the overrides reset when `columns` is set. A commit dispatches `forge-data-table-column-rename`. The input is
   focused in `updated()`, not a `ref` callback, because the callback runs before the new template is attached.

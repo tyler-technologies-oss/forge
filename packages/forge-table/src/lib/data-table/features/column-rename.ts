@@ -1,5 +1,6 @@
-import type { Column, SortingState } from '@tanstack/lit-table';
+import type { Column, SortingState, Table } from '@tanstack/lit-table';
 import type { ReactiveController, TemplateResult } from 'lit';
+import { COLUMN_MENU_ACTION_EVENT } from '../../column-menu/constants.js';
 import type { ColumnMenuActionEventDetail } from '../../column-menu/types.js';
 import type { DataTableElement } from '../data-table.js';
 import type { DataTableFeatures } from '../table-features.js';
@@ -7,7 +8,8 @@ import { renderRenameInput } from '../templates/rename-input.js';
 import type { Row } from '../types.js';
 import { getColumnHeaderId } from './row-meta.js';
 
-export interface ColumnRenameControllerOptions {
+export interface ColumnRenameControllerOptions<TData extends Row> {
+  getTable: () => Table<DataTableFeatures, TData> | null;
   getSorting: () => SortingState;
   setSorting: (sorting: SortingState) => void;
 }
@@ -17,13 +19,13 @@ export interface ColumnRenameControllerOptions {
  */
 export class ColumnRenameController<TData extends Row> implements ReactiveController {
   readonly #host: DataTableElement<TData>;
-  readonly #options: ColumnRenameControllerOptions;
+  readonly #options: ColumnRenameControllerOptions<TData>;
   #renamingColumnId: string | null = null;
   #headers: Record<string, string> = {};
   #sortingBeforeClick: SortingState | null = null;
   #focusInputPending = false;
 
-  constructor(host: DataTableElement<TData>, options: ColumnRenameControllerOptions) {
+  constructor(host: DataTableElement<TData>, options: ColumnRenameControllerOptions<TData>) {
     this.#host = host;
     this.#options = options;
     host.addController(this);
@@ -37,7 +39,13 @@ export class ColumnRenameController<TData extends Row> implements ReactiveContro
     return this.#renamingColumnId;
   }
 
-  public hostConnected(): void {}
+  public hostConnected(): void {
+    this.#host.addEventListener(COLUMN_MENU_ACTION_EVENT, this.#onColumnMenuAction);
+  }
+
+  public hostDisconnected(): void {
+    this.#host.removeEventListener(COLUMN_MENU_ACTION_EVENT, this.#onColumnMenuAction);
+  }
 
   public hostUpdated(): void {
     if (!this.#focusInputPending) {
@@ -71,12 +79,6 @@ export class ColumnRenameController<TData extends Row> implements ReactiveContro
     });
   }
 
-  public onColumnMenuAction(evt: CustomEvent<ColumnMenuActionEventDetail>, column: Column<DataTableFeatures, TData>): void {
-    if (evt.detail.action === 'rename' && this.canRename(column)) {
-      this.#setRenamingColumnId(column.id);
-    }
-  }
-
   /**
    * Remembers the sorting before the first click of a (possible) double click, which `onHeaderDoubleClick` restores.
    */
@@ -92,7 +94,21 @@ export class ColumnRenameController<TData extends Row> implements ReactiveContro
       this.#options.setSorting(this.#sortingBeforeClick);
     }
     this.#sortingBeforeClick = null;
-    this.#setRenamingColumnId(column.id);
+    this.#startRenaming(column);
+  }
+
+  #onColumnMenuAction = (evt: CustomEvent<ColumnMenuActionEventDetail>): void => {
+    const { action, columnId } = evt.detail;
+    const column = this.#options.getTable()?.getColumn(columnId);
+    if (action === 'rename' && column) {
+      this.#startRenaming(column);
+    }
+  };
+
+  #startRenaming(column: Column<DataTableFeatures, TData>): void {
+    if (this.canRename(column)) {
+      this.#setRenamingColumnId(column.id);
+    }
   }
 
   #setRenamingColumnId(columnId: string | null): void {
@@ -137,6 +153,7 @@ export class ColumnRenameController<TData extends Row> implements ReactiveContro
   async #focusColumnMenu(columnId: string): Promise<void> {
     await this.#host.updateComplete;
     const menu = this.#host.shadowRoot?.getElementById(getColumnHeaderId(columnId))?.querySelector('forge-data-table-column-menu');
+    await menu?.updateComplete;
     menu?.focus();
   }
 }

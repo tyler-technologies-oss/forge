@@ -333,6 +333,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     onVisibilityChange: nextState => this.#emitColumnVisibilityChange(nextState)
   });
   readonly #columnRename = new ColumnRenameController<TData>(this, {
+    getTable: () => this.#table,
     getSorting: () => this._sorting,
     setSorting: sorting => this.#onSort(sorting)
   });

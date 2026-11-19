@@ -15,7 +15,7 @@ export function renderRenameInput<TData extends Row>(
   const { header } = column.columnDef;
   const value = typeof header === 'string' ? header : column.id;
   return html`
-    <forge-text-field class="rename-field" density="extra-small" variant="plain">
+    <span class="rename-field">
       <input
         type="text"
         class="rename-input"
@@ -29,6 +29,6 @@ export function renderRenameInput<TData extends Row>(
         @click=${(evt: Event) => evt.stopPropagation()}
         @keydown=${(evt: KeyboardEvent) => onKeydown(evt, column)}
         @blur=${(evt: FocusEvent) => onCommit(column, (evt.currentTarget as HTMLInputElement).value)} />
-    </forge-text-field>
+    </span>
   `;
 }

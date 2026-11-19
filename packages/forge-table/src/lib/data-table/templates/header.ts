@@ -6,7 +6,6 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { svg } from 'lit/static-html.js';
 import type { ColumnMenuElement } from '../../column-menu/column-menu.js';
 import { COLUMN_MENU_TAG_NAME } from '../../column-menu/constants.js';
-import type { ColumnMenuActionEventDetail } from '../../column-menu/types.js';
 import { canColumnBeReordered, getGroupStartColumnIds } from '../columns/column-utils.js';
 import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { ColumnReorderController } from '../controllers/column-reorder-controller.js';
@@ -127,12 +126,7 @@ function renderHeaderCell<TData extends Row>(
           ${renderSortIndicator(context, header)}
         </div>
         ${hasColumnMenu
-          ? html`<forge-data-table-column-menu
-              .table=${table}
-              .column=${column}
-              .reorderable=${host.reorderable}
-              @forge-data-table-column-menu-action=${(evt: CustomEvent<ColumnMenuActionEventDetail>) =>
-                rename.onColumnMenuAction(evt, column)}></forge-data-table-column-menu>`
+          ? html`<forge-data-table-column-menu .table=${table} .column=${column} .reorderable=${host.reorderable}></forge-data-table-column-menu>`
           : nothing}
       </div>
       ${host.filterable && column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(column)}</div>` : nothing}
