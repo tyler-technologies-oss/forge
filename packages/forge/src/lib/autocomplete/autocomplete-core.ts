@@ -148,7 +148,16 @@ export class AutocompleteCore extends ListDropdownAwareCore implements IAutocomp
 
     // Edge case, but if the consumer has a need to preserve the existing selection if it doesn't exist in the new options, this will support that
     if (preserveValue) {
-      this._options.push(...(this._selectedOptions as IAutocompleteOption<any>[] & IAutocompleteOptionGroup[]));
+      const flatOptions = this._flatOptions;
+      const missingOptions = this._selectedOptions.filter(selected => !flatOptions.some(o => optionEqualPredicate(o, selected.value, this._matchKey)));
+      if (missingOptions.length) {
+        // Grouped options can only take another group, so the missing selections go in one without a header
+        if (isOptionType(this._options, OptionType.Group)) {
+          (this._options as IAutocompleteOptionGroup[]).push({ text: '', options: missingOptions });
+        } else {
+          (this._options as IAutocompleteOption[]).push(...missingOptions);
+        }
+      }
     }
 
     // This will update our current state, but it's expected that consumers will manage their own values so it's likely that this will be called again soon
