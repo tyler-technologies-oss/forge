@@ -1063,6 +1063,109 @@ describe('Select', () => {
     });
   });
 
+  describe('typeahead', () => {
+    it('should select the next matching option when the same character is typed repeatedly while closed', async () => {
+      const harness = await createTypeaheadFixture();
+
+      harness.element.focus();
+      await harness.pressKey('b');
+      expect(harness.element.value).toBe('banana');
+
+      await harness.pressKey('b');
+      expect(harness.element.value).toBe('blackberry');
+      expect(harness.element.open).toBe(false);
+    });
+
+    it('should wrap around to the first matching option when cycling past the last match', async () => {
+      const harness = await createTypeaheadFixture();
+
+      harness.element.focus();
+      await harness.pressKey('b');
+      await harness.pressKey('b');
+      expect(harness.element.value).toBe('blackberry');
+
+      await harness.pressKey('b');
+      expect(harness.element.value).toBe('banana');
+    });
+
+    it('should skip disabled options when moving to the next matching option', async () => {
+      const harness = await createTypeaheadFixture();
+      harness.element.value = 'banana';
+      await frame();
+
+      harness.element.focus();
+      await harness.pressKey('b');
+
+      expect(harness.element.value).toBe('blackberry');
+    });
+
+    it('should move to the next matching option when the same character is typed after the typeahead window', async () => {
+      const harness = await createTypeaheadFixture();
+
+      harness.element.focus();
+      await harness.pressKey('b');
+      await new Promise(resolve => setTimeout(resolve, 350));
+      await harness.pressKey('b');
+
+      expect(harness.element.value).toBe('blackberry');
+    });
+
+    it('should select the option matching the typed prefix when different characters are typed', async () => {
+      const harness = await createTypeaheadFixture();
+
+      harness.element.focus();
+      await harness.pressKey('b');
+      await harness.pressKey('l');
+      await harness.pressKey('a');
+
+      expect(harness.element.value).toBe('blackberry');
+    });
+
+    it('should highlight the next matching option without selecting it when the same character is typed repeatedly while open', async () => {
+      const harness = await createTypeaheadFixture();
+
+      await harness.clickElement(harness.element);
+      await harness.popoverToggleAnimation;
+
+      await harness.pressKey('b');
+      await harness.pressKey('b');
+
+      const listItems = harness.getListItems();
+      expect(harness.element.open).toBe(true);
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[3].querySelector('button')?.id);
+      expect(harness.element.value).toBeUndefined();
+    });
+
+    it('should wrap the highlight around to the first matching option while open', async () => {
+      const harness = await createTypeaheadFixture();
+
+      await harness.clickElement(harness.element);
+      await harness.popoverToggleAnimation;
+
+      const listItems = harness.getListItems();
+      await harness.pressKey('b');
+      await harness.pressKey('b');
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[3].querySelector('button')?.id);
+
+      await harness.pressKey('b');
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[1].querySelector('button')?.id);
+    });
+
+    it('should highlight the matching option after select all when open with select all shown', async () => {
+      const harness = await createTypeaheadFixture({ multiple: true, showSelectAll: true });
+
+      await harness.clickElement(harness.element);
+      await harness.popoverToggleAnimation;
+
+      await harness.pressKey('b');
+      await harness.pressKey('b');
+
+      const listItems = harness.getListItems();
+      expect(harness.element.getAttribute('aria-activedescendant')).toBe(listItems[4].querySelector('button')?.id);
+      expect(harness.element.value).toEqual([]);
+    });
+  });
+
   describe('list dropdown API', () => {
     it('should set popover placement', async () => {
       const harness = await createFixture();
@@ -1449,6 +1552,20 @@ async function createFixture({
       <forge-option value="one">Option 1</forge-option>
       <forge-option value="two">Option 2</forge-option>
       <forge-option value="three">Option 3</forge-option>
+    </forge-select>
+  `);
+  const el = screen.container.querySelector('forge-select') as ISelectComponent;
+  return new SelectHarness(el);
+}
+
+async function createTypeaheadFixture({ multiple, showSelectAll }: Pick<SelectFixtureConfig, 'multiple' | 'showSelectAll'> = {}): Promise<SelectHarness> {
+  const screen = render(html`
+    <forge-select label="Fruit" ?multiple=${multiple} ?show-select-all=${showSelectAll}>
+      <forge-option value="apple">Apple</forge-option>
+      <forge-option value="banana">Banana</forge-option>
+      <forge-option value="blueberry" disabled>Blueberry</forge-option>
+      <forge-option value="blackberry">Blackberry</forge-option>
+      <forge-option value="cherry">Cherry</forge-option>
     </forge-select>
   `);
   const el = screen.container.querySelector('forge-select') as ISelectComponent;
