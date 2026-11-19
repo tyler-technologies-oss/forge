@@ -1850,6 +1850,51 @@ describe('AutocompleteComponent', () => {
         expect(harness.input.value).toBe(DEFAULT_FILTER_OPTIONS[2].label);
         expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
       });
+
+      it('should not duplicate the selected option when preserving a value the new filtered options already contain', async () => {
+        const harness = await createFixture({
+          filter: () => DEFAULT_FILTER_OPTIONS
+        });
+
+        harness.triggerDropdownClick();
+        await frame();
+        harness.clickListItem(2);
+        await frame();
+
+        harness.component.forceFilter({ preserveValue: true });
+        await frame();
+
+        harness.triggerDropdownClick();
+        await frame();
+
+        const values = harness.getListItems().map(item => item.value);
+        expect(values.filter(value => value === DEFAULT_FILTER_OPTIONS[2].value).length).toBe(1);
+        expect(values.length).toBe(DEFAULT_FILTER_OPTIONS.length);
+      });
+
+      it('should keep option groups intact when preserving a selected value', async () => {
+        const groups = [
+          { text: 'First', options: DEFAULT_FILTER_OPTIONS.slice(0, 2) },
+          { text: 'Second', options: DEFAULT_FILTER_OPTIONS.slice(2) }
+        ];
+        const harness = await createFixture({
+          filter: () => groups
+        });
+
+        harness.triggerDropdownClick();
+        await frame();
+        harness.clickListItem(2);
+        await frame();
+
+        harness.component.forceFilter({ preserveValue: true });
+        await frame();
+
+        harness.triggerDropdownClick();
+        await frame();
+
+        expect(harness.component.value).toBe(DEFAULT_FILTER_OPTIONS[2].value);
+        expect(harness.getListItems().length).toBe(DEFAULT_FILTER_OPTIONS.length);
+      });
     });
   });
 
