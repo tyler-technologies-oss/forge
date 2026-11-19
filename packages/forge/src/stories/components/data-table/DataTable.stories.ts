@@ -25,6 +25,7 @@ const rowClickAction = action('forge-data-table-row-click');
 const columnOrderAction = action('forge-data-table-column-order');
 const columnVisibilityAction = action('forge-data-table-column-visibility');
 const columnRenameAction = action('forge-data-table-column-rename');
+const groupingAction = action('forge-data-table-grouping');
 
 const actionCellClickAction = action('action-cell-click');
 
@@ -62,6 +63,8 @@ const meta = {
           ?bordered=${args.bordered}
           ?reorderable=${args.reorderable}
           ?expandable=${args.expandable}
+          ?groupable=${args.groupable}
+          .grouping=${args.grouping}
           ?virtualized=${args.virtualized}
           ?fixed-headers=${args.fixedHeaders}
           row-selection=${args.rowSelection}
@@ -76,7 +79,8 @@ const meta = {
           @forge-data-table-row-click=${rowClickAction}
           @forge-data-table-column-order=${columnOrderAction}
           @forge-data-table-column-visibility=${columnVisibilityAction}
-          @forge-data-table-column-rename=${columnRenameAction}>
+          @forge-data-table-column-rename=${columnRenameAction}
+          @forge-data-table-grouping=${groupingAction}>
         </forge-data-table>
       </div>
     `;
@@ -93,6 +97,8 @@ const meta = {
     bordered: { control: 'boolean' },
     reorderable: { control: 'boolean' },
     expandable: { control: 'boolean' },
+    groupable: { control: 'boolean' },
+    grouping: { control: 'object' },
     virtualized: { control: 'boolean' },
     fixedHeaders: { control: 'boolean' },
     rowSelection: {
@@ -118,6 +124,8 @@ const meta = {
     bordered: false,
     reorderable: false,
     expandable: false,
+    groupable: false,
+    grouping: [],
     virtualized: false,
     fixedHeaders: false,
     rowSelection: 'off',
@@ -627,6 +635,104 @@ const columns: ColumnDef<Employee>[] = [
   // \`extent\` shows the range from the lowest to the highest value
   { header: 'Utilization (extent)', property: 'utilization', aggregate: 'extent', format: new NumberFormatter({ maximumFractionDigits: 0 }) }
 ];`
+});
+
+// Row grouping
+
+export const RowGrouping: Story = exampleStory({
+  description:
+    'Set `grouping` to the ids of the columns to group the rows by. Each group is a collapsed row with a toggle, the group name and the number of rows in it. The grouped column moves to the start of the table, and its cells are empty in the rows of the group. Set `groupable` to add a **Group** action to each column menu, which groups or ungroups by that column and fires `forge-data-table-grouping`.',
+  args: {
+    groupable: true,
+    sortable: true,
+    grouping: ['department'],
+    columns: [
+      employeeColumn('name', 'Name'),
+      employeeColumn('department', 'Department'),
+      employeeColumn('status', 'Status'),
+      employeeColumn('salary', 'Salary', { format: new CurrencyFormatter() }),
+      employeeColumn('hireDate', 'Hire date', { format: new DateFormatter() })
+    ]
+  },
+  code: `const columns: ColumnDef<Employee>[] = [
+  { header: 'Name', property: 'name' },
+  { header: 'Department', property: 'department' },
+  { header: 'Status', property: 'status' },
+  { header: 'Salary', property: 'salary', format: new CurrencyFormatter() },
+  { header: 'Hire date', property: 'hireDate', format: new DateFormatter() }
+];
+
+// Group by the id of a column. A column without an \`id\` uses its \`property\`.
+table.grouping = ['department'];
+
+// Add a "Group" action to the column menus
+table.groupable = true;
+
+table.addEventListener('forge-data-table-grouping', ({ detail }) => {
+  console.log(detail); // ['department']
+});`
+});
+
+export const NestedRowGrouping: Story = exampleStory({
+  description:
+    'Group by more than one column to nest the groups, in the order of the ids. With multiple row selection, a group row has a checkbox that selects every row in the group, including the rows of nested groups. It is indeterminate when only some of them are selected. Add `groupable: false` to a column definition to keep it out of the **Group** action.',
+  args: {
+    groupable: true,
+    rowSelection: 'multiple',
+    grouping: ['department', 'status'],
+    columns: [
+      employeeColumn('name', 'Name'),
+      employeeColumn('department', 'Department'),
+      employeeColumn('status', 'Status'),
+      employeeColumn('salary', 'Salary', { format: new CurrencyFormatter(), groupable: false })
+    ]
+  },
+  code: `const columns: ColumnDef<Employee>[] = [
+  { header: 'Name', property: 'name' },
+  { header: 'Department', property: 'department' },
+  { header: 'Status', property: 'status' },
+  // Not offered in the column menu's Group action
+  { header: 'Salary', property: 'salary', format: new CurrencyFormatter(), groupable: false }
+];
+
+table.groupable = true;
+table.rowSelection = 'multiple';
+table.grouping = ['department', 'status'];`
+});
+
+// Group aggregation
+
+export const GroupAggregation: Story = exampleStory({
+  description:
+    'A group row shows the aggregate of its rows in each column that sets `aggregate`, calculated with the same function as the footer, which still totals every row. Aggregates of nested groups combine their rows. A column with a `Formatter` aggregates the raw value, then formats the result.',
+  args: {
+    groupable: true,
+    grouping: ['department'],
+    columns: [
+      employeeColumn('name', 'Name'),
+      employeeColumn('department', 'Department', { footer: 'All employees' }),
+      employeeColumn('salary', 'Salary (sum)', { id: 'salary-sum', aggregate: 'sum', format: new CurrencyFormatter() }),
+      employeeColumn('salary', 'Salary (mean)', { id: 'salary-mean', aggregate: 'mean', format: new CurrencyFormatter() }),
+      employeeColumn('rating', 'Rating (mean)', { aggregate: 'mean' }),
+      employeeColumn('utilization', 'Utilization (extent)', { aggregate: 'extent', format: new NumberFormatter({ maximumFractionDigits: 0 }) }),
+      employeeColumn('status', 'Status', { aggregate: 'uniqueCount' })
+    ]
+  },
+  code: `import { CurrencyFormatter, NumberFormatter } from '@tylertech/forge-core';
+
+const columns: ColumnDef<Employee>[] = [
+  { header: 'Name', property: 'name' },
+  // A string footer is shown as-is. The grouped column is first, so its footer is too.
+  { header: 'Department', property: 'department', footer: 'All employees' },
+  { id: 'salary-sum', header: 'Salary (sum)', property: 'salary', aggregate: 'sum', format: new CurrencyFormatter() },
+  { id: 'salary-mean', header: 'Salary (mean)', property: 'salary', aggregate: 'mean', format: new CurrencyFormatter() },
+  { header: 'Rating (mean)', property: 'rating', aggregate: 'mean' },
+  { header: 'Utilization (extent)', property: 'utilization', aggregate: 'extent', format: new NumberFormatter({ maximumFractionDigits: 0 }) },
+  // The number of different statuses in each group
+  { header: 'Status', property: 'status', aggregate: 'uniqueCount' }
+];
+
+table.grouping = ['department'];`
 });
 
 // Column renaming

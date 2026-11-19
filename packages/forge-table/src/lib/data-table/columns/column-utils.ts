@@ -81,6 +81,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
       header: column.header,
       footer: mapFooter(column),
       enableHiding: column.hideable ?? true,
+      enableGrouping: column.groupable,
       enableCellSelection: getStaticCellSelection(column),
       size: column.width ?? DEFAULT_COLUMN_WIDTH,
       meta: {
@@ -92,6 +93,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         align: column.align,
         formatAttribute: getFormatterAttribute(column.format),
         aggregated: !!column.aggregate && typeof column.footer !== 'string',
+        aggregate: column.aggregate,
+        aggregateFormatter: column.format instanceof Formatter ? column.format : undefined,
         canEdit: createCellEditablePredicate(column),
         enableCellSelection: column.enableCellSelection
       }

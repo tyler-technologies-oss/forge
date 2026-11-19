@@ -430,6 +430,36 @@ table.row-selection {
 }
 
 //
+// Row grouping
+//
+
+table tbody tr.group-row {
+  background-color: #{theme.variable(surface-container-minimum)};
+  color: #{theme.variable(on-surface-container-minimum)};
+
+  td:not(.pinned) {
+    background-color: inherit;
+  }
+}
+
+.group-cell {
+  display: flex;
+  align-items: center;
+  gap: #{spacing.variable(xsmall)};
+  min-width: 0;
+}
+
+.group-label {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-count {
+  color: #{theme.variable(text-medium)};
+}
+
+//
 // Cell selection
 //
 

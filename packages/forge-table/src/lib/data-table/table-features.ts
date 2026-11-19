@@ -2,12 +2,15 @@
 import {
   cellSelectionFeature,
   columnFilteringFeature,
+  columnGroupingFeature,
   columnOrderingFeature,
   columnPinningFeature,
   columnResizingFeature,
   columnSizingFeature,
   columnVisibilityFeature,
+  createExpandedRowModel,
   createFilteredRowModel,
+  createGroupedRowModel,
   createSortedRowModel,
   filterFn_arrIncludes,
   filterFn_equals,
@@ -31,6 +34,7 @@ import type { ColumnDefMeta } from './types.js';
 export const dataTableFeatures = tableFeatures({
   cellSelectionFeature,
   columnFilteringFeature,
+  columnGroupingFeature,
   columnOrderingFeature,
   columnPinningFeature,
   columnSizingFeature,
@@ -40,7 +44,9 @@ export const dataTableFeatures = tableFeatures({
   rowExpandingFeature,
   rowSelectionFeature,
   rowSortingFeature,
+  expandedRowModel: createExpandedRowModel(),
   filteredRowModel: createFilteredRowModel(),
+  groupedRowModel: createGroupedRowModel(),
   sortedRowModel: createSortedRowModel(),
   aggregationFns: dataTableAggregationFns,
   filterFns: {

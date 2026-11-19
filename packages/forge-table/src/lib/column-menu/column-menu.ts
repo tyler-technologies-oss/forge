@@ -14,6 +14,7 @@ import {
   tylIconPin,
   tylIconPinOff,
   tylIconSort,
+  tylIconTableRows,
   tylIconVisibilityOff
 } from '@tylertech/tyler-icons';
 import { html, LitElement, nothing, TemplateResult, unsafeCSS } from 'lit';
@@ -39,7 +40,7 @@ type MoveDirection = -1 | 1;
 /**
  * A menu button with actions for a single table column.
  *
- * Sorting, moving, hiding, and pinning are applied directly to the table through the TanStack `column` and `table`.
+ * Sorting, moving, hiding, pinning, and grouping are applied directly to the table through the TanStack `column` and `table`.
  * Maximizing and renaming are only announced through the `forge-data-table-column-menu-action` event, because the owner of the header decides how to present them.
  *
  * @tag forge-data-table-column-menu
@@ -63,6 +64,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       tylIconDockLeft,
       tylIconDockRight,
       tylIconSort,
+      tylIconTableRows,
       tylIconArrowExpandHorizontal
     ]);
   }
@@ -129,6 +131,14 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
                   <span>Descending</span>
                 </forge-dropdown-menu-item-radio>
               </forge-dropdown-menu-item>
+            `
+          : nothing}
+        ${this.column?.getCanGroup()
+          ? html`
+              <forge-dropdown-menu-item-checkbox ?checked="${this.column.getIsGrouped()}" @click="${() => this.column?.toggleGrouping()}">
+                <forge-icon slot="start" name="table_rows"></forge-icon>
+                <span>Group</span>
+              </forge-dropdown-menu-item-checkbox>
             `
           : nothing}
         ${this.column?.columnDef.meta?.renamable && typeof this.column?.columnDef.header === 'string'

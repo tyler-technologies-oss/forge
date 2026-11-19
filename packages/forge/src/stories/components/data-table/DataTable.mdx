@@ -21,6 +21,7 @@ It supports features such as sorting, filtering, column resizing and reordering,
 - **Column Visibility**: Right-click headers to open a column menu or control visibility programmatically
 - **Cell Templates**: Render badges, links, meters, ratings, action buttons, inputs, or your own content in a cell
 - **Aggregation**: Show sums, averages, counts, ranges, or custom results in a footer
+- **Row Grouping**: Group rows by one or more columns, with group totals and a checkbox that selects a whole group
 - **Column Renaming**: Let users rename column headers
 - **Formatters**: Format numbers, currency, and dates, or transform values with a function
 - **Styling Options**: Apply various styling options like striped rows, hover effects, and more
@@ -142,6 +143,23 @@ Set a column's `aggregate` to show a calculated value in the footer. The built-i
 `max`, `extent`, `count`, `uniqueCount`, `unique`, `first` and `last`. The aggregates are calculated over the filtered rows.
 
 <Canvas of={DataTableStories.Aggregation} />
+
+## Row Grouping
+
+Set `grouping` to the ids of the columns to group the rows by, or set `groupable` to let users group from the column menu. Groups are collapsed until
+they are expanded, and the grouped columns move to the start of the table, after the selection column.
+
+<Canvas of={DataTableStories.RowGrouping} />
+
+### Nested groups and selection
+
+<Canvas of={DataTableStories.NestedRowGrouping} />
+
+### Group aggregation
+
+Group rows show the `aggregate` of each column that sets one, calculated over the rows in the group.
+
+<Canvas of={DataTableStories.GroupAggregation} />
 
 ## Column Renaming
 

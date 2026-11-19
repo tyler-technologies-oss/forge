@@ -314,6 +314,8 @@ async function createFixture(
       .reorderable=${props.reorderable ?? false}
       .allowRowClick=${props.allowRowClick ?? false}
       .expandable=${props.expandable ?? false}
+      .groupable=${props.groupable ?? false}
+      .grouping=${props.grouping ?? []}
       .virtualized=${props.virtualized ?? false}
       .fixedHeaders=${props.fixedHeaders ?? false}
       .columnVisibility=${props.columnVisibility ?? {}}
@@ -3190,6 +3192,511 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Row Grouping', () => {
+    const GROUP_DATA: TestData[] = [
+      { id: 1, name: 'Alice', age: 30, email: 'red' },
+      { id: 2, name: 'Bob', age: 20, email: 'red' },
+      { id: 3, name: 'Charlie', age: 40, email: 'blue' },
+      { id: 4, name: 'Dana', age: 10, email: 'blue' },
+      { id: 5, name: 'Eve', age: 50, email: 'green' }
+    ];
+
+    const GROUP_COLUMNS: ColumnDef<TestData>[] = [
+      { id: 'name', header: 'Name', property: 'name' },
+      { id: 'age', header: 'Age', property: 'age', aggregate: 'sum' },
+      { id: 'email', header: 'Team', property: 'email' }
+    ];
+
+    const TEAM_CELL = 0;
+    const NAME_CELL = 1;
+    const AGE_CELL = 2;
+
+    const createGroupedFixture = (options: Record<string, unknown> = {}): Promise<DataTableHarness> =>
+      createFixture({ data: GROUP_DATA, columns: GROUP_COLUMNS, grouping: ['email'], ...options });
+
+    const getCellText = (harness: DataTableHarness, rowIndex: number, cellIndex: number): string | undefined =>
+      harness.getBodyCellByRowAndColumn(rowIndex, cellIndex)?.textContent?.replace(/\s+/g, ' ').trim();
+
+    const toggleGroup = async (harness: DataTableHarness, rowIndex: number): Promise<void> => {
+      (harness.getBodyRowByIndex(rowIndex)?.querySelector('forge-icon-button') as HTMLElement).click();
+      await settle(harness.element);
+    };
+
+    it('should render a collapsed group row for each grouped value', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(harness.bodyRows).toHaveLength(3);
+      expect(harness.shadowRoot.querySelectorAll('tbody tr.group-row')).toHaveLength(3);
+      expect(getCellText(harness, 0, 0)).toBe('red (2)');
+      expect(getCellText(harness, 1, 0)).toBe('blue (2)');
+      expect(getCellText(harness, 2, 0)).toBe('green (1)');
+    });
+
+    it('should not group the rows when grouping is empty', async () => {
+      const harness = await createGroupedFixture({ grouping: [] });
+
+      expect(harness.bodyRows).toHaveLength(GROUP_DATA.length);
+      expect(harness.shadowRoot.querySelector('tr.group-row')).toBeNull();
+    });
+
+    it('should show the rows of a group when its toggle is clicked', async () => {
+      const harness = await createGroupedFixture();
+
+      await toggleGroup(harness, 0);
+
+      expect(harness.bodyRows).toHaveLength(5);
+      expect(getCellText(harness, 1, NAME_CELL)).toBe('Alice');
+      expect(getCellText(harness, 2, NAME_CELL)).toBe('Bob');
+      expect(harness.getBodyRowByIndex(1)?.classList.contains('group-row')).toBe(false);
+    });
+
+    it('should hide the rows of a group when its toggle is clicked again', async () => {
+      const harness = await createGroupedFixture();
+
+      await toggleGroup(harness, 0);
+      await toggleGroup(harness, 0);
+
+      expect(harness.bodyRows).toHaveLength(3);
+    });
+
+    it('should expose the expanded state of a group on its toggle', async () => {
+      const harness = await createGroupedFixture();
+      const getToggle = (): Element | null | undefined => harness.getBodyRowByIndex(0)?.querySelector('forge-icon-button');
+
+      expect(getToggle()?.getAttribute('aria-expanded')).toBe('false');
+      expect(getToggle()?.getAttribute('aria-label')).toBe('Expand red');
+
+      await toggleGroup(harness, 0);
+
+      expect(getToggle()?.getAttribute('aria-expanded')).toBe('true');
+      expect(getToggle()?.getAttribute('aria-label')).toBe('Collapse red');
+    });
+
+    it('should name a group row after its column and value', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(harness.getBodyRowByIndex(0)?.getAttribute('aria-label')).toBe('Team: red');
+    });
+
+    it('should move the grouped column to the start of the table', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(harness.headerCells.map(cell => cell.textContent?.trim())).toEqual(['Team', 'Name', 'Age']);
+    });
+
+    it('should move the grouped column after the selection column when rows are selectable', async () => {
+      const harness = await createGroupedFixture({ rowSelection: 'multiple' });
+
+      expect(harness.headerCells.map(cell => cell.textContent?.trim()).slice(1)).toEqual(['Team', 'Name', 'Age']);
+      expect(harness.headerCells[0].classList.contains('select-column')).toBe(true);
+    });
+
+    it('should keep the grouped column first when columns are reorderable', async () => {
+      const harness = await createGroupedFixture({ reorderable: true, rowSelection: 'multiple' });
+
+      expect(harness.headerCells.map(cell => cell.textContent?.trim()).slice(1)).toEqual(['Team', 'Name', 'Age']);
+    });
+
+    it('should place several grouped columns in grouping order after the selection column', async () => {
+      const harness = await createGroupedFixture({ grouping: ['email', 'name'], rowSelection: 'multiple' });
+
+      expect(harness.headerCells.map(cell => cell.textContent?.trim()).slice(1)).toEqual(['Team', 'Name', 'Age']);
+    });
+
+    it('should restore the column order when grouping is removed', async () => {
+      const harness = await createGroupedFixture();
+
+      harness.element.grouping = [];
+      await settle(harness.element);
+
+      expect(harness.headerCells.map(cell => cell.textContent?.trim())).toEqual(['Name', 'Age', 'Team']);
+    });
+
+    it('should render a cell for every column in a group row', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(harness.getBodyRowByIndex(0)?.querySelectorAll('td')).toHaveLength(GROUP_COLUMNS.length);
+    });
+
+    it('should show the aggregate of a group in the columns that set aggregate', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(getCellText(harness, 0, AGE_CELL)).toBe('50');
+      expect(getCellText(harness, 1, AGE_CELL)).toBe('50');
+      expect(getCellText(harness, 2, AGE_CELL)).toBe('50');
+    });
+
+    it('should leave the cells of columns without an aggregate empty in a group row', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(getCellText(harness, 0, NAME_CELL)).toBe('');
+    });
+
+    it('should format the aggregate of a group with the format of the column', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'age', header: 'Age', property: 'age', aggregate: 'sum', format: new CurrencyFormatter() },
+        { id: 'email', header: 'Team', property: 'email' }
+      ];
+      const harness = await createGroupedFixture({ columns });
+
+      expect(getCellText(harness, 0, AGE_CELL)).toBe(new CurrencyFormatter().format(50));
+    });
+
+    it('should use a custom aggregation function for a group', async () => {
+      const longestName = constructAggregationFn<any, TestData>({
+        aggregate: ({ rows, getValue }) => Math.max(...rows.map(row => String(getValue(row)).length))
+      });
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name', aggregate: longestName },
+        { id: 'email', header: 'Team', property: 'email' }
+      ];
+      const harness = await createGroupedFixture({ columns });
+
+      expect(getCellText(harness, 0, NAME_CELL)).toBe('5');
+      expect(getCellText(harness, 1, NAME_CELL)).toBe('7');
+    });
+
+    it('should show the group in the first visible column when the grouped column is hidden', async () => {
+      const harness = await createGroupedFixture({ columnVisibility: { email: false } });
+
+      expect(getCellText(harness, 0, 0)).toBe('red (2)');
+    });
+
+    it('should start align the group cell regardless of the column alignment', async () => {
+      const columns = GROUP_COLUMNS.map(column => (column.id === 'email' ? { ...column, align: 'end' as const } : column));
+      const harness = await createGroupedFixture({ columns });
+
+      expect(harness.getBodyCellByRowAndColumn(0, TEAM_CELL)?.hasAttribute('data-align')).toBe(false);
+    });
+
+    it('should leave the grouped column empty in the rows of a group', async () => {
+      const harness = await createGroupedFixture();
+
+      await toggleGroup(harness, 0);
+
+      expect(getCellText(harness, 1, TEAM_CELL)).toBe('');
+      expect(getCellText(harness, 2, TEAM_CELL)).toBe('');
+      expect(getCellText(harness, 1, NAME_CELL)).toBe('Alice');
+    });
+
+    it('should show the grouped value again when grouping is removed', async () => {
+      const harness = await createGroupedFixture();
+
+      harness.element.grouping = [];
+      await settle(harness.element);
+
+      expect(getCellText(harness, 0, 2)).toBe('red');
+    });
+
+    it('should group by several columns in order', async () => {
+      const harness = await createGroupedFixture({ grouping: ['email', 'name'] });
+
+      expect(harness.bodyRows).toHaveLength(3);
+
+      await toggleGroup(harness, 0);
+
+      expect(harness.bodyRows).toHaveLength(5);
+      expect(getCellText(harness, 1, NAME_CELL)).toBe('Alice (1)');
+      expect(getCellText(harness, 1, AGE_CELL)).toBe('30');
+      expect(getCellText(harness, 1, TEAM_CELL)).toBe('');
+      expect(getCellText(harness, 2, NAME_CELL)).toBe('Bob (1)');
+    });
+
+    it('should show an empty label for rows without a value in the grouped column', async () => {
+      const data = [...GROUP_DATA, { id: 6, name: 'Frank', age: 5, email: '' }];
+      const harness = await createGroupedFixture({ data });
+
+      expect(getCellText(harness, 3, 0)).toBe('(Empty) (1)');
+    });
+
+    it('should group the rows when grouping is set after the first render', async () => {
+      const harness = await createGroupedFixture({ grouping: [] });
+
+      harness.element.grouping = ['email'];
+      await settle(harness.element);
+
+      expect(harness.bodyRows).toHaveLength(3);
+    });
+
+    it('should sort the rows within each group', async () => {
+      const harness = await createGroupedFixture({ sortable: true });
+
+      await harness.clickHeaderCell(AGE_CELL);
+      await harness.clickHeaderCell(AGE_CELL);
+      await toggleGroup(harness, 0);
+
+      expect(harness.getHeaderCellById('age')?.classList.contains('sort-asc')).toBe(true);
+      expect([1, 2].map(index => getCellText(harness, index, NAME_CELL))).toEqual(['Bob', 'Alice']);
+    });
+
+    it('should not dispatch row click for a group row', async () => {
+      const harness = await createGroupedFixture({ allowRowClick: true });
+      const handler = vi.fn();
+      harness.element.addEventListener('forge-data-table-row-click', handler);
+
+      await harness.clickBodyCell(0, AGE_CELL);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('should not render expanded row content for a group row when rows are expandable', async () => {
+      const harness = await createGroupedFixture({ expandable: true });
+
+      await toggleGroup(harness, 0);
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should not make the cells of a group row selectable', async () => {
+      const harness = await createGroupedFixture({ cellSelection: true });
+
+      await toggleGroup(harness, 0);
+
+      expect(harness.getBodyRowByIndex(0)?.querySelector('.cell-selectable')).toBeNull();
+      expect(harness.getBodyRowByIndex(1)?.querySelector('.cell-selectable')).not.toBeNull();
+    });
+
+    it('should render a cell for every column in a group row when virtualized', async () => {
+      const harness = await createGroupedFixture({ virtualized: true });
+
+      const groupRows = harness.shadowRoot.querySelectorAll('tbody tr.group-row');
+
+      expect(groupRows).toHaveLength(3);
+      expect(groupRows[0].querySelectorAll('td')).toHaveLength(GROUP_COLUMNS.length);
+    });
+
+    it('should keep the footer aggregate over every row when rows are grouped', async () => {
+      const harness = await createGroupedFixture();
+
+      expect(harness.footerCells.map(cell => cell.textContent?.trim())).toContain('150');
+    });
+
+    describe('Row Selection', () => {
+      interface CheckboxState {
+        checked: boolean;
+        indeterminate: boolean;
+      }
+
+      const createSelectableFixture = (options: Record<string, unknown> = {}): Promise<DataTableHarness> =>
+        createGroupedFixture({ rowSelection: 'multiple', ...options });
+
+      const getCheckbox = (harness: DataTableHarness, rowIndex: number): (HTMLElement & CheckboxState) | null =>
+        harness.getBodyRowByIndex(rowIndex)?.querySelector('forge-checkbox') ?? null;
+
+      const clickCheckbox = async (harness: DataTableHarness, rowIndex: number): Promise<void> => {
+        getCheckbox(harness, rowIndex)?.click();
+        await settle(harness.element);
+      };
+
+      const trackSelection = (harness: DataTableHarness): (() => string[]) => {
+        let selection: Record<string, boolean> = {};
+        harness.element.addEventListener('forge-data-table-row-select', evt => (selection = (evt as CustomEvent).detail));
+        return () => Object.keys(selection).filter(id => selection[id]);
+      };
+
+      it('should keep the selection column in a group row with a checkbox', async () => {
+        const harness = await createSelectableFixture();
+
+        const cells = harness.getBodyRowByIndex(0)?.querySelectorAll('td');
+
+        expect(cells).toHaveLength(GROUP_COLUMNS.length + 1);
+        expect(cells?.[0].classList.contains('select-column')).toBe(true);
+        expect(cells?.[0].querySelector('forge-checkbox')).not.toBeNull();
+      });
+
+      it('should show the group in the first column after the checkbox', async () => {
+        const harness = await createSelectableFixture();
+
+        expect(getCellText(harness, 0, 1)).toBe('red (2)');
+        expect(getCellText(harness, 0, 3)).toBe('50');
+      });
+
+      it('should not render a checkbox in a group row when only one row can be selected', async () => {
+        const harness = await createSelectableFixture({ rowSelection: 'single' });
+
+        const cells = harness.getBodyRowByIndex(0)?.querySelectorAll('td');
+
+        expect(cells).toHaveLength(GROUP_COLUMNS.length + 1);
+        expect(cells?.[0].classList.contains('select-column')).toBe(true);
+        expect(getCheckbox(harness, 0)).toBeNull();
+      });
+
+      it('should render the group checkbox unchecked when no rows in the group are selected', async () => {
+        const harness = await createSelectableFixture();
+
+        expect(getCheckbox(harness, 0)?.checked).toBe(false);
+        expect(getCheckbox(harness, 0)?.indeterminate).toBe(false);
+      });
+
+      it('should select every row in the group when the group checkbox is checked', async () => {
+        const harness = await createSelectableFixture();
+        const getSelection = trackSelection(harness);
+
+        await clickCheckbox(harness, 0);
+
+        expect(getSelection()).toEqual(['0', '1']);
+        expect(getCheckbox(harness, 0)?.checked).toBe(true);
+        expect(getCheckbox(harness, 1)?.checked).toBe(false);
+      });
+
+      it('should dispatch a single row select event when the group checkbox is checked', async () => {
+        const harness = await createSelectableFixture();
+        const handler = vi.fn();
+        harness.element.addEventListener('forge-data-table-row-select', handler);
+
+        await clickCheckbox(harness, 0);
+
+        expect(handler).toHaveBeenCalledTimes(1);
+      });
+
+      it('should select the rows of the group that are shown in the rows when the group is expanded', async () => {
+        const harness = await createSelectableFixture();
+
+        await clickCheckbox(harness, 0);
+        await toggleGroup(harness, 0);
+
+        expect(getCheckbox(harness, 1)?.checked).toBe(true);
+        expect(getCheckbox(harness, 2)?.checked).toBe(true);
+      });
+
+      it('should deselect every row in the group when the group checkbox is unchecked', async () => {
+        const harness = await createSelectableFixture();
+        const getSelection = trackSelection(harness);
+
+        await clickCheckbox(harness, 0);
+        await clickCheckbox(harness, 0);
+
+        expect(getSelection()).toEqual([]);
+        expect(getCheckbox(harness, 0)?.checked).toBe(false);
+      });
+
+      it('should leave rows in other groups selected when the group checkbox is unchecked', async () => {
+        const harness = await createSelectableFixture();
+        const getSelection = trackSelection(harness);
+
+        await clickCheckbox(harness, 1);
+        await clickCheckbox(harness, 0);
+        await clickCheckbox(harness, 0);
+
+        expect(getSelection()).toEqual(['2', '3']);
+      });
+
+      it('should be indeterminate when only some rows in the group are selected', async () => {
+        const harness = await createSelectableFixture();
+
+        await toggleGroup(harness, 0);
+        await harness.clickRowCheckbox(1);
+        await settle(harness.element);
+
+        expect(getCheckbox(harness, 0)?.checked).toBe(false);
+        expect(getCheckbox(harness, 0)?.indeterminate).toBe(true);
+      });
+
+      it('should be checked when every row in the group is selected one by one', async () => {
+        const harness = await createSelectableFixture();
+
+        await toggleGroup(harness, 0);
+        await harness.clickRowCheckbox(1);
+        await harness.clickRowCheckbox(2);
+        await settle(harness.element);
+
+        expect(getCheckbox(harness, 0)?.checked).toBe(true);
+        expect(getCheckbox(harness, 0)?.indeterminate).toBe(false);
+      });
+
+      it('should select every row in the group when an indeterminate group checkbox is checked', async () => {
+        const harness = await createSelectableFixture();
+        const getSelection = trackSelection(harness);
+
+        await toggleGroup(harness, 0);
+        await harness.clickRowCheckbox(1);
+        await clickCheckbox(harness, 0);
+
+        expect(getSelection()).toEqual(['0', '1']);
+        expect(getCheckbox(harness, 0)?.checked).toBe(true);
+        expect(getCheckbox(harness, 0)?.indeterminate).toBe(false);
+      });
+
+      it('should select the rows of nested groups when the outer group checkbox is checked', async () => {
+        const harness = await createSelectableFixture({ grouping: ['email', 'name'] });
+        const getSelection = trackSelection(harness);
+
+        await clickCheckbox(harness, 0);
+        await toggleGroup(harness, 0);
+
+        expect(getSelection()).toEqual(['0', '1']);
+        expect(getCheckbox(harness, 1)?.checked).toBe(true);
+        expect(getCheckbox(harness, 2)?.checked).toBe(true);
+      });
+
+      it('should be indeterminate when only some rows in nested groups are selected', async () => {
+        const harness = await createSelectableFixture({ grouping: ['email', 'name'] });
+
+        await toggleGroup(harness, 0);
+        await clickCheckbox(harness, 1);
+
+        expect(getCheckbox(harness, 0)?.indeterminate).toBe(true);
+        expect(getCheckbox(harness, 1)?.checked).toBe(true);
+        expect(getCheckbox(harness, 2)?.checked).toBe(false);
+      });
+
+      it('should not add group rows to the row selection', async () => {
+        const harness = await createSelectableFixture();
+        const getSelection = trackSelection(harness);
+
+        await clickCheckbox(harness, 0);
+
+        expect(getSelection().some(id => id.includes('email:'))).toBe(false);
+      });
+
+      it('should reflect the header checkbox when every group is selected', async () => {
+        const harness = await createSelectableFixture();
+
+        await clickCheckbox(harness, 0);
+        await clickCheckbox(harness, 1);
+        await clickCheckbox(harness, 2);
+
+        expect((harness.shadowRoot.querySelector('thead forge-checkbox') as HTMLElement & CheckboxState).checked).toBe(true);
+      });
+    });
+
+    describe('Column Menu', () => {
+      it('should group the rows and dispatch the grouping when the group action is chosen', async () => {
+        const harness = await createGroupedFixture({ groupable: true, grouping: [] });
+        const handler = vi.fn();
+        harness.element.addEventListener('forge-data-table-grouping', handler);
+
+        await chooseMenuAction(harness, 'email', 'Group');
+
+        expect(handler).toHaveBeenCalledTimes(1);
+        expect((handler.mock.calls[0][0] as CustomEvent).detail).toEqual(['email']);
+        expect(harness.element.grouping).toEqual(['email']);
+        expect(harness.bodyRows).toHaveLength(3);
+      });
+
+      it('should ungroup the rows when the group action is chosen for a grouped column', async () => {
+        const harness = await createGroupedFixture({ groupable: true });
+
+        await chooseMenuAction(harness, 'email', 'Group');
+
+        expect(harness.element.grouping).toEqual([]);
+        expect(harness.bodyRows).toHaveLength(GROUP_DATA.length);
+      });
+
+      it('should not offer the group action when the table is not groupable', async () => {
+        const harness = await createGroupedFixture({ grouping: [] });
+        const menu = harness.getHeaderCellById('email')?.querySelector('forge-data-table-column-menu');
+        (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
+        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBeGreaterThan(0));
+
+        const labels = [...document.querySelectorAll('forge-list-item')].map(item => item.textContent?.trim());
+
+        expect(labels).not.toContain('Group');
+      });
+    });
+  });
+
   describe('Virtualization', () => {
     it('should create virtualizer when virtualized is true', async () => {
       const largeData = Array.from({ length: 100 }, (_, i) => ({
@@ -3869,6 +4376,23 @@ describe('DataTable', () => {
     }
 
     const lines = (csv: string): string[] => csv.split('\r\n');
+
+    it('should export only the data rows when rows are grouped', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'email', header: 'Team', property: 'email' }
+      ];
+      const data = [
+        { id: 1, name: 'Alice', age: 30, email: 'red' },
+        { id: 2, name: 'Bob', age: 20, email: 'blue' },
+        { id: 3, name: 'Charlie', age: 40, email: 'red' }
+      ];
+      const harness = await createFixture({ data, columns, grouping: ['email'] });
+
+      const { csv } = await exportCsv(harness);
+
+      expect(lines(csv)).toEqual(['Team,Name', 'red,Alice', 'red,Charlie', 'blue,Bob']);
+    });
 
     it('should export a header row and a row for each item', async () => {
       const harness = await createFixture();

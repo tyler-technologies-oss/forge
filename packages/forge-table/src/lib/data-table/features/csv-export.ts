@@ -1,6 +1,7 @@
 import type { Column, Table } from '@tanstack/lit-table';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
+import { getDataRows } from './row-grouping.js';
 
 const CSV_DELIMITER = ',';
 const CSV_LINE_BREAK = '\r\n';
@@ -29,7 +30,7 @@ export function getCsvColumns<TData extends Row>(table: Table<DataTableFeatures,
 export function buildCsv<TData extends Row>(table: Table<DataTableFeatures, TData>): string {
   const columns = getCsvColumns(table);
   const header = columns.map(column => getHeaderText(column));
-  const rows = table.getRowModel().rows.map(row => columns.map(column => row.getValue(column.id)));
+  const rows = getDataRows(table).map(row => columns.map(column => row.getValue(column.id)));
   return serializeCsv([header, ...rows]);
 }
 

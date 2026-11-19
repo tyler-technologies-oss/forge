@@ -8,6 +8,7 @@ import {
   ColumnPinningState,
   ColumnVisibilityState,
   FlexRender,
+  GroupingState,
   LitTable,
   RowSelectionState,
   SelectCellRangeOptions,
@@ -57,6 +58,7 @@ import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pi
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { CellSelectionAutoScroller, type AutoScrollInsets } from './features/cell-selection-autoscroll.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
+import { getGroupedColumnOrder, getGroupLabelCell, getGroupRowName, renderGroupCheckbox, renderGroupRowCell } from './features/row-grouping.js';
 import { getColumnHeaderTextId, setRowName, type RowMeta } from './features/row-meta.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
 import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
@@ -262,6 +264,24 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public expandable = false;
 
   /**
+   * Allow rows to be grouped by column.
+   *
+   * Adds a "Group" action to each column menu. A column opts out with `groupable: false`. Setting `grouping` groups the rows whether or not this is set.
+   */
+  @property({ type: Boolean })
+  public groupable = false;
+
+  /**
+   * The ids of the columns to group the rows by, outermost group first.
+   *
+   * Each group is a row that can be expanded and collapsed. It shows the grouped value and the number of rows, and
+   * the aggregate of each column that sets `aggregate`. Groups are collapsed until they are expanded. Users change this through
+   * the column menu when `groupable` is set, which dispatches `forge-data-table-grouping`.
+   */
+  @property({ type: Array })
+  public grouping: string[] = [];
+
+  /**
    * Enable virtualization for rows in the table.
    */
   @property({ type: Boolean })
@@ -378,6 +398,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('cellSelection') ||
       changedProperties.has('enableCellSelection') ||
       changedProperties.has('expandable') ||
+      changedProperties.has('groupable') ||
       changedProperties.has('fixedHeaders') ||
       changedProperties.has('virtualized');
 
@@ -524,13 +545,17 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
       onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
       onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
-      getRowCanExpand: () => this.expandable,
+      enableGrouping: this.groupable,
+      groupedColumnMode: false,
+      onGroupingChange: updaterOrValue => this.#onGroupingChange(updaterOrValue),
+      getRowCanExpand: row => row.getIsGrouped() || this.expandable,
       state: {
         sorting: this._sorting,
         columnFilters: this._columnFilters,
         columnVisibility: this.columnVisibility,
-        columnOrder: this.columnOrder,
+        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off'),
         columnPinning: this._columnPinning,
+        grouping: this.grouping,
         rowSelection: this._rowSelection,
         cellSelection: this._cellSelection
       }
@@ -773,15 +798,19 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #canSelectCell(cell: Cell<DataTableFeatures, TData, any>): boolean {
+    if (cell.row.getIsGrouped()) {
+      return false;
+    }
     const columnOption = cell.column.columnDef.meta?.enableCellSelection ?? this.enableCellSelection;
     return typeof columnOption === 'function' ? columnOption(cell as Cell<DataTableFeatures, any, any>) : columnOption;
   }
 
   #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
-    const editable = isCellEditable(cell as Cell<DataTableFeatures, any>);
+    const editable = !cell.row.getIsGrouped() && isCellEditable(cell as Cell<DataTableFeatures, any>);
     const selectable = this.cellSelection && cell.getCanSelect();
     const selected = selectable && cell.getIsSelected();
     const edges = selected ? cell.getSelectionEdges() : undefined;
+    const isGroupLabel = cell.row.getIsGrouped() && getGroupLabelCell(cell.row)?.id === cell.id;
     return html`
       <td
         part="body-cell cell"
@@ -807,21 +836,35 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         @mouseenter=${selectable ? cell.getSelectionExtendHandler() : nothing}
         @keydown=${selectable ? (evt: KeyboardEvent) => this.#onCellKeydown(evt, cell) : nothing}
         @focus=${selectable ? () => this.#onCellFocus(cell) : nothing}
-        data-align=${ifDefined(cell.column.columnDef.meta?.align)}
-        ${formatAttribute(cell.column.columnDef.meta?.formatAttribute)}
+        data-align=${ifDefined(isGroupLabel ? undefined : cell.column.columnDef.meta?.align)}
+        ${formatAttribute(isGroupLabel ? undefined : cell.column.columnDef.meta?.formatAttribute)}
         ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
         cell.column.columnDef.id === SELECT_COLUMN_ID ||
         editable}>
-        <div class="cell-content" part="body-cell-content cell-content">
-          ${cell.column.columnDef.meta?.cellSlot
-            ? guard(
-                [cell.column],
-                () => html`<slot ${lightDomRender(this, cell as Cell<DataTableFeatures, any>)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`
-              )
-            : FlexRender({ cell })}
-        </div>
+        <div class="cell-content" part="body-cell-content cell-content">${this.#renderCellContent(cell, rowId)}</div>
       </td>
     `;
+  }
+
+  #renderGroupRowCellContent(cell: Cell<DataTableFeatures, TData>): unknown {
+    if (cell.column.id === SELECT_COLUMN_ID) {
+      return this.rowSelection === 'multiple' && this.#table ? renderGroupCheckbox(this.#table, cell) : nothing;
+    }
+
+    return renderGroupRowCell(cell);
+  }
+
+  #renderCellContent(cell: Cell<DataTableFeatures, TData>, rowId: string): unknown {
+    if (cell.row.getIsGrouped()) {
+      return this.#renderGroupRowCellContent(cell);
+    }
+
+    return cell.column.columnDef.meta?.cellSlot
+      ? guard(
+          [cell.column],
+          () => html`<slot ${lightDomRender(this, cell as Cell<DataTableFeatures, any>)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`
+        )
+      : FlexRender({ cell });
   }
 
   #getCellTabStopId(table: LitTable<DataTableFeatures, TData>): string | undefined {
@@ -831,7 +874,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
     return table
       .getRowModel()
-      .rows[0]?.getVisibleCells()
+      .rows.find(row => !row.getIsGrouped())
+      ?.getVisibleCells()
       .find(cell => cell.getCanSelect())?.id;
   }
 
@@ -952,17 +996,17 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         table.getRowModel().rows,
         row => row.id,
         row => {
-          const { name, nameId } = this.#getRowName(row);
+          const { name, nameId } = this.#getRowName(table, row);
           return html`
             <tr
               id=${nameId}
               aria-label=${name}
-              class=${classMap({ selected: row.getIsSelected() })}
-              part="body-tr tr"
-              @click=${this.allowRowClick ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
+              class=${classMap({ selected: row.getIsSelected(), 'group-row': row.getIsGrouped() })}
+              part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
+              @click=${this.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
               ${row.getVisibleCells().map(cell => this.#renderCell(cell, row.id, groupStartColumnIds))}
             </tr>
-            ${row.getIsExpanded()
+            ${row.getIsExpanded() && !row.getIsGrouped()
               ? html`
                   <tr part="body-tr tr">
                     <td colspan=${row.getAllCells().length}>
@@ -1156,8 +1200,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     return column.id;
   }
 
-  #getRowName(row: TanstackRow<DataTableFeatures, TData>): RowMeta {
-    return setRowName(row, this.getRowName(row.original, row.index));
+  #getRowName(table: LitTable<DataTableFeatures, TData>, row: TanstackRow<DataTableFeatures, TData>): RowMeta {
+    return setRowName(row, row.getIsGrouped() ? getGroupRowName(table, row) : this.getRowName(row.original, row.index));
   }
 
   #getColumnHeaderId(columnId: string): string {
@@ -1230,6 +1274,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
   }
 
+  #onGroupingChange(updaterOrValue: Updater<GroupingState>): void {
+    this.grouping = typeof updaterOrValue === 'function' ? updaterOrValue(this.grouping) : updaterOrValue;
+    this.dispatchEvent(new CustomEvent('forge-data-table-grouping', { detail: this.grouping, bubbles: true, composed: true }));
+  }
+
   #onFilter(updaterOrValue: Updater<ColumnFiltersState>): void {
     this._columnFilters = typeof updaterOrValue === 'function' ? updaterOrValue(this._columnFilters) : updaterOrValue;
     if (this.manualFilter) {
@@ -1295,6 +1344,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
     const rows = table.getRowModel().rows;
     const virtualizer = this._virtualizerController.getVirtualizer();
+    if (virtualizer.options.count !== rows.length) {
+      virtualizer.setOptions({ ...virtualizer.options, count: rows.length });
+    }
     const virtualItems = virtualizer.getVirtualItems();
     const totalHeight = virtualizer.getTotalSize();
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
@@ -1310,7 +1362,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         item => item.key,
         item => {
           const row = rows[item.index];
-          const { name, nameId } = this.#getRowName(row);
+          const { name, nameId } = this.#getRowName(table, row);
           return html`
             <tr
               id=${nameId}
@@ -1318,16 +1370,17 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
               data-index="${item.index}"
               class=${classMap({
                 selected: row.getIsSelected(),
+                'group-row': row.getIsGrouped(),
                 'virtualized-tr': true
               })}
-              part="body-tr tr"
+              part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
               style=${styleMap({
                 position: 'absolute',
                 transform: `translateY(${item.start}px)`,
                 width: '100%',
                 height: `${item.size}px`
               })}
-              @click=${this.allowRowClick ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
+              @click=${this.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
               ${repeat(
                 row.getVisibleCells(),
                 cell => cell.id,

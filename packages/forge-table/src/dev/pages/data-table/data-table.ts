@@ -78,7 +78,7 @@ const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Department', property: 'department', renamable: true },
   { header: 'Position', property: 'position', renamable: true },
   { header: 'Tags', id: 'tags', template: tagsBadges },
-  { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end' },
+  { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter(), align: 'end', aggregate: 'mean' },
   { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
   { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
   { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
@@ -299,6 +299,9 @@ allowRowClickToggle.addEventListener('forge-switch-change', ({ detail: selected 
 
 const expandableToggle = document.querySelector('#opt-expandable') as ISwitchComponent;
 expandableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.expandable = selected));
+
+const groupableToggle = document.querySelector('#opt-groupable') as ISwitchComponent;
+groupableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.groupable = selected));
 
 const customCellTemplateToggle = document.querySelector('#opt-custom-cell-template') as ISwitchComponent;
 customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {

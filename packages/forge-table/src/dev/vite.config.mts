@@ -88,7 +88,7 @@ export default defineConfig({
       // The page shell (scaffold, app bar, options drawer, theme toggle) is shared with forge's own dev pages
       { find: /^\$src\//, replacement: `${resolve(forgeDevDir, 'src')}/` },
       // forge's shell imports its stylesheets as `*.scss` sources, which only exist in the forge workspace; use the built CSS
-      { find: /^@tylertech\/forge\/(forge|forge-core|forge-dark)\.scss/, replacement: `${forgeDistDir}/$1.css` }
+      { find: /^@tylertech\/forge\/(forge|forge-core|forge-dark|forge-radix|forge-radix-dark)\.scss/, replacement: `${forgeDistDir}/$1.css` }
     ],
     conditions: ['module', 'browser', 'default']
   },

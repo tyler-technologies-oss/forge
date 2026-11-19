@@ -19,6 +19,8 @@ export interface ColumnDefMeta {
   align?: ColumnAlign;
   formatAttribute?: string;
   aggregated?: boolean;
+  aggregate?: ColumnAggregation<any>;
+  aggregateFormatter?: Formatter<unknown, unknown>;
   canEdit?: CellEditablePredicate;
   enableCellSelection?: boolean | EnableCellSelectionFn<any, any>;
 }
@@ -46,6 +48,7 @@ export interface ColumnDef<TData extends Row = Row> {
   header?: string;
   footer?: string | FooterCallback<TData>;
   aggregate?: ColumnAggregation<TData>;
+  groupable?: boolean;
   property?: string & keyof TData;
   hidden?: boolean;
   hideable?: boolean;

@@ -2,6 +2,7 @@ import type { Table } from '@tanstack/lit-table';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
 import { getCsvColumns, getHeaderText, stringifyValue } from './csv-export.js';
+import { getDataRows } from './row-grouping.js';
 
 const HTML_ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 const HTML_SPECIAL_CHARS = /[&<>"']/g;
@@ -29,7 +30,7 @@ export function buildPrintDocument<TData extends Row>(table: Table<DataTableFeat
   const alignClass = (align?: string): string => (align === 'center' || align === 'end' ? ` class="align-${align}"` : '');
 
   const headerCells = columns.map(column => `<th scope="col"${alignClass(column.columnDef.meta?.align)}>${escapeHtml(getHeaderText(column))}</th>`);
-  const bodyRows = table.getRowModel().rows.map(row => {
+  const bodyRows = getDataRows(table).map(row => {
     const cells = columns.map(column => `<td${alignClass(column.columnDef.meta?.align)}>${escapeHtml(stringifyValue(row.getValue(column.id)))}</td>`);
     return `<tr>${cells.join('')}</tr>`;
   });

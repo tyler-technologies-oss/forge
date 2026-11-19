@@ -27,7 +27,7 @@ const DATA: TestData[] = [
 ];
 
 function createTestTable(
-  options: { enableSorting?: boolean; enableColumnResizing?: boolean; columns?: ColumnDef<DataTableFeatures, TestData>[] } = {}
+  options: { enableSorting?: boolean; enableColumnResizing?: boolean; enableGrouping?: boolean; columns?: ColumnDef<DataTableFeatures, TestData>[] } = {}
 ): Table<DataTableFeatures, TestData> {
   const host: ReactiveControllerHost = {
     addController: () => {},
@@ -40,7 +40,8 @@ function createTestTable(
     data: DATA,
     columns: options.columns ?? COLUMNS,
     enableSorting: options.enableSorting ?? true,
-    enableColumnResizing: options.enableColumnResizing ?? true
+    enableColumnResizing: options.enableColumnResizing ?? true,
+    enableGrouping: options.enableGrouping ?? false
   });
 }
 
@@ -113,6 +114,38 @@ describe('ColumnMenu', () => {
     await choose(await openMenu(element), 'Sort descending');
 
     expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: true }]);
+  });
+
+  it('should list the group action when the table allows grouping', async () => {
+    const element = await renderMenu(createTestTable({ enableGrouping: true }), 'name');
+
+    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Sort ascending', 'Sort descending', 'Group', 'Hide', 'Pin', 'Maximize']);
+  });
+
+  it('should group the rows by the column when group is chosen', async () => {
+    const table = createTestTable({ enableGrouping: true });
+    const element = await renderMenu(table, 'name');
+
+    await choose(await openMenu(element), 'Group');
+
+    expect(table.atoms.grouping.get()).toEqual(['name']);
+  });
+
+  it('should remove the grouping when group is chosen for a grouped column', async () => {
+    const table = createTestTable({ enableGrouping: true });
+    table.setGrouping(['name']);
+    const element = await renderMenu(table, 'name');
+
+    await choose(await openMenu(element), 'Group');
+
+    expect(table.atoms.grouping.get()).toEqual([]);
+  });
+
+  it('should omit the group action when the column does not allow grouping', async () => {
+    const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enableGrouping: false } : column));
+    const element = await renderMenu(createTestTable({ columns, enableGrouping: true }), 'name');
+
+    expect(getLabels(await openMenu(element))).not.toContain('Group');
   });
 
   it('should omit sort actions when the table does not allow sorting', async () => {
