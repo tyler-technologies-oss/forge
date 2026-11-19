@@ -66,7 +66,8 @@ const meta = {
           ?groupable=${args.groupable}
           .grouping=${args.grouping}
           ?virtualized=${args.virtualized}
-          ?fixed-headers=${args.fixedHeaders}
+          ?sticky-header=${args.stickyHeader}
+          ?sticky-footer=${args.stickyFooter}
           row-selection=${args.rowSelection}
           ?cell-selection=${args.cellSelection}
           ?allow-row-click=${args.allowRowClick}
@@ -100,7 +101,8 @@ const meta = {
     groupable: { control: 'boolean' },
     grouping: { control: 'object' },
     virtualized: { control: 'boolean' },
-    fixedHeaders: { control: 'boolean' },
+    stickyHeader: { control: 'boolean' },
+    stickyFooter: { control: 'boolean' },
     rowSelection: {
       control: 'select',
       options: ['off', 'single', 'multiple']
@@ -127,7 +129,8 @@ const meta = {
     groupable: false,
     grouping: [],
     virtualized: false,
-    fixedHeaders: false,
+    stickyHeader: false,
+    stickyFooter: false,
     rowSelection: 'off',
     cellSelection: false,
     allowRowClick: false,
@@ -240,10 +243,16 @@ export const Virtualization: Story = {
   `
 };
 
-// Story with fixed headers
-export const FixedHeaders: Story = {
+export const StickyHeader: Story = {
   args: {
-    fixedHeaders: true
+    stickyHeader: true
+  }
+};
+
+export const StickyFooter: Story = {
+  args: {
+    stickyFooter: true,
+    columns: sampleColumns.map((column, index) => (index === 0 ? { ...column, footer: 'Footer' } : column))
   }
 };
 

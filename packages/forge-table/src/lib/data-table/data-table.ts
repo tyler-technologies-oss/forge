@@ -289,10 +289,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public virtualized = false;
 
   /**
-   * Keep headers fixed at the top while scrolling through the table.
+   * Keep the header row stuck to the top while scrolling through the table.
    */
-  @property({ type: Boolean, attribute: 'fixed-headers' })
-  public fixedHeaders = false;
+  @property({ type: Boolean, attribute: 'sticky-header' })
+  public stickyHeader = false;
+
+  /**
+   * Keep the footer row stuck to the bottom while scrolling through the table.
+   */
+  @property({ type: Boolean, attribute: 'sticky-footer' })
+  public stickyFooter = false;
 
   /**
    * Returns the accessible name for a given row.
@@ -369,8 +375,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     if (changedProperties.has('allowRowClick')) {
       toggleState(this.#internals, 'allow-row-click', this.allowRowClick);
     }
-    if (changedProperties.has('fixedHeaders')) {
-      toggleState(this.#internals, 'fixed-headers', this.fixedHeaders);
+    if (changedProperties.has('stickyHeader')) {
+      toggleState(this.#internals, 'sticky-header', this.stickyHeader);
+    }
+    if (changedProperties.has('stickyFooter')) {
+      toggleState(this.#internals, 'sticky-footer', this.stickyFooter);
     }
     if (changedProperties.has('virtualized')) {
       toggleState(this.#internals, 'virtualized', this.virtualized);
@@ -413,7 +422,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('enableCellSelection') ||
       changedProperties.has('expandable') ||
       changedProperties.has('groupable') ||
-      changedProperties.has('fixedHeaders') ||
+      changedProperties.has('stickyHeader') ||
+      changedProperties.has('stickyFooter') ||
       changedProperties.has('virtualized');
 
     if (needsRecreation) {
@@ -591,11 +601,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             'cell-selection': this.cellSelection,
             compact: this.compact,
             filterable: this.filterable,
-            'fixed-headers': this.fixedHeaders,
             hover: this.hover,
             'has-pinned-columns': table.getIsSomeColumnsPinned(),
             resizable: this.resizable,
             'row-selection': this.rowSelection !== 'off',
+            'sticky-footer': this.stickyFooter,
+            'sticky-header': this.stickyHeader,
             striped: this.striped,
             virtualized: this.virtualized
           })}
@@ -910,9 +921,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   #getStickyInsets(): AutoScrollInsets {
     const sumSizes = (columns: Column<DataTableFeatures, TData>[]): number => columns.reduce((total, column) => total + column.getSize(), 0);
     return {
-      top: this.fixedHeaders ? (this.shadowRoot?.querySelector('thead')?.offsetHeight ?? 0) : 0,
+      top: this.stickyHeader ? (this.shadowRoot?.querySelector('thead')?.offsetHeight ?? 0) : 0,
       right: sumSizes(this.#table?.getEndVisibleLeafColumns() ?? []),
-      bottom: 0,
+      bottom: this.stickyFooter ? (this.shadowRoot?.querySelector('tfoot')?.offsetHeight ?? 0) : 0,
       left: sumSizes(this.#table?.getStartVisibleLeafColumns() ?? [])
     };
   }

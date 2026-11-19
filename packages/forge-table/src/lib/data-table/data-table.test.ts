@@ -318,7 +318,8 @@ async function createFixture(
       .groupable=${props.groupable ?? false}
       .grouping=${props.grouping ?? []}
       .virtualized=${props.virtualized ?? false}
-      .fixedHeaders=${props.fixedHeaders ?? false}
+      .stickyHeader=${props.stickyHeader ?? false}
+      .stickyFooter=${props.stickyFooter ?? false}
       .columnVisibility=${props.columnVisibility ?? {}}
       .columnOrder=${props.columnOrder ?? []}></forge-data-table>
   `);
@@ -4181,10 +4182,16 @@ describe('DataTable', () => {
       expect(harness.hasCustomState('bordered')).toBe(true);
     });
 
-    it('should apply fixed-headers custom state when fixedHeaders is true', async () => {
-      const harness = await createFixture({ fixedHeaders: true });
+    it('should apply sticky-header custom state when stickyHeader is true', async () => {
+      const harness = await createFixture({ stickyHeader: true });
 
-      expect(harness.hasCustomState('fixed-headers')).toBe(true);
+      expect(harness.hasCustomState('sticky-header')).toBe(true);
+    });
+
+    it('should apply sticky-footer custom state when stickyFooter is true', async () => {
+      const harness = await createFixture({ stickyFooter: true });
+
+      expect(harness.hasCustomState('sticky-footer')).toBe(true);
     });
 
     it('should apply resizable custom state when resizable is true', async () => {

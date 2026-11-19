@@ -572,20 +572,24 @@ table.allow-row-click {
 }
 
 //
-// Fixed Headers
+// Sticky Header
 //
 
-table.fixed-headers {
-  .table-container {
-    position: relative;
-  }
+table.sticky-header thead th {
+  position: sticky;
+  top: 0;
+  background-color: #{theme.variable(surface)};
+  z-index: 1;
+}
 
-  th {
-    position: sticky;
-    top: 0;
-    background-color: #{theme.variable(surface)};
-    z-index: 1;
-  }
+//
+// Sticky Footer
+//
+
+table.sticky-footer tfoot th {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 }
 
 // A header being renamed grows with its text, so it overlays the neighboring headers instead of clipping

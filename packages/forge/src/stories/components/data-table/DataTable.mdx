@@ -84,11 +84,17 @@ Enable row virtualization for efficiently handling large datasets with improved 
 
 <Canvas of={DataTableStories.Virtualization} />
 
-## Fixed Headers Table
+## Sticky Header
 
-Enable fixed headers to keep column headers visible while scrolling through large datasets:
+Set `sticky-header` to keep the column headers visible while scrolling through large datasets:
 
-<Canvas of={DataTableStories.FixedHeaders} />
+<Canvas of={DataTableStories.StickyHeader} />
+
+## Sticky Footer
+
+Set `sticky-footer` to keep the footer row visible while scrolling. It only applies when a column defines a `footer`:
+
+<Canvas of={DataTableStories.StickyFooter} />
 
 ## Cell Templates
 
