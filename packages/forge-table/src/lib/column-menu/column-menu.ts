@@ -1,5 +1,5 @@
 import type { Column, ColumnOrderState, Table } from '@tanstack/lit-table';
-import { IconRegistry } from '@tylertech/forge';
+import { IconRegistry, VirtualElement } from '@tylertech/forge';
 import {
   tylIconArrowBack,
   tylIconArrowDownward,
@@ -19,6 +19,7 @@ import {
 } from '@tylertech/tyler-icons';
 import { html, LitElement, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import type { DropdownMenuComponent } from '@tylertech/forge/dropdown-menu';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
 import { SELECT_COLUMN_ID } from '../data-table/constants.js';
 import type { DataTableFeatures } from '../data-table/table-features.js';
@@ -100,7 +101,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       <forge-icon-button id="button" aria-label=${this.buttonLabel} dense shape="squared">
         <forge-icon name="more_vert"></forge-icon>
       </forge-icon-button>
-      <forge-dropdown-menu class="menu" trigger="button" dense>
+      <forge-dropdown-menu class="menu" trigger="button" dense @beforetoggle="${this.#onBeforeToggle}">
         ${this.reorderable
           ? html`
               <forge-dropdown-menu-item>
@@ -220,6 +221,60 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
     [order[from], order[to]] = [order[to], order[from]];
     table.setColumnOrder(order);
   }
+
+  /**
+   * Opens the menu. It is anchored to its button, or to the pointer position when opened for a mouse event such as `contextmenu`.
+   */
+  public async openMenu(evt?: MouseEvent): Promise<void> {
+    await this.updateComplete;
+    const menu = this.#menu;
+    if (!menu) {
+      return;
+    }
+
+    menu.anchorElement = evt ? VirtualElement.fromEvent(evt) : null;
+    menu.open = true;
+    this.#listenForOutsideContextMenu();
+  }
+
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#stopListeningForOutsideContextMenu();
+  }
+
+  get #menu(): DropdownMenuComponent | null {
+    return this.shadowRoot?.querySelector('forge-dropdown-menu') ?? null;
+  }
+
+  #onBeforeToggle = (evt: ToggleEvent): void => {
+    if (evt.newState === 'open' && this.#menu) {
+      this.#menu.anchorElement = null;
+      this.#listenForOutsideContextMenu();
+    }
+  };
+
+  #listenForOutsideContextMenu(): void {
+    document.addEventListener('contextmenu', this.#onDocumentContextMenu, { capture: true });
+  }
+
+  #stopListeningForOutsideContextMenu(): void {
+    document.removeEventListener('contextmenu', this.#onDocumentContextMenu, { capture: true });
+  }
+
+  #onDocumentContextMenu = (evt: MouseEvent): void => {
+    const menu = this.#menu;
+    if (!menu?.open) {
+      this.#stopListeningForOutsideContextMenu();
+      return;
+    }
+
+    if (evt.composedPath().includes(menu)) {
+      return;
+    }
+
+    menu.open = false;
+    this.#stopListeningForOutsideContextMenu();
+  };
 
   public override focus(options?: FocusOptions): void {
     this.shadowRoot?.querySelector('forge-icon-button')?.focus(options);

@@ -4,6 +4,7 @@ import { html, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { KeyActionController } from '../../core/utils/key-action.js';
+import type { VirtualElement } from '../../core/utils/position-utils.js';
 import { IOverlayComponent } from '../../overlay/overlay.js';
 import { OVERLAY_CONSTANTS, type OverlayPlacement } from '../../overlay/overlay-constants.js';
 import { IPopoverToggleEventData } from '../../popover/popover-constants.js';
@@ -106,10 +107,12 @@ export class DropdownMenuComponent extends BaseLitElement {
    * The element that the menu is positioned relative to.
    *
    * Overrides the trigger as the positioning element. Takes precedence over `anchor`.
+   *
+   * Can be a `VirtualElement` to position the menu at a point, such as the cursor of a `contextmenu` event.
    * @default null
    */
   @property({ attribute: false })
-  public anchorElement: HTMLElement | null = null;
+  public anchorElement: HTMLElement | VirtualElement | null = null;
 
   /**
    * Whether the menu is open.
@@ -208,7 +211,7 @@ export class DropdownMenuComponent extends BaseLitElement {
     `;
   }
 
-  #locateElement(element: HTMLElement | null, id: string | null): HTMLElement | null {
+  #locateElement<T extends HTMLElement | VirtualElement>(element: T | null, id: string | null): T | HTMLElement | null {
     if (element) {
       return element;
     }

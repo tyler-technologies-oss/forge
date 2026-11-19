@@ -220,3 +220,13 @@ export function canColumnBeReordered<TData extends Row>(column: Column<DataTable
   }
   return column.columnDef.meta?.reorderable ?? true;
 }
+
+export function getGroupStartColumnIds<TData extends Row>(table: Table<DataTableFeatures, TData>): ReadonlySet<string> {
+  const groupStartColumnIds = new Set<string>();
+  table.getVisibleLeafColumns().forEach((column, index, columns) => {
+    if (index > 0 && column.parent?.id !== columns[index - 1].parent?.id) {
+      groupStartColumnIds.add(column.id);
+    }
+  });
+  return groupStartColumnIds;
+}

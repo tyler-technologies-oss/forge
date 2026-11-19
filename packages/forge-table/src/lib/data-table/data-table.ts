@@ -1,13 +1,10 @@
 import {
-  Cell,
   CellSelectionRange,
   CellSelectionState,
-  Column,
   ColumnFiltersState,
   ColumnOrderState,
   ColumnPinningState,
   ColumnVisibilityState,
-  FlexRender,
   GroupingState,
   LitTable,
   RowSelectionState,
@@ -15,57 +12,33 @@ import {
   SortingState,
   TableController,
   ColumnDef as TanstackColumnDef,
-  Row as TanstackRow,
   Updater
 } from '@tanstack/lit-table';
-import { VirtualizerController } from '@tanstack/lit-virtual';
-import { toggleState } from '@tylertech/forge';
 import type { DataSource } from '@tylertech/forge-core';
-import type { IPopoverToggleEventData, PopoverComponent } from '@tylertech/forge/popover';
-import { html, LitElement, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { guard } from 'lit/directives/guard.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { repeat } from 'lit/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { svg } from 'lit/static-html.js';
-import {
-  applyColumnHeaders,
-  canColumnBeReordered,
-  getAllColumnIds,
-  getAllLeafColumns,
-  mapColumns,
-  prependSelectColumn,
-  resolveColumnId
-} from './columns/column-utils.js';
-import {
-  CELL_SELECTION_KEY_DIRECTIONS,
-  COMPACT_ROW_HEIGHT,
-  DATA_TABLE_DEF_KEYS,
-  DEFAULT_COLUMN_WIDTH,
-  DEFAULT_ROW_HEIGHT,
-  FETCH_SKIP,
-  FETCH_TAKE,
-  SELECT_COLUMN_ID,
-  VIRTUALIZER_OVERSCAN
-} from './constants.js';
+import { applyColumnHeaders, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
+import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID } from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
-import { formatAttribute } from './directives/format-attribute.js';
-import { lightDomRender } from './directives/light-dom-render.js';
-import { getColumnPinningState, getPinnedColumnClasses, getPinnedColumnStyle, pinSelectColumn } from './features/column-pinning.js';
+import { CellSelectionController } from './features/cell-selection.js';
+import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
+import { ColumnRenameController } from './features/column-rename.js';
+import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
-import { CellSelectionAutoScroller, type AutoScrollInsets } from './features/cell-selection-autoscroll.js';
+import { HostSemantics } from './features/host-semantics.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
-import { getGroupedColumnOrder, getGroupLabelCell, getGroupRowName, renderGroupCheckbox, renderGroupRowCell } from './features/row-grouping.js';
-import { getColumnHeaderTextId, setRowName, type RowMeta } from './features/row-meta.js';
+import { getGroupedColumnOrder } from './features/row-grouping.js';
+import { isMultiSortEvent } from './features/sorting.js';
+import { RowVirtualization } from './features/virtualization.js';
 import { dataTableFeatures, type DataTableFeatures } from './table-features.js';
-import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
-import { renderEmptyState } from './templates/empty-state.js';
-import { renderFilterField } from './templates/filter-fields.js';
-import { isCellEditable } from './templates/input-cell.js';
+import { renderBody } from './templates/body.js';
+import { renderColumnGroup } from './templates/column-group.js';
+import { renderTableFooter } from './templates/footer.js';
+import { renderTableHeader } from './templates/header.js';
 import type { ColumnDef, DataTableDef, EnableCellSelectionFn, MultiSortKey, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
@@ -104,29 +77,25 @@ export type {
  */
 @customElement('forge-data-table')
 export class DataTableElement<TData extends Row = Row> extends LitElement {
-  #tableController = new TableController<DataTableFeatures, TData>(this);
-  #table: LitTable<DataTableFeatures, TData> | null = null;
-  #tableContainerRef = createRef<HTMLElement>();
-  #columnReorderController: ColumnReorderController<TData> | null = null;
-  #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
-    selectColumnId: SELECT_COLUMN_ID,
-    onVisibilityChange: nextState => this.#emitColumnVisibilityChange(nextState)
-  });
-  @query('#column-visibility-popover')
-  private _columnVisibilityPopover?: PopoverComponent;
-  #internals: ElementInternals;
-  #managedRole: string | undefined;
-  #isDragging = false;
-  #sortingBeforeClick: SortingState | null = null;
-  #cellTabStopId: string | undefined;
-  #pendingCellFocus = false;
-  #cellAutoScroller = new CellSelectionAutoScroller({
-    getScrollElement: () => this.#tableContainerRef.value,
-    getInsets: () => this.#getStickyInsets(),
-    onPoint: (x, y, evt) => this.#extendCellSelectionAtPoint(x, y, evt)
-  });
-
   public static override styles = unsafeCSS(styles);
+
+  /**
+   * The whole table configuration as one object.
+   *
+   * Reading it returns the current value of every configuration property. Setting it assigns each field it contains to the property of the
+   * same name, and leaves the others as they are, so it can be combined with setting individual properties or attributes. A field set to
+   * `undefined` is ignored, except `dataSource` and `maxMultiSortColCount`, where `undefined` clears the value.
+   */
+  public get config(): DataTableDef<TData> {
+    return Object.fromEntries(Object.keys(DATA_TABLE_DEF_KEYS).map(key => [key, this[key as keyof DataTableDef]]));
+  }
+
+  public set config(def: DataTableDef<TData>) {
+    const entries = (Object.keys(DATA_TABLE_DEF_KEYS) as (keyof DataTableDef)[]).filter(
+      key => key in def && (def[key] !== undefined || DATA_TABLE_DEF_KEYS[key])
+    );
+    Object.assign(this, Object.fromEntries(entries.map(key => [key, def[key]])));
+  }
 
   /**
    * The data source that supplies the rows to display in the table.
@@ -327,24 +296,6 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @property({ attribute: false })
   public getSelectionClipboardValue: (data: unknown[][][]) => string = buildSelectionCsv;
 
-  /**
-   * The whole table configuration as one object.
-   *
-   * Reading it returns the current value of every configuration property. Setting it assigns each field it contains to the property of the
-   * same name, and leaves the others as they are, so it can be combined with setting individual properties or attributes. A field set to
-   * `undefined` is ignored, except `dataSource` and `maxMultiSortColCount`, where `undefined` clears the value.
-   */
-  public get config(): DataTableDef<TData> {
-    return Object.fromEntries(Object.keys(DATA_TABLE_DEF_KEYS).map(key => [key, this[key as keyof DataTableDef]]));
-  }
-
-  public set config(def: DataTableDef<TData>) {
-    const entries = (Object.keys(DATA_TABLE_DEF_KEYS) as (keyof DataTableDef)[]).filter(
-      key => key in def && (def[key] !== undefined || DATA_TABLE_DEF_KEYS[key])
-    );
-    Object.assign(this, Object.fromEntries(entries.map(key => [key, def[key]])));
-  }
-
   @state() private _data: TData[] = [];
   @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
   @state() private _tableColumns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
@@ -352,68 +303,159 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @state() private _columnFilters: ColumnFiltersState = [];
   @state() private _columnPinning: ColumnPinningState = { start: [], end: [] };
   @state() private _rowSelection: RowSelectionState = {};
-  @state() private _cellSelection: CellSelectionState = [];
-  @state() private _virtualizerController: VirtualizerController<HTMLElement, HTMLElement> | null = null;
-  @state() private _columnMenuAnchorId: string | null = null;
-  @state() private _columnMenuOpen = false;
-  @state() private _columnHeaders: Record<string, string> = {};
-  @state() private _renamingColumnId: string | null = null;
+
+  #tableController = new TableController<DataTableFeatures, TData>(this);
+  #table: LitTable<DataTableFeatures, TData> | null = null;
+  #tableContainerRef = createRef<HTMLElement>();
+  #columnReorderController: ColumnReorderController<TData> | null = null;
+  #appliedColumnHeaders: Record<string, string> = {};
+  readonly #hostSemantics: HostSemantics;
+  readonly #virtualization = new RowVirtualization<TData>(this, () => this.#tableContainerRef.value);
+  readonly #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
+    selectColumnId: SELECT_COLUMN_ID,
+    onVisibilityChange: nextState => this.#emitColumnVisibilityChange(nextState)
+  });
+  readonly #columnRename = new ColumnRenameController<TData>(this, {
+    getSorting: () => this._sorting,
+    setSorting: sorting => this.#onSort(sorting)
+  });
+  readonly #cellSelection = new CellSelectionController<TData>(this, {
+    getTable: () => this.#table,
+    getScrollElement: () => this.#tableContainerRef.value,
+    scrollToRow: rowIndex => this.#virtualization.scrollToRow(rowIndex)
+  });
 
   constructor() {
     super();
-    this.#internals = this.attachInternals();
+    this.#hostSemantics = new HostSemantics(this, this.attachInternals());
   }
 
-  #updateRole(): void {
-    const role = this.getAttribute('role');
-    if (role === null || role === this.#managedRole) {
-      this.#managedRole = this.cellSelection ? 'grid' : 'table';
-      this.setAttribute('role', this.#managedRole);
+  public willUpdate(changedProperties: PropertyValues<this>): void {
+    this.#hostSemantics.updateStates(changedProperties);
+
+    if (!this.hasUpdated || changedProperties.has('cellSelection')) {
+      this.#hostSemantics.updateRole();
     }
-    this.#internals.ariaMultiSelectable = this.cellSelection ? 'true' : null;
+
+    if (changedProperties.has('columns')) {
+      this.#handleColumnsChange();
+    }
+
+    if (changedProperties.has('cellSelection') && !this.cellSelection) {
+      this.#cellSelection.reset();
+    }
+
+    this.#checkRecreateTableController(changedProperties);
+
+    if (changedProperties.has('reorderable') || changedProperties.has('rowSelection') || changedProperties.has('columns')) {
+      this.#setReorderable();
+    }
+
+    if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
+      this.#updateColumnPinning();
+    }
+
+    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || this.#columnRename.headers !== this.#appliedColumnHeaders) {
+      this.#updateRenderColumns();
+    }
+
+    if (changedProperties.has('dataSource')) {
+      this.#loadData();
+    }
+
+    if (changedProperties.has('virtualized') || changedProperties.has('_data' as never)) {
+      this.#virtualization.sync(this._data.length);
+    }
   }
 
-  #getCellRole(): 'cell' | 'gridcell' {
-    return this.cellSelection ? 'gridcell' : 'cell';
-  }
+  public render(): TemplateResult {
+    const table = this.#tableController.table({
+      features: dataTableFeatures,
+      defaultColumn: {
+        size: DEFAULT_COLUMN_WIDTH
+      },
+      columns: this._tableColumns,
+      data: this._data,
+      columnResizeMode: 'onChange',
+      enableColumnResizing: this.resizable,
+      enableSorting: this.sortable,
+      enableMultiSort: this.sortable && this.multiSort,
+      maxMultiSortColCount: this.maxMultiSortColCount,
+      enableMultiRemove: this.multiSortRemove,
+      enableSortingRemoval: this.multiSortRemove,
+      isMultiSortEvent: evt => isMultiSortEvent(this.multiSortKey, evt),
+      manualSorting: this.manualSort,
+      onSortingChange: updaterOrValue => this.#onSort(updaterOrValue),
+      enableColumnFilters: this.filterable,
+      manualFiltering: this.manualFilter,
+      onColumnFiltersChange: updaterOrValue => this.#onFilter(updaterOrValue),
+      enableRowSelection: this.rowSelection !== 'off',
+      enableMultiRowSelection: this.rowSelection === 'multiple',
+      onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
+      enableCellSelection: this.cellSelection && (cell => this.#cellSelection.canSelect(cell)),
+      onCellSelectionChange: updaterOrValue => this.#cellSelection.onSelectionChange(updaterOrValue),
+      onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
+      onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
+      onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
+      enableGrouping: this.groupable,
+      groupedColumnMode: false,
+      onGroupingChange: updaterOrValue => this.#onGroupingChange(updaterOrValue),
+      getRowCanExpand: row => row.getIsGrouped() || this.expandable,
+      state: {
+        sorting: this._sorting,
+        columnFilters: this._columnFilters,
+        columnVisibility: this.columnVisibility,
+        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off'),
+        columnPinning: this._columnPinning,
+        grouping: this.grouping,
+        rowSelection: this._rowSelection,
+        cellSelection: this.#cellSelection.state
+      }
+    });
+    this.#table = table;
+    this.#cellSelection.updateTabStop(table);
 
-  #updateCustomStates(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('resizable')) {
-      toggleState(this.#internals, 'resizable', this.resizable);
-    }
-    if (changedProperties.has('filterable')) {
-      toggleState(this.#internals, 'filterable', this.filterable);
-    }
-    if (changedProperties.has('rowSelection')) {
-      toggleState(this.#internals, 'row-selection', this.rowSelection !== 'off');
-    }
-    if (changedProperties.has('cellSelection')) {
-      toggleState(this.#internals, 'cell-selection', this.cellSelection);
-    }
-    if (changedProperties.has('hover')) {
-      toggleState(this.#internals, 'hover', this.hover);
-    }
-    if (changedProperties.has('striped')) {
-      toggleState(this.#internals, 'striped', this.striped);
-    }
-    if (changedProperties.has('bordered')) {
-      toggleState(this.#internals, 'bordered', this.bordered);
-    }
-    if (changedProperties.has('compact')) {
-      toggleState(this.#internals, 'compact', this.compact);
-    }
-    if (changedProperties.has('allowRowClick')) {
-      toggleState(this.#internals, 'allow-row-click', this.allowRowClick);
-    }
-    if (changedProperties.has('stickyHeader')) {
-      toggleState(this.#internals, 'sticky-header', this.stickyHeader);
-    }
-    if (changedProperties.has('stickyFooter')) {
-      toggleState(this.#internals, 'sticky-footer', this.stickyFooter);
-    }
-    if (changedProperties.has('virtualized')) {
-      toggleState(this.#internals, 'virtualized', this.virtualized);
-    }
+    return html`
+      <div class="table-container" ${ref(this.#tableContainerRef)}>
+        <table
+          class=${classMap({
+            'allow-row-click': this.allowRowClick,
+            bordered: this.bordered,
+            'cell-selection': this.cellSelection,
+            compact: this.compact,
+            filterable: this.filterable,
+            hover: this.hover,
+            'has-pinned-columns': table.getIsSomeColumnsPinned(),
+            resizable: this.resizable,
+            'row-selection': this.rowSelection !== 'off',
+            'sticky-footer': this.stickyFooter,
+            'sticky-header': this.stickyHeader,
+            striped: this.striped,
+            virtualized: this.virtualized
+          })}
+          role="presentation"
+          style=${styleMap(getColumnSizeStyles(table, this.resizable))}>
+          ${renderColumnGroup(table, this.resizable)}
+          <thead role="rowgroup">
+            ${renderTableHeader({
+              host: this,
+              table,
+              sorting: this._sorting,
+              rename: this.#columnRename,
+              reorder: this.#columnReorderController
+            })}
+          </thead>
+          ${renderBody({
+            host: this,
+            table,
+            filtered: this._columnFilters.length > 0,
+            cellSelection: this.#cellSelection,
+            virtualization: this.#virtualization
+          })}
+          ${renderTableFooter(table, this.resizable)}
+        </table>
+      </div>
+    `;
   }
 
   #handleColumnsChange(): void {
@@ -431,9 +473,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       this.#columnVisibilityController.setVisibilityState(derivedVisibility, { notifyHost: false });
     }
 
-    this._columnHeaders = {};
-    this._renamingColumnId = null;
-    this.#closeColumnMenu();
+    this.#columnRename.reset();
   }
 
   #checkRecreateTableController(changedProperties: PropertyValues<this>): boolean {
@@ -495,785 +535,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #updateRenderColumns(): void {
-    const columns = applyColumnHeaders(this._columns, this._columnHeaders);
+    this.#appliedColumnHeaders = this.#columnRename.headers;
+    const columns = applyColumnHeaders(this._columns, this.#appliedColumnHeaders);
     this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
-  }
-
-  public override disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.#cellAutoScroller.stop();
-  }
-
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected willUpdate(changedProperties: PropertyValues<this>): void {
-    this.#updateCustomStates(changedProperties);
-
-    if (!this.hasUpdated || changedProperties.has('cellSelection')) {
-      this.#updateRole();
-    }
-
-    if (changedProperties.has('columns')) {
-      this.#handleColumnsChange();
-    }
-
-    if (changedProperties.has('cellSelection') && !this.cellSelection) {
-      this._cellSelection = [];
-      this.#pendingCellFocus = false;
-      this.#cellAutoScroller.stop();
-    }
-
-    this.#checkRecreateTableController(changedProperties);
-
-    if (changedProperties.has('reorderable') || changedProperties.has('rowSelection') || changedProperties.has('columns')) {
-      this.#setReorderable();
-    }
-
-    if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
-      this.#updateColumnPinning();
-    }
-
-    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || changedProperties.has('_columnHeaders' as never)) {
-      this.#updateRenderColumns();
-    }
-
-    if (changedProperties.has('dataSource')) {
-      this.#loadData();
-    }
-
-    if (changedProperties.has('virtualized') || changedProperties.has('_data' as never)) {
-      this.#setVirtualized();
-    }
-  }
-
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected override updated(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('_renamingColumnId' as never) && this._renamingColumnId) {
-      const input = this.shadowRoot?.querySelector<HTMLInputElement>('.rename-input');
-      input?.focus();
-      input?.select();
-    }
-
-    if (this.#pendingCellFocus) {
-      this.#focusCellTabStop();
-    }
-  }
-
-  // eslint-disable-next-line @tylertech-eslint/require-private-modifier
-  protected override render(): TemplateResult {
-    // Update the table controller with the current state
-    const table = this.#tableController.table({
-      features: dataTableFeatures,
-      defaultColumn: {
-        size: DEFAULT_COLUMN_WIDTH
-      },
-      columns: this._tableColumns,
-      data: this._data,
-      columnResizeMode: 'onChange',
-      enableColumnResizing: this.resizable,
-      enableSorting: this.sortable,
-      enableMultiSort: this.sortable && this.multiSort,
-      maxMultiSortColCount: this.maxMultiSortColCount,
-      enableMultiRemove: this.multiSortRemove,
-      enableSortingRemoval: this.multiSortRemove,
-      isMultiSortEvent: (e: unknown) => {
-        const evt = e as MouseEvent | KeyboardEvent;
-        switch (this.multiSortKey) {
-          case 'shift':
-            return evt.shiftKey;
-          case 'ctrl':
-            return evt.ctrlKey;
-          case 'meta':
-            return evt.metaKey;
-          case 'alt':
-            return evt.altKey;
-          default:
-            return false;
-        }
-      },
-      manualSorting: this.manualSort,
-      onSortingChange: updaterOrValue => this.#onSort(updaterOrValue),
-      enableColumnFilters: this.filterable,
-      manualFiltering: this.manualFilter,
-      onColumnFiltersChange: updaterOrValue => this.#onFilter(updaterOrValue),
-      enableRowSelection: this.rowSelection !== 'off',
-      enableMultiRowSelection: this.rowSelection === 'multiple',
-      onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
-      enableCellSelection: this.cellSelection && (cell => this.#canSelectCell(cell)),
-      onCellSelectionChange: updaterOrValue => this.#onCellSelect(updaterOrValue),
-      onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
-      onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
-      onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
-      enableGrouping: this.groupable,
-      groupedColumnMode: false,
-      onGroupingChange: updaterOrValue => this.#onGroupingChange(updaterOrValue),
-      getRowCanExpand: row => row.getIsGrouped() || this.expandable,
-      state: {
-        sorting: this._sorting,
-        columnFilters: this._columnFilters,
-        columnVisibility: this.columnVisibility,
-        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off'),
-        columnPinning: this._columnPinning,
-        grouping: this.grouping,
-        rowSelection: this._rowSelection,
-        cellSelection: this._cellSelection
-      }
-    });
-    this.#table = table;
-    this.#cellTabStopId = this.cellSelection ? this.#getCellTabStopId(table) : undefined;
-    const tableStyle = this.#getColumnSizeStyles(table);
-
-    return html`
-      <div class="table-container" ${ref(this.#tableContainerRef)}>
-        <table
-          class=${classMap({
-            'allow-row-click': this.allowRowClick,
-            bordered: this.bordered,
-            'cell-selection': this.cellSelection,
-            compact: this.compact,
-            filterable: this.filterable,
-            hover: this.hover,
-            'has-pinned-columns': table.getIsSomeColumnsPinned(),
-            resizable: this.resizable,
-            'row-selection': this.rowSelection !== 'off',
-            'sticky-footer': this.stickyFooter,
-            'sticky-header': this.stickyHeader,
-            striped: this.striped,
-            virtualized: this.virtualized
-          })}
-          role="presentation"
-          style=${styleMap(tableStyle)}>
-          ${this.#renderColumnGroup(table)}
-          <thead role="rowgroup">
-            ${this.#renderTableHeader(table)}
-          </thead>
-          ${this.#renderBody(table)} ${this.#renderTableFooter(table)}
-        </table>
-      </div>
-      ${this.#renderColumnVisibilityPopover(table)}
-    `;
-  }
-
-  #getGroupStartColumnIds(table: LitTable<DataTableFeatures, TData>): ReadonlySet<string> {
-    const groupStartColumnIds = new Set<string>();
-    table.getVisibleLeafColumns().forEach((column, index, columns) => {
-      if (index > 0 && column.parent?.id !== columns[index - 1].parent?.id) {
-        groupStartColumnIds.add(column.id);
-      }
-    });
-    return groupStartColumnIds;
-  }
-
-  #renderColumnGroup(table: LitTable<DataTableFeatures, TData>): TemplateResult | typeof nothing {
-    if (!table.getIsSomeColumnsPinned()) {
-      return nothing;
-    }
-
-    return html`<colgroup>
-      ${[...table.getStartVisibleLeafColumns(), ...table.getCenterVisibleLeafColumns(), ...table.getEndVisibleLeafColumns()].map(
-        column => html`<col style=${styleMap({ width: this.#getColumnWidthStyle(column) })} />`
-      )}
-    </colgroup>`;
-  }
-
-  #renderTableHeader(table: LitTable<DataTableFeatures, TData>): TemplateResult {
-    const headerGroups = table.getHeaderGroups();
-    const groupStartColumnIds = this.#getGroupStartColumnIds(table);
-    return html`${headerGroups.map(
-      headerGroup => html`
-        <tr role="row" part="head-tr tr">
-          ${headerGroup.headers.map(header => {
-            const isGroupHeader = headerGroup.depth < headerGroups.length - 1;
-            const isGroupStart = groupStartColumnIds.has(header.getLeafHeaders()[0].column.id);
-            const hasHeader = !!header.column.columnDef.header?.length;
-            const isParent = (header.column.columns?.length ?? 0) > 0;
-            const canAcceptDrop = this.reorderable && header.column.columnDef.id !== SELECT_COLUMN_ID && ((isParent && !header.isPlaceholder) || hasHeader);
-            const isRenaming = this._renamingColumnId === header.column.id;
-            const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && !isRenaming && canColumnBeReordered(header.column);
-            const headerId = this.#getColumnHeaderId(header.column.id);
-            const canRename = !header.isPlaceholder && !isRenaming && this.#canRenameColumn(header.column);
-            const sortClickHandler =
-              this.sortable && !canBeDragged
-                ? header.column.getToggleSortingHandler()
-                : canBeDragged
-                  ? (evt: MouseEvent) => this.#onHeaderClick(evt, header.column)
-                  : null;
-            const hasColumnMenu = header.column.columnDef.id !== SELECT_COLUMN_ID && !header.isPlaceholder && !isParent;
-            const canShowColumnMenu =
-              header.column.columnDef.id !== SELECT_COLUMN_ID && header.column.getCanHide() && !header.isPlaceholder && !header.column.columns.length;
-            return html`
-              <th
-                id=${headerId}
-                role="columnheader"
-                part="head-cell cell"
-                colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
-                style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
-                class=${classMap({
-                  ...getPinnedColumnClasses(header.column),
-                  'sort-asc': header.column.getIsSorted() === 'asc',
-                  'sort-desc': header.column.getIsSorted() === 'desc',
-                  'select-column': this.rowSelection && header.column.columnDef.id === SELECT_COLUMN_ID,
-                  'group-header': isGroupHeader,
-                  'group-start': isGroupStart,
-                  renaming: isRenaming
-                })}
-                data-column-id=${header.column.id}
-                @dragover=${canAcceptDrop ? (evt: DragEvent) => this.#columnReorderController?.onDragOver(evt, header.column) : nothing}
-                @drop=${canAcceptDrop ? (evt: DragEvent) => this.#columnReorderController?.onDrop(evt, header.column) : nothing}
-                @contextmenu=${canShowColumnMenu ? (evt: MouseEvent) => this.#onHeaderContextMenu(evt, header.column) : nothing}>
-                <div
-                  class="cell-container"
-                  part="head-cell-container"
-                  draggable=${canBeDragged ? 'true' : 'false'}
-                  @dragstart=${canBeDragged ? (evt: DragEvent) => this.#onHeaderDragStart(evt, header.column) : nothing}
-                  @dragend=${canBeDragged ? (evt: DragEvent) => this.#onHeaderDragEnd(evt) : nothing}
-                  style=${styleMap({
-                    cursor: this.sortable && header.column.getCanSort() ? 'default' : canBeDragged ? 'grab' : 'default',
-                    userSelect: canBeDragged ? 'none' : null
-                  })}>
-                  <div
-                    part="head-cell-content cell-content"
-                    class="cell-content"
-                    @click=${canRename && sortClickHandler
-                      ? (evt: MouseEvent) => {
-                          if (evt.detail === 1) {
-                            this.#sortingBeforeClick = this._sorting;
-                          }
-                          sortClickHandler(evt);
-                        }
-                      : sortClickHandler}
-                    @dblclick=${canRename ? () => this.#onHeaderDoubleClick(header.column) : nothing}>
-                    ${isRenaming
-                      ? this.#renderRenameInput(header.column)
-                      : html`<span class="cell-text" id=${getColumnHeaderTextId(header.column.id)}
-                          >${header.isPlaceholder ? null : FlexRender({ header })}</span
-                        >`}
-                    ${this.sortable && header.column.getIsSorted()
-                      ? html`
-                          ${this._sorting.length > 1 ? html`<span class="sort-index" part="sort-index">${header.column.getSortIndex() + 1}</span>` : nothing}
-                          ${svg`<svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>`}
-                        `
-                      : null}
-                  </div>
-                  ${hasColumnMenu
-                    ? html`<forge-data-table-column-menu
-                        .table=${table}
-                        .column=${header.column}
-                        .reorderable=${this.reorderable}
-                        @forge-data-table-column-menu-action=${(evt: CustomEvent<ColumnMenuActionEventDetail>) =>
-                          this.#onColumnMenuAction(evt, header.column)}></forge-data-table-column-menu>`
-                    : nothing}
-                </div>
-                ${this.filterable && header.column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(header.column)}</div>` : nothing}
-                ${this.resizable && header.column.getCanResize() && !header.isPlaceholder
-                  ? html`<div
-                @doubleclick=${() => header.column.resetSize()}
-                @mousedown=${header.getResizeHandler()}
-                @touchstart=${header.getResizeHandler()}
-                class=${classMap({ resizer: true, [table.options.columnResizeDirection ?? 'ltr']: true, resizing: header.column.getIsResizing() })}
-              </div>`
-                  : nothing}
-              </th>
-            `;
-          })}
-        </tr>
-      `
-    )}`;
-  }
-
-  #renderRenameInput(column: Column<DataTableFeatures, TData>): TemplateResult {
-    const { header } = column.columnDef;
-    const value = typeof header === 'string' ? header : column.id;
-    return html`
-      <forge-text-field class="rename-field" density="extra-small" variant="plain">
-        <input
-          type="text"
-          class="rename-input"
-          aria-label="Column name"
-          .value=${value}
-          size=${Math.max(value.length, 1)}
-          @input=${(evt: InputEvent) => {
-            const input = evt.currentTarget as HTMLInputElement;
-            input.size = Math.max(input.value.length, 1);
-          }}
-          @click=${(evt: Event) => evt.stopPropagation()}
-          @keydown=${(evt: KeyboardEvent) => this.#onRenameKeydown(evt, column)}
-          @blur=${(evt: FocusEvent) => this.#commitRename(column, (evt.currentTarget as HTMLInputElement).value)} />
-      </forge-text-field>
-    `;
-  }
-
-  #onColumnMenuAction(evt: CustomEvent<ColumnMenuActionEventDetail>, column: Column<DataTableFeatures, TData>): void {
-    if (evt.detail.action === 'rename' && this.#canRenameColumn(column)) {
-      this._renamingColumnId = column.id;
-    }
-  }
-
-  #canRenameColumn(column: Column<DataTableFeatures, TData>): boolean {
-    return !!column.columnDef.meta?.renamable && typeof column.columnDef.header === 'string';
-  }
-
-  #onHeaderDoubleClick(column: Column<DataTableFeatures, TData>): void {
-    // The two clicks of a double click each toggled sorting, so put it back before editing the name
-    if (this.#sortingBeforeClick && this.#sortingBeforeClick !== this._sorting) {
-      this.#onSort(this.#sortingBeforeClick);
-    }
-    this.#sortingBeforeClick = null;
-    this._renamingColumnId = column.id;
-  }
-
-  #onRenameKeydown(evt: KeyboardEvent, column: Column<DataTableFeatures, TData>): void {
-    evt.stopPropagation();
-    if (evt.key === 'Enter') {
-      evt.preventDefault();
-      this.#commitRename(column, (evt.currentTarget as HTMLInputElement).value);
-      this.#focusColumnMenu(column.id);
-    } else if (evt.key === 'Escape') {
-      evt.preventDefault();
-      this._renamingColumnId = null;
-      this.#focusColumnMenu(column.id);
-    }
-  }
-
-  #commitRename(column: Column<DataTableFeatures, TData>, value: string): void {
-    if (this._renamingColumnId !== column.id) {
-      return;
-    }
-
-    this._renamingColumnId = null;
-
-    const header = value.trim();
-    if (!header || header === column.columnDef.header) {
-      return;
-    }
-
-    this._columnHeaders = { ...this._columnHeaders, [column.id]: header };
-    this.dispatchEvent(new CustomEvent('forge-data-table-column-rename', { detail: { columnId: column.id, header }, bubbles: true, composed: true }));
-  }
-
-  async #focusColumnMenu(columnId: string): Promise<void> {
-    await this.updateComplete;
-    const menu = this.shadowRoot?.getElementById(this.#getColumnHeaderId(columnId))?.querySelector('forge-data-table-column-menu');
-    menu?.focus();
-  }
-
-  #canSelectCell(cell: Cell<DataTableFeatures, TData, any>): boolean {
-    if (cell.row.getIsGrouped()) {
-      return false;
-    }
-    const columnOption = cell.column.columnDef.meta?.enableCellSelection ?? this.enableCellSelection;
-    return typeof columnOption === 'function' ? columnOption(cell as Cell<DataTableFeatures, any, any>) : columnOption;
-  }
-
-  #renderCell(cell: Cell<DataTableFeatures, TData>, rowId: string, groupStartColumnIds: ReadonlySet<string>): TemplateResult {
-    const editable = !cell.row.getIsGrouped() && isCellEditable(cell as Cell<DataTableFeatures, any>);
-    const selectable = this.cellSelection && cell.getCanSelect();
-    const selected = selectable && cell.getIsSelected();
-    const edges = selected ? cell.getSelectionEdges() : undefined;
-    const isGroupLabel = cell.row.getIsGrouped() && getGroupLabelCell(cell.row)?.id === cell.id;
-    return html`
-      <td
-        role=${this.#getCellRole()}
-        part="body-cell cell"
-        style=${styleMap({ width: this.#getColumnWidthStyle(cell.column), ...getPinnedColumnStyle(cell.column) })}
-        class=${classMap({
-          ...getPinnedColumnClasses(cell.column),
-          'cell-selectable': selectable,
-          'cell-selected': selected,
-          'selection-top': !!edges?.top,
-          'selection-right': !!edges?.right,
-          'selection-bottom': !!edges?.bottom,
-          'selection-left': !!edges?.left,
-          'select-column': this.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
-          'editable-cell': editable,
-          'group-start': groupStartColumnIds.has(cell.column.id)
-        })}
-        id=${cell.column.id}
-        data-row-id=${ifDefined(selectable ? cell.row.id : undefined)}
-        data-column-id=${ifDefined(selectable ? cell.column.id : undefined)}
-        tabindex=${ifDefined(selectable ? (cell.id === this.#cellTabStopId ? 0 : -1) : undefined)}
-        aria-selected=${ifDefined(selectable ? String(selected) : undefined)}
-        @mousedown=${selectable ? (evt: MouseEvent) => this.#onCellMouseDown(evt, cell) : nothing}
-        @mouseenter=${selectable ? cell.getSelectionExtendHandler() : nothing}
-        @keydown=${selectable ? (evt: KeyboardEvent) => this.#onCellKeydown(evt, cell) : nothing}
-        @focus=${selectable ? () => this.#onCellFocus(cell) : nothing}
-        data-align=${ifDefined(isGroupLabel ? undefined : cell.column.columnDef.meta?.align)}
-        ${formatAttribute(isGroupLabel ? undefined : cell.column.columnDef.meta?.formatAttribute)}
-        ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
-        cell.column.columnDef.id === SELECT_COLUMN_ID ||
-        editable}>
-        <div class="cell-content" part="body-cell-content cell-content">${this.#renderCellContent(cell, rowId)}</div>
-      </td>
-    `;
-  }
-
-  #renderGroupRowCellContent(cell: Cell<DataTableFeatures, TData>): unknown {
-    if (cell.column.id === SELECT_COLUMN_ID) {
-      return this.rowSelection === 'multiple' && this.#table ? renderGroupCheckbox(this.#table, cell) : nothing;
-    }
-
-    return renderGroupRowCell(cell);
-  }
-
-  #renderCellContent(cell: Cell<DataTableFeatures, TData>, rowId: string): unknown {
-    if (cell.row.getIsGrouped()) {
-      return this.#renderGroupRowCellContent(cell);
-    }
-
-    return cell.column.columnDef.meta?.cellSlot
-      ? guard(
-          [cell.column],
-          () => html`<slot ${lightDomRender(this, cell as Cell<DataTableFeatures, any>)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`
-        )
-      : FlexRender({ cell });
-  }
-
-  #getCellTabStopId(table: LitTable<DataTableFeatures, TData>): string | undefined {
-    const focusedCell = table.getFocusedCell();
-    if (focusedCell?.getCanSelect()) {
-      return focusedCell.id;
-    }
-    return table
-      .getRowModel()
-      .rows.find(row => !row.getIsGrouped())
-      ?.getVisibleCells()
-      .find(cell => cell.getCanSelect())?.id;
-  }
-
-  #onCellMouseDown(evt: MouseEvent, cell: Cell<DataTableFeatures, TData>): void {
-    if (evt.button !== 0) {
-      return;
-    }
-    this.#pendingCellFocus = false;
-    cell.getSelectionStartHandler()(evt);
-    this.#cellAutoScroller.start(evt, this.ownerDocument);
-  }
-
-  #getStickyInsets(): AutoScrollInsets {
-    const sumSizes = (columns: Column<DataTableFeatures, TData>[]): number => columns.reduce((total, column) => total + column.getSize(), 0);
-    return {
-      top: this.stickyHeader ? (this.shadowRoot?.querySelector('thead')?.offsetHeight ?? 0) : 0,
-      right: sumSizes(this.#table?.getEndVisibleLeafColumns() ?? []),
-      bottom: this.stickyFooter ? (this.shadowRoot?.querySelector('tfoot')?.offsetHeight ?? 0) : 0,
-      left: sumSizes(this.#table?.getStartVisibleLeafColumns() ?? [])
-    };
-  }
-
-  #extendCellSelectionAtPoint(x: number, y: number, evt: MouseEvent): void {
-    const target = this.shadowRoot
-      ?.elementsFromPoint(x, y)
-      .map(element => element.closest<HTMLElement>('td[data-row-id]'))
-      .find(Boolean);
-    const { rowId, columnId } = target?.dataset ?? {};
-    const row = this.#table?.getRowModel().rows.find(({ id }) => id === rowId);
-    row
-      ?.getVisibleCells()
-      .find(cell => cell.column.id === columnId)
-      ?.getSelectionExtendHandler()(evt);
-  }
-
-  #onCellFocus(cell: Cell<DataTableFeatures, TData>): void {
-    if (!this._cellSelection.length) {
-      cell.table.setFocusedCell(cell.row.id, cell.column.id);
-    }
-  }
-
-  #onCellKeydown(evt: KeyboardEvent, cell: Cell<DataTableFeatures, TData>): void {
-    if (evt.target !== evt.currentTarget) {
-      return;
-    }
-
-    const { table } = cell;
-    const direction = CELL_SELECTION_KEY_DIRECTIONS[evt.key];
-    const hasModifier = evt.ctrlKey || evt.metaKey;
-    const selectsAll = hasModifier && evt.key.toLowerCase() === 'a';
-    const copies = hasModifier && evt.key.toLowerCase() === 'c';
-    if (copies) {
-      this.#copySelectedCells(evt);
-      return;
-    }
-
-    if (!direction && !selectsAll && evt.key !== 'Escape') {
-      return;
-    }
-
-    evt.preventDefault();
-
-    if (evt.key === 'Escape') {
-      table.resetCellSelection(true);
-    } else if (!this._cellSelection.length) {
-      table.setFocusedCell(cell.row.id, cell.column.id);
-    } else if (selectsAll) {
-      table.selectAllCells();
-    } else if (evt.shiftKey) {
-      table.extendCellSelection(direction);
-    } else {
-      this.#pendingCellFocus = true;
-      table.moveCellSelection(direction);
-    }
-  }
-
-  #copySelectedCells(evt: KeyboardEvent): void {
-    const data = this.getSelectedCellRangesData();
-    if (!data.length) {
-      return;
-    }
-
-    evt.preventDefault();
-    void navigator.clipboard?.writeText(this.getSelectionClipboardValue(data)).catch(() => {});
-  }
-
-  #focusCellTabStop(): void {
-    const cell = this.shadowRoot?.querySelector<HTMLElement>('td[tabindex="0"]');
-    if (cell) {
-      this.#pendingCellFocus = false;
-      cell.focus();
-      return;
-    }
-
-    // The cell is in a row the virtualizer has not rendered; scrolling to it triggers another update that retries the focus
-    const focusedCell = this.#table?.getFocusedCell();
-    const rowIndex = focusedCell ? (this.#table?.getRowModel().rows.findIndex(row => row.id === focusedCell.row.id) ?? -1) : -1;
-    if (rowIndex >= 0) {
-      this._virtualizerController?.getVirtualizer().scrollToIndex(rowIndex);
-    }
-  }
-
-  #renderBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
-    if (!table.getRowModel().rows.length) {
-      return renderEmptyState({
-        colSpan: Math.max(table.getVisibleLeafColumns().length, 1),
-        cellRole: this.#getCellRole(),
-        filtered: this._columnFilters.length > 0,
-        onClearFilters: () => table.setColumnFilters([])
-      });
-    }
-    return this.virtualized && this._virtualizerController ? this.#renderVirtualizedTableBody(table) : this.#renderTableBody(table);
-  }
-
-  #renderTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
-    const groupStartColumnIds = this.#getGroupStartColumnIds(table);
-    return html`<tbody class="standard-tbody" role="rowgroup">
-      ${repeat(
-        table.getRowModel().rows,
-        row => row.id,
-        row => {
-          const { name, nameId } = this.#getRowName(table, row);
-          return html`
-            <tr
-              role="row"
-              id=${nameId}
-              aria-label=${name}
-              class=${classMap({ selected: row.getIsSelected(), 'group-row': row.getIsGrouped() })}
-              part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
-              @click=${this.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
-              ${row.getVisibleCells().map(cell => this.#renderCell(cell, row.id, groupStartColumnIds))}
-            </tr>
-            ${row.getIsExpanded() && !row.getIsGrouped()
-              ? html`
-                  <tr role="row" part="body-tr tr">
-                    <td role=${this.#getCellRole()} colspan=${row.getAllCells().length}>
-                      <div class="expanded-content">
-                        <slot name=${`expanded:row-${row.id}`}></slot>
-                      </div>
-                    </td>
-                  </tr>
-                `
-              : nothing}
-          `;
-        }
-      )}
-    </tbody>`;
-  }
-
-  #renderTableFooter(table: LitTable<DataTableFeatures, TData>): TemplateResult | typeof nothing {
-    const hasFooterGroups = table
-      .getFooterGroups()
-      .flatMap(footerGroup => footerGroup.headers.flatMap(header => header.column.columnDef.footer))
-      .some(footer => footer !== undefined);
-
-    if (!hasFooterGroups) {
-      return nothing;
-    }
-
-    return html`<tfoot role="rowgroup">
-      ${table.getFooterGroups().map(
-        footerGroup => html`
-          <tr role="row" part="tfoot-tr tr">
-            ${footerGroup.headers.map(
-              header => html`
-                <th
-                  role="columnheader"
-                  part="tfoot-cell cell"
-                  colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
-                  style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
-                  class=${classMap({ ...getPinnedColumnClasses(header.column), 'empty-footer': header.column.columnDef.footer === undefined })}
-                  data-align=${ifDefined(header.column.columnDef.meta?.aggregated ? header.column.columnDef.meta.align : undefined)}
-                  ${formatAttribute(header.column.columnDef.meta?.aggregated ? header.column.columnDef.meta.formatAttribute : undefined)}>
-                  <div class="cell-content" part="footer-cell-content cell-content">${FlexRender({ footer: header })}</div>
-                </th>
-              `
-            )}
-          </tr>
-        `
-      )}
-    </tfoot>`;
-  }
-
-  #renderColumnVisibilityPopover(table: LitTable<DataTableFeatures, TData>): TemplateResult {
-    const anchorId = this._columnMenuAnchorId ?? undefined;
-    const items = table.getAllLeafColumns().filter(column => column.id !== SELECT_COLUMN_ID && column.getCanHide());
-
-    return html`
-      <forge-popover
-        id="column-visibility-popover"
-        anchor=${ifDefined(anchorId)}
-        placement="bottom-start"
-        position-strategy="fixed"
-        trigger-type="manual"
-        anchor-accessibility="none"
-        .open=${this._columnMenuOpen}
-        @forge-popover-toggle=${(evt: CustomEvent<IPopoverToggleEventData>) => this.#onColumnMenuToggle(evt)}>
-        <forge-list role="menu">
-          ${items.length
-            ? items.map(column => this.#renderColumnVisibilityItem(column))
-            : html`<forge-list-item disabled>No columns available</forge-list-item>`}
-        </forge-list>
-      </forge-popover>
-    `;
-  }
-
-  #renderColumnVisibilityItem(column: Column<DataTableFeatures, TData>): TemplateResult {
-    const isVisible = column.getIsVisible();
-
-    return html`
-      <forge-list-item
-        role="menuitemcheckbox"
-        aria-checked=${isVisible ? 'true' : 'false'}
-        value=${column.id}
-        @click=${(evt: Event) => this.#onColumnMenuItemClick(evt, column)}>
-        <forge-checkbox slot="start" .checked=${isVisible} @change=${(evt: Event) => this.#onColumnMenuCheckboxChange(evt, column)}></forge-checkbox>
-        <span>${this.#getColumnMenuLabel(column)}</span>
-      </forge-list-item>
-    `;
-  }
-
-  #onHeaderDragStart(evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
-    this.#isDragging = true;
-    this.#columnReorderController?.onDragStart(evt, column);
-  }
-
-  #onHeaderDragEnd(evt: DragEvent): void {
-    this.#isDragging = false;
-    this.#columnReorderController?.onDragEnd(evt);
-  }
-
-  #onHeaderClick(evt: MouseEvent, column: Column<DataTableFeatures, TData>): void {
-    if (this.#isDragging) {
-      this.#isDragging = false;
-      return;
-    }
-    if (this.sortable && column.getCanSort()) {
-      column.getToggleSortingHandler()?.(evt);
-    }
-  }
-
-  async #onHeaderContextMenu(evt: MouseEvent, column: Column<DataTableFeatures, TData>): Promise<void> {
-    evt.preventDefault();
-
-    const target = evt.currentTarget as HTMLElement | null;
-    if (!target) {
-      return;
-    }
-
-    this._columnMenuAnchorId = target.id || this.#getColumnHeaderId(column.id);
-    this._columnMenuOpen = true;
-
-    await this.updateComplete;
-    if (this._columnVisibilityPopover) {
-      this._columnVisibilityPopover.open = true;
-    }
-  }
-
-  #onColumnMenuToggle(evt: CustomEvent<IPopoverToggleEventData>): void {
-    const { newState } = evt.detail;
-
-    if (newState === 'closed') {
-      this.#closeColumnMenu();
-      return;
-    }
-
-    if (newState === 'open') {
-      this._columnMenuOpen = true;
-    }
-  }
-
-  #onColumnMenuItemClick(evt: Event, column: Column<DataTableFeatures, TData>): void {
-    const path = evt.composedPath();
-    const interactedWithCheckbox = path.some(target => {
-      if (!(target as HTMLElement)?.tagName) {
-        return false;
-      }
-      const tagName = (target as HTMLElement).tagName.toUpperCase();
-      return tagName === 'FORGE-CHECKBOX' || tagName === 'INPUT';
-    });
-
-    if (interactedWithCheckbox) {
-      return;
-    }
-
-    evt.preventDefault();
-    this.#toggleColumnVisibility(column);
-  }
-
-  #onColumnMenuCheckboxChange(evt: Event, column: Column<DataTableFeatures, TData>): void {
-    evt.stopPropagation();
-
-    this.#toggleColumnVisibility(column);
-  }
-
-  #toggleColumnVisibility(column: Column<DataTableFeatures, TData>): void {
-    const columnId = column.id;
-    if (!columnId) {
-      return;
-    }
-
-    if (column.getIsVisible()) {
-      this.hideColumn(columnId);
-    } else {
-      this.showColumn(columnId);
-    }
-
-    this.#closeColumnMenu();
-  }
-
-  #getColumnMenuLabel(column: Column<DataTableFeatures, TData>): string {
-    const header = column.columnDef.header;
-
-    if (typeof header === 'string' || typeof header === 'number') {
-      return String(header);
-    }
-
-    if ('accessorKey' in column.columnDef) {
-      const accessorKey = column.columnDef.accessorKey;
-      if (typeof accessorKey === 'string') {
-        return accessorKey;
-      }
-    }
-
-    return column.id;
-  }
-
-  #getRowName(table: LitTable<DataTableFeatures, TData>, row: TanstackRow<DataTableFeatures, TData>): RowMeta {
-    return setRowName(row, row.getIsGrouped() ? getGroupRowName(table, row) : this.getRowName(row.original, row.index));
-  }
-
-  #getColumnHeaderId(columnId: string): string {
-    return `column-header-${columnId}`;
-  }
-
-  #closeColumnMenu(): void {
-    this._columnMenuOpen = false;
-    this._columnMenuAnchorId = null;
   }
 
   #setReorderable(): void {
@@ -1303,33 +567,6 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
   }
 
-  #setVirtualized(): void {
-    if (!this.virtualized) {
-      if (this._virtualizerController) {
-        this.removeController(this._virtualizerController);
-        this._virtualizerController = null;
-      }
-      return;
-    }
-
-    if (!this._virtualizerController) {
-      this._virtualizerController = new VirtualizerController(this, {
-        getScrollElement: () => this.#tableContainerRef.value as HTMLElement,
-        estimateSize: () => (this.compact ? COMPACT_ROW_HEIGHT : DEFAULT_ROW_HEIGHT),
-        overscan: VIRTUALIZER_OVERSCAN,
-        count: this._data.length
-      });
-      this.addController(this._virtualizerController);
-      return;
-    }
-
-    const virtualizer = this._virtualizerController.getVirtualizer();
-    virtualizer.setOptions({
-      ...virtualizer.options,
-      count: this._data.length
-    });
-  }
-
   #onSort(updaterOrValue: Updater<SortingState>): void {
     this._sorting = typeof updaterOrValue === 'function' ? updaterOrValue(this._sorting) : updaterOrValue;
     if (this.manualSort) {
@@ -1354,15 +591,6 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     this.dispatchEvent(new CustomEvent('forge-data-table-row-select', { detail: this._rowSelection, bubbles: true, composed: true }));
   }
 
-  #onCellSelect(updaterOrValue: Updater<CellSelectionState>): void {
-    const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this._cellSelection) : updaterOrValue;
-    if (!nextState.length && !this._cellSelection.length) {
-      return;
-    }
-    this._cellSelection = nextState;
-    this.dispatchEvent(new CustomEvent('forge-data-table-cell-select', { detail: this._cellSelection, bubbles: true, composed: true }));
-  }
-
   #onColumnVisibilityChange(updaterOrValue: Updater<ColumnVisibilityState>): void {
     const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this.columnVisibility) : updaterOrValue;
     this.#columnVisibilityController.setVisibilityState(nextState);
@@ -1380,126 +608,6 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   #onColumnOrderChange(updaterOrValue: Updater<ColumnOrderState>): void {
     this.columnOrder = typeof updaterOrValue === 'function' ? updaterOrValue(this.columnOrder) : updaterOrValue;
     this.dispatchEvent(new CustomEvent('forge-data-table-column-order', { detail: this.columnOrder, bubbles: true, composed: true }));
-  }
-
-  #onRowClick(evt: MouseEvent, index: number, data: TData): void {
-    const isProtectedCell = evt
-      .composedPath()
-      .filter(el => (el as Node).nodeType === Node.ELEMENT_NODE)
-      .some(el => (el as Element).matches(`:where([id="${SELECT_COLUMN_ID}"],[data-forge-stop-row-click-propagation])`));
-    if (isProtectedCell) {
-      return;
-    }
-
-    this.dispatchEvent(
-      new CustomEvent('forge-data-table-row-click', {
-        detail: { data, index },
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-
-  #renderVirtualizedTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
-    if (!this.#tableContainerRef || !this._virtualizerController) {
-      return this.#renderTableBody(table);
-    }
-
-    const rows = table.getRowModel().rows;
-    const virtualizer = this._virtualizerController.getVirtualizer();
-    if (virtualizer.options.count !== rows.length) {
-      virtualizer.setOptions({ ...virtualizer.options, count: rows.length });
-    }
-    const virtualItems = virtualizer.getVirtualItems();
-    const totalHeight = virtualizer.getTotalSize();
-    const groupStartColumnIds = this.#getGroupStartColumnIds(table);
-
-    return html`<tbody
-      role="rowgroup"
-      class="virtualized-tbody"
-      style=${styleMap({
-        position: 'relative',
-        height: `${totalHeight}px`
-      })}>
-      ${repeat(
-        virtualItems,
-        item => item.key,
-        item => {
-          const row = rows[item.index];
-          const { name, nameId } = this.#getRowName(table, row);
-          return html`
-            <tr
-              role="row"
-              id=${nameId}
-              aria-label=${name}
-              data-index="${item.index}"
-              class=${classMap({
-                selected: row.getIsSelected(),
-                'group-row': row.getIsGrouped(),
-                'virtualized-tr': true
-              })}
-              part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
-              style=${styleMap({
-                position: 'absolute',
-                transform: `translateY(${item.start}px)`,
-                width: '100%',
-                height: `${item.size}px`
-              })}
-              @click=${this.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => this.#onRowClick(evt, row.index, row.original) : nothing}>
-              ${repeat(
-                row.getVisibleCells(),
-                cell => cell.id,
-                cell => this.#renderCell(cell, row.id, groupStartColumnIds)
-              )}
-            </tr>
-            ${
-              // TODO: how to handle expanded content in virtualized rows?
-              /*row.getIsExpanded()
-            ? html`
-                <tr part="body-tr tr">
-                  <td colspan=${row.getAllCells().length}>
-                    <div class="expanded-content">
-                      <slot name=${`expanded:row-${row.id}`}></slot>
-                    </div>
-                  </td>
-                </tr>
-              `
-            : */ nothing
-            }
-          `;
-        }
-      )}
-    </tbody>`;
-  }
-
-  #getColumnSizeStyles(table: LitTable<DataTableFeatures, TData>): Record<string, string> {
-    if (!this.resizable) {
-      return {};
-    }
-
-    const colStyles: Record<string, string> = {};
-    table.getFlatHeaders().forEach(header => {
-      if (!header.column.getCanResize()) {
-        return;
-      }
-      colStyles[this.#getColumnSizeVarName(header.column.id)] = `${header.getSize()}px`;
-    });
-
-    return colStyles;
-  }
-
-  #getColumnWidthStyle(column: Column<DataTableFeatures, TData>): string | null {
-    if (this.resizable && column.getCanResize()) {
-      return `var(${this.#getColumnSizeVarName(column.id)})`;
-    }
-
-    return column.table.getIsSomeColumnsPinned() ? `${column.getSize()}px` : null;
-  }
-
-  #getColumnSizeVarName(columnId: string): string {
-    const sanitizedId = columnId.replace(/[^a-zA-Z0-9_-]/g, '-');
-    const hasValidChar = /[a-zA-Z0-9]/.test(sanitizedId);
-    return `--forge-data-table-column-${hasValidChar ? sanitizedId : 'column'}-size`;
   }
 
   /**

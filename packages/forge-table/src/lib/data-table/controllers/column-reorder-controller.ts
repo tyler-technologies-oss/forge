@@ -14,6 +14,7 @@ export class ColumnReorderController<TData extends Row> implements ReactiveContr
   public movingColumn: string | null = null;
   public targetColumn: string | null = null;
   public dropSide: 'before' | 'after' | null = null;
+  public isDragging = false;
   private _dragGhostElement: HTMLElement | null = null;
   private _dropIndicator: HTMLElement | null = null;
   private _childDropIndicator: HTMLElement | null = null;
@@ -33,11 +34,21 @@ export class ColumnReorderController<TData extends Row> implements ReactiveContr
 
   public hostConnected(): void {}
 
+  /**
+   * Returns whether a drag just ended, and clears that, so the click that follows a drag is not treated as a header click.
+   */
+  public consumeDragClick(): boolean {
+    const wasDragging = this.isDragging;
+    this.isDragging = false;
+    return wasDragging;
+  }
+
   public hostDisconnected(): void {
     this._cleanup();
   }
 
   public onDragStart(evt: DragEvent, column: Column<DataTableFeatures, TData>): void {
+    this.isDragging = true;
     this.movingColumn = column.id;
     this.targetColumn = null;
     this.dropSide = null;
@@ -114,6 +125,7 @@ export class ColumnReorderController<TData extends Row> implements ReactiveContr
   }
 
   public onDragEnd(_evt: DragEvent): void {
+    this.isDragging = false;
     this._cleanup();
     this._host.requestUpdate();
   }

@@ -58,3 +58,10 @@ export function labelWithRowName(element: HTMLElement, row: object): void {
   }
   element.setAttribute('aria-labelledby', `${element.id} ${meta.nameId}`);
 }
+
+/**
+ * The id of the header cell that contains a column.
+ */
+export function getColumnHeaderId(columnId: string): string {
+  return `column-header-${columnId}`;
+}

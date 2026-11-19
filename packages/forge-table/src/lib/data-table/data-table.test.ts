@@ -127,8 +127,9 @@ class DataTableHarness {
     return Array.from(this.shadowRoot.querySelectorAll('.select-column forge-checkbox'));
   }
 
-  public get columnVisibilityPopover(): HTMLElement | null {
-    return this.shadowRoot.querySelector('#column-visibility-popover');
+  public getColumnMenuDropdown(columnId: string): (HTMLElement & { open: boolean }) | null {
+    const menu = this.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
+    return (menu?.shadowRoot?.querySelector('forge-dropdown-menu') as (HTMLElement & { open: boolean }) | null | undefined) ?? null;
   }
 
   public getHeaderCellByIndex(index: number): HTMLTableCellElement | undefined {
@@ -974,74 +975,117 @@ describe('DataTable', () => {
       expect(harness.getHeaderCellById('id')).not.toBeNull();
     });
 
-    it('should open column visibility popover on context menu', async () => {
+    it('should open the column menu when a header cell is right-clicked', async () => {
       const harness = await createFixture();
 
       await harness.contextMenuHeaderCell(1);
-      await harness.element.updateComplete;
 
-      const popover = harness.columnVisibilityPopover as any;
-      expect(popover).not.toBeNull();
-      expect(popover.open).toBe(true);
+      await vi.waitFor(() => expect(harness.getColumnMenuDropdown('name')?.open).toBe(true));
     });
 
-    it('should show only hideable columns in visibility menu', async () => {
-      const columns: ColumnDef<TestData>[] = [
-        { id: 'id', header: 'ID', property: 'id', hideable: false },
-        { id: 'name', header: 'Name', property: 'name' },
-        { id: 'age', header: 'Age', property: 'age' }
-      ];
-      const harness = await createFixture({ columns });
-
-      await harness.contextMenuHeaderCell(1);
-      await harness.element.updateComplete;
-
-      const popover = harness.columnVisibilityPopover!;
-      const listItems = popover.querySelectorAll('forge-list-item:not([disabled])');
-      expect(listItems.length).toBe(2);
-    });
-
-    it('should toggle column visibility from menu', async () => {
+    it('should position the column menu at the cursor when a header cell is right-clicked', async () => {
       const harness = await createFixture();
+      const clientX = 240;
+      const clientY = 180;
 
-      await harness.contextMenuHeaderCell(1);
-      await harness.element.updateComplete;
+      harness.getHeaderCellByIndex(1)?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true, clientX, clientY }));
 
-      const popover = harness.columnVisibilityPopover!;
-      const listItem = popover.querySelector('forge-list-item[value="name"]') as HTMLElement;
-      listItem.click();
-      await harness.element.updateComplete;
-
-      expect(harness.element.columnVisibility.name).toBe(false);
+      const dropdown = await vi.waitFor(() => {
+        const match = harness.getColumnMenuDropdown('name');
+        expect(match?.open).toBe(true);
+        return match as HTMLElement;
+      });
+      await vi.waitFor(() => {
+        const rect = dropdown.shadowRoot?.querySelector('.menu')?.getBoundingClientRect();
+        expect(rect).toBeDefined();
+        expect(Math.abs((rect?.left ?? 0) - clientX)).toBeLessThan(8);
+        expect(Math.abs((rect?.top ?? 0) - clientY)).toBeLessThan(8);
+      });
     });
 
-    it('should close visibility menu after selection', async () => {
+    it('should anchor the column menu to its button when opened after a context menu', async () => {
       const harness = await createFixture();
+      const header = harness.getHeaderCellById('name') as HTMLElement;
+      const columnMenu = header.querySelector('forge-data-table-column-menu') as HTMLElement;
+      const button = columnMenu.shadowRoot?.querySelector('forge-icon-button') as HTMLElement;
+      header.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true, clientX: 600, clientY: 400 }));
+      const dropdown = await vi.waitFor(() => {
+        const match = harness.getColumnMenuDropdown('name');
+        expect(match?.open).toBe(true);
+        return match as HTMLElement & { open: boolean };
+      });
 
+      dropdown.open = false;
+      await vi.waitFor(() => expect(dropdown.shadowRoot?.querySelector('forge-popover')?.open).toBe(false));
+      await userEvent.click(button);
+
+      await vi.waitFor(() => {
+        expect(dropdown.open).toBe(true);
+        const menuRect = dropdown.shadowRoot?.querySelector('.menu')?.getBoundingClientRect();
+        const buttonRect = button.getBoundingClientRect();
+        expect(Math.abs((menuRect?.left ?? 0) - buttonRect.left)).toBeLessThan(buttonRect.width + 8);
+        expect(Math.abs((menuRect?.top ?? 0) - buttonRect.bottom)).toBeLessThan(16);
+      });
+    });
+
+    it('should close the column menu when a context menu event fires outside of it', async () => {
+      const harness = await createFixture();
       await harness.contextMenuHeaderCell(1);
-      await harness.element.updateComplete;
+      const dropdown = await vi.waitFor(() => {
+        const match = harness.getColumnMenuDropdown('name');
+        expect(match?.open).toBe(true);
+        return match as HTMLElement & { open: boolean };
+      });
 
-      const popover = harness.columnVisibilityPopover as any;
-      expect(popover.open).toBe(true);
+      document.body.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true }));
 
-      const listItem = popover.querySelector('forge-list-item[value="name"]') as HTMLElement;
-      listItem.click();
-      await harness.element.updateComplete;
+      await vi.waitFor(() => expect(dropdown.open).toBe(false));
+    });
 
+    it('should close the open column menu and open the one for the header that was right-clicked', async () => {
+      const harness = await createFixture();
+      await harness.contextMenuHeaderCell(1);
+      await vi.waitFor(() => expect(harness.getColumnMenuDropdown('name')?.open).toBe(true));
+
+      await harness.contextMenuHeaderCell(2);
+
+      await vi.waitFor(() => {
+        expect(harness.getColumnMenuDropdown('name')?.open).toBe(false);
+        expect(harness.getColumnMenuDropdown('age')?.open).toBe(true);
+      });
+    });
+
+    it('should keep the column menu open when a context menu event fires inside of it', async () => {
+      const harness = await createFixture();
+      await harness.contextMenuHeaderCell(1);
+      const dropdown = await vi.waitFor(() => {
+        const match = harness.getColumnMenuDropdown('name');
+        expect(match?.open).toBe(true);
+        return match as HTMLElement & { open: boolean };
+      });
+
+      dropdown.querySelector('forge-dropdown-menu-item')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true }));
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      expect(popover.open).toBe(false);
+      expect(dropdown.open).toBe(true);
     });
 
-    it('should not show select column in visibility menu', async () => {
+    it('should prevent the browser context menu when a header cell is right-clicked', async () => {
+      const harness = await createFixture();
+      const event = new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true });
+
+      harness.getHeaderCellByIndex(1)?.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it('should not open a column menu when the select column header is right-clicked', async () => {
       const harness = await createFixture({ rowSelection: 'single' });
+      const event = new MouseEvent('contextmenu', { bubbles: true, composed: true, cancelable: true });
 
-      await harness.contextMenuHeaderCell(1);
-      await harness.element.updateComplete;
+      harness.getHeaderCellByIndex(0)?.dispatchEvent(event);
 
-      const popover = harness.columnVisibilityPopover!;
-      const selectItem = popover.querySelector('forge-list-item[value="SELECT_COLUMN_ID"]');
-      expect(selectItem).toBeNull();
+      expect(event.defaultPrevented).toBe(false);
     });
   });
 
