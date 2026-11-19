@@ -3,6 +3,7 @@ import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
+import { getTableAccessibility } from '../../testing/accessibility.js';
 import '../data-table/data-table.js';
 import type { ColumnDef, DataTableElement } from '../data-table/data-table.js';
 import './table-toolbar.js';
@@ -111,6 +112,59 @@ describe('TableToolbar', () => {
       await toolbar.updateComplete;
 
       expect(toolbar.tableElement).toBeNull();
+    });
+  });
+
+  describe('table label', () => {
+    it('should label the table with the title', async () => {
+      const { toolbar, table } = await createFixture();
+
+      expect(table.ariaLabelledByElements).toEqual([toolbar.querySelector('[slot="title"]')]);
+    });
+
+    it('should expose the title as the accessible name of the table', async () => {
+      await createFixture();
+
+      await vi.waitFor(async () => expect((await getTableAccessibility()).name).toBe('People'));
+    });
+
+    it('should not label the table when the toolbar has no title', async () => {
+      const { toolbar, table } = await createFixture();
+
+      toolbar.querySelector('[slot="title"]')?.remove();
+      await toolbar.updateComplete;
+
+      expect(table.ariaLabelledByElements).toBeNull();
+    });
+
+    it('should label the table with the new title when the title is replaced', async () => {
+      const { toolbar, table } = await createFixture();
+      const title = document.createElement('span');
+      title.slot = 'title';
+      title.textContent = 'Employees';
+
+      toolbar.querySelector('[slot="title"]')?.replaceWith(title);
+      await vi.waitFor(() => expect(table.ariaLabelledByElements).toEqual([title]));
+    });
+
+    it('should stop labelling the table when the toolbar is removed', async () => {
+      const { toolbar, table } = await createFixture();
+
+      toolbar.remove();
+
+      expect(table.ariaLabelledByElements).toBeNull();
+    });
+
+    it('should stop labelling the previous table when connected to another table', async () => {
+      const { toolbar, table } = await createFixture();
+      const other = document.createElement('forge-data-table') as DataTableElement<TestData>;
+      table.parentElement?.append(other);
+
+      toolbar.tableElement = other;
+      await toolbar.updateComplete;
+
+      expect(table.ariaLabelledByElements).toBeNull();
+      expect(other.ariaLabelledByElements).toEqual([toolbar.querySelector('[slot="title"]')]);
     });
   });
 

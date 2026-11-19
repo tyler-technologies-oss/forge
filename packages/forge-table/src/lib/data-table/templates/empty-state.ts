@@ -3,14 +3,15 @@ import { html, TemplateResult } from 'lit';
 
 export interface EmptyStateConfig {
   colSpan: number;
+  cellRole: 'cell' | 'gridcell';
   filtered: boolean;
   onClearFilters: () => void;
 }
 
-export function renderEmptyState({ colSpan, filtered, onClearFilters }: EmptyStateConfig): TemplateResult {
-  return html`<tbody class="empty-tbody">
-    <tr part="empty-state-tr">
-      <td colspan=${colSpan} part="empty-state-cell">
+export function renderEmptyState({ colSpan, cellRole, filtered, onClearFilters }: EmptyStateConfig): TemplateResult {
+  return html`<tbody class="empty-tbody" role="rowgroup">
+    <tr role="row" part="empty-state-tr">
+      <td role=${cellRole} colspan=${colSpan} part="empty-state-cell">
         <div class="empty-state" part="empty-state">
           ${filtered
             ? html`

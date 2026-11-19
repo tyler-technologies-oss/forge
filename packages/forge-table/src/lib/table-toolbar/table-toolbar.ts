@@ -73,6 +73,8 @@ export class TableToolbarElement extends LitElement {
   public features: TableToolbarFeature[] = [];
 
   #observedTable: DataTableElement<any> | undefined;
+  #labelledTable: DataTableElement<any> | undefined;
+  #titleElements: Element[] = [];
 
   #onTableChange = (): void => this.requestUpdate();
 
@@ -103,7 +105,7 @@ export class TableToolbarElement extends LitElement {
     return html`
       <div class="forge-table-toolbar">
         <div class="title">
-          <slot name="title"></slot>
+          <slot name="title" @slotchange=${this.#onTitleSlotChange}></slot>
         </div>
         <div class="end">
           ${map(
@@ -220,7 +222,30 @@ export class TableToolbarElement extends LitElement {
     this.#observedTable?.removeEventListener(COLUMN_VISIBILITY_EVENT, this.#onTableChange);
     this.#observedTable = table ?? undefined;
     table?.addEventListener(COLUMN_VISIBILITY_EVENT, this.#onTableChange);
+    this.#labelTable(table);
   }
+
+  #labelTable(table: DataTableElement<any> | null): void {
+    const previousTitleElements = this.#titleElements;
+    if (this.#labelledTable) {
+      this.#setLabelledBy(this.#labelledTable, this.#withoutElements(this.#labelledTable, previousTitleElements));
+    }
+    this.#labelledTable = table ?? undefined;
+    this.#titleElements = table ? Array.from(this.children).filter(({ slot }) => slot === 'title') : [];
+    if (table) {
+      this.#setLabelledBy(table, [...this.#withoutElements(table, previousTitleElements), ...this.#titleElements]);
+    }
+  }
+
+  #withoutElements(table: DataTableElement<any>, elements: readonly Element[]): Element[] {
+    return (table.ariaLabelledByElements ?? []).filter(element => !elements.includes(element));
+  }
+
+  #setLabelledBy(table: DataTableElement<any>, elements: Element[]): void {
+    table.ariaLabelledByElements = elements.length ? elements : null;
+  }
+
+  #onTitleSlotChange = (): void => this.#labelTable(this.#labelledTable ?? null);
 
   #onMenuToggle = (evt: ToggleEvent): void => {
     if (evt.newState === 'open') {

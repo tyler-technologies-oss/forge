@@ -1,0 +1,12 @@
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+
+:host {
+  display: block;
+  color: #{theme.variable(text-medium)};
+  @include typography.style(body2);
+}
+
+:host([hidden]) {
+  display: none;
+}

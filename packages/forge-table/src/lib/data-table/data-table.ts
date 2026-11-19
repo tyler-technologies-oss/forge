@@ -103,6 +103,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @query('#column-visibility-popover')
   private _columnVisibilityPopover?: PopoverComponent;
   #internals: ElementInternals;
+  #managedRole: string | undefined;
   #isDragging = false;
   #sortingBeforeClick: SortingState | null = null;
   #cellTabStopId: string | undefined;
@@ -327,6 +328,19 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     this.#internals = this.attachInternals();
   }
 
+  #updateRole(): void {
+    const role = this.getAttribute('role');
+    if (role === null || role === this.#managedRole) {
+      this.#managedRole = this.cellSelection ? 'grid' : 'table';
+      this.setAttribute('role', this.#managedRole);
+    }
+    this.#internals.ariaMultiSelectable = this.cellSelection ? 'true' : null;
+  }
+
+  #getCellRole(): 'cell' | 'gridcell' {
+    return this.cellSelection ? 'gridcell' : 'cell';
+  }
+
   #updateCustomStates(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('resizable')) {
       toggleState(this.#internals, 'resizable', this.resizable);
@@ -453,6 +467,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   // eslint-disable-next-line @tylertech-eslint/require-private-modifier
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     this.#updateCustomStates(changedProperties);
+
+    if (!this.hasUpdated || changedProperties.has('cellSelection')) {
+      this.#updateRole();
+    }
 
     if (changedProperties.has('columns')) {
       this.#handleColumnsChange();
@@ -581,11 +599,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             striped: this.striped,
             virtualized: this.virtualized
           })}
-          role=${ifDefined(this.cellSelection ? 'grid' : undefined)}
-          aria-multiselectable=${ifDefined(this.cellSelection ? 'true' : undefined)}
+          role="presentation"
           style=${styleMap(tableStyle)}>
           ${this.#renderColumnGroup(table)}
-          <thead>
+          <thead role="rowgroup">
             ${this.#renderTableHeader(table)}
           </thead>
           ${this.#renderBody(table)} ${this.#renderTableFooter(table)}
@@ -622,7 +639,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
     return html`${headerGroups.map(
       headerGroup => html`
-        <tr part="head-tr tr">
+        <tr role="row" part="head-tr tr">
           ${headerGroup.headers.map(header => {
             const isGroupHeader = headerGroup.depth < headerGroups.length - 1;
             const isGroupStart = groupStartColumnIds.has(header.getLeafHeaders()[0].column.id);
@@ -645,6 +662,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             return html`
               <th
                 id=${headerId}
+                role="columnheader"
                 part="head-cell cell"
                 colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                 style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
@@ -813,6 +831,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     const isGroupLabel = cell.row.getIsGrouped() && getGroupLabelCell(cell.row)?.id === cell.id;
     return html`
       <td
+        role=${this.#getCellRole()}
         part="body-cell cell"
         style=${styleMap({ width: this.#getColumnWidthStyle(cell.column), ...getPinnedColumnStyle(cell.column) })}
         class=${classMap({
@@ -982,6 +1001,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     if (!table.getRowModel().rows.length) {
       return renderEmptyState({
         colSpan: Math.max(table.getVisibleLeafColumns().length, 1),
+        cellRole: this.#getCellRole(),
         filtered: this._columnFilters.length > 0,
         onClearFilters: () => table.setColumnFilters([])
       });
@@ -991,7 +1011,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   #renderTableBody(table: LitTable<DataTableFeatures, TData>): TemplateResult {
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
-    return html`<tbody class="standard-tbody">
+    return html`<tbody class="standard-tbody" role="rowgroup">
       ${repeat(
         table.getRowModel().rows,
         row => row.id,
@@ -999,6 +1019,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
           const { name, nameId } = this.#getRowName(table, row);
           return html`
             <tr
+              role="row"
               id=${nameId}
               aria-label=${name}
               class=${classMap({ selected: row.getIsSelected(), 'group-row': row.getIsGrouped() })}
@@ -1008,8 +1029,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             </tr>
             ${row.getIsExpanded() && !row.getIsGrouped()
               ? html`
-                  <tr part="body-tr tr">
-                    <td colspan=${row.getAllCells().length}>
+                  <tr role="row" part="body-tr tr">
+                    <td role=${this.#getCellRole()} colspan=${row.getAllCells().length}>
                       <div class="expanded-content">
                         <slot name=${`expanded:row-${row.id}`}></slot>
                       </div>
@@ -1033,13 +1054,14 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       return nothing;
     }
 
-    return html`<tfoot>
+    return html`<tfoot role="rowgroup">
       ${table.getFooterGroups().map(
         footerGroup => html`
-          <tr part="tfoot-tr tr">
+          <tr role="row" part="tfoot-tr tr">
             ${footerGroup.headers.map(
               header => html`
                 <th
+                  role="columnheader"
                   part="tfoot-cell cell"
                   colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
                   style=${styleMap({ width: this.#getColumnWidthStyle(header.column), ...getPinnedColumnStyle(header.column) })}
@@ -1352,6 +1374,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     const groupStartColumnIds = this.#getGroupStartColumnIds(table);
 
     return html`<tbody
+      role="rowgroup"
       class="virtualized-tbody"
       style=${styleMap({
         position: 'relative',
@@ -1365,6 +1388,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
           const { name, nameId } = this.#getRowName(table, row);
           return html`
             <tr
+              role="row"
               id=${nameId}
               aria-label=${name}
               data-index="${item.index}"

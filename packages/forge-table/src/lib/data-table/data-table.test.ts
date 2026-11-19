@@ -5,6 +5,7 @@ import { html } from 'lit';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
+import { getTableAccessibility } from '../../testing/accessibility.js';
 import './data-table.js';
 import type { ColumnDef, DataTableElement } from './data-table.js';
 import { actionCell, badgeCell, createExpanderColumn, meterCell, ratingCell } from './data-table.js';
@@ -447,6 +448,68 @@ describe('DataTable', () => {
       const harness = await createFixture({ data: TEST_DATA, columns: TEST_COLUMNS });
 
       await expect(harness.element).toBeAccessible();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should expose a single table with rows, column headers and cells', async () => {
+      await createFixture();
+
+      await vi.waitFor(async () => {
+        const { role, roles } = await getTableAccessibility();
+        expect(role).toBe('table');
+        expect(roles.filter(r => r === 'table' || r === 'grid')).toHaveLength(1);
+        expect(roles).toContain('columnheader');
+        expect(roles).toContain('row');
+        expect(roles).toContain('cell');
+      });
+    });
+
+    it('should expose gridcells instead of cells when cell selection is on', async () => {
+      await createFixture({ cellSelection: true });
+
+      await vi.waitFor(async () => {
+        const { roles } = await getTableAccessibility();
+        expect(roles).toContain('gridcell');
+        expect(roles).not.toContain('cell');
+      });
+    });
+
+    it('should use the name and description given by aria-labelledby and aria-describedby on the host', async () => {
+      const screen = await render(html`
+        <h2 id="title">People</h2>
+        <p id="note">Sorted by name.</p>
+        <forge-data-table
+          aria-labelledby="title"
+          aria-describedby="note"
+          .columns=${TEST_COLUMNS}
+          .dataSource=${new DataSource<TestData>(() => TEST_DATA)}></forge-data-table>
+      `);
+      await settle(screen.container.querySelector('forge-data-table') as DataTableElement<TestData>);
+
+      await vi.waitFor(async () => {
+        const { name, description } = await getTableAccessibility();
+        expect(name).toBe('People');
+        expect(description).toBe('Sorted by name.');
+      });
+    });
+
+    it('should use the name and description given by ariaLabelledByElements and ariaDescribedByElements on the host', async () => {
+      const screen = await render(html`
+        <h2 id="title">People</h2>
+        <p id="note">Sorted by name.</p>
+        <forge-data-table .columns=${TEST_COLUMNS} .dataSource=${new DataSource<TestData>(() => TEST_DATA)}></forge-data-table>
+      `);
+      const element = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
+      element.ariaLabelledByElements = [screen.container.querySelector('#title') as Element];
+      element.ariaDescribedByElements = [screen.container.querySelector('#note') as Element];
+      await settle(element);
+
+      await vi.waitFor(async () => {
+        const { name, description } = await getTableAccessibility();
+        expect(name).toBe('People');
+        expect(description).toBe('Sorted by name.');
+      });
     });
   });
 
@@ -2233,7 +2296,6 @@ describe('DataTable', () => {
 
       await harness.clickBodyCell(0, 1);
 
-      expect(harness.tableElement?.hasAttribute('role')).toBe(false);
       expect(harness.bodyCells.some(cell => cell.hasAttribute('tabindex'))).toBe(false);
       expect(harness.selectedCells.length).toBe(0);
     });
@@ -2241,9 +2303,12 @@ describe('DataTable', () => {
     it('should expose a multiselectable grid when cell selection is on', async () => {
       const harness = await createFixture({ cellSelection: true });
 
-      expect(harness.tableElement?.getAttribute('role')).toBe('grid');
-      expect(harness.tableElement?.getAttribute('aria-multiselectable')).toBe('true');
       expect(harness.hasCustomState('cell-selection')).toBe(true);
+      await vi.waitFor(async () => {
+        const { role, multiselectable } = await getTableAccessibility();
+        expect(role).toBe('grid');
+        expect(multiselectable).toBe(true);
+      });
     });
 
     it('should select a cell when it is clicked', async () => {
@@ -2457,8 +2522,8 @@ describe('DataTable', () => {
       await settle(harness.element);
 
       expect(harness.selectedCells.length).toBe(0);
-      expect(harness.tableElement?.hasAttribute('role')).toBe(false);
       expect(harness.bodyCells.some(cell => cell.hasAttribute('tabindex'))).toBe(false);
+      await vi.waitFor(async () => expect((await getTableAccessibility()).role).toBe('table'));
     });
 
     it('should not make the row selection column selectable', async () => {
