@@ -107,14 +107,14 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
               <forge-dropdown-menu-item>
                 <forge-icon slot="start" name="arrow_left_right"></forge-icon>
                 <span>Move</span>
-                <forge-dropdown-menu-item-radio slot="submenu" .disabled="${!this.#getMoveTarget(-1)}" @click="${() => this.#move(-1)}">
+                <forge-dropdown-menu-item slot="submenu" .disabled="${!this.#getMoveTarget(-1)}" @click="${() => this.#move(-1)}">
                   <forge-icon slot="start" name="arrow_back"></forge-icon>
                   <span>Move left</span>
-                </forge-dropdown-menu-item-radio>
-                <forge-dropdown-menu-item-radio slot="submenu" .disabled="${!this.#getMoveTarget(1)}" @click="${() => this.#move(1)}">
+                </forge-dropdown-menu-item>
+                <forge-dropdown-menu-item slot="submenu" .disabled="${!this.#getMoveTarget(1)}" @click="${() => this.#move(1)}">
                   <forge-icon slot="start" name="arrow_forward"></forge-icon>
                   <span>Move right</span>
-                </forge-dropdown-menu-item-radio>
+                </forge-dropdown-menu-item>
               </forge-dropdown-menu-item>
             `
           : nothing}
