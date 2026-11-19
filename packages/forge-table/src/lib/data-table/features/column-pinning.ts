@@ -1,6 +1,6 @@
 import type { Column, ColumnPinningState } from '@tanstack/lit-table';
 import { hasChildColumns, resolveColumnId } from '../columns/column-utils.js';
-import { SELECT_COLUMN_ID } from '../constants.js';
+import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { ColumnDef, ColumnPin, Row } from '../types.js';
 
@@ -11,19 +11,24 @@ import type { ColumnDef, ColumnPin, Row } from '../types.js';
  * `includeSelectColumn` is set and any column is pinned to the start, the row selection column
  * is pinned ahead of them so it stays the first column.
  */
-export function getColumnPinningState<TData extends Row>(columns: ColumnDef<TData>[], includeSelectColumn = false): ColumnPinningState {
+export function getColumnPinningState<TData extends Row>(
+  columns: ColumnDef<TData>[],
+  includeSelectColumn = false,
+  includeGroupsColumn = false
+): ColumnPinningState {
   const state: ColumnPinningState = { start: [], end: [] };
   collectPinnedColumns(columns, state);
-  return pinSelectColumn(state, includeSelectColumn);
+  return pinSelectColumn(state, includeSelectColumn, includeGroupsColumn);
 }
 
 /**
- * Keeps the row selection column as the first start-pinned column while any other column is pinned to the start,
+ * Keeps the row selection column, then the groups column, as the first start-pinned columns while any other column is pinned to the start,
  * and unpinned otherwise.
  */
-export function pinSelectColumn(state: ColumnPinningState, includeSelectColumn: boolean): ColumnPinningState {
-  const start = state.start.filter(id => id !== SELECT_COLUMN_ID);
-  return { ...state, start: includeSelectColumn && start.length ? [SELECT_COLUMN_ID, ...start] : start };
+export function pinSelectColumn(state: ColumnPinningState, includeSelectColumn: boolean, includeGroupsColumn = false): ColumnPinningState {
+  const start = state.start.filter(id => id !== SELECT_COLUMN_ID && id !== GROUPS_COLUMN_ID);
+  const leading = [...(includeSelectColumn ? [SELECT_COLUMN_ID] : []), ...(includeGroupsColumn ? [GROUPS_COLUMN_ID] : [])];
+  return { ...state, start: start.length ? [...leading, ...start] : start };
 }
 
 function collectPinnedColumns<TData extends Row>(

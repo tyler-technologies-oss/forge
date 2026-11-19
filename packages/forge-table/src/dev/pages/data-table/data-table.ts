@@ -303,6 +303,9 @@ expandableToggle.addEventListener('forge-switch-change', ({ detail: selected }) 
 const groupableToggle = document.querySelector('#opt-groupable') as ISwitchComponent;
 groupableToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.groupable = selected));
 
+const singleGroupColumnToggle = document.querySelector('#opt-single-group-column') as ISwitchComponent;
+singleGroupColumnToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.singleGroupColumn = selected));
+
 const customCellTemplateToggle = document.querySelector('#opt-custom-cell-template') as ISwitchComponent;
 customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {
   const findColumn = (columns: ColumnDef<RowData>[]): ColumnDef<RowData> | undefined => {

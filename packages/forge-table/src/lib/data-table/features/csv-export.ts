@@ -17,9 +17,20 @@ export const DEFAULT_CSV_FILENAME = 'data-table.csv';
  * Display columns without an accessor (row selection, expander, action buttons) hold no data, so they are left out.
  */
 export function getCsvColumns<TData extends Row>(table: Table<DataTableFeatures, TData>): Column<DataTableFeatures, TData>[] {
-  return [...table.getStartVisibleLeafColumns(), ...table.getCenterVisibleLeafColumns(), ...table.getEndVisibleLeafColumns()].filter(
-    column => !!column.accessorFn
-  );
+  const displayed = [...table.getStartVisibleLeafColumns(), ...table.getCenterVisibleLeafColumns(), ...table.getEndVisibleLeafColumns()];
+  return [...getRemovedGroupedColumns(table), ...displayed].filter(column => !!column.accessorFn);
+}
+
+/**
+ * The grouped columns that `singleGroupColumn` removes from the table. Their values are still data, so they lead the export, in grouping order, like the grouped columns of a table without it.
+ */
+function getRemovedGroupedColumns<TData extends Row>(table: Table<DataTableFeatures, TData>): Column<DataTableFeatures, TData>[] {
+  if (table.options.groupedColumnMode !== 'remove') {
+    return [];
+  }
+
+  const columns = (table.options.state?.grouping ?? []).map(id => table.getColumn(id));
+  return columns.filter((column): column is Column<DataTableFeatures, TData> => !!column?.getIsVisible());
 }
 
 /**

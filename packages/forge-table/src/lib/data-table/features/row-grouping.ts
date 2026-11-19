@@ -3,7 +3,7 @@ import { IconRegistry } from '@tylertech/forge';
 import { tylIconChevronDown, tylIconChevronRight } from '@tylertech/tyler-icons';
 import { html, nothing, type TemplateResult } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { SELECT_COLUMN_ID } from '../constants.js';
+import { GROUP_INDENT_WIDTH, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
 import { formatAggregationValue } from './aggregation.js';
@@ -105,13 +105,15 @@ export function getDataRows<TData extends Row>(table: Table<DataTableFeatures, T
  *
  * TanStack's own `groupedColumnMode: 'reorder'` would put them ahead of the row selection column, so the table orders them through
  * `columnOrder` instead. Columns not listed keep their relative order after the grouped ones.
+ *
+ * With `singleGroupColumn` the groups column takes the place of the grouped columns (TanStack removes those from the table), and it keeps that place while nothing is grouped.
  */
-export function getGroupedColumnOrder(columnOrder: string[], grouping: string[], hasSelectColumn: boolean): string[] {
-  if (!grouping.length) {
+export function getGroupedColumnOrder(columnOrder: string[], grouping: string[], hasSelectColumn: boolean, singleGroupColumn = false): string[] {
+  if (!grouping.length && !singleGroupColumn) {
     return columnOrder;
   }
 
-  const leading = hasSelectColumn ? [SELECT_COLUMN_ID, ...grouping] : grouping;
+  const leading = [...(hasSelectColumn ? [SELECT_COLUMN_ID] : []), ...(singleGroupColumn ? [GROUPS_COLUMN_ID] : grouping)];
   return [...leading, ...columnOrder.filter(id => !leading.includes(id))];
 }
 
@@ -133,7 +135,7 @@ export function getGroupLabelCell<TData extends Row>(row: GroupingRow<TData>): C
  */
 export function renderGroupRowCell<TData extends Row>(cell: Cell<DataTableFeatures, TData>): TemplateResult | string | typeof nothing {
   if (getGroupLabelCell(cell.row)?.id === cell.id) {
-    return renderGroupCell(cell.row);
+    return renderGroupCell(cell.row, cell.column.id === GROUPS_COLUMN_ID);
   }
 
   const { aggregate, aggregateFormatter } = cell.column.columnDef.meta ?? {};
@@ -165,7 +167,7 @@ export function renderGroupCheckbox<TData extends Row>(table: Table<DataTableFea
   `;
 }
 
-function renderGroupCell<TData extends Row>(row: GroupingRow<TData>): TemplateResult {
+function renderGroupCell<TData extends Row>(row: GroupingRow<TData>, indented: boolean): TemplateResult {
   const expanded = row.getIsExpanded();
   const label = getGroupLabel(row.getValue(row.groupingColumnId ?? ''));
   const onToggle = (evt: Event): void => {
@@ -174,7 +176,10 @@ function renderGroupCell<TData extends Row>(row: GroupingRow<TData>): TemplateRe
   };
 
   return html`
-    <div class="group-cell" part="group-cell">
+    <div
+      class="group-cell"
+      part="group-cell"
+      style=${ifDefined(indented && row.depth > 0 ? `padding-inline-start: ${row.depth * GROUP_INDENT_WIDTH}px` : undefined)}>
       <forge-icon-button
         class="group-toggle"
         part="group-toggle"

@@ -65,6 +65,7 @@ const meta = {
           ?expandable=${args.expandable}
           ?groupable=${args.groupable}
           .grouping=${args.grouping}
+          ?single-group-column=${args.singleGroupColumn}
           ?virtualized=${args.virtualized}
           ?sticky-header=${args.stickyHeader}
           ?sticky-footer=${args.stickyFooter}
@@ -100,6 +101,7 @@ const meta = {
     expandable: { control: 'boolean' },
     groupable: { control: 'boolean' },
     grouping: { control: 'object' },
+    singleGroupColumn: { control: 'boolean' },
     virtualized: { control: 'boolean' },
     stickyHeader: { control: 'boolean' },
     stickyFooter: { control: 'boolean' },
@@ -128,6 +130,7 @@ const meta = {
     expandable: false,
     groupable: false,
     grouping: [],
+    singleGroupColumn: false,
     virtualized: false,
     stickyHeader: false,
     stickyFooter: false,
@@ -706,6 +709,26 @@ export const NestedRowGrouping: Story = exampleStory({
 
 table.groupable = true;
 table.rowSelection = 'multiple';
+table.grouping = ['department', 'status'];`
+});
+
+export const SingleGroupColumn: Story = exampleStory({
+  description:
+    'Set `singleGroupColumn` to show the grouped columns in one column labelled **Groups** instead of in their own columns. Each group row shows its toggle, label and row count there, nested groups are indented by depth, and the cells in data rows are empty. The column is not shown while nothing is grouped, and the export and print still include the grouped columns.',
+  args: {
+    groupable: true,
+    singleGroupColumn: true,
+    rowSelection: 'multiple',
+    grouping: ['department', 'status'],
+    columns: [
+      employeeColumn('name', 'Name'),
+      employeeColumn('department', 'Department'),
+      employeeColumn('status', 'Status'),
+      employeeColumn('salary', 'Salary', { format: new CurrencyFormatter(), groupable: false })
+    ]
+  },
+  code: `table.groupable = true;
+table.singleGroupColumn = true;
 table.grouping = ['department', 'status'];`
 });
 

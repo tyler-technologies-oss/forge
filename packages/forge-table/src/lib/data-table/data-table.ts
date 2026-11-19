@@ -20,8 +20,16 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { applyColumnHeaders, getAllColumnIds, getAllLeafColumns, mapColumns, prependSelectColumn, resolveColumnId } from './columns/column-utils.js';
-import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, SELECT_COLUMN_ID } from './constants.js';
+import {
+  applyColumnHeaders,
+  getAllColumnIds,
+  getAllLeafColumns,
+  mapColumns,
+  prependGroupsColumn,
+  prependSelectColumn,
+  resolveColumnId
+} from './columns/column-utils.js';
+import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
 import { CellSelectionController } from './features/cell-selection.js';
@@ -264,6 +272,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public grouping: string[] = [];
 
   /**
+   * Show the grouped columns in a single column labelled "Groups" instead of in their own columns.
+   *
+   * The grouped columns are removed from the table while the rows are grouped, and each group row shows its label, row count and
+   * expand toggle in the "Groups" column, indented by its depth. The column is not shown while nothing is grouped.
+   */
+  @property({ type: Boolean, attribute: 'single-group-column' })
+  public singleGroupColumn = false;
+
+  /**
    * Enable virtualization for rows in the table.
    */
   @property({ type: Boolean })
@@ -351,11 +368,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       this.#setReorderable();
     }
 
-    if (changedProperties.has('columns') || changedProperties.has('rowSelection')) {
+    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || changedProperties.has('singleGroupColumn')) {
       this.#updateColumnPinning();
     }
 
-    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || this.#columnRename.headers !== this.#appliedColumnHeaders) {
+    if (
+      changedProperties.has('columns') ||
+      changedProperties.has('rowSelection') ||
+      changedProperties.has('singleGroupColumn') ||
+      this.#columnRename.headers !== this.#appliedColumnHeaders
+    ) {
       this.#updateRenderColumns();
     }
 
@@ -398,14 +420,14 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       onColumnOrderChange: updaterOrValue => this.#onColumnOrderChange(updaterOrValue),
       onColumnPinningChange: updaterOrValue => this.#onColumnPinningChange(updaterOrValue),
       enableGrouping: this.groupable,
-      groupedColumnMode: false,
+      groupedColumnMode: this.singleGroupColumn ? 'remove' : false,
       onGroupingChange: updaterOrValue => this.#onGroupingChange(updaterOrValue),
       getRowCanExpand: row => row.getIsGrouped() || this.expandable,
       state: {
         sorting: this._sorting,
         columnFilters: this._columnFilters,
-        columnVisibility: this.columnVisibility,
-        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off'),
+        columnVisibility: this.singleGroupColumn ? { ...this.columnVisibility, [GROUPS_COLUMN_ID]: this.grouping.length > 0 } : this.columnVisibility,
+        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off', this.singleGroupColumn),
         columnPinning: this._columnPinning,
         grouping: this.grouping,
         rowSelection: this._rowSelection,
@@ -492,6 +514,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('enableCellSelection') ||
       changedProperties.has('expandable') ||
       changedProperties.has('groupable') ||
+      changedProperties.has('singleGroupColumn') ||
       changedProperties.has('stickyHeader') ||
       changedProperties.has('stickyFooter') ||
       changedProperties.has('virtualized');
@@ -531,12 +554,13 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #updateColumnPinning(): void {
-    this._columnPinning = getColumnPinningState(this.columns, this.rowSelection !== 'off');
+    this._columnPinning = getColumnPinningState(this.columns, this.rowSelection !== 'off', this.singleGroupColumn);
   }
 
   #updateRenderColumns(): void {
     this.#appliedColumnHeaders = this.#columnRename.headers;
-    const columns = applyColumnHeaders(this._columns, this.#appliedColumnHeaders);
+    const renamed = applyColumnHeaders(this._columns, this.#appliedColumnHeaders);
+    const columns = this.singleGroupColumn ? prependGroupsColumn(renamed) : renamed;
     this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
   }
 
@@ -598,7 +622,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   #onColumnPinningChange(updaterOrValue: Updater<ColumnPinningState>): void {
     const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this._columnPinning) : updaterOrValue;
-    this._columnPinning = pinSelectColumn(nextState, this.rowSelection !== 'off');
+    this._columnPinning = pinSelectColumn(nextState, this.rowSelection !== 'off', this.singleGroupColumn);
   }
 
   #emitColumnVisibilityChange(nextState: ColumnVisibilityState): void {

@@ -2,9 +2,13 @@ import type { CellSelectionDirection } from '@tanstack/lit-table';
 import type { DataTableDef } from './types.js';
 
 export const SELECT_COLUMN_ID = 'SELECT_COLUMN_ID';
+export const GROUPS_COLUMN_ID = 'GROUPS_COLUMN_ID';
+export const GROUPS_COLUMN_HEADER = 'Groups';
 
 export const DEFAULT_COLUMN_WIDTH = 172;
 export const SELECT_COLUMN_WIDTH = 40;
+export const GROUPS_COLUMN_WIDTH = 240;
+export const GROUP_INDENT_WIDTH = 24;
 export const COMPACT_ROW_HEIGHT = 32;
 export const DEFAULT_ROW_HEIGHT = 48;
 export const VIRTUALIZER_OVERSCAN = 5;
@@ -47,6 +51,7 @@ export const DATA_TABLE_DEF_KEYS = {
   expandable: false,
   groupable: false,
   grouping: false,
+  singleGroupColumn: false,
   virtualized: false,
   stickyHeader: false,
   stickyFooter: false,

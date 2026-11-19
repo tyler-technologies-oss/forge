@@ -99,6 +99,7 @@ export interface DataTableDef<TData extends Row = Row> {
   expandable?: boolean;
   groupable?: boolean;
   grouping?: string[];
+  singleGroupColumn?: boolean;
   virtualized?: boolean;
   stickyHeader?: boolean;
   stickyFooter?: boolean;

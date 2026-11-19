@@ -8,7 +8,7 @@ import type { ColumnMenuElement } from '../../column-menu/column-menu.js';
 import { COLUMN_MENU_TAG_NAME } from '../../column-menu/constants.js';
 import type { ColumnMenuActionEventDetail } from '../../column-menu/types.js';
 import { canColumnBeReordered, getGroupStartColumnIds } from '../columns/column-utils.js';
-import { SELECT_COLUMN_ID } from '../constants.js';
+import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { ColumnReorderController } from '../controllers/column-reorder-controller.js';
 import type { DataTableElement } from '../data-table.js';
 import type { ColumnRenameController } from '../features/column-rename.js';
@@ -57,7 +57,8 @@ function renderHeaderCell<TData extends Row>(
   const isGroupStart = groupStartColumnIds.has(header.getLeafHeaders()[0].column.id);
   const hasHeader = !!column.columnDef.header?.length;
   const isParent = (column.columns?.length ?? 0) > 0;
-  const canAcceptDrop = host.reorderable && column.columnDef.id !== SELECT_COLUMN_ID && ((isParent && !header.isPlaceholder) || hasHeader);
+  const isLeadingColumn = column.columnDef.id === SELECT_COLUMN_ID || column.columnDef.id === GROUPS_COLUMN_ID;
+  const canAcceptDrop = host.reorderable && !isLeadingColumn && ((isParent && !header.isPlaceholder) || hasHeader);
   const isRenaming = rename.isRenaming(column.id);
   const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && !isRenaming && canColumnBeReordered(column);
   const canRename = !header.isPlaceholder && !isRenaming && rename.canRename(column);
@@ -71,7 +72,7 @@ function renderHeaderCell<TData extends Row>(
             }
           }
         : null;
-  const hasColumnMenu = column.columnDef.id !== SELECT_COLUMN_ID && !header.isPlaceholder && !isParent;
+  const hasColumnMenu = !isLeadingColumn && !header.isPlaceholder && !isParent;
   const onHeaderContextMenu = (evt: MouseEvent): void => {
     const menu = (evt.currentTarget as HTMLElement).querySelector<ColumnMenuElement<TData>>(COLUMN_MENU_TAG_NAME);
     if (!menu) {

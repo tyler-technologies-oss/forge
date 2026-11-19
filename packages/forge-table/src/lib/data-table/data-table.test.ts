@@ -318,6 +318,7 @@ async function createFixture(
       .expandable=${props.expandable ?? false}
       .groupable=${props.groupable ?? false}
       .grouping=${props.grouping ?? []}
+      .singleGroupColumn=${props.singleGroupColumn ?? false}
       .virtualized=${props.virtualized ?? false}
       .stickyHeader=${props.stickyHeader ?? false}
       .stickyFooter=${props.stickyFooter ?? false}
@@ -3527,6 +3528,106 @@ describe('DataTable', () => {
       await settle(harness.element);
 
       expect(harness.bodyRows).toHaveLength(3);
+    });
+
+    describe('single group column', () => {
+      const headerTexts = (harness: DataTableHarness): (string | undefined)[] => harness.headerCells.map(cell => cell.textContent?.trim());
+
+      it('should show a single Groups column instead of the grouped column', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+
+        expect(headerTexts(harness)).toEqual(['Groups', 'Name', 'Age']);
+      });
+
+      it('should keep the grouped columns in place when the option is off', async () => {
+        const harness = await createGroupedFixture();
+
+        expect(headerTexts(harness)).toEqual(['Team', 'Name', 'Age']);
+      });
+
+      it('should not show the Groups column while nothing is grouped', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true, grouping: [] });
+
+        expect(headerTexts(harness)).toEqual(['Name', 'Age', 'Team']);
+      });
+
+      it('should show and remove the Groups column when grouping changes', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true, grouping: [] });
+
+        harness.element.grouping = ['email'];
+        await settle(harness.element);
+        expect(headerTexts(harness)).toEqual(['Groups', 'Name', 'Age']);
+
+        harness.element.grouping = [];
+        await settle(harness.element);
+        expect(headerTexts(harness)).toEqual(['Name', 'Age', 'Team']);
+      });
+
+      it('should show the group label and count in the Groups column', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+
+        expect(harness.bodyRows).toHaveLength(3);
+        expect(getCellText(harness, 0, 0)).toBe('red (2)');
+        expect(getCellText(harness, 1, 0)).toBe('blue (2)');
+      });
+
+      it('should leave the Groups cell empty in data rows', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+
+        await toggleGroup(harness, 0);
+
+        expect(getCellText(harness, 1, 0)).toBe('');
+        expect(getCellText(harness, 1, 1)).toBe('Alice');
+      });
+
+      it('should keep the Groups column after the selection column', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true, rowSelection: 'multiple' });
+
+        expect(headerTexts(harness).slice(1)).toEqual(['Groups', 'Name', 'Age']);
+      });
+
+      it('should show nested groups in the Groups column indented by depth', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true, grouping: ['email', 'name'] });
+
+        await toggleGroup(harness, 0);
+
+        const [outer, inner] = [0, 1].map(index => harness.getBodyCellByRowAndColumn(index, 0)?.querySelector<HTMLElement>('.group-cell'));
+        expect(getCellText(harness, 1, 0)).toBe('Alice (1)');
+        expect(outer?.style.paddingInlineStart).toBe('');
+        expect(inner?.style.paddingInlineStart).not.toBe('');
+      });
+
+      it('should not offer a column menu on the Groups header', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+
+        expect(harness.headerCells[0].querySelector('forge-data-table-column-menu')).toBeNull();
+      });
+
+      it('should still export the grouped column', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+        const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockImplementation(() => 'blob:test');
+        const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+        const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+
+        try {
+          harness.element.exportToCsv();
+          const blob = createObjectURL.mock.calls[0][0] as Blob;
+          const lines = (await blob.text()).replace(/^\uFEFF/, '').split('\r\n');
+
+          expect(lines[0]).toBe('Team,Name,Age');
+          expect(lines).toHaveLength(GROUP_DATA.length + 1);
+        } finally {
+          createObjectURL.mockRestore();
+          revokeObjectURL.mockRestore();
+          click.mockRestore();
+        }
+      });
+
+      it('should report the option through config', async () => {
+        const harness = await createGroupedFixture({ singleGroupColumn: true });
+
+        expect(harness.element.config.singleGroupColumn).toBe(true);
+      });
     });
 
     it('should sort the rows within each group', async () => {

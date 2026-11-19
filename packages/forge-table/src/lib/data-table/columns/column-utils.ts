@@ -1,7 +1,7 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { DEFAULT_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
+import { DEFAULT_COLUMN_WIDTH, GROUPS_COLUMN_HEADER, GROUPS_COLUMN_ID, GROUPS_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
 import type { ColumnDef, CustomFormatter, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
@@ -214,8 +214,31 @@ export function prependSelectColumn<TData extends Row>(
   return [selectColumn, ...columns];
 }
 
+/**
+ * Prepends the column that shows the groups when `singleGroupColumn` is set. Its cells are empty in data rows, because a group row shows its label there.
+ */
+export function prependGroupsColumn<TData extends Row>(columns: TanstackColumnDef<DataTableFeatures, TData>[]): TanstackColumnDef<DataTableFeatures, TData>[] {
+  if (columns.some(column => column.id === GROUPS_COLUMN_ID)) {
+    return [...columns];
+  }
+
+  const groupsColumn: TanstackColumnDef<DataTableFeatures, TData> = {
+    id: GROUPS_COLUMN_ID,
+    header: GROUPS_COLUMN_HEADER,
+    size: GROUPS_COLUMN_WIDTH,
+    enableColumnFilter: false,
+    enableSorting: false,
+    enableHiding: false,
+    enableGrouping: false,
+    enableCellSelection: false,
+    cell: () => nothing
+  };
+
+  return [groupsColumn, ...columns];
+}
+
 export function canColumnBeReordered<TData extends Row>(column: Column<DataTableFeatures, TData>): boolean {
-  if (column.columnDef.id === SELECT_COLUMN_ID) {
+  if (column.columnDef.id === SELECT_COLUMN_ID || column.columnDef.id === GROUPS_COLUMN_ID) {
     return false;
   }
   return column.columnDef.meta?.reorderable ?? true;
