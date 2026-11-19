@@ -43,6 +43,7 @@ import {
 import {
   CELL_SELECTION_KEY_DIRECTIONS,
   COMPACT_ROW_HEIGHT,
+  DATA_TABLE_DEF_KEYS,
   DEFAULT_COLUMN_WIDTH,
   DEFAULT_ROW_HEIGHT,
   FETCH_SKIP,
@@ -65,7 +66,7 @@ import type { ColumnMenuActionEventDetail } from '../column-menu/types.js';
 import { renderEmptyState } from './templates/empty-state.js';
 import { renderFilterField } from './templates/filter-fields.js';
 import { isCellEditable } from './templates/input-cell.js';
-import type { ColumnDef, EnableCellSelectionFn, Row, RowSelectionType } from './types.js';
+import type { ColumnDef, DataTableDef, EnableCellSelectionFn, MultiSortKey, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -85,7 +86,18 @@ export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/l
 export { badgeCell, type BadgeCellConfig, type BadgeCellFn, type BadgeCellOptions } from './templates/badge-cell.js';
 export { meterCell, type MeterCellOptions } from './templates/meter-cell.js';
 export type { CellSelectionRange, CellSelectionState, SelectCellRangeOptions } from '@tanstack/lit-table';
-export type { ColumnAggregation, ColumnDef, EnableCellSelectionFn, FilterType, FooterCallback, Row, RowSelectionType, TemplateFn } from './types.js';
+export type {
+  ColumnAggregation,
+  ColumnDef,
+  DataTableDef,
+  EnableCellSelectionFn,
+  FilterType,
+  FooterCallback,
+  MultiSortKey,
+  Row,
+  RowSelectionType,
+  TemplateFn
+} from './types.js';
 
 /**
  * @tag forge-data-table
@@ -176,7 +188,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
    * Modifier key required to trigger multi-column sorting.
    */
   @property({ attribute: 'multi-sort-key' })
-  public multiSortKey: 'shift' | 'ctrl' | 'meta' | 'alt' = 'shift';
+  public multiSortKey: MultiSortKey = 'shift';
 
   /**
    * Whether the columns in the table can be filtered.
@@ -314,6 +326,24 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
    */
   @property({ attribute: false })
   public getSelectionClipboardValue: (data: unknown[][][]) => string = buildSelectionCsv;
+
+  /**
+   * The whole table configuration as one object.
+   *
+   * Reading it returns the current value of every configuration property. Setting it assigns each field it contains to the property of the
+   * same name, and leaves the others as they are, so it can be combined with setting individual properties or attributes. A field set to
+   * `undefined` is ignored, except `dataSource` and `maxMultiSortColCount`, where `undefined` clears the value.
+   */
+  public get config(): DataTableDef<TData> {
+    return Object.fromEntries(Object.keys(DATA_TABLE_DEF_KEYS).map(key => [key, this[key as keyof DataTableDef]]));
+  }
+
+  public set config(def: DataTableDef<TData>) {
+    const entries = (Object.keys(DATA_TABLE_DEF_KEYS) as (keyof DataTableDef)[]).filter(
+      key => key in def && (def[key] !== undefined || DATA_TABLE_DEF_KEYS[key])
+    );
+    Object.assign(this, Object.fromEntries(entries.map(key => [key, def[key]])));
+  }
 
   @state() private _data: TData[] = [];
   @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];

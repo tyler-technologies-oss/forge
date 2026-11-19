@@ -4777,6 +4777,114 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Configuration Object', () => {
+    it('should return the current value of every configuration property', async () => {
+      const harness = await createFixture({ sortable: true, rowSelection: 'multiple' });
+      const { config } = harness.element;
+
+      expect(config.sortable).toBe(true);
+      expect(config.rowSelection).toBe('multiple');
+      expect(config.columns).toBe(harness.element.columns);
+      expect(config.dataSource).toBe(harness.element.dataSource);
+      expect(config.multiSortKey).toBe('shift');
+      Object.entries(config).forEach(([key, value]) => {
+        expect(value).toBe((harness.element as unknown as Record<string, unknown>)[key]);
+      });
+      expect(Object.keys(config)).toContain('getSelectionClipboardValue');
+    });
+
+    it('should apply every field when the configuration is set', async () => {
+      const harness = await createFixture();
+      const dataSource = new DataSource<TestData>(() => [TEST_DATA[0]]);
+
+      harness.element.config = {
+        dataSource,
+        columns: [TEST_COLUMNS[0], TEST_COLUMNS[1]],
+        sortable: true,
+        resizable: true,
+        striped: true,
+        rowSelection: 'single',
+        multiSortKey: 'ctrl',
+        maxMultiSortColCount: 2
+      };
+      await settle(harness.element);
+
+      expect(harness.element.sortable).toBe(true);
+      expect(harness.element.resizable).toBe(true);
+      expect(harness.element.striped).toBe(true);
+      expect(harness.element.rowSelection).toBe('single');
+      expect(harness.element.multiSortKey).toBe('ctrl');
+      expect(harness.element.maxMultiSortColCount).toBe(2);
+      expect(harness.hasCustomState('striped')).toBe(true);
+      expect(harness.headerCells.length).toBe(3);
+      expect(harness.bodyRows.length).toBe(1);
+    });
+
+    it('should leave properties that are not in the configuration unchanged', async () => {
+      const harness = await createFixture({ sortable: true, hover: true });
+
+      harness.element.config = { striped: true };
+      await settle(harness.element);
+
+      expect(harness.element.striped).toBe(true);
+      expect(harness.element.sortable).toBe(true);
+      expect(harness.element.hover).toBe(true);
+      expect(harness.bodyRows.length).toBe(3);
+    });
+
+    it('should ignore undefined fields except for dataSource and maxMultiSortColCount', async () => {
+      const harness = await createFixture({ maxMultiSortColCount: 3 });
+      const { dataSource, columns } = harness.element;
+
+      harness.element.config = { columns: undefined, sortable: undefined };
+      await settle(harness.element);
+
+      expect(harness.element.columns).toBe(columns);
+      expect(harness.element.sortable).toBe(false);
+      expect(harness.element.dataSource).toBe(dataSource);
+
+      harness.element.config = { maxMultiSortColCount: undefined, dataSource: undefined };
+      await settle(harness.element);
+
+      expect(harness.element.maxMultiSortColCount).toBeUndefined();
+      expect(harness.element.dataSource).toBeUndefined();
+      expect(harness.bodyRows.length).toBe(0);
+    });
+
+    it('should ignore fields that are not part of the configuration', async () => {
+      const harness = await createFixture();
+
+      harness.element.config = { unknown: 'value', tagName: 'DIV' } as never;
+      await settle(harness.element);
+
+      expect((harness.element as unknown as Record<string, unknown>).unknown).toBeUndefined();
+      expect(harness.element.tagName).toBe('FORGE-DATA-TABLE');
+    });
+
+    it('should reflect individually set properties in the configuration', async () => {
+      const harness = await createFixture();
+
+      harness.element.compact = true;
+      harness.element.grouping = ['name'];
+
+      expect(harness.element.config.compact).toBe(true);
+      expect(harness.element.config.grouping).toEqual(['name']);
+    });
+
+    it('should round trip the configuration to another table', async () => {
+      const source = await createFixture({ sortable: true, bordered: true, rowSelection: 'multiple', stickyHeader: true });
+      const target = await createFixture();
+
+      target.element.config = source.element.config;
+      await settle(target.element);
+
+      expect(target.element.config).toEqual(source.element.config);
+      expect(target.hasCustomState('bordered')).toBe(true);
+      expect(target.hasCustomState('sticky-header')).toBe(true);
+      expect(target.selectColumnCheckboxes.length).toBeGreaterThan(0);
+    });
+  });
+
   describe('Edge Cases', () => {
     it('should handle empty data array', async () => {
       const harness = await createFixture({ data: [] });

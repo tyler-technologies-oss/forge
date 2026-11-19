@@ -25,6 +25,7 @@ component out of a release. To publish: remove `private`, add a changeset, and r
 - `src/lib/data-table/data-table.ts` — the `DataTableElement`. A plain `LitElement` that registers itself
   with `@customElement('forge-data-table')`, so importing the module is what defines the element. It does
   not use `BaseLitElement` or `defineCustomElement`, unlike most of Forge.
+- `DataTableElement.config` (`DataTableDef`, in `types.ts`) reads or sets every configuration property as one object. The getter builds it from the element's properties; the setter assigns only the fields present (merging, so it composes with individual properties and attributes) and skips `undefined` except for `dataSource` and `maxMultiSortColCount`, where it clears the value. `DATA_TABLE_DEF_KEYS` in `constants.ts` lists the fields and is type-checked against `DataTableDef`, so a new public configuration property must be added to both. It is a plain accessor, not a Lit property, so it has no attribute.
 - `src/lib/data-table/table-features.ts` — the TanStack Table v9 `tableFeatures({...})` registration (`dataTableFeatures` /
   `DataTableFeatures`). v9 only exposes an API when its feature is registered, so using a new table, column, or row API
   (pinning, pagination, faceting, ...) means adding the feature here first. Built-in filter and sort functions are registered

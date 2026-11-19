@@ -1,4 +1,5 @@
 import type { CellSelectionDirection } from '@tanstack/lit-table';
+import type { DataTableDef } from './types.js';
 
 export const SELECT_COLUMN_ID = 'SELECT_COLUMN_ID';
 
@@ -19,3 +20,36 @@ export const CELL_SELECTION_KEY_DIRECTIONS: Readonly<Record<string, CellSelectio
 
 export const AUTO_SCROLL_EDGE_SIZE = 32;
 export const AUTO_SCROLL_MAX_SPEED = 24;
+
+export const DATA_TABLE_DEF_KEYS = {
+  dataSource: true,
+  columns: false,
+  columnVisibility: false,
+  columnOrder: false,
+  resizable: false,
+  sortable: false,
+  multiSort: false,
+  maxMultiSortColCount: true,
+  multiSortRemove: false,
+  multiSortKey: false,
+  filterable: false,
+  manualSort: false,
+  manualFilter: false,
+  striped: false,
+  hover: false,
+  compact: false,
+  bordered: false,
+  rowSelection: false,
+  cellSelection: false,
+  enableCellSelection: false,
+  reorderable: false,
+  allowRowClick: false,
+  expandable: false,
+  groupable: false,
+  grouping: false,
+  virtualized: false,
+  stickyHeader: false,
+  stickyFooter: false,
+  getRowName: false,
+  getSelectionClipboardValue: false
+} as const satisfies Record<keyof DataTableDef, boolean>;

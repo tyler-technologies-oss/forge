@@ -1,5 +1,5 @@
-import type { AggregationFnDef, Cell, Column, RowData } from '@tanstack/lit-table';
-import type { Formatter } from '@tylertech/forge-core';
+import type { AggregationFnDef, Cell, Column, ColumnOrderState, ColumnVisibilityState, RowData } from '@tanstack/lit-table';
+import type { DataSource, Formatter } from '@tylertech/forge-core';
 import type { BuiltInColumnAggregation } from './features/aggregation.js';
 import type { DataTableFeatures } from './table-features.js';
 import type { CellEditablePredicate } from './templates/input-cell.js';
@@ -66,4 +66,42 @@ export interface ColumnDef<TData extends Row = Row> {
   pin?: ColumnPin;
   editable?: boolean;
   enableCellSelection?: boolean | EnableCellSelectionFn<TData>;
+}
+
+export type MultiSortKey = 'shift' | 'ctrl' | 'meta' | 'alt';
+
+/**
+ * The complete configuration of a data table. Every field mirrors the property of the same name on the element.
+ */
+export interface DataTableDef<TData extends Row = Row> {
+  dataSource?: DataSource<TData>;
+  columns?: ColumnDef<any>[];
+  columnVisibility?: ColumnVisibilityState;
+  columnOrder?: ColumnOrderState;
+  resizable?: boolean;
+  sortable?: boolean;
+  multiSort?: boolean;
+  maxMultiSortColCount?: number;
+  multiSortRemove?: boolean;
+  multiSortKey?: MultiSortKey;
+  filterable?: boolean;
+  manualSort?: boolean;
+  manualFilter?: boolean;
+  striped?: boolean;
+  hover?: boolean;
+  compact?: boolean;
+  bordered?: boolean;
+  rowSelection?: RowSelectionType;
+  cellSelection?: boolean;
+  enableCellSelection?: boolean | EnableCellSelectionFn<any, any>;
+  reorderable?: boolean;
+  allowRowClick?: boolean;
+  expandable?: boolean;
+  groupable?: boolean;
+  grouping?: string[];
+  virtualized?: boolean;
+  stickyHeader?: boolean;
+  stickyFooter?: boolean;
+  getRowName?: (row: TData, index: number) => string;
+  getSelectionClipboardValue?: (data: unknown[][][]) => string;
 }
