@@ -738,18 +738,46 @@ export abstract class BaseSelectCore<T extends IBaseSelectAdapter> extends ListD
       this._filterTimeout = undefined;
     }, 300);
     this._options = this._adapter.getOptions();
-    // TODO: Enhance this to cycle through closest matches (see the native select)
-    const matchedOption = this._flatOptions.find(
-      ({ disabled, label }) => !disabled && label.trim().toLowerCase().startsWith(this._filterString.trim().toLowerCase())
-    );
-    if (matchedOption) {
-      const optionIndex = this._flatOptions.indexOf(matchedOption);
-      if (this._open) {
-        this._adapter.highlightActiveOption(optionIndex);
-      } else if (!this._multiple) {
-        this._onSelect(matchedOption, optionIndex, false);
+
+    // Like the native select, a repeated character cycles through the options starting with it, beginning after
+    // the current option. A multi-character prefix keeps the current option when it still matches.
+    const searchString = this._filterString.trim().toLowerCase();
+    const isRepeatedCharacter = [...searchString].every(char => char === searchString[0]);
+    const prefix = isRepeatedCharacter ? searchString.charAt(0) : searchString;
+    const searchStartOffset = isRepeatedCharacter ? 1 : 0;
+    const optionIndex = this._findTypeaheadMatchIndex(prefix, this._getTypeaheadCurrentIndex() + searchStartOffset);
+    if (optionIndex === -1) {
+      return;
+    }
+
+    if (this._open) {
+      this._adapter.highlightActiveOption(this._adjustIndexToDropdown(optionIndex));
+    } else if (!this._multiple) {
+      this._onSelect(this._flatOptions[optionIndex], optionIndex, false);
+    }
+  }
+
+  private _getTypeaheadCurrentIndex(): number {
+    if (!this._open) {
+      return this._multiple ? -1 : this._flatOptions.findIndex(o => this._selectedValues.includes(o.value));
+    }
+    const dropdownIndex = this._adapter.getActiveOptionIndex();
+    if (dropdownIndex === -1 || (this._showSelectAll && this._multiple && dropdownIndex === 0)) {
+      return -1;
+    }
+    return this._adjustIndexFromDropdown(dropdownIndex);
+  }
+
+  private _findTypeaheadMatchIndex(prefix: string, startIndex: number): number {
+    const options = this._flatOptions;
+    for (let offset = 0; offset < options.length; offset++) {
+      const index = (Math.max(startIndex, 0) + offset) % options.length;
+      const { disabled, divider, label } = options[index];
+      if (!disabled && !divider && label.trim().toLowerCase().startsWith(prefix)) {
+        return index;
       }
     }
+    return -1;
   }
 
   private _onOptionsChanged(options: ISelectOption[] | ISelectOptionGroup[]): void {

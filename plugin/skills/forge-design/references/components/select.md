@@ -79,6 +79,7 @@ Example (A forge-select-dropdown attached to a button trigger instead of a field
 | Tab / Enter                            | Selects the focused option and closes the select. If "Select all" is focused, toggles all options. |
 | Arrow down / Arrow up                  | Highlights the next or previous option.                                                            |
 | Home / End                             | Highlights the first or last option that isn't disabled.                                           |
+| Letters / digits                       | Moves to the next option starting with the typed text. Repeating a character cycles its matches.   |
 
 In multiple-select mode, Enter toggles the focused option's selected state instead of closing the select.
 
