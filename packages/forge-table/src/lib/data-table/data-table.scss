@@ -375,6 +375,10 @@ table.filterable {
     vertical-align: top;
   }
 
+  thead th .cell-container {
+    padding-block-start: #{spacing.variable(xsmall)};
+  }
+
   .filter-container {
     padding-block: #{spacing.variable(xsmall)};
   }

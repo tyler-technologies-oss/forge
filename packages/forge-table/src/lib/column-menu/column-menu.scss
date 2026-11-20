@@ -3,6 +3,10 @@
   margin-inline-start: 8px;
 }
 
+.button {
+  --forge-icon-button-icon-color: var(--forge-theme-text-low);
+}
+
 .menu {
   --forge-popover-background: var(--forge-theme-surface-inverse);
   color: var(--forge-theme-text-high-inverse);

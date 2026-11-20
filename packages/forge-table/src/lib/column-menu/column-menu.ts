@@ -98,7 +98,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
 
   public render(): TemplateResult {
     return html`
-      <forge-icon-button id="button" aria-label=${this.buttonLabel} dense shape="squared">
+      <forge-icon-button class="button" id="button" aria-label=${this.buttonLabel} dense shape="squared">
         <forge-icon name="more_vert"></forge-icon>
       </forge-icon-button>
       <forge-dropdown-menu class="menu" trigger="button" dense @beforetoggle="${this.#onBeforeToggle}">
