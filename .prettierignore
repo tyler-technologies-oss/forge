@@ -14,6 +14,8 @@ patches/
 packages/forge/src/stories/**/*.mdx
 packages/forge/src/dev/**/*.html
 packages/forge/src/dev/**/*.ejs
+packages/forge-table/src/dev/**/*.html
+packages/forge-table/src/dev/**/*.ejs
 packages/forge/templates/
 CONTRIBUTING.md
 CHANGELOG.md

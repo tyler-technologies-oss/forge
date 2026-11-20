@@ -1,0 +1,16 @@
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+@use '@tylertech/forge-tokens/sass/typography';
+
+:host {
+  @include typography.style(body1);
+
+  display: block;
+  color: #{theme.variable(text-medium)};
+  margin-block: #{spacing.variable(xsmall)};
+  margin-inline: #{spacing.variable(medium)};
+}
+
+:host([hidden]) {
+  display: none;
+}

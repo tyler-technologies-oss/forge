@@ -1,0 +1,16 @@
+@use 'sass:map';
+@use '../utils';
+@use '../tokens/typography' as raw;
+
+// The base typography values that all typography styles are relative to.
+$base: (
+  font-family: utils.create-var(typography, font-family, raw.$font-family),
+  font-size: utils.create-var(typography, font-size, raw.$font-size)
+);
+
+@function get($key) {
+  @if not map.has-key($base, $key) {
+    @error 'No typography style exists with the key `#{$key}`.';
+  }
+  @return map.get($base, $key);
+}

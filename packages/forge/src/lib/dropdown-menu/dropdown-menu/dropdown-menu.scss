@@ -1,0 +1,21 @@
+@use './core';
+
+:host {
+  @include core.host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.popover {
+  @include core.tokens;
+}
+
+.popover {
+  @include core.base;
+}
+
+.menu {
+  @include core.menu;
+}

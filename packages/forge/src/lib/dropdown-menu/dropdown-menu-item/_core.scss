@@ -1,0 +1,25 @@
+@use '@tylertech/forge-tokens/sass/theme';
+@use '../../option/option/token-utils' as option;
+
+@forward '../base/core';
+
+@mixin open {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: var(--forge-state-layer-hover-opacity, 0.08);
+    background-color: var(--forge-state-layer-hover-color, #{theme.variable(on-surface)});
+    pointer-events: none;
+  }
+}
+
+@mixin submenu-icon {
+  flex-shrink: 0;
+  color: #{option.token(text-color)};
+}
+
+@mixin submenu-icon-rtl {
+  transform: scaleX(-1);
+}
