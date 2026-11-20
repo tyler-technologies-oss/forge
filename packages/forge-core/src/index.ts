@@ -10,6 +10,7 @@ export * from './custom-elements/index.js';
 export * from './data-source/index.js';
 export * from './events/index.js';
 export * from './formatter/index.js';
+export * from './masks/index.js';
 export * from './media-observer/index.js';
 export * from './message-list/index.js';
 export * from './resize/index.js';
