@@ -1,4 +1,18 @@
-import { constructAggregationFn } from '@tanstack/lit-table';
+/* eslint-disable camelcase -- TanStack exports its built-in filter functions with underscores */
+import {
+  constructAggregationFn,
+  filterFn_arrHas,
+  filterFn_arrIncludes,
+  filterFn_arrIncludesAll,
+  filterFn_arrIncludesSome,
+  filterFn_equals,
+  filterFn_equalsString,
+  filterFn_inDateRange,
+  filterFn_inNumberRange,
+  filterFn_includesString,
+  filterFn_startsWith,
+  filterFn_weakEquals
+} from '@tanstack/lit-table';
 import type { CellSelectionRange, CellSelectionState, ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
 import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
@@ -7,8 +21,13 @@ import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import './data-table.js';
-import type { ColumnDef, DataTableElement } from './data-table.js';
-import { actionCell, badgeCell, createExpanderColumn, meterCell, ratingCell } from './data-table.js';
+import type { ColumnDef, ColumnFilter, DataTableElement } from './data-table.js';
+import { actionCell, badgeCell, createExpanderColumn, meterCell, ratingCell, registerFilterFns } from './data-table.js';
+import {
+  filterFn_arrIncludesSome as arrIncludesSome,
+  filterFn_inDateRange as inDateRange,
+  filterFn_inNumberRange as inNumberRange
+} from './features/filter-fns.js';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -1898,6 +1917,434 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Filter functions', () => {
+    const exactly: ColumnFilter<TestData> = { filterFn: filterFn_equals, label: 'Is exactly' };
+    const multiFilterColumns = (filter: ColumnDef<TestData>['filter']): ColumnDef<TestData>[] => [
+      { id: 'id', header: 'ID', property: 'id' },
+      { id: 'name', header: 'Name', property: 'name', filter }
+    ];
+
+    const getMenuButton = (harness: DataTableHarness): HTMLElement | null => harness.shadowRoot.querySelector('#filter-fn-button-name');
+    const getMenuItems = (harness: DataTableHarness): HTMLElement[] => Array.from(harness.shadowRoot.querySelectorAll('forge-dropdown-menu-item-radio'));
+
+    it('should filter with the filter function of the column', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns(filterFn_equals), filterable: true });
+
+      await harness.typeIntoFilter(1, 'Ali');
+      expect(harness.bodyRows.length).toBe(0);
+
+      await harness.typeIntoFilter(1, 'Alice');
+      expect(harness.bodyRows.length).toBe(1);
+    });
+
+    it('should filter with a filter function registered by name', async () => {
+      registerFilterFns({ startsWith: filterFn_startsWith });
+      const harness = await createFixture({ columns: multiFilterColumns('startsWith'), filterable: true });
+
+      await harness.typeIntoFilter(1, 'li');
+      expect(harness.bodyRows.length).toBe(0);
+
+      await harness.typeIntoFilter(1, 'Al');
+      expect(harness.bodyRows.length).toBe(1);
+    });
+
+    it('should not show the filter function menu when the column has one filter function', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_equals]), filterable: true });
+
+      expect(getMenuButton(harness)).toBeNull();
+    });
+
+    it('should show a menu with an item for each filter function when the column has several', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+
+      expect(getMenuButton(harness)).not.toBeNull();
+      expect(getMenuItems(harness).map(item => item.textContent?.trim())).toEqual(['Contains', 'Is exactly']);
+    });
+
+    it('should show a shared label for built-in filter functions registered under different names', async () => {
+      registerFilterFns({
+        arrIncludes: filterFn_arrIncludes,
+        equalsString: filterFn_equalsString,
+        weakEquals: filterFn_weakEquals,
+        arrIncludesAll: filterFn_arrIncludesAll,
+        arrIncludesSome: filterFn_arrIncludesSome,
+        arrHas: filterFn_arrHas,
+        inNumberRange: filterFn_inNumberRange,
+        inDateRange: filterFn_inDateRange
+      });
+      const names = [
+        'includesString',
+        'arrIncludes',
+        'equalsString',
+        'weakEquals',
+        'arrIncludesAll',
+        'arrIncludesSome',
+        'arrHas',
+        'inNumberRange',
+        'inDateRange'
+      ];
+      const harness = await createFixture({ columns: multiFilterColumns(names), filterable: true });
+
+      expect(getMenuItems(harness).map(item => item.textContent?.trim())).toEqual([
+        'Contains',
+        'Contains',
+        'Equals',
+        'Equals',
+        'Contains all',
+        'Contains some',
+        'Has',
+        'In range',
+        'In range'
+      ]);
+    });
+
+    it('should check the first filter function by default', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+
+      expect(getMenuItems(harness).map(item => (item as HTMLElement & { checked: boolean }).checked)).toEqual([true, false]);
+    });
+
+    it('should filter with the first filter function by default', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+
+      await harness.typeIntoFilter(1, 'Ali');
+
+      expect(harness.bodyRows.length).toBe(1);
+    });
+
+    it('should filter again with the chosen filter function when an item is selected', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+      await harness.typeIntoFilter(1, 'Ali');
+
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(0);
+      expect(harness.filterInputs[1].value).toBe('Ali');
+    });
+
+    it('should filter with the chosen filter function for the next value', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+      await harness.typeIntoFilter(1, 'Alice');
+
+      expect(harness.bodyRows.length).toBe(1);
+    });
+
+    it('should check the chosen filter function', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+
+      expect(getMenuItems(harness).map(item => (item as HTMLElement & { checked: boolean }).checked)).toEqual([false, true]);
+    });
+
+    it('should dispatch an event when a filter function is chosen', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+      const events: CustomEvent[] = [];
+      harness.element.addEventListener('forge-data-table-filter-fn-change', evt => events.push(evt as CustomEvent));
+
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+
+      expect(events).toHaveLength(1);
+      expect(events[0].detail).toEqual({ columnId: 'name', filterFn: filterFn_equals, index: 1 });
+    });
+
+    it('should emit the filter event with the current value when a filter function is chosen with a manual filter', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true, manualFilter: true });
+      await harness.typeIntoFilter(1, 'Ali');
+      const events: ColumnFiltersState[] = [];
+      harness.element.addEventListener('forge-data-table-filter', (evt: Event) => events.push((evt as CustomEvent<ColumnFiltersState>).detail));
+
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+
+      expect(events).toHaveLength(1);
+      expect(events[0]).toEqual([{ id: 'name', value: 'Ali' }]);
+    });
+
+    it('should not filter again or dispatch an event when the active filter function is selected', async () => {
+      const harness = await createFixture({ columns: multiFilterColumns([filterFn_includesString, exactly]), filterable: true });
+      const listener = vi.fn();
+      harness.element.addEventListener('forge-data-table-filter-fn-change', listener);
+
+      getMenuItems(harness)[0].click();
+      await settle(harness.element);
+
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should use the first filter function again when the columns are set', async () => {
+      const columns = multiFilterColumns([filterFn_includesString, exactly]);
+      const harness = await createFixture({ columns, filterable: true });
+      getMenuItems(harness)[1].click();
+      await settle(harness.element);
+
+      harness.element.columns = [...columns];
+      await settle(harness.element);
+
+      expect(getMenuItems(harness).map(item => (item as HTMLElement & { checked: boolean }).checked)).toEqual([true, false]);
+    });
+  });
+
+  describe('Filter fields', () => {
+    interface FieldData {
+      id: number;
+      tags: string[];
+      level: string;
+      when: Date;
+    }
+
+    const FIELD_DATA: FieldData[] = [
+      { id: 1, tags: ['a', 'b'], level: 'low', when: new Date(2024, 0, 10) },
+      { id: 5, tags: ['b'], level: 'high', when: new Date(2024, 2, 10) },
+      { id: 9, tags: ['c'], level: 'low', when: new Date(2024, 4, 10) }
+    ];
+
+    const fieldFixture = (column: ColumnDef<FieldData>): Promise<DataTableHarness> =>
+      createFixture({
+        columns: [column] as unknown as ColumnDef<TestData>[],
+        data: FIELD_DATA as unknown as TestData[],
+        filterable: true,
+        manualFilter: false
+      });
+
+    const getSelect = (harness: DataTableHarness): HTMLElement & { value: unknown } =>
+      harness.shadowRoot.querySelector('.filter-container forge-select') as HTMLElement & { value: unknown };
+
+    const choose = async (harness: DataTableHarness, value: unknown): Promise<void> => {
+      getSelect(harness).value = value;
+      getSelect(harness).dispatchEvent(new Event('change', { bubbles: true }));
+      await settle(harness.element);
+    };
+
+    const optionLabels = (harness: DataTableHarness): (string | undefined)[] =>
+      Array.from(harness.shadowRoot.querySelectorAll('.filter-container forge-option')).map(option => option.textContent?.trim());
+
+    it('should render a text field when the filter function has no field configuration', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: filterFn_equals });
+
+      expect(harness.filterInputs).toHaveLength(1);
+      expect(harness.shadowRoot.querySelector('.range-filter-container')).toBeNull();
+    });
+
+    it('should render a range field for a built-in range filter function', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: inNumberRange });
+
+      expect(harness.shadowRoot.querySelectorAll('.range-filter-container input')).toHaveLength(2);
+    });
+
+    it('should render a range field when the field configuration is a range', async () => {
+      const filter: ColumnFilter<FieldData> = { filterFn: filterFn_weakEquals, field: { type: 'range' } };
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter });
+
+      expect(harness.shadowRoot.querySelectorAll('.range-filter-container input')).toHaveLength(2);
+    });
+
+    it('should render number range inputs with a number mask when the data type is number', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: inNumberRange });
+
+      const [min] = harness.filterInputs;
+      min.focus();
+      await userEvent.keyboard('a1b');
+
+      expect(min.inputMode).toBe('decimal');
+      expect(min.value).toBe('1');
+    });
+
+    it('should filter by the range bounds', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: inNumberRange });
+
+      await harness.typeIntoFilter(0, '2');
+      expect(harness.bodyRows).toHaveLength(2);
+
+      await harness.typeIntoFilter(1, '6');
+      expect(harness.bodyRows).toHaveLength(1);
+    });
+
+    it('should label each range input with its bound and column header', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: inNumberRange });
+
+      const [min, max] = harness.filterInputs;
+      const getLabel = (field: HTMLInputElement): string | undefined =>
+        field
+          .getAttribute('aria-labelledby')
+          ?.split(' ')
+          .map(id => {
+            const target = harness.shadowRoot.getElementById(id);
+            return target?.id === field.id ? target.getAttribute('aria-label') : target?.textContent?.trim();
+          })
+          .join(' ');
+      expect(getLabel(min)).toBe('Filter minimum Id');
+      expect(getLabel(max)).toBe('Filter maximum Id');
+    });
+
+    it('should render date pickers for a range field when the data type is date', async () => {
+      const harness = await fieldFixture({ id: 'when', header: 'When', property: 'when', filter: inDateRange });
+
+      expect(harness.shadowRoot.querySelectorAll('.range-filter-container forge-date-picker')).toHaveLength(2);
+    });
+
+    it('should render a select field with the configured options', async () => {
+      const filter: ColumnFilter<FieldData> = {
+        filterFn: filterFn_equals,
+        field: {
+          type: 'select',
+          options: [
+            { value: 'low', label: 'Low' },
+            { value: 'high', label: 'High' }
+          ]
+        }
+      };
+      const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter });
+
+      expect(optionLabels(harness)).toEqual(['All', 'Low', 'High']);
+    });
+
+    it('should filter by the chosen option of a select field', async () => {
+      const filter: ColumnFilter<FieldData> = { filterFn: filterFn_equals, field: { type: 'select', options: [{ value: 'high', label: 'High' }] } };
+      const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter });
+
+      await choose(harness, 'high');
+      expect(harness.bodyRows).toHaveLength(1);
+
+      await choose(harness, '');
+      expect(harness.bodyRows).toHaveLength(3);
+    });
+
+    it('should infer the options of a select field from the column values', async () => {
+      const filter: ColumnFilter<FieldData> = { filterFn: filterFn_equals, field: { type: 'select' } };
+      const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter });
+
+      expect(optionLabels(harness)).toEqual(['All', 'low', 'high']);
+    });
+
+    it('should filter by every chosen option of a multiple select field', async () => {
+      const harness = await fieldFixture({ id: 'tags', header: 'Tags', property: 'tags', filter: arrIncludesSome });
+
+      expect(optionLabels(harness)).toEqual(['a', 'b', 'c']);
+
+      await choose(harness, ['a']);
+      expect(harness.bodyRows).toHaveLength(1);
+
+      await choose(harness, ['a', 'c']);
+      expect(harness.bodyRows).toHaveLength(2);
+
+      await choose(harness, []);
+      expect(harness.bodyRows).toHaveLength(3);
+    });
+
+    it('should label a filter with its label in the menu', async () => {
+      const harness = await fieldFixture({
+        id: 'id',
+        header: 'Id',
+        property: 'id',
+        filter: [
+          { filterFn: filterFn_weakEquals, label: 'Same' },
+          { filterFn: inNumberRange, label: 'Between' }
+        ]
+      });
+
+      const items = Array.from(harness.shadowRoot.querySelectorAll('forge-dropdown-menu-item-radio'));
+      expect(items.map(item => item.textContent?.trim())).toEqual(['Same', 'Between']);
+    });
+
+    it('should accept a registered filter function name in a filter', async () => {
+      registerFilterFns({ equals: filterFn_equals });
+      const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter: { filterFn: 'equals', field: { type: 'select' } } });
+
+      expect(optionLabels(harness)).toEqual(['All', 'low', 'high']);
+    });
+
+    it('should use the field of the filter instead of the default field of its filter function', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: inNumberRange, field: { type: 'text' } } });
+
+      expect(harness.shadowRoot.querySelector('.range-filter-container')).toBeNull();
+      expect(harness.filterInputs).toHaveLength(1);
+    });
+
+    it('should use the default field of a built-in filter function in a filter without a field', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: inNumberRange } });
+
+      expect(harness.shadowRoot.querySelectorAll('.range-filter-container input')).toHaveLength(2);
+    });
+
+    it('should keep the default field type of a built-in filter function when the field omits the type', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: inNumberRange, field: { size: '10rem' } } });
+
+      expect(harness.shadowRoot.querySelectorAll('.range-filter-container input')).toHaveLength(2);
+      expect(harness.shadowRoot.querySelector<HTMLElement>('.range-filter-container forge-text-field')?.getAttribute('style')).toBe('min-inline-size: 10rem');
+    });
+
+    it('should render a text field when the field omits the type and the filter function has no default field', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: filterFn_weakEquals, field: { size: '10rem' } } });
+
+      expect(harness.filterInputs).toHaveLength(1);
+      expect(harness.shadowRoot.querySelector<HTMLElement>('.filter-container forge-text-field')?.getAttribute('style')).toBe('min-inline-size: 10rem');
+    });
+
+    it('should give filter fields a minimum inline size of 64px when the size is not set', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: filterFn_weakEquals } });
+
+      const field = harness.shadowRoot.querySelector<HTMLElement>('.filter-container forge-text-field');
+      expect(getComputedStyle(field as HTMLElement).minInlineSize).toBe('64px');
+    });
+
+    it('should use the size of the field as the minimum inline size when it is set', async () => {
+      const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: { filterFn: filterFn_weakEquals, field: { size: '120px' } } });
+
+      const field = harness.shadowRoot.querySelector<HTMLElement>('.filter-container forge-text-field');
+      expect(getComputedStyle(field as HTMLElement).minInlineSize).toBe('120px');
+    });
+
+    describe('with several filter functions', () => {
+      const rangeFn: ColumnFilter<FieldData> = { filterFn: filterFn_weakEquals, field: { type: 'range' } };
+      const getMenuItems = (harness: DataTableHarness): HTMLElement[] => Array.from(harness.shadowRoot.querySelectorAll('forge-dropdown-menu-item-radio'));
+
+      it('should render the field of the chosen filter function', async () => {
+        const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: [filterFn_weakEquals, rangeFn] });
+        expect(harness.shadowRoot.querySelector('.range-filter-container')).toBeNull();
+
+        getMenuItems(harness)[1].click();
+        await settle(harness.element);
+
+        expect(harness.shadowRoot.querySelector('.range-filter-container')).not.toBeNull();
+      });
+
+      it('should clear the filter value when the chosen filter function has a field with a different value', async () => {
+        const harness = await fieldFixture({ id: 'id', header: 'Id', property: 'id', filter: [filterFn_weakEquals, rangeFn] });
+        await harness.typeIntoFilter(0, '5');
+        expect(harness.bodyRows).toHaveLength(1);
+
+        getMenuItems(harness)[1].click();
+        await settle(harness.element);
+
+        expect(harness.bodyRows).toHaveLength(3);
+        expect(harness.filterInputs.every(input => input.value === '')).toBe(true);
+      });
+
+      it('should keep the filter value when the chosen filter function has a field with the same value', async () => {
+        const harness = await fieldFixture({
+          id: 'id',
+          header: 'Id',
+          property: 'id',
+          filter: [filterFn_weakEquals, { filterFn: filterFn_weakEquals, label: 'Same' }]
+        });
+        await harness.typeIntoFilter(0, '5');
+
+        getMenuItems(harness)[1].click();
+        await settle(harness.element);
+
+        expect(harness.filterInputs[0].value).toBe('5');
+        expect(harness.bodyRows).toHaveLength(1);
+      });
+    });
+  });
+
   describe('Filtering', () => {
     it('should show filter inputs when filterable is true', async () => {
       const harness = await createFixture({ filterable: true });
@@ -1976,8 +2423,8 @@ describe('DataTable', () => {
       expect(input.type).toBe('text');
     });
 
-    it('should render number filter when filterType is number', async () => {
-      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'number' }];
+    it('should render number filter when dataType is number', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', dataType: 'number' }];
       const harness = await createFixture({ columns, filterable: true });
 
       const input = harness.filterInputs[0];
@@ -1986,7 +2433,7 @@ describe('DataTable', () => {
     });
 
     it('should only allow numeric characters in number filter', async () => {
-      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'number' }];
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', dataType: 'number' }];
       const harness = await createFixture({ columns, filterable: true });
 
       const input = harness.filterInputs[0];
@@ -1994,16 +2441,6 @@ describe('DataTable', () => {
       await userEvent.keyboard('a1b2.5');
 
       expect(input.value).toBe('12.5');
-    });
-
-    it('should render range filter when filterType is range', async () => {
-      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'range' }];
-      const harness = await createFixture({ columns, filterable: true });
-
-      const rangeContainer = harness.shadowRoot.querySelector('.range-filter-container');
-      expect(rangeContainer).not.toBeNull();
-      const inputs = rangeContainer?.querySelectorAll('input');
-      expect(inputs?.length).toBe(2);
     });
 
     describe('filter labels', () => {
@@ -2023,40 +2460,88 @@ describe('DataTable', () => {
         expect(getLabel(harness, harness.filterInputs[1])).toBe('Filter Name');
       });
 
-      it('should label a select filter with its column header', async () => {
-        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'select' }];
-        const harness = await createFixture({ columns, filterable: true });
-
-        expect(getLabel(harness, harness.shadowRoot.querySelector('forge-select') as Element)).toBe('Filter Name');
-      });
-
       it('should label a date filter with its column header', async () => {
-        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'date' }];
+        const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', dataType: 'date' }];
         const harness = await createFixture({ columns, filterable: true });
 
         expect(getLabel(harness, harness.filterInputs[0])).toBe('Filter Name');
       });
+    });
 
-      it('should label each range filter input with its bound and column header', async () => {
-        const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'range' }];
-        const harness = await createFixture({ columns, filterable: true });
+    it('should render time filter when dataType is time', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', dataType: 'time' }];
+      const harness = await createFixture({ columns, filterable: true });
 
-        const [min, max] = harness.filterInputs;
-        expect(getLabel(harness, min)).toBe('Filter minimum Age');
-        expect(getLabel(harness, max)).toBe('Filter maximum Age');
+      expect(harness.filterInputs[0].type).toBe('time');
+    });
+
+    it('should render text filter when dataType is string', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', dataType: 'string' }];
+      const harness = await createFixture({ columns, filterable: true });
+
+      const input = harness.filterInputs[0];
+      expect(input.type).toBe('text');
+      expect(input.inputMode).not.toBe('decimal');
+    });
+
+    describe('inferred data type', () => {
+      const infer = async (data: Record<string, unknown>[]): Promise<{ input: HTMLInputElement; harness: DataTableHarness }> => {
+        const columns = [{ id: 'value', header: 'Value', property: 'value' }] as ColumnDef<TestData>[];
+        const harness = await createFixture({ columns, data: data as unknown as TestData[], filterable: true });
+        return { input: harness.filterInputs[0], harness };
+      };
+
+      it('should render a number filter when the column values are numbers', async () => {
+        const { input } = await infer([{ value: 1 }, { value: 2 }]);
+
+        expect(input.inputMode).toBe('decimal');
+      });
+
+      it('should render a date filter when the column values are dates', async () => {
+        const { harness } = await infer([{ value: new Date(2024, 0, 1) }]);
+
+        expect(harness.shadowRoot.querySelector('forge-date-picker')).not.toBeNull();
+      });
+
+      it('should infer from the first non-empty value', async () => {
+        const { input } = await infer([{ value: null }, { value: undefined }, { value: '' }, { value: 5 }]);
+
+        expect(input.inputMode).toBe('decimal');
+      });
+
+      it('should render a plain text filter when the column values are strings', async () => {
+        const { input } = await infer([{ value: 'abc' }]);
+
+        expect(input.type).toBe('text');
+        expect(input.inputMode).not.toBe('decimal');
+      });
+
+      it('should render a plain text filter when there is no data to infer from', async () => {
+        const { input } = await infer([]);
+
+        expect(input.type).toBe('text');
+        expect(input.inputMode).not.toBe('decimal');
+      });
+
+      it('should prefer the data type of the column definition over the inferred one', async () => {
+        const columns = [{ id: 'value', header: 'Value', property: 'value', dataType: 'string' }] as ColumnDef<TestData>[];
+        const harness = await createFixture({ columns, data: [{ value: 1 }] as unknown as TestData[], filterable: true });
+
+        expect(harness.filterInputs[0].inputMode).not.toBe('decimal');
+      });
+
+      it('should keep the inferred type while the filter hides every row', async () => {
+        const { harness, input } = await infer([{ value: 1 }, { value: 2 }]);
+
+        await harness.typeIntoFilter(0, '99');
+
+        expect(harness.filterInputs[0]).toBe(input);
+        expect(harness.filterInputs[0].inputMode).toBe('decimal');
       });
     });
 
-    it('should render select filter when filterType is select', async () => {
-      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'select' }];
-      const harness = await createFixture({ columns, filterable: true });
-
-      const select = harness.shadowRoot.querySelector('forge-select');
-      expect(select).not.toBeNull();
-    });
-
-    it('should render date filter when filterType is date', async () => {
-      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', filterType: 'date' }];
+    it('should render date filter when dataType is date', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name', dataType: 'date' }];
       const harness = await createFixture({ columns, filterable: true });
 
       const datePicker = harness.shadowRoot.querySelector('forge-date-picker');

@@ -8,9 +8,11 @@ import { BUTTON_CONSTANTS } from './button-constants.js';
 import { ButtonComponent } from './button.js';
 import type { IStateLayerComponent } from '../state-layer/index.js';
 import type { IFocusIndicatorComponent } from '../focus-indicator/index.js';
+import type { OpenIconComponent } from '../open-icon/open-icon.js';
 import { ButtonComponentDelegate } from './button-component-delegate.js';
 
 import './button.js';
+import '../open-icon/open-icon.js';
 
 describe('Button', () => {
   it('should initialize', async () => {
@@ -133,6 +135,55 @@ describe('Button', () => {
 
     expect(el.fullWidth).toBe(false);
     expect(el.hasAttribute(BUTTON_CONSTANTS.attributes.FULL_WIDTH)).toBe(false);
+  });
+
+  describe('open icon sync', () => {
+    it('should open slotted open icon when aria-expanded is true', async () => {
+      const screen = render(html`<forge-button aria-expanded="true">Button<forge-open-icon slot="end"></forge-open-icon></forge-button>`);
+      const el = screen.container.querySelector('forge-button') as ButtonComponent;
+      const icon = el.querySelector('forge-open-icon') as OpenIconComponent;
+      await el.updateComplete;
+
+      expect(icon.open).toBe(true);
+    });
+
+    it('should sync open icon when aria-expanded changes', async () => {
+      const screen = render(html`<forge-button aria-expanded="false">Button<forge-open-icon slot="end"></forge-open-icon></forge-button>`);
+      const el = screen.container.querySelector('forge-button') as ButtonComponent;
+      const icon = el.querySelector('forge-open-icon') as OpenIconComponent;
+      await el.updateComplete;
+
+      expect(icon.open).toBe(false);
+
+      el.setAttribute('aria-expanded', 'true');
+      await frame();
+      expect(icon.open).toBe(true);
+
+      el.setAttribute('aria-expanded', 'false');
+      await frame();
+      expect(icon.open).toBe(false);
+    });
+
+    it('should close open icon when aria-expanded is removed', async () => {
+      const screen = render(html`<forge-button aria-expanded="true">Button<forge-open-icon slot="end"></forge-open-icon></forge-button>`);
+      const el = screen.container.querySelector('forge-button') as ButtonComponent;
+      const icon = el.querySelector('forge-open-icon') as OpenIconComponent;
+      await el.updateComplete;
+
+      el.removeAttribute('aria-expanded');
+      await frame();
+
+      expect(icon.open).toBe(false);
+    });
+
+    it('should not change open icon when button has no aria-expanded', async () => {
+      const screen = render(html`<forge-button>Button<forge-open-icon slot="end" open></forge-open-icon></forge-button>`);
+      const el = screen.container.querySelector('forge-button') as ButtonComponent;
+      const icon = el.querySelector('forge-open-icon') as OpenIconComponent;
+      await el.updateComplete;
+
+      expect(icon.open).toBe(true);
+    });
   });
 
   describe('ButtonComponentDelegate', () => {

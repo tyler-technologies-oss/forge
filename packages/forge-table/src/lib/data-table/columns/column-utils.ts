@@ -7,6 +7,7 @@ import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
 import type { DataTableFeatures } from '../table-features.js';
 import { createAggregationFn, formatAggregationValue } from '../features/aggregation.js';
+import { resolveColumnFilters } from '../features/filter-fn.js';
 import { getCellLabelledBy } from '../features/row-meta.js';
 import { createCellEditablePredicate, inputCell } from '../templates/input-cell.js';
 
@@ -75,6 +76,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
     const indexPath = [...parentIndices, index];
     const columnId = resolveColumnId(column, indexPath);
     const isParent = hasChildColumns(column);
+    const filters = resolveColumnFilters(column.filter);
 
     const baseColumn = {
       id: columnId,
@@ -86,7 +88,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
       size: column.width ?? DEFAULT_COLUMN_WIDTH,
       meta: {
         cellSlot: column.useTemplateSlot,
-        filterVariant: column.filterType,
+        dataType: column.dataType,
+        filters: filters.length ? filters : undefined,
         stopRowClickPropagation: column.stopRowClickPropagation,
         reorderable: column.reorderable,
         renamable: column.renamable,
@@ -120,6 +123,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
               ? (row: TData, i: number = 0) => (column.format as CustomFormatter<TData>)(row, i)
               : undefined,
         enableResizing: column.resizable ?? true,
+        ...(filters.length > 0 && { filterFn: filters[0].filterFn }),
         ...(column.aggregate && { aggregationFn: createAggregationFn(column.aggregate, getRawValueReader(column)) }),
         ...(column.editable
           ? { cell: inputCell(typeof column.template === 'function' ? column.template : undefined) }

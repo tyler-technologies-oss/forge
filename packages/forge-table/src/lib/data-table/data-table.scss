@@ -383,6 +383,24 @@ table.filterable {
     padding-block: #{spacing.variable(xsmall)};
   }
 
+  .filter-field {
+    min-inline-size: 64px;
+  }
+
+  .filter-container.has-filter-fn-menu {
+    display: flex;
+    align-items: center;
+    gap: #{spacing.variable(xxxsmall)};
+
+    > :first-child {
+      flex: 1 1 auto;
+    }
+  }
+
+  .filter-fn-button {
+    --forge-open-icon-size: 18px;
+  }
+
   .range-filter-container {
     display: flex;
     gap: #{spacing.variable(xsmall)};

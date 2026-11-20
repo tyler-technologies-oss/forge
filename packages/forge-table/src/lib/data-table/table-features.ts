@@ -1,4 +1,4 @@
-/* eslint-disable camelcase -- TanStack exports its built-in filter and sort functions with underscores */
+/* eslint-disable camelcase -- TanStack exports its built-in sort functions with underscores */
 import {
   cellSelectionFeature,
   columnFilteringFeature,
@@ -12,12 +12,6 @@ import {
   createFilteredRowModel,
   createGroupedRowModel,
   createSortedRowModel,
-  filterFn_arrIncludes,
-  filterFn_equals,
-  filterFn_inDateRange,
-  filterFn_inNumberRange,
-  filterFn_includesString,
-  filterFn_weakEquals,
   metaHelper,
   rowAggregationFeature,
   rowExpandingFeature,
@@ -29,6 +23,7 @@ import {
   tableFeatures
 } from '@tanstack/lit-table';
 import { dataTableAggregationFns } from './features/aggregation.js';
+import { dataTableFilterFns } from './features/filter-fn.js';
 import type { ColumnDefMeta } from './types.js';
 
 export const dataTableFeatures = tableFeatures({
@@ -49,14 +44,7 @@ export const dataTableFeatures = tableFeatures({
   groupedRowModel: createGroupedRowModel(),
   sortedRowModel: createSortedRowModel(),
   aggregationFns: dataTableAggregationFns,
-  filterFns: {
-    arrIncludes: filterFn_arrIncludes,
-    equals: filterFn_equals,
-    inDateRange: filterFn_inDateRange,
-    inNumberRange: filterFn_inNumberRange,
-    includesString: filterFn_includesString,
-    weakEquals: filterFn_weakEquals
-  },
+  filterFns: dataTableFilterFns,
   sortFns: {
     alphanumeric: sortFn_alphanumeric,
     datetime: sortFn_datetime,

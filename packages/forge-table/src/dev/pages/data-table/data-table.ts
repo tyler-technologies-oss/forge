@@ -1,3 +1,4 @@
+/* eslint-disable camelcase -- TanStack exports its built-in filter functions with underscores */
 import '$src/shared';
 import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
@@ -6,7 +7,22 @@ import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@
 import type { BadgeTheme } from '@tylertech/forge/badge';
 import type { ISelectComponent } from '@tylertech/forge/select';
 import type { ISwitchComponent } from '@tylertech/forge/switch';
-import { actionCell, badgeCell, linkCell, meterCell, ratingCell } from '@tylertech/forge-table';
+import {
+  actionCell,
+  badgeCell,
+  filterFn_empty,
+  filterFn_equals,
+  filterFn_greaterThan,
+  filterFn_inNumberRange,
+  filterFn_includesString,
+  filterFn_lessThan,
+  filterFn_startsWith,
+  filterFn_weakEquals,
+  linkCell,
+  meterCell,
+  ratingCell,
+  registerFilterFns
+} from '@tylertech/forge-table';
 import type { ColumnAggregation, ColumnDef, DataTableElement, RowSelectionType } from '@tylertech/forge-table';
 import { IconRegistry } from '@tylertech/forge';
 import { tylIconDelete, tylIconEdit, tylIconStar } from '@tylertech/tyler-icons';
@@ -69,20 +85,38 @@ const actionsColumn: ColumnDef<RowData> = {
   ])
 };
 
+registerFilterFns({
+  equals: filterFn_equals,
+  startsWith: filterFn_startsWith,
+  greaterThan: filterFn_greaterThan,
+  lessThan: filterFn_lessThan,
+  empty: filterFn_empty,
+  inNumberRange: filterFn_inNumberRange
+});
+
+const textFilterFns = [filterFn_includesString, filterFn_startsWith, filterFn_equals, filterFn_empty];
+const numberFilterFns = [filterFn_equals, filterFn_greaterThan, filterFn_lessThan, filterFn_inNumberRange];
+
 const flatColumns: ColumnDef<RowData>[] = [
-  { header: 'Id', property: 'id', filterType: 'number' },
-  { header: 'First Name', property: 'firstName', renamable: true },
+  { header: 'Id', property: 'id', dataType: 'number', filter: numberFilterFns },
+  { header: 'First Name', property: 'firstName', renamable: true, filter: textFilterFns },
   { header: 'Last Name', property: 'lastName', renamable: true },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
   { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
   { header: 'Department', property: 'department', renamable: true },
   { header: 'Position', property: 'position', renamable: true },
   { header: 'Tags', id: 'tags', template: tagsBadges },
-  { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
-  { header: 'Performance rating', property: 'performanceRating', filterType: 'range', template: ratingCell({ min: 0, max: 5 }) },
-  { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
-  { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
-  { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() },
+  { header: 'Salary', property: 'salary', dataType: 'number', format: new CurrencyFormatter() },
+  {
+    header: 'Performance rating',
+    property: 'performanceRating',
+    dataType: 'number',
+    filter: numberFilterFns,
+    template: ratingCell({ min: 0, max: 5 })
+  },
+  { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', dataType: 'number', filter: numberFilterFns, template: performanceMeter },
+  { header: 'Bonus rate', property: 'bonusRate', dataType: 'number', format: bonusRateFormatter },
+  { header: 'Start date', property: 'startDate', dataType: 'date', format: new DateFormatter() },
   { header: 'City', property: 'city', renamable: true },
   { header: 'State', property: 'state', renamable: true },
   { header: 'Notes', property: 'notes', editable: true },
@@ -90,7 +124,7 @@ const flatColumns: ColumnDef<RowData>[] = [
 ];
 
 const groupedColumns: ColumnDef<RowData>[] = [
-  { header: 'Id', property: 'id', filterType: 'number' },
+  { header: 'Id', property: 'id', dataType: 'number', filter: numberFilterFns },
   {
     header: 'Personal Info',
     columns: [
@@ -106,11 +140,24 @@ const groupedColumns: ColumnDef<RowData>[] = [
       { header: 'Department', property: 'department', renamable: true },
       { header: 'Position', property: 'position', renamable: true },
       { header: 'Tags', id: 'tags', template: tagsBadges },
-      { header: 'Salary', property: 'salary', filterType: 'number', format: new CurrencyFormatter() },
-      { header: 'Performance rating', property: 'performanceRating', filterType: 'number', template: ratingCell({ min: 0, max: 5 }) },
-      { header: 'Performance', property: 'performanceRating', id: 'performanceMeter', filterType: 'number', template: performanceMeter },
-      { header: 'Bonus rate', property: 'bonusRate', filterType: 'number', format: bonusRateFormatter },
-      { header: 'Start date', property: 'startDate', filterType: 'date', format: new DateFormatter() }
+      { header: 'Salary', property: 'salary', dataType: 'number', format: new CurrencyFormatter() },
+      {
+        header: 'Performance rating',
+        property: 'performanceRating',
+        dataType: 'number',
+        filter: numberFilterFns,
+        template: ratingCell({ min: 0, max: 5 })
+      },
+      {
+        header: 'Performance',
+        property: 'performanceRating',
+        id: 'performanceMeter',
+        dataType: 'number',
+        filter: numberFilterFns,
+        template: performanceMeter
+      },
+      { header: 'Bonus rate', property: 'bonusRate', dataType: 'number', format: bonusRateFormatter },
+      { header: 'Start date', property: 'startDate', dataType: 'date', format: new DateFormatter() }
     ]
   },
   {

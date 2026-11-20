@@ -11,18 +11,20 @@ import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { ColumnReorderController } from '../controllers/column-reorder-controller.js';
 import type { DataTableElement } from '../data-table.js';
 import type { ColumnRenameController } from '../features/column-rename.js';
+import type { ColumnFilterFnController } from '../features/filter-fn.js';
 import { getPinnedColumnClasses, getPinnedColumnStyle } from '../features/column-pinning.js';
 import { getColumnWidthStyle } from '../features/column-sizing.js';
 import { getColumnHeaderId, getColumnHeaderTextId } from '../features/row-meta.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
-import { renderFilterField } from './filter-fields.js';
+import { renderFilterContainer } from './filter-fields.js';
 
 export interface HeaderContext<TData extends Row> {
   host: DataTableElement<TData>;
   table: Table<DataTableFeatures, TData>;
   sorting: SortingState;
   rename: ColumnRenameController<TData>;
+  filterFn: ColumnFilterFnController<TData>;
   reorder: ColumnReorderController<TData> | null;
 }
 
@@ -50,7 +52,7 @@ function renderHeaderCell<TData extends Row>(
   headerGroups: TableHeaderGroup<TData>[],
   groupStartColumnIds: ReadonlySet<string>
 ): TemplateResult {
-  const { host, table, rename, reorder } = context;
+  const { host, table, rename, filterFn, reorder } = context;
   const { column } = header;
   const isGroupHeader = headerGroup.depth < headerGroups.length - 1;
   const isGroupStart = groupStartColumnIds.has(header.getLeafHeaders()[0].column.id);
@@ -129,8 +131,7 @@ function renderHeaderCell<TData extends Row>(
           ? html`<forge-data-table-column-menu .table=${table} .column=${column} .reorderable=${host.reorderable}></forge-data-table-column-menu>`
           : nothing}
       </div>
-      ${host.filterable && column.getCanFilter() ? html`<div class="filter-container">${renderFilterField(column)}</div>` : nothing}
-      ${renderResizer(context, header)}
+      ${host.filterable && column.getCanFilter() ? renderFilterContainer(column, filterFn) : nothing} ${renderResizer(context, header)}
     </th>
   `;
 }

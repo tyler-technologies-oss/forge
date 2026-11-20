@@ -35,6 +35,7 @@ import { ColumnVisibilityController } from './controllers/column-visibility-cont
 import { CellSelectionController } from './features/cell-selection.js';
 import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
 import { ColumnRenameController } from './features/column-rename.js';
+import { ColumnFilterFnController } from './features/filter-fn.js';
 import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { HostSemantics } from './features/host-semantics.js';
@@ -47,7 +48,7 @@ import { renderBody } from './templates/body.js';
 import { renderColumnGroup } from './templates/column-group.js';
 import { renderTableFooter } from './templates/footer.js';
 import { renderTableHeader } from './templates/header.js';
-import type { ColumnDef, DataTableDef, EnableCellSelectionFn, MultiSortKey, Row, RowSelectionType } from './types.js';
+import type { ColumnDef, DataTableDef, EnableCellSelectionFn, FilterFnChangeEventDetail, MultiSortKey, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -60,6 +61,7 @@ import '../column-menu/column-menu.js';
 
 import styles from './data-table.scss';
 
+export { registerFilterFns } from './features/filter-fn.js';
 export { createExpanderColumn, type ExpanderColumnOptions } from './features/expander.js';
 export { actionCell, type ActionButtonConfig } from './templates/action-cell.js';
 export { ratingCell, type RatingOptions } from './templates/rating-cell.js';
@@ -72,7 +74,14 @@ export type {
   ColumnDef,
   DataTableDef,
   EnableCellSelectionFn,
-  FilterType,
+  ColumnFilter,
+  ColumnFilterFn,
+  ColumnFilterOption,
+  DataType,
+  FilterFieldConfig,
+  FilterFieldOption,
+  FilterFieldType,
+  FilterFnChangeEventDetail,
   FooterCallback,
   MultiSortKey,
   Row,
@@ -326,6 +335,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   #tableContainerRef = createRef<HTMLElement>();
   #columnReorderController: ColumnReorderController<TData> | null = null;
   #appliedColumnHeaders: Record<string, string> = {};
+  #appliedFilterFns: Readonly<Record<string, number>> = {};
   readonly #hostSemantics: HostSemantics;
   readonly #virtualization = new RowVirtualization<TData>(this, () => this.#tableContainerRef.value);
   readonly #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
@@ -336,6 +346,9 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     getTable: () => this.#table,
     getSorting: () => this._sorting,
     setSorting: sorting => this.#onSort(sorting)
+  });
+  readonly #columnFilterFn = new ColumnFilterFnController<TData>(this, {
+    refilter: () => this.#onFilter(filters => [...filters])
   });
   readonly #cellSelection = new CellSelectionController<TData>(this, {
     getTable: () => this.#table,
@@ -377,7 +390,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('columns') ||
       changedProperties.has('rowSelection') ||
       changedProperties.has('singleGroupColumn') ||
-      this.#columnRename.headers !== this.#appliedColumnHeaders
+      this.#columnRename.headers !== this.#appliedColumnHeaders ||
+      this.#columnFilterFn.selection !== this.#appliedFilterFns
     ) {
       this.#updateRenderColumns();
     }
@@ -465,6 +479,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
               table,
               sorting: this._sorting,
               rename: this.#columnRename,
+              filterFn: this.#columnFilterFn,
               reorder: this.#columnReorderController
             })}
           </thead>
@@ -497,6 +512,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
 
     this.#columnRename.reset();
+    this.#columnFilterFn.reset();
   }
 
   #checkRecreateTableController(changedProperties: PropertyValues<this>): boolean {
@@ -560,7 +576,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   #updateRenderColumns(): void {
     this.#appliedColumnHeaders = this.#columnRename.headers;
-    const renamed = applyColumnHeaders(this._columns, this.#appliedColumnHeaders);
+    this.#appliedFilterFns = this.#columnFilterFn.selection;
+    const renamed = this.#columnFilterFn.apply(applyColumnHeaders(this._columns, this.#appliedColumnHeaders));
     const columns = this.singleGroupColumn ? prependGroupsColumn(renamed) : renamed;
     this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
   }
@@ -732,6 +749,7 @@ declare global {
   interface HTMLElementEventMap {
     'forge-data-table-sort': CustomEvent<SortingState>;
     'forge-data-table-filter': CustomEvent<ColumnFiltersState>;
+    'forge-data-table-filter-fn-change': CustomEvent<FilterFnChangeEventDetail<any>>;
     'forge-data-table-row-select': CustomEvent<RowSelectionState>;
     'forge-data-table-cell-select': CustomEvent<CellSelectionState>;
     'forge-data-table-column-visibility': CustomEvent<ColumnVisibilityState>;

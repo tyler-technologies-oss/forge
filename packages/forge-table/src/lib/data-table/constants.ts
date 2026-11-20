@@ -22,6 +22,8 @@ export const CELL_SELECTION_KEY_DIRECTIONS: Readonly<Record<string, CellSelectio
   ArrowRight: 'right'
 };
 
+export const FILTER_FN_CHANGE_EVENT = 'forge-data-table-filter-fn-change';
+
 export const AUTO_SCROLL_EDGE_SIZE = 32;
 export const AUTO_SCROLL_MAX_SPEED = 24;
 
