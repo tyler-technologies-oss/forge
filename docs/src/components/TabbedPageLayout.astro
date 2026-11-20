@@ -106,6 +106,7 @@ const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
       updateActivePanel(tabId);
       updateBodyCardWidth(tabId, wideTabs);
       updateDocumentTitle(tabId);
+      resetScrollPosition();
     }) as EventListener);
 
     // Handle browser back/forward
@@ -118,6 +119,7 @@ const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
         (tabBar as HTMLElement & { activeTab: number }).activeTab = tabIndex;
         updateActivePanel(tabId);
         updateBodyCardWidth(tabId, wideTabs);
+        resetScrollPosition();
       }
     });
 
@@ -143,6 +145,13 @@ const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
     const isWide = wideTabs.includes(tabId);
     bodyCard.classList.toggle("max-w-wide", isWide);
     bodyCard.classList.toggle("max-w-content", !isWide);
+  }
+
+  function resetScrollPosition(): void {
+    const scrollBody = document.querySelector("[data-page-scroll-body]");
+    if (scrollBody) {
+      scrollBody.scrollTop = 0;
+    }
   }
 
   function updateDocumentTitle(tabId: string): void {

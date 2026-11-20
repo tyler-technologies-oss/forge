@@ -444,6 +444,39 @@ describe('Toast', () => {
     });
   });
 
+  describe('focus indicator color', () => {
+    const getSurface = (el: IToastComponent): HTMLElement => el.shadowRoot!.querySelector('.surface') as HTMLElement;
+
+    it('should use the primary theme color for focus indicators by default', async () => {
+      const screen = render(html`<forge-toast open>Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      el.style.setProperty('--forge-theme-primary', 'rgb(1, 2, 3)');
+
+      expect(getComputedStyle(getSurface(el)).getPropertyValue('--forge-focus-indicator-color').trim()).toBe('rgb(1, 2, 3)');
+    });
+
+    it('should use the focus indicator color property when set', async () => {
+      const screen = render(html`<forge-toast open>Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      el.style.setProperty('--forge-toast-focus-indicator-color', 'rgb(4, 5, 6)');
+
+      expect(getComputedStyle(getSurface(el)).getPropertyValue('--forge-focus-indicator-color').trim()).toBe('rgb(4, 5, 6)');
+    });
+  });
+
+  describe('action color', () => {
+    it('should use the action color for the action button text when a button text color is inherited', async () => {
+      const screen = render(html`<forge-toast open action-text="Action">Test</forge-toast>`);
+      const el = screen.container.querySelector('forge-toast') as IToastComponent;
+      el.style.setProperty('--forge-button-text-color', 'rgb(1, 2, 3)');
+      el.style.setProperty('--forge-toast-action-color', 'rgb(4, 5, 6)');
+      await frame();
+      const button = getActionButton(el).shadowRoot!.querySelector('[part=root]') as HTMLElement;
+
+      expect(getComputedStyle(button).color).toBe('rgb(4, 5, 6)');
+    });
+  });
+
   describe('timer pause/resume', () => {
     it('should pause timer on pointer hover', async () => {
       const screen = render(html`<forge-toast open duration="500">Test</forge-toast>`);

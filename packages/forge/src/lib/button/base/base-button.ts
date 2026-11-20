@@ -83,6 +83,7 @@ export abstract class BaseButton extends BaseLitElement {
     }
   }
   #disabled = false;
+  #consumerAriaDisabled: string | null | undefined;
 
   /**
    * Gets/sets whether the button is dense.
@@ -340,14 +341,33 @@ export abstract class BaseButton extends BaseLitElement {
     if (this._anchorElements.length) {
       this.removeAttribute('tabindex');
       setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: true });
+      this.#consumerAriaDisabled = undefined;
+    } else if (this.disabled) {
+      this.removeAttribute('tabindex');
+      if (this.#consumerAriaDisabled === undefined) {
+        this.#consumerAriaDisabled = this.getAttribute('aria-disabled');
+      }
+      setDefaultAria(this, this._internals, { ariaDisabled: 'true' }, { setAttribute: true });
     } else {
-      if (this.disabled) {
-        this.removeAttribute('tabindex');
-      } else if (!this.hasAttribute('tabindex')) {
+      if (!this.hasAttribute('tabindex')) {
         this.setAttribute('tabindex', '0');
       }
-      setDefaultAria(this, this._internals, { ariaDisabled: this.disabled ? 'true' : null }, { setAttribute: true });
+      this.#restoreConsumerAriaDisabled();
     }
+  }
+
+  /**
+   * Hands `aria-disabled` back to the consumer when the button is re-enabled. If the attribute still holds the
+   * value written while disabled, the consumer's value from before disabling is restored. If the consumer changed
+   * or removed it while disabled, their latest value is kept.
+   */
+  #restoreConsumerAriaDisabled(): void {
+    const ownsAttribute = this.getAttribute('aria-disabled') === 'true';
+    setDefaultAria(this, this._internals, { ariaDisabled: null }, { setAttribute: ownsAttribute });
+    if (ownsAttribute && this.#consumerAriaDisabled != null) {
+      this.setAttribute('aria-disabled', this.#consumerAriaDisabled);
+    }
+    this.#consumerAriaDisabled = undefined;
   }
 
   #animateStateLayer(): void {

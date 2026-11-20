@@ -1,5 +1,6 @@
 [
   { "label": "Accordion", "path": "/pages/accordion/accordion.html", "tags": ["expansion", "panel"] },
+  { "label": "AI", "path": "/pages/ai/ai.html", "tags": ["gradient", "form", "field"] },
   { "label": "App Bar", "path": "/pages/app-bar/app-bar.html", "tags": ["omnibar", "header"] },
   { "label": "Autocomplete", "path": "/pages/autocomplete/autocomplete.html", "tags": ["text", "form", "field"] },
   { "label": "Avatar", "path": "/pages/avatar/avatar.html" },
@@ -49,6 +50,7 @@
   { "label": "Profile card", "path": "/pages/profile-card/profile-card.html" },
   { "label": "Process stepper", "path": "/pages/process-stepper/process-stepper.html", "tags": ["progress", "steps", "workflow"] },
   { "label": "Radio", "path": "/pages/radio/radio.html", "tags": ["form"] },
+  { "label": "Radix compare", "path": "/pages/radix-compare/radix-compare.html", "tags": ["theme", "diff", "difference", "visual"] },
   { "label": "Scaffold", "path": "/pages/scaffold/scaffold.html" },
   { "label": "Secret", "path": "/pages/secret/secret.html", "tags": ["password", "sensitive", "hide", "privacy", "credentials", "blur"] },
   { "label": "Select", "path": "/pages/select/select.html", "tags": ["form", "field"] },

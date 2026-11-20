@@ -1,0 +1,10 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-circular-progress aria-label="Loading"></forge-circular-progress>
+  <forge-circular-progress determinate progress="0.65" aria-label="65% complete"></forge-circular-progress>
+</ComponentHeader>

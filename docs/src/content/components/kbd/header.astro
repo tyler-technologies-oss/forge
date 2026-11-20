@@ -1,0 +1,11 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <forge-kbd mod keys="K"></forge-kbd>
+  <forge-kbd ctrl shift keys="P"></forge-kbd>
+  <forge-kbd keys="Enter"></forge-kbd>
+</ComponentHeader>

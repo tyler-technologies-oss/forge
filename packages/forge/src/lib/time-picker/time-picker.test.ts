@@ -23,6 +23,7 @@ import {
 import './time-picker.js';
 
 const POPOVER_ANIMATION_DURATION = 200;
+const MASK_CURSOR_UPDATE_DELAY = 20;
 
 class TimePickerHarness extends TestHarness<ITimePickerComponent> {
   public inputElement: HTMLInputElement;
@@ -54,11 +55,12 @@ class TimePickerHarness extends TestHarness<ITimePickerComponent> {
   }
 
   // Types a sequence of characters into the input using real keyboard events, one keystroke at a time.
+  // The input mask repositions the cursor on a 10ms timer that the next keystroke cancels, so wait it out like a human typist would.
   public async typeSequence(text: string): Promise<void> {
     await userEvent.click(this.inputElement);
     for (const char of text) {
       await userEvent.keyboard(char);
-      await frame();
+      await task(MASK_CURSOR_UPDATE_DELAY);
     }
   }
 

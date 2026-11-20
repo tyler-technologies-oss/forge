@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-tokens",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Tyler Forge™ global design tokens and Sass utilities",
   "license": "Apache-2.0",
   "author": "Tyler Technologies, Inc.",
@@ -25,6 +25,10 @@
     "./sass/color-emphasis": "./sass/color-emphasis/index.scss",
     "./sass/color-palette": "./sass/color-palette/index.scss",
     "./sass/elevation": "./sass/elevation/index.scss",
+    "./sass/radix-color-palette": "./sass/radix-color-palette/index.scss",
+    "./sass/radix-color-palette-dark": "./sass/radix-color-palette-dark/index.scss",
+    "./sass/radix-theme": "./sass/radix-theme/index.scss",
+    "./sass/radix-typography": "./sass/radix-typography/index.scss",
     "./sass/shape": "./sass/shape/index.scss",
     "./sass/spacing": "./sass/spacing/index.scss",
     "./sass/theme": "./sass/theme/index.scss",

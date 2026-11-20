@@ -16,6 +16,7 @@ Tyler Forge is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspa
 | [@tylertech/forge-react](./packages/forge-react) | React adapter library |
 | [@tylertech/forge-angular](./packages/forge-angular) | Angular adapter library |
 | [@tylertech/forge-schematics](./packages/forge-schematics) | Angular Schematics for generating custom element proxies |
+| [@tylertech/forge-ai](./packages/forge-ai) | AI chat interface Web Components |
 
 ## Requirements
 
@@ -99,6 +100,8 @@ Follow the prompts to:
 5. Describe the change
 
 The prompts combine your answers into the changeset description, for example `feat(button): add support for invoker commands api`. Any other `pnpm changeset <command>` (such as `pnpm changeset status`) runs the standard Changesets CLI.
+
+`@tylertech/forge-ai` compiles Forge component styles into its own CSS at build time, so Forge releases do not reach it on their own. When a Forge style change is visible to users, also select `@tylertech/forge-ai` with a `patch` bump.
 
 The semver bump only decides the version number. Changelog entries are grouped by the conventional commit type in the description (Features, Bug Fixes, Documentation, etc.). A `major` bump, or a `!` written by hand (such as `feat!:`), is listed under Breaking Changes. If a changeset has no type prefix, the type of the commit that adds it is used instead.
 

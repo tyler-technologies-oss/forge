@@ -1,0 +1,87 @@
+import { describe, expect, it } from 'vitest';
+import type { AnyToolDefinition, ToolCall } from '../types/index.js';
+import { isToolCallSettled, shouldShowToolRenderer } from './utils.js';
+
+function createToolCall(status: ToolCall['status']): ToolCall {
+  return { id: 'call-1', messageId: 'msg-1', name: 'tool', args: {}, status, type: 'client' };
+}
+
+function createDefinition(overrides: Partial<AnyToolDefinition> = {}): AnyToolDefinition {
+  return { name: 'tool', renderer: { elementTag: 'div' }, ...overrides };
+}
+
+describe('shouldShowToolRenderer', () => {
+  it('should be false without a tool definition', () => {
+    expect(shouldShowToolRenderer(createToolCall('complete'))).toBe(false);
+  });
+
+  it('should be false when the definition has no renderer', () => {
+    expect(shouldShowToolRenderer(createToolCall('complete'), createDefinition({ renderer: undefined }))).toBe(false);
+  });
+
+  it('should be true once the call is complete', () => {
+    expect(shouldShowToolRenderer(createToolCall('complete'), createDefinition())).toBe(true);
+  });
+
+  it.each(['pending', 'parsing', 'executing', 'error'] as const)('should be false for status "%s" without renderOnStart', status => {
+    expect(shouldShowToolRenderer(createToolCall(status), createDefinition())).toBe(false);
+  });
+
+  it.each(['parsing', 'executing'] as const)('should be true for status "%s" with renderOnStart', status => {
+    expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ renderOnStart: true }))).toBe(true);
+  });
+
+  it('should be true for status "cancelled" with renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ renderOnStart: true }))).toBe(true);
+  });
+
+  it('should be false for status "cancelled" without renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition())).toBe(false);
+  });
+
+  it('should be true for status "error" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('error'), createDefinition({ rendererOnly: true }))).toBe(true);
+  });
+
+  it('should be true for status "cancelled" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ rendererOnly: true }))).toBe(true);
+  });
+
+  it('should be true for status "cancelled" when the tool opts into rendererOnly and renderOnStart', () => {
+    expect(shouldShowToolRenderer(createToolCall('cancelled'), createDefinition({ rendererOnly: true, renderOnStart: true }))).toBe(true);
+  });
+
+  it('should be false for status "error" when the tool does not opt into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('error'), createDefinition())).toBe(false);
+  });
+
+  it('should be true for status "complete" when the tool opts into rendererOnly', () => {
+    expect(shouldShowToolRenderer(createToolCall('complete'), createDefinition({ rendererOnly: true }))).toBe(true);
+  });
+
+  it.each(['pending', 'executing'] as const)('should be false for status "%s" when the tool opts into rendererOnly without renderOnStart', status => {
+    expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ rendererOnly: true }))).toBe(false);
+  });
+
+  it.each(['pending', 'error'] as const)('should be false for status "%s" even with renderOnStart', status => {
+    expect(shouldShowToolRenderer(createToolCall(status), createDefinition({ renderOnStart: true }))).toBe(false);
+  });
+});
+
+describe('isToolCallSettled', () => {
+  it.each(['complete', 'error', 'cancelled'] as const)('should be true for status "%s" without a definition', status => {
+    expect(isToolCallSettled(createToolCall(status))).toBe(true);
+  });
+
+  it.each(['pending', 'parsing', 'executing'] as const)('should be false for status "%s" without a definition', status => {
+    expect(isToolCallSettled(createToolCall(status))).toBe(false);
+  });
+
+  it('should be true while running when the tool is already showing its renderer', () => {
+    expect(isToolCallSettled(createToolCall('executing'), createDefinition({ renderOnStart: true }))).toBe(true);
+  });
+
+  it('should be false while running when the renderer is not shown yet', () => {
+    expect(isToolCallSettled(createToolCall('executing'), createDefinition())).toBe(false);
+  });
+});

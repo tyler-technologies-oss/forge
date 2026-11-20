@@ -7,17 +7,16 @@ category: data-display
 storybookId: components-label-value--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-label-value>
-    <span slot="label">Name</span>
-    <span slot="value">Ada Lovelace</span>
-  </forge-label-value>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+The label value component displays read-only data in a structured label-value pair format. This component provides clear information hierarchy for non-interactive content, making it ideal for displaying submitted form data, summary information, or reference details within cards and layouts.
 
 ## Usage
 
@@ -29,6 +28,9 @@ import Rule from "../../../components/Rule.astro";
   <Rule
     variant="do"
     rules={[
+      "Use consistent label formatting and capitalization across all instances.",
+      "Group related label-value pairs logically within containers or sections.",
+      "Provide meaningful labels that clearly describe the associated data.",
       "Use label value for readonly data with a short label and a short value.",
       "Use it in place of a disabled text field when the value will never be edited on that screen.",
       "Communicate elsewhere on the page whether and how the value can be edited.",

@@ -1,0 +1,38 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiArtifactCardGroupStories from './AiArtifactCardGroup.stories';
+
+<Meta of={AiArtifactCardGroupStories} />
+
+<Title />
+
+Lists several `forge-ai-artifact-card` elements as one container, for example when an agent returns more than one result for a request. Cards past `visible-count` (3 by default) collapse behind a toggle.
+
+<Canvas of={AiArtifactCardGroupStories.Demo} />
+
+## Usage
+
+- Place only `forge-ai-artifact-card` elements in the group. They switch to a row style automatically, and each still emits `forge-ai-artifact-card-open`.
+- The toggle emits `forge-ai-artifact-card-group-toggle` with `{ expanded }`.
+- Customize the toggle text with `show-more-text` (`{count}` becomes the number of collapsed cards) and `show-less-text`.
+- Cards you set `hidden` on stay hidden and are not counted.
+
+With `visible-count` cards or fewer, no toggle renders.
+
+<Canvas of={AiArtifactCardGroupStories.FitsWithoutToggle} />
+
+## Active row
+
+Set `active` on the card for the result currently being viewed. In a group it shows as a light accent fill.
+
+<Canvas of={AiArtifactCardGroupStories.ActiveRow} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- The group is a list and each card a list item, so screen readers announce the number of visible results. The toggle label includes the number of collapsed ones.
+- The toggle is a native button with `aria-expanded`, and keeps focus after expanding or collapsing.
+- Collapsed cards are removed from the tab order and accessibility tree.

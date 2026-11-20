@@ -2,6 +2,10 @@
 
 Dialogs are modal windows that interrupt the user to convey critical information or request a decision.
 
+## Overview
+
+A dialog is a type of window that appears in front of app content to provide critical information or ask for a decision. Modal dialogs remain on screen until confirmed, dismissed, or a required action has been taken, while nonmodal dialogs provide more flexibility for user interaction.
+
 ## Usage
 
 `forge-dialog` shows modal (or non-modal) content through `open`, `mode`, `type`, `preset`, `placement`, `fullscreen`, and `persistent`, and typically composes with a `forge-scaffold`'s header/body/footer slots for structure. Use it sparingly, only for critical information or a decision that truly needs to block the rest of the app. For the common confirm/cancel prompt, reach for the pre-built `forge-confirmation-dialog` instead of hand-building one. For lower-priority feedback, use a [toast](./toast.md), [banner](./banner.md), or [inline message](./inline-message.md) instead.
@@ -11,16 +15,18 @@ Dialogs are modal windows that interrupt the user to convey critical information
 **Do**
 
 - Reserve a dialog for critical information or a decision that truly needs to block the rest of the app.
-- Use a filled button for the confirming action and a tonal button for the dismissive one, with the confirming action on the right.
+- Use a flat button for the confirming action and a tonal button for the dismissive one, with the confirming action on the right.
 - Disable the confirming action until every required field in the dialog is filled.
 - Confirm before discarding unsaved changes when a user tries to close a dialog containing form input.
+- A single action may be provided only if it's an acknowledgement.
 
 **Don't**
 
 - Don't stack a dialog on top of another dialog.
 - Don't let a click outside the dialog close it when the dialog contains a form — that risks accidental data loss.
-- Don't place two filled buttons next to each other in a dialog's footer.
+- Don't place two flat buttons next to each other in a dialog's footer.
 - Don't use a vague action label like "OK" or "Done" — use a specific verb like "Save" or "Send".
+- Avoid apologies ("Sorry for the interruption"), alarm ("Warning!"), or ambiguity ("Are you sure?"), in dialog titles.
 
 ## Structure
 
@@ -30,7 +36,7 @@ A dialog's content is typically a `forge-scaffold` with a `header` toolbar (titl
 <forge-dialog labelledby="edit-profile-title">
   <forge-scaffold>
     <forge-toolbar slot="header">
-      <h2 slot="start" id="edit-profile-title" class="forge-typography--heading3">Edit profile</h2>
+      <h2 slot="start" id="edit-profile-title" class="forge-typography--heading4">Edit profile</h2>
       <forge-icon-button slot="end" density="medium" aria-label="Close dialog">
         <forge-icon name="close"></forge-icon>
       </forge-icon-button>
@@ -128,7 +134,7 @@ You can't set `aria-labelledby` or `aria-describedby` directly on `<forge-dialog
 
 ```html
 <forge-dialog labelledby="dialog-title" describedby="dialog-message">
-  <h2 id="dialog-title" class="forge-typography--heading3">Delete file?</h2>
+  <h2 id="dialog-title" class="forge-typography--heading4">Delete file?</h2>
   <p id="dialog-message">This can't be undone.</p>
 </forge-dialog>
 ```

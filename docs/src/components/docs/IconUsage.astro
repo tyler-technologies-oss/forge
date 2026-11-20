@@ -1,0 +1,50 @@
+---
+/**
+ * IconUsage — the decorative header on the Iconography page. A field of
+ * Tyler icons on rounded tiles that fades out toward the edges, with the Forge
+ * logo on a primary tile at the center. Colors come from theme tokens, so it follows
+ * light, dark, and custom themes. Purely visual: hidden from assistive tech.
+ */
+const ROWS = [
+  ["folder", "mail", "insert_invitation", "star", "bell", "description", "dashboard"],
+  ["settings", "person", "search", "forge_logo", "send", "home", "code"],
+  ["favorite", "flag", "rocket", "lightbulb_outline", "category", "inbox", "widgets"],
+];
+
+const CENTER_ROW = 1;
+const CENTER_COL = 3;
+
+const tileOpacity = (row: number, col: number): string => {
+  const distance = Math.abs(row - CENTER_ROW) + Math.abs(col - CENTER_COL);
+  return ["opacity-100", "opacity-80", "opacity-60", "opacity-40", "opacity-25"][Math.min(distance, 4)];
+};
+---
+
+<div
+  class="flex flex-col items-center gap-xsmall [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]"
+  aria-hidden="true">
+  {
+    ROWS.map((icons, row) => (
+      <div class:list={["flex gap-xsmall", { "translate-x-6": row % 2 === 1 }]}>
+        {icons.map((icon, col) => {
+          const isCenter = row === CENTER_ROW && col === CENTER_COL;
+          return (
+            <div
+              class:list={[
+                "size-12 rounded-lg flex items-center justify-center",
+                isCenter
+                  ? "bg-primary text-(--forge-theme-on-primary) shadow-md"
+                  : "bg-surface border border-outline text-medium",
+                tileOpacity(row, col),
+              ]}>
+              <forge-icon
+                name={icon}
+                class={isCenter ? "[--forge-icon-size:32px]" : "[--forge-icon-size:24px]"}
+              />
+            </div>
+          );
+        })}
+      </div>
+    ))
+  }
+</div>

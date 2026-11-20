@@ -2,6 +2,12 @@
 
 A busy indicator blocks interaction with a fullscreen or inline region while a longer-running process completes.
 
+## Overview
+
+The busy indicator is an overlay component that prevents user interaction while communicating that a system-wide process is in progress. It can either block an entire page or a specific region, where it can inform users about an ongoing operation. It includes a loading animation and descriptive text to inform users about the ongoing operation.
+
+When used in fullscreen, it appears as a modal overlay with a scrim background and includes a loading animation with descriptive text to inform users about the ongoing operation. This component is specifically designed for operations that affect the entire page or application state.
+
 ## Usage
 
 `forge-busy-indicator` blocks interaction with a region through `open`, `mode` (`fullscreen` or `inline`), and `variant` (`spinner`, `progress`, or `message-only`), plus optional `titleText`, `message`, and `cancelable`. Use it for an operation expected to take more than a second that genuinely needs to block the user, on either the whole page or a single component. For a shorter, purely visual loading cue, use a [circular progress](./circular-progress.md) or [linear progress](./linear-progress.md) indicator instead, and for a page's initial load where the eventual layout is already known, use a [skeleton](./skeleton.md) instead.

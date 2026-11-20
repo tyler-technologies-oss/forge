@@ -188,6 +188,7 @@ export class ColorPickerCore implements IColorPickerCore {
   private _render(): void {
     this._setGradientColor();
     this._adapter.setPreviewColor(formatRgba(this._rgba));
+    this._adapter.setOpacityGradientColor(this._rgba);
     this._adapter.setHexInputValue(formatHex(this._hex, this._allowOpacity));
     this._adapter.setRgbaInputValue(this._rgba);
     this._adapter.setHsvaInputValue(this._hsva);

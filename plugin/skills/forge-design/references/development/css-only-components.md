@@ -5,8 +5,8 @@ An experimental, framework-agnostic alternative to Forge's Web Components using 
 **Experimental**
 
 CSS-only components are an experimental feature that is in developer preview. This means that the API and implementation may change in future versions,
-and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed. Please provide feedback and
-<a href="https://github.com/tyler-technologies-oss/forge/issues">report</a> any issues you encounter, and suggest any features you would like to see in a future update!
+and there may be bugs or issues that need to be resolved. Use at your own risk and be prepared to update your code as needed. Please provide feedback,
+<a href="https://my.work.tylertech.com/jira/software/c/projects/FORGE/form/7140">report</a> any issues you encounter, and <a href="https://my.work.tylertech.com/jira/software/c/projects/FORGE/form/7138">suggest</a> any features you would like to see in a future update!
 
 The official implementation of the Tyler Forge™ design system has always been a library of high quality and framework-agnostic Web Components. This will continue to be
 the direction, especially for those who want to utilize the full power of the design system. However, we understand that not everyone can or wants to use Web Components

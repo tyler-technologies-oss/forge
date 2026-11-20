@@ -33,6 +33,7 @@ declare global {
  * @cssproperty --forge-drawer-background - The background color of the drawer.
  * @cssproperty --forge-drawer-border-color - The border of the drawer.
  * @cssproperty --forge-drawer-border-width - The border width of the drawer.
+ * @cssproperty --forge-modal-drawer-elevation - The shadow of the modal drawer when it is open.
  * @cssproperty --forge-drawer-transition-duration - The transition duration of the drawer.
  * @cssproperty --forge-drawer-transition-easing - The transition timing function of the drawer.
  * @cssproperty --forge-drawer-duration-close - The duration of the drawer closing animation.

@@ -22,6 +22,7 @@ Visit `http://localhost:5173` to browse blocks during development.
 | `pnpm build` | Build blocks, generate manifest, and capture screenshots |
 | `pnpm generate-manifest` | Regenerate `manifest.json` from block metadata |
 | `pnpm generate-screenshots` | Capture screenshots for blocks that changed |
+| `pnpm check-responsive` | Check `@responsive` blocks for horizontal overflow at tablet and phone widths |
 
 ### Screenshot Generation Options
 
@@ -94,6 +95,8 @@ For overlays that only appear after a click (e.g. dialogs), add optional screens
 - `@screenshot-wait <selector>` - element to wait for after clicking (defaults to `forge-dialog[open], dialog[open]`)
 
 If the click doesn't open anything, a warning is logged and a plain screenshot is captured instead.
+
+Blocks verified to work at tablet (768px) and phone (375px) widths can add a bare `@responsive` flag (no value). It is written to the manifest as `responsive: true`, and the docs block viewer only shows its desktop/tablet/phone toggles for flagged blocks. Run `pnpm check-responsive` to check every flagged block for horizontal overflow at those widths (`--filter <name>` narrows it; `--all` checks unflagged blocks too, to find candidates), and confirm by eye that the layout is usable.
 
 ### 3. Add block content
 

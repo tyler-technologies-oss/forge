@@ -38,6 +38,10 @@ const defaults = {
   TRIGGER_TYPES: ['hover'] as TooltipTriggerType[]
 };
 
+const classes = {
+  NO_ANIMATION: 'no-animation'
+} as const;
+
 const selectors = {
   CONTENT: '.forge-tooltip',
   ARROW: '.arrow',
@@ -50,6 +54,7 @@ export const TOOLTIP_CONSTANTS = {
   attributes,
   numbers,
   defaults,
+  classes,
   selectors
 };
 

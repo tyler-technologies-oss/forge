@@ -1,0 +1,20 @@
+:host {
+  display: contents;
+}
+
+.ai-overlay {
+  position: fixed;
+  box-sizing: border-box;
+
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: inherit;
+  color: inherit;
+  border-radius: inherit;
+  overflow: visible;
+
+  &[popover] {
+    inset: unset;
+  }
+}

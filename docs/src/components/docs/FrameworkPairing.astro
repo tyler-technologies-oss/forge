@@ -1,0 +1,35 @@
+---
+/**
+ * FrameworkPairing — the decorative header on each Frameworks page: the Forge
+ * logo joined to the framework's logo, with the package that page installs set
+ * beneath. Logos are single-color marks from Simple Icons (CC0), drawn in
+ * `currentColor`. The logo tile uses the Frameworks section's tone.
+ */
+import HeaderPairing from "./HeaderPairing.astro";
+import AngularLogo from "../../assets/images/frameworks/angular.svg";
+import BlazorLogo from "../../assets/images/frameworks/blazor.svg";
+import ReactLogo from "../../assets/images/frameworks/react.svg";
+import SvelteLogo from "../../assets/images/frameworks/svelte.svg";
+import VueLogo from "../../assets/images/frameworks/vue.svg";
+
+type Framework = "angular" | "blazor" | "react" | "svelte" | "vue";
+
+interface Props {
+  framework: Framework;
+}
+
+const FRAMEWORKS = {
+  angular: { Logo: AngularLogo, pkg: "@tylertech/forge-angular" },
+  blazor: { Logo: BlazorLogo, pkg: "Adapter coming soon" },
+  react: { Logo: ReactLogo, pkg: "@tylertech/forge-react" },
+  svelte: { Logo: SvelteLogo, pkg: "@tylertech/forge" },
+  vue: { Logo: VueLogo, pkg: "@tylertech/forge" },
+} as const;
+
+const { framework } = Astro.props;
+const { Logo, pkg } = FRAMEWORKS[framework];
+---
+
+<HeaderPairing caption={pkg} tone="warning">
+  <Logo class="size-12" fill="currentColor" />
+</HeaderPairing>

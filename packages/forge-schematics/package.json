@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
     "lint": "eslint",
-    "test": "pnpm run build && vitest run",
+    "test": "vitest run",
     "vitest": "vitest",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json}\""

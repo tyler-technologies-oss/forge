@@ -1,0 +1,14 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64">
+    <forge-text-field>
+      <input id="header-name" type="text" value="Ada Lovelace" />
+      <label for="header-name" slot="label">Name</label>
+    </forge-text-field>
+  </div>
+</ComponentHeader>

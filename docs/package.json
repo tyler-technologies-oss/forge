@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-forge-skill.mjs",
+    "build": "astro build && pagefind --site dist && node scripts/build-forge-skill.mjs --site",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test scripts/*.test.mjs",
@@ -17,12 +17,12 @@
   },
   "dependencies": {
     "@astrojs/mdx": "~8.0.3",
-    "@astrojs/svelte": "~9.0.1",
+    "@astrojs/svelte": "~9.1.2",
     "@tailwindcss/vite": "catalog:",
     "@tylertech/forge": "workspace:*",
     "@tylertech/forge-tailwind": "workspace:*",
     "@tylertech/tyler-icons": "catalog:",
-    "astro": "~7.3.8",
+    "astro": "~7.4.7",
     "highlight.js": "^11.11.1",
     "marked": "^18.0.13",
     "pagefind": "^1.5.0",

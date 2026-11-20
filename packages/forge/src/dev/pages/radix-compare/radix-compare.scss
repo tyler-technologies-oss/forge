@@ -1,0 +1,59 @@
+.content .card {
+  max-width: none;
+}
+
+.compare {
+  --compare-frame-width: 100%;
+  --compare-frame-height: calc(100vh - 240px);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  overflow-x: auto;
+
+  &__pane {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__label {
+    margin: 0;
+  }
+
+  &__frame {
+    box-sizing: border-box;
+    width: var(--compare-frame-width);
+    min-height: 320px;
+    height: var(--compare-frame-height);
+    border: 1px solid var(--forge-theme-outline);
+    background: #fff;
+  }
+
+  &[data-view='difference'] {
+    isolation: isolate;
+    grid-template-columns: 1fr;
+    background: #000;
+
+    .compare__pane {
+      grid-area: 1 / 1;
+    }
+
+    .compare__label {
+      display: none;
+    }
+
+    .compare__frame {
+      border: none;
+    }
+
+    #frame-default {
+      pointer-events: none;
+    }
+
+    #frame-radix {
+      mix-blend-mode: difference;
+    }
+  }
+}

@@ -7,15 +7,16 @@ category: feedback
 storybookId: components-circular-progress--demo
 ---
 
-import ComponentHeader from "../../../components/ComponentHeader.astro";
+import Header from "./header.astro";
 import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 
-<ComponentHeader>
-  <forge-circular-progress aria-label="Loading"></forge-circular-progress>
-  <forge-circular-progress determinate progress="0.65" aria-label="65% complete"></forge-circular-progress>
-</ComponentHeader>
+<Header />
+
+## Overview
+
+Circular progress indicators communicate that a specific area or component is loading or processing data. They are designed to be placed close to the content that is being loaded or changed, providing localized feedback without disrupting the entire interface. Circular progress indicators are ideal for inline components and situations where only a portion of the interface is being updated.
 
 ## Usage
 
@@ -30,6 +31,7 @@ import Rule from "../../../components/Rule.astro";
       "Only show a progress indicator when the expected wait is more than a second.",
       "Place the indicator inside or directly beside the specific content that's loading or changing.",
       "Pick one indicator style — linear or circular — for a given action, and use it consistently everywhere that action appears.",
+      "Use smooth animations to soften transitions between loading and loaded states.",
     ]}
   />
 

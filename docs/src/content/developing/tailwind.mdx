@@ -4,6 +4,12 @@ description: An optional Tailwind CSS v4 theme that maps Tailwind utilities to F
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="tailwind" />
+</ComponentHeader>
 
 Forge provides an optional Tailwind CSS v4 theme package that maps Tailwind utilities to Forge design tokens. This allows you to use familiar Tailwind syntax while maintaining consistency with Forge's design system.
 

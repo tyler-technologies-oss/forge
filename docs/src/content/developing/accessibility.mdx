@@ -4,6 +4,12 @@ description: An introduction to web accessibility, tools, and best practices as 
 ---
 
 import Blockquote from "../../components/docs/Blockquote.astro";
+import ComponentHeader from "../../components/ComponentHeader.astro";
+import TopicPairing from "../../components/docs/TopicPairing.astro";
+
+<ComponentHeader interactive={false} height="200px">
+  <TopicPairing topic="accessibility" />
+</ComponentHeader>
 
 Accessibility is a broad topic that covers many aspects of the web and beyond. The intention of this guide is to introduce you to
 general web accessibility and how it relates to using Forge, as well as applications that consume Forge. We will also go into some
@@ -21,7 +27,7 @@ create the proper semantic structure.
 
 <Blockquote>
   We are always looking to improve accessibility across the library. If you find any issues that you think we can take care of at a component-level,
-  please open an issue or pull request on the GitHub repository to get it taken care of as soon as possible.
+  please [report a bug](https://my.work.tylertech.com/jira/software/c/projects/FORGE/form/7140) or open a pull request on the GitHub repository to get it taken care of as soon as possible.
 </Blockquote>
 
 ## Nested interactive elements

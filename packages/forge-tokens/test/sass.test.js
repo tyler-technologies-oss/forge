@@ -1,16 +1,11 @@
 import { readFileSync } from 'fs';
 import { compileString } from 'sass';
-import { beforeAll, describe, expect, it } from 'vitest';
-import { build } from '../scripts/build.js';
+import { describe, expect, it } from 'vitest';
 
 const compile = source => compileString(source, { loadPaths: ['sass'], style: 'expanded' }).css;
 const collapseWhitespace = css => css.replace(/\s+/g, ' ');
 
 describe('sass', () => {
-  beforeAll(async () => {
-    await build();
-  });
-
   describe('theme', () => {
     it('should create a variable reference with the token value as the fallback', () => {
       const css = compile(`@use 'theme'; .a { color: theme.variable(primary); }`);
@@ -149,6 +144,39 @@ describe('sass', () => {
         `@use 'sass:map'; @use 'theme/token-utils'; $theme: token-utils.get-color-theme(test, #3f51b5, #ffffff); .a { color: map.get($theme, on-test); }`
       );
       expect(css).toContain('color: #ffffff;');
+    });
+  });
+
+  describe('radix color palette', () => {
+    it('should expose the light palette colors as variables', () => {
+      const css = compile(`@use 'radix-color-palette' as palette; .a { color: palette.$indigo-9; }`);
+      expect(css).toMatch(/color: oklch\(/);
+    });
+
+    it('should expose the dark palette colors as variables', () => {
+      const css = compile(`@use 'radix-color-palette-dark' as palette; .a { color: palette.$indigo-9; }`);
+      expect(css).toMatch(/color: oklch\(/);
+    });
+  });
+
+  describe('radix theme', () => {
+    it('should emit custom properties for the radix light theme', () => {
+      const css = compile(`@use 'radix-theme'; :root { @include radix-theme.properties; }`);
+      expect(css).toContain('--forge-theme-primary:');
+      expect(css).toContain('--forge-theme-control-bg:');
+      expect(css).toContain('--forge-theme-primary-container-maximum:');
+    });
+
+    it('should emit custom properties for the radix dark theme', () => {
+      const css = compile(`@use 'radix-theme'; :root { @include radix-theme.properties-dark; }`);
+      expect(css).toContain('--forge-theme-primary:');
+      expect(css).toContain('--forge-theme-control-bg:');
+    });
+
+    it('should not change the default theme', () => {
+      const css = compile(`@use 'theme'; :root { @include theme.properties; }`);
+      expect(css).toContain('--forge-theme-primary: #3f51b5;');
+      expect(css).not.toContain('--forge-theme-control-bg:');
     });
   });
 

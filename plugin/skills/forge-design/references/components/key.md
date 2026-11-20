@@ -2,6 +2,10 @@
 
 Keys label the meaning of colors or values in a chart or data visualization, such as which color in a grouped meter represents which series.
 
+## Overview
+
+The key component is used in tandem with charts or other visualizations to label data in a grouped area for reference. The colors used tie into the visualization it references in order to inform the user of specific details related to that data.
+
 ## Usage
 
 `forge-key` lays out one or more `forge-key-item` entries, each pairing a colored icon with a label (and an optional `value` slot), to explain what a color or series means in a chart or visualization. It's the standard companion to a [grouped meter](./meter.md): label each meter in the group with a key item sharing its color, so the grouping is legible without relying on color alone.

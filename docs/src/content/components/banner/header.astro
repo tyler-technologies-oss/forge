@@ -1,0 +1,15 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-full px-large">
+    <forge-banner>
+      <forge-icon slot="icon" name="info"></forge-icon>
+      Your session will expire in 5 minutes.
+      <forge-button slot="button" variant="text">Extend</forge-button>
+    </forge-banner>
+  </div>
+</ComponentHeader>

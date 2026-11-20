@@ -4,6 +4,7 @@ import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { getShadowElement } from '@tylertech/forge-core';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { frame } from '../core/utils/utils.js';
 import type { IFocusIndicatorComponent } from './focus-indicator.js';
 
 import './focus-indicator.js';
@@ -357,6 +358,198 @@ describe('FocusIndicator', () => {
 
       expect(indicatorElement.hasAttribute('obscured')).toBe(true);
     });
+
+    describe('clipping', () => {
+      it('should hide when the target is scrolled out of view inside a scroll container', async () => {
+        const { scroller, indicatorElement, scrollTo } = await createScrollFixture();
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+
+        scrollTo({ left: 280, top: 0 });
+
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(true);
+        expect(scroller.scrollTop).toBe(0);
+      });
+
+      it('should hide when the target is scrolled out of view horizontally inside a scroll container', async () => {
+        const { indicatorElement, scrollTo } = await createScrollFixture();
+        scrollTo({ left: 1000, top: 280 });
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(true);
+
+        scrollTo({ left: 280, top: 280 });
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+
+        scrollTo({ left: 0, top: 280 });
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(true);
+      });
+
+      it.each(['left', 'right', 'top', 'bottom'] as const)('should trim the %s side when the target is partially scrolled out of view', async side => {
+        const { button, scroller, indicatorElement, scrollTo } = await createScrollFixture();
+        const { offsetWidth: width, offsetHeight: height } = button;
+        const scrollPositions = {
+          left: { left: 300 + width / 2, top: 280 },
+          right: { left: 300 + width / 2 - scroller.clientWidth, top: 280 },
+          top: { left: 280, top: 300 + height / 2 },
+          bottom: { left: 280, top: 300 + height / 2 - scroller.clientHeight }
+        };
+
+        scrollTo(scrollPositions[side]);
+
+        await expect.poll(() => getTrimmedEdge(indicatorElement, side)).toBeCloseTo(getScrollerEdge(scroller, side), 0);
+        expect(indicatorElement.hasAttribute('obscured')).toBe(false);
+      });
+
+      it('should trim an inward indicator at the scroll container edge', async () => {
+        const { button, scroller, indicatorElement, scrollTo } = await createScrollFixture({ inward: true });
+
+        scrollTo({ left: 300 + button.offsetWidth / 2, top: 280 });
+
+        await expect.poll(() => getTrimmedEdge(indicatorElement, 'left')).toBeCloseTo(getScrollerEdge(scroller, 'left'), 0);
+      });
+
+      it('should not trim the indicator when the target is fully visible', async () => {
+        const { indicatorElement, scrollTo } = await createScrollFixture();
+
+        scrollTo({ left: 280, top: 280 });
+
+        await expect.poll(() => getInsetValues(getComputedStyle(indicatorElement).clipPath).every(value => value < 0)).toBe(true);
+      });
+
+      it('should not trim a side the target overhangs by less than a pixel', async () => {
+        const { button, scroller, indicatorElement, scrollTo } = await createScrollFixture();
+        scrollTo({ left: 0, top: 280 });
+        button.style.left = `${scroller.clientWidth - button.getBoundingClientRect().width + 0.4}px`;
+
+        await expect.poll(() => button.getBoundingClientRect().right - getScrollerEdge(scroller, 'right')).toBeGreaterThan(0);
+        await expect.poll(() => getInsetValues(getComputedStyle(indicatorElement).clipPath).every(value => value < 0)).toBe(true);
+      });
+
+      it('should clip a fixed positioned target by an ancestor that is its containing block', async () => {
+        const { indicatorElement } = await createFixedFixture({ transform: true });
+
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(true);
+      });
+
+      it('should not clip a fixed positioned target by an ancestor that is not its containing block', async () => {
+        const { indicatorElement } = await createFixedFixture({ transform: false });
+
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+      });
+
+      it('should not clip a target by an ancestor with display contents', async () => {
+        const screen = render(html`
+          <button id="detached" type="button">Simple button</button>
+          <div style="display: contents; overflow: hidden; width: 20px; height: 10px;">
+            <button id="attached" type="button">
+              Button
+              <forge-focus-indicator></forge-focus-indicator>
+            </button>
+          </div>
+        `);
+        const focusIndicator = await focusAttachedButton(screen.container);
+        const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+      });
+
+      it('should clip a slotted target by an ancestor in the shadow tree that it is assigned into', async () => {
+        const screen = render(html`
+          <button id="detached" type="button">Simple button</button>
+          <div id="host">
+            <button id="attached" type="button" style="margin-left: 100px;">
+              Button
+              <forge-focus-indicator></forge-focus-indicator>
+            </button>
+          </div>
+        `);
+        const host = screen.container.querySelector('#host') as HTMLElement;
+        host.attachShadow({ mode: 'open' }).innerHTML = '<div style="width: 60px; height: 40px; overflow: hidden;"><slot></slot></div>';
+        const focusIndicator = await focusAttachedButton(screen.container);
+        const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(true);
+      });
+
+      it('should not clip an absolutely positioned target by an ancestor that does not contain it', async () => {
+        const screen = render(html`
+          <button id="detached" type="button">Simple button</button>
+          <div style="position: relative; width: 300px; height: 200px;">
+            <div style="width: 100px; height: 50px; overflow: hidden;">
+              <button id="attached" type="button" style="position: absolute; left: 150px; top: 100px;">
+                Button
+                <forge-focus-indicator></forge-focus-indicator>
+              </button>
+            </div>
+          </div>
+        `);
+        const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+        const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+
+        await focusKeyboard(screen.container.querySelector('#detached') as HTMLButtonElement);
+        button.focus();
+
+        await expect.poll(() => focusIndicator.active).toBe(true);
+        const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+      });
+
+      it('should not clip a target in the top layer that is not fixed positioned by an ancestor with overflow', async () => {
+        const screen = render(html`
+          <button id="detached" type="button">Simple button</button>
+          <div style="width: 100px; height: 50px; overflow: hidden;">
+            <div id="popover" popover="manual" style="position: absolute; inset: auto; top: 200px; left: 100px; margin: 0;">
+              <button id="attached" type="button">
+                Button
+                <forge-focus-indicator></forge-focus-indicator>
+              </button>
+            </div>
+          </div>
+        `);
+        const popover = screen.container.querySelector('#popover') as HTMLElement;
+        const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+        const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+        popover.showPopover();
+
+        await focusKeyboard(screen.container.querySelector('#detached') as HTMLButtonElement);
+        button.focus();
+
+        await expect.poll(() => focusIndicator.active).toBe(true);
+        const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+        await expect.poll(() => indicatorElement.hasAttribute('obscured')).toBe(false);
+      });
+    });
+
+    it('should follow the anchor when the layout shifts after the target has resized', async () => {
+      const screen = render(html`
+        <button id="detached" type="button">Simple button</button>
+        <div id="shifter" style="padding-left: 0;">
+          <forge-text-field show-clear style="width: 300px;">
+            <label for="field-input">Label</label>
+            <input id="field-input" type="text" />
+          </forge-text-field>
+        </div>
+      `);
+      const shifter = screen.container.querySelector('#shifter') as HTMLElement;
+      const textField = screen.container.querySelector('forge-text-field') as HTMLElement;
+      const fieldElement = textField.shadowRoot?.querySelector('forge-field') as HTMLElement;
+
+      await focusKeyboard(screen.container.querySelector('#detached') as HTMLButtonElement);
+      const focusIndicator = fieldElement.shadowRoot?.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+      await expect.poll(() => focusIndicator.active).toBe(true);
+      const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+      const anchor = (focusIndicator.parentElement ?? textField) as HTMLElement;
+
+      await userEvent.keyboard('k');
+      await expect.poll(() => textField.querySelector('input')?.value).toBe('k');
+      await frame();
+      await frame();
+      const initialAnchorLeft = anchor.getBoundingClientRect().left;
+      const initialIndicatorLeft = indicatorElement.getBoundingClientRect().left;
+
+      shifter.style.paddingLeft = '8px';
+
+      await expect.poll(() => anchor.getBoundingClientRect().left).toBe(initialAnchorLeft + 8);
+      await expect.poll(() => indicatorElement.getBoundingClientRect().left).toBe(initialIndicatorLeft + 8);
+    });
   });
 });
 
@@ -387,6 +580,81 @@ async function createFixture({ target, inward, circular, allowFocus }: FocusIndi
   const button = screen.container.querySelector('button#attached') as HTMLButtonElement;
   const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
   return { detachedButton, button, focusIndicator };
+}
+
+async function createFixedFixture({ transform }: { transform: boolean }): Promise<{ indicatorElement: HTMLElement }> {
+  const screen = render(html`
+    <button id="detached" type="button">Simple button</button>
+    <div style="width: 100px; height: 50px; overflow: hidden; ${transform ? 'transform: translateX(0);' : ''}">
+      <button id="attached" type="button" style="position: fixed; left: 200px; top: 200px;">
+        Button
+        <forge-focus-indicator></forge-focus-indicator>
+      </button>
+    </div>
+  `);
+  const focusIndicator = await focusAttachedButton(screen.container);
+  return { indicatorElement: focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement };
+}
+
+async function focusAttachedButton(container: HTMLElement): Promise<IFocusIndicatorComponent> {
+  const button = container.querySelector('#attached') as HTMLButtonElement;
+  const focusIndicator = container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+  (container.querySelector('#detached') as HTMLButtonElement).focus();
+  await userEvent.keyboard('{Shift>}{/Shift}');
+  button.focus({ preventScroll: true });
+  await expect.poll(() => focusIndicator.active).toBe(true);
+  return focusIndicator;
+}
+
+async function createScrollFixture({ inward = false }: { inward?: boolean } = {}): Promise<ScrollFixtureResult> {
+  const screen = render(html`
+    <button id="detached" type="button">Simple button</button>
+    <div id="scroller" style="width: 150px; height: 100px; overflow: auto;">
+      <div style="position: relative; width: 1000px; height: 1000px;">
+        <button id="attached" type="button" style="position: absolute; left: 300px; top: 300px;">
+          Button
+          <forge-focus-indicator ?inward=${inward}></forge-focus-indicator>
+        </button>
+      </div>
+    </div>
+  `);
+  const scroller = screen.container.querySelector('#scroller') as HTMLElement;
+  const button = screen.container.querySelector('#attached') as HTMLButtonElement;
+  const focusIndicator = screen.container.querySelector('forge-focus-indicator') as IFocusIndicatorComponent;
+
+  scroller.scrollTo({ left: 280, top: 280 });
+  await focusKeyboard(screen.container.querySelector('#detached') as HTMLButtonElement);
+  button.focus();
+  await expect.poll(() => focusIndicator.active).toBe(true);
+  const indicatorElement = focusIndicator.shadowRoot?.querySelector('.focus-indicator') as HTMLElement;
+  const scrollTo = (position: { left: number; top: number }): void => scroller.scrollTo(position);
+  return { scroller, button, indicatorElement, scrollTo };
+}
+
+interface ScrollFixtureResult {
+  scroller: HTMLElement;
+  button: HTMLButtonElement;
+  indicatorElement: HTMLElement;
+  scrollTo: (position: { left: number; top: number }) => void;
+}
+
+/** The viewport edge, in pixels, where the clip path cuts the indicator on the given side. */
+function getTrimmedEdge(indicatorElement: HTMLElement, side: 'left' | 'right' | 'top' | 'bottom'): number {
+  const [top, right, bottom, left] = getInsetValues(getComputedStyle(indicatorElement).clipPath);
+  const rect = indicatorElement.getBoundingClientRect();
+  return { left: rect.left + left, right: rect.right - right, top: rect.top + top, bottom: rect.bottom - bottom }[side];
+}
+
+/** The viewport edge, in pixels, of the scroller's padding box on the given side. */
+function getScrollerEdge(scroller: HTMLElement, side: 'left' | 'right' | 'top' | 'bottom'): number {
+  const rect = scroller.getBoundingClientRect();
+  const left = rect.left + scroller.clientLeft;
+  const top = rect.top + scroller.clientTop;
+  return { left, right: left + scroller.clientWidth, top, bottom: top + scroller.clientHeight }[side];
+}
+
+function getInsetValues(clipPath: string): number[] {
+  return (clipPath.match(/-?\d+(\.\d+)?px/g) ?? []).map(value => parseFloat(value));
 }
 
 async function focusKeyboard(startFocusEl: HTMLElement): Promise<void> {

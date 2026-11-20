@@ -1,0 +1,21 @@
+---
+import ComponentHeader from "../../../components/ComponentHeader.astro";
+
+const { thumbnail = false } = Astro.props;
+---
+
+<ComponentHeader {thumbnail}>
+  <div class="w-64">
+    <forge-tree>
+      <forge-tree-item open>
+        <span>Projects</span>
+        <forge-tree-item slot="children"><span>Alpha</span></forge-tree-item>
+        <forge-tree-item slot="children"><span>Beta</span></forge-tree-item>
+      </forge-tree-item>
+      <forge-tree-item>
+        <span>Archive</span>
+        <forge-tree-item slot="children"><span>2024</span></forge-tree-item>
+      </forge-tree-item>
+    </forge-tree>
+  </div>
+</ComponentHeader>

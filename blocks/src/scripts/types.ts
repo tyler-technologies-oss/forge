@@ -16,6 +16,8 @@ export interface BlockMetadata {
   description: string;
   tags: string[];
   type: BlockType;
+  /** Whether the block opts into the docs viewer's tablet/phone viewport toggles via the @responsive flag */
+  responsive: boolean;
 }
 
 /** Screenshot interaction options from @screenshot-click and @screenshot-wait annotations */

@@ -226,7 +226,7 @@ function checkContent(text, filePath) {
     if (titleStyle) {
       violations.push({
         rule: 'card-title-style',
-        msg: `Card title styled heading${titleStyle[1]} — card, dialog, and drawer titles use text-heading3 (one step below the page title's text-heading4). The heading element (h1–h6) is up to the app's outline. See references/design/typography.md.`,
+        msg: `Card title styled heading${titleStyle[1]} — card and drawer titles use text-heading3 (one step below the page and dialog title's text-heading4). The heading element (h1–h6) is up to the app's outline. See references/design/typography.md.`,
       });
     }
   }

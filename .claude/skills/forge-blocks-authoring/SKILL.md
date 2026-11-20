@@ -37,6 +37,7 @@ Every block HTML file starts with a comment; `pnpm generate-manifest` (run from 
 - Name format for component variants: `"<Component Display Name> — <Variant Display Name>"` (em dash, e.g. `Busy Indicator — Inline`).
 - Tags convention for simple component blocks: `<component-name>, <variant>, storybook, component-example`.
 - Overlay blocks whose main content only appears after a click (dialogs, etc.) add `@screenshot-click <selector>` (usually the trigger's `#id`). The screenshot script clicks it with reduced motion enabled, waits for `forge-dialog[open], dialog[open]` (or `@screenshot-wait <selector>` for other overlays), then captures. Never hardcode `open` in the markup just for the screenshot.
+- `@responsive` (a bare flag, no value: not `@responsive true`) opts a block into the docs viewer's desktop/tablet/phone toggles. Blocks without it render at full width with no toggles. Add it only to blocks that genuinely work at 768px and 375px (typically `application-layout` templates, forms, and card grids), never to simple `components/` examples. See "Verifying a responsive block" below before adding it.
 
 ## Converting story markup to block markup
 
@@ -108,4 +109,15 @@ Then:
 
 - Read the generated `.webp` back (`Read` tool supports images) and visually confirm it matches intent. Overlay blocks should show the overlay open; if you see only the trigger, add or fix `@screenshot-click` (the run logs a `⚠` warning when the click doesn't open anything).
 - `npx prettier --check blocks/src/blocks/components/<component-name>` from repo root (blocks HTML/TS files are covered by the root Prettier config; there is no separate lint script for `blocks/`).
-- Spot-check `blocks/manifest.json` for the new entries: correct `category`, `componentsUsed` list, and `screenshot` path.
+- Spot-check `blocks/manifest.json` for the new entries: correct `category`, `componentsUsed` list, `screenshot` path, and `responsive` value.
+
+### Verifying a responsive block
+
+Before adding `@responsive`, or after changing a block that has it:
+
+```bash
+pnpm check-responsive --filter "<block-name>"         # @responsive blocks only; fails on horizontal overflow at 768px and 375px
+pnpm check-responsive --all --filter "<category>"     # any block, flagged or not, to find candidates
+```
+
+The check flags visible content that spills past the viewport edge, and allows content inside a horizontal scroll container that itself fits (e.g. a wide table). Passing it is necessary but not sufficient: it can't tell that a layout is cramped. Also capture the block at 375px with Playwright, `Read` the image, and confirm it is actually usable. Panels that stay side by side and crush the main content, titles wrapping one word per line, and truncated app bar actions all mean the block is not responsive, even when the check passes.
