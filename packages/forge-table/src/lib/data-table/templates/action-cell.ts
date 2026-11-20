@@ -1,5 +1,6 @@
 import '@tylertech/forge/button';
 import '@tylertech/forge/icon-button';
+import type { IconButtonComponent } from '@tylertech/forge/icon-button';
 import type { TooltipComponent } from '@tylertech/forge/tooltip';
 import { labelWithRowName } from '../features/row-meta.js';
 
@@ -23,9 +24,12 @@ export function actionCell(config: ActionButtonConfig[]) {
       if (buttonConfig.type === 'button') {
         button.textContent = textContent;
       } else {
+        button.setAttribute('aria-label', textContent);
+        (button as IconButtonComponent).shape = 'squared';
         tooltip = document.createElement('forge-tooltip') as TooltipComponent;
         tooltip.textContent = textContent;
         tooltip.type = 'label';
+        tooltip.placement = 'top';
         tooltip.anchorElement = button;
       }
       if (buttonConfig.icon) {
@@ -33,9 +37,6 @@ export function actionCell(config: ActionButtonConfig[]) {
         icon.name = buttonConfig.icon;
         icon.slot = buttonConfig.type === 'button' ? 'start' : '';
         button.prepend(icon);
-      }
-      if (buttonConfig.type !== 'button') {
-        button.setAttribute('aria-label', textContent);
       }
       labelWithRowName(button, row);
       button.addEventListener('click', () => buttonConfig.onClick(row));
