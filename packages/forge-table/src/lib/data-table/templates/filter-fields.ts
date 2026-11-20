@@ -1,8 +1,20 @@
 import type { Column } from '@tanstack/lit-table';
-import { html, TemplateResult } from 'lit';
-import type { DataTableFeatures } from '../table-features.js';
+import { applyNumberMask } from '@tylertech/forge-core';
+import { html, nothing, TemplateResult } from 'lit';
+import { ref } from 'lit/directives/ref.js';
 import { getColumnHeaderTextId } from '../features/row-meta.js';
+import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
+
+const maskedInputs = new WeakSet<HTMLInputElement>();
+
+const applyNumberFilterMask = (input?: Element): void => {
+  if (!(input instanceof HTMLInputElement) || maskedInputs.has(input)) {
+    return;
+  }
+  maskedInputs.add(input);
+  applyNumberMask(input);
+};
 
 const getLabelledBy = (fieldId: string, columnId: string): string => `${fieldId} ${getColumnHeaderTextId(columnId)}`;
 
@@ -46,6 +58,7 @@ function renderRangeFilter<TData extends Row>(column: Column<DataTableFeatures, 
         @input=${(evt: InputEvent) =>
           column.setFilterValue((old: [number, number]) => [parseInt((evt.target as HTMLInputElement).value, 10), old?.[1] ?? 0])} />
     </forge-text-field>
+    <span aria-hidden="true">-</span>
     <forge-text-field density="extra-small">
       <input
         type="number"
@@ -76,17 +89,23 @@ function renderDateFilter<TData extends Row>(column: Column<DataTableFeatures, T
 }
 
 function renderTextFilter<TData extends Row>(column: Column<DataTableFeatures, TData>): TemplateResult {
-  return html` <forge-text-field density="extra-small">
-    <input
-      id="filter-field-${column.id}"
-      name="filter-${column.id}"
-      aria-label="Filter"
-      aria-labelledby=${getLabelledBy(`filter-field-${column.id}`, column.id)}
-      .type=${column.columnDef.meta?.filterVariant ?? 'text'}
-      .value=${(column.getFilterValue() as string) ?? ''}
-      @input=${(evt: InputEvent) => {
-        const value = (evt.target as HTMLInputElement).value;
-        column.setFilterValue(value || undefined);
-      }} />
-  </forge-text-field>`;
+  const isNumber = column.columnDef.meta?.filterVariant === 'number';
+  const type = isNumber ? 'text' : (column.columnDef.meta?.filterVariant ?? 'text');
+  return html`
+    <forge-text-field density="extra-small">
+      <input
+        id="filter-field-${column.id}"
+        name="filter-${column.id}"
+        aria-label="Filter"
+        aria-labelledby=${getLabelledBy(`filter-field-${column.id}`, column.id)}
+        .type=${type}
+        inputmode=${isNumber ? 'decimal' : nothing}
+        .value=${(column.getFilterValue() as string) ?? ''}
+        ${isNumber ? ref(applyNumberFilterMask) : nothing}
+        @input=${(evt: InputEvent) => {
+          const value = (evt.target as HTMLInputElement).value;
+          column.setFilterValue(value || undefined);
+        }} />
+    </forge-text-field>
+  `;
 }

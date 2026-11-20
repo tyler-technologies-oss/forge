@@ -1981,7 +1981,19 @@ describe('DataTable', () => {
       const harness = await createFixture({ columns, filterable: true });
 
       const input = harness.filterInputs[0];
-      expect(input.type).toBe('number');
+      expect(input.type).toBe('text');
+      expect(input.inputMode).toBe('decimal');
+    });
+
+    it('should only allow numeric characters in number filter', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'age', header: 'Age', property: 'age', filterType: 'number' }];
+      const harness = await createFixture({ columns, filterable: true });
+
+      const input = harness.filterInputs[0];
+      input.focus();
+      await userEvent.keyboard('a1b2.5');
+
+      expect(input.value).toBe('12.5');
     });
 
     it('should render range filter when filterType is range', async () => {
