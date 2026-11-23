@@ -4,6 +4,7 @@ import PageScaffold from "../../components/PageScaffold.astro";
 import ContentHeader from "../../components/ContentHeader.astro";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { getCollection } from "astro:content";
+import { categories, categoryIds } from "../../data/component-categories";
 
 const headers = import.meta.glob<AstroComponentFactory>(
   "../../content/components/*/header.astro",
@@ -17,31 +18,56 @@ const components = (await getCollection("components"))
     data,
     Header: headers[`../../content/components/${id}/header.astro`],
   }));
+const categoryOptions = categoryIds
+  .filter((id) => components.some(({ data }) => data.category === id))
+  .map((id) => ({ id, label: categories[id] }));
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Components">
+<BaseLayout title="Components" wide searchable={false}>
   <PageScaffold>
+    <div slot="header">
     <ContentHeader
-      slot="header"
       title="Components"
       description="Explore Forge's library of reusable UI components. Each component is designed to be accessible, customizable, and consistent with the Forge design system."
     />
+    <div class="mb-medium flex flex-col gap-medium">
+      <div class="flex items-center gap-medium">
+        <forge-text-field class="block grow" show-clear>
+          <forge-icon slot="start" name="search"></forge-icon>
+          <forge-icon-button slot="clear-button" tabindex="-1" dense aria-label="Clear">
+            <forge-icon name="clear"></forge-icon>
+          </forge-icon-button>
+          <input type="text" id="component-filter" autocomplete="off" placeholder="Search components" aria-label="Search components" />
+        </forge-text-field>
+        <forge-button-toggle-group id="view-toggle" value="card" mandatory aria-label="Layout">
+          <forge-button-toggle value="card" aria-label="Card view">
+            <forge-icon name="view_grid"></forge-icon>
+          </forge-button-toggle>
+          <forge-button-toggle value="list" aria-label="List view">
+            <forge-icon name="view_list"></forge-icon>
+          </forge-button-toggle>
+        </forge-button-toggle-group>
+      </div>
 
-    <div class="mt-large flex flex-col gap-large">
-      <forge-text-field>
-        <forge-icon slot="start" name="search"></forge-icon>
-        <label for="component-filter">Filter components</label>
-        <input type="text" id="component-filter" autocomplete="off" />
-      </forge-text-field>
+      <forge-chip-set id="category-filter" type="filter" dense aria-label="Filter by category">
+        {categoryOptions.map(({ id, label }) => <forge-chip value={id}>{label}</forge-chip>)}
+      </forge-chip-set>
+      </div>
+    </div>
+
+    <div class="pt-medium flex flex-col">
+
 
       <ul
-        id="component-list"
-        class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-medium list-none m-0 p-0">
+        id="component-cards"
+        data-view="card"
+        class="group grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] data-[view=list]:grid-cols-1 gap-medium list-none m-0 p-0">
         {
           components.map(({ id, data, Header }) => (
             <li
               class="m-0"
+              data-category={data.category}
               data-filter-text={`${data.title} ${data.description}`.toLowerCase()}>
               <forge-card class="p-0 h-full">
                 <forge-button-area class="h-full">
@@ -50,13 +76,17 @@ const baseUrl = import.meta.env.BASE_URL;
                     href={`${baseUrl}components/${id}/usage/`}
                     aria-labelledby={`${id}-heading`}
                   />
-                  <div class="h-full flex flex-col">
-                    {Header && <Header thumbnail />}
-                    <div class="flex flex-col gap-xxsmall p-medium">
-                      <h2 id={`${id}-heading`} class="text-heading3 m-0">
+                  <div class="h-full flex flex-col group-data-[view=list]:flex-row">
+                    {Header && (
+                      <div class="group-data-[view=list]:w-[160px] group-data-[view=list]:shrink-0 group-data-[view=list]:*:!h-[96px] group-data-[view=list]:*:border-b-0 group-data-[view=list]:*:border-r">
+                        <Header thumbnail />
+                      </div>
+                    )}
+                    <div class="flex flex-col gap-xxsmall p-medium group-data-[view=list]:p-small group-data-[view=list]:justify-center">
+                      <h2 id={`${id}-heading`} class="text-heading3 group-data-[view=list]:text-heading2 m-0">
                         {data.title}
                       </h2>
-                      <p class="text-body1 text-medium line-clamp-2 m-0">
+                      <p class="text-body1 text-medium line-clamp-2 group-data-[view=list]:line-clamp-1 m-0">
                         {data.description}
                       </p>
                     </div>
@@ -68,7 +98,7 @@ const baseUrl = import.meta.env.BASE_URL;
         }
       </ul>
 
-      <p id="component-filter-empty" class="text-medium m-0" hidden>
+      <p id="component-filter-empty" class="text-medium mt-medium mb-0" hidden>
         No components match your filter.
       </p>
     </div>
@@ -76,29 +106,73 @@ const baseUrl = import.meta.env.BASE_URL;
 </BaseLayout>
 
 <script>
-  const initComponentFilter = (): void => {
-    const input = document.getElementById(
-      "component-filter",
-    ) as HTMLInputElement | null;
+  import {
+    getListFilters,
+    getListView,
+    setListFilters,
+    setListView,
+    type ListView,
+  } from "../../scripts/list-view";
+
+  const PAGE_KEY = "components";
+
+  type ChipElement = HTMLElement & { selected: boolean; value: string };
+
+  const initComponentFilter = async (): Promise<void> => {
+    const input = document.getElementById("component-filter") as HTMLInputElement | null;
     const emptyState = document.getElementById("component-filter-empty");
-    const items = document.querySelectorAll<HTMLElement>("#component-list > li");
-    if (!input || !emptyState) {
+    const chipSet = document.getElementById("category-filter");
+    const toggle = document.getElementById("view-toggle") as (HTMLElement & { value: string }) | null;
+    const cards = document.getElementById("component-cards");
+    if (!input || !emptyState || !chipSet || !toggle || !cards) {
       return;
     }
 
-    input.addEventListener("input", () => {
+    await customElements.whenDefined("forge-chip");
+    const chips = Array.from(chipSet.querySelectorAll<ChipElement>("forge-chip"));
+    const items = document.querySelectorAll<HTMLElement>(
+      "#component-cards > li",
+    );
+
+    const applyFilters = (): void => {
       const query = input.value.toLowerCase().trim();
+      const selected = chips.filter((chip) => chip.selected).map((chip) => chip.value);
       let visibleCount = 0;
       items.forEach((item) => {
         const matches =
-          !query || (item.dataset.filterText ?? "").includes(query);
-        item.hidden = !matches;
+          (!query || (item.dataset.filterText ?? "").includes(query)) &&
+          (selected.length === 0 || selected.includes(item.dataset.category ?? ""));
+        item.style.display = matches ? "" : "none";
         if (matches) {
           visibleCount++;
         }
       });
       emptyState.hidden = visibleCount > 0;
+      setListFilters(PAGE_KEY, { query: input.value, categories: selected });
+    };
+
+    const applyView = (view: ListView): void => {
+      cards.dataset.view = view;
+    };
+
+    const saved = getListFilters(PAGE_KEY);
+    input.value = saved.query;
+    chips.forEach((chip) => {
+      chip.selected = saved.categories.includes(chip.value);
     });
+    const view = getListView();
+    toggle.value = view;
+    applyView(view);
+    applyFilters();
+
+    toggle.addEventListener("forge-button-toggle-group-change", ({ detail }: Event & { detail?: string }) => {
+      const next: ListView = detail === "list" ? "list" : "card";
+      setListView(next);
+      applyView(next);
+    });
+    input.addEventListener("input", applyFilters);
+    document.getElementById("component-filter")?.closest("forge-text-field")?.addEventListener("forge-text-field-clear", applyFilters);
+    chipSet.addEventListener("forge-chip-select", applyFilters);
   };
 
   document.addEventListener("astro:page-load", initComponentFilter);

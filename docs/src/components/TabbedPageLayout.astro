@@ -25,6 +25,7 @@ interface Props {
   currentTab: string;
   baseUrl: string;
   slug: string;
+  backHref?: string;
 }
 
 const {
@@ -37,6 +38,7 @@ const {
   currentTab,
   baseUrl,
   slug,
+  backHref,
 } = Astro.props;
 
 const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
@@ -50,6 +52,7 @@ const activeTabIndex = tabs.findIndex((tab) => tab.id === currentTab);
       showBadge={showBadge}
       badgeText={badgeText}
       badgeTheme={badgeTheme}
+      backHref={backHref}
     />
 
     <nav aria-label="Page tabs">
