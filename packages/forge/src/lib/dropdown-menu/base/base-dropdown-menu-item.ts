@@ -1,4 +1,4 @@
-import { consume } from '@lit/context';
+import { consume, ContextRoot } from '@lit/context';
 import { CSSResultGroup, html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ClassInfo, classMap } from 'lit/directives/class-map.js';
@@ -44,6 +44,9 @@ import styles from './base-dropdown-menu-item.scss';
  */
 export abstract class BaseDropdownMenuItem extends BaseLitElement {
   public static styles: CSSResultGroup = unsafeCSS(styles);
+
+  /** @internal */
+  public static contextRoot = new ContextRoot();
 
   /**
    * The value of the item, provided in the detail of the select event.
@@ -110,6 +113,10 @@ export abstract class BaseDropdownMenuItem extends BaseLitElement {
   }
 
   public override connectedCallback(): void {
+    const menu = getRootMenu(this);
+    if (menu) {
+      BaseDropdownMenuItem.contextRoot.attach(menu);
+    }
     super.connectedCallback();
     setDefaultAria(this, this._internals, { role: this._defaultRole });
     this.tabIndex = -1;
@@ -134,14 +141,18 @@ export abstract class BaseDropdownMenuItem extends BaseLitElement {
 
   public render(): TemplateResult {
     const content = html`
-      <slot name="start"></slot>
-      <div id="label" class="label" part="label">
-        <slot></slot>
-        <slot name="secondary"></slot>
-        <slot name="tertiary"></slot>
+      <div class="main">
+        <slot name="start"></slot>
+        <div id="label" class="label" part="label">
+          <slot></slot>
+          <slot name="secondary"></slot>
+          <slot name="tertiary"></slot>
+        </div>
       </div>
-      <slot name="end"></slot>
-      ${this._renderIndicator()}
+      <div class="end">
+        <slot name="end"></slot>
+        <div class="indicator">${this._renderIndicator()}</div>
+      </div>
       <forge-focus-indicator part="focus-indicator" target=":host" focus-mode="focus" inward></forge-focus-indicator>
       ${this.disabled ? nothing : html`<forge-state-layer exportparts="surface:state-layer"></forge-state-layer>`}
     `;
@@ -157,7 +168,7 @@ export abstract class BaseDropdownMenuItem extends BaseLitElement {
   /** Classes applied to the root element. Extend to add classes for additional states. */
   protected _getRootClasses(): ClassInfo {
     return {
-      'forge-option': true,
+      'forge-dropdown-menu-item': true,
       disabled: this.disabled,
       'two-line': this.twoLine && !this.threeLine,
       'three-line': this.threeLine,
@@ -165,7 +176,7 @@ export abstract class BaseDropdownMenuItem extends BaseLitElement {
     };
   }
 
-  /** Renders content at the end of the root element, such as a checkmark. */
+  /** Renders content after the end slot in the same column, such as a checkmark. */
   protected _renderIndicator(): TemplateResult | typeof nothing {
     return nothing;
   }

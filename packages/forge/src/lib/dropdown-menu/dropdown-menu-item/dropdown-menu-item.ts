@@ -240,7 +240,6 @@ export class DropdownMenuItemComponent extends BaseDropdownMenuItem {
       <forge-popover
         class="submenu"
         part="submenu"
-        preset="list"
         trigger-type="manual"
         anchor-accessibility="none"
         .offset=${{ crossAxis: SUBMENU_ALIGNMENT_OFFSET }}

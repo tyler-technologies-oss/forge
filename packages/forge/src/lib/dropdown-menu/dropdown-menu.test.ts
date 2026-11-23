@@ -815,12 +815,12 @@ describe('DropdownMenu', () => {
 
       edit.twoLine = true;
       await edit.updateComplete;
-      expect(edit.shadowRoot?.querySelector('.forge-option')?.classList.contains('two-line')).toBe(true);
+      expect(edit.shadowRoot?.querySelector('.forge-dropdown-menu-item')?.classList.contains('two-line')).toBe(true);
 
       edit.threeLine = true;
       await edit.updateComplete;
-      expect(edit.shadowRoot?.querySelector('.forge-option')?.classList.contains('three-line')).toBe(true);
-      expect(edit.shadowRoot?.querySelector('.forge-option')?.classList.contains('two-line')).toBe(false);
+      expect(edit.shadowRoot?.querySelector('.forge-dropdown-menu-item')?.classList.contains('three-line')).toBe(true);
+      expect(edit.shadowRoot?.querySelector('.forge-dropdown-menu-item')?.classList.contains('two-line')).toBe(false);
     });
 
     it('should not open its submenu on hover when disabled', async () => {
@@ -1088,6 +1088,44 @@ describe('DropdownMenu', () => {
       harness.menu.querySelector(`forge-dropdown-menu-item-checkbox[value="${value}"]`) as DropdownMenuItemCheckboxComponent;
 
     const hasCheckmark = (item: BaseDropdownMenuItem): boolean => !!item.shadowRoot?.querySelector('forge-icon[part="checkmark"]');
+
+    describe('adjoining checked items', () => {
+      const getRadii = (item: BaseDropdownMenuItem): string[] => {
+        const style = getComputedStyle(item.shadowRoot?.querySelector('[part="root"]') as Element);
+        return [style.borderStartStartRadius, style.borderStartEndRadius, style.borderEndEndRadius, style.borderEndStartRadius];
+      };
+
+      const adjoiningTemplate = (): TemplateResult => html`
+        <button id="trigger" type="button">View</button>
+        <forge-dropdown-menu trigger="trigger">
+          <forge-dropdown-menu-item-checkbox value="a" checked>A</forge-dropdown-menu-item-checkbox>
+          <forge-dropdown-menu-item-checkbox value="b" checked>B</forge-dropdown-menu-item-checkbox>
+          <forge-dropdown-menu-item-checkbox value="c">C</forge-dropdown-menu-item-checkbox>
+        </forge-dropdown-menu>
+      `;
+
+      it('should remove the radius of adjoining sides when contiguous items are checked', async () => {
+        const harness = await renderMenu(adjoiningTemplate());
+        await harness.open();
+        const [a, b] = ['a', 'b'].map(value => getCheckbox(harness, value));
+        const radius = getRadii(getCheckbox(harness, 'c'))[0];
+
+        expect(getRadii(a)).toEqual([radius, radius, '0px', '0px']);
+        expect(getRadii(b)).toEqual(['0px', '0px', radius, radius]);
+      });
+
+      it('should restore the radius when an adjoining item is unchecked', async () => {
+        const harness = await renderMenu(adjoiningTemplate());
+        await harness.open();
+        const [a, b] = ['a', 'b'].map(value => getCheckbox(harness, value));
+        b.checked = false;
+        await b.updateComplete;
+        await a.updateComplete;
+
+        const radius = getRadii(b)[0];
+        expect(getRadii(a)).toEqual([radius, radius, radius, radius]);
+      });
+    });
 
     it('should have the menuitemcheckbox role', async () => {
       const harness = await renderMenu(checkboxTemplate());
@@ -1592,6 +1630,83 @@ describe('DropdownMenu', () => {
         const item = screen.container.querySelector('forge-dropdown-menu-item-radio') as DropdownMenuItemRadioComponent;
         await vi.waitFor(() => expect(item.disabled).toBe(true));
       });
+    });
+  });
+
+  describe('end content alignment', () => {
+    const alignmentTemplate = (): TemplateResult => html`
+      <button id="trigger" type="button">Open</button>
+      <forge-dropdown-menu trigger="trigger">
+        <forge-dropdown-menu-item value="short">Cut<span slot="end">⌘X</span></forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="long">A considerably longer item label<span slot="end">⌘⇧Alt+L</span></forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="none">No end content</forge-dropdown-menu-item>
+        <forge-dropdown-menu-item value="submenu">
+          More
+          <forge-dropdown-menu-item value="nested">Nested</forge-dropdown-menu-item>
+        </forge-dropdown-menu-item>
+        <forge-dropdown-menu-item-checkbox value="checked" checked>Checked<span slot="end">⌘K</span></forge-dropdown-menu-item-checkbox>
+        <forge-dropdown-menu-item-checkbox value="unchecked">Unchecked</forge-dropdown-menu-item-checkbox>
+        <forge-dropdown-menu-group label="Group">
+          <forge-dropdown-menu-item value="grouped">Grouped<span slot="end">⌘G</span></forge-dropdown-menu-item>
+        </forge-dropdown-menu-group>
+      </forge-dropdown-menu>
+    `;
+
+    const getLeft = (element: Element | null | undefined): number => element?.getBoundingClientRect().left ?? Number.NaN;
+    const getRight = (element: Element | null | undefined): number => element?.getBoundingClientRect().right ?? Number.NaN;
+    const getCheckbox = (harness: DropdownMenuHarness, value: string): Element =>
+      harness.menu.querySelector(`forge-dropdown-menu-item-checkbox[value="${value}"]`) as Element;
+    const getEnd = (item: Element): Element | null | undefined => item.querySelector('[slot="end"]');
+    const getLabel = (item: BaseDropdownMenuItem): Element | null | undefined => item.shadowRoot?.querySelector('.label');
+
+    it('should right-align end slot content in the same column for items without an indicator', async () => {
+      const harness = await renderMenu(alignmentTemplate());
+      await harness.open();
+
+      const endRights = Array.from(harness.menu.querySelectorAll('[slot="end"]'))
+        .filter(end => end.parentElement?.localName !== 'forge-dropdown-menu-item-checkbox')
+        .map(getRight);
+      expect(endRights.length).toBe(3);
+      expect(new Set(endRights.map(Math.round)).size).toBe(1);
+    });
+
+    it('should position end slot content after the longest label', async () => {
+      const harness = await renderMenu(alignmentTemplate());
+      await harness.open();
+
+      const endLeft = getLeft(getEnd(harness.item('long')));
+      const labelRights = Array.from(harness.menu.querySelectorAll<BaseDropdownMenuItem>(DROPDOWN_MENU_ITEM_SELECTOR)).map(item => getRight(getLabel(item)));
+      expect(endLeft).toBeGreaterThanOrEqual(Math.max(...labelRights.filter(right => !Number.isNaN(right))));
+    });
+
+    it('should align checkmarks and submenu icons in the same column', async () => {
+      const harness = await renderMenu(alignmentTemplate());
+      await harness.open();
+
+      const checkmark = getCheckbox(harness, 'checked').shadowRoot?.querySelector('[part="checkmark"]');
+      const submenuIcon = harness.item('submenu').shadowRoot?.querySelector('[part="submenu-icon"]');
+      expect(Math.round(getLeft(checkmark))).toBe(Math.round(getLeft(submenuIcon)));
+    });
+
+    it('should place checkmarks and submenu icons after the end slot content', async () => {
+      const harness = await renderMenu(alignmentTemplate());
+      await harness.open();
+
+      const checkmark = getCheckbox(harness, 'checked').shadowRoot?.querySelector('[part="checkmark"]');
+      const endRight = getRight(getEnd(getCheckbox(harness, 'checked')));
+      expect(getLeft(checkmark)).toBeGreaterThanOrEqual(endRight);
+    });
+
+    it('should not change the menu width when an item is checked', async () => {
+      const harness = await renderMenu(alignmentTemplate());
+      await harness.open();
+      const unchecked = harness.menu.querySelector('forge-dropdown-menu-item-checkbox[value="unchecked"]') as DropdownMenuItemCheckboxComponent;
+      const before = harness.item('long').getBoundingClientRect().width;
+
+      unchecked.checked = true;
+      await unchecked.updateComplete;
+
+      expect(harness.item('long').getBoundingClientRect().width).toBe(before);
     });
   });
 });

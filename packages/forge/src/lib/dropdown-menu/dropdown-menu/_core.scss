@@ -1,8 +1,10 @@
+@use '@tylertech/forge-tokens/sass/spacing';
 @use '../../divider';
 @use '../../popover';
-@use './token-utils' as *;
+@use '../base/core' as base-core;
+@use '../base/token-utils' as *;
 
-@forward './token-utils';
+@forward '../base/token-utils';
 
 @mixin host {
   display: contents;
@@ -18,9 +20,16 @@
 }
 
 @mixin menu {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: base-core.$columns;
+  column-gap: 0;
+  align-content: start;
   outline: none;
+  padding-block: #{token('margin')};
+
+  slot::slotted(*) {
+    grid-column: 1 / -1;
+  }
 
   @include divider.provide-theme(
     (

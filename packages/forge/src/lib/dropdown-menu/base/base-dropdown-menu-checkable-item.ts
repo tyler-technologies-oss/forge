@@ -1,6 +1,7 @@
 import { tylIconCheck } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ClassInfo } from 'lit/directives/class-map.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { removeDefaultAttribute } from '../../core/utils/lit-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
@@ -12,6 +13,8 @@ import '../../icon/icon.js';
 
 const CHECKED_STATE = 'checked';
 const UNCHECKED_STATE = 'unchecked';
+const ADJOINS_PREVIOUS_STATE = 'adjoins-previous';
+const ADJOINS_NEXT_STATE = 'adjoins-next';
 
 /**
  * The base class for items that have a checked state and participate in forms.
@@ -21,6 +24,8 @@ const UNCHECKED_STATE = 'unchecked';
  * @event {Event} change - Dispatched when the user changes the checked state of the item.
  *
  * @state checked - Applied when the item is checked.
+ * @state adjoins-previous - Applied when the item and the item before it are both checked.
+ * @state adjoins-next - Applied when the item and the item after it are both checked.
  *
  * @csspart checkmark - The check icon shown when the item is checked.
  */
@@ -70,6 +75,21 @@ export abstract class BaseDropdownMenuCheckableItem extends BaseDropdownMenuItem
     return this._internals.form;
   }
 
+  #neighbors: Array<Element | null> = [];
+
+  public override connectedCallback(): void {
+    super.connectedCallback();
+    if (this.hasUpdated) {
+      this.#syncAdjoining();
+    }
+  }
+
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#neighbors.forEach(neighbor => neighbor?.isConnected && BaseDropdownMenuCheckableItem.#updateAdjoining(neighbor));
+    this.#neighbors = [];
+  }
+
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     super.willUpdate(changedProperties);
 
@@ -87,6 +107,14 @@ export abstract class BaseDropdownMenuCheckableItem extends BaseDropdownMenuItem
     }
   }
 
+  public override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('checked')) {
+      this.#syncAdjoining();
+    }
+  }
+
   public formDisabledCallback(disabled: boolean): void {
     this.disabled = disabled;
   }
@@ -97,6 +125,10 @@ export abstract class BaseDropdownMenuCheckableItem extends BaseDropdownMenuItem
 
   public formStateRestoreCallback(state: File | string | FormData | null): void {
     this.checked = state === CHECKED_STATE;
+  }
+
+  protected override _getRootClasses(): ClassInfo {
+    return { ...super._getRootClasses(), checkable: true, checked: this.checked };
   }
 
   protected override _renderIndicator(): TemplateResult | typeof nothing {
@@ -115,5 +147,20 @@ export abstract class BaseDropdownMenuCheckableItem extends BaseDropdownMenuItem
 
     this.checked = checked;
     this.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  static #updateAdjoining(item: Element | null): void {
+    if (!(item instanceof BaseDropdownMenuCheckableItem)) {
+      return;
+    }
+
+    const adjoins = (sibling: Element | null): boolean => item.checked && sibling instanceof BaseDropdownMenuCheckableItem && sibling.checked;
+    toggleState(item._internals, ADJOINS_PREVIOUS_STATE, adjoins(item.previousElementSibling));
+    toggleState(item._internals, ADJOINS_NEXT_STATE, adjoins(item.nextElementSibling));
+  }
+
+  #syncAdjoining(): void {
+    this.#neighbors = [this.previousElementSibling, this.nextElementSibling];
+    [this.previousElementSibling, this, this.nextElementSibling].forEach(item => BaseDropdownMenuCheckableItem.#updateAdjoining(item));
   }
 }

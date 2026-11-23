@@ -201,7 +201,6 @@ export class DropdownMenuComponent extends BaseLitElement {
       <forge-popover
         class="popover"
         part="popover"
-        preset="list"
         anchor-accessibility="none"
         .placement=${this.placement}
         @forge-popover-beforetoggle=${this.#handleBeforeToggle}
