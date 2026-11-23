@@ -13,6 +13,7 @@ export * from './ai-chain-of-thought/index.js';
 export * from './ai-chat-header/index.js';
 export * from './ai-chat-interface/index.js';
 export * from './ai-client-message/index.js';
+export * from './ai-clarification-stepper/index.js';
 export * from './ai-copy-button/index.js';
 export * from './ai-conversations-panel/index.js';
 export * from './ai-context-chip/index.js';

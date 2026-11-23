@@ -1,0 +1,93 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiClarificationStepperStories from './AiClarificationStepper.stories';
+
+<Meta of={AiClarificationStepperStories} />
+
+<Title />
+
+The AI Clarification Stepper is an inline component an agent uses to have a person settle a few interpretive choices before it runs a query or builds a report. It walks one question per step, with a "Step N of M" counter beside the question. Every question offers a recommended answer, lets the person type an answer when none of the options fit, and can be answered entirely with the recommendations in one choice.
+
+It is content in the conversation, not an overlay: it does not trap focus, does not respond to Escape, and scrolls away with the rest of the thread.
+
+<Canvas of={AiClarificationStepperStories.Demo} />
+
+## Questions
+
+Each entry in `questions` is one step. A question has an `id`, the `question` text, and 2-4 `options`. Exactly one option should set `recommended`; it is always shown first, preselected, and labeled "· Recommended", so "Choose recommended for all" and the final action always have a defined outcome. The order of `options` otherwise decides the order of the rest.
+
+```ts
+const questions = [
+  {
+    id: 'time-window',
+    question: 'What should "last quarter" mean?',
+    options: [
+      { label: 'Previous calendar quarter', value: 'calendar_quarter', recommended: true },
+      { label: 'Trailing three months', value: 'trailing_3_months' }
+    ],
+    allowCustom: false
+  }
+];
+```
+
+## Numbered options
+
+Options are clear, borderless rows. Each leads with a numbered marker styled like a `forge-stepper` step, squared off with the medium shape token (4px) instead of the step's circle: a primary number on a light navy fill while idle, and the tertiary container fill once chosen. The chosen row takes the light tertiary container fill (`#E8EBFF`), and its number the deeper one (`#B5C0FF`). "Choose recommended for all" is set apart by a Forge divider above and below it, with a grey "Auto" badge on its right. Numbers run in display order across the options, "Something else", and "Choose recommended for all". The markers are built from the same step tokens as `forge-stepper`, so they can be themed with the `--forge-step-*` custom properties (for example `--forge-step-primary-color` or `--forge-step-icon-content-size`). The resting fill of each row has no matching Forge theme token, so it is exposed as `--forge-ai-clarification-stepper-marker-background`.
+
+## Something else
+
+Unless a question sets `allowCustom` to `false`, it ends with a "Something else" option. While it is chosen, a pencil replaces its number. The option is itself an editable text field, built from the plain Forge field (`forge-field--plain`) so it carries no border, fill or focus ring: focusing it or typing in it selects the option, and clicking its radio with a pointer moves focus into the field. A blank answer is never valid, so the forward action stays disabled until the field has text.
+Omit the option only when a question is genuinely closed, such as "calendar quarter or trailing three months", which has no third answer.
+
+<Canvas of={AiClarificationStepperStories.ClosedQuestion} />
+
+## Stepping through
+
+- **Next** is a tonal Forge button (`forge-button--tonal`) at the end of the bottom row. It advances one step. Pressing Enter in the text field does the same and never submits the whole set, so a fast typist cannot skip the remaining questions.
+- **Back** is a plain text Forge button, with no outline, at the start of the bottom row. It is absent on the first step and restores earlier answers, including typed text.
+- **Choose recommended for all** is the last option on every step, with an "Auto" badge on its right. It appears when any question has a recommended option. Selecting it turns the forward action into **Run**, which submits every recommended answer at once; picking any other option clears it.
+- On the last step the forward action becomes **Run**.
+- A line above the buttons, styled like the "Step N of M" counter, lists the answers chosen so far, separated by bullets: "Cleared by arrest • Assignment date". It covers the steps up to the current one, or every question once "Choose recommended for all" is chosen. A custom answer appears once it has text.
+
+<Canvas of={AiClarificationStepperStories.SingleQuestion} />
+
+## Submitting
+
+Finishing the last step, or running with "Choose recommended for all", fires `forge-ai-clarification-stepper-submit` with an `answers` array. Each answer carries the `questionId`, the chosen `value` and `label`, and a `custom` flag that is `true` when the person typed their own answer. A custom answer is an instruction rather than a value, so the agent may need to interpret it.
+
+```ts
+stepper.addEventListener('forge-ai-clarification-stepper-submit', evt => {
+  console.log(evt.detail.answers);
+});
+```
+
+## Status
+
+The host drives what happens after the answers are submitted through `status`, because only the host knows whether they were delivered:
+
+- **`editing`** is the default. The person can step through the questions and answer.
+- **`sending`** disables every control while the answers are delivered. Their choices stay where they were.
+- **`sent`** is terminal. The stepper becomes a read-only record of the turn, showing each submitted answer, from `answers`, under the question it answers. It is not a form to revisit, and it can be shown again from history.
+
+<Canvas of={AiClarificationStepperStories.Sending} />
+
+<Canvas of={AiClarificationStepperStories.Sent} />
+
+## Narrow containers
+
+The component fills its container and wraps its actions, so it holds up in a chat column down to 360px.
+
+<Canvas of={AiClarificationStepperStories.Narrow} />
+
+## API
+
+<CustomArgTypes />
+
+## Accessibility
+
+- Each question's options are native radio inputs sharing one `name`, inside a `role="radiogroup"` labelled by the question. That gives true single-select semantics, arrow-key movement within the group, and a single tab stop.
+- The "Something else" radio is named "Something else", and its text field has its own programmatic label that includes the question. Choosing the option from the keyboard leaves focus on the radio so arrow-key navigation keeps working; Tab moves on to the text field.
+- "Choose recommended for all" is a member of the same radio group, so it is reached with the same arrow keys.
+- The numbers are decorative and hidden from assistive technology. The native radio sits invisibly over each number, so selection and announcements ("radio, 2 of 4, selected") come from the radio, not the marker. The chosen option is also shown by a filled marker and a darker row, and a chosen "Something else" by its pencil, never by color alone. The dividers are hidden from assistive technology. Because rows carry no border or outline, keyboard focus is shown as a ring on the number.
+- When the step changes, focus moves to the new question and the "Step N of M" counter is read as its description, so the change is announced.
+- There is no focus trap and no Escape handling.
