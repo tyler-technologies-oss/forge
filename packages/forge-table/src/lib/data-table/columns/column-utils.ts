@@ -124,6 +124,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
               : undefined,
         enableResizing: column.resizable ?? true,
         ...(filters.length > 0 && { filterFn: filters[0].filterFn }),
+        ...(column.sortFn && { sortFn: column.sortFn }),
         ...(column.aggregate && { aggregationFn: createAggregationFn(column.aggregate, getRawValueReader(column)) }),
         ...(column.editable
           ? { cell: inputCell(typeof column.template === 'function' ? column.template : undefined) }

@@ -1250,6 +1250,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.3.0
         version: 12.3.0(rollup@4.60.1)(tslib@2.8.1)(typescript@5.9.3)
+      '@tanstack/match-sorter-utils':
+        specifier: ^9.2.6
+        version: 9.2.6
       '@tylertech-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 4.0.0(eslint@9.39.4(jiti@2.6.1))(typescript-eslint@8.58.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(typescript@5.9.3)
@@ -5372,6 +5375,10 @@ packages:
     peerDependencies:
       lit: ^3.1.0
 
+  '@tanstack/match-sorter-utils@9.2.6':
+    resolution: {integrity: sha512-DIpUSOhPfQ7u/qfUi/Wgm0wBO56MyBYXGvnlI0NcauDRPqdBUlAZZjW2Dxm92m+k1UWVhKw8YJ4f47+75Aujyw==}
+    engines: {node: '>=20'}
+
   '@tanstack/store@0.11.2':
     resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
@@ -9400,6 +9407,9 @@ packages:
 
   remend@1.4.0:
     resolution: {integrity: sha512-mHiYhhwphs1IgIZmkToKLwJn0U99IjPXuutkA2acrNcG0vlEq2G4TGnd2eT0saIHwh2KjaCpvleHcsd5SAz96A==}
+
+  remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
   request-light@0.5.8:
     resolution: {integrity: sha512-3Zjgh+8b5fhRJBQZoy+zbVKpAQGLyka0MPgW3zruTF4dFFJ8Fqcfu9YsAvi/rvdcaTeWG3MkbZv4WKxAn/84Lg==}
@@ -14838,6 +14848,10 @@ snapshots:
       '@tanstack/virtual-core': 3.19.11
       lit: 3.3.2
 
+  '@tanstack/match-sorter-utils@9.2.6':
+    dependencies:
+      remove-accents: 0.5.0
+
   '@tanstack/store@0.11.2': {}
 
   '@tanstack/table-core@9.3.1':
@@ -19990,6 +20004,8 @@ snapshots:
       unified: 11.0.5
 
   remend@1.4.0: {}
+
+  remove-accents@0.5.0: {}
 
   request-light@0.5.8: {}
 

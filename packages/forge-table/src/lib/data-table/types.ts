@@ -1,4 +1,4 @@
-import type { AggregationFnDef, Cell, Column, ColumnOrderState, ColumnVisibilityState, FilterFn, RowData } from '@tanstack/lit-table';
+import type { AggregationFnDef, Cell, Column, ColumnOrderState, ColumnVisibilityState, FilterFn, RowData, SortFn } from '@tanstack/lit-table';
 import type { DataSource, Formatter } from '@tylertech/forge-core';
 import type { BuiltInColumnAggregation } from './features/aggregation.js';
 import type { DataTableFeatures } from './table-features.js';
@@ -88,6 +88,11 @@ export interface ColumnFilter<TData extends Row = Row> {
  */
 export type ColumnFilterOption<TData extends Row = Row> = ColumnFilter<TData> | ColumnFilterFn<TData> | string;
 
+/**
+ * A TanStack sort function: a built-in `sortFn_*` or a custom one that follows the same API.
+ */
+export type ColumnSortFn<TData extends Row = Row> = SortFn<DataTableFeatures, TData>;
+
 export type ResolvedColumnFilter<TData extends Row = Row> = ColumnFilter<TData> & { filterFn: ColumnFilterFn<TData> };
 
 export interface FilterFnChangeEventDetail<TData extends Row = Row> {
@@ -126,6 +131,10 @@ export interface ColumnDef<TData extends Row = Row> {
   useTemplateSlot?: boolean;
   dataType?: DataType;
   filter?: ColumnFilterOption<TData> | ColumnFilterOption<TData>[];
+  /**
+   * The function that sorts the column, instead of the one TanStack picks from its values. Passed straight to TanStack, so it needs no registration.
+   */
+  sortFn?: ColumnSortFn<TData>;
   stopRowClickPropagation?: boolean;
   columns?: ColumnDef<TData>[];
   align?: ColumnAlign;

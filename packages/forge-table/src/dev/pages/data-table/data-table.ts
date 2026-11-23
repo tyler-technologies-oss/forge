@@ -2,6 +2,7 @@
 import '$src/shared';
 import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
+import { fuzzyFilter, fuzzySort } from '@tylertech/forge-table/data-table/features/fuzzy';
 import './data-table.scss';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import type { BadgeTheme } from '@tylertech/forge/badge';
@@ -17,7 +18,6 @@ import {
   filterFn_includesString,
   filterFn_lessThan,
   filterFn_startsWith,
-  filterFn_weakEquals,
   linkCell,
   meterCell,
   ratingCell,
@@ -100,7 +100,7 @@ const numberFilterFns = [filterFn_equals, filterFn_greaterThan, filterFn_lessTha
 const flatColumns: ColumnDef<RowData>[] = [
   { header: 'Id', property: 'id', dataType: 'number', filter: numberFilterFns },
   { header: 'First Name', property: 'firstName', renamable: true, filter: textFilterFns },
-  { header: 'Last Name', property: 'lastName', renamable: true },
+  { header: 'Last Name', property: 'lastName', renamable: true, filter: fuzzyFilter, sortFn: fuzzySort },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },
   { header: 'Phone', property: 'phone', template: linkCell({ type: 'phone' }) },
   { header: 'Department', property: 'department', renamable: true },

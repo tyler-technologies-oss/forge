@@ -67,11 +67,18 @@
     "tslib": "catalog:"
   },
   "peerDependencies": {
+    "@tanstack/match-sorter-utils": "^9.2.6",
     "@tylertech/forge": "^3.20.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/match-sorter-utils": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
     "@rollup/plugin-typescript": "^12.3.0",
+    "@tanstack/match-sorter-utils": "^9.2.6",
     "@tylertech-eslint/eslint-plugin": "catalog:",
     "@tylertech/forge": "workspace:*",
     "@tylertech/forge-tokens": "workspace:*",
