@@ -1,8 +1,8 @@
-@use '../../option/option-group/core' as option-group-core;
 @use '../../option/option-group/token-utils' as option-group;
+@use './core' as *;
 
 :host {
-  display: block;
+  @include host;
 }
 
 :host([hidden]) {
@@ -14,9 +14,9 @@
 }
 
 .forge-dropdown-menu-group {
-  @include option-group-core.base;
+  @include base;
 }
 
 .label {
-  @include option-group-core.label;
+  @include label;
 }

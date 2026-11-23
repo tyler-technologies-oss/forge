@@ -1,0 +1,28 @@
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '../../option/option-group/core' as option-group-core;
+@use '../base/core' as base-core;
+@use '../base/token-utils' as *;
+
+@forward '../base/token-utils';
+
+@mixin host {
+  @include base-core.grid;
+}
+
+@mixin base {
+  @include option-group-core.base;
+  @include base-core.grid;
+
+  slot::slotted(*) {
+    grid-column: 1 / -1;
+  }
+}
+
+@mixin label {
+  @include option-group-core.label;
+
+  margin-block-start: #{spacing.variable('xsmall')};
+  margin-block-end: #{spacing.variable('xxsmall')};
+  margin-inline-start: #{token('margin')};
+  grid-column: 1 / -1;
+}
