@@ -97,6 +97,7 @@ import {
   tylIconCheck,
   tylIconCheckCircle,
   tylIconClockOutline,
+  tylIconClear,
   tylIconClose,
   tylIconCloseCircle,
   tylIconCode,
@@ -181,6 +182,8 @@ import {
   tylIconVariable,
   tylIconViewCarousel,
   tylIconViewDashboardOutline,
+  tylIconViewGrid,
+  tylIconViewList,
   tylIconViewQuilt,
   tylIconWarning,
   tylIconWidgets
@@ -206,6 +209,7 @@ IconRegistry.define([
   tylIconCheck,
   tylIconCheckCircle,
   tylIconClockOutline,
+  tylIconClear,
   tylIconClose,
   tylIconCloseCircle,
   tylIconCode,
@@ -290,6 +294,8 @@ IconRegistry.define([
   tylIconVariable,
   tylIconViewCarousel,
   tylIconViewDashboardOutline,
+  tylIconViewGrid,
+  tylIconViewList,
   tylIconViewQuilt,
   tylIconWarning,
   tylIconWidgets

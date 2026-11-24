@@ -5,7 +5,6 @@ import PendoAnalytics from "../components/PendoAnalytics.astro";
 import SearchDialog from "../components/SearchDialog.astro";
 import SearchField from "../components/SearchField.astro";
 import Sidenav from "../components/Sidenav.astro";
-import { getCollection } from "astro:content";
 import "../styles/global.css";
 import "../styles/dark-theme.scss";
 
@@ -49,7 +48,6 @@ const SEARCH_SECTIONS: Record<string, string> = {
 
 const searchSection = SEARCH_SECTIONS[Astro.url.pathname.split("/")[1]] ?? "Docs";
 
-const components = await getCollection("components");
 ---
 
 <!doctype html>
@@ -318,7 +316,7 @@ const components = await getCollection("components");
         slot="left"
         data-sidenav
         transition:persist>
-        <Sidenav components={components} />
+        <Sidenav />
       </div>
 
       <main

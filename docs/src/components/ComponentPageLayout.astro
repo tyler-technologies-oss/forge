@@ -51,6 +51,7 @@ const baseUrl = `${import.meta.env.BASE_URL}components`;
   tabs={tabs}
   currentTab={currentTab}
   baseUrl={baseUrl}
+  backHref={`${baseUrl}/`}
   slug={slug}>
   <slot name="content" />
 </TabbedPageLayout>

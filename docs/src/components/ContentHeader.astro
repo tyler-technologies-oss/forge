@@ -13,6 +13,7 @@ interface Props {
   badgeText?: string;
   badgeTheme?: string;
   showBackButton?: boolean;
+  backHref?: string;
 }
 
 const {
@@ -22,17 +23,19 @@ const {
   badgeText = "Beta",
   badgeTheme = "warning",
   showBackButton = false,
+  backHref,
 } = Astro.props;
 ---
 
 <header class="content-header mb-small">
   <div class="flex items-center gap-small flex-wrap">
     {
-      showBackButton && (
+      (showBackButton || backHref) && (
         <forge-icon-button
           density="small"
           aria-label="Go back"
-          data-back>
+          data-back
+          data-back-href={backHref}>
           <forge-icon name="arrow_back" />
         </forge-icon-button>
       )
@@ -48,11 +51,20 @@ const {
 </header>
 
 <script>
+  import { navigate } from "astro:transitions/client";
+
   document.addEventListener("astro:page-load", () => {
     document
       .querySelectorAll<HTMLElement>("forge-icon-button[data-back]")
       .forEach((btn) => {
-        btn.addEventListener("click", () => history.back());
+        btn.addEventListener("click", () => {
+          const { backHref } = btn.dataset;
+          if (backHref) {
+            navigate(backHref);
+            return;
+          }
+          history.back();
+        });
       });
   });
 </script>
