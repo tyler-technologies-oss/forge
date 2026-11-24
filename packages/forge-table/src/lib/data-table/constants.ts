@@ -9,6 +9,7 @@ export const GROUPS_COLUMN_HEADER = 'Groups';
 export const DEFAULT_COLUMN_WIDTH = 172;
 export const SELECT_COLUMN_WIDTH = 40;
 export const EXPANDER_COLUMN_WIDTH = 48;
+export const EXPANDED_SLOT_PREFIX = 'expanded:row-';
 export const EXPANDER_COLUMN_LABEL = 'Toggle row expansion';
 export const GROUPS_COLUMN_WIDTH = 240;
 export const GROUP_INDENT_WIDTH = 24;

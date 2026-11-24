@@ -42,7 +42,7 @@ import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { HostSemantics } from './features/host-semantics.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
-import { canExpandRow, prependExpanderColumn } from './features/expander.js';
+import { canExpandRow, ExpandedSlotController, prependExpanderColumn } from './features/expander.js';
 import { getGroupedColumnOrder } from './features/row-grouping.js';
 import { isMultiSortEvent } from './features/sorting.js';
 import { RowVirtualization } from './features/virtualization.js';
@@ -330,12 +330,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   /**
    * Returns whether a given row has a detail row.
+   *
+   * A row with content in its `expanded:row-<id>` slot has one regardless.
    */
   @property({ attribute: false })
   public getRowHasDetail: ((row: TData, index: number) => boolean) | undefined;
 
   /**
    * Returns the detail element for a given row.
+   *
+   * When not set, the detail of a row that has one (see `getRowHasDetail`) is the content in its `expanded:row-<id>` slot.
    */
   @property({ attribute: false })
   public getRowDetail: ((row: TData, index: number) => HTMLElement) | undefined;
@@ -398,6 +402,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     super();
     this.#hostSemantics = new HostSemantics(this, this.attachInternals());
     new RowClickController<TData>(this);
+    new ExpandedSlotController(this);
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {

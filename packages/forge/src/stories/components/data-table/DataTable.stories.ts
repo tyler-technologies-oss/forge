@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/web-components-vite';
 import { action } from 'storybook/actions';
-import { html, nothing } from 'lit';
+import { html, nothing, type TemplateResult } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import { IconRegistry } from '@tylertech/forge/icon';
@@ -63,6 +63,9 @@ const meta = {
           ?bordered=${args.bordered}
           ?reorderable=${args.reorderable}
           ?expandable=${args.expandable}
+          .getSubRows=${args.getSubRows}
+          .getRowHasDetail=${args.getRowHasDetail}
+          .getRowDetail=${args.getRowDetail}
           ?groupable=${args.groupable}
           .grouping=${args.grouping}
           ?single-group-column=${args.singleGroupColumn}
@@ -83,6 +86,9 @@ const meta = {
           @forge-data-table-column-visibility=${columnVisibilityAction}
           @forge-data-table-column-rename=${columnRenameAction}
           @forge-data-table-grouping=${groupingAction}>
+          ${Object.entries(args.expandedSlots as Record<string, TemplateResult>).map(
+            ([rowId, content]) => html`<div slot=${`expanded:row-${rowId}`}>${content}</div>`
+          )}
         </forge-data-table>
       </div>
     `;
@@ -99,6 +105,10 @@ const meta = {
     bordered: { control: 'boolean' },
     reorderable: { control: 'boolean' },
     expandable: { control: 'boolean' },
+    getSubRows: { control: false },
+    getRowHasDetail: { control: false },
+    getRowDetail: { control: false },
+    expandedSlots: { control: false },
     groupable: { control: 'boolean' },
     grouping: { control: 'object' },
     singleGroupColumn: { control: 'boolean' },
@@ -128,6 +138,10 @@ const meta = {
     bordered: false,
     reorderable: false,
     expandable: false,
+    getSubRows: undefined,
+    getRowHasDetail: undefined,
+    getRowDetail: undefined,
+    expandedSlots: {},
     groupable: false,
     grouping: [],
     singleGroupColumn: false,
@@ -291,15 +305,15 @@ export const StickyFooter: Story = {
   }
 };
 
-type CellStoryOptions = Pick<Story, 'args'> & { code: string; description?: string };
+type CellStoryOptions = Pick<Story, 'args'> & { code: string; description?: string; language?: string };
 
-const exampleStory = ({ args, code, description }: CellStoryOptions): Story => ({
+const exampleStory = ({ args, code, description, language = 'ts' }: CellStoryOptions): Story => ({
   args: { data: employeeData, ...args },
   argTypes: { data: { control: false }, columns: { control: false } },
   parameters: {
     docs: {
       description: { story: description },
-      source: { code, language: 'ts' }
+      source: { code, language }
     }
   }
 });
@@ -862,4 +876,118 @@ export const ColumnRenaming: Story = exampleStory({
 table.addEventListener('forge-data-table-column-rename', ({ detail }) => {
   console.log(detail.columnId, detail.header);
 });`
+});
+
+// Expandable rows: sub rows and detail rows
+
+type EmployeeWithReports = EmployeeData & { reports?: EmployeeData[] };
+
+const withReports = (manager: EmployeeData, reports: EmployeeData[]): EmployeeWithReports => ({ ...manager, reports });
+
+const employeeHierarchy: EmployeeWithReports[] = [
+  withReports(employeeData[0], [employeeData[3]]),
+  employeeData[1],
+  withReports(employeeData[2], [employeeData[6]]),
+  withReports(employeeData[4], [employeeData[7]]),
+  employeeData[5]
+];
+
+const expandableColumns = [
+  employeeColumn('name', 'Name'),
+  employeeColumn('department', 'Department'),
+  employeeColumn('status', 'Status'),
+  employeeColumn('hireDate', 'Hire date', { format: new DateFormatter() })
+];
+
+const createEmployeeDetail = (employee: EmployeeData): HTMLElement => {
+  const detail = document.createElement('p');
+  detail.textContent = `${employee.name} joined ${employee.department} on ${employee.hireDate} and can be reached at ${employee.email}.`;
+  return detail;
+};
+
+const renderEmployeeDetail = (employee: EmployeeData): TemplateResult => html`
+  <p style="margin: 0;">${employee.name} joined ${employee.department} on ${employee.hireDate} and can be reached at ${employee.email}.</p>
+`;
+
+export const SubRows: Story = exampleStory({
+  description:
+    'Set `getSubRows` to return the child rows of a row, or `undefined` when it has none. With `expandable`, a row that has sub rows gets a toggle, and expanding it shows its sub rows as ordinary rows right after it. Rows without sub rows get no toggle.',
+  args: {
+    expandable: true,
+    data: employeeHierarchy,
+    columns: expandableColumns,
+    getSubRows: (row: EmployeeWithReports) => row.reports
+  },
+  code: `interface Employee {
+  name: string;
+  // ...
+  reports?: Employee[];
+}
+
+table.expandable = true;
+table.getSubRows = (row: Employee) => row.reports;`
+});
+
+export const DetailRows: Story = exampleStory({
+  description:
+    'Set `getRowHasDetail` to choose which rows have a detail row, and `getRowDetail` to create its content. The detail is a single full-width row below the expanded row. `getRowDetail` is called once when the row is expanded, and the element it returns is kept until the row is collapsed. Here, terminated employees have no detail and no toggle.',
+  args: {
+    expandable: true,
+    columns: expandableColumns,
+    getRowHasDetail: (row: EmployeeData) => row.status !== 'Terminated',
+    getRowDetail: createEmployeeDetail
+  },
+  code: `table.expandable = true;
+table.getRowHasDetail = (row: Employee) => row.status !== 'Terminated';
+table.getRowDetail = (row: Employee) => {
+  const detail = document.createElement('p');
+  detail.textContent = \`\${row.name} joined \${row.department} on \${row.hireDate}.\`;
+  return detail;
+};`
+});
+
+export const DetailRowsSlots: Story = exampleStory({
+  description:
+    'Detail content can also be written as markup. Put an element in the `expanded:row-<id>` slot of the table, where `<id>` is the id of the row (the index of the row in the data, unless the table uses another row id). The element stays in your own DOM, so your styles, templates and event handlers apply to it. When neither `getSubRows` nor `getRowHasDetail` is set, every row expands, and a row without slotted content expands to an empty detail row.',
+  args: {
+    expandable: true,
+    columns: expandableColumns,
+    expandedSlots: Object.fromEntries(employeeData.map((employee, index) => [String(index), renderEmployeeDetail(employee)]))
+  },
+  language: 'html',
+  code: `<forge-data-table expandable>
+  <p slot="expanded:row-0">John Doe joined Engineering on 2019-03-11.</p>
+  <p slot="expanded:row-1">Jane Smith joined Design on 2020-07-27.</p>
+  <p slot="expanded:row-2">Bob Johnson joined Sales on 2017-11-02.</p>
+</forge-data-table>`
+});
+
+export const DetailRowsMixed: Story = exampleStory({
+  description:
+    'A row with content in its `expanded:row-<id>` slot can always expand, whatever `getRowHasDetail` returns for it, so the two ways of providing detail content can be combined. Here, `getRowHasDetail` and `getRowDetail` provide the detail of Engineering employees, and Jane Smith and Charlie Wilson have slotted content. Every other row has neither, so it does not expand. When a row has both, `getRowDetail` is used. The table notices slotted content being added or removed, so toggles appear and disappear with it.',
+  args: {
+    expandable: true,
+    columns: expandableColumns,
+    getRowHasDetail: (row: EmployeeData) => row.department === 'Engineering',
+    getRowDetail: createEmployeeDetail,
+    expandedSlots: {
+      '1': renderEmployeeDetail(employeeData[1]),
+      '4': renderEmployeeDetail(employeeData[4])
+    }
+  },
+  language: 'html',
+  code: `<forge-data-table expandable>
+  <p slot="expanded:row-1">Jane Smith joined Design on 2020-07-27.</p>
+  <p slot="expanded:row-4">Charlie Wilson joined Support on 2022-05-09.</p>
+</forge-data-table>
+
+<script>
+  // Programmatic detail for Engineering. Rows with slotted content expand too.
+  table.getRowHasDetail = (row) => row.department === 'Engineering';
+  table.getRowDetail = (row) => {
+    const detail = document.createElement('p');
+    detail.textContent = \`\${row.name} joined \${row.department} on \${row.hireDate}.\`;
+    return detail;
+  };
+</script>`
 });

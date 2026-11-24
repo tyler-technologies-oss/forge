@@ -123,11 +123,42 @@ Apply compact and bordered styling for a denser, more defined table:
 
 ## Expandable Rows
 
-Enable expandable rows to show additional details:
+Set `expandable` to `true` to add a toggle column. Expanding a row shows its content in a full-width row below it. Where that content comes from depends on how the table is configured:
 
-Set `expandable` to `true` to add a toggle column, and provide the content of each row in its `expanded:row-<id>` slot. To expand sub rows or render detail content instead, set `getSubRows`, `getRowHasDetail` and `getRowDetail`.
+- With no `getSubRows` or `getRowHasDetail`, every row expands, and its content is whatever you put in its `expanded:row-<id>` slot.
+- With `getSubRows`, a row that has sub rows expands to show them.
+- With `getRowHasDetail`, a row that returns `true` expands to show its detail. The detail is the element returned by `getRowDetail`, or, when `getRowDetail` is not set, the content in the row's slot.
+- A row with content in its slot always expands, whatever `getRowHasDetail` returns for it.
+
+Rows that cannot expand have no toggle. Double-clicking a row that can expand, or clicking it when `allowRowClick` is set, toggles it too.
 
 <Canvas of={DataTableStories.ExpandableRows} />
+
+### Sub rows
+
+Set `getSubRows` to return the child rows of a row, or `undefined` when it has none. The sub rows are rendered as ordinary rows, right after their parent.
+
+<Canvas of={DataTableStories.SubRows} />
+
+### Detail rows
+
+Set `getRowHasDetail` to choose which rows have a detail, and `getRowDetail` to create its content. `getRowDetail` returns an element, and is called once each time the row is expanded rather than on every render.
+
+<Canvas of={DataTableStories.DetailRows} />
+
+A row can have both sub rows and a detail. The detail row comes first, followed by the sub rows.
+
+### Detail rows in slots
+
+To write the content as markup instead, put it in the `expanded:row-<id>` slot of the table. `<id>` is the id of the row, which is its index in the data unless the table uses another row id. The slotted element stays in your own DOM, so your styles, templates and event listeners apply to it.
+
+<Canvas of={DataTableStories.DetailRowsSlots} />
+
+Slotted content and `getRowDetail` can be combined. A row with slotted content expands even when `getRowHasDetail` is `false` for it, or when it does not have one at all, and the table adds and removes toggles as slotted content comes and goes. When a row has both, `getRowDetail` wins.
+
+<Canvas of={DataTableStories.DetailRowsMixed} />
+
+Detail rows are not rendered when `virtualized` is set.
 
 ## Virtualized Table
 

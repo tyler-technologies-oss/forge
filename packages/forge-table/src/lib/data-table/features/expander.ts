@@ -1,7 +1,7 @@
 import type { ColumnDef as TanstackColumnDef, Row as TanstackRow } from '@tanstack/lit-table';
-import { html, nothing, type TemplateResult } from 'lit';
+import { html, nothing, type ReactiveController, type ReactiveControllerHost, type TemplateResult } from 'lit';
 import { guard } from 'lit/directives/guard.js';
-import { EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH } from '../constants.js';
+import { EXPANDED_SLOT_PREFIX, EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH } from '../constants.js';
 import type { DataTableElement } from '../data-table.js';
 import type { DataTableFeatures } from '../table-features.js';
 import { renderExpandToggle } from '../templates/expand-toggle.js';
@@ -10,12 +10,59 @@ import { getCellRole } from './cell-selection.js';
 import { isFromInteractiveContent } from './row-click.js';
 import { getExpanderButtonId, getRowMeta } from './row-meta.js';
 
-type ExpandableHost<TData extends Row> = Pick<DataTableElement<TData>, 'expandable' | 'getSubRows' | 'getRowHasDetail' | 'getRowDetail' | 'cellSelection'>;
+type ExpandableHost<TData extends Row> = Pick<
+  DataTableElement<TData>,
+  'expandable' | 'getSubRows' | 'getRowHasDetail' | 'getRowDetail' | 'cellSelection' | 'children'
+>;
 
 /**
- * Returns whether the detail of a row should be shown when it is expanded.
- *
- * Requires `getRowHasDetail` to be set and to return `true` for the row.
+ * Requests an update of the host when content is added to, removed from or moved between the `expanded:row-<id>` slots, because a row with
+ * slotted content can expand and rows that are not expanded have no `<slot>` to report it through `slotchange`.
+ */
+export class ExpandedSlotController implements ReactiveController {
+  readonly #host: ReactiveControllerHost & HTMLElement;
+  readonly #observer = new MutationObserver(mutations => {
+    if (mutations.some(mutation => this.#affectsExpandedSlot(mutation))) {
+      this.#host.requestUpdate();
+    }
+  });
+
+  constructor(host: ReactiveControllerHost & HTMLElement) {
+    this.#host = host;
+    host.addController(this);
+  }
+
+  public hostConnected(): void {
+    this.#observer.observe(this.#host, { childList: true, attributes: true, attributeFilter: ['slot'], attributeOldValue: true });
+  }
+
+  public hostDisconnected(): void {
+    this.#observer.disconnect();
+  }
+
+  #affectsExpandedSlot(mutation: MutationRecord): boolean {
+    if (mutation.type === 'attributes') {
+      return [mutation.oldValue, (mutation.target as Element).getAttribute('slot')].some(isExpandedSlotName);
+    }
+    return [...mutation.addedNodes, ...mutation.removedNodes].some(node => node instanceof Element && isExpandedSlotName(node.getAttribute('slot')));
+  }
+}
+
+function isExpandedSlotName(name: string | null | undefined): boolean {
+  return !!name?.startsWith(EXPANDED_SLOT_PREFIX);
+}
+
+function getExpandedSlotName<TData extends Row>(row: TanstackRow<DataTableFeatures, TData>): string {
+  return `${EXPANDED_SLOT_PREFIX}${row.id}`;
+}
+
+function rowHasSlottedContent<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): boolean {
+  const name = getExpandedSlotName(row);
+  return !row.getIsGrouped() && [...host.children].some(child => child.getAttribute('slot') === name);
+}
+
+/**
+ * Returns whether `getRowHasDetail` says the row has a detail.
  */
 function rowHasDetail<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): boolean {
   return !row.getIsGrouped() && !!host.getRowHasDetail?.(row.original, row.index);
@@ -25,7 +72,8 @@ function rowHasDetail<TData extends Row>(host: ExpandableHost<TData>, row: Tanst
  * Backs TanStack's `getRowCanExpand`.
  *
  * Group rows can always expand. Other rows need `expandable`, and then: when neither `getSubRows` nor `getRowHasDetail` is set every row can
- * expand (its content is the `expanded:row-<id>` slot), otherwise a row can expand when it has sub rows or a detail.
+ * expand (its content is the `expanded:row-<id>` slot), otherwise a row can expand when it has sub rows, a detail, or content in its
+ * `expanded:row-<id>` slot, whatever `getRowHasDetail` returns for it.
  */
 export function canExpandRow<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): boolean {
   if (row.getIsGrouped()) {
@@ -37,7 +85,7 @@ export function canExpandRow<TData extends Row>(host: ExpandableHost<TData>, row
   if (!host.getSubRows && !host.getRowHasDetail) {
     return true;
   }
-  return row.subRows.length > 0 || rowHasDetail(host, row);
+  return row.subRows.length > 0 || rowHasDetail(host, row) || rowHasSlottedContent(host, row);
 }
 
 /**
@@ -95,8 +143,9 @@ export function toggleRowOnDoubleClick(evt: MouseEvent, row: { getCanExpand(): b
 }
 
 /**
- * Renders the full span row under an expanded row: the element from `getRowDetail` when the row has a detail, otherwise the
- * `expanded:row-<id>` slot when neither `getSubRows` nor `getRowHasDetail` is set.
+ * Renders the full span row under an expanded row: for a row that has a detail, the element from `getRowDetail`, or the `expanded:row-<id>`
+ * slot when `getRowDetail` is not set. The slot is also used for a row that has content in it, and for every row when neither `getSubRows`
+ * nor `getRowHasDetail` is set.
  *
  * Sub rows follow the detail row because TanStack lists them after their parent in the row model.
  */
@@ -106,13 +155,15 @@ export function renderRowDetail<TData extends Row>(host: ExpandableHost<TData>, 
   }
 
   const hasDetail = rowHasDetail(host, row);
-  if (!hasDetail && (host.getSubRows || host.getRowHasDetail)) {
+  if (!hasDetail && (host.getSubRows || host.getRowHasDetail) && !rowHasSlottedContent(host, row)) {
     return nothing;
   }
 
-  const content = hasDetail
-    ? guard([row.original, row.index, host.getRowDetail], () => host.getRowDetail?.(row.original, row.index))
-    : html`<slot name=${`expanded:row-${row.id}`}></slot>`;
+  const { getRowDetail } = host;
+  const content =
+    hasDetail && getRowDetail
+      ? guard([row.original, row.index, getRowDetail], () => getRowDetail(row.original, row.index))
+      : html`<slot name=${getExpandedSlotName(row)}></slot>`;
 
   return html`
     <tr role="row" part="body-tr tr detail-tr">

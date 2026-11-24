@@ -45,7 +45,7 @@ Column filtering renders `forge-select` and `forge-text-field`. Import the filte
 import '@tylertech/forge-table/data-table/features/filter';
 ```
 
-Set `expandable` to add a toggle column to each row. Use `getSubRows`, `getRowHasDetail` and `getRowDetail` to expand sub rows or render detail content.
+Set `expandable` to add a toggle column to each row. Use `getSubRows` and `getRowHasDetail` to expand sub rows or limit which rows have detail content. Detail content comes from `getRowDetail`, or from the row's `expanded:row-<id>` slot when that is not set. A row with content in its slot can always expand, whatever `getRowHasDetail` returns for it.
 
 ## Development
 

@@ -4244,6 +4244,82 @@ describe('DataTable', () => {
       expect(harness.bodyRows.some(row => row.textContent?.includes('Child of Alice'))).toBe(true);
     });
 
+    it('should render the row slot for a row that has a detail when getRowDetail is not set', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail });
+
+      expect(harness.shadowRoot.querySelectorAll('tbody forge-icon-button')).toHaveLength(1);
+
+      await expandFirstRow(harness);
+
+      const slot = harness.shadowRoot.querySelector('.expanded-content slot');
+      expect(slot?.getAttribute('name')).toMatch(/^expanded:row-/);
+    });
+
+    it('should not render the row slot for a row without a detail when getRowHasDetail is set', async () => {
+      const harness = await createFixture({
+        columns,
+        expandable: true,
+        getRowHasDetail: (row: TestData) => row.id !== 1,
+        getSubRows: (row: TestData) => (row.id === 1 ? children : undefined)
+      });
+
+      await expandFirstRow(harness);
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    const appendSlotted = async (harness: DataTableHarness, rowId: string): Promise<HTMLElement> => {
+      const content = document.createElement('div');
+      content.slot = `expanded:row-${rowId}`;
+      content.textContent = `Slotted detail ${rowId}`;
+      harness.element.append(content);
+      await settle(harness.element);
+      return content;
+    };
+    const getExpander = (harness: DataTableHarness, index: number): HTMLElement | null | undefined =>
+      harness.getBodyRowByIndex(index)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button');
+
+    it('should expand a row with slotted content when getRowHasDetail does not return true for it', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail });
+
+      expect(getExpander(harness, 1)).toBeNull();
+
+      await appendSlotted(harness, '1');
+
+      expect(getExpander(harness, 1)).not.toBeNull();
+      expect(getExpander(harness, 2)).toBeNull();
+    });
+
+    it('should render the slot of a row with slotted content when it is expanded', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail: () => false });
+      await appendSlotted(harness, '0');
+
+      await expandFirstRow(harness);
+
+      expect(harness.shadowRoot.querySelector('.expanded-content slot')?.getAttribute('name')).toBe('expanded:row-0');
+    });
+
+    it('should stop expanding a row when its slotted content is removed', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail: () => false });
+      const content = await appendSlotted(harness, '0');
+      expect(getExpander(harness, 0)).not.toBeNull();
+
+      content.remove();
+      await settle(harness.element);
+
+      expect(getExpander(harness, 0)).toBeNull();
+    });
+
+    it('should prefer getRowDetail over slotted content for a row that has a detail', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail });
+      await appendSlotted(harness, '0');
+
+      await expandFirstRow(harness);
+
+      expect(harness.shadowRoot.querySelector('.expanded-content .test-detail')).not.toBeNull();
+      expect(harness.shadowRoot.querySelector('.expanded-content slot')).toBeNull();
+    });
+
     it('should not expand a row with a detail when expandable is false', async () => {
       const harness = await createFixture({ columns: [{ id: 'name', header: 'Name', property: 'name' }], getRowHasDetail, getRowDetail });
 
