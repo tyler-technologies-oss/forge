@@ -76,8 +76,8 @@ export function recommendedAnswers(questions: AiClarificationQuestion[]): AiClar
  * @description
  * Walks one question per step, with a "Step N of M" counter beside the question. Every question has a recommended
  * option that is shown first and preselected, and unless a question opts out, a "Something else" option that is
- * itself an editable text field for a typed answer. "Choose recommended for all" accepts every recommended answer
- * at once. The final step's forward action submits the full set of answers.
+ * itself an editable text field for a typed answer. On the first step only, "Choose recommended for all" submits every
+ * recommended answer at once. The final step's forward action submits the full set of answers.
  *
  * This is content in the conversation rather than an overlay: it does not trap focus and does not respond
  * to Escape.
@@ -248,7 +248,12 @@ export class AiClarificationStepperComponent extends LitElement {
   }
 
   #handleAutoChange(): void {
+    if (this.#isLocked) {
+      return;
+    }
+
     this._autoAll = true;
+    this.#submit(this.questions.map(question => this.#recommendedAnswerFor(question)));
   }
 
   // Keyboard selection reports a click with no detail; leave it alone so arrow navigation keeps working.
@@ -445,7 +450,7 @@ export class AiClarificationStepperComponent extends LitElement {
         <div class="options" role="radiogroup" aria-labelledby=${questionId}>
           ${this.#orderedOptions(question).map(({ option, index }, order) => this.#renderOption({ question, option, index, position: order + 1 }))}
           ${when(hasCustom, () => this.#renderCustomOption({ question, position: customPosition }))}
-          ${when(this.#hasRecommended, () => this.#renderAutoOption({ question, position: autoPosition }))}
+          ${when(this.#isFirstStep && this.#hasRecommended, () => this.#renderAutoOption({ question, position: autoPosition }))}
         </div>
         ${this.#summary} ${this.#renderActions(question)}
       </div>

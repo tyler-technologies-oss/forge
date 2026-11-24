@@ -45,9 +45,9 @@ Omit the option only when a question is genuinely closed, such as "calendar quar
 
 - **Next** is a tonal Forge button (`forge-button--tonal`) at the end of the bottom row. It advances one step. Pressing Enter in the text field does the same and never submits the whole set, so a fast typist cannot skip the remaining questions.
 - **Back** is a plain text Forge button, with no outline, at the start of the bottom row. It is absent on the first step and restores earlier answers, including typed text.
-- **Choose recommended for all** is the last option on every step, with an "Auto" badge on its right. It appears when any question has a recommended option. Selecting it turns the forward action into **Run**, which submits every recommended answer at once; picking any other option clears it.
+- **Choose recommended for all** is the last option on the first step only, with an "Auto" badge on its right. It appears when any question has a recommended option. Selecting it submits every recommended answer straight away, with no further step or **Run**.
 - On the last step the forward action becomes **Run**.
-- A line above the buttons, styled like the "Step N of M" counter, lists the answers chosen so far, separated by bullets: "Cleared by arrest • Assignment date". It covers the steps up to the current one, or every question once "Choose recommended for all" is chosen. A custom answer appears once it has text.
+- A line above the buttons, styled like the "Step N of M" counter, lists the answers chosen so far, separated by bullets: "Cleared by arrest • Assignment date". It covers the steps up to the current one. A custom answer appears once it has text.
 
 <Canvas of={AiClarificationStepperStories.SingleQuestion} />
 

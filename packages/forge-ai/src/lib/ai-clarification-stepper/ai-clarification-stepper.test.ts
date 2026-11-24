@@ -640,16 +640,6 @@ describe('AiClarificationStepper', () => {
       expect(summary(el)).toBe('Status date');
     });
 
-    it('should keep showing the earlier picks, not the recommended ones, when "Choose recommended for all" is chosen', async () => {
-      const el = await createStepper([...questions, grouping]);
-
-      await choose(el, REPORT_DATE);
-      await click(el, '.next-button');
-      await choose(el, radios(el).length - 1);
-
-      expect(summary(el)).toBe('Report date');
-    });
-
     it('should be styled like the step counter', async () => {
       const el = await createStepper();
       await click(el, '.next-button');
@@ -711,22 +701,12 @@ describe('AiClarificationStepper', () => {
       expect(query(el, '.option--auto')).toBeNull();
     });
 
-    it('should uncheck the other options and relabel the forward action "Run" when chosen', async () => {
-      const el = await createStepper();
-
-      await choose(el, AUTO);
-
-      expect(checked(el)).toEqual([false, false, false, true]);
-      expect(query(el, '.next-button').textContent!.trim()).toBe('Run');
-    });
-
-    it('should submit every recommended answer straight from the first step', async () => {
+    it('should submit every recommended answer as soon as it is chosen', async () => {
       const el = await createStepper();
 
       await choose(el, REPORT_DATE);
-      await choose(el, AUTO);
       const submitted = oneEvent(el, 'forge-ai-clarification-stepper-submit');
-      query(el, '.next-button').click();
+      radios(el)[AUTO].click();
       const { detail } = await submitted;
 
       expect(detail.answers).toEqual([
@@ -735,14 +715,45 @@ describe('AiClarificationStepper', () => {
       ]);
     });
 
-    it('should enable the forward action even when "Something else" was left empty', async () => {
+    it('should submit the recommended answers even when "Something else" was left empty', async () => {
       const el = await createStepper();
 
       await choose(el, SOMETHING_ELSE);
-      expect(query<HTMLButtonElement>(el, '.next-button').disabled).toBe(true);
+      const submitted = oneEvent(el, 'forge-ai-clarification-stepper-submit');
+      radios(el)[AUTO].click();
+      const { detail } = await submitted;
 
-      await choose(el, AUTO);
-      expect(query<HTMLButtonElement>(el, '.next-button').disabled).toBe(false);
+      expect(detail.answers.map(answer => answer.value)).toEqual(['status_date', 'calendar']);
+    });
+
+    it('should not be offered after the first step', async () => {
+      const el = await createStepper();
+
+      await click(el, '.next-button');
+
+      expect(query(el, '.option--auto')).toBeNull();
+      expect(el.shadowRoot!.querySelectorAll('hr')).toHaveLength(0);
+    });
+
+    it('should be offered again when returning to the first step', async () => {
+      const el = await createStepper();
+
+      await click(el, '.next-button');
+      await click(el, '.back-button');
+
+      expect(query(el, '.option--auto')).not.toBeNull();
+    });
+
+    it('should not submit while the stepper is sending', async () => {
+      const el = await createStepper();
+      el.status = 'sending';
+      await el.updateComplete;
+      let submitted = false;
+      el.addEventListener('forge-ai-clarification-stepper-submit', () => (submitted = true));
+
+      radios(el)[AUTO].dispatchEvent(new Event('change'));
+
+      expect(submitted).toBe(false);
     });
 
     it('should fall back to the first option for a question that has no recommended option', async () => {
@@ -758,32 +769,11 @@ describe('AiClarificationStepper', () => {
         }
       ]);
 
-      await choose(el, AUTO);
       const submitted = oneEvent(el, 'forge-ai-clarification-stepper-submit');
-      query(el, '.next-button').click();
+      radios(el)[AUTO].click();
       const { detail } = await submitted;
 
       expect(detail.answers.map((answer: { value: string }) => answer.value)).toEqual(['status_date', 'a']);
-    });
-
-    it('should be cleared when another option is chosen', async () => {
-      const el = await createStepper();
-
-      await choose(el, AUTO);
-      await choose(el, REPORT_DATE);
-
-      expect(checked(el)).toEqual([false, true, false, false]);
-      expect(query(el, '.next-button').textContent!.trim()).toBe('Next');
-    });
-
-    it('should be cleared when the text field is focused', async () => {
-      const el = await createStepper();
-
-      await choose(el, AUTO);
-      query<HTMLInputElement>(el, '.custom-input').focus();
-      await el.updateComplete;
-
-      expect(checked(el)).toEqual([false, false, true, false]);
     });
   });
 
