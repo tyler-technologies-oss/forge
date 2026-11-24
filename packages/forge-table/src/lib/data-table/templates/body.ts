@@ -1,11 +1,11 @@
 import type { Row as TanstackRow } from '@tanstack/lit-table';
-import { html, TemplateResult, nothing } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { getGroupStartColumnIds } from '../columns/column-utils.js';
 import { getCellRole } from '../features/cell-selection.js';
-import { dispatchRowClick } from '../features/row-click.js';
+import { CLICKABLE_CLASS, getRowClickHandler, hasRowClickAction } from '../features/row-click.js';
 import { getGroupRowName } from '../features/row-grouping.js';
 import { setRowName, type RowMeta } from '../features/row-meta.js';
 import { renderRowDetail, toggleRowOnDoubleClick } from '../features/expander.js';
@@ -53,9 +53,13 @@ function renderTableBody<TData extends Row>(context: BodyContext<TData>): Templa
             role="row"
             id=${nameId}
             aria-label=${name}
-            class=${classMap({ selected: row.getIsSelected(), 'group-row': row.getIsGrouped() })}
+            class=${classMap({
+              selected: row.getIsSelected(),
+              'group-row': row.getIsGrouped(),
+              [CLICKABLE_CLASS]: host.allowRowClick && hasRowClickAction(row)
+            })}
             part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
-            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}
+            @click=${getRowClickHandler(host, row)}
             @dblclick=${(evt: MouseEvent) => toggleRowOnDoubleClick(evt, row)}>
             ${row.getVisibleCells().map(cell => renderBodyCell(context, cell, row.id, groupStartColumnIds))}
           </tr>
@@ -99,6 +103,7 @@ function renderVirtualizedTableBody<TData extends Row>(context: BodyContext<TDat
             class=${classMap({
               selected: row.getIsSelected(),
               'group-row': row.getIsGrouped(),
+              [CLICKABLE_CLASS]: host.allowRowClick && hasRowClickAction(row),
               'virtualized-tr': true
             })}
             part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
@@ -108,7 +113,7 @@ function renderVirtualizedTableBody<TData extends Row>(context: BodyContext<TDat
               width: '100%',
               height: `${item.size}px`
             })}
-            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}
+            @click=${getRowClickHandler(host, row)}
             @dblclick=${(evt: MouseEvent) => toggleRowOnDoubleClick(evt, row)}>
             ${repeat(
               row.getVisibleCells(),

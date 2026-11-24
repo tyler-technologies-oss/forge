@@ -36,6 +36,7 @@ import { CellRenderController } from './features/cell-render.js';
 import { CellSelectionController } from './features/cell-selection.js';
 import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
 import { ColumnRenameController } from './features/column-rename.js';
+import { RowClickController } from './features/row-click.js';
 import { ColumnFilterFnController } from './features/filter-fn.js';
 import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
@@ -254,6 +255,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   /**
    * Allow rows to be clicked.
+   *
+   * Only rows that contain an element with a `forge-default-action` attribute, can be selected, or can be expanded are clickable. Clicking one dispatches
+   * `forge-data-table-row-click`, then clicks the `forge-default-action` element if there is one, otherwise toggles the row selection if it can be selected,
+   * otherwise toggles the expansion. Other rows get no clickable styles and no event.
    */
   @property({ type: Boolean, attribute: 'allow-row-click' })
   public allowRowClick = false;
@@ -392,6 +397,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   constructor() {
     super();
     this.#hostSemantics = new HostSemantics(this, this.attachInternals());
+    new RowClickController<TData>(this);
   }
 
   public willUpdate(changedProperties: PropertyValues<this>): void {

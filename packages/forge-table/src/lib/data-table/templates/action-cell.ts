@@ -8,6 +8,7 @@ export interface ActionButtonConfig {
   text: string | ((row: any) => string);
   icon?: string;
   type?: 'button' | 'icon';
+  defaultAction?: boolean;
   onClick: (row: any) => void;
 }
 
@@ -15,6 +16,7 @@ export function actionCell(config: ActionButtonConfig[]) {
   return ({ row }: { row: any }) => {
     const container = document.createElement('div');
     container.classList.add('action-cell');
+    let didSetDefaultAction = false;
 
     config.forEach(buttonConfig => {
       const button = document.createElement(buttonConfig.type === 'button' ? 'forge-button' : 'forge-icon-button');
@@ -40,6 +42,10 @@ export function actionCell(config: ActionButtonConfig[]) {
       }
       labelWithRowName(button, row);
       button.addEventListener('click', () => buttonConfig.onClick(row));
+      if (!didSetDefaultAction && buttonConfig.defaultAction) {
+        button.setAttribute('forge-default-action', '');
+        didSetDefaultAction = true;
+      }
       container.appendChild(button);
       if (tooltip) {
         container.appendChild(tooltip);

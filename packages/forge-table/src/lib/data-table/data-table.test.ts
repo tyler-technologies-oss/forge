@@ -3720,60 +3720,69 @@ describe('DataTable', () => {
   });
 
   describe('Row Interactions', () => {
-    it('should emit row click event when allowRowClick is true', async () => {
-      const harness = await createFixture({ allowRowClick: true });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+    interface RowClickDetail {
+      data: unknown;
+      index: number;
+    }
+    type Harness = Awaited<ReturnType<typeof createFixture>>;
 
-      await harness.clickBodyRow(0);
+    const listenForRowClicks = (harness: Harness): RowClickDetail[] => {
+      const events: RowClickDetail[] = [];
+      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) => events.push((evt as CustomEvent<RowClickDetail>).detail));
+      return events;
+    };
+
+    const getCell = (harness: Harness, rowIndex: number, columnId: string): HTMLElement =>
+      harness.getBodyRowByIndex(rowIndex)?.querySelector(`td[id="${columnId}"]`) as HTMLElement;
+
+    it('should emit row click event when allowRowClick is true and the row is selectable', async () => {
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
+      const events = listenForRowClicks(harness);
+
+      await userEvent.click(getCell(harness, 0, 'name'));
 
       expect(events.length).toBe(1);
     });
 
     it('should not emit row click event when allowRowClick is false', async () => {
-      const harness = await createFixture({ allowRowClick: false });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const harness = await createFixture({ allowRowClick: false, rowSelection: 'single' });
+      const events = listenForRowClicks(harness);
 
-      await harness.clickBodyRow(0);
+      await userEvent.click(getCell(harness, 0, 'name'));
+
+      expect(events.length).toBe(0);
+    });
+
+    it('should not emit row click event when the row cannot be selected or expanded and has no default action', async () => {
+      const harness = await createFixture({ allowRowClick: true });
+      const events = listenForRowClicks(harness);
+
+      await userEvent.click(getCell(harness, 0, 'name'));
 
       expect(events.length).toBe(0);
     });
 
     it('should include row data in click event', async () => {
-      const harness = await createFixture({ allowRowClick: true });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
+      const events = listenForRowClicks(harness);
 
-      await harness.clickBodyRow(0);
+      await userEvent.click(getCell(harness, 0, 'name'));
 
       expect(events[0].data).toEqual(TEST_DATA[0]);
     });
 
     it('should include row index in click event', async () => {
-      const harness = await createFixture({ allowRowClick: true });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
+      const events = listenForRowClicks(harness);
 
-      await harness.clickBodyRow(1);
+      await userEvent.click(getCell(harness, 1, 'name'));
 
       expect(events[0].index).toBe(1);
     });
 
     it('should not emit click when clicking select column', async () => {
       const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const events = listenForRowClicks(harness);
 
       await harness.clickRowCheckbox(0);
 
@@ -3785,28 +3794,242 @@ describe('DataTable', () => {
         { id: 'id', header: 'ID', property: 'id', stopRowClickPropagation: true },
         { id: 'name', header: 'Name', property: 'name' }
       ];
-      const harness = await createFixture({ columns, allowRowClick: true });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const harness = await createFixture({ columns, allowRowClick: true, rowSelection: 'single' });
+      const events = listenForRowClicks(harness);
 
-      await harness.clickBodyCell(0, 0);
+      await userEvent.click(getCell(harness, 0, 'id'));
 
       expect(events.length).toBe(0);
+      expect(harness.bodyRows[0].classList.contains('selected')).toBe(false);
     });
 
     it('should stop row click propagation on checkbox cell', async () => {
       const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
-      const events: { data: unknown; index: number }[] = [];
-      harness.element.addEventListener('forge-data-table-row-click', (evt: Event) =>
-        events.push((evt as CustomEvent<{ data: unknown; index: number }>).detail)
-      );
+      const events = listenForRowClicks(harness);
 
       const selectCell = harness.getBodyCellByRowAndColumn(0, 0);
       await userEvent.click(selectCell!);
 
       expect(events.length).toBe(0);
+    });
+
+    it('should select a row when it is clicked and rows are selectable', async () => {
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'multiple' });
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+
+      expect(harness.bodyRows[0].classList.contains('selected')).toBe(true);
+      expect(harness.bodyRows[1].classList.contains('selected')).toBe(false);
+    });
+
+    it('should deselect a selected row when it is clicked', async () => {
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'multiple' });
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+      await userEvent.click(getCell(harness, 0, 'name'));
+
+      expect(harness.bodyRows[0].classList.contains('selected')).toBe(false);
+    });
+
+    it('should replace the selected row when rowSelection is single', async () => {
+      const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+      await userEvent.click(getCell(harness, 1, 'name'));
+
+      expect(harness.bodyRows[0].classList.contains('selected')).toBe(false);
+      expect(harness.bodyRows[1].classList.contains('selected')).toBe(true);
+    });
+
+    it('should expand and collapse a row when it is clicked and rows are expandable but not selectable', async () => {
+      const harness = await createFixture({ allowRowClick: true, expandable: true });
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(1);
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should select instead of expand when the row is selectable and expandable', async () => {
+      const harness = await createFixture({ allowRowClick: true, expandable: true, rowSelection: 'multiple' });
+
+      await userEvent.click(getCell(harness, 0, 'name'));
+      await harness.element.updateComplete;
+
+      expect(harness.bodyRows[0].classList.contains('selected')).toBe(true);
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should not emit row click event for a row that cannot expand', async () => {
+      const harness = await createFixture({
+        allowRowClick: true,
+        expandable: true,
+        getSubRows: (row: TestData) => (row.id === 1 ? [{ id: 10, name: 'Child', age: 5, email: 'child@example.com' }] : undefined)
+      });
+      const events = listenForRowClicks(harness);
+
+      await userEvent.click(getCell(harness, 1, 'name'));
+
+      expect(events.length).toBe(0);
+    });
+
+    describe('default action', () => {
+      const createDefaultActionColumns = (onClick: () => void): ColumnDef<TestData>[] => [
+        { id: 'id', header: 'ID', property: 'id' },
+        {
+          id: 'name',
+          header: 'Name',
+          property: 'name',
+          template: ({ row }) => html`<span forge-default-action tabindex="0" @click=${onClick}>${row.original.name}</span>`
+        }
+      ];
+
+      it('should click the element with forge-default-action when the row is clicked', async () => {
+        const onClick = vi.fn();
+        const harness = await createFixture({ columns: createDefaultActionColumns(onClick), allowRowClick: true });
+
+        await userEvent.click(getCell(harness, 0, 'id'));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+      });
+
+      it('should click the default action instead of selecting or expanding the row', async () => {
+        const onClick = vi.fn();
+        const harness = await createFixture({
+          columns: createDefaultActionColumns(onClick),
+          allowRowClick: true,
+          rowSelection: 'multiple',
+          expandable: true
+        });
+
+        await userEvent.click(getCell(harness, 0, 'id'));
+        await harness.element.updateComplete;
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(harness.bodyRows[0].classList.contains('selected')).toBe(false);
+        expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+      });
+
+      it('should click the default action of the clicked row only', async () => {
+        const onClick = vi.fn();
+        const harness = await createFixture({ columns: createDefaultActionColumns(onClick), allowRowClick: true });
+
+        await userEvent.click(getCell(harness, 1, 'id'));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+      });
+
+      it('should not click the default action a second time when the element itself is clicked', async () => {
+        const onClick = vi.fn();
+        const harness = await createFixture({ columns: createDefaultActionColumns(onClick), allowRowClick: true });
+        const events = listenForRowClicks(harness);
+
+        await userEvent.click(getCell(harness, 0, 'name').querySelector('[forge-default-action]') as HTMLElement);
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(events.length).toBe(0);
+      });
+
+      it('should emit row click event when the row is clicked', async () => {
+        const harness = await createFixture({ columns: createDefaultActionColumns(vi.fn()), allowRowClick: true });
+        const events = listenForRowClicks(harness);
+
+        await userEvent.click(getCell(harness, 0, 'id'));
+
+        expect(events).toHaveLength(1);
+        expect(events[0].index).toBe(0);
+      });
+
+      it('should not click the default action when allowRowClick is false', async () => {
+        const onClick = vi.fn();
+        const harness = await createFixture({ columns: createDefaultActionColumns(onClick), allowRowClick: false });
+
+        await userEvent.click(getCell(harness, 0, 'id'));
+
+        expect(onClick).not.toHaveBeenCalled();
+      });
+
+      it('should click a default action in content slotted into a cell', async () => {
+        const onClick = vi.fn();
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'id', header: 'ID', property: 'id' },
+          {
+            id: 'name',
+            header: 'Name',
+            property: 'name',
+            useTemplateSlot: true,
+            template: () => {
+              const link = document.createElement('span');
+              link.setAttribute('forge-default-action', '');
+              link.addEventListener('click', onClick);
+              return link as unknown as string;
+            }
+          }
+        ];
+        const harness = await createFixture({ columns, allowRowClick: true });
+        await harness.element.updateComplete;
+
+        await userEvent.click(getCell(harness, 0, 'id'));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('styles', () => {
+      const getStateLayerContent = (row: HTMLElement | undefined): string => getComputedStyle(row?.querySelector('td') as HTMLElement, '::before').content;
+      const getCursor = (row: HTMLElement | undefined): string => getComputedStyle(row as HTMLElement).cursor;
+
+      it('should apply the clickable styles and state layer to a selectable row', async () => {
+        const harness = await createFixture({ allowRowClick: true, rowSelection: 'single' });
+        const row = harness.getBodyRowByIndex(0);
+
+        expect(row?.classList.contains('clickable')).toBe(true);
+        expect(getCursor(row)).toBe('pointer');
+        expect(getStateLayerContent(row)).toBe('""');
+      });
+
+      it('should apply the clickable styles to an expandable row', async () => {
+        const harness = await createFixture({ allowRowClick: true, expandable: true });
+
+        expect(harness.getBodyRowByIndex(0)?.classList.contains('clickable')).toBe(true);
+        expect(getCursor(harness.getBodyRowByIndex(0))).toBe('pointer');
+      });
+
+      it('should apply the clickable styles to a row with a default action', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'id', header: 'ID', property: 'id' },
+          { id: 'name', header: 'Name', property: 'name', template: () => html`<a href="#" forge-default-action>Open</a>` }
+        ];
+        const harness = await createFixture({ columns, allowRowClick: true });
+        const row = harness.getBodyRowByIndex(0);
+
+        expect(row?.classList.contains('has-default-action')).toBe(true);
+        expect(getCursor(row)).toBe('pointer');
+        expect(getStateLayerContent(row)).toBe('""');
+      });
+
+      it('should not apply the clickable styles when the row has nothing to click', async () => {
+        const harness = await createFixture({ allowRowClick: true });
+        const row = harness.getBodyRowByIndex(0);
+
+        expect(row?.classList.contains('clickable')).toBe(false);
+        expect(row?.classList.contains('has-default-action')).toBe(false);
+        expect(getCursor(row)).not.toBe('pointer');
+        expect(getStateLayerContent(row)).not.toBe('""');
+      });
+
+      it('should not apply the clickable styles when allowRowClick is false', async () => {
+        const harness = await createFixture({ allowRowClick: false, rowSelection: 'single' });
+        const row = harness.getBodyRowByIndex(0);
+
+        expect(row?.classList.contains('clickable')).toBe(false);
+        expect(getCursor(row)).not.toBe('pointer');
+      });
     });
   });
 

@@ -1,17 +1,16 @@
 import type { ColumnDef as TanstackColumnDef, Row as TanstackRow } from '@tanstack/lit-table';
 import { html, nothing, type TemplateResult } from 'lit';
 import { guard } from 'lit/directives/guard.js';
-import { EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
+import { EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH } from '../constants.js';
 import type { DataTableElement } from '../data-table.js';
 import type { DataTableFeatures } from '../table-features.js';
 import { renderExpandToggle } from '../templates/expand-toggle.js';
 import type { Row } from '../types.js';
 import { getCellRole } from './cell-selection.js';
+import { isFromInteractiveContent } from './row-click.js';
 import { getExpanderButtonId, getRowMeta } from './row-meta.js';
 
 type ExpandableHost<TData extends Row> = Pick<DataTableElement<TData>, 'expandable' | 'getSubRows' | 'getRowHasDetail' | 'getRowDetail' | 'cellSelection'>;
-
-const INTERACTIVE_SELECTOR = `:where(a, button, input, select, textarea, label, [contenteditable], [role="button"], forge-icon-button, forge-button, forge-checkbox, [id="${SELECT_COLUMN_ID}"], [data-forge-stop-row-click-propagation])`;
 
 /**
  * Returns whether the detail of a row should be shown when it is expanded.
@@ -88,11 +87,7 @@ export function toggleRowOnDoubleClick(evt: MouseEvent, row: { getCanExpand(): b
     return;
   }
 
-  const isInteractive = evt
-    .composedPath()
-    .slice(0, evt.composedPath().indexOf(evt.currentTarget as EventTarget))
-    .some(el => (el as Node).nodeType === Node.ELEMENT_NODE && (el as Element).matches(INTERACTIVE_SELECTOR));
-  if (isInteractive) {
+  if (isFromInteractiveContent(evt)) {
     return;
   }
 

@@ -189,6 +189,38 @@ export const RowSelection: Story = {
   }
 };
 
+// Story with row clicking that selects the row
+export const RowClickSelection: Story = {
+  args: {
+    allowRowClick: true,
+    rowSelection: 'multiple'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Rows that can be selected are clickable: clicking anywhere on the row selects or deselects it, the same as its checkbox. Hover or press a row to see the state layer.'
+      }
+    }
+  }
+};
+
+// Story with row clicking that expands the row
+export const RowClickExpansion: Story = {
+  args: {
+    allowRowClick: true,
+    expandable: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Rows that can expand but not be selected are clickable too: clicking anywhere on the row expands or collapses it, the same as its toggle button. When the table also has `rowSelection`, selecting wins.'
+      }
+    }
+  }
+};
+
 // Story with cell selection
 export const CellSelection: Story = {
   args: {
@@ -457,6 +489,44 @@ const columns: ColumnDef<Employee>[] = [
     ])
   }
 ];`
+});
+
+export const ActionCellDefaultAction: Story = exampleStory({
+  description:
+    'Set `defaultAction` on a button config to make it the default action of the row. With `allowRowClick` on, clicking anywhere else on the row clicks that button, and the row gets the clickable styles. Only the first button with `defaultAction` is used. Keyboard and screen reader users reach the same action by tabbing to the button.',
+  args: {
+    allowRowClick: true,
+    columns: [
+      employeeColumn('name', 'Name'),
+      employeeColumn('department', 'Department'),
+      {
+        id: 'actions',
+        header: 'Actions',
+        width: 120,
+        align: 'end',
+        template: actionCell([
+          { text: row => `Edit ${row.original.name}`, icon: 'edit', defaultAction: true, onClick: row => actionCellClickAction('edit', row.original) },
+          { text: row => `Delete ${row.original.name}`, icon: 'delete', onClick: row => actionCellClickAction('delete', row.original) }
+        ])
+      }
+    ]
+  },
+  code: `import { actionCell } from '@tylertech/forge-table';
+
+const columns: ColumnDef<Employee>[] = [
+  {
+    id: 'actions',
+    header: 'Actions',
+    align: 'end',
+    template: actionCell([
+      // Clicking the row clicks this button. Only the first button with \`defaultAction\` is used
+      { text: row => \`Edit \${row.original.name}\`, icon: 'edit', defaultAction: true, onClick: row => edit(row.original) },
+      { text: row => \`Delete \${row.original.name}\`, icon: 'delete', onClick: row => remove(row.original) }
+    ])
+  }
+];
+
+table.allowRowClick = true;`
 });
 
 export const EditableCell: Story = exampleStory({

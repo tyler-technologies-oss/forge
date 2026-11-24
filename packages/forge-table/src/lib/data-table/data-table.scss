@@ -2,6 +2,7 @@
 @use '@tylertech/forge/sass/table/core';
 @use '@tylertech/forge/sass/core/styles/scrollbar';
 @use '@tylertech/forge/sass/focus-indicator';
+@use '@tylertech/forge/sass/state-layer';
 @use '@tylertech/forge/sass/badge/core' as badge;
 @use '@tylertech/forge/sass/badge/forge-badge';
 @use '@tylertech/forge-tokens/sass/theme';
@@ -626,8 +627,35 @@ table.compact {
 //
 
 table.allow-row-click {
-  tbody tr {
+  tbody tr:is(.clickable, .has-default-action) {
+    @include state-layer.tokens;
+
     cursor: pointer;
+
+    > td {
+      &:not(.pinned) {
+        position: relative;
+      }
+
+      &::before {
+        @include state-layer.layer-base;
+        @include state-layer.hover-base;
+        @include state-layer.override(hover-duration, 100ms, value);
+
+        content: '';
+        pointer-events: none;
+        opacity: 0;
+      }
+    }
+
+    &:hover > td::before {
+      @include state-layer.hovered;
+    }
+
+    &:active > td::before {
+      @include state-layer.pressed;
+      @include state-layer.override(pressed-opacity, 0.18, value);
+    }
   }
 }
 

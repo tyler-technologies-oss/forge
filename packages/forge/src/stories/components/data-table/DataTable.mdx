@@ -16,7 +16,7 @@ It supports features such as sorting, filtering, column resizing and reordering,
 - **Resizing**: Adjust column widths by dragging column dividers
 - **Reordering**: Drag and drop columns to rearrange them
 - **Row Selection**: Select single or multiple rows
-- **Row Clicking**: Respond to row click events
+- **Row Clicking**: Click anywhere on a row to select it, expand it, or run its default action
 - **Toolbar**: Show and hide columns, export to CSV, print, and toggle filtering or row selection
 - **Column Visibility**: Right-click headers to open a column menu or control visibility programmatically
 - **Cell Templates**: Render badges, links, meters, ratings, action buttons, inputs, or your own content in a cell
@@ -57,6 +57,57 @@ Enable sorting by clicking on column headers:
 Enable row selection with checkbox column:
 
 <Canvas of={DataTableStories.RowSelection} />
+
+## Row Clicking
+
+Set `allow-row-click` to let users click anywhere on a row instead of aiming for a checkbox, a toggle or a button. A row is only clickable when
+there is something for the click to do, so it only gets the clickable styles and click handling when it:
+
+1. contains an element with a `forge-default-action` attribute,
+2. can be selected (`rowSelection` is `single` or `multiple`), or
+3. can be expanded (`expandable`).
+
+Clicking a clickable row dispatches `forge-data-table-row-click` (detail: `data` and `index`), then does the first of these that applies:
+
+1. Clicks the element with `forge-default-action`.
+2. Selects the row, or deselects it when it is already selected.
+3. Expands the row, or collapses it when it is already expanded.
+
+Rows that match none of the above, and group rows, get no pointer cursor, no state layer and no event.
+Clickable rows show a Forge state layer, which is CSS only, when hovered or pressed.
+
+<Canvas of={DataTableStories.RowClickSelection} />
+
+<Canvas of={DataTableStories.RowClickExpansion} />
+
+### Default action
+
+Add a `forge-default-action` attribute to the element in a row that should run when the row is clicked, such as a link to the record or an edit button.
+It can be in a cell template or in content slotted into a cell with `useTemplateSlot`. If a row has more than one, the first one is used.
+It takes precedence over selecting and expanding the row.
+
+```ts
+const columns: ColumnDef<Employee>[] = [
+  {
+    header: 'Name',
+    property: 'name',
+    template: ({ row }) => html`<a href=${`/employees/${row.original.id}`} forge-default-action>${row.original.name}</a>`
+  }
+];
+```
+
+For action buttons, set `defaultAction` on a button config of `actionCell()` instead (see [Actions](#actions)).
+
+<Canvas of={DataTableStories.ActionCellDefaultAction} />
+
+### Accessibility
+
+A clicked row is a convenience for pointer users. The row itself is not focusable and has no role, so every action it triggers must also be reachable
+by keyboard and screen reader: the selection checkbox, the expand toggle, and the element with `forge-default-action`. Make sure that element is a
+real control, such as a link or a button, with an accessible name.
+
+Clicks that land on interactive content in a row (links, buttons, form controls, checkboxes) are left to that content and do not trigger the row click.
+Set `stopRowClickPropagation` on a column to also ignore clicks anywhere in its cells.
 
 ## Column Visibility
 
@@ -120,6 +171,18 @@ that create common templates, and you can write your own. Each example below sho
 ### Actions
 
 <Canvas of={DataTableStories.ActionCell} />
+
+`actionCell()` takes an array of button configs (`ActionButtonConfig`):
+
+| Property        | Type                           | Description                                                                                                                                                                        |
+| --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`          | `string \| (row) => string`    | The label of a text button, or the tooltip and accessible label of an icon button. A function receives the TanStack row. The accessible name also includes the row name.         |
+| `icon`          | `string`                       | The name of the icon to show.                                                                                                                                                      |
+| `type`          | `'icon' \| 'button'`           | `icon` (default) renders an icon button with a tooltip. `button` renders a text button.                                                                                            |
+| `defaultAction` | `boolean`                      | Marks the button as the default action of the row. When `allow-row-click` is on, clicking the row clicks this button. Only the first button with `defaultAction` in a cell is used. |
+| `onClick`       | `(row) => void`                | Called with the TanStack row when the button is clicked, including when the row click triggers it.                                                                                 |
+
+With `defaultAction`, a click on the row runs the same `onClick` as a click on the button. See [Row Clicking](#row-clicking).
 
 ### Editable
 

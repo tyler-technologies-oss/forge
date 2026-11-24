@@ -81,7 +81,7 @@ const actionsColumn: ColumnDef<RowData> = {
   resizable: false,
   stopRowClickPropagation: true,
   template: actionCell([
-    { text: 'Edit', icon: 'edit', onClick: ({ original }) => console.log('edit', original) },
+    { text: 'Edit', icon: 'edit', defaultAction: true, onClick: ({ original }) => console.log('edit', original) },
     { text: 'Delete', icon: 'delete', onClick: ({ original }) => console.log('delete', original) }
   ])
 };
