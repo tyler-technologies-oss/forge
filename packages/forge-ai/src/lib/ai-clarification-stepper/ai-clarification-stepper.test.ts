@@ -5,8 +5,6 @@ import type { AiClarificationQuestion, AiClarificationStepperComponent, AiClarif
 
 import './ai-clarification-stepper.js';
 
-// The first question lists its recommended option second so ordering is observable. It renders as:
-// Status date (recommended), Report date, Something else, Choose recommended for all.
 const questions: AiClarificationQuestion[] = [
   {
     id: 'field',
@@ -151,7 +149,6 @@ describe('AiClarificationStepper', () => {
       const markers = Array.from(el.shadowRoot!.querySelectorAll<HTMLElement>('.option-index'));
       const fill = (marker: HTMLElement): string => getComputedStyle(marker).backgroundColor;
 
-      // The recommended option is preselected, so only the first marker is filled.
       const filled = fill(markers[0]);
       const outlined = fill(markers[1]);
       expect(filled).not.toBe(outlined);
@@ -217,7 +214,6 @@ describe('AiClarificationStepper', () => {
       const el = await createStepper();
       const options = Array.from(el.shadowRoot!.querySelectorAll<HTMLElement>('.option'));
 
-      // The first option is the preselected recommended one, so it is the only chosen row.
       for (const option of options.slice(1)) {
         expect(getComputedStyle(option).backgroundColor).toBe('rgba(0, 0, 0, 0)');
       }
@@ -230,7 +226,7 @@ describe('AiClarificationStepper', () => {
 
       expect(getComputedStyle(markers[0]).backgroundColor).toBe('rgb(181, 192, 255)');
       for (const marker of markers.slice(1)) {
-        expect(getComputedStyle(marker).backgroundColor).toBe('rgba(0, 0, 51, 0.06)');
+        expect(getComputedStyle(marker).backgroundColor).toBe('color(srgb 0.247059 0.317647 0.709804 / 0.08)');
       }
     });
 

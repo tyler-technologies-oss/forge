@@ -17,7 +17,6 @@ declare global {
 
 export const AiClarificationStepperComponentTagName: keyof HTMLElementTagNameMap = 'forge-ai-clarification-stepper';
 
-/** Selection index that represents the free-text "Something else" option. */
 const CUSTOM_INDEX = -1;
 
 export interface AiClarificationOption {
@@ -55,14 +54,12 @@ export interface AiClarificationStepperSubmitEventData {
 }
 
 /**
- * Where the stepper is in its life. It is `editing` until the answers are submitted, `sending` while the host
- * delivers them, and `sent` once they are delivered, when it becomes a read-only record of the turn.
+ * `editing` until submitted, `sending` while the host delivers the answers, `sent` once delivered.
  */
 export type AiClarificationStatus = 'editing' | 'sending' | 'sent';
 
 /**
- * The recommended answer to each question, or its first option where none is marked. This is what "Choose
- * recommended for all" submits, and what a host can fall back on when a question goes unanswered.
+ * The recommended answer to each question, or its first option where none is marked.
  */
 export function recommendedAnswers(questions: AiClarificationQuestion[]): AiClarificationAnswer[] {
   return questions.map(question => {
@@ -102,18 +99,11 @@ export class AiClarificationStepperComponent extends LitElement {
   @property({ attribute: false })
   public questions: AiClarificationQuestion[] = [];
 
-  /**
-   * The answers that were submitted, shown against their questions once `status` is `sent`. The host sets this
-   * from the delivered result, so a finished stepper can be shown again from history.
-   */
+  /** The submitted answers, shown against their questions once `status` is `sent`. */
   @property({ attribute: false })
   public answers: AiClarificationAnswer[] = [];
 
-  /**
-   * Where the stepper is in its life. While `sending` every control is disabled; once `sent` the stepper is
-   * terminal and shows only the submitted `answers`. It is a record of a turn in the conversation, not a form to
-   * revisit.
-   */
+  /** `sending` disables every control; `sent` shows only the submitted `answers`. */
   @property({ reflect: true })
   public status: AiClarificationStatus = 'editing';
 
@@ -126,7 +116,7 @@ export class AiClarificationStepperComponent extends LitElement {
   @state()
   private _customText: Record<string, string> = {};
 
-  /** Whether "Choose recommended for all" is selected, which makes the forward action submit every recommended answer. */
+  /** Whether "Choose recommended for all" is selected. */
   @state()
   private _autoAll = false;
 
@@ -164,7 +154,6 @@ export class AiClarificationStepperComponent extends LitElement {
     );
   }
 
-  /** Everything is disabled once the answers have been submitted, whether they are still being delivered or not. */
   get #isLocked(): boolean {
     return this.status !== 'editing';
   }
@@ -181,15 +170,11 @@ export class AiClarificationStepperComponent extends LitElement {
     return this._stepIndex === this.questions.length - 1;
   }
 
-  /** Whether any question has a recommended option, which is what makes "Choose recommended for all" meaningful. */
   get #hasRecommended(): boolean {
     return this.questions.some(question => question.options.some(option => option.recommended));
   }
 
-  /**
-   * Options paired with their original index, recommended first. Selections are keyed by the original
-   * index so reordering for display never changes which option an answer refers to.
-   */
+  // Selections are keyed by the original index, so display order never changes which option an answer refers to.
   #orderedOptions(question: AiClarificationQuestion): { option: AiClarificationOption; index: number }[] {
     const entries = question.options.map((option, index) => ({ option, index }));
     return [...entries.filter(entry => entry.option.recommended), ...entries.filter(entry => !entry.option.recommended)];
@@ -203,17 +188,14 @@ export class AiClarificationStepperComponent extends LitElement {
     return (this._customText[question.id] ?? '').trim();
   }
 
-  /** A blank typed answer is never valid, so the forward action stays disabled until text is entered. */
   #isAnswered(question: AiClarificationQuestion): boolean {
     return this._autoAll || !this.#isCustom(question) || this.#customValue(question).length > 0;
   }
 
-  /** The answer that is submitted for a question: the recommended one for every question while "Choose recommended for all" is on. */
   #answerFor(question: AiClarificationQuestion): AiClarificationAnswer {
     return this._autoAll ? this.#recommendedAnswerFor(question) : this.#pickedAnswerFor(question);
   }
 
-  /** The person's own pick for a question, ignoring "Choose recommended for all". */
   #pickedAnswerFor(question: AiClarificationQuestion): AiClarificationAnswer {
     if (this.#isCustom(question)) {
       const text = this.#customValue(question);
@@ -269,17 +251,13 @@ export class AiClarificationStepperComponent extends LitElement {
     this._autoAll = true;
   }
 
-  /**
-   * A pointer click on the "Something else" radio moves focus into its text field. Keyboard selection
-   * (arrow keys, Space) reports a click with no detail and is left alone so arrow navigation keeps working.
-   */
+  // Keyboard selection reports a click with no detail; leave it alone so arrow navigation keeps working.
   #handleCustomRadioClick(evt: MouseEvent): void {
     if (evt.detail > 0) {
       this.#pendingFocus = 'custom';
     }
   }
 
-  /** Focusing the text field is an intent to type a custom answer, so it selects "Something else". */
   #handleCustomFocus(question: AiClarificationQuestion): void {
     if (!this._autoAll && this.#isCustom(question)) {
       return;
@@ -292,7 +270,7 @@ export class AiClarificationStepperComponent extends LitElement {
     this._customText = { ...this._customText, [question.id]: (evt.target as HTMLInputElement).value };
   }
 
-  /** Enter advances to the next step but never submits, so a fast typist cannot skip the remaining questions. */
+  // Enter never submits, so a fast typist cannot skip the remaining questions.
   #handleCustomKeydown(question: AiClarificationQuestion, evt: KeyboardEvent): void {
     if (evt.key !== 'Enter' || evt.isComposing) {
       return;
@@ -304,17 +282,8 @@ export class AiClarificationStepperComponent extends LitElement {
     }
   }
 
-  /** Forge's separator line, set above and below "Choose recommended for all". Decorative, so hidden from assistive technology. */
   readonly #divider = html`<hr class="forge-divider" aria-hidden="true" />`;
 
-  /**
-   * The numbered marker every option leads with, in the style of a `forge-stepper` step. The native radio is
-   * kept, invisibly, on top of the number so selection, arrow keys and screen readers behave as a radio group
-   * while the number is what the person sees. The number is decorative: the radio carries the semantics.
-   *
-   * A chosen "Something else" option shows a pencil in place of its number, since its row is where the
-   * person types.
-   */
   #renderMarker(config: { radio: TemplateResult; position: number; showEditIcon?: boolean }): TemplateResult {
     const { radio, position, showEditIcon = false } = config;
     return html`
@@ -325,7 +294,6 @@ export class AiClarificationStepperComponent extends LitElement {
     `;
   }
 
-  /** The pencil used for rename in `forge-ai-thread-actions-menu`. */
   readonly #editIcon = html`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="forge-icon" aria-hidden="true">
       <path
@@ -353,10 +321,7 @@ export class AiClarificationStepperComponent extends LitElement {
     `;
   }
 
-  /**
-   * The "Something else" row is an editable text field rather than a label. Typing in it, or focusing it,
-   * selects the option, so there is no separate field to reveal.
-   */
+  // Typing in or focusing the field selects the option, so no separate field is revealed.
   #renderCustomOption(config: { question: AiClarificationQuestion; position: number }): TemplateResult {
     const { question, position } = config;
     const selected = !this._autoAll && this.#isCustom(question);
@@ -390,7 +355,6 @@ export class AiClarificationStepperComponent extends LitElement {
     `;
   }
 
-  /** Sits at the very bottom of the options and answers every remaining question with its recommended option. */
   #renderAutoOption(config: { question: AiClarificationQuestion; position: number }): TemplateResult {
     const { question, position } = config;
     const radio = html`
@@ -408,11 +372,6 @@ export class AiClarificationStepperComponent extends LitElement {
     `;
   }
 
-  /**
-   * The answers chosen in the previous steps, in step order, shown above the buttons. The current step's own
-   * selection is left out, and so is "Choose recommended for all", which is not an answer to an earlier step.
-   * There is nothing to show on the first step.
-   */
   get #summary(): TemplateResult | typeof nothing {
     // A previous step always has an answer: "Next" is disabled while a typed answer is empty.
     const labels = this.questions.slice(0, this._stepIndex).map(question => this.#pickedAnswerFor(question).label);
@@ -438,10 +397,7 @@ export class AiClarificationStepperComponent extends LitElement {
     `;
   }
 
-  /**
-   * The terminal state: each submitted answer set against its question, with nothing to operate. A set of answers
-   * with no matching question still shows its answer, so a record is never silently shorter than what was sent.
-   */
+  // An answer with no matching question is still shown, so the record is never shorter than what was sent.
   get #record(): TemplateResult | typeof nothing {
     if (this.answers.length === 0) {
       return nothing;

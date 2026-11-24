@@ -1,8 +1,7 @@
 import type { AiClarificationAnswer } from '../../ai-clarification-stepper/index.js';
 
 /**
- * What the agent receives. `dismissed` is set when the person did not choose these answers: the question was left
- * behind, so `answers` holds the agent's own recommended options (or nothing, if there was nothing to ask).
+ * What the agent receives. `dismissed` means the question was abandoned and `answers` holds the recommended options.
  */
 export interface ClarificationResult extends Record<string, unknown> {
   answers: AiClarificationAnswer[];
@@ -11,22 +10,15 @@ export interface ClarificationResult extends Record<string, unknown> {
 
 interface PendingClarification {
   resolve: (result: ClarificationResult) => void;
-  /** What to answer with if the question is abandoned. */
   fallback: AiClarificationAnswer[];
 }
 
-/**
- * The tool's handler and its renderer are separate objects that only share a tool call id, so a handler that is
- * waiting for the person parks its `resolve` here, and the renderer settles it when the person answers.
- */
 const pending = new Map<string, PendingClarification>();
 
-/** The renderers currently showing each tool call, each represented by a token. */
 const watchers = new Map<string, Set<symbol>>();
 
 /**
- * Called by the tool's handler. The returned promise settles when the person answers, or when the question is
- * abandoned, and the chatbot holds the agent's turn until then.
+ * Called by the tool's handler. Settles when the person answers or the question is abandoned.
  */
 export function waitForClarification(config: { toolCallId: string; fallback: AiClarificationAnswer[] }): Promise<ClarificationResult> {
   const { toolCallId, fallback } = config;
@@ -35,7 +27,9 @@ export function waitForClarification(config: { toolCallId: string; fallback: AiC
   });
 }
 
-/** Called by the renderer with the person's answers. Returns whether a handler was waiting for them. */
+/**
+ * Called by the renderer. Returns whether a handler was waiting.
+ */
 export function resolveClarification(config: { toolCallId: string; answers: AiClarificationAnswer[] }): boolean {
   const { toolCallId, answers } = config;
   const request = pending.get(toolCallId);
@@ -51,10 +45,8 @@ export function resolveClarification(config: { toolCallId: string; answers: AiCl
 /**
  * Registers a renderer as showing a tool call, and returns the function that releases it.
  *
- * A question nobody is showing any more can never be answered, and the chatbot stays busy for as long as its
- * handler is waiting, so it is abandoned. But the host also replaces a renderer with a fresh one for the same
- * call (and the launcher removes the whole conversation while its history view is open), so the check waits until
- * the host has finished moving elements, and abandons only if no renderer picked the call back up.
+ * A question nobody is showing is abandoned. The host can swap in a fresh renderer for the same call, so the
+ * check is deferred and abandons only if no renderer picked the call back up.
  */
 export function watchClarification(toolCallId: string): () => void {
   const token = Symbol(toolCallId);
@@ -62,14 +54,13 @@ export function watchClarification(toolCallId: string): () => void {
   tokens.add(token);
   watchers.set(toolCallId, tokens);
 
-  // Releasing twice is harmless: the token is already gone, and the abandon check re-reads who is watching.
   return () => {
     tokens.delete(token);
     if (tokens.size > 0) {
       return;
     }
 
-    // A release that arrives after a newer renderer took the call over must leave that renderer registered.
+    // A late release must not unregister a newer renderer that took the call over.
     if (watchers.get(toolCallId) === tokens) {
       watchers.delete(toolCallId);
     }

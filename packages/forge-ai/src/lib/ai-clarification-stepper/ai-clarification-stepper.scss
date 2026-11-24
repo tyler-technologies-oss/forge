@@ -3,6 +3,7 @@
 @use '@tylertech/forge-tokens/sass/theme' as forge-theme;
 @use '@tylertech/forge-tokens/sass/typography' as forge-typography;
 @use '@tylertech/forge-tokens/sass/border' as forge-border;
+@use '@tylertech/forge-tokens/sass/color-emphasis' as forge-color-emphasis;
 @use '@tylertech/forge/dist/button/forge-button';
 @use '@tylertech/forge/dist/badge/forge-badge';
 @use '@tylertech/forge/dist/divider/forge-divider';
@@ -11,9 +12,10 @@
 @use '@tylertech/forge/sass/stepper/step/core' as forge-step;
 
 :host {
-  // No Forge theme token matches this resting fill for the number squares (a navy at about 6% opacity), so it is a
-  // themable component variable with the design's value as its default.
-  --_marker-background: var(--forge-ai-clarification-stepper-marker-background, #0000330f);
+  --_marker-background: var(
+    --forge-ai-clarification-stepper-marker-background,
+    color-mix(in srgb, #{forge-theme.variable(primary)} #{forge-color-emphasis.value(lowest)}, transparent)
+  );
 
   display: block;
   min-inline-size: 0;
@@ -29,7 +31,6 @@
   border-radius: #{forge-shape.variable(large)};
 }
 
-// The question sits at the start and the step counter at the end of the same row.
 .header {
   display: flex;
   align-items: baseline;
@@ -46,13 +47,12 @@
   font-weight: 700;
   color: #{forge-theme.variable(text-high)};
 
-  // Focus lands here when the step changes; the heading is not interactive, so no ring is drawn.
+  // Focus lands here on step change; the heading is not interactive, so no ring.
   &:focus {
     outline: none;
   }
 }
 
-// The step counter and the chosen-answers summary share one style.
 .counter,
 .summary {
   @include forge-typography.style(label1);
@@ -73,8 +73,7 @@
 }
 
 .option {
-  // The same step tokens `forge-step` is themed with, so the numbered markers below can be restyled with
-  // `--forge-step-*` custom properties exactly as a `forge-stepper` can.
+  // The same tokens `forge-step` uses, so markers can be themed with `--forge-step-*` properties.
   @include forge-step.tokens(
     (
       primary-color,
@@ -90,8 +89,6 @@
   );
   @include forge-typography.style(body1);
 
-  // The number square rests on the marker fill. Once its option is chosen it takes the tertiary container fill
-  // instead, in place of the step's primary color. The row itself stays clear until it is chosen.
   --forge-step-icon-fill: var(--_marker-background);
   --forge-step-icon-fill-active: #{forge-theme.variable(tertiary-container-high)};
   --forge-step-icon-text-color-active: #{forge-theme.variable(on-tertiary-container-high)};
@@ -105,14 +102,11 @@
   color: #{forge-theme.variable(text-high)};
   cursor: pointer;
 
-  // The chosen option is marked by a tinted row, with no border or outline around it. Its number is filled with
-  // the deeper tertiary container color set above.
   &:has(input:checked) {
     background-color: #{forge-theme.variable(tertiary-container-low)};
   }
 
-  // The chosen label takes the step's heavier weight. Its color stays the row's own, since the primary color
-  // `forge-step` would use does not have enough contrast on this fill.
+  // The primary color `forge-step` would use lacks contrast on this fill, so only the weight changes.
   &:has(input:checked) .option-label {
     font-weight: 500;
   }
@@ -123,9 +117,7 @@
   display: flex;
   flex-shrink: 0;
 
-  // The native radio stays in place, invisibly, over the number. It keeps selection, arrow keys and screen
-  // reader semantics while the number is what the person sees, and a pointer click on the number still lands
-  // on the radio. Its keyboard focus ring is drawn on the number, below.
+  // The native radio is invisible over the number, keeping radio semantics and pointer clicks.
   input[type='radio'] {
     position: absolute;
     inset: 0;
@@ -137,24 +129,19 @@
   }
 }
 
-// The step marker from `forge-stepper`, with no outline: a bare primary number when idle, filled when chosen.
-// The fill difference means the chosen state never relies on color alone.
 .option-index {
   @include forge-typography.style(label1);
   @include forge-step.icon-content;
 
   // `icon-content` reserves trailing space for a step label; the option's own gap does that here.
   margin: 0;
-  // A square rather than the step's circle, using the shape token (4px) the design calls for.
   border-radius: #{forge-shape.variable(medium)};
 
-  // The pencil that replaces the number on a chosen "Something else" option, sized as a step icon.
   .forge-icon {
     --forge-icon-font-size: #{forge-step.token(icon-size)};
   }
 }
 
-// With no border or outline on the row, a keyboard user's position is shown on the number instead.
 input:focus-visible + .option-index {
   outline: #{forge-border.variable(medium)} solid #{forge-theme.variable(primary)};
   outline-offset: #{forge-border.variable(thin)};
@@ -176,17 +163,11 @@ input:checked + .option-index {
   color: #{forge-theme.variable(text-medium)};
 }
 
-// The "Something else" row is a text field that looks like part of the option rather than a bordered box,
-// so the row reads as one editable choice.
 .option--custom {
   cursor: text;
 }
 
-// `.forge-field--plain` supplies the borderless, fill-less, unpadded input, and its typography and text color.
-// Only Forge's own tokens are set here: the field takes its height from the row's text line, as the other options
-// do, so every row is the same height; the placeholder (the "Something else" label) matches the other option
-// labels; and the focus ring is given no width, since options carry no outline. Both widths are zeroed because
-// the ring animates out to the active width before settling at the resting one.
+// Both focus widths are zeroed because the ring animates out to the active width before settling at the resting one.
 .custom-field {
   --forge-field-height: auto;
   --forge-field-placeholder-color: #{forge-theme.variable(text-high)};
@@ -197,13 +178,11 @@ input:checked + .option-index {
   min-inline-size: 0;
 }
 
-// Some browsers dim placeholders on their own; the placeholder should read like the other labels.
+// Some browsers dim placeholders on their own.
 .custom-input::placeholder {
   opacity: 1;
 }
 
-// Sizing, shape, typography and padding all come from `.forge-badge`; only the colors are themed here, through
-// the badge's own tokens.
 .auto-badge {
   --forge-badge-background: #{forge-theme.variable(surface-container-low)};
   --forge-badge-color: #{forge-theme.variable(on-surface-container-low)};
@@ -211,12 +190,10 @@ input:checked + .option-index {
   flex-shrink: 0;
 }
 
-// Disabled controls (while the answers are being delivered) stop looking clickable.
 .option:has(input:disabled) {
   cursor: default;
 }
 
-// The terminal record: each submitted answer under the question it answers, with nothing to operate.
 .record {
   display: flex;
   flex-direction: column;
@@ -244,8 +221,6 @@ input:checked + .option-index {
   color: #{forge-theme.variable(text-high)};
 }
 
-// Back floats to the start and Next to the end. Next keeps the end position on the first step, where
-// Back is absent.
 .actions {
   display: flex;
   align-items: center;

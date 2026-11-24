@@ -1,8 +1,7 @@
 import type { AiClarificationOption, AiClarificationQuestion } from '../../ai-clarification-stepper/index.js';
 
 /**
- * What the agent sends. Every field is optional because it is agent-written: the tool treats the arguments as
- * untrusted and keeps only what the stepper can safely show.
+ * What the agent sends. Every field is optional because the arguments are untrusted.
  */
 export interface ClarificationStepperData {
   questions?: (Partial<Omit<AiClarificationQuestion, 'options'>> & {
@@ -11,9 +10,8 @@ export interface ClarificationStepperData {
 }
 
 /**
- * Keeps only what the stepper can show. A question needs text and at least one labeled option, and ids are made
- * unique. Only the first option marked recommended keeps the mark, since more than one would make "Choose
- * recommended for all" ambiguous.
+ * Keeps only what the stepper can show: questions with text and a labeled option, unique ids, and one recommended
+ * option per question.
  */
 export function sanitizeQuestions(raw: unknown): AiClarificationQuestion[] {
   if (!Array.isArray(raw)) {

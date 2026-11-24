@@ -22,10 +22,7 @@ declare global {
 
 /**
  * Clarification stepper tool renderer. Maps an `askClarification` tool call onto the presentational
- * `forge-ai-clarification-stepper` primitive, so the primitive stays unaware of tool calls.
- *
- * The tool's handler is waiting for the person, so submitting the stepper settles it, which releases the agent's
- * turn. Once the call completes, the stepper becomes a read-only record of the answers that were delivered.
+ * `forge-ai-clarification-stepper` primitive. Submitting settles the tool's waiting handler.
  *
  * @tag forge-ai-tool-clarification-stepper
  */
@@ -33,13 +30,10 @@ declare global {
 export class ClarificationStepperToolElement extends LitElement implements IToolRenderer<ClarificationStepperData, ClarificationResult> {
   public static styles = unsafeCSS(styles);
 
-  /**
-   * Tool call data containing the agent-provided questions and, once it completes, the delivered answers.
-   */
+  /** Tool call data containing the agent-provided questions and, once complete, the delivered answers. */
   @property({ attribute: false })
   public toolCall!: ToolCall<ClarificationStepperData, ClarificationResult>;
 
-  /** Whether the person has submitted from this element, which is the time between submitting and the call completing. */
   @state()
   private _submitted = false;
 
@@ -58,11 +52,7 @@ export class ClarificationStepperToolElement extends LitElement implements ITool
     this.#release = undefined;
   }
 
-  /**
-   * The host assigns `toolCall` again on every update, and the stepper resets whenever it receives a new `questions`
-   * array. The sanitized questions are therefore rebuilt only when the agent's arguments actually differ, so a
-   * person's selections survive unrelated updates to the tool call.
-   */
+  // The stepper resets on a new `questions` array, so rebuild only when the arguments differ to keep selections.
   public override willUpdate(changedProperties: PropertyValues<this>): void {
     if (!changedProperties.has('toolCall')) {
       return;
@@ -78,10 +68,7 @@ export class ClarificationStepperToolElement extends LitElement implements ITool
     this.#watch();
   }
 
-  /**
-   * Tells the pending request that something is showing it. The call's id can arrive after the element connects, so
-   * this runs on connect and again whenever the tool call is assigned.
-   */
+  // The call's id can arrive after the element connects, so this also runs when the tool call is assigned.
   #watch(): void {
     if (this.#release || !this.isConnected || !this.toolCall?.id) {
       return;
@@ -99,7 +86,6 @@ export class ClarificationStepperToolElement extends LitElement implements ITool
     resolveClarification({ toolCallId: this.toolCall.id, answers: evt.detail.answers });
   }
 
-  /** The answers the agent received, which are what the finished stepper records. */
   get #deliveredAnswers(): AiClarificationAnswer[] {
     const answers = this.toolCall.result?.answers;
     return Array.isArray(answers) ? answers : [];
@@ -114,9 +100,7 @@ export class ClarificationStepperToolElement extends LitElement implements ITool
   }
 
   public override render(): TemplateResult | typeof nothing {
-    // The tool shows its renderer from the start, since the call stays `executing` for as long as it waits for the
-    // person. Until the arguments are complete there are no final questions to show, and one that failed has nothing
-    // to answer.
+    // Arguments are incomplete until the call is `executing`, and a failed call has nothing to answer.
     const status = this.toolCall?.status;
     if (!this.toolCall || status === 'pending' || status === 'parsing' || status === 'error') {
       return nothing;

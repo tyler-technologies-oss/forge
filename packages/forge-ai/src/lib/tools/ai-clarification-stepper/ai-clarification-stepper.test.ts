@@ -32,7 +32,6 @@ const validQuestions = [
 
 let nextId = 0;
 
-/** Every call gets its own id, since pending requests live in module state shared by all of these tests. */
 function createToolCall(overrides: Partial<ToolCall> = {}): ToolCall {
   return {
     id: `tc-${++nextId}`,
@@ -45,7 +44,6 @@ function createToolCall(overrides: Partial<ToolCall> = {}): ToolCall {
   };
 }
 
-/** A call whose arguments are not what the schema asks for, as an agent might send. */
 function createUntrustedToolCall(questions: unknown): ToolCall {
   return createToolCall({ args: { questions } as ClarificationStepperData });
 }
@@ -68,7 +66,6 @@ function oneEvent(el: HTMLElement, eventName: string): Promise<CustomEvent<{ ans
   return new Promise(resolve => el.addEventListener(eventName, evt => resolve(evt as CustomEvent<{ answers: unknown[] }>), { once: true }));
 }
 
-/** Resolves to what the promise settled with, or to `'pending'` if it has not settled after a few ticks. */
 async function settled<T>(promise: Promise<T>): Promise<T | 'pending'> {
   return Promise.race([promise, new Promise<'pending'>(resolve => setTimeout(() => resolve('pending'), 30))]);
 }
@@ -496,7 +493,6 @@ describe('ClarificationStepperToolElement', () => {
       await stepper.updateComplete;
       expect(radios()[1].checked).toBe(true);
 
-      // The host assigns a new tool call object on updates such as the status changing.
       el.toolCall = { ...toolCall, args: { questions: JSON.parse(JSON.stringify(validQuestions)) } };
       await el.updateComplete;
       await stepper.updateComplete;
@@ -527,7 +523,6 @@ describe('ClarificationStepperToolElement', () => {
       const { el, stepper } = await renderTool(createToolCall());
       const questions = stepper.questions;
 
-      // The host also assigns `presentation` and `canvas`; any update that leaves `toolCall` alone must be a no-op.
       el.requestUpdate();
       await el.updateComplete;
 

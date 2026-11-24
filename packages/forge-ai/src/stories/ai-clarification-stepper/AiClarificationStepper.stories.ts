@@ -100,8 +100,7 @@ export const Demo: Story = {
 };
 
 /**
- * Once the answers are submitted the host sets `status` to `sending`. Every control is disabled while they are
- * delivered, and the person's choices stay where they were.
+ * With `status` set to `sending`, every control is disabled while the answers are delivered.
  */
 export const Sending: Story = {
   render: () => html`
@@ -113,8 +112,7 @@ export const Sending: Story = {
 };
 
 /**
- * Once delivered, the stepper is terminal: a read-only record of the turn, each submitted answer under the question it
- * answers. It is not a form to revisit.
+ * With `status` set to `sent`, the stepper is a read-only record of each submitted answer.
  */
 export const Sent: Story = {
   render: () => html`
@@ -138,8 +136,7 @@ export const SingleQuestion: Story = {
 };
 
 /**
- * A question with `allowCustom: false` is genuinely closed, so it offers only its own options. The
- * second step of this stepper is one.
+ * A question with `allowCustom: false` offers only its own options.
  */
 export const ClosedQuestion: Story = {
   render: () => html`
