@@ -24,9 +24,10 @@ interface Props {
 
 const { block } = Astro.props;
 const fileUrl = getBlockFileUrl(block);
+const isComponentDemo = block.category.toLowerCase() === "components" || block.id.includes("/components/");
 ---
 
-<BaseLayout title={block.name} description={block.description} wide searchable={false}>
+<BaseLayout title={block.name} description={block.description} wide searchable={!isComponentDemo}>
   <PageScaffold class="block-detail">
     <ContentHeader slot="header" title={block.name} description={block.description} showBackButton />
 

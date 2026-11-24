@@ -6,6 +6,14 @@
  * index doesn't exist under `astro dev`, so the dialog reports that search
  * needs a build there.
  */
+import { buildNavigation } from "../config/navigation";
+
+const sectionIcons = Object.fromEntries(
+  buildNavigation()
+    .flatMap(({ items }) => items)
+    .filter(({ icon }) => icon)
+    .map(({ label, icon }) => [label, icon]),
+);
 ---
 
 <div class="contents" transition:persist="search-dialog">
@@ -15,7 +23,8 @@
   <forge-dialog
     label="Search the docs"
     class="[--forge-dialog-width:640px] [--forge-dialog-max-width:calc(100vw-32px)] [--forge-dialog-height:60vh] [--forge-dialog-shape:var(--forge-shape-extra-large)]"
-    data-search-dialog>
+    data-search-dialog
+    data-section-icons={JSON.stringify(sectionIcons)}>
     <forge-scaffold>
       <div slot="header" class="border-b border-outline">
         <forge-text-field label-position="none" variant="plain" density="extra-large" class="w-full [--forge-field-padding-inline-start:var(--forge-spacing-medium)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-start-start:var(--forge-shape-extra-large)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-start-end:var(--forge-shape-extra-large)] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-end-start:0px] [[data-search-dialog]:not([fullscreen])_&]:[--forge-focus-indicator-shape-end-end:0px]">
@@ -83,18 +92,10 @@
   import type { DialogComponent } from "@tylertech/forge/dialog";
   import type { IListItemComponent } from "@tylertech/forge/list";
 
-  interface PagefindSubResult {
-    title: string;
-    url: string;
-    excerpt: string;
-    locations: number[];
-  }
-
   interface PagefindPage {
     url: string;
     excerpt: string;
     meta: Record<string, string | undefined>;
-    sub_results: PagefindSubResult[];
   }
 
   interface PagefindResult {
@@ -110,10 +111,12 @@
     title: string;
     url: string;
     excerpt: string;
-    isSection: boolean;
+    icon: string;
   }
 
   const MAX_RESULTS = 10;
+  const CANDIDATE_LIMIT = 30;
+  const FALLBACK_ICON = "file_document";
   const EXCERPT_LENGTH = 18;
   const DEBOUNCE_MS = 150;
   const DEFAULT_SECTION = "Docs";
@@ -127,6 +130,7 @@
   };
 
   const dialog = document.querySelector<DialogComponent>("[data-search-dialog]");
+  const sectionIcons: Record<string, string> = JSON.parse(dialog?.dataset.sectionIcons ?? "{}");
   const input = document.querySelector<HTMLInputElement>("[data-search-input]");
   const clearButton = document.querySelector<HTMLElement>("[data-search-clear]");
   const clearDivider = document.querySelector<HTMLElement>("[data-search-clear-divider]");
@@ -154,19 +158,47 @@
     return pagefindLoader;
   };
 
-  /** Points at the section of the page with the most matches, when that's a heading anchor. */
-  const toHit = (page: PagefindPage): SearchHit => {
-    const title = page.meta.title ?? page.url;
-    const best = page.sub_results.reduce<PagefindSubResult | undefined>(
-      (top, sub) => (!top || sub.locations.length > top.locations.length ? sub : top),
-      undefined,
-    );
+  const COMPONENT_TAB_PATTERN = /^(.*\/components\/[^/]+)\/(?:usage|api|accessibility|playground)\/?$/;
+  const COMPONENT_TAB_TITLE_PATTERN = / - (?:Usage|API|Accessibility|Playground)$/;
 
-    if (!best || best.url === page.url || best.title === title) {
-      return { title, url: page.url, excerpt: page.excerpt, isSection: false };
-    }
-    return { title: `${title} › ${best.title}`, url: best.url, excerpt: best.excerpt, isSection: true };
+  /** Always links to the page level, never a heading anchor or a component tab other than usage. */
+  const toHit = (page: PagefindPage): SearchHit => {
+    const withoutHash = page.url.split("#")[0].replace(COMPONENT_TAB_PATTERN, "$1/usage");
+    const pageUrl = withoutHash.endsWith("/") ? withoutHash : `${withoutHash}/`;
+    const title = (page.meta.title ?? page.url).replace(COMPONENT_TAB_TITLE_PATTERN, "");
+    const icon = sectionIcons[page.meta.section ?? DEFAULT_SECTION] ?? FALLBACK_ICON;
+    return { title, url: pageUrl, excerpt: page.excerpt, icon };
   };
+
+  const dedupeHits = (hits: SearchHit[]): SearchHit[] => {
+    const seen = new Set<string>();
+    return hits.filter(({ url }) => {
+      if (seen.has(url)) {
+        return false;
+      }
+      seen.add(url);
+      return true;
+    });
+  };
+
+  const titleRank = (title: string, query: string): number => {
+    const normalizedTitle = title.toLowerCase();
+    const normalizedQuery = query.toLowerCase();
+    if (normalizedTitle === normalizedQuery) {
+      return 0;
+    }
+    if (normalizedTitle.startsWith(normalizedQuery)) {
+      return 1;
+    }
+    return normalizedTitle.includes(normalizedQuery) ? 2 : 3;
+  };
+
+  /** Title matches come first (exact, then prefix, then contains); Pagefind's relevance order breaks ties. */
+  const rankHits = (hits: SearchHit[], query: string): SearchHit[] =>
+    hits
+      .map((hit, order) => ({ hit, order, rank: titleRank(hit.title, query) }))
+      .sort((a, b) => a.rank - b.rank || a.order - b.order)
+      .map(({ hit }) => hit);
 
   const showStatus = (message: string | null): void => {
     if (!status) {
@@ -198,7 +230,7 @@
 
     const icon = document.createElement("forge-icon");
     icon.slot = "start";
-    icon.name = hit.isSection ? "pound" : "file_document";
+    icon.name = hit.icon;
 
     const link = document.createElement("a");
     link.id = `search-result-${index}`;
@@ -213,37 +245,33 @@
     return item;
   };
 
-  const renderResults = (sections: Map<string, SearchHit[]>): void => {
+  const renderResults = (): void => {
     if (!resultsContainer) {
       return;
     }
 
-    const groups = [...sections].map(([section, sectionHits], groupIndex) => {
-      const group = document.createElement("section");
-      const headingId = `search-group-${groupIndex}`;
+    const list = document.createElement("forge-list");
+    list.setAttribute("aria-label", "Search results");
+    list.append(...hits.map(createResultItem));
 
-      const heading = document.createElement("h2");
-      heading.id = headingId;
-      heading.className = "text-subheading2 m-0 mb-xsmall";
-      heading.textContent = section;
-
-      const list = document.createElement("forge-list");
-      list.setAttribute("aria-labelledby", headingId);
-      list.append(...sectionHits.map((hit) => createResultItem(hit, hits.indexOf(hit))));
-
-      group.append(heading, list);
-      return group;
-    });
-
-    resultsContainer.replaceChildren(...groups);
+    resultsContainer.replaceChildren(...(hits.length ? [list] : []));
     items = [...resultsContainer.querySelectorAll("forge-list-item")];
     input?.setAttribute("aria-expanded", String(items.length > 0));
-    setActive(-1);
+    const renderedItems = items;
+    setActive(items.length ? 0 : -1);
+    // The list items render their focus indicator after connecting, and setting `active` to its current value
+    // is a no-op, so clear it and apply it again once they have.
+    requestAnimationFrame(() => {
+      if (renderedItems === items && activeIndex === 0) {
+        items[0].active = false;
+        setActive(0);
+      }
+    });
   };
 
   const clearResults = (message: string | null): void => {
     hits = [];
-    renderResults(new Map());
+    renderResults();
     showStatus(message);
   };
 
@@ -270,19 +298,13 @@
       return;
     }
 
-    const pages = await Promise.all(search.results.slice(0, MAX_RESULTS).map((result) => result.data()));
+    const pages = await Promise.all(search.results.slice(0, CANDIDATE_LIMIT).map((result) => result.data()));
     if (query !== input?.value.trim()) {
       return;
     }
 
-    hits = pages.map(toHit);
-    const sections = new Map<string, SearchHit[]>();
-    pages.forEach((page, index) => {
-      const section = page.meta.section ?? DEFAULT_SECTION;
-      sections.set(section, [...(sections.get(section) ?? []), hits[index]]);
-    });
-
-    renderResults(sections);
+    hits = rankHits(dedupeHits(pages.map(toHit)), query).slice(0, MAX_RESULTS);
+    renderResults();
     showStatus(hits.length ? null : STATUS.noResults(query));
     if (announcer) {
       announcer.textContent = `${search.results.length} results`;
@@ -307,8 +329,22 @@
     }
   };
 
+  /**
+   * The animated close finishes asynchronously and force-closes the native dialog when it does. If a
+   * navigation swaps the persisted dialog in the meantime, that late close hits the next time it opens.
+   */
+  const closeSearchImmediately = (): void => {
+    if (!dialog) {
+      return;
+    }
+    const { animationType } = dialog;
+    dialog.animationType = "none";
+    dialog.open = false;
+    dialog.animationType = animationType;
+  };
+
   const goTo = (url: string): void => {
-    closeSearch();
+    closeSearchImmediately();
     navigate(url);
   };
 
@@ -327,7 +363,7 @@
       return;
     }
 
-    if (event.key === "Enter" && hits[activeIndex]) {
+    if (event.key === "Enter" && !event.repeat && !event.isComposing && hits[activeIndex]) {
       event.preventDefault();
       goTo(hits[activeIndex].url);
     }
@@ -345,42 +381,51 @@
     }
   };
 
-  // Triggers live in swapped page content (the mobile header) as well as the
-  // persisted sidenav, so listen on the document rather than binding each one.
-  document.addEventListener("click", (event) => {
-    if ((event.target as Element).closest(TRIGGER_SELECTOR)) {
-      openSearch();
-    }
-  });
+  // This script re-runs on SPA navigation while the dialog and its shortcuts persist,
+  // so bind once or every Cmd/Ctrl+K press would toggle the dialog repeatedly.
+  if (dialog && !dialog.dataset.searchBound) {
+    dialog.dataset.searchBound = "true";
 
-  document.addEventListener("keydown", (event) => {
-    const { target } = event;
-    if (target instanceof HTMLInputElement && target.closest(TRIGGER_SELECTOR)) {
-      onTriggerKeydown(event);
-    }
-  });
+    document.addEventListener("astro:before-swap", closeSearchImmediately);
+    document.addEventListener("astro:after-swap", closeSearchImmediately);
 
-  document.querySelectorAll("[data-search-shortcut]").forEach((shortcut) => {
-    shortcut.addEventListener("forge-keyboard-shortcut-activate", () => (dialog?.open ? closeSearch() : openSearch()));
-  });
+    // Triggers live in swapped page content (the mobile header) as well as the
+    // persisted sidenav, so listen on the document rather than binding each one.
+    document.addEventListener("click", (event) => {
+      if ((event.target as Element).closest(TRIGGER_SELECTOR)) {
+        openSearch();
+      }
+    });
 
-  input?.addEventListener("input", runSearch);
-  input?.addEventListener("keydown", onInputKeydown);
-  clearButton?.addEventListener("click", () => {
-    if (!input) {
-      return;
-    }
-    input.value = "";
-    runSearch();
-    input.focus();
-  });
+    document.addEventListener("keydown", (event) => {
+      const { target } = event;
+      if (target instanceof HTMLInputElement && target.closest(TRIGGER_SELECTOR)) {
+        onTriggerKeydown(event);
+      }
+    });
 
-  dialog?.addEventListener("forge-dialog-open", () => input?.select());
-  document.querySelector("[data-search-close]")?.addEventListener("click", closeSearch);
+    document.querySelectorAll("[data-search-shortcut]").forEach((shortcut) => {
+      shortcut.addEventListener("forge-keyboard-shortcut-activate", () => (dialog?.open ? closeSearch() : openSearch()));
+    });
 
-  resultsContainer?.addEventListener("click", (event) => {
-    if ((event.target as Element).closest("a")) {
-      closeSearch();
-    }
-  });
+    input?.addEventListener("input", runSearch);
+    input?.addEventListener("keydown", onInputKeydown);
+    clearButton?.addEventListener("click", () => {
+      if (!input) {
+        return;
+      }
+      input.value = "";
+      runSearch();
+      input.focus();
+    });
+
+    dialog?.addEventListener("forge-dialog-open", () => input?.select());
+    document.querySelector("[data-search-close]")?.addEventListener("click", closeSearch);
+
+    resultsContainer?.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) {
+        closeSearchImmediately();
+      }
+    });
+  }
 </script>
