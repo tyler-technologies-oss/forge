@@ -44,6 +44,7 @@ interface RowData {
   city: string;
   state: string;
   notes: string;
+  children?: RowData[];
 }
 
 const FETCH_DELAY_MS = 250;
@@ -175,6 +176,14 @@ const dataTable = document.querySelector('forge-data-table') as DataTableElement
 dataTable.columns = flatColumns;
 dataTable.reorderable = true;
 dataTable.multiSort = false;
+dataTable.getSubRows = (row: RowData) => row.children ?? undefined;
+dataTable.getRowHasDetail = (row: RowData) => row.id === 2;
+dataTable.getRowDetail = (row: RowData) => {
+  const detail = document.createElement('div');
+  detail.textContent = `Detail for row ${row.id}`;
+  return detail;
+};
+
 const employees: RowData[] = [
   {
     id: 1,
@@ -190,7 +199,57 @@ const employees: RowData[] = [
     startDate: new Date(2019, 2, 18),
     city: 'San Francisco',
     state: 'CA',
-    notes: 'Excellent performance'
+    notes: 'Excellent performance',
+    children: [
+      {
+        id: 8,
+        firstName: 'Eve',
+        lastName: 'Smith',
+        email: 'eve.smith@company.com',
+        phone: '(555) 987-6543',
+        department: 'Engineering',
+        position: 'Intern',
+        salary: 50000,
+        performanceRating: 4.0,
+        bonusRate: 0.02,
+        startDate: new Date(2024, 0, 15),
+        city: 'San Francisco',
+        state: 'CA',
+        notes: 'Promising intern'
+      },
+      {
+        id: 9,
+        firstName: 'Frank',
+        lastName: 'Smith',
+        email: 'frank.smith@company.com',
+        phone: '(555) 654-3210',
+        department: 'Engineering',
+        position: 'Intern',
+        salary: 50000,
+        performanceRating: 3.8,
+        bonusRate: 0.02,
+        startDate: new Date(2024, 0, 20),
+        city: 'San Francisco',
+        state: 'CA',
+        notes: 'Another promising intern'
+      },
+      {
+        id: 10,
+        firstName: 'Grace',
+        lastName: 'Smith',
+        email: 'grace.smith@company.com',
+        phone: '(555) 321-9876',
+        department: 'Engineering',
+        position: 'Intern',
+        salary: 50000,
+        performanceRating: 3.9,
+        bonusRate: 0.02,
+        startDate: new Date(2024, 0, 25),
+        city: 'San Francisco',
+        state: 'CA',
+        notes: 'Yet another promising intern'
+      }
+    ]
   },
   {
     id: 2,

@@ -44,6 +44,14 @@ export function getCellLabelledBy(cell: { row: object; column: { id: string; col
 }
 
 /**
+ * The id the expander button of a row gets, so its `aria-labelledby` can name itself and the row.
+ */
+export function getExpanderButtonId(row: object): string | undefined {
+  const meta = rowMetaByRow.get(row);
+  return meta ? `${meta.nameId}-expander` : undefined;
+}
+
+/**
  * Names an element that has its own `aria-label` as `{label} {row name}`.
  *
  * Does nothing when the row has no name, which is the case for rows rendered outside of a data table.

@@ -469,10 +469,31 @@ table.row-selection {
 }
 
 //
+// Expander column
+//
+
+table {
+  :where(th, td).expander-column {
+    --forge-open-icon-size: 18px;
+
+    width: 48px;
+    padding-inline: 0;
+
+    .cell-container,
+    .cell-content {
+      justify-content: center;
+      padding-inline-start: #{spacing.variable(small)};
+    }
+  }
+}
+
+//
 // Row grouping
 //
 
 table tbody tr.group-row {
+  --forge-open-icon-size: 18px;
+
   background-color: #{theme.variable(surface-container-minimum)};
   color: #{theme.variable(on-surface-container-minimum)};
 

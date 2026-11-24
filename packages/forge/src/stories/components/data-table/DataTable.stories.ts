@@ -6,7 +6,7 @@ import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconBlock, tylIconCheckCircle, tylIconDelete, tylIconEdit, tylIconEmail, tylIconPauseCircle, tylIconVisibility } from '@tylertech/tyler-icons';
 import { actionCell, badgeCell, linkCell, meterCell, ratingCell, type ColumnDef, type DataTableElement } from '@tylertech/forge-table';
-import { employeeData, generateLargeDataset, sampleData, sampleColumns, sampleDataColumns, type EmployeeData, type EmployeeStatus } from './sample-data.js';
+import { employeeData, generateLargeDataset, sampleData, sampleDataColumns, type EmployeeData, type EmployeeStatus } from './sample-data.js';
 
 import '@tylertech/forge/button';
 import '@tylertech/forge-table';
@@ -118,7 +118,7 @@ const meta = {
   },
   args: {
     data: sampleData,
-    columns: sampleColumns,
+    columns: sampleDataColumns,
     sortable: false,
     filterable: false,
     resizable: false,
@@ -255,7 +255,7 @@ export const StickyHeader: Story = {
 export const StickyFooter: Story = {
   args: {
     stickyFooter: true,
-    columns: sampleColumns.map((column, index) => (index === 0 ? { ...column, footer: 'Footer' } : column))
+    columns: sampleDataColumns.map((column, index) => (index === 0 ? { ...column, footer: 'Footer' } : column))
   }
 };
 

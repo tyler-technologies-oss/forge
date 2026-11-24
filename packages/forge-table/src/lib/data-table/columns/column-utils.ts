@@ -1,7 +1,15 @@
 import type { Column, ColumnDef as TanstackColumnDef, Table } from '@tanstack/lit-table';
 import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { DEFAULT_COLUMN_WIDTH, GROUPS_COLUMN_HEADER, GROUPS_COLUMN_ID, GROUPS_COLUMN_WIDTH, SELECT_COLUMN_ID, SELECT_COLUMN_WIDTH } from '../constants.js';
+import {
+  DEFAULT_COLUMN_WIDTH,
+  EXPANDER_COLUMN_ID,
+  GROUPS_COLUMN_HEADER,
+  GROUPS_COLUMN_ID,
+  GROUPS_COLUMN_WIDTH,
+  SELECT_COLUMN_ID,
+  SELECT_COLUMN_WIDTH
+} from '../constants.js';
 import type { ColumnDef, CustomFormatter, Row, RowSelectionType } from '../types.js';
 import { Formatter } from '@tylertech/forge-core';
 import { getFormatterAttribute } from './formatter-attributes.js';
@@ -243,7 +251,7 @@ export function prependGroupsColumn<TData extends Row>(columns: TanstackColumnDe
 }
 
 export function canColumnBeReordered<TData extends Row>(column: Column<DataTableFeatures, TData>): boolean {
-  if (column.columnDef.id === SELECT_COLUMN_ID || column.columnDef.id === GROUPS_COLUMN_ID) {
+  if (column.columnDef.id === SELECT_COLUMN_ID || column.columnDef.id === EXPANDER_COLUMN_ID || column.columnDef.id === GROUPS_COLUMN_ID) {
     return false;
   }
   return column.columnDef.meta?.reorderable ?? true;

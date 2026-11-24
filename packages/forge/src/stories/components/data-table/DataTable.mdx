@@ -74,7 +74,7 @@ Apply compact and bordered styling for a denser, more defined table:
 
 Enable expandable rows to show additional details:
 
-Use the exported `createExpanderColumn()` helper to add the toggle column, then set `expandable` to `true` and provide slotted row content.
+Set `expandable` to `true` to add a toggle column, and provide the content of each row in its `expanded:row-<id>` slot. To expand sub rows or render detail content instead, set `getSubRows`, `getRowHasDetail` and `getRowDetail`.
 
 <Canvas of={DataTableStories.ExpandableRows} />
 

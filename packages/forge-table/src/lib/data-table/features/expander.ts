@@ -1,76 +1,142 @@
-import type { Row as TanstackRow } from '@tanstack/lit-table';
+import type { ColumnDef as TanstackColumnDef, Row as TanstackRow } from '@tanstack/lit-table';
+import { html, nothing, type TemplateResult } from 'lit';
+import { guard } from 'lit/directives/guard.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
+import type { DataTableElement } from '../data-table.js';
 import type { DataTableFeatures } from '../table-features.js';
-import { labelWithRowName } from './row-meta.js';
-import type { ColumnDef, Row } from '../types.js';
+import type { Row } from '../types.js';
+import { getCellRole } from './cell-selection.js';
+import { getExpanderButtonId, getRowMeta } from './row-meta.js';
 
 import '@tylertech/forge/icon-button';
-import '@tylertech/forge/icon';
+import '@tylertech/forge/open-icon';
 
-export interface ExpanderColumnOptions {
-  /**
-   * Optional identifier applied to the column.
-   * Defaults to `expander`.
-   */
-  id?: string;
-  /**
-   * Optional header content. Defaults to an empty string
-   * to keep the header area visually compact.
-   */
-  header?: string;
-  /**
-   * Accessible label applied to the toggle button.
-   */
-  ariaLabel?: string;
-  /**
-   * Icon name rendered when the row is expanded.
-   */
-  expandedIcon?: string;
-  /**
-   * Icon name rendered when the row is collapsed.
-   */
-  collapsedIcon?: string;
+type ExpandableHost<TData extends Row> = Pick<DataTableElement<TData>, 'expandable' | 'getSubRows' | 'getRowHasDetail' | 'getRowDetail' | 'cellSelection'>;
+
+const INTERACTIVE_SELECTOR = `:where(a, button, input, select, textarea, label, [contenteditable], [role="button"], forge-icon-button, forge-button, forge-checkbox, [id="${SELECT_COLUMN_ID}"], [data-forge-stop-row-click-propagation])`;
+
+/**
+ * Returns whether the detail of a row should be shown when it is expanded.
+ *
+ * Requires `getRowHasDetail` to be set and to return `true` for the row.
+ */
+function rowHasDetail<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): boolean {
+  return !row.getIsGrouped() && !!host.getRowHasDetail?.(row.original, row.index);
 }
 
-interface ExpandableRow {
-  getIsExpanded(): boolean;
-  toggleExpanded(): void;
+/**
+ * Backs TanStack's `getRowCanExpand`.
+ *
+ * Group rows can always expand. Other rows need `expandable`, and then: when neither `getSubRows` nor `getRowHasDetail` is set every row can
+ * expand (its content is the `expanded:row-<id>` slot), otherwise a row can expand when it has sub rows or a detail.
+ */
+export function canExpandRow<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): boolean {
+  if (row.getIsGrouped()) {
+    return true;
+  }
+  if (!host.expandable) {
+    return false;
+  }
+  if (!host.getSubRows && !host.getRowHasDetail) {
+    return true;
+  }
+  return row.subRows.length > 0 || rowHasDetail(host, row);
 }
 
-export function createExpanderColumn<TData extends Row = Row>(options: ExpanderColumnOptions = {}): ColumnDef<TData> {
-  const { id = 'expander', header = '', ariaLabel = 'Toggle row expansion', expandedIcon = 'chevron_down', collapsedIcon = 'chevron_right' } = options;
+/**
+ * Prepends the column with the button that expands a row, when the table has `expandable` rows. Group rows leave its cell empty, because their toggle is in the group cell.
+ */
+export function prependExpanderColumn<TData extends Row>(
+  columns: TanstackColumnDef<DataTableFeatures, TData>[]
+): TanstackColumnDef<DataTableFeatures, TData>[] {
+  if (columns.some(column => column.id === EXPANDER_COLUMN_ID)) {
+    return [...columns];
+  }
 
-  return {
-    id,
-    header,
-    hideable: false,
-    resizable: false,
-    width: 56,
-    stopRowClickPropagation: true,
-    template: ({ row }) => {
-      const expandableRow = row as TanstackRow<DataTableFeatures, TData> & ExpandableRow;
-      const iconButton = document.createElement('forge-icon-button');
-      const icon = document.createElement('forge-icon');
-
-      const updateIconState = (): void => {
-        const isExpanded = expandableRow.getIsExpanded();
-        icon.name = isExpanded ? expandedIcon : collapsedIcon;
-        iconButton.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-      };
-
-      icon.external = true;
-      iconButton.setAttribute('aria-label', ariaLabel);
-      labelWithRowName(iconButton, row);
-      iconButton.appendChild(icon);
-
-      iconButton.addEventListener('click', evt => {
-        evt.stopPropagation();
-        expandableRow.toggleExpanded();
-        updateIconState();
-      });
-
-      updateIconState();
-
-      return iconButton;
+  const expanderColumn: TanstackColumnDef<DataTableFeatures, TData> = {
+    id: EXPANDER_COLUMN_ID,
+    size: EXPANDER_COLUMN_WIDTH,
+    enableResizing: false,
+    enableColumnFilter: false,
+    enableSorting: false,
+    enableHiding: false,
+    enableGrouping: false,
+    enableCellSelection: false,
+    cell: ({ row }) => {
+      if (row.getIsGrouped() || !row.getCanExpand()) {
+        return nothing;
+      }
+      const id = getExpanderButtonId(row);
+      return html`
+        <forge-icon-button
+          class="group-toggle"
+          part="group-toggle"
+          shape="squared"
+          dense
+          id="${ifDefined(id)}"
+          aria-label="${EXPANDER_COLUMN_LABEL}"
+          aria-labelledby="${ifDefined(id ? `${id} ${getRowMeta(row)?.nameId}` : undefined)}"
+          aria-expanded="${row.getIsExpanded()}"
+          @click="${(evt: Event) => {
+            evt.stopPropagation();
+            row.toggleExpanded();
+          }}">
+          <forge-open-icon ?open="${row.getIsExpanded()}" orientation="horizontal" rotation="half"></forge-open-icon>
+        </forge-icon-button>
+      `;
     }
   };
+
+  return [expanderColumn, ...columns];
+}
+
+/**
+ * Toggles the expansion of a group row, or of a data row that can expand, when it is double clicked.
+ *
+ * Double clicks that land on interactive content (the toggle buttons, checkboxes, inputs, ...) are ignored, because those handle their own clicks.
+ */
+export function toggleRowOnDoubleClick(evt: MouseEvent, row: { getCanExpand(): boolean; toggleExpanded(): void }): void {
+  if (!row.getCanExpand()) {
+    return;
+  }
+
+  const isInteractive = evt
+    .composedPath()
+    .slice(0, evt.composedPath().indexOf(evt.currentTarget as EventTarget))
+    .some(el => (el as Node).nodeType === Node.ELEMENT_NODE && (el as Element).matches(INTERACTIVE_SELECTOR));
+  if (isInteractive) {
+    return;
+  }
+
+  row.toggleExpanded();
+}
+
+/**
+ * Renders the full span row under an expanded row: the element from `getRowDetail` when the row has a detail, otherwise the
+ * `expanded:row-<id>` slot when neither `getSubRows` nor `getRowHasDetail` is set.
+ *
+ * Sub rows follow the detail row because TanStack lists them after their parent in the row model.
+ */
+export function renderRowDetail<TData extends Row>(host: ExpandableHost<TData>, row: TanstackRow<DataTableFeatures, TData>): TemplateResult | typeof nothing {
+  if (!row.getIsExpanded() || row.getIsGrouped()) {
+    return nothing;
+  }
+
+  const hasDetail = rowHasDetail(host, row);
+  if (!hasDetail && (host.getSubRows || host.getRowHasDetail)) {
+    return nothing;
+  }
+
+  const content = hasDetail
+    ? guard([row.original, row.index, host.getRowDetail], () => host.getRowDetail?.(row.original, row.index))
+    : html`<slot name=${`expanded:row-${row.id}`}></slot>`;
+
+  return html`
+    <tr role="row" part="body-tr tr detail-tr">
+      <td role=${getCellRole(host.cellSelection)} part="body-cell cell detail-cell" colspan=${row.getVisibleCells().length}>
+        <div class="expanded-content">${content}</div>
+      </td>
+    </tr>
+  `;
 }

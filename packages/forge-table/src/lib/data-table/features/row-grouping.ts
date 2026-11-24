@@ -3,15 +3,15 @@ import { IconRegistry } from '@tylertech/forge';
 import { tylIconChevronDown, tylIconChevronRight } from '@tylertech/tyler-icons';
 import { html, nothing, type TemplateResult } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { GROUP_INDENT_WIDTH, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
+import { EXPANDER_COLUMN_ID, GROUP_INDENT_WIDTH, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
 import { formatAggregationValue } from './aggregation.js';
 import { getCellLabelledBy } from './row-meta.js';
 
 import '@tylertech/forge/checkbox';
-import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
+import '@tylertech/forge/open-icon';
 import '@tylertech/forge/tooltip';
 
 IconRegistry.define([tylIconChevronDown, tylIconChevronRight]);
@@ -101,19 +101,29 @@ export function getDataRows<TData extends Row>(table: Table<DataTableFeatures, T
 }
 
 /**
- * The column order that moves the grouped columns to the start of the table, in grouping order, right after the row selection column.
+ * The column order that moves the grouped columns to the start of the table, in grouping order, right after the row selection and expander columns.
  *
  * TanStack's own `groupedColumnMode: 'reorder'` would put them ahead of the row selection column, so the table orders them through
  * `columnOrder` instead. Columns not listed keep their relative order after the grouped ones.
  *
  * With `singleGroupColumn` the groups column takes the place of the grouped columns (TanStack removes those from the table), and it keeps that place while nothing is grouped.
  */
-export function getGroupedColumnOrder(columnOrder: string[], grouping: string[], hasSelectColumn: boolean, singleGroupColumn = false): string[] {
-  if (!grouping.length && !singleGroupColumn) {
+export function getGroupedColumnOrder(
+  columnOrder: string[],
+  grouping: string[],
+  hasSelectColumn: boolean,
+  singleGroupColumn = false,
+  hasExpanderColumn = false
+): string[] {
+  if (!grouping.length && !singleGroupColumn && !hasExpanderColumn) {
     return columnOrder;
   }
 
-  const leading = [...(hasSelectColumn ? [SELECT_COLUMN_ID] : []), ...(singleGroupColumn ? [GROUPS_COLUMN_ID] : grouping)];
+  const leading = [
+    ...(hasSelectColumn ? [SELECT_COLUMN_ID] : []),
+    ...(hasExpanderColumn ? [EXPANDER_COLUMN_ID] : []),
+    ...(singleGroupColumn ? [GROUPS_COLUMN_ID] : grouping)
+  ];
   return [...leading, ...columnOrder.filter(id => !leading.includes(id))];
 }
 
@@ -124,7 +134,7 @@ export function getGroupedColumnOrder(columnOrder: string[], grouping: string[],
  */
 export function getGroupLabelCell<TData extends Row>(row: GroupingRow<TData>): Cell<DataTableFeatures, TData> | undefined {
   const cells = row.getVisibleCells();
-  return cells.find(cell => cell.getIsGrouped()) ?? cells.find(cell => cell.column.id !== SELECT_COLUMN_ID);
+  return cells.find(cell => cell.getIsGrouped()) ?? cells.find(cell => cell.column.id !== SELECT_COLUMN_ID && cell.column.id !== EXPANDER_COLUMN_ID);
 }
 
 /**
@@ -188,7 +198,7 @@ function renderGroupCell<TData extends Row>(row: GroupingRow<TData>, indented: b
         aria-label=${`${expanded ? 'Collapse' : 'Expand'} ${label}`}
         aria-expanded=${String(expanded)}
         @click=${onToggle}>
-        <forge-icon name=${expanded ? 'chevron_down' : 'chevron_right'}></forge-icon>
+        <forge-open-icon ?open=${expanded} orientation="horizontal" rotation="half"></forge-open-icon>
       </forge-icon-button>
       <span class="group-label" part="group-label">${label}</span>
       <span class="group-count" part="group-count">(${countGroupDataRows(row)})</span>

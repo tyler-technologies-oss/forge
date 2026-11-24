@@ -4,7 +4,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { guard } from 'lit/directives/guard.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { SELECT_COLUMN_ID } from '../constants.js';
+import { EXPANDER_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableElement } from '../data-table.js';
 import { formatAttribute } from '../directives/format-attribute.js';
 import { lightDomRender } from '../directives/light-dom-render.js';
@@ -48,6 +48,7 @@ export function renderBodyCell<TData extends Row>(
         'selection-bottom': !!edges?.bottom,
         'selection-left': !!edges?.left,
         'select-column': host.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
+        'expander-column': cell.column.columnDef.id === EXPANDER_COLUMN_ID,
         'editable-cell': editable,
         'group-start': groupStartColumnIds.has(cell.column.id)
       })}
@@ -64,6 +65,7 @@ export function renderBodyCell<TData extends Row>(
       ${formatAttribute(isGroupLabel ? undefined : cell.column.columnDef.meta?.formatAttribute)}
       ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
       cell.column.columnDef.id === SELECT_COLUMN_ID ||
+      cell.column.columnDef.id === EXPANDER_COLUMN_ID ||
       editable}>
       <div class="cell-content" part="body-cell-content cell-content">${renderCellContent(context, cell, rowId)}</div>
     </td>

@@ -2,11 +2,14 @@ import type { CellSelectionDirection } from '@tanstack/lit-table';
 import type { DataTableDef } from './types.js';
 
 export const SELECT_COLUMN_ID = 'SELECT_COLUMN_ID';
+export const EXPANDER_COLUMN_ID = 'EXPANDER_COLUMN_ID';
 export const GROUPS_COLUMN_ID = 'GROUPS_COLUMN_ID';
 export const GROUPS_COLUMN_HEADER = 'Groups';
 
 export const DEFAULT_COLUMN_WIDTH = 172;
 export const SELECT_COLUMN_WIDTH = 40;
+export const EXPANDER_COLUMN_WIDTH = 48;
+export const EXPANDER_COLUMN_LABEL = 'Toggle row expansion';
 export const GROUPS_COLUMN_WIDTH = 240;
 export const GROUP_INDENT_WIDTH = 24;
 export const COMPACT_ROW_HEIGHT = 32;
@@ -58,5 +61,8 @@ export const DATA_TABLE_DEF_KEYS = {
   stickyHeader: false,
   stickyFooter: false,
   getRowName: false,
+  getSubRows: true,
+  getRowHasDetail: true,
+  getRowDetail: true,
   getSelectionClipboardValue: false
 } as const satisfies Record<keyof DataTableDef, boolean>;

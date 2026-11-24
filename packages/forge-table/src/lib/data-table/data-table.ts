@@ -40,6 +40,7 @@ import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { HostSemantics } from './features/host-semantics.js';
 import { buildPrintDocument, printDocument } from './features/print.js';
+import { canExpandRow, prependExpanderColumn } from './features/expander.js';
 import { getGroupedColumnOrder } from './features/row-grouping.js';
 import { isMultiSortEvent } from './features/sorting.js';
 import { RowVirtualization } from './features/virtualization.js';
@@ -62,7 +63,6 @@ import '../column-menu/column-menu.js';
 import styles from './data-table.scss';
 
 export { registerFilterFns } from './features/filter-fn.js';
-export { createExpanderColumn, type ExpanderColumnOptions } from './features/expander.js';
 export { actionCell, type ActionButtonConfig } from './templates/action-cell.js';
 export { ratingCell, type RatingOptions } from './templates/rating-cell.js';
 export { linkCell, type LinkCellOptions, type LinkCellType } from './templates/link-cell.js';
@@ -314,6 +314,26 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public getRowName: (row: TData, index: number) => string = (_, index) => `Row ${index + 1}`;
 
   /**
+   * Returns the child rows of a given row, or `undefined` when it has none.
+   *
+   * The table builds its row hierarchy from the result, which TanStack exposes as each row's `subRows`.
+   */
+  @property({ attribute: false })
+  public getSubRows: ((row: TData, index: number) => ReadonlyArray<TData> | undefined) | undefined;
+
+  /**
+   * Returns whether a given row has a detail row.
+   */
+  @property({ attribute: false })
+  public getRowHasDetail: ((row: TData, index: number) => boolean) | undefined;
+
+  /**
+   * Returns the detail element for a given row.
+   */
+  @property({ attribute: false })
+  public getRowDetail: ((row: TData, index: number) => HTMLElement) | undefined;
+
+  /**
    * Converts the selected cells to the text that Ctrl/Cmd+C copies to the clipboard while `cellSelection` is on.
    *
    * Receives the same grids as `getSelectedCellRangesData()` (`[region][row][column]`) and returns the clipboard text. The default writes
@@ -382,7 +402,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       this.#setReorderable();
     }
 
-    if (changedProperties.has('columns') || changedProperties.has('rowSelection') || changedProperties.has('singleGroupColumn')) {
+    if (
+      changedProperties.has('columns') ||
+      changedProperties.has('rowSelection') ||
+      changedProperties.has('singleGroupColumn') ||
+      changedProperties.has('expandable')
+    ) {
       this.#updateColumnPinning();
     }
 
@@ -390,10 +415,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('columns') ||
       changedProperties.has('rowSelection') ||
       changedProperties.has('singleGroupColumn') ||
+      changedProperties.has('expandable') ||
       this.#columnRename.headers !== this.#appliedColumnHeaders ||
       this.#columnFilterFn.selection !== this.#appliedFilterFns
     ) {
       this.#updateRenderColumns();
+    }
+
+    if (changedProperties.has('getSubRows') && this.hasUpdated) {
+      this._data = [...this._data];
     }
 
     if (changedProperties.has('dataSource')) {
@@ -413,6 +443,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       },
       columns: this._tableColumns,
       data: this._data,
+      getSubRows: this.getSubRows,
       columnResizeMode: 'onChange',
       enableColumnResizing: this.resizable,
       enableSorting: this.sortable,
@@ -437,12 +468,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       enableGrouping: this.groupable,
       groupedColumnMode: this.singleGroupColumn ? 'remove' : false,
       onGroupingChange: updaterOrValue => this.#onGroupingChange(updaterOrValue),
-      getRowCanExpand: row => row.getIsGrouped() || this.expandable,
+      getRowCanExpand: row => canExpandRow(this, row),
       state: {
         sorting: this._sorting,
         columnFilters: this._columnFilters,
         columnVisibility: this.singleGroupColumn ? { ...this.columnVisibility, [GROUPS_COLUMN_ID]: this.grouping.length > 0 } : this.columnVisibility,
-        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off', this.singleGroupColumn),
+        columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off', this.singleGroupColumn, this.expandable),
         columnPinning: this._columnPinning,
         grouping: this.grouping,
         rowSelection: this._rowSelection,
@@ -571,14 +602,15 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   #updateColumnPinning(): void {
-    this._columnPinning = getColumnPinningState(this.columns, this.rowSelection !== 'off', this.singleGroupColumn);
+    this._columnPinning = getColumnPinningState(this.columns, this.rowSelection !== 'off', this.singleGroupColumn, this.expandable);
   }
 
   #updateRenderColumns(): void {
     this.#appliedColumnHeaders = this.#columnRename.headers;
     this.#appliedFilterFns = this.#columnFilterFn.selection;
     const renamed = this.#columnFilterFn.apply(applyColumnHeaders(this._columns, this.#appliedColumnHeaders));
-    const columns = this.singleGroupColumn ? prependGroupsColumn(renamed) : renamed;
+    const grouped = this.singleGroupColumn ? prependGroupsColumn(renamed) : renamed;
+    const columns = this.expandable ? prependExpanderColumn(grouped) : grouped;
     this._tableColumns = this.rowSelection === 'off' ? columns : prependSelectColumn(columns, this.rowSelection);
   }
 
@@ -640,7 +672,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
   #onColumnPinningChange(updaterOrValue: Updater<ColumnPinningState>): void {
     const nextState = typeof updaterOrValue === 'function' ? updaterOrValue(this._columnPinning) : updaterOrValue;
-    this._columnPinning = pinSelectColumn(nextState, this.rowSelection !== 'off', this.singleGroupColumn);
+    this._columnPinning = pinSelectColumn(nextState, this.rowSelection !== 'off', this.singleGroupColumn, this.expandable);
   }
 
   #emitColumnVisibilityChange(nextState: ColumnVisibilityState): void {

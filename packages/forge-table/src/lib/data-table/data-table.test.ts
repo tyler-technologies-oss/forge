@@ -22,7 +22,7 @@ import { userEvent } from 'vitest/browser';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import './data-table.js';
 import type { ColumnDef, ColumnFilter, DataTableElement } from './data-table.js';
-import { actionCell, badgeCell, createExpanderColumn, meterCell, ratingCell, registerFilterFns } from './data-table.js';
+import { actionCell, badgeCell, meterCell, ratingCell, registerFilterFns } from './data-table.js';
 import {
   filterFn_arrIncludesSome as arrIncludesSome,
   filterFn_inDateRange as inDateRange,
@@ -336,6 +336,9 @@ async function createFixture(
       .allowRowClick=${props.allowRowClick ?? false}
       .expandable=${props.expandable ?? false}
       .groupable=${props.groupable ?? false}
+      .getSubRows=${props.getSubRows}
+      .getRowHasDetail=${props.getRowHasDetail}
+      .getRowDetail=${props.getRowDetail}
       .grouping=${props.grouping ?? []}
       .singleGroupColumn=${props.singleGroupColumn ?? false}
       .virtualized=${props.virtualized ?? false}
@@ -3708,63 +3711,71 @@ describe('DataTable', () => {
   });
 
   describe('Expandable Rows', () => {
-    it('should render expander column when expandable is true', async () => {
-      const columns: ColumnDef<TestData>[] = [
-        createExpanderColumn(),
-        { id: 'name', header: 'Name', property: 'name' },
-        { id: 'age', header: 'Age', property: 'age' }
-      ];
-      const harness = await createFixture({ columns, expandable: true });
+    it('should render the sub rows of an expanded row when getSubRows is set', async () => {
+      const children: TestData[] = [{ id: 10, name: 'Child of Alice', age: 5, email: 'child@example.com' }];
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name' }];
+      const harness = await createFixture({ columns, expandable: true, getSubRows: (row: TestData) => (row.id === 1 ? children : undefined) });
 
-      const expanderCell = harness.shadowRoot.querySelector('td[id="expander"]');
-      expect(expanderCell).not.toBeNull();
+      expect(harness.bodyRows).toHaveLength(TEST_DATA.length);
+      expect(harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).not.toBeNull();
+      expect(harness.getBodyRowByIndex(1)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).toBeNull();
+      expect(harness.getBodyRowByIndex(2)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).toBeNull();
 
-      const iconButton = expanderCell?.querySelector('forge-icon-button');
-      expect(iconButton).not.toBeNull();
+      const iconButton = harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button') as HTMLElement;
+      iconButton.click();
+      await harness.element.updateComplete;
+
+      expect(harness.bodyRows.some(row => row.textContent?.includes('Child of Alice'))).toBe(true);
     });
 
-    it('should expand row when expander clicked', async () => {
-      const columns: ColumnDef<TestData>[] = [createExpanderColumn(), { id: 'name', header: 'Name', property: 'name' }];
-      const harness = await createFixture({ columns, expandable: true });
+    it('should not render the built-in expander for a row without sub rows when getSubRows is set', async () => {
+      const children: TestData[] = [{ id: 10, name: 'Child of Alice', age: 5, email: 'child@example.com' }];
+      const harness = await createFixture({ expandable: true, getSubRows: (row: TestData) => (row.id === 1 ? children : undefined) });
 
-      const firstRow = harness.getBodyRowByIndex(0);
-      const expanderCell = firstRow?.querySelector('td[id="expander"]');
-      const iconButton = expanderCell?.querySelector('forge-icon-button') as HTMLElement;
+      const expanderButtons = harness.shadowRoot.querySelectorAll('tbody forge-icon-button');
 
-      iconButton.click();
-      await harness.element.updateComplete;
-
-      const expandedRows = harness.shadowRoot.querySelectorAll('.expanded-content');
-      expect(expandedRows.length).toBeGreaterThan(0);
+      expect(expanderButtons).toHaveLength(1);
     });
 
-    it('should collapse row when expander clicked again', async () => {
-      const columns: ColumnDef<TestData>[] = [createExpanderColumn(), { id: 'name', header: 'Name', property: 'name' }];
+    it('should still render the expander for every row when getSubRows is not set', async () => {
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name' }];
       const harness = await createFixture({ columns, expandable: true });
 
-      const firstRow = harness.getBodyRowByIndex(0);
-      const expanderCell = firstRow?.querySelector('td[id="expander"]');
-      const iconButton = expanderCell?.querySelector('forge-icon-button') as HTMLElement;
+      expect(harness.shadowRoot.querySelectorAll('tbody forge-icon-button')).toHaveLength(TEST_DATA.length);
+    });
 
+    it('should not render the expanded content row for an expanded row with sub rows when getSubRows is set', async () => {
+      const children: TestData[] = [{ id: 10, name: 'Child of Alice', age: 5, email: 'child@example.com' }];
+      const harness = await createFixture({ expandable: true, getSubRows: (row: TestData) => (row.id === 1 ? children : undefined) });
+
+      (harness.getBodyRowByIndex(0)?.querySelector('forge-icon-button') as HTMLElement).click();
+      await harness.element.updateComplete;
+
+      expect(harness.bodyRows).toHaveLength(TEST_DATA.length + children.length);
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should render the sub rows when getSubRows is set after the rows have loaded', async () => {
+      const children: TestData[] = [{ id: 10, name: 'Child of Alice', age: 5, email: 'child@example.com' }];
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name' }];
+      const harness = await createFixture({ columns, expandable: true });
+
+      harness.element.getSubRows = (row: TestData) => (row.id === 1 ? children : undefined);
+      await settle(harness.element);
+
+      const iconButton = harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button') as HTMLElement;
       iconButton.click();
       await harness.element.updateComplete;
 
-      let expandedRows = harness.shadowRoot.querySelectorAll('.expanded-content');
-      expect(expandedRows.length).toBeGreaterThan(0);
-
-      iconButton.click();
-      await harness.element.updateComplete;
-
-      expandedRows = harness.shadowRoot.querySelectorAll('.expanded-content');
-      expect(expandedRows.length).toBe(0);
+      expect(harness.bodyRows.some(row => row.textContent?.includes('Child of Alice'))).toBe(true);
     });
 
     it('should show expanded content slot', async () => {
-      const columns: ColumnDef<TestData>[] = [createExpanderColumn(), { id: 'name', header: 'Name', property: 'name' }];
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name' }];
       const harness = await createFixture({ columns, expandable: true });
 
       const firstRow = harness.getBodyRowByIndex(0);
-      const expanderCell = firstRow?.querySelector('td[id="expander"]');
+      const expanderCell = firstRow?.querySelector('td[id="EXPANDER_COLUMN_ID"]');
       const iconButton = expanderCell?.querySelector('forge-icon-button') as HTMLElement;
 
       iconButton.click();
@@ -3780,14 +3791,13 @@ describe('DataTable', () => {
 
     it('should render expanded row with full colspan', async () => {
       const columns: ColumnDef<TestData>[] = [
-        createExpanderColumn(),
         { id: 'name', header: 'Name', property: 'name' },
         { id: 'age', header: 'Age', property: 'age' }
       ];
       const harness = await createFixture({ columns, expandable: true });
 
       const firstRow = harness.getBodyRowByIndex(0);
-      const expanderCell = firstRow?.querySelector('td[id="expander"]');
+      const expanderCell = firstRow?.querySelector('td[id="EXPANDER_COLUMN_ID"]');
       const iconButton = expanderCell?.querySelector('forge-icon-button') as HTMLElement;
 
       iconButton.click();
@@ -3797,6 +3807,290 @@ describe('DataTable', () => {
       const expandedCell = expandedRow?.querySelector('td');
 
       expect(expandedCell?.getAttribute('colspan')).toBe('3');
+    });
+  });
+
+  describe('Row details', () => {
+    const children: TestData[] = [{ id: 10, name: 'Child of Alice', age: 5, email: 'child@example.com' }];
+    const columns: ColumnDef<TestData>[] = [
+      { id: 'name', header: 'Name', property: 'name' },
+      { id: 'age', header: 'Age', property: 'age' }
+    ];
+    const getRowHasDetail = (row: TestData): boolean => row.id === 1;
+    const getRowDetail = (row: TestData): HTMLElement => {
+      const el = document.createElement('div');
+      el.className = 'test-detail';
+      el.textContent = `Detail for ${row.name}`;
+      return el;
+    };
+    const expandFirstRow = async (harness: DataTableHarness): Promise<void> => {
+      (harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button') as HTMLElement).click();
+      await harness.element.updateComplete;
+    };
+
+    it('should only render the expander for rows that have a detail when getRowHasDetail is set', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail });
+
+      expect(harness.shadowRoot.querySelectorAll('tbody forge-icon-button')).toHaveLength(1);
+      expect(harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).not.toBeNull();
+    });
+
+    it('should render the detail in a single full span row when a row with a detail is expanded', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail });
+
+      await expandFirstRow(harness);
+
+      const details = harness.shadowRoot.querySelectorAll('.expanded-content');
+      expect(details).toHaveLength(1);
+      expect(details[0].querySelector('.test-detail')?.textContent).toBe('Detail for Alice');
+      expect(details[0].closest('td')?.getAttribute('colspan')).toBe('3');
+      expect(details[0].closest('tr')?.previousElementSibling).toBe(harness.getBodyRowByIndex(0));
+    });
+
+    it('should remove the detail row when the row is collapsed', async () => {
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail });
+
+      await expandFirstRow(harness);
+      await expandFirstRow(harness);
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should not call getRowDetail again when the table re-renders while the row stays expanded', async () => {
+      const detail = vi.fn(getRowDetail);
+      const harness = await createFixture({ columns, expandable: true, getRowHasDetail, getRowDetail: detail });
+
+      await expandFirstRow(harness);
+      const calls = detail.mock.calls.length;
+      harness.element.striped = true;
+      await harness.element.updateComplete;
+
+      expect(detail.mock.calls.length).toBe(calls);
+      expect(harness.shadowRoot.querySelectorAll('.test-detail')).toHaveLength(1);
+    });
+
+    it('should expand rows that have sub rows but no detail when both getSubRows and getRowHasDetail are set', async () => {
+      const harness = await createFixture({
+        columns,
+        expandable: true,
+        getRowHasDetail: (row: TestData) => row.id === 1,
+        getRowDetail,
+        getSubRows: (row: TestData) => (row.id === 2 ? children : undefined)
+      });
+
+      expect(harness.getBodyRowByIndex(0)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).not.toBeNull();
+      expect(harness.getBodyRowByIndex(1)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).not.toBeNull();
+      expect(harness.getBodyRowByIndex(2)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button')).toBeNull();
+
+      (harness.getBodyRowByIndex(1)?.querySelector('td[id="EXPANDER_COLUMN_ID"] forge-icon-button') as HTMLElement).click();
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+      expect(harness.bodyRows.some(row => row.textContent?.includes('Child of Alice'))).toBe(true);
+    });
+
+    it('should render the sub rows after the detail row when a row has both', async () => {
+      const harness = await createFixture({
+        columns,
+        expandable: true,
+        getRowHasDetail,
+        getRowDetail,
+        getSubRows: (row: TestData) => (row.id === 1 ? children : undefined)
+      });
+
+      await expandFirstRow(harness);
+
+      const rows = [...harness.shadowRoot.querySelectorAll('tbody tr')];
+      expect(rows[0].textContent).toContain('Alice');
+      expect(rows[1].querySelector('.test-detail')).not.toBeNull();
+      expect(rows[2].textContent).toContain('Child of Alice');
+    });
+
+    it('should not render a detail row for an expanded row without a detail when getRowHasDetail is set', async () => {
+      const harness = await createFixture({
+        columns,
+        expandable: true,
+        getRowHasDetail: (row: TestData) => row.id !== 1,
+        getRowDetail,
+        getSubRows: (row: TestData) => (row.id === 1 ? children : undefined)
+      });
+
+      await expandFirstRow(harness);
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+      expect(harness.bodyRows.some(row => row.textContent?.includes('Child of Alice'))).toBe(true);
+    });
+
+    it('should not expand a row with a detail when expandable is false', async () => {
+      const harness = await createFixture({ columns: [{ id: 'name', header: 'Name', property: 'name' }], getRowHasDetail, getRowDetail });
+
+      expect(harness.shadowRoot.querySelectorAll('tbody forge-icon-button')).toHaveLength(0);
+    });
+  });
+
+  describe('Expander column', () => {
+    const columns: ColumnDef<TestData>[] = [
+      { id: 'name', header: 'Name', property: 'name' },
+      { id: 'age', header: 'Age', property: 'age' }
+    ];
+
+    it('should render an expander column at the start when expandable is true', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+
+      const firstRow = harness.getBodyRowByIndex(0);
+      const cells = firstRow?.querySelectorAll('td');
+
+      expect(cells).toHaveLength(3);
+      expect(cells?.[0].querySelector('forge-icon-button')).not.toBeNull();
+      expect(cells?.[1].textContent).toContain('Alice');
+    });
+
+    it('should not render an expander column when expandable is false', async () => {
+      const harness = await createFixture({ columns });
+
+      expect(harness.getBodyRowByIndex(0)?.querySelector('forge-icon-button')).toBeNull();
+      expect(harness.getBodyRowByIndex(0)?.querySelectorAll('td')).toHaveLength(2);
+    });
+
+    it('should expand and collapse a row when the expander button is clicked', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+      const getButton = (): HTMLElement | null | undefined => harness.getBodyRowByIndex(0)?.querySelector<HTMLElement>('forge-icon-button');
+
+      getButton()?.click();
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(1);
+      expect(getButton()?.getAttribute('aria-expanded')).toBe('true');
+
+      getButton()?.click();
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+      expect(getButton()?.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('should not dispatch a row click when the expander button is clicked', async () => {
+      const harness = await createFixture({ columns, expandable: true, allowRowClick: true });
+      const handler = vi.fn();
+      harness.element.addEventListener('forge-data-table-row-click', handler);
+
+      harness.getBodyRowByIndex(0)?.querySelector<HTMLElement>('forge-icon-button')?.click();
+      await harness.element.updateComplete;
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('should render an expander header cell with no column menu', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+
+      const headerCells = harness.shadowRoot.querySelectorAll('thead th');
+
+      expect(headerCells).toHaveLength(3);
+      expect(headerCells[0].querySelector('forge-data-table-column-menu')).toBeNull();
+    });
+
+    it('should place the expander column after the row selection column', async () => {
+      const harness = await createFixture({ columns, expandable: true, rowSelection: 'multiple' });
+
+      const cells = harness.getBodyRowByIndex(0)?.querySelectorAll('td');
+
+      expect(cells).toHaveLength(4);
+      expect(cells?.[0].querySelector('forge-checkbox')).not.toBeNull();
+      expect(cells?.[1].querySelector('forge-icon-button')).not.toBeNull();
+    });
+
+    it('should expand and collapse a row when it is double clicked', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+
+      await userEvent.dblClick(harness.getBodyCellByRowAndColumn(0, 1)!);
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(1);
+
+      await userEvent.dblClick(harness.getBodyCellByRowAndColumn(0, 1)!);
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should not expand a row when it is double clicked and rows are not expandable', async () => {
+      const harness = await createFixture({ columns });
+
+      await userEvent.dblClick(harness.getBodyCellByRowAndColumn(0, 0)!);
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should not toggle a row twice when its expander button is double clicked', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+
+      await userEvent.dblClick(harness.getBodyRowByIndex(0)!.querySelector('forge-icon-button')!);
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('.expanded-content')).toHaveLength(0);
+    });
+
+    it('should expand and collapse a group row when it is double clicked', async () => {
+      const harness = await createFixture({ columns, grouping: ['name'] });
+      const rowCount = (): number => harness.shadowRoot.querySelectorAll('tbody tr').length;
+      const collapsedCount = rowCount();
+
+      await userEvent.dblClick(harness.getBodyCellByRowAndColumn(0, 1)!);
+      await harness.element.updateComplete;
+
+      expect(rowCount()).toBe(collapsedCount + 1);
+
+      await userEvent.dblClick(harness.getBodyCellByRowAndColumn(0, 1)!);
+      await harness.element.updateComplete;
+
+      expect(rowCount()).toBe(collapsedCount);
+    });
+
+    it('should not toggle a group row twice when its toggle button is double clicked', async () => {
+      const harness = await createFixture({ columns, grouping: ['name'] });
+      const collapsedCount = harness.shadowRoot.querySelectorAll('tbody tr').length;
+
+      await userEvent.dblClick(harness.getBodyRowByIndex(0)!.querySelector('forge-icon-button')!);
+      await harness.element.updateComplete;
+
+      expect(harness.shadowRoot.querySelectorAll('tbody tr').length).toBe(collapsedCount);
+    });
+
+    it('should set open on the group toggle open icon when the group is expanded', async () => {
+      const harness = await createFixture({ columns, grouping: ['name'] });
+      const getOpenIcon = (): HTMLElement & { open: boolean } =>
+        harness.getBodyRowByIndex(0)!.querySelector('forge-icon-button forge-open-icon') as HTMLElement & { open: boolean };
+
+      expect(getOpenIcon().open).toBe(false);
+
+      harness.getBodyRowByIndex(0)!.querySelector<HTMLElement>('forge-icon-button')!.click();
+      await harness.element.updateComplete;
+
+      expect(getOpenIcon().open).toBe(true);
+    });
+
+    it('should set open on the expander open icon when the row is expanded', async () => {
+      const harness = await createFixture({ columns, expandable: true });
+      const getOpenIcon = (): HTMLElement & { open: boolean } =>
+        harness.getBodyRowByIndex(0)!.querySelector('forge-icon-button forge-open-icon') as HTMLElement & { open: boolean };
+
+      expect(getOpenIcon().open).toBe(false);
+
+      harness.getBodyRowByIndex(0)!.querySelector<HTMLElement>('forge-icon-button')!.click();
+      await harness.element.updateComplete;
+
+      expect(getOpenIcon().open).toBe(true);
+    });
+
+    it('should leave the expander cell of a group row empty', async () => {
+      const harness = await createFixture({ columns, expandable: true, grouping: ['name'] });
+
+      const groupRow = harness.getBodyRowByIndex(0);
+
+      expect(groupRow?.classList.contains('group-row')).toBe(true);
+      expect(groupRow?.querySelector('td')?.querySelector('forge-icon-button')).toBeNull();
+      expect(groupRow?.querySelectorAll('forge-icon-button')).toHaveLength(1);
     });
   });
 
@@ -5435,6 +5729,30 @@ describe('DataTable', () => {
       expect(Object.keys(config)).toContain('getSelectionClipboardValue');
     });
 
+    it('should report getSubRows through config', async () => {
+      const getSubRows = (row: TestData): TestData[] | undefined => (row.id === 1 ? [TEST_DATA[1]] : undefined);
+      const harness = await createFixture({ getSubRows });
+
+      expect(harness.element.config.getSubRows).toBe(getSubRows);
+    });
+
+    it('should apply getSubRows when set through config', async () => {
+      const harness = await createFixture();
+      const getSubRows = (): undefined => undefined;
+
+      harness.element.config = { getSubRows };
+
+      expect(harness.element.getSubRows).toBe(getSubRows);
+    });
+
+    it('should clear getSubRows when config sets it to undefined', async () => {
+      const harness = await createFixture({ getSubRows: () => undefined });
+
+      harness.element.config = { getSubRows: undefined };
+
+      expect(harness.element.getSubRows).toBeUndefined();
+    });
+
     it('should apply every field when the configuration is set', async () => {
       const harness = await createFixture();
       const dataSource = new DataSource<TestData>(() => [TEST_DATA[0]]);
@@ -5664,7 +5982,7 @@ describe('DataTable', () => {
     });
 
     it('should label the expander button with its label and the row name', async () => {
-      const columns: ColumnDef<TestData>[] = [createExpanderColumn(), { id: 'name', header: 'Name', property: 'name' }];
+      const columns: ColumnDef<TestData>[] = [{ id: 'name', header: 'Name', property: 'name' }];
       const harness = await createFixture({ columns, expandable: true });
       harness.element.getRowName = row => row.name;
       await settle(harness.element);

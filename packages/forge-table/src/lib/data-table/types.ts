@@ -179,5 +179,8 @@ export interface DataTableDef<TData extends Row = Row> {
   stickyHeader?: boolean;
   stickyFooter?: boolean;
   getRowName?: (row: TData, index: number) => string;
+  getSubRows?: (row: TData, index: number) => ReadonlyArray<TData> | undefined;
+  getRowHasDetail?: (row: TData, index: number) => boolean;
+  getRowDetail?: (row: TData, index: number) => HTMLElement;
   getSelectionClipboardValue?: (data: unknown[][][]) => string;
 }

@@ -1,6 +1,6 @@
 import type { Column, ColumnPinningState } from '@tanstack/lit-table';
 import { hasChildColumns, resolveColumnId } from '../columns/column-utils.js';
-import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
+import { EXPANDER_COLUMN_ID, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { ColumnDef, ColumnPin, Row } from '../types.js';
 
@@ -14,20 +14,30 @@ import type { ColumnDef, ColumnPin, Row } from '../types.js';
 export function getColumnPinningState<TData extends Row>(
   columns: ColumnDef<TData>[],
   includeSelectColumn = false,
-  includeGroupsColumn = false
+  includeGroupsColumn = false,
+  includeExpanderColumn = false
 ): ColumnPinningState {
   const state: ColumnPinningState = { start: [], end: [] };
   collectPinnedColumns(columns, state);
-  return pinSelectColumn(state, includeSelectColumn, includeGroupsColumn);
+  return pinSelectColumn(state, includeSelectColumn, includeGroupsColumn, includeExpanderColumn);
 }
 
 /**
- * Keeps the row selection column, then the groups column, as the first start-pinned columns while any other column is pinned to the start,
+ * Keeps the row selection column, then the expander column, then the groups column, as the first start-pinned columns while any other column is pinned to the start,
  * and unpinned otherwise.
  */
-export function pinSelectColumn(state: ColumnPinningState, includeSelectColumn: boolean, includeGroupsColumn = false): ColumnPinningState {
-  const start = state.start.filter(id => id !== SELECT_COLUMN_ID && id !== GROUPS_COLUMN_ID);
-  const leading = [...(includeSelectColumn ? [SELECT_COLUMN_ID] : []), ...(includeGroupsColumn ? [GROUPS_COLUMN_ID] : [])];
+export function pinSelectColumn(
+  state: ColumnPinningState,
+  includeSelectColumn: boolean,
+  includeGroupsColumn = false,
+  includeExpanderColumn = false
+): ColumnPinningState {
+  const start = state.start.filter(id => id !== SELECT_COLUMN_ID && id !== EXPANDER_COLUMN_ID && id !== GROUPS_COLUMN_ID);
+  const leading = [
+    ...(includeSelectColumn ? [SELECT_COLUMN_ID] : []),
+    ...(includeExpanderColumn ? [EXPANDER_COLUMN_ID] : []),
+    ...(includeGroupsColumn ? [GROUPS_COLUMN_ID] : [])
+  ];
   return { ...state, start: start.length ? [...leading, ...start] : start };
 }
 

@@ -21,7 +21,7 @@ import { html, LitElement, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { DropdownMenuComponent } from '@tylertech/forge/dropdown-menu';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
-import { SELECT_COLUMN_ID } from '../data-table/constants.js';
+import { EXPANDER_COLUMN_ID, SELECT_COLUMN_ID } from '../data-table/constants.js';
 import type { DataTableFeatures } from '../data-table/table-features.js';
 import type { Row } from '../data-table/types.js';
 import { COLUMN_MENU_ACTION_EVENT, COLUMN_MENU_TAG_NAME } from './constants.js';
@@ -199,7 +199,9 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       return undefined;
     }
 
-    const siblings = table.getVisibleLeafColumns().filter(sibling => sibling.id !== SELECT_COLUMN_ID && sibling.parent?.id === column.parent?.id);
+    const siblings = table
+      .getVisibleLeafColumns()
+      .filter(sibling => sibling.id !== SELECT_COLUMN_ID && sibling.id !== EXPANDER_COLUMN_ID && sibling.parent?.id === column.parent?.id);
     const target = siblings[siblings.findIndex(sibling => sibling.id === column.id) + direction];
     return target && canColumnBeReordered(target) ? target : undefined;
   }

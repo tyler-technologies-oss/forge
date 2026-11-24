@@ -8,6 +8,7 @@ import { getCellRole } from '../features/cell-selection.js';
 import { dispatchRowClick } from '../features/row-click.js';
 import { getGroupRowName } from '../features/row-grouping.js';
 import { setRowName, type RowMeta } from '../features/row-meta.js';
+import { renderRowDetail, toggleRowOnDoubleClick } from '../features/expander.js';
 import type { RowVirtualization, RowVirtualizer } from '../features/virtualization.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
@@ -54,20 +55,11 @@ function renderTableBody<TData extends Row>(context: BodyContext<TData>): Templa
             aria-label=${name}
             class=${classMap({ selected: row.getIsSelected(), 'group-row': row.getIsGrouped() })}
             part=${row.getIsGrouped() ? 'body-tr tr group-tr' : 'body-tr tr'}
-            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}>
+            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}
+            @dblclick=${(evt: MouseEvent) => toggleRowOnDoubleClick(evt, row)}>
             ${row.getVisibleCells().map(cell => renderBodyCell(context, cell, row.id, groupStartColumnIds))}
           </tr>
-          ${row.getIsExpanded() && !row.getIsGrouped()
-            ? html`
-                <tr role="row" part="body-tr tr">
-                  <td role=${getCellRole(host.cellSelection)} colspan=${row.getAllCells().length}>
-                    <div class="expanded-content">
-                      <slot name=${`expanded:row-${row.id}`}></slot>
-                    </div>
-                  </td>
-                </tr>
-              `
-            : nothing}
+          ${renderRowDetail(host, row)}
         `;
       }
     )}
@@ -116,7 +108,8 @@ function renderVirtualizedTableBody<TData extends Row>(context: BodyContext<TDat
               width: '100%',
               height: `${item.size}px`
             })}
-            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}>
+            @click=${host.allowRowClick && !row.getIsGrouped() ? (evt: MouseEvent) => dispatchRowClick(host, evt, row.index, row.original) : nothing}
+            @dblclick=${(evt: MouseEvent) => toggleRowOnDoubleClick(evt, row)}>
             ${repeat(
               row.getVisibleCells(),
               cell => cell.id,

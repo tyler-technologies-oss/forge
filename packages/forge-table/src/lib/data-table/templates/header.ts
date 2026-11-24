@@ -7,7 +7,7 @@ import { svg } from 'lit/static-html.js';
 import type { ColumnMenuElement } from '../../column-menu/column-menu.js';
 import { COLUMN_MENU_TAG_NAME } from '../../column-menu/constants.js';
 import { canColumnBeReordered, getGroupStartColumnIds } from '../columns/column-utils.js';
-import { GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
+import { EXPANDER_COLUMN_ID, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { ColumnReorderController } from '../controllers/column-reorder-controller.js';
 import type { DataTableElement } from '../data-table.js';
 import type { ColumnRenameController } from '../features/column-rename.js';
@@ -58,7 +58,7 @@ function renderHeaderCell<TData extends Row>(
   const isGroupStart = groupStartColumnIds.has(header.getLeafHeaders()[0].column.id);
   const hasHeader = !!column.columnDef.header?.length;
   const isParent = (column.columns?.length ?? 0) > 0;
-  const isLeadingColumn = column.columnDef.id === SELECT_COLUMN_ID || column.columnDef.id === GROUPS_COLUMN_ID;
+  const isLeadingColumn = [SELECT_COLUMN_ID, EXPANDER_COLUMN_ID, GROUPS_COLUMN_ID].includes(column.columnDef.id ?? '');
   const canAcceptDrop = host.reorderable && !isLeadingColumn && ((isParent && !header.isPlaceholder) || hasHeader);
   const isRenaming = rename.isRenaming(column.id);
   const canBeDragged = canAcceptDrop && hasHeader && !header.isPlaceholder && !isRenaming && canColumnBeReordered(column);
@@ -94,6 +94,7 @@ function renderHeaderCell<TData extends Row>(
         'sort-asc': column.getIsSorted() === 'asc',
         'sort-desc': column.getIsSorted() === 'desc',
         'select-column': host.rowSelection && column.columnDef.id === SELECT_COLUMN_ID,
+        'expander-column': column.columnDef.id === EXPANDER_COLUMN_ID,
         'group-header': isGroupHeader,
         'group-start': isGroupStart,
         renaming: isRenaming

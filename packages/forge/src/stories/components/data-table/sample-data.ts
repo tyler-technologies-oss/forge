@@ -1,4 +1,4 @@
-import { ColumnDef, createExpanderColumn } from '@tylertech/forge-table';
+import { ColumnDef } from '@tylertech/forge-table';
 
 export const sampleData = [
   { id: 1, name: 'John Doe', age: 32, email: 'john.doe@example.com', status: 'Active', createdAt: '2023-01-15' },
@@ -95,8 +95,6 @@ export const sampleDataColumns: ColumnDef<SampleData>[] = [
   { header: 'Status', property: 'status' },
   { header: 'Created Date', property: 'createdAt', filterType: 'date' }
 ];
-
-export const sampleColumns: ColumnDef<SampleData>[] = [...sampleDataColumns, createExpanderColumn()];
 
 export type EmployeeStatus = 'Active' | 'On leave' | 'Terminated';
 
