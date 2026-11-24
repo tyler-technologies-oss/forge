@@ -5,6 +5,10 @@ const { thumbnail = false } = Astro.props;
 ---
 
 <ComponentHeader {thumbnail}>
-  <forge-button variant="raised">Shortcut target</forge-button>
-  <forge-keyboard-shortcut target key="a"></forge-keyboard-shortcut>
+  <div class="flex items-center gap-small">
+    <span>Press</span>
+    <forge-kbd mod keys="K"></forge-kbd>
+    <span>to search the docs</span>
+  </div>
+  <forge-keyboard-shortcut global key="mod+k"></forge-keyboard-shortcut>
 </ComponentHeader>

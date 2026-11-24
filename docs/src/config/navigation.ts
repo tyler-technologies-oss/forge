@@ -186,18 +186,6 @@ export function buildNavigation(
             },
           ],
         },
-        {
-          id: "faq",
-          label: "FAQ",
-          icon: "help_circle_outline",
-          children: [
-            {
-              id: "faq-dropdown-options",
-              label: "Dropdown Options",
-              href: "/faq/dropdown-options/",
-            },
-          ],
-        },
       ],
     },
     // Section 3: Reference
@@ -284,20 +272,13 @@ export function buildNavigation(
     },
 
     {
-      id: "about",
+      id: "more",
       items: [
         {
-          id: "about",
-          label: "About",
-          icon: "info_outline",
-          children: [
-            { id: "about-roadmap", label: "Roadmap", href: "/about/roadmap/" },
-            {
-              id: "about-changelog",
-              label: "Changelog",
-              href: "/about/changelog/",
-            },
-          ],
+          id: "changelog",
+          label: "Changelog",
+          icon: "history",
+          href: "/changelog/",
         },
         {
           id: "blog",
