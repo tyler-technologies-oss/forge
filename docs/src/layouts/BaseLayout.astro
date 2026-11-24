@@ -392,8 +392,9 @@ const components = await getCollection("components");
       // `<a>` appears throughout slotted/child content (sidenav, MDX,
       // breadcrumbs) rather than this component's own template, so :global()
       // is required — same escape hatch Blockquote.astro uses for its
-      // slotted body content.
-      :global(a) {
+      // slotted body content. Anchors wrapped by `forge-button` are excluded
+      // so the button keeps its own text color and decoration.
+      :global(a:where(:not(forge-button > a))) {
         @include forge-typography.anchor-base;
 
         &:visited {
