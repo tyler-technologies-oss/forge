@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1437" />
+      <stop offset="0.55" stop-color="#14286b" />
+      <stop offset="1" stop-color="#0a1a4a" />
+    </linearGradient>
+    <radialGradient id="glow-a" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4f8cff" stop-opacity="0.85" />
+      <stop offset="1" stop-color="#4f8cff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow-b" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9b6bff" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#9b6bff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow-c" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2ee6d6" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#2ee6d6" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1" />
+    </pattern>
+    <radialGradient id="grid-fade" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0.2" stop-color="#fff" stop-opacity="1" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+    <mask id="grid-mask">
+      <rect width="1920" height="1080" fill="url(#grid-fade)" />
+    </mask>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#base)" />
+
+  <ellipse cx="420" cy="260" rx="760" ry="520" fill="url(#glow-a)" />
+  <ellipse cx="1500" cy="200" rx="700" ry="460" fill="url(#glow-b)" />
+  <ellipse cx="1180" cy="940" rx="820" ry="420" fill="url(#glow-c)" />
+
+  <rect width="1920" height="1080" fill="url(#grid)" mask="url(#grid-mask)" />
+
+  <g fill="none" stroke="#ffffff" stroke-linecap="round">
+    <path d="M-40 760C260 620 520 880 860 740S1440 560 1960 700" stroke-opacity="0.16" stroke-width="1.5" />
+    <path d="M-40 820C300 690 560 940 900 800S1460 630 1960 770" stroke-opacity="0.1" stroke-width="1.5" />
+    <path d="M-40 880C340 760 600 1000 940 860S1480 700 1960 840" stroke-opacity="0.06" stroke-width="1.5" />
+  </g>
+
+  <g fill="#ffffff">
+    <circle cx="240" cy="180" r="2" fill-opacity="0.7" />
+    <circle cx="610" cy="120" r="1.5" fill-opacity="0.5" />
+    <circle cx="980" cy="210" r="2.5" fill-opacity="0.6" />
+    <circle cx="1340" cy="90" r="1.5" fill-opacity="0.5" />
+    <circle cx="1710" cy="260" r="2" fill-opacity="0.7" />
+    <circle cx="1560" cy="470" r="1.5" fill-opacity="0.4" />
+    <circle cx="330" cy="520" r="1.5" fill-opacity="0.4" />
+    <circle cx="820" cy="640" r="2" fill-opacity="0.5" />
+  </g>
+</svg>
