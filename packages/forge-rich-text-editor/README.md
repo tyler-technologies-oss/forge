@@ -38,6 +38,9 @@ gets.
 `forge-rich-text-editor` takes `content` as an **HTML string or a ProseMirror document**, while
 `forge-rich-text-renderer` takes **only a document** — the shape the editor's `change` event emits.
 
+Setting `content` to the document the editor already holds does nothing, so an app can pass each
+`change` back as `content`, as it would with a controlled input, without the cursor moving.
+
 To give the renderer HTML, convert it first with `toRichTextDocument(html)`. It sanitizes the HTML
 and returns the document an editor with `forge-rte-standard-tools` would produce from it. Pass
 features to match a different editor, for example
