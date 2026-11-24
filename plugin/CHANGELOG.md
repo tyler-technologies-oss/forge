@@ -1,5 +1,11 @@
 # @tylertech/forge-plugin
 
+## 1.7.1
+
+### Documentation
+
+- c44e1a2: **sass-library**: remove roadmap link from the CSS library note
+
 ## 1.7.0
 
 ### Documentation
