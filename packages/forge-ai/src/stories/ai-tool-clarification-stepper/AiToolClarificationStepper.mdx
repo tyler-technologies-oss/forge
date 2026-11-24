@@ -1,0 +1,57 @@
+import { Meta, Title, Canvas } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../blocks/CustomArgTypes';
+import * as AiToolClarificationStepperStories from './AiToolClarificationStepper.stories';
+
+<Meta of={AiToolClarificationStepperStories} />
+
+<Title />
+
+A tool renderer that displays an `askClarification` tool call as a [`forge-ai-clarification-stepper`](?path=/docs/components-tools-reasoning-clarification-stepper--docs). It is exported from `@tylertech/forge-ai/tools`. Use it when you want the agent to have a person settle a few interpretive choices before it continues.
+
+<Canvas of={AiToolClarificationStepperStories.Demo} />
+
+The tool call's `args.questions` supplies the questions. Nothing is shown until the arguments have fully arrived, so the questions do not rebuild themselves while they stream in. Once the call completes, the stepper becomes a read-only record of the answers in `result.answers`.
+
+<Canvas of={AiToolClarificationStepperStories.Answered} />
+
+## Registering
+
+Define a tool named `askClarification` that takes a `questions` array, render it with this element, and give it a `handler` that waits for the person. Set `renderOnStart` so the renderer shows while the call is `executing`, which is for as long as the handler waits.
+
+```ts
+import { sanitizeQuestions, waitForClarification } from '@tylertech/forge-ai/tools';
+import { recommendedAnswers } from '@tylertech/forge-ai/ai-clarification-stepper';
+
+const askClarification = {
+  name: 'askClarification',
+  renderOnStart: true,
+  renderer: { elementTag: 'forge-ai-tool-clarification-stepper' },
+  handler: ({ toolCallId, args }) => {
+    const questions = sanitizeQuestions(args.questions);
+    if (questions.length === 0) {
+      return { answers: [], dismissed: true };
+    }
+
+    return waitForClarification({ toolCallId, fallback: recommendedAnswers(questions) });
+  }
+  // parameters: a `questions` array of { id, question, options: { label, value?, recommended? }[], allowCustom? }
+};
+```
+
+## Waiting for the person
+
+The handler and the renderer only share the tool call's id. `waitForClarification` parks the handler's promise under that id, and submitting the stepper settles it through `resolveClarification`, so the host holds the agent's turn until the person answers. The answers come back as the tool result, shaped like the stepper's submit event:
+
+- A typed answer has `custom: true`. It is an instruction rather than a value, so the tool description should tell the agent to interpret it.
+- A question that is left behind cannot be answered, and the host would stay busy for as long as the handler waits, so it is abandoned. The agent then receives its own recommended options, marked `dismissed`. This happens when the stepper leaves the page for good, such as when the thread is cleared or replaced. A stepper that is only moved, or replaced by a fresh one for the same call within the same task, does not count as leaving.
+- When the agent sends nothing usable to ask, `sanitizeQuestions` returns an empty list and the handler answers straight away with no answers, marked `dismissed`.
+
+Only a pending question is held. A stepper restored from history while still unanswered, such as after a page reload, has no waiting handler and cannot be answered.
+
+## Untrusted arguments
+
+The arguments are written by the agent, so the renderer keeps only what the stepper can show. A question needs text and at least one labeled option, ids are made unique, and only the first option marked `recommended` keeps the mark.
+
+## API
+
+<CustomArgTypes />

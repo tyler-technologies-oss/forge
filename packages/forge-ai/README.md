@@ -33,7 +33,7 @@ Every component folder is a subpath export. Importing a subpath registers its el
 | `@tylertech/forge-ai`               | Root barrel: every component plus the shared types                                             |
 | `@tylertech/forge-ai/<component>`   | One component, for example `/ai-prompt`, `/ai-message-thread`, `/ai-sidebar`                  |
 | `@tylertech/forge-ai/ai-tool-call`  | `forge-ai-tool-call`, `createToolRenderer`, tool canvas helpers, `isToolCallSettled`           |
-| `@tylertech/forge-ai/tools`         | Tool renderers: `forge-ai-tool-data-table`, `forge-ai-tool-steps`, and `forge-ai-paginator`    |
+| `@tylertech/forge-ai/tools`         | Tool renderers: `forge-ai-tool-data-table`, `forge-ai-tool-steps`, `forge-ai-tool-clarification-stepper`, and `forge-ai-paginator` |
 | `@tylertech/forge-ai/core`          | Overlay, popover, and tooltip components, `DragController`, `ResizeController`                 |
 | `@tylertech/forge-ai/types`         | Data shapes for messages, tools, threads, files, and agents (types only)                       |
 | `@tylertech/forge-ai/utils`         | Markdown, CSV, storage, and controller utilities (browser only)                                |
