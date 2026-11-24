@@ -24,6 +24,7 @@ export interface ColumnDefMeta {
   aggregateFormatter?: Formatter<unknown, unknown>;
   canEdit?: CellEditablePredicate;
   enableCellSelection?: boolean | EnableCellSelectionFn<any, any>;
+  onCellRender?: CellRenderFn<any, any>;
 }
 
 export type Row = RowData;
@@ -111,6 +112,13 @@ export type TemplateFn<TData extends Row = Row, TValue = unknown> = (props: {
   cell: Cell<DataTableFeatures, TData, TValue>;
 }) => string | HTMLElement;
 
+/**
+ * Called after a body cell renders, with the props of a `TemplateFn` plus the cell's `<td>` as `element`, to modify the cell's DOM in
+ * place. It runs after every render of the table, so it must be idempotent. It is not called for group rows or the selection,
+ * expander and groups columns.
+ */
+export type CellRenderFn<TData extends Row = Row, TValue = unknown> = (props: Parameters<TemplateFn<TData, TValue>>[0] & { element: HTMLElement }) => void;
+
 export type EnableCellSelectionFn<TData extends Row = Row, TValue = unknown> = (cell: Cell<DataTableFeatures, TData, TValue>) => boolean;
 
 export interface ColumnDef<TData extends Row = Row> {
@@ -141,6 +149,10 @@ export interface ColumnDef<TData extends Row = Row> {
   pin?: ColumnPin;
   editable?: boolean;
   enableCellSelection?: boolean | EnableCellSelectionFn<TData>;
+  /**
+   * Called after each of the column's body cells renders, to modify the cell's DOM in place. Takes precedence over the table's `onCellRender`.
+   */
+  onCellRender?: CellRenderFn<TData>;
 }
 
 export type MultiSortKey = 'shift' | 'ctrl' | 'meta' | 'alt';
@@ -183,4 +195,5 @@ export interface DataTableDef<TData extends Row = Row> {
   getRowHasDetail?: (row: TData, index: number) => boolean;
   getRowDetail?: (row: TData, index: number) => HTMLElement;
   getSelectionClipboardValue?: (data: unknown[][][]) => string;
+  onCellRender?: CellRenderFn<any, any>;
 }

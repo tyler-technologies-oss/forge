@@ -6,8 +6,10 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { EXPANDER_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableElement } from '../data-table.js';
+import { queueCellRender } from '../directives/cell-render.js';
 import { formatAttribute } from '../directives/format-attribute.js';
 import { lightDomRender } from '../directives/light-dom-render.js';
+import type { CellRenderController } from '../features/cell-render.js';
 import { getCellRole, type CellSelectionController } from '../features/cell-selection.js';
 import { getPinnedColumnClasses, getPinnedColumnStyle } from '../features/column-pinning.js';
 import { getColumnWidthStyle } from '../features/column-sizing.js';
@@ -20,6 +22,7 @@ export interface BodyCellContext<TData extends Row> {
   host: DataTableElement<TData>;
   table: Table<DataTableFeatures, TData>;
   cellSelection: CellSelectionController<TData>;
+  cellRender: CellRenderController<TData>;
 }
 
 export function renderBodyCell<TData extends Row>(
@@ -28,7 +31,7 @@ export function renderBodyCell<TData extends Row>(
   rowId: string,
   groupStartColumnIds: ReadonlySet<string>
 ): TemplateResult {
-  const { host, cellSelection } = context;
+  const { host, cellSelection, cellRender } = context;
   const editable = !cell.row.getIsGrouped() && isCellEditable(cell as Cell<DataTableFeatures, any>);
   const selectable = host.cellSelection && cell.getCanSelect();
   const selected = selectable && cell.getIsSelected();
@@ -61,6 +64,7 @@ export function renderBodyCell<TData extends Row>(
       @mouseenter=${selectable ? cell.getSelectionExtendHandler() : nothing}
       @keydown=${selectable ? (evt: KeyboardEvent) => cellSelection.onCellKeydown(evt, cell) : nothing}
       @focus=${selectable ? () => cellSelection.onCellFocus(cell) : nothing}
+      ${queueCellRender(cellRender, cell as Cell<DataTableFeatures, any>)}
       data-align=${ifDefined(isGroupLabel ? undefined : cell.column.columnDef.meta?.align)}
       ${formatAttribute(isGroupLabel ? undefined : cell.column.columnDef.meta?.formatAttribute)}
       ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||

@@ -339,6 +339,7 @@ async function createFixture(
       .getSubRows=${props.getSubRows}
       .getRowHasDetail=${props.getRowHasDetail}
       .getRowDetail=${props.getRowDetail}
+      .onCellRender=${props.onCellRender}
       .grouping=${props.grouping ?? []}
       .singleGroupColumn=${props.singleGroupColumn ?? false}
       .virtualized=${props.virtualized ?? false}
@@ -2820,6 +2821,105 @@ describe('DataTable', () => {
         const rowsStillSelected = harness.bodyRows.filter(row => row.classList.contains('selected'));
         expect(rowsStillSelected.length).toBeLessThanOrEqual(1);
       });
+    });
+  });
+
+  describe('Cell Render', () => {
+    it('should call the table callback for every body cell with the cell element and the template props', async () => {
+      const onCellRender = vi.fn(({ element }: { element: HTMLElement }) => element.setAttribute('data-rendered', ''));
+      const harness = await createFixture({ onCellRender });
+
+      expect(onCellRender).toHaveBeenCalledTimes(TEST_DATA.length * TEST_COLUMNS.length);
+      expect(harness.bodyCells.every(cell => cell.hasAttribute('data-rendered'))).toBe(true);
+      const props = onCellRender.mock.calls[0][0] as Record<string, unknown>;
+      expect(props.element).toBe(harness.getBodyCellByRowAndColumn(0, 0));
+      expect(Object.keys(props)).toEqual(expect.arrayContaining(['row', 'column', 'cell', 'element']));
+    });
+
+    it('should modify the rendered cell content in place', async () => {
+      const harness = await createFixture({
+        onCellRender: ({ cell, element }: { cell: { getValue: () => unknown }; element: HTMLElement }) => {
+          element.querySelector('.cell-content')?.setAttribute('data-value', String(cell.getValue()));
+        }
+      });
+
+      expect(harness.getBodyCellByRowAndColumn(1, 1)?.querySelector('.cell-content')?.getAttribute('data-value')).toBe('Bob');
+    });
+
+    it('should call a column callback instead of the table callback for that column', async () => {
+      const tableCallback = vi.fn();
+      const columnCallback = vi.fn();
+      const columns = TEST_COLUMNS.map(column => (column.id === 'age' ? { ...column, onCellRender: columnCallback } : column));
+      await createFixture({ columns, onCellRender: tableCallback });
+
+      expect(columnCallback).toHaveBeenCalledTimes(TEST_DATA.length);
+      expect(tableCallback).toHaveBeenCalledTimes(TEST_DATA.length * (TEST_COLUMNS.length - 1));
+    });
+
+    it('should call a column callback without a table callback', async () => {
+      const columnCallback = vi.fn();
+      const columns = TEST_COLUMNS.map(column => (column.id === 'name' ? { ...column, onCellRender: columnCallback } : column));
+      await createFixture({ columns });
+
+      expect(columnCallback).toHaveBeenCalledTimes(TEST_DATA.length);
+    });
+
+    it('should run the callback again, after the content changes, when the table re-renders', async () => {
+      const onCellRender = vi.fn(({ element }: { element: HTMLElement }) => element.setAttribute('data-rendered', ''));
+      const harness = await createFixture({ onCellRender });
+      onCellRender.mockClear();
+
+      harness.element.striped = true;
+      await settle(harness.element);
+
+      expect(onCellRender).toHaveBeenCalledTimes(TEST_DATA.length * TEST_COLUMNS.length);
+    });
+
+    it('should apply a callback assigned after the first render', async () => {
+      const harness = await createFixture();
+      const onCellRender = vi.fn();
+
+      harness.element.onCellRender = onCellRender;
+      await settle(harness.element);
+
+      expect(onCellRender).toHaveBeenCalledTimes(TEST_DATA.length * TEST_COLUMNS.length);
+    });
+
+    it('should not call the callback for the selection column', async () => {
+      const onCellRender = vi.fn();
+      await createFixture({ onCellRender, rowSelection: 'multiple' });
+
+      expect(onCellRender).toHaveBeenCalledTimes(TEST_DATA.length * TEST_COLUMNS.length);
+    });
+
+    it('should not call the callback for group rows', async () => {
+      const onCellRender = vi.fn();
+      await createFixture({ onCellRender, grouping: ['age'] });
+
+      expect(onCellRender).not.toHaveBeenCalled();
+    });
+
+    it('should keep rendering when the callback throws', async () => {
+      const reportError = vi.spyOn(window, 'reportError').mockImplementation(() => undefined);
+      const onCellRender = vi.fn(() => {
+        throw new Error('boom');
+      });
+      const harness = await createFixture({ onCellRender });
+
+      expect(harness.bodyCells).toHaveLength(TEST_DATA.length * TEST_COLUMNS.length);
+      expect(reportError).toHaveBeenCalledTimes(TEST_DATA.length * TEST_COLUMNS.length);
+      reportError.mockRestore();
+    });
+
+    it('should read and write the callback through config', async () => {
+      const harness = await createFixture();
+      const onCellRender = vi.fn();
+
+      harness.element.config = { onCellRender };
+      await settle(harness.element);
+
+      expect(harness.element.config.onCellRender).toBe(onCellRender);
+      expect(onCellRender).toHaveBeenCalled();
     });
   });
 

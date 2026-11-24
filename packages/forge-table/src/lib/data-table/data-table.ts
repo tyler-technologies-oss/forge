@@ -32,6 +32,7 @@ import {
 import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
+import { CellRenderController } from './features/cell-render.js';
 import { CellSelectionController } from './features/cell-selection.js';
 import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
 import { ColumnRenameController } from './features/column-rename.js';
@@ -49,7 +50,7 @@ import { renderBody } from './templates/body.js';
 import { renderColumnGroup } from './templates/column-group.js';
 import { renderTableFooter } from './templates/footer.js';
 import { renderTableHeader } from './templates/header.js';
-import type { ColumnDef, DataTableDef, EnableCellSelectionFn, FilterFnChangeEventDetail, MultiSortKey, Row, RowSelectionType } from './types.js';
+import type { CellRenderFn, ColumnDef, DataTableDef, EnableCellSelectionFn, FilterFnChangeEventDetail, MultiSortKey, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -70,6 +71,7 @@ export { badgeCell, type BadgeCellConfig, type BadgeCellFn, type BadgeCellOption
 export { meterCell, type MeterCellOptions } from './templates/meter-cell.js';
 export type { CellSelectionRange, CellSelectionState, SelectCellRangeOptions } from '@tanstack/lit-table';
 export type {
+  CellRenderFn,
   ColumnAggregation,
   ColumnDef,
   DataTableDef,
@@ -342,6 +344,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @property({ attribute: false })
   public getSelectionClipboardValue: (data: unknown[][][]) => string = buildSelectionCsv;
 
+  /**
+   * Called after each body cell renders, to modify the cell's DOM in place.
+   *
+   * Receives the same props as a column `template` plus `element`, the cell's `<td>`, and returns nothing. It runs after every render of the table, so
+   * it must be idempotent. It is not called for group rows or the selection, expander and groups columns. A column's own `onCellRender` takes
+   * precedence over this one for that column's cells.
+   */
+  @property({ attribute: false })
+  public onCellRender: CellRenderFn<TData> | undefined;
+
   @state() private _data: TData[] = [];
   @state() private _columns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
   @state() private _tableColumns: TanstackColumnDef<DataTableFeatures, TData>[] = [];
@@ -370,6 +382,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   readonly #columnFilterFn = new ColumnFilterFnController<TData>(this, {
     refilter: () => this.#onFilter(filters => [...filters])
   });
+  readonly #cellRender = new CellRenderController<TData>(this);
   readonly #cellSelection = new CellSelectionController<TData>(this, {
     getTable: () => this.#table,
     getScrollElement: () => this.#tableContainerRef.value,
@@ -519,6 +532,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             table,
             filtered: this._columnFilters.length > 0,
             cellSelection: this.#cellSelection,
+            cellRender: this.#cellRender,
             virtualization: this.#virtualization
           })}
           ${renderTableFooter(table, this.resizable)}

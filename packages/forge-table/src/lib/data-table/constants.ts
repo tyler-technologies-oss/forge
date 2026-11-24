@@ -64,5 +64,6 @@ export const DATA_TABLE_DEF_KEYS = {
   getSubRows: true,
   getRowHasDetail: true,
   getRowDetail: true,
-  getSelectionClipboardValue: false
+  getSelectionClipboardValue: false,
+  onCellRender: true
 } as const satisfies Record<keyof DataTableDef, boolean>;

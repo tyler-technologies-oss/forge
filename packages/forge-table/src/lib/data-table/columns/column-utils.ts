@@ -107,7 +107,8 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         aggregate: column.aggregate,
         aggregateFormatter: column.format instanceof Formatter ? column.format : undefined,
         canEdit: createCellEditablePredicate(column),
-        enableCellSelection: column.enableCellSelection
+        enableCellSelection: column.enableCellSelection,
+        onCellRender: column.onCellRender
       }
     };
 
