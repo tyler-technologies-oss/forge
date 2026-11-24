@@ -1,0 +1,54 @@
+import Blockquote from "../../../components/docs/Blockquote.astro";
+
+## NPM
+
+Install the Tyler icons package from NPM. This is the recommended way to consume icons in your applications or libraries.
+
+```bash
+npm install @tylertech/tyler-icons
+```
+
+Icons are distributed as ES modules. Import the ones you need from the package root. Each icon object has a `name` and a `data` property, where `data` is the raw SVG string.
+
+```javascript
+import { tylIconFavorite, tylIconHeart, tylIconForgeLogo } from '@tylertech/tyler-icons';
+```
+
+Register each icon with the `IconRegistry`, then reference it by name:
+
+```javascript
+import { IconRegistry } from '@tylertech/forge';
+
+IconRegistry.define([tylIconFavorite, tylIconHeart, tylIconForgeLogo]);
+```
+
+```html
+<forge-icon name="favorite"></forge-icon>
+<forge-icon name="heart"></forge-icon>
+<forge-icon name="forge-logo"></forge-icon>
+```
+
+If you can't determine an icon's name at build time, set the `external` attribute. The component fetches the icon from the CDN at runtime, which is useful for icons chosen from dynamic data.
+
+```html
+<forge-icon name="favorite" external></forge-icon>
+```
+
+## CDN
+
+The icons are also available from the CDN as `.svg` files, which is useful if you want to use them as images or fetch them manually.
+
+```html
+<img src="https://cdn.forge.tylertech.com/v1/icons/svg/standard/cake.svg" alt="Cake icon" />
+```
+
+You can also fetch the SVG with the `fetch` API and render it yourself. This is what `forge-icon` does under the hood when `external` is set.
+
+```javascript
+const response = await fetch('https://cdn.forge.tylertech.com/v1/icons/svg/standard/cake.svg');
+const svg = await response.text();
+```
+
+<Blockquote>
+  **Note:** The `standard` segment of the URL is the icon set the icon belongs to. Replace it with `extended` or `custom` to access icons from those sets. These are CDN URL path segments only, not npm import paths. The `@tylertech/tyler-icons` package exports only its root and `./tyler-icons-metadata.json`, so always import icons from the package root.
+</Blockquote>
