@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import placeholderImage from "../assets/images/404/placeholder.svg";
+import notFoundImage from "../assets/images/404/not-found.svg";
 
 const baseUrl = import.meta.env.BASE_URL;
 ---
@@ -8,69 +8,24 @@ const baseUrl = import.meta.env.BASE_URL;
 <BaseLayout
   title="Page not found"
   description="The page you're looking for doesn't exist or has moved."
-  flush
   searchable={false}>
-  <section
-    class="relative isolate flex min-h-full flex-col items-center justify-center gap-xlarge overflow-hidden bg-[#0b1437] px-large py-xxxlarge text-center text-white">
-    <img
-      src={placeholderImage.src}
-      alt=""
-      class="absolute inset-0 -z-20 size-full object-cover"
-    />
-    <div
-      class="absolute inset-0 -z-10 bg-linear-to-b from-black/10 via-transparent to-black/50"
-      aria-hidden="true">
-    </div>
-
-    <div
-      class="select-none bg-linear-to-b from-white via-white/70 to-white/0 bg-clip-text text-[clamp(8rem,26vw,20rem)] font-bold leading-[0.85] tracking-tighter text-transparent"
-      aria-hidden="true">
-      404
-    </div>
-
-    <div class="flex max-w-[640px] flex-col items-center gap-medium">
-      <span
-        class="inline-flex items-center gap-xsmall rounded-full border border-solid border-white/25 bg-white/10 px-medium py-xxsmall text-label2 uppercase tracking-widest backdrop-blur-md">
-        Page not found
-      </span>
-      <h1 class="m-0 text-heading6 font-semibold md:text-heading5">
-        This page has gone off the grid
-      </h1>
-      <p class="m-0 text-body3 text-white/75">
-        The page you're looking for may have moved, been renamed, or never
-        existed. Let's get you back to something solid.
-      </p>
-    </div>
-
-    <div class="flex flex-wrap items-center justify-center gap-medium">
-      <forge-button
-        variant="raised"
-        pill
-        class="[--forge-button-raised-background:white] [--forge-button-raised-color:#14286b]">
-        <a href={baseUrl}>
-          <forge-icon slot="start" name="arrow_back" aria-hidden="true"
-          ></forge-icon>
-          Back to home
-        </a>
-      </forge-button>
-      <forge-button
-        variant="outlined"
-        pill
-        class="[--forge-button-outlined-border-color:rgb(255_255_255/0.45)] [--forge-button-outlined-color:white]">
-        <a href={`${baseUrl}components/`}>
-          Browse components
-          <forge-icon slot="end" name="arrow_forward" aria-hidden="true"
-          ></forge-icon>
-        </a>
-      </forge-button>
-      <forge-button
-        variant="text"
-        pill
-        class="[--forge-button-text-color:white]"
-        data-search-trigger>
-        <forge-icon slot="start" name="search" aria-hidden="true"></forge-icon>
-        Search the docs
-      </forge-button>
-    </div>
-  </section>
+  <forge-page-state class="min-h-full">
+    <img src={notFoundImage.src} alt="" slot="graphic" />
+    <h1
+      slot="title"
+      class="m-0 text-[length:inherit] font-[weight:inherit] leading-[inherit]">
+      Looks like this page wandered off
+    </h1>
+    <p slot="message">
+      The page you're looking for may have been moved or removed, or the URL may
+      have been mistyped.
+    </p>
+    <forge-button slot="action" data-search-trigger>
+      <forge-icon slot="start" name="search" aria-hidden="true"></forge-icon>
+      Search the docs
+    </forge-button>
+    <forge-button slot="action" variant="filled">
+      <a href={baseUrl}>Back to home</a>
+    </forge-button>
+  </forge-page-state>
 </BaseLayout>
