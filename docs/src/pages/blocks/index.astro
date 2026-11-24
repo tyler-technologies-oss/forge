@@ -201,6 +201,7 @@ const baseUrl = import.meta.env.BASE_URL;
     filterInput.addEventListener("input", applyFilters);
     filterInput.closest("forge-text-field")?.addEventListener("forge-text-field-clear", applyFilters);
     categoryChips.addEventListener("forge-chip-select", applyFilters);
+    filterInput.focus();
   };
 
   document.addEventListener("astro:page-load", initBlockFilter);

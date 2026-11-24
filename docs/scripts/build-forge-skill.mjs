@@ -505,6 +505,21 @@ async function buildComponentDocs(examples) {
       examples,
     });
 
+    const installationPath = path.join(COMPONENTS_DIR, slug, "installation.mdx");
+    const hasInstallationDocs = await access(installationPath).then(() => true, () => false);
+    let installationSection = "";
+    if (hasInstallationDocs) {
+      const installationTree = buildCleanTree(await readFile(installationPath, "utf8"), {
+        file: path.relative(ROOT, installationPath),
+        slug,
+        outDir: "components",
+        lineOffset: 0,
+        examples,
+      });
+      demoteHeadings(installationTree.children);
+      installationSection = `\n\n## Installation\n\n${mdStringifier.stringify(installationTree).trim()}`;
+    }
+
     const accessibilityPath = path.join(COMPONENTS_DIR, slug, "accessibility.mdx");
     const hasAccessibilityDocs = await access(accessibilityPath).then(() => true, () => false);
     let accessibilitySection = "";
@@ -521,7 +536,7 @@ async function buildComponentDocs(examples) {
       accessibilitySection = `\n\n## Accessibility\n\n${accessibilityBody}`;
     }
 
-    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${cleanedBody}${accessibilitySection}\n`;
+    const md = `# ${frontmatter.title}\n\n${frontmatter.description}\n\n${cleanedBody}${installationSection}${accessibilitySection}\n`;
     await writeFile(path.join(OUT_COMPONENTS_DIR, `${slug}.md`), md, "utf8");
 
     components.push({

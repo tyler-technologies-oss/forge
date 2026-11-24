@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import hljs from 'highlight.js/lib/core';
   import xml from 'highlight.js/lib/languages/xml';
   import typescript from 'highlight.js/lib/languages/typescript';
@@ -224,6 +225,45 @@
     filterText = value;
   });
 
+  let filterInput: HTMLInputElement | undefined = $state();
+
+  const FOCUS_RETRY_DELAYS_MS = [150, 400, 800, 1500];
+  const DISPLACED_FOCUS_SELECTOR = '[data-search-trigger], [data-search-dialog]';
+
+  const isFocusDisplaced = () => {
+    const active = document.activeElement;
+    return !active || active === document.body || !!active.closest(DISPLACED_FOCUS_SELECTOR);
+  };
+
+  const focusFilter = () => {
+    if (filterInput && document.activeElement !== filterInput) {
+      filterInput.focus();
+    }
+  };
+
+  const reclaimFocus = () => {
+    if (isFocusDisplaced()) {
+      focusFilter();
+    }
+  };
+
+  onMount(() => {
+    focusFilter();
+    const retries = FOCUS_RETRY_DELAYS_MS.map(delay => setTimeout(reclaimFocus, delay));
+    document.addEventListener('astro:page-load', focusFilter);
+    const textField = filterInput?.closest('forge-text-field');
+    textField?.addEventListener('forge-text-field-clear', onFilterClear);
+    return () => {
+      retries.forEach(clearTimeout);
+      document.removeEventListener('astro:page-load', focusFilter);
+      textField?.removeEventListener('forge-text-field-clear', onFilterClear);
+    };
+  });
+
+  function onFilterClear() {
+    handleFilter('');
+  }
+
   function onFilterInput(e: Event) {
     const target = e.target as HTMLInputElement;
     handleFilter(target.value);
@@ -309,9 +349,15 @@
 </script>
 
 <div class="flex flex-col gap-medium">
-  <forge-text-field>
-    <input type="text" placeholder="Filter..." oninput={onFilterInput} aria-label="Filter icons" />
+  <div class="sticky top-0 z-10 bg-surface pb-small">
+  <forge-text-field show-clear class="block">
+    <forge-icon slot="start" name="search"></forge-icon>
+    <forge-icon-button slot="clear-button" tabindex="-1" dense aria-label="Clear">
+      <forge-icon name="clear"></forge-icon>
+    </forge-icon-button>
+    <input bind:this={filterInput} type="text" autocomplete="off" placeholder="Search icons" aria-label="Search icons" oninput={onFilterInput} />
   </forge-text-field>
+  </div>
 
   {#if isLoading}
     <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-small">

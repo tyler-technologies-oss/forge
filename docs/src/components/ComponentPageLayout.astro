@@ -6,7 +6,7 @@
  */
 import TabbedPageLayout from "./TabbedPageLayout.astro";
 
-type TabId = "usage" | "api" | "playground" | "accessibility";
+type TabId = "usage" | "installation" | "api" | "playground" | "accessibility";
 
 interface Props {
   title: string;
@@ -17,6 +17,7 @@ interface Props {
   currentTab: TabId;
   slug: string;
   storybookId?: string;
+  hasInstallation?: boolean;
 }
 
 const {
@@ -28,10 +29,12 @@ const {
   currentTab,
   slug,
   storybookId,
+  hasInstallation = false,
 } = Astro.props;
 
 const tabs = [
   { id: "usage", label: "Usage" },
+  ...(hasInstallation ? [{ id: "installation", label: "Installation" }] : []),
   { id: "api", label: "API" },
   ...(storybookId
     ? [{ id: "playground", label: "Playground", wide: true }]

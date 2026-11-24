@@ -33,6 +33,15 @@ const accessibilityCollection = defineCollection({
   schema: z.object({}),
 });
 
+const installationCollection = defineCollection({
+  loader: glob({
+    pattern: '*/installation.mdx',
+    base: './src/content/components',
+    generateId: ({ entry }) => entry.replace(/\/installation\.mdx$/, ''),
+  }),
+  schema: z.object({}),
+});
+
 const pagesCollection = defineCollection({
   loader: glob({
     pattern: ['**/*.mdx', '!components/**'],
@@ -50,4 +59,5 @@ export const collections = {
   pages: pagesCollection,
   components: componentsCollection,
   accessibility: accessibilityCollection,
+  installation: installationCollection,
 };

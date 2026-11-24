@@ -85,7 +85,7 @@
 
   .content-body h2,
   .mdx-content h2 {
-    @apply text-heading5 mt-xxxlarge mb-medium border-t border-outline pt-large;
+    @apply text-heading5 mt-xlarge mb-medium pt-large;
   }
 
   .content-body h2:first-child,

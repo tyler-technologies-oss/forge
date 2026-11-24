@@ -9,15 +9,20 @@ import TableOfContents from "../../../components/docs/TableOfContents.svelte";
 import { getComponentApi, statusLabels } from "../../../data/components";
 import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
 
-type TabId = "usage" | "api" | "playground" | "accessibility";
+type TabId = "usage" | "installation" | "api" | "playground" | "accessibility";
 
 export async function getStaticPaths() {
   const components = await getCollection("components");
+  const installationIds = new Set((await getCollection("installation")).map(({ id }) => id));
 
   return components.flatMap((component) => {
-    const tabs: TabId[] = component.data.storybookId
-      ? ["usage", "api", "playground", "accessibility"]
-      : ["usage", "api", "accessibility"];
+    const tabs: TabId[] = [
+      "usage",
+      ...(installationIds.has(component.id) ? (["installation"] as const) : []),
+      "api",
+      ...(component.data.storybookId ? (["playground"] as const) : []),
+      "accessibility",
+    ];
 
     return tabs.map((tab) => ({
       params: { slug: component.id, tab },
@@ -42,6 +47,11 @@ const AccessibilityContent = accessibilityEntry
   ? (await render(accessibilityEntry)).Content
   : undefined;
 
+const installationEntry = await getEntry("installation", component.id);
+const InstallationContent = installationEntry
+  ? (await render(installationEntry)).Content
+  : undefined;
+
 function formatTabLabel(tab: string): string {
   return tab === "api" ? "API" : tab.charAt(0).toUpperCase() + tab.slice(1);
 }
@@ -55,6 +65,12 @@ function formatTabLabel(tab: string): string {
   <div slot="aside" class="tab-panel" data-tab="usage" class:list={[{ active: currentTab === "usage" }]}>
     <TableOfContents client:load contentSelector="[data-tab='usage'] .mdx-content" />
   </div>
+
+  {InstallationContent && (
+    <div slot="aside" class="tab-panel" data-tab="installation" class:list={[{ active: currentTab === "installation" }]}>
+      <TableOfContents client:load contentSelector="[data-tab='installation'] .mdx-content" />
+    </div>
+  )}
 
   <div slot="aside" class="tab-panel" data-tab="api" class:list={[{ active: currentTab === "api" }]}>
     <TableOfContents
@@ -77,7 +93,8 @@ function formatTabLabel(tab: string): string {
     badgeTheme={status === "deprecated" ? "error" : "warning"}
     currentTab={currentTab}
     slug={component.id}
-    storybookId={storybookId}>
+    storybookId={storybookId}
+    hasInstallation={Boolean(InstallationContent)}>
 
     <div slot="content" class="tab-panels relative">
       <div
@@ -89,6 +106,18 @@ function formatTabLabel(tab: string): string {
           <MdxContent components={mdxComponents} />
         </article>
       </div>
+
+      {InstallationContent && (
+        <div
+          class="tab-panel"
+          data-tab="installation"
+          class:list={[{ active: currentTab === "installation" }]}
+          data-pagefind-ignore={currentTab !== "installation" || undefined}>
+          <article class="mdx-content text-high">
+            <InstallationContent components={mdxComponents} />
+          </article>
+        </div>
+      )}
 
       <div
         class="tab-panel"

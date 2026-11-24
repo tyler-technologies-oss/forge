@@ -12,12 +12,31 @@ import Example from "../../../components/Example.astro";
 import Rules from "../../../components/Rules.astro";
 import Rule from "../../../components/Rule.astro";
 import InlineMessage from "../../../components/docs/InlineMessage.astro";
+import Blockquote from "../../../components/docs/Blockquote.astro";
 
 <Header />
+
+<InlineMessage theme="info" title="Looking for an icon?">
+  Browse and search all 8,500+ icons in the [icon library](/icons/library/)
+</InlineMessage>
 
 ## Overview
 
 Icons are visual symbols used to communicate the intention of content or actions, enhancing user experience by making interfaces more intuitive and scannable. The icon component in Forge renders SVG icons and supports direct integration with the Tyler icons library, providing a consistent visual language across applications.
+
+Use an icon:
+
+- **To reinforce a label.** An icon next to a button or menu item label helps users find it faster.
+- **For familiar actions in tight spaces.** Common actions like close, search, edit, delete, and more options can be icon-only buttons in toolbars and table rows.
+- **To show status.** A check, warning, or error icon reinforces a status message.
+
+## Sizing
+
+An icon takes the size of the text around it by default, so it lines up with an adjacent label without extra work. Inside components like buttons, icon buttons, list items, and toolbars, the component sets the icon size for you. Only set a size for a standalone icon, like one in an empty state.
+
+## Color
+
+Icons inherit the color of the text around them. Use the same [text emphasis](/designing/color/#text) tokens as text, and use a status color only when the icon communicates that status. An icon's color must meet the same contrast requirements as text. See the [accessibility](/components/icon/accessibility/) guidance for decorative and semantic icons.
 
 ## Usage
 
@@ -41,7 +60,11 @@ Icons are visual symbols used to communicate the intention of content or actions
   <Rule
     variant="do"
     rules={[
-      "Maintain consistent sizing within the same interface context.",
+      "Use icons from the Tyler icons library.",
+      "Pair an icon with a text label wherever there's room.",
+      "Add a tooltip to every icon-only button.",
+      "Let components set icon size, and inherit color from the surrounding text.",
+      "Maintain consistent sizing within the same interface context.",
       "Register every icon a page needs in IconRegistry.define(...) rather than relying on external fetches.",
       "Import icons from the @tylertech/tyler-icons package root only; it has no /standard, /extended, or /custom subpaths.",
       "Pair an icon with a visible label or an accessible name whenever it conveys essential meaning on its own.",
@@ -53,11 +76,13 @@ Icons are visual symbols used to communicate the intention of content or actions
     variant="dont"
     rules={[
       "Don't rely on an icon alone to convey information essential to completing a task.",
+      "Don't use an icon-only button for an unfamiliar or domain-specific action.",
+      "Don't use two different icons for the same action in one application.",
       "Don't use external for icons on every page load — it adds a network request the registry avoids.",
       "Don't mix icon styles or weights within the same group of related items.",
-      "Don't mix icon styles from different libraries or design systems.",
-      "Don’t make icons too small to be easily recognizable or accessible.",
-      "Don’t rely solely on color to convey meaning in icons.",
+      "Don't mix icons from other libraries or design systems with Tyler icons.",
+      "Don’t make icons too small to be easily recognizable or accessible.",
+      "Don’t rely solely on color to convey meaning in icons.",
     ]}
   />
 </Rules>
@@ -71,3 +96,12 @@ Set `src` to a raw SVG string for a one-off icon that isn't in the registry.
   blockUrl="https://forge.tylerdev.io/blocks/v1/components/icon/custom-svg/custom-svg.html"
 />
 
+## Contribution
+
+The icon library is hosted on GitHub and is open source. To view the source or contribute, see the [tyler-icons repository](https://github.com/tyler-technologies-oss/tyler-icons).
+
+<Blockquote>
+  Tyler Technologies uses the Material Design Icons as a base for the standard and extended icon sets. These icons are licensed by Google but self-hosted by Forge to ensure availability and performance. We do not modify the icons in any way, and they are distributed under the original licensing terms.
+
+  The custom icons are created by Tyler Technologies and are licensed under Apache 2.0.
+</Blockquote>

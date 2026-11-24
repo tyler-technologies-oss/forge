@@ -140,7 +140,6 @@ export function buildNavigation(): NavSection[] {
               label: "Building Apps",
               children: [
                 { id: "dev-forms", label: "Forms", href: "/developing/forms/" },
-                { id: "dev-icons", label: "Icons", href: "/developing/icons/" },
                 {
                   id: "dev-illustrations",
                   label: "Illustrations",
@@ -235,25 +234,14 @@ export function buildNavigation(): NavSection[] {
         },
         {
           id: "icons",
-          label: "Icons",
-          icon: "palette",
-          children: [
-            {
-              id: "icons-usage",
-              label: "Usage",
-              href: "/icons/usage/",
-            },
-            {
-              id: "icons-library",
-              label: "Icon Library",
-              href: "/icons/library/",
-            },
-          ],
+          label: "Icon Library",
+          icon: "shape_plus_outline",
+          href: "/icons/library/",
         },
         {
           id: "blocks",
           label: "Blocks",
-          icon: "widgets",
+          icon: "view_quilt",
           href: "/blocks/",
         },
       ],

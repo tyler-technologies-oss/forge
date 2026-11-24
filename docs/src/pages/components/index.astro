@@ -173,6 +173,7 @@ const baseUrl = import.meta.env.BASE_URL;
     input.addEventListener("input", applyFilters);
     document.getElementById("component-filter")?.closest("forge-text-field")?.addEventListener("forge-text-field-clear", applyFilters);
     chipSet.addEventListener("forge-chip-select", applyFilters);
+    input.focus();
   };
 
   document.addEventListener("astro:page-load", initComponentFilter);

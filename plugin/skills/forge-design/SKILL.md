@@ -192,7 +192,6 @@ Each reference below is a separate file under `references/`. Load only the ones 
 - [Forge MCP Server](references/development/mcp-server.md) — Give AI clients direct access to Forge component documentation, design tokens, and code generation.
 - [Forms](references/development/forms.md) — How Forge's form-associated components participate in native form submission and validation.
 - [Global Configuration](references/development/global-configuration.md) — Overriding default component state application-wide via a global configuration object.
-- [Icons](references/development/icons.md) — How to install and use the Tyler icons library with the Forge icon component.
 - [Illustrations](references/development/illustrations.md) — Using Tyler Forge illustrations in your application.
 - [Installation](references/development/installation.md) — How to install Tyler Forge via npm or CDN.
 - [React](references/development/frameworks/react.md) — Using Tyler Forge with React.
