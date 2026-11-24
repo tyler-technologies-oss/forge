@@ -5,13 +5,12 @@ import { html, nothing, type TemplateResult } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { EXPANDER_COLUMN_ID, GROUP_INDENT_WIDTH, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableFeatures } from '../table-features.js';
+import { renderExpandToggle } from '../templates/expand-toggle.js';
 import type { Row } from '../types.js';
 import { formatAggregationValue } from './aggregation.js';
 import { getCellLabelledBy } from './row-meta.js';
 
 import '@tylertech/forge/checkbox';
-import '@tylertech/forge/icon-button';
-import '@tylertech/forge/open-icon';
 import '@tylertech/forge/tooltip';
 
 IconRegistry.define([tylIconChevronDown, tylIconChevronRight]);
@@ -180,26 +179,13 @@ export function renderGroupCheckbox<TData extends Row>(table: Table<DataTableFea
 function renderGroupCell<TData extends Row>(row: GroupingRow<TData>, indented: boolean): TemplateResult {
   const expanded = row.getIsExpanded();
   const label = getGroupLabel(row.getValue(row.groupingColumnId ?? ''));
-  const onToggle = (evt: Event): void => {
-    evt.stopPropagation();
-    row.toggleExpanded();
-  };
 
   return html`
     <div
       class="group-cell"
       part="group-cell"
       style=${ifDefined(indented && row.depth > 0 ? `padding-inline-start: ${row.depth * GROUP_INDENT_WIDTH}px` : undefined)}>
-      <forge-icon-button
-        class="group-toggle"
-        part="group-toggle"
-        shape="squared"
-        dense
-        aria-label=${`${expanded ? 'Collapse' : 'Expand'} ${label}`}
-        aria-expanded=${String(expanded)}
-        @click=${onToggle}>
-        <forge-open-icon ?open=${expanded} orientation="horizontal" rotation="half"></forge-open-icon>
-      </forge-icon-button>
+      ${renderExpandToggle({ expanded, label: `${expanded ? 'Collapse' : 'Expand'} ${label}`, onToggle: () => row.toggleExpanded() })}
       <span class="group-label" part="group-label">${label}</span>
       <span class="group-count" part="group-count">(${countGroupDataRows(row)})</span>
     </div>

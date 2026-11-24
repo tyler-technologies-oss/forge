@@ -1,16 +1,13 @@
 import type { ColumnDef as TanstackColumnDef, Row as TanstackRow } from '@tanstack/lit-table';
 import { html, nothing, type TemplateResult } from 'lit';
 import { guard } from 'lit/directives/guard.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { EXPANDER_COLUMN_ID, EXPANDER_COLUMN_LABEL, EXPANDER_COLUMN_WIDTH, SELECT_COLUMN_ID } from '../constants.js';
 import type { DataTableElement } from '../data-table.js';
 import type { DataTableFeatures } from '../table-features.js';
+import { renderExpandToggle } from '../templates/expand-toggle.js';
 import type { Row } from '../types.js';
 import { getCellRole } from './cell-selection.js';
 import { getExpanderButtonId, getRowMeta } from './row-meta.js';
-
-import '@tylertech/forge/icon-button';
-import '@tylertech/forge/open-icon';
 
 type ExpandableHost<TData extends Row> = Pick<DataTableElement<TData>, 'expandable' | 'getSubRows' | 'getRowHasDetail' | 'getRowDetail' | 'cellSelection'>;
 
@@ -68,23 +65,13 @@ export function prependExpanderColumn<TData extends Row>(
         return nothing;
       }
       const id = getExpanderButtonId(row);
-      return html`
-        <forge-icon-button
-          class="group-toggle"
-          part="group-toggle"
-          shape="squared"
-          dense
-          id="${ifDefined(id)}"
-          aria-label="${EXPANDER_COLUMN_LABEL}"
-          aria-labelledby="${ifDefined(id ? `${id} ${getRowMeta(row)?.nameId}` : undefined)}"
-          aria-expanded="${row.getIsExpanded()}"
-          @click="${(evt: Event) => {
-            evt.stopPropagation();
-            row.toggleExpanded();
-          }}">
-          <forge-open-icon ?open="${row.getIsExpanded()}" orientation="horizontal" rotation="half"></forge-open-icon>
-        </forge-icon-button>
-      `;
+      return renderExpandToggle({
+        id,
+        expanded: row.getIsExpanded(),
+        label: EXPANDER_COLUMN_LABEL,
+        labelledBy: id ? `${id} ${getRowMeta(row)?.nameId}` : undefined,
+        onToggle: () => row.toggleExpanded()
+      });
     }
   };
 
