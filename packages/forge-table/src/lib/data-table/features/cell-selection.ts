@@ -165,7 +165,7 @@ export class CellSelectionController<TData extends Row> implements ReactiveContr
   #extendSelectionAtPoint(x: number, y: number, evt: MouseEvent): void {
     const target = this.#host.shadowRoot
       ?.elementsFromPoint(x, y)
-      .map(element => element.closest<HTMLElement>('td[data-row-id]'))
+      .map(element => element.closest<HTMLElement>('tbody :is(td, th)[data-row-id]'))
       .find(Boolean);
     const { rowId, columnId } = target?.dataset ?? {};
     const row = this.#options
@@ -189,7 +189,7 @@ export class CellSelectionController<TData extends Row> implements ReactiveContr
   }
 
   #focusTabStop(): void {
-    const cell = this.#host.shadowRoot?.querySelector<HTMLElement>('td[tabindex="0"]');
+    const cell = this.#host.shadowRoot?.querySelector<HTMLElement>('tbody :is(td, th)[tabindex="0"]');
     if (cell) {
       this.#pendingFocus = false;
       cell.focus();

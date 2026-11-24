@@ -818,6 +818,55 @@ describe('DataTable', () => {
     });
   });
 
+  describe('Header Column', () => {
+    const getRowHeaders = (harness: Awaited<ReturnType<typeof createFixture>>): HTMLElement[] =>
+      Array.from(harness.shadowRoot.querySelectorAll('tbody:not(.empty-tbody) th'));
+
+    it('should render body cells of the column as row headers when headerColumn is set', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name', headerColumn: true },
+        { id: 'age', header: 'Age', property: 'age' }
+      ];
+      const harness = await createFixture({ columns });
+
+      const rowHeaders = getRowHeaders(harness);
+      expect(rowHeaders).toHaveLength(harness.bodyRows.length);
+      expect(rowHeaders.every(cell => cell.getAttribute('scope') === 'row' && cell.getAttribute('role') === 'rowheader')).toBe(true);
+      expect(harness.bodyRows[0].querySelectorAll('td')).toHaveLength(1);
+    });
+
+    it('should render body cells as data cells when headerColumn is not set', async () => {
+      const harness = await createFixture({ columns: [{ header: 'Name', property: 'name' }] });
+
+      expect(getRowHeaders(harness)).toHaveLength(0);
+    });
+
+    it('should keep the header cell of the column as a column header', async () => {
+      const harness = await createFixture({ columns: [{ header: 'Name', property: 'name', headerColumn: true }] });
+
+      expect(harness.headerCells[0].getAttribute('scope')).not.toBe('row');
+    });
+
+    it('should expose row headers in the accessibility tree', async () => {
+      await createFixture({ columns: [{ header: 'Name', property: 'name', headerColumn: true }] });
+
+      await vi.waitFor(async () => {
+        const { roles } = await getTableAccessibility();
+        expect(roles).toContain('rowheader');
+      });
+    });
+
+    it('should select the cell when cell selection is on and the cell is a row header', async () => {
+      const harness = await createFixture({ cellSelection: true, columns: [{ id: 'name', header: 'Name', property: 'name', headerColumn: true }] });
+
+      const [cell] = getRowHeaders(harness);
+      cell.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+      await harness.element.updateComplete;
+
+      expect(cell.classList.contains('cell-selected')).toBe(true);
+    });
+  });
+
   describe('Column Alignment', () => {
     it.each(['start', 'center', 'end'] as const)('should align body cell text to %s when align is set', async align => {
       const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', footer: 'Total', align }];

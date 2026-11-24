@@ -101,6 +101,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
         stopRowClickPropagation: column.stopRowClickPropagation,
         reorderable: column.reorderable,
         renamable: column.renamable,
+        headerColumn: column.headerColumn,
         align: column.align,
         formatAttribute: getFormatterAttribute(column.format),
         aggregated: !!column.aggregate && typeof column.footer !== 'string',

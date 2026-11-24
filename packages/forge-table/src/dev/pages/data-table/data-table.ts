@@ -99,7 +99,7 @@ const textFilterFns = [filterFn_includesString, filterFn_startsWith, filterFn_eq
 const numberFilterFns = [filterFn_equals, filterFn_greaterThan, filterFn_lessThan, filterFn_inNumberRange];
 
 const flatColumns: ColumnDef<RowData>[] = [
-  { header: 'Id', property: 'id', dataType: 'number', filter: numberFilterFns },
+  { header: 'Id', property: 'id', headerColumn: true, dataType: 'number', filter: numberFilterFns },
   { header: 'First Name', property: 'firstName', renamable: true, filter: textFilterFns },
   { header: 'Last Name', property: 'lastName', renamable: true, filter: fuzzyFilter, sortFn: fuzzySort },
   { header: 'Email', property: 'email', template: linkCell({ type: 'email' }) },

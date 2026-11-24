@@ -17,6 +17,7 @@ export interface ColumnDefMeta {
   stopRowClickPropagation?: boolean;
   reorderable?: boolean;
   renamable?: boolean;
+  headerColumn?: boolean;
   align?: ColumnAlign;
   formatAttribute?: string;
   aggregated?: boolean;
@@ -133,6 +134,10 @@ export interface ColumnDef<TData extends Row = Row> {
   resizable?: boolean;
   reorderable?: boolean;
   renamable?: boolean;
+  /**
+   * Renders the column's body cells as row headers (`<th scope="row">`) that name their row, instead of data cells.
+   */
+  headerColumn?: boolean;
   width?: number;
   format?: Formatter<unknown, unknown> | CustomFormatter<TData>;
   template?: string | TemplateFn;

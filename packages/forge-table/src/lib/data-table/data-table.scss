@@ -42,7 +42,7 @@ table {
     min-width: 0;
   }
 
-  :is(td, tfoot th) {
+  :is(td, tbody th, tfoot th) {
     &:is([data-number-format], [data-currency-format]) {
       text-align: end;
     }
@@ -181,6 +181,14 @@ table {
     }
   }
 
+  tbody th.header-column-cell {
+    @include core.cell;
+    @include core.body-row-cell;
+
+    font-weight: 600;
+    text-align: start;
+  }
+
   tfoot {
     tr {
       background-color: transparent;
@@ -215,7 +223,7 @@ table {
       background-color: inherit;
     }
 
-    td {
+    :is(td, th) {
       padding-top: 0;
       padding-bottom: 0;
 
@@ -277,7 +285,7 @@ table {
 
 @include focus-indicator.keyframes;
 
-table tbody td.editable-cell {
+table tbody :is(td, th).editable-cell {
   height: 1px;
   padding: 0;
 
@@ -312,7 +320,7 @@ table tbody td.editable-cell {
   text-align: inherit;
 }
 
-table.compact td.editable-cell .input-cell-input {
+table.compact :is(td, th).editable-cell .input-cell-input {
   padding-inline: #{spacing.variable(xsmall)};
 }
 
@@ -525,11 +533,11 @@ table tbody tr.group-row {
 //
 
 table.cell-selection {
-  td.cell-selectable {
+  :is(td, th).cell-selectable {
     user-select: none;
   }
 
-  td.cell-selected {
+  :is(td, th).cell-selected {
     // The outline replaces the focus ring; a focused cell that is not selected keeps the native one
     &:focus {
       outline: none;
@@ -632,7 +640,7 @@ table.allow-row-click {
 
     cursor: pointer;
 
-    > td {
+    > :is(td, th) {
       &:not(.pinned) {
         position: relative;
       }
@@ -648,11 +656,11 @@ table.allow-row-click {
       }
     }
 
-    &:hover > td::before {
+    &:hover > :is(td, th)::before {
       @include state-layer.hovered;
     }
 
-    &:active > td::before {
+    &:active > :is(td, th)::before {
       @include state-layer.pressed;
       @include state-layer.override(pressed-opacity, 0.18, value);
     }
@@ -703,7 +711,7 @@ table.has-pinned-columns {
     z-index: 2;
   }
 
-  td.pinned {
+  tbody :is(td, th).pinned {
     background-color: #{theme.variable(surface)};
   }
 
@@ -717,26 +725,26 @@ table.has-pinned-columns {
     }
   }
 
-  &.striped tbody tr:nth-child(odd) td.pinned {
+  &.striped tbody tr:nth-child(odd) :is(td, th).pinned {
     background-color: #{theme.variable(surface-container-minimum)};
   }
 
   &.hover {
-    tbody tr:hover td.pinned {
+    tbody tr:hover :is(td, th).pinned {
       background-color: #{theme.variable(surface-container-minimum)};
     }
 
-    &.striped tbody tr:nth-child(odd):hover td.pinned {
+    &.striped tbody tr:nth-child(odd):hover :is(td, th).pinned {
       background-color: #{theme.variable(surface-container-low)};
     }
   }
 
   &.row-selection {
-    tbody tr.selected td.pinned {
+    tbody tr.selected :is(td, th).pinned {
       background-color: #{theme.variable(primary-container-low)};
     }
 
-    &.hover tbody tr.selected:hover td.pinned {
+    &.hover tbody tr.selected:hover :is(td, th).pinned {
       background-color: #{theme.variable(primary-container-minimum)};
     }
   }
@@ -766,7 +774,7 @@ table.virtualized {
     display: flex;
 
     // Make the virtualized table cells grow to fill the row width properly
-    td {
+    :is(td, th) {
       display: flex;
       flex: 1 0 auto;
       align-items: center;

@@ -1,5 +1,6 @@
 import { FlexRender, type Cell, type Table } from '@tanstack/lit-table';
-import { html, nothing, TemplateResult } from 'lit';
+import { nothing, TemplateResult } from 'lit';
+import { html, literal } from 'lit/static-html.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { guard } from 'lit/directives/guard.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -36,10 +37,13 @@ export function renderBodyCell<TData extends Row>(
   const selectable = host.cellSelection && cell.getCanSelect();
   const selected = selectable && cell.getIsSelected();
   const edges = selected ? cell.getSelectionEdges() : undefined;
+  const headerColumn = !!cell.column.columnDef.meta?.headerColumn && !cell.row.getIsGrouped();
+  const tag = headerColumn ? literal`th` : literal`td`;
   const isGroupLabel = cell.row.getIsGrouped() && getGroupLabelCell(cell.row)?.id === cell.id;
   return html`
-    <td
-      role=${getCellRole(host.cellSelection)}
+    <${tag}
+      role=${headerColumn ? 'rowheader' : getCellRole(host.cellSelection)}
+      scope=${ifDefined(headerColumn ? 'row' : undefined)}
       part="body-cell cell"
       style=${styleMap({ width: getColumnWidthStyle(cell.column, host.resizable), ...getPinnedColumnStyle(cell.column) })}
       class=${classMap({
@@ -53,6 +57,7 @@ export function renderBodyCell<TData extends Row>(
         'select-column': host.rowSelection && cell.column.columnDef.id === SELECT_COLUMN_ID,
         'expander-column': cell.column.columnDef.id === EXPANDER_COLUMN_ID,
         'editable-cell': editable,
+        'header-column-cell': headerColumn,
         'group-start': groupStartColumnIds.has(cell.column.id)
       })}
       id=${cell.column.id}
@@ -67,12 +72,14 @@ export function renderBodyCell<TData extends Row>(
       ${queueCellRender(cellRender, cell as Cell<DataTableFeatures, any>)}
       data-align=${ifDefined(isGroupLabel ? undefined : cell.column.columnDef.meta?.align)}
       ${formatAttribute(isGroupLabel ? undefined : cell.column.columnDef.meta?.formatAttribute)}
-      ?data-forge-stop-row-click-propagation=${cell.column.columnDef.meta?.stopRowClickPropagation ||
-      cell.column.columnDef.id === SELECT_COLUMN_ID ||
-      cell.column.columnDef.id === EXPANDER_COLUMN_ID ||
-      editable}>
+      ?data-forge-stop-row-click-propagation=${
+        cell.column.columnDef.meta?.stopRowClickPropagation ||
+        cell.column.columnDef.id === SELECT_COLUMN_ID ||
+        cell.column.columnDef.id === EXPANDER_COLUMN_ID ||
+        editable
+      }>
       <div class="cell-content" part="body-cell-content cell-content">${renderCellContent(context, cell, rowId)}</div>
-    </td>
+    </${tag}>
   `;
 }
 
