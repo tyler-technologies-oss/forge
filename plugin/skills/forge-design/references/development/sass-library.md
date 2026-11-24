@@ -41,6 +41,6 @@ Forge also provides a library of CSS-only components that you can use in your ap
 that provide the same look and feel, but do not have any JavaScript functionality. This can be useful for creating static pages or for use in applications
 where you do not want to use Web Components.
 
-This feature is still in development and will be available in a future release. See the [roadmap](https://tylerforge.design/about/roadmap/) for more information.
+This feature is still in development and will be available in a future release.
 
 We will update this page when the CSS library is available.
