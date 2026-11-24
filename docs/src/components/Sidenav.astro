@@ -1,18 +1,12 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import { buildNavigation } from "../config/navigation";
 import NavItem from "./NavItem.astro";
 import SearchField from "./SearchField.astro";
 
-interface Props {
-  components: CollectionEntry<"components">[];
-}
-
-const { components } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 
 // Build navigation from config
-const navigation = buildNavigation(components);
+const navigation = buildNavigation();
 ---
 
 <forge-scaffold>
