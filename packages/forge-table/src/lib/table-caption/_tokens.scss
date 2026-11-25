@@ -1,0 +1,9 @@
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+
+$tokens: (
+  color: utils.module-val(table-caption, color, theme.variable(text-medium)),
+  margin-block: utils.module-val(table-caption, margin-block, spacing.variable(xsmall)),
+  margin-inline: utils.module-val(table-caption, margin-inline, spacing.variable(medium))
+) !default;

@@ -1,14 +1,14 @@
-@use '@tylertech/forge-tokens/sass/spacing';
-@use '@tylertech/forge-tokens/sass/theme';
 @use '@tylertech/forge-tokens/sass/typography';
+@use './token-utils' as *;
 
 :host {
+  @include tokens;
   @include typography.style(body1);
 
   display: block;
-  color: #{theme.variable(text-medium)};
-  margin-block: #{spacing.variable(xsmall)};
-  margin-inline: #{spacing.variable(medium)};
+  color: #{token(color)};
+  margin-block: #{token(margin-block)};
+  margin-inline: #{token(margin-inline)};
 }
 
 :host([hidden]) {

@@ -1,0 +1,75 @@
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/border';
+@use '@tylertech/forge-tokens/sass/elevation';
+@use '@tylertech/forge-tokens/sass/shape';
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '@tylertech/forge-tokens/sass/theme';
+
+$tokens: (
+  // Border
+  border-color: utils.module-val(data-table, border-color, theme.variable(outline)),
+  border-width: utils.module-val(data-table, border-width, border.variable(thin)),
+  // Header
+  header-background: utils.module-val(data-table, header-background, theme.variable(surface-container-minimum)),
+  header-color: utils.module-val(data-table, header-color, theme.variable(on-surface-container-minimum)),
+  header-padding-inline-end: utils.module-val(data-table, header-padding-inline-end, spacing.variable(medium)),
+  sticky-header-background: utils.module-val(data-table, sticky-header-background, theme.variable(surface)),
+  // Footer
+  footer-background: utils.module-ref(data-table, footer-background, header-background),
+  footer-color: utils.module-ref(data-table, footer-color, header-color),
+  // Paginator
+  paginator-background: utils.module-ref(data-table, paginator-background, header-background),
+  paginator-padding-inline: utils.module-val(data-table, paginator-padding-inline, spacing.variable(medium)),
+  // Rows
+  hover-background: utils.module-val(data-table, hover-background, theme.variable(surface-container-minimum)),
+  striped-background: utils.module-val(data-table, striped-background, theme.variable(surface-container-minimum)),
+  striped-hover-background: utils.module-val(data-table, striped-hover-background, theme.variable(surface-container-low)),
+  selected-background: utils.module-val(data-table, selected-background, theme.variable(primary-container-low)),
+  selected-color: utils.module-val(data-table, selected-color, theme.variable(on-primary-container-low)),
+  selected-hover-background: utils.module-val(data-table, selected-hover-background, theme.variable(primary-container-minimum)),
+  pinned-background: utils.module-val(data-table, pinned-background, theme.variable(surface)),
+  // Compact
+  compact-row-height: utils.module-val(data-table, compact-row-height, 32px),
+  compact-padding-inline: utils.module-val(data-table, compact-padding-inline, spacing.variable(xsmall)),
+  // Special columns
+  select-column-width: utils.module-val(data-table, select-column-width, 40px),
+  expander-column-width: utils.module-val(data-table, expander-column-width, 48px),
+  // Sorting
+  sort-icon-size: utils.module-val(data-table, sort-icon-size, 1rem),
+  sort-icon-color: utils.module-val(data-table, sort-icon-color, theme.variable(on-surface)),
+  sort-icon-margin-inline-start: utils.module-val(data-table, sort-icon-margin-inline-start, shape.variable(small)),
+  sort-index-background: utils.module-val(data-table, sort-index-background, theme.variable(primary-container)),
+  sort-index-color: utils.module-val(data-table, sort-index-color, theme.variable(on-primary-container)),
+  sort-index-hover-background: utils.module-val(data-table, sort-index-hover-background, theme.variable(primary)),
+  sort-index-hover-color: utils.module-val(data-table, sort-index-hover-color, theme.variable(on-primary)),
+  // Column resizing
+  resizer-color: utils.module-val(data-table, resizer-color, theme.variable(outline)),
+  resizer-active-color: utils.module-val(data-table, resizer-active-color, theme.variable(primary)),
+  resizer-width: utils.module-val(data-table, resizer-width, border.variable(medium)),
+  // Column reordering
+  drop-indicator-color: utils.module-val(data-table, drop-indicator-color, theme.variable(primary)),
+  drop-indicator-shadow: utils.module-val(data-table, drop-indicator-shadow, elevation.value(4)),
+  // Column rename
+  rename-input-height: utils.module-val(data-table, rename-input-height, 24px),
+  // Cell selection
+  cell-selection-color: utils.module-val(data-table, cell-selection-color, theme.variable(primary)),
+  cell-selection-border-width: utils.module-val(data-table, cell-selection-border-width, border.variable(medium)),
+  cell-selection-background: utils.module-val(
+      data-table,
+      cell-selection-background,
+      color-mix(in srgb, #{utils.module-var(data-table, cell-selection-color)} 12%, transparent)
+    ),
+  // Row grouping
+  group-row-background: utils.module-val(data-table, group-row-background, theme.variable(surface-container-minimum)),
+  group-row-color: utils.module-val(data-table, group-row-color, theme.variable(on-surface-container-minimum)),
+  group-count-color: utils.module-val(data-table, group-count-color, theme.variable(text-medium)),
+  // Empty state
+  empty-state-color: utils.module-val(data-table, empty-state-color, theme.variable(text-medium)),
+  empty-state-gap: utils.module-val(data-table, empty-state-gap, spacing.variable(large)),
+  empty-state-padding: utils.module-val(data-table, empty-state-padding, spacing.variable(xlarge)),
+  // Cell types
+  action-icon-color: utils.module-val(data-table, action-icon-color, theme.variable(text-medium)),
+  rating-size: utils.module-val(data-table, rating-size, 1.25em),
+  rating-color: utils.module-val(data-table, rating-color, theme.variable(text-high)),
+  rating-empty-color: utils.module-val(data-table, rating-empty-color, theme.variable(text-lowest))
+) !default;

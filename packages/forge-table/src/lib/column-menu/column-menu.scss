@@ -1,8 +1,12 @@
+@use './token-utils' as *;
+
 :host {
+  @include tokens;
+
   display: flex;
-  margin-inline-start: 8px;
+  margin-inline-start: #{token(margin-inline-start)};
 }
 
 .button {
-  --forge-icon-button-icon-color: var(--forge-theme-text-low);
+  --forge-icon-button-icon-color: #{token(icon-color)};
 }

@@ -12,10 +12,11 @@
 @use '@tylertech/forge-tokens/sass/animation';
 @use '@tylertech/forge-tokens/sass/elevation';
 @use '@tylertech/forge-tokens/sass/typography';
-
-$rename-input-height: 24px;
+@use './token-utils' as *;
 
 :host {
+  @include tokens;
+
   > * {
     @include scrollbar.base;
   }
@@ -76,9 +77,9 @@ table {
     tr {
       th {
         position: relative;
-        padding-inline-end: #{spacing.variable(medium)};
-        background-color: #{theme.variable(surface-container-minimum)};
-        color: #{theme.variable(on-surface-container-minimum)};
+        padding-inline-end: #{token(header-padding-inline-end)};
+        background-color: #{token(header-background)};
+        color: #{token(header-color)};
 
         .cell-content {
           display: flex;
@@ -98,12 +99,12 @@ table {
             position: relative;
             display: inline-flex;
             flex: 0 0 auto;
-            background-color: #{theme.variable(surface-container-minimum)};
+            background-color: #{token(header-background)};
           }
 
           .rename-input {
             box-sizing: border-box;
-            block-size: #{$rename-input-height};
+            block-size: #{token(rename-input-height)};
             min-inline-size: 4ch;
             margin: 0;
             padding-block: 0;
@@ -134,11 +135,11 @@ table {
         }
 
         .sort-icon {
-          height: 1rem;
-          width: 1rem;
+          height: #{token(sort-icon-size)};
+          width: #{token(sort-icon-size)};
           flex-shrink: 0;
-          fill: #{theme.variable(on-surface)};
-          margin-inline-start: #{shape.variable(small)};
+          fill: #{token(sort-icon-color)};
+          margin-inline-start: #{token(sort-icon-margin-inline-start)};
           transition: transform #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
         }
 
@@ -158,8 +159,8 @@ table {
           font-weight: 500;
           line-height: 1;
           border-radius: #{shape.variable(full)};
-          background-color: #{theme.variable(primary-container)};
-          color: #{theme.variable(on-primary-container)};
+          background-color: #{token(sort-index-background)};
+          color: #{token(sort-index-color)};
           flex-shrink: 0;
           order: -1;
           transition:
@@ -173,8 +174,8 @@ table {
           }
 
           .sort-index {
-            background-color: #{theme.variable(primary)};
-            color: #{theme.variable(on-primary)};
+            background-color: #{token(sort-index-hover-background)};
+            color: #{token(sort-index-hover-color)};
           }
         }
       }
@@ -200,8 +201,8 @@ table {
 
       position: relative;
       border: none;
-      background-color: #{theme.variable(surface-container-minimum)};
-      color: #{theme.variable(on-surface-container-minimum)};
+      background-color: #{token(footer-background)};
+      color: #{token(footer-color)};
 
       .cell-content {
         display: block;
@@ -240,9 +241,9 @@ table {
     position: absolute;
     top: 30%;
     height: 40%;
-    width: #{border.variable(medium)};
+    width: #{token(resizer-width)};
     padding-inline: #{spacing.variable(xxsmall)};
-    background-color: #{theme.variable(outline)};
+    background-color: #{token(resizer-color)};
     background-clip: content-box;
     border-radius: #{shape.variable(medium)};
     cursor: col-resize;
@@ -259,12 +260,12 @@ table {
     }
 
     &:hover {
-      background-color: #{theme.variable(primary)};
+      background-color: #{token(resizer-active-color)};
       opacity: 0.6;
     }
 
     &.resizing {
-      background-color: #{theme.variable(primary)};
+      background-color: #{token(resizer-active-color)};
       opacity: 1;
     }
   }
@@ -272,8 +273,8 @@ table {
 
 .forge-data-table-drop-indicator {
   width: 3px;
-  background-color: #{theme.variable(primary)};
-  box-shadow: #{elevation.value(4)};
+  background-color: #{token(drop-indicator-color)};
+  box-shadow: #{token(drop-indicator-shadow)};
   transition:
     left #{animation.variable(duration-short4)} #{animation.variable(easing-standard)},
     top #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
@@ -333,7 +334,7 @@ table.bordered {
 
   td,
   th {
-    border: 1px solid #{theme.variable(outline)};
+    border: #{token(border-width)} solid #{token(border-color)};
   }
 
   .resizer {
@@ -361,7 +362,7 @@ table:not(.bordered) {
   }
 
   .group-start {
-    border-inline-start: #{border.variable(thin)} solid #{theme.variable(outline)};
+    border-inline-start: #{token(border-width)} solid #{token(border-color)};
   }
 }
 
@@ -421,8 +422,8 @@ table.filterable {
 //
 
 .paginator {
-  background-color: #{theme.variable(surface-container-minimum)};
-  padding-inline: #{spacing.variable(medium)};
+  background-color: #{token(paginator-background)};
+  padding-inline: #{token(paginator-padding-inline)};
 }
 
 //
@@ -450,10 +451,10 @@ table tbody.page-filler-tbody td {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: #{spacing.variable(large)};
-  padding: #{spacing.variable(xlarge)};
+  gap: #{token(empty-state-gap)};
+  padding: #{token(empty-state-padding)};
   text-align: center;
-  color: #{theme.variable(text-medium)};
+  color: #{token(empty-state-color)};
 }
 
 .empty-state-message {
@@ -472,7 +473,7 @@ table.row-selection {
   }
 
   :where(th, td).select-column {
-    width: 40px;
+    width: #{token(select-column-width)};
     padding-inline: 0;
 
     .cell-container,
@@ -486,8 +487,8 @@ table.row-selection {
   }
 
   tbody tr.selected {
-    background-color: #{theme.variable(primary-container-low)};
-    color: #{theme.variable(on-primary-container-low)};
+    background-color: #{token(selected-background)};
+    color: #{token(selected-color)};
   }
 }
 
@@ -499,7 +500,7 @@ table {
   :where(th, td).expander-column {
     --forge-open-icon-size: 18px;
 
-    width: 48px;
+    width: #{token(expander-column-width)};
     padding-inline: 0;
 
     .cell-container,
@@ -517,8 +518,8 @@ table {
 table tbody tr.group-row {
   --forge-open-icon-size: 18px;
 
-  background-color: #{theme.variable(surface-container-minimum)};
-  color: #{theme.variable(on-surface-container-minimum)};
+  background-color: #{token(group-row-background)};
+  color: #{token(group-row-color)};
 
   td:not(.pinned) {
     background-color: inherit;
@@ -539,7 +540,7 @@ table tbody tr.group-row {
 }
 
 .group-count {
-  color: #{theme.variable(text-medium)};
+  color: #{token(group-count-color)};
 }
 
 //
@@ -563,11 +564,11 @@ table.cell-selection {
     &::after {
       content: '';
       position: absolute;
-      inset: calc(-1 * #{border.variable(thin)});
+      inset: calc(-1 * #{token(border-width)});
       box-sizing: border-box;
-      border: 0 solid #{theme.variable(primary)};
-      padding: #{border.variable(thin)};
-      background-color: color-mix(in srgb, #{theme.variable(primary)} 12%, transparent);
+      border: 0 solid #{token(cell-selection-color)};
+      padding: #{token(border-width)};
+      background-color: #{token(cell-selection-background)};
       background-clip: content-box; // keeps the tint off the extension so neighboring cells' tints do not stack
       pointer-events: none;
     }
@@ -577,22 +578,22 @@ table.cell-selection {
     }
 
     &.selection-top::after {
-      border-block-start-width: #{border.variable(medium)};
+      border-block-start-width: #{token(cell-selection-border-width)};
       padding-block-start: 0;
     }
 
     &.selection-right::after {
-      border-inline-end-width: #{border.variable(medium)};
+      border-inline-end-width: #{token(cell-selection-border-width)};
       padding-inline-end: 0;
     }
 
     &.selection-bottom::after {
-      border-block-end-width: #{border.variable(medium)};
+      border-block-end-width: #{token(cell-selection-border-width)};
       padding-block-end: 0;
     }
 
     &.selection-left::after {
-      border-inline-start-width: #{border.variable(medium)};
+      border-inline-start-width: #{token(cell-selection-border-width)};
       padding-inline-start: 0;
     }
   }
@@ -604,16 +605,16 @@ table.cell-selection {
 
 table.hover {
   tbody:not(.empty-tbody, .page-filler-tbody) tr:hover {
-    background-color: #{theme.variable(surface-container-minimum)};
+    background-color: #{token(hover-background)};
   }
 
   tbody tr.selected:hover {
-    background-color: #{theme.variable(primary-container-minimum)};
+    background-color: #{token(selected-hover-background)};
   }
 
   &.striped {
     tbody:not(.empty-tbody, .page-filler-tbody) tr:nth-child(odd):hover {
-      background-color: #{theme.variable(surface-container-low)};
+      background-color: #{token(striped-hover-background)};
     }
   }
 }
@@ -624,7 +625,7 @@ table.hover {
 
 table.striped {
   tbody:not(.empty-tbody, .page-filler-tbody) tr:nth-child(odd) {
-    background-color: #{theme.variable(surface-container-minimum)};
+    background-color: #{token(striped-background)};
   }
 }
 
@@ -634,13 +635,13 @@ table.striped {
 
 table.compact {
   tr {
-    height: 32px;
+    height: #{token(compact-row-height)};
   }
 
   th,
   td {
-    padding-left: #{spacing.variable(xsmall)};
-    padding-right: #{spacing.variable(xsmall)};
+    padding-left: #{token(compact-padding-inline)};
+    padding-right: #{token(compact-padding-inline)};
   }
 }
 
@@ -688,7 +689,7 @@ table.allow-row-click {
 table.sticky-header thead th {
   position: sticky;
   top: 0;
-  background-color: #{theme.variable(surface)};
+  background-color: #{token(sticky-header-background)};
   z-index: 1;
 }
 
@@ -726,40 +727,40 @@ table.has-pinned-columns {
   }
 
   tbody :is(td, th).pinned {
-    background-color: #{theme.variable(surface)};
+    background-color: #{token(pinned-background)};
   }
 
   :where(th, td).pinned-edge {
     &.pinned-start {
-      box-shadow: inset -1px 0 0 #{theme.variable(outline)};
+      box-shadow: inset -1px 0 0 #{token(border-color)};
     }
 
     &.pinned-end {
-      box-shadow: inset 1px 0 0 #{theme.variable(outline)};
+      box-shadow: inset 1px 0 0 #{token(border-color)};
     }
   }
 
   &.striped tbody tr:nth-child(odd) :is(td, th).pinned {
-    background-color: #{theme.variable(surface-container-minimum)};
+    background-color: #{token(striped-background)};
   }
 
   &.hover {
     tbody tr:hover :is(td, th).pinned {
-      background-color: #{theme.variable(surface-container-minimum)};
+      background-color: #{token(hover-background)};
     }
 
     &.striped tbody tr:nth-child(odd):hover :is(td, th).pinned {
-      background-color: #{theme.variable(surface-container-low)};
+      background-color: #{token(striped-hover-background)};
     }
   }
 
   &.row-selection {
     tbody tr.selected :is(td, th).pinned {
-      background-color: #{theme.variable(primary-container-low)};
+      background-color: #{token(selected-background)};
     }
 
     &.hover tbody tr.selected:hover :is(td, th).pinned {
-      background-color: #{theme.variable(primary-container-minimum)};
+      background-color: #{token(selected-hover-background)};
     }
   }
 }
@@ -811,7 +812,7 @@ table.virtualized {
 
 .action-cell {
   forge-icon {
-    color: #{theme.variable(text-medium)};
+    color: #{token(action-icon-color)};
   }
 }
 
@@ -901,13 +902,11 @@ $_badge-themes: (
 }
 
 .rating-cell__meter {
-  $size: 1.25em;
-
   display: block;
-  block-size: $size;
-  inline-size: calc(var(--rating-cell-steps) * #{$size});
-  background: linear-gradient(to right, #{theme.variable(text-high)} var(--rating-cell-fill), #{theme.variable(text-lowest)} var(--rating-cell-fill));
+  block-size: #{token(rating-size)};
+  inline-size: calc(var(--rating-cell-steps) * #{token(rating-size)});
+  background: linear-gradient(to right, #{token(rating-color)} var(--rating-cell-fill), #{token(rating-empty-color)} var(--rating-cell-fill));
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
   mask-repeat: repeat-x;
-  mask-size: $size 100%;
+  mask-size: #{token(rating-size)} 100%;
 }

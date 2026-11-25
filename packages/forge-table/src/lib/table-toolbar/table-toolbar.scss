@@ -1,7 +1,10 @@
 @use '@tylertech/forge-tokens/sass/typography';
 @use '@tylertech/forge/sass/toolbar/core' as toolbar;
+@use './token-utils' as *;
 
 :host {
+  @include tokens;
+
   display: block;
 }
 
@@ -14,8 +17,8 @@
   @include toolbar.base;
   @include toolbar.inner;
 
-  border: none;
-  background: transparent;
+  border: #{token(border)};
+  background: #{token(background)};
 }
 
 .title {
