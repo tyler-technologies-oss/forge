@@ -1,0 +1,6 @@
+@use '@tylertech/forge-tokens/sass/utils';
+
+$tokens: (
+  background: utils.module-val(table-toolbar, background, transparent),
+  border: utils.module-val(table-toolbar, border, none)
+) !default;

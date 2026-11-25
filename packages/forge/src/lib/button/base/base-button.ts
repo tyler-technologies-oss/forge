@@ -10,6 +10,7 @@ import { BUTTON_FORM_ATTRIBUTES, cloneAttributes } from '../../core/utils/reflec
 import { toggleState } from '../../core/utils/utils.js';
 import { FOCUS_INDICATOR_TAG_NAME, IFocusIndicatorComponent } from '../../focus-indicator/index.js';
 import { IconRegistry } from '../../icon/icon-registry.js';
+import type { OpenIconComponent } from '../../open-icon/open-icon.js';
 import { IStateLayerComponent, STATE_LAYER_CONSTANTS } from '../../state-layer/index.js';
 import { BASE_BUTTON_CONSTANTS, ButtonType, CommandType } from './base-button-constants.js';
 
@@ -165,6 +166,8 @@ export abstract class BaseButton extends BaseLitElement {
   #clickListener = this._onClick.bind(this);
   #keydownListener = this.#onKeydown.bind(this);
   #slotChangeListener = (): void => this.#detectSlottedAnchor();
+  #endSlotChangeListener = (): void => this.#syncOpenIcons();
+  #ariaExpandedObserver = new MutationObserver(() => this.#syncOpenIcons(true));
 
   // Shadow DOM queries
   @query('#root', true) protected _rootElement!: HTMLElement;
@@ -193,6 +196,13 @@ export abstract class BaseButton extends BaseLitElement {
     }
     this.removeAttribute(DEFERRED_LABEL_TARGET);
     delete this[forgeLabelRef];
+
+    this.#ariaExpandedObserver.observe(this, { attributes: true, attributeFilter: ['aria-expanded'] });
+  }
+
+  public override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.#ariaExpandedObserver.disconnect();
   }
 
   public override firstUpdated(changedProperties: PropertyValues<this>): void {
@@ -201,6 +211,7 @@ export abstract class BaseButton extends BaseLitElement {
     // Initialize after DOM is ready
     this.#detectSlottedAnchor();
     this.#updateDefaultAria();
+    this.#syncOpenIcons();
   }
 
   // Render methods
@@ -209,7 +220,7 @@ export abstract class BaseButton extends BaseLitElement {
   }
 
   protected _renderEndSlotWithOptionalPopoverIcon(): TemplateResult {
-    return html` <slot name="end">
+    return html` <slot name="end" @slotchange=${this.#endSlotChangeListener}>
       ${this.popoverIcon ? html`<forge-icon class=${BASE_BUTTON_CONSTANTS.classes.POPOVER_ICON} name=${tylIconArrowDropDown.name}></forge-icon>` : nothing}
     </slot>`;
   }
@@ -314,6 +325,22 @@ export abstract class BaseButton extends BaseLitElement {
       this.addEventListener('keydown', this.#keydownListener);
     }
     this.#updateDefaultAria();
+    this.#syncOpenIcons();
+  }
+
+  /**
+   * Syncs the `open` state of any descendant `forge-open-icon` elements to this button's `aria-expanded` attribute.
+   * When the attribute is absent, icons are only closed in response to the attribute being removed (`force`), so
+   * consumers who control an icon manually inside a button without `aria-expanded` are left alone.
+   */
+  #syncOpenIcons(force = false): void {
+    if (!force && !this.hasAttribute('aria-expanded')) {
+      return;
+    }
+    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+    this.querySelectorAll<OpenIconComponent>('forge-open-icon').forEach(icon => {
+      icon.open = isExpanded;
+    });
   }
 
   #updateDefaultAria(): void {

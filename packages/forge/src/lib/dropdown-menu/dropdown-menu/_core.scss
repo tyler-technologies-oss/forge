@@ -1,0 +1,39 @@
+@use '@tylertech/forge-tokens/sass/spacing';
+@use '../../divider';
+@use '../../popover';
+@use '../base/core' as base-core;
+@use '../base/token-utils' as *;
+
+@forward '../base/token-utils';
+
+@mixin host {
+  display: contents;
+}
+
+@mixin base {
+  @include popover.provide-theme(
+    (
+      min-width: #{token(min-width)},
+      max-width: #{token(max-width)}
+    )
+  );
+}
+
+@mixin menu {
+  display: grid;
+  grid-template-columns: base-core.$columns;
+  column-gap: 0;
+  align-content: start;
+  outline: none;
+  padding-block: #{token('margin')};
+
+  slot::slotted(*) {
+    grid-column: 1 / -1;
+  }
+
+  @include divider.provide-theme(
+    (
+      margin: #{token(divider-margin)} 0
+    )
+  );
+}

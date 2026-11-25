@@ -1,0 +1,24 @@
+@use '../dropdown-menu/core' as menu-core;
+@use './core' as *;
+
+.forge-dropdown-menu-item {
+  &:is(a) {
+    color: inherit;
+  }
+
+  &.open {
+    @include open;
+  }
+}
+
+.submenu-icon {
+  @include submenu-icon;
+}
+
+:host(:dir(rtl)) .submenu-icon {
+  @include submenu-icon-rtl;
+}
+
+.menu {
+  @include menu-core.menu;
+}

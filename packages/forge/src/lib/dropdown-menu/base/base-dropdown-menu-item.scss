@@ -1,0 +1,100 @@
+@use '@tylertech/forge-tokens/sass/typography';
+@use '../../icon/token-utils' as icon;
+@use '../../option/option/token-utils' as option;
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-dropdown-menu-item {
+  @include option.tokens;
+  @include icon.provide-theme(
+    (
+      size: #{typography.font-size-relative('1125')}
+    )
+  );
+}
+
+.forge-dropdown-menu-item {
+  @include base;
+}
+
+.main {
+  @include main;
+}
+
+.label {
+  @include label;
+}
+
+.end {
+  @include end;
+}
+
+slot[name='end']::slotted(*) {
+  @include end-content;
+}
+
+.indicator {
+  @include indicator;
+
+  > * {
+    @include indicator-content;
+  }
+}
+
+.checkable .indicator {
+  @include checkable-indicator;
+}
+
+slot[name='secondary'],
+slot[name='tertiary'] {
+  &::slotted(*) {
+    @include secondary-text;
+  }
+}
+
+.disabled {
+  @include disabled;
+}
+
+.two-line {
+  @include two-line;
+}
+
+.three-line {
+  @include three-line;
+}
+
+.checked {
+  @include checked;
+}
+
+:host(:state(adjoins-previous)) .forge-dropdown-menu-item {
+  @include adjoins-previous;
+}
+
+:host(:state(adjoins-next)) .forge-dropdown-menu-item {
+  @include adjoins-next;
+}
+
+.dense {
+  @include dense;
+
+  .label {
+    @include dense-label;
+  }
+
+  &.two-line {
+    @include dense-two-line;
+  }
+
+  &.three-line {
+    @include dense-three-line;
+  }
+}

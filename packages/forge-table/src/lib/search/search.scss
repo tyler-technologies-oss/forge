@@ -1,0 +1,16 @@
+@use './token-utils' as *;
+
+:host {
+  @include tokens;
+
+  display: block;
+  inline-size: #{token(width)};
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-text-field {
+  inline-size: 100%;
+}

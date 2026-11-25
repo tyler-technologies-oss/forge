@@ -1,0 +1,282 @@
+import { Meta, Title, Controls, Canvas, Story } from '@storybook/addon-docs/blocks';
+import CustomArgTypes from '../../blocks/CustomArgTypes';
+import * as DataTableStories from './DataTable.stories';
+
+<Meta of={DataTableStories} />
+
+<Title />
+
+The Data Table component provides a powerful and flexible way to display and interact with tabular data.
+It supports features such as sorting, filtering, column resizing and reordering, row selection, and more.
+
+## Features
+
+- **Sorting**: Click on column headers to sort data
+- **Filtering**: Apply filters to columns to narrow down displayed data
+- **Resizing**: Adjust column widths by dragging column dividers
+- **Reordering**: Drag and drop columns to rearrange them
+- **Row Selection**: Select single or multiple rows
+- **Row Clicking**: Click anywhere on a row to select it, expand it, or run its default action
+- **Toolbar**: Show and hide columns, export to CSV, print, and toggle filtering or row selection
+- **Column Visibility**: Right-click headers to open a column menu or control visibility programmatically
+- **Cell Templates**: Render badges, links, meters, ratings, action buttons, inputs, or your own content in a cell
+- **Aggregation**: Show sums, averages, counts, ranges, or custom results in a footer
+- **Row Grouping**: Group rows by one or more columns, with group totals and a checkbox that selects a whole group
+- **Column Renaming**: Let users rename column headers
+- **Formatters**: Format numbers, currency, and dates, or transform values with a function
+- **Styling Options**: Apply various styling options like striped rows, hover effects, and more
+- **Virtualization**: Efficiently handle large datasets with row virtualization for improved performance
+- **Fixed Headers**: Keep column headers visible while scrolling through large datasets
+
+## Basic Usage
+
+<Canvas of={DataTableStories.Basic} />
+
+## Interactive Table
+
+This example showcases a fully interactive table with sorting, filtering, resizing, and row selection enabled:
+
+<Canvas of={DataTableStories.Interactive} />
+
+## Toolbar
+
+Add a `forge-data-table-toolbar` above the table and connect it by setting `table` to the id of the data table.
+The `features` attribute picks the icon buttons to show: `columns` (show and hide columns), `export` (download as CSV),
+`filter` (toggle column filters), `print`, and `select` (toggle row selection). Use the `title` slot for the table's title.
+
+<Canvas of={DataTableStories.Toolbar} />
+
+## Sortable Table
+
+Enable sorting by clicking on column headers:
+
+<Canvas of={DataTableStories.Sortable} />
+
+## Row Selection
+
+Enable row selection with checkbox column:
+
+<Canvas of={DataTableStories.RowSelection} />
+
+## Row Clicking
+
+Set `allow-row-click` to let users click anywhere on a row instead of aiming for a checkbox, a toggle or a button. A row is only clickable when
+there is something for the click to do, so it only gets the clickable styles and click handling when it:
+
+1. contains an element with a `forge-default-action` attribute,
+2. can be selected (`rowSelection` is `single` or `multiple`), or
+3. can be expanded (`expandable`).
+
+Clicking a clickable row dispatches `forge-data-table-row-click` (detail: `data` and `index`), then does the first of these that applies:
+
+1. Clicks the element with `forge-default-action`.
+2. Selects the row, or deselects it when it is already selected.
+3. Expands the row, or collapses it when it is already expanded.
+
+Rows that match none of the above, and group rows, get no pointer cursor, no state layer and no event.
+Clickable rows show a Forge state layer, which is CSS only, when hovered or pressed.
+
+<Canvas of={DataTableStories.RowClickSelection} />
+
+<Canvas of={DataTableStories.RowClickExpansion} />
+
+### Default action
+
+Add a `forge-default-action` attribute to the element in a row that should run when the row is clicked, such as a link to the record or an edit button.
+It can be in a cell template or in content slotted into a cell with `useTemplateSlot`. If a row has more than one, the first one is used.
+It takes precedence over selecting and expanding the row.
+
+```ts
+const columns: ColumnDef<Employee>[] = [
+  {
+    header: 'Name',
+    property: 'name',
+    template: ({ row }) => html`<a href=${`/employees/${row.original.id}`} forge-default-action>${row.original.name}</a>`
+  }
+];
+```
+
+For action buttons, set `defaultAction` on a button config of `actionCell()` instead (see [Actions](#actions)).
+
+<Canvas of={DataTableStories.ActionCellDefaultAction} />
+
+### Accessibility
+
+A clicked row is a convenience for pointer users. The row itself is not focusable and has no role, so every action it triggers must also be reachable
+by keyboard and screen reader: the selection checkbox, the expand toggle, and the element with `forge-default-action`. Make sure that element is a
+real control, such as a link or a button, with an accessible name.
+
+Clicks that land on interactive content in a row (links, buttons, form controls, checkboxes) are left to that content and do not trigger the row click.
+Set `stopRowClickPropagation` on a column to also ignore clicks anywhere in its cells.
+
+## Column Visibility
+
+Right-click any column header to open the column visibility menu. This example hides a column by default and prevents another column from being hidden:
+
+<Canvas of={DataTableStories.ColumnVisibility} />
+
+## Compact and Bordered Table
+
+Apply compact and bordered styling for a denser, more defined table:
+
+<Canvas of={DataTableStories.CompactAndBordered} />
+
+## Expandable Rows
+
+Set `expandable` to `true` to add a toggle column. Expanding a row shows its content in a full-width row below it. Where that content comes from depends on how the table is configured:
+
+- With no `getSubRows` or `getRowHasDetail`, every row expands, and its content is whatever you put in its `expanded:row-<id>` slot.
+- With `getSubRows`, a row that has sub rows expands to show them.
+- With `getRowHasDetail`, a row that returns `true` expands to show its detail. The detail is the element returned by `getRowDetail`, or, when `getRowDetail` is not set, the content in the row's slot.
+- A row with content in its slot always expands, whatever `getRowHasDetail` returns for it.
+
+Rows that cannot expand have no toggle. Double-clicking a row that can expand, or clicking it when `allowRowClick` is set, toggles it too.
+
+<Canvas of={DataTableStories.ExpandableRows} />
+
+### Sub rows
+
+Set `getSubRows` to return the child rows of a row, or `undefined` when it has none. The sub rows are rendered as ordinary rows, right after their parent.
+
+<Canvas of={DataTableStories.SubRows} />
+
+### Detail rows
+
+Set `getRowHasDetail` to choose which rows have a detail, and `getRowDetail` to create its content. `getRowDetail` returns an element, and is called once each time the row is expanded rather than on every render.
+
+<Canvas of={DataTableStories.DetailRows} />
+
+A row can have both sub rows and a detail. The detail row comes first, followed by the sub rows.
+
+### Detail rows in slots
+
+To write the content as markup instead, put it in the `expanded:row-<id>` slot of the table. `<id>` is the id of the row, which is its index in the data unless the table uses another row id. The slotted element stays in your own DOM, so your styles, templates and event listeners apply to it.
+
+<Canvas of={DataTableStories.DetailRowsSlots} />
+
+Slotted content and `getRowDetail` can be combined. A row with slotted content expands even when `getRowHasDetail` is `false` for it, or when it does not have one at all, and the table adds and removes toggles as slotted content comes and goes. When a row has both, `getRowDetail` wins.
+
+<Canvas of={DataTableStories.DetailRowsMixed} />
+
+Detail rows are not rendered when `virtualized` is set.
+
+## Slotted Cells
+
+To write the content of a cell as markup, put an element in the `col-<id>:row-<id>` slot of the table, where `<id>` is the id of the column and then the id of the row (its index in the data unless the table uses another row id). The slotted element stays in your own DOM, so your styles, templates and event listeners apply to it.
+
+```html
+<forge-data-table>
+  <forge-button slot="col-actions:row-0">Edit</forge-button>
+</forge-data-table>
+```
+
+A cell with slotted content shows it instead of its value, and shows its value again when the content is removed. Slotted content also takes precedence over what the column renders, including columns that set `useTemplateSlot` or a `template`. Group rows do not show slotted cells.
+
+## Virtualized Table
+
+Enable row virtualization for efficiently handling large datasets with improved performance:
+
+<Canvas of={DataTableStories.Virtualization} />
+
+## Sticky Header
+
+Set `sticky-header` to keep the column headers visible while scrolling through large datasets:
+
+<Canvas of={DataTableStories.StickyHeader} />
+
+## Sticky Footer
+
+Set `sticky-footer` to keep the footer row visible while scrolling. It only applies when a column defines a `footer`:
+
+<Canvas of={DataTableStories.StickyFooter} />
+
+## Cell Templates
+
+By default a cell shows its value as text. Set a column's `template` to change how the cell renders. The package exports helpers
+that create common templates, and you can write your own. Each example below shows its column definitions under **Show code**.
+
+### Badge
+
+<Canvas of={DataTableStories.BadgeCell} />
+
+### Link
+
+<Canvas of={DataTableStories.LinkCell} />
+
+### Meter
+
+<Canvas of={DataTableStories.MeterCell} />
+
+### Rating
+
+<Canvas of={DataTableStories.RatingCell} />
+
+### Actions
+
+<Canvas of={DataTableStories.ActionCell} />
+
+`actionCell()` takes an array of button configs (`ActionButtonConfig`):
+
+| Property        | Type                        | Description                                                                                                                                                                         |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`          | `string \| (row) => string` | The label of a text button, or the tooltip and accessible label of an icon button. A function receives the TanStack row. The accessible name also includes the row name.            |
+| `icon`          | `string`                    | The name of the icon to show.                                                                                                                                                       |
+| `type`          | `'icon' \| 'button'`        | `icon` (default) renders an icon button with a tooltip. `button` renders a text button.                                                                                             |
+| `defaultAction` | `boolean`                   | Marks the button as the default action of the row. When `allow-row-click` is on, clicking the row clicks this button. Only the first button with `defaultAction` in a cell is used. |
+| `onClick`       | `(row) => void`             | Called with the TanStack row when the button is clicked, including when the row click triggers it.                                                                                  |
+
+With `defaultAction`, a click on the row runs the same `onClick` as a click on the button. See [Row Clicking](#row-clicking).
+
+### Editable
+
+<Canvas of={DataTableStories.EditableCell} />
+
+### Custom
+
+<Canvas of={DataTableStories.CustomTemplate} />
+
+## Formatters
+
+Set a column's `format` to transform the value that is displayed, exported and printed, without changing the underlying data.
+
+<Canvas of={DataTableStories.Formatters} />
+
+## Empty State
+
+A table with no rows shows a message. When a filter is what removed the rows, the message says so and offers a button to clear the filters.
+
+<Canvas of={DataTableStories.EmptyState} />
+
+<Canvas of={DataTableStories.EmptyStateFiltered} />
+
+## Aggregation
+
+Set a column's `aggregate` to show a calculated value in the footer. The built-in aggregations are `sum`, `mean`, `median`, `min`,
+`max`, `extent`, `count`, `uniqueCount`, `unique`, `first` and `last`. The aggregates are calculated over the filtered rows.
+
+<Canvas of={DataTableStories.Aggregation} />
+
+## Row Grouping
+
+Set `grouping` to the ids of the columns to group the rows by, or set `groupable` to let users group from the column menu. Groups are collapsed until
+they are expanded, and the grouped columns move to the start of the table, after the selection column.
+
+<Canvas of={DataTableStories.RowGrouping} />
+
+### Nested groups and selection
+
+<Canvas of={DataTableStories.NestedRowGrouping} />
+
+### Group aggregation
+
+Group rows show the `aggregate` of each column that sets one, calculated over the rows in the group.
+
+<Canvas of={DataTableStories.GroupAggregation} />
+
+## Column Renaming
+
+<Canvas of={DataTableStories.ColumnRenaming} />
+
+## API
+
+<CustomArgTypes />

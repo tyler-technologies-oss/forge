@@ -1,0 +1,5 @@
+@use '@tylertech/forge-tokens/sass/utils';
+
+$tokens: (
+  width: utils.module-val(table-search, width, 100%)
+) !default;

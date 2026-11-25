@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+
+$tokens: (
+  min-width: utils.module-val(dropdown-menu, min-width, 112px),
+  max-width: utils.module-val(dropdown-menu, max-width, 280px),
+  margin: utils.module-val(dropdown-menu, margin, spacing.variable(xxsmall)),
+  divider-margin: utils.module-ref(dropdown-menu, divider-margin, margin),
+  gap: utils.module-val(dropdown-menu, gap, spacing.variable(small))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

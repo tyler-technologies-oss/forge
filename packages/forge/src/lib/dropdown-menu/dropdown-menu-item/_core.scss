@@ -1,0 +1,17 @@
+@use '../../state-layer';
+
+@forward '../base/core';
+
+@mixin open {
+  forge-state-layer::part(surface)::before {
+    @include state-layer.hovered;
+  }
+}
+
+@mixin submenu-icon {
+  flex-shrink: 0;
+}
+
+@mixin submenu-icon-rtl {
+  transform: scaleX(-1);
+}
