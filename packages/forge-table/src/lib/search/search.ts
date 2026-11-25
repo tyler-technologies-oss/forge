@@ -6,7 +6,7 @@ import { GLOBAL_FILTER_EVENT, GLOBAL_FILTER_FN_CHANGE_EVENT } from '../data-tabl
 import type { DataTableElement } from '../data-table/data-table.js';
 import { getFilterLabel, resolveColumnFilters } from '../data-table/features/filter-fn.js';
 import type { ResolvedColumnFilter } from '../data-table/types.js';
-import { TABLE_SEARCH_TAG_NAME } from './constants.js';
+import { SEARCH_TAG_NAME } from './constants.js';
 
 import '@tylertech/forge/dropdown-menu';
 import '@tylertech/forge/dropdown-menu/dropdown-menu-item-radio';
@@ -14,7 +14,7 @@ import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
 import '@tylertech/forge/text-field';
 
-import styles from './table-search.scss';
+import styles from './search.scss';
 
 /**
  * A search field for a `forge-data-table`.
@@ -28,8 +28,8 @@ import styles from './table-search.scss';
  *
  * @tag forge-data-table-search
  */
-@customElement(TABLE_SEARCH_TAG_NAME)
-export class TableSearchElement extends LitElement {
+@customElement(SEARCH_TAG_NAME)
+export class SearchElement extends LitElement {
   static {
     IconRegistry.define([tylIconFilterList, tylIconSearch]);
   }
@@ -143,6 +143,6 @@ export class TableSearchElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [TABLE_SEARCH_TAG_NAME]: TableSearchElement;
+    [SEARCH_TAG_NAME]: SearchElement;
   }
 }

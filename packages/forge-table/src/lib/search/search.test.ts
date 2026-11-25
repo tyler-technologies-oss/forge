@@ -7,8 +7,8 @@ import '../data-table/data-table.js';
 import { fuzzyFilter } from '../data-table/features/fuzzy/index.js';
 import { filterFn_includesString as includesString } from '../data-table/features/filter-fns.js';
 import type { ColumnDef, DataTableElement } from '../data-table/data-table.js';
-import './table-search.js';
-import type { TableSearchElement } from './table-search.js';
+import './search.js';
+import type { SearchElement } from './search.js';
 
 interface TestData {
   id: number;
@@ -26,7 +26,7 @@ const TEST_COLUMNS: ColumnDef<TestData>[] = [
 ];
 
 interface Fixture {
-  search: TableSearchElement;
+  search: SearchElement;
   table: DataTableElement<TestData>;
   input: HTMLInputElement;
 }
@@ -37,7 +37,7 @@ async function createFixture(options: { withTable?: boolean } = {}): Promise<Fix
     <forge-data-table-search></forge-data-table-search>
     <forge-data-table id="people" .columns=${TEST_COLUMNS} .dataSource=${new DataSource<TestData>(() => TEST_DATA)}></forge-data-table>
   `);
-  const search = screen.container.querySelector('forge-data-table-search') as TableSearchElement;
+  const search = screen.container.querySelector('forge-data-table-search') as SearchElement;
   const table = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
   await table.updateComplete;
   if (withTable) {
@@ -48,7 +48,7 @@ async function createFixture(options: { withTable?: boolean } = {}): Promise<Fix
   return { search, table, input };
 }
 
-describe('TableSearchElement', () => {
+describe('SearchElement', () => {
   it('should render a text field with a labelled input', async () => {
     const { search, input } = await createFixture();
 
@@ -96,8 +96,8 @@ describe('TableSearchElement', () => {
   });
 
   describe('filter function menu', () => {
-    const getButton = (search: TableSearchElement): HTMLElement | null => search.shadowRoot?.querySelector('.filter-fn-button') ?? null;
-    const getItems = (search: TableSearchElement): (HTMLElement & { checked: boolean })[] =>
+    const getButton = (search: SearchElement): HTMLElement | null => search.shadowRoot?.querySelector('.filter-fn-button') ?? null;
+    const getItems = (search: SearchElement): (HTMLElement & { checked: boolean })[] =>
       Array.from(search.shadowRoot?.querySelectorAll<HTMLElement & { checked: boolean }>('forge-dropdown-menu-item-radio') ?? []);
 
     it('should not render a menu when the table has no filter functions', async () => {

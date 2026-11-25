@@ -1,9 +1,9 @@
 import { html, LitElement, type PropertyValues, type TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { DataTableElement } from '../data-table/data-table.js';
-import { TABLE_CAPTION_TAG_NAME } from './constants.js';
+import { CAPTION_TAG_NAME } from './constants.js';
 
-import styles from './table-caption.scss';
+import styles from './caption.scss';
 
 /**
  * A caption or note to display alongside a `forge-data-table`.
@@ -15,8 +15,8 @@ import styles from './table-caption.scss';
  *
  * @slot - The caption content.
  */
-@customElement(TABLE_CAPTION_TAG_NAME)
-export class TableCaptionElement extends LitElement {
+@customElement(CAPTION_TAG_NAME)
+export class CaptionElement extends LitElement {
   public static override styles = unsafeCSS(styles);
 
   /**
@@ -85,6 +85,6 @@ export class TableCaptionElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [TABLE_CAPTION_TAG_NAME]: TableCaptionElement;
+    [CAPTION_TAG_NAME]: CaptionElement;
   }
 }

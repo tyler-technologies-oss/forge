@@ -6,8 +6,8 @@ import { userEvent } from 'vitest/browser';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import '../data-table/data-table.js';
 import type { ColumnDef, DataTableElement } from '../data-table/data-table.js';
-import './table-toolbar.js';
-import type { TableToolbarElement } from './table-toolbar.js';
+import './toolbar.js';
+import type { ToolbarElement } from './toolbar.js';
 
 interface TestData {
   id: number;
@@ -28,7 +28,7 @@ const TEST_COLUMNS: ColumnDef<TestData>[] = [
 ];
 
 interface Fixture {
-  toolbar: TableToolbarElement;
+  toolbar: ToolbarElement;
   table: DataTableElement<TestData>;
 }
 
@@ -40,7 +40,7 @@ async function createFixture(options: { features?: string; withTable?: boolean }
     </forge-data-table-toolbar>
     <forge-data-table .columns=${TEST_COLUMNS} .dataSource=${new DataSource<TestData>(() => TEST_DATA)}></forge-data-table>
   `);
-  const toolbar = screen.container.querySelector('forge-data-table-toolbar') as TableToolbarElement;
+  const toolbar = screen.container.querySelector('forge-data-table-toolbar') as ToolbarElement;
   const table = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
   await table.updateComplete;
   await vi.waitFor(() => expect(table.shadowRoot?.querySelectorAll('tbody tr').length).toBe(TEST_DATA.length));
@@ -51,27 +51,27 @@ async function createFixture(options: { features?: string; withTable?: boolean }
   return { toolbar, table };
 }
 
-function getButtons(toolbar: TableToolbarElement): HTMLElement[] {
+function getButtons(toolbar: ToolbarElement): HTMLElement[] {
   return Array.from(toolbar.shadowRoot?.querySelectorAll<HTMLElement>('forge-icon-button') ?? []);
 }
 
-function getTooltipLabels(toolbar: TableToolbarElement): (string | undefined)[] {
+function getTooltipLabels(toolbar: ToolbarElement): (string | undefined)[] {
   return Array.from(toolbar.shadowRoot?.querySelectorAll('forge-tooltip') ?? []).map(tooltip => tooltip.textContent?.trim());
 }
 
-function getColumnsMenu(toolbar: TableToolbarElement): HTMLElement & { open: boolean } {
+function getColumnsMenu(toolbar: ToolbarElement): HTMLElement & { open: boolean } {
   return toolbar.shadowRoot?.querySelector('forge-dropdown-menu') as HTMLElement & { open: boolean };
 }
 
-function getShowAllItem(toolbar: TableToolbarElement): HTMLElement & { disabled: boolean } {
+function getShowAllItem(toolbar: ToolbarElement): HTMLElement & { disabled: boolean } {
   return getColumnsMenu(toolbar).querySelector('forge-dropdown-menu-item') as HTMLElement & { disabled: boolean };
 }
 
-function getColumnItems(toolbar: TableToolbarElement): (HTMLElement & { checked: boolean })[] {
+function getColumnItems(toolbar: ToolbarElement): (HTMLElement & { checked: boolean })[] {
   return Array.from(getColumnsMenu(toolbar).querySelectorAll<HTMLElement & { checked: boolean }>('forge-dropdown-menu-item-checkbox'));
 }
 
-describe('TableToolbar', () => {
+describe('Toolbar', () => {
   describe('table association', () => {
     it('should connect to the data table with the id given by table', async () => {
       const { toolbar, table } = await createFixture({ withTable: false });
@@ -98,7 +98,7 @@ describe('TableToolbar', () => {
         <forge-data-table-toolbar table="people"></forge-data-table-toolbar>
         <forge-data-table id="people" .columns=${TEST_COLUMNS}></forge-data-table>
       `);
-      const toolbar = screen.container.querySelector('forge-data-table-toolbar') as TableToolbarElement;
+      const toolbar = screen.container.querySelector('forge-data-table-toolbar') as ToolbarElement;
       const table = screen.container.querySelector('forge-data-table') as DataTableElement<TestData>;
       await toolbar.updateComplete;
 

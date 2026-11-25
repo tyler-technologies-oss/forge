@@ -5,8 +5,8 @@ import { render } from 'vitest-browser-lit';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import '../data-table/data-table.js';
 import type { ColumnDef, DataTableElement } from '../data-table/data-table.js';
-import './table-caption.js';
-import type { TableCaptionElement } from './table-caption.js';
+import './caption.js';
+import type { CaptionElement } from './caption.js';
 
 interface TestData {
   id: number;
@@ -24,7 +24,7 @@ const TEST_COLUMNS: ColumnDef<TestData>[] = [
 ];
 
 interface Fixture {
-  caption: TableCaptionElement;
+  caption: CaptionElement;
   table: DataTableElement<TestData>;
   container: HTMLElement;
 }
@@ -38,7 +38,7 @@ async function createFixture(captionAttributes = 'table="people"'): Promise<Fixt
   const container = screen.container as HTMLElement;
   const host = container.querySelector('#caption-host') as HTMLElement;
   host.innerHTML = markup;
-  const caption = host.querySelector('forge-data-table-caption') as TableCaptionElement;
+  const caption = host.querySelector('forge-data-table-caption') as CaptionElement;
   const table = container.querySelector('forge-data-table') as DataTableElement<TestData>;
   await table.updateComplete;
   await caption.updateComplete;
@@ -46,7 +46,7 @@ async function createFixture(captionAttributes = 'table="people"'): Promise<Fixt
   return { caption, table, container };
 }
 
-describe('TableCaptionElement', () => {
+describe('CaptionElement', () => {
   it('should render slotted content', async () => {
     const { caption } = await createFixture();
 
@@ -129,7 +129,7 @@ describe('TableCaptionElement', () => {
 
   it('should keep other captions when one caption is removed', async () => {
     const { caption, table, container } = await createFixture();
-    const second = document.createElement('forge-data-table-caption') as TableCaptionElement;
+    const second = document.createElement('forge-data-table-caption') as CaptionElement;
     second.table = 'people';
     container.append(second);
     await second.updateComplete;

@@ -17,8 +17,8 @@ import { map } from 'lit/directives/map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { getAllLeafColumns, resolveColumnId } from '../data-table/columns/column-utils.js';
 import type { DataTableElement } from '../data-table/data-table.js';
-import type { TableToolbarFeature } from './constants.js';
-import { TABLE_TOOLBAR_FEATURE_ICONS, TABLE_TOOLBAR_FEATURE_LABELS, TABLE_TOOLBAR_TAG_NAME } from './constants.js';
+import type { ToolbarFeature } from './constants.js';
+import { TOOLBAR_FEATURE_ICONS, TOOLBAR_FEATURE_LABELS, TOOLBAR_TAG_NAME } from './constants.js';
 
 import '@tylertech/forge/divider';
 import '@tylertech/forge/dropdown-menu';
@@ -27,10 +27,10 @@ import '@tylertech/forge/dropdown-menu/dropdown-menu-item-checkbox';
 import '@tylertech/forge/icon';
 import '@tylertech/forge/icon-button';
 
-import styles from './table-toolbar.scss';
+import styles from './toolbar.scss';
 
-const TOGGLE_FEATURES: ReadonlySet<TableToolbarFeature> = new Set(['select', 'filter']);
-const MENU_FEATURES: ReadonlySet<TableToolbarFeature> = new Set(['columns']);
+const TOGGLE_FEATURES: ReadonlySet<ToolbarFeature> = new Set(['select', 'filter']);
+const MENU_FEATURES: ReadonlySet<ToolbarFeature> = new Set(['columns']);
 const COLUMN_VISIBILITY_EVENT = 'forge-data-table-column-visibility';
 
 interface ColumnOption {
@@ -49,8 +49,8 @@ interface ColumnOption {
  *
  * @slot title - The table's title.
  */
-@customElement(TABLE_TOOLBAR_TAG_NAME)
-export class TableToolbarElement extends LitElement {
+@customElement(TOOLBAR_TAG_NAME)
+export class ToolbarElement extends LitElement {
   static {
     IconRegistry.define([tylIconExport, tylIconFilterList, tylIconSearch, tylIconCheckboxMultipleMarked, tylIconPrint, tylIconRefresh, tylIconViewColumn]);
   }
@@ -70,7 +70,7 @@ export class TableToolbarElement extends LitElement {
   public tableElement: DataTableElement<any> | null = null;
 
   @property({ attribute: 'features', converter: value => (value ? value.split(',').map(v => v.trim()) : []) })
-  public features: TableToolbarFeature[] = [];
+  public features: ToolbarFeature[] = [];
 
   #observedTable: DataTableElement<any> | undefined;
   #labelledTable: DataTableElement<any> | undefined;
@@ -118,10 +118,10 @@ export class TableToolbarElement extends LitElement {
                 .on=${this.#isFeatureOn(feature)}
                 @click=${() => this.#onFeatureClick(feature)}
                 @forge-icon-button-toggle=${(evt: CustomEvent<boolean>) => this.#onFeatureToggle(feature, evt)}>
-                <forge-icon .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>
-                ${TOGGLE_FEATURES.has(feature) ? html`<forge-icon slot="on" .name="${TABLE_TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
+                <forge-icon .name="${TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>
+                ${TOGGLE_FEATURES.has(feature) ? html`<forge-icon slot="on" .name="${TOOLBAR_FEATURE_ICONS[feature]}"></forge-icon>` : nothing}
               </forge-icon-button>
-              <forge-tooltip type="label" placement="top"> ${TABLE_TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
+              <forge-tooltip type="label" placement="top"> ${TOOLBAR_FEATURE_LABELS[feature]} </forge-tooltip>
               ${this.#renderMenu(feature)}
             `
           )}
@@ -130,11 +130,11 @@ export class TableToolbarElement extends LitElement {
     `;
   }
 
-  #getButtonId(feature: TableToolbarFeature): string {
+  #getButtonId(feature: ToolbarFeature): string {
     return `${feature}-button`;
   }
 
-  #renderMenu(feature: TableToolbarFeature): TemplateResult | typeof nothing {
+  #renderMenu(feature: ToolbarFeature): TemplateResult | typeof nothing {
     if (!MENU_FEATURES.has(feature)) {
       return nothing;
     }
@@ -143,7 +143,7 @@ export class TableToolbarElement extends LitElement {
     `;
   }
 
-  #renderMenuItems(feature: TableToolbarFeature): TemplateResult | typeof nothing {
+  #renderMenuItems(feature: ToolbarFeature): TemplateResult | typeof nothing {
     if (feature === 'columns') {
       const options = this.#getColumnOptions();
       return html`
@@ -165,7 +165,7 @@ export class TableToolbarElement extends LitElement {
     return nothing;
   }
 
-  #onFeatureClick(feature: TableToolbarFeature): void {
+  #onFeatureClick(feature: ToolbarFeature): void {
     if (feature === 'export') {
       this.tableElement?.exportToCsv();
     } else if (feature === 'print') {
@@ -173,7 +173,7 @@ export class TableToolbarElement extends LitElement {
     }
   }
 
-  #isFeatureOn(feature: TableToolbarFeature): boolean {
+  #isFeatureOn(feature: ToolbarFeature): boolean {
     if (!this.tableElement) {
       return false;
     }
@@ -183,7 +183,7 @@ export class TableToolbarElement extends LitElement {
     return feature === 'filter' && this.tableElement.filterable;
   }
 
-  #onFeatureToggle(feature: TableToolbarFeature, evt: CustomEvent<boolean>): void {
+  #onFeatureToggle(feature: ToolbarFeature, evt: CustomEvent<boolean>): void {
     if (!this.tableElement) {
       return;
     }
@@ -273,6 +273,6 @@ export class TableToolbarElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [TABLE_TOOLBAR_TAG_NAME]: TableToolbarElement;
+    [TOOLBAR_TAG_NAME]: ToolbarElement;
   }
 }
