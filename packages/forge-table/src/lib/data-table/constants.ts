@@ -32,6 +32,9 @@ export const CELL_SELECTION_KEY_DIRECTIONS: Readonly<Record<string, CellSelectio
 export const FILTER_FN_CHANGE_EVENT = 'forge-data-table-filter-fn-change';
 export const GLOBAL_FILTER_EVENT = 'forge-data-table-global-filter';
 export const GLOBAL_FILTER_FN_CHANGE_EVENT = 'forge-data-table-global-filter-fn-change';
+export const COLUMNS_CHANGE_EVENT = 'forge-data-table-columns-change';
+export const COLUMN_VISIBILITY_EVENT = 'forge-data-table-column-visibility';
+export const COLUMN_ORDER_EVENT = 'forge-data-table-column-order';
 
 export const AUTO_SCROLL_EDGE_SIZE = 32;
 export const AUTO_SCROLL_MAX_SPEED = 24;

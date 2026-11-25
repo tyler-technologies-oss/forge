@@ -1,6 +1,6 @@
 export const TOOLBAR_TAG_NAME = 'forge-data-table-toolbar';
 
-export type ToolbarFeature = 'columns' | 'export' | 'filter' | 'print' | 'reload' | 'search' | 'select';
+export type ToolbarFeature = 'columns' | 'export' | 'filter' | 'print' | 'reload' | 'search' | 'select' | 'tools';
 
 export const TOOLBAR_FEATURE_ICONS: Record<ToolbarFeature, string> = {
   columns: 'view_column',
@@ -9,7 +9,8 @@ export const TOOLBAR_FEATURE_ICONS: Record<ToolbarFeature, string> = {
   print: 'print',
   reload: 'refresh',
   search: 'search',
-  select: 'checkbox_multiple_marked'
+  select: 'checkbox_multiple_marked',
+  tools: 'tools'
 };
 
 export const TOOLBAR_FEATURE_LABELS: Record<ToolbarFeature, string> = {
@@ -19,5 +20,6 @@ export const TOOLBAR_FEATURE_LABELS: Record<ToolbarFeature, string> = {
   reload: 'Reload',
   print: 'Print',
   search: 'Search',
-  select: 'Select'
+  select: 'Select',
+  tools: 'Tools'
 };

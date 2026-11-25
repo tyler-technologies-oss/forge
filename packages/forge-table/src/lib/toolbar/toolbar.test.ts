@@ -6,6 +6,8 @@ import { userEvent } from 'vitest/browser';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import '../data-table/data-table.js';
 import type { ColumnDef, DataTableElement } from '../data-table/data-table.js';
+import '../tool-panel/tool-panel.js';
+import type { ToolPanelElement } from '../tool-panel/tool-panel.js';
 import './toolbar.js';
 import type { ToolbarElement } from './toolbar.js';
 
@@ -157,7 +159,7 @@ describe('Toolbar', () => {
 
     it('should stop labelling the previous table when connected to another table', async () => {
       const { toolbar, table } = await createFixture();
-      const other = document.createElement('forge-data-table') as DataTableElement<TestData>;
+      const other = document.createElement('forge-data-table') as unknown as DataTableElement<TestData>;
       table.parentElement?.append(other);
 
       toolbar.tableElement = other;
@@ -470,6 +472,75 @@ describe('Toolbar', () => {
 
     it('should not throw when the filter button is clicked without a connected table', async () => {
       const { toolbar } = await createFixture({ features: 'filter', withTable: false });
+
+      await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
+    });
+  });
+
+  describe('tools', () => {
+    async function createToolsFixture(options: { byId?: boolean } = {}): Promise<Fixture & { toolPanel: ToolPanelElement }> {
+      const { toolbar, table } = await createFixture({ features: 'tools' });
+      const toolPanel = document.createElement('forge-data-table-tool-panel') as unknown as ToolPanelElement;
+      if (options.byId) {
+        table.id = 'people';
+        toolPanel.table = 'people';
+      } else {
+        toolPanel.tableElement = table;
+      }
+      toolbar.after(toolPanel);
+      await toolPanel.updateComplete;
+      toolbar.requestUpdate();
+      await toolbar.updateComplete;
+      return { toolbar, table, toolPanel };
+    }
+
+    it('should show the tools button as on while the tool panel is visible', async () => {
+      const { toolbar } = await createToolsFixture();
+
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(true);
+    });
+
+    it('should hide the tool panel when the tools button is clicked', async () => {
+      const { toolbar, toolPanel } = await createToolsFixture();
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+
+      expect(toolPanel.hidden).toBe(true);
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(false);
+    });
+
+    it('should show the tool panel when the tools button is clicked while it is hidden', async () => {
+      const { toolbar, toolPanel } = await createToolsFixture();
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      await userEvent.click(getButtons(toolbar)[0]);
+      await toolbar.updateComplete;
+
+      expect(toolPanel.hidden).toBe(false);
+      expect((getButtons(toolbar)[0] as HTMLElement & { on: boolean }).on).toBe(true);
+    });
+
+    it('should find the tool panel connected to the table by id', async () => {
+      const { toolbar, toolPanel } = await createToolsFixture({ byId: true });
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(toolPanel.hidden).toBe(true);
+    });
+
+    it('should not hide a tool panel connected to another table', async () => {
+      const { toolbar, toolPanel } = await createToolsFixture();
+      const otherTable = document.createElement('forge-data-table') as unknown as DataTableElement<TestData>;
+      toolPanel.tableElement = otherTable;
+
+      await userEvent.click(getButtons(toolbar)[0]);
+
+      expect(toolPanel.hidden).toBe(false);
+    });
+
+    it('should not throw when the tools button is clicked without a tool panel', async () => {
+      const { toolbar } = await createFixture({ features: 'tools' });
 
       await expect(userEvent.click(getButtons(toolbar)[0])).resolves.not.toThrow();
     });

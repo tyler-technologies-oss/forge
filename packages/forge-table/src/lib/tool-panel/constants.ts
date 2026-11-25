@@ -4,6 +4,8 @@ export type ToolPanelTool = 'columns' | 'filters';
 
 export const TOOL_PANEL_TOOLS: readonly ToolPanelTool[] = ['columns', 'filters'];
 
+export const TOOL_PANEL_DEFAULT_TOOL: ToolPanelTool = 'columns';
+
 export const TOOL_PANEL_TOOL_ICONS: Record<ToolPanelTool, string> = {
   columns: 'view_column',
   filters: 'filter_list'

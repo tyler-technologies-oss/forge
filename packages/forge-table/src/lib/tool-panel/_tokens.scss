@@ -3,5 +3,6 @@
 
 $tokens: (
   padding: utils.module-val(table-tool-panel, padding, spacing.variable(xsmall)),
-  gap: utils.module-val(table-tool-panel, gap, spacing.variable(xsmall))
+  gap: utils.module-val(table-tool-panel, gap, spacing.variable(xsmall)),
+  tree-width: utils.module-val(table-tool-panel, tree-width, 240px)
 ) !default;

@@ -30,7 +30,7 @@ import {
   prependSelectColumn,
   resolveColumnId
 } from './columns/column-utils.js';
-import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from './constants.js';
+import { COLUMNS_CHANGE_EVENT, DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, GROUPS_COLUMN_ID, SELECT_COLUMN_ID } from './constants.js';
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
 import { CellRenderController } from './features/cell-render.js';
@@ -458,6 +458,12 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     new ExpandedSlotController(this);
   }
 
+  public updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has('columns')) {
+      this.dispatchEvent(new CustomEvent(COLUMNS_CHANGE_EVENT, { bubbles: true, composed: true }));
+    }
+  }
+
   public willUpdate(changedProperties: PropertyValues<this>): void {
     this.#hostSemantics.updateStates(changedProperties);
 
@@ -803,6 +809,16 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   }
 
   /**
+   * Sets the order of the columns, by ID. Emits `forge-data-table-column-order`.
+   *
+   * Works whether or not `reorderable` is on. Setting `columns` resets the order.
+   * @param {string[]} columnOrder - The IDs of the columns, in display order.
+   */
+  public setColumnOrder(columnOrder: ColumnOrderState): void {
+    this.#onColumnOrderChange(columnOrder);
+  }
+
+  /**
    * Toggles the visibility of a column by ID.
    * @param {string} columnId - The ID of the column to toggle.
    */
@@ -918,6 +934,7 @@ declare global {
     'forge-data-table-cell-select': CustomEvent<CellSelectionState>;
     'forge-data-table-column-visibility': CustomEvent<ColumnVisibilityState>;
     'forge-data-table-column-order': CustomEvent<ColumnOrderState>;
+    'forge-data-table-columns-change': CustomEvent<void>;
     'forge-data-table-column-rename': CustomEvent<{ columnId: string; header: string }>;
     'forge-data-table-row-click': CustomEvent<{ data: unknown; index: number }>;
   }

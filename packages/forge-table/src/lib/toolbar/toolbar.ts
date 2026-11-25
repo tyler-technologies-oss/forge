@@ -8,7 +8,8 @@ import {
   tylIconRefresh,
   tylIconSearch,
   tylIconViewColumn,
-  tylIconPrint
+  tylIconPrint,
+  tylIconTools
 } from '@tylertech/tyler-icons';
 import { html, LitElement, nothing, type PropertyValues, type TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
@@ -17,6 +18,8 @@ import { map } from 'lit/directives/map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { getAllLeafColumns, resolveColumnId } from '../data-table/columns/column-utils.js';
 import type { DataTableElement } from '../data-table/data-table.js';
+import { TOOL_PANEL_TAG_NAME } from '../tool-panel/constants.js';
+import type { ToolPanelElement } from '../tool-panel/tool-panel.js';
 import type { ToolbarFeature } from './constants.js';
 import { TOOLBAR_FEATURE_ICONS, TOOLBAR_FEATURE_LABELS, TOOLBAR_TAG_NAME } from './constants.js';
 
@@ -29,7 +32,7 @@ import '@tylertech/forge/icon-button';
 
 import styles from './toolbar.scss';
 
-const TOGGLE_FEATURES: ReadonlySet<ToolbarFeature> = new Set(['select', 'filter']);
+const TOGGLE_FEATURES: ReadonlySet<ToolbarFeature> = new Set(['select', 'filter', 'tools']);
 const MENU_FEATURES: ReadonlySet<ToolbarFeature> = new Set(['columns']);
 const COLUMN_VISIBILITY_EVENT = 'forge-data-table-column-visibility';
 
@@ -42,7 +45,7 @@ interface ColumnOption {
 /**
  * A toolbar for a `forge-data-table`.
  *
- * Shows how many rows are selected, offers a menu to show and hide the table's columns, and provides slots for a title and extra actions.
+ * Shows how many rows are selected, offers a menu to show and hide the table's columns, a button that shows and hides the table's tool panel, and provides slots for a title and extra actions.
  * Connect a data table by setting `table` to its id, or by assigning the element to `tableElement`.
  *
  * @tag forge-data-table-toolbar
@@ -52,7 +55,16 @@ interface ColumnOption {
 @customElement(TOOLBAR_TAG_NAME)
 export class ToolbarElement extends LitElement {
   static {
-    IconRegistry.define([tylIconExport, tylIconFilterList, tylIconSearch, tylIconCheckboxMultipleMarked, tylIconPrint, tylIconRefresh, tylIconViewColumn]);
+    IconRegistry.define([
+      tylIconExport,
+      tylIconFilterList,
+      tylIconSearch,
+      tylIconCheckboxMultipleMarked,
+      tylIconPrint,
+      tylIconRefresh,
+      tylIconViewColumn,
+      tylIconTools
+    ]);
   }
 
   public static override styles = unsafeCSS(styles);
@@ -180,7 +192,21 @@ export class ToolbarElement extends LitElement {
     if (feature === 'select') {
       return this.tableElement.rowSelection !== 'off';
     }
+    if (feature === 'tools') {
+      const toolPanel = this.#findToolPanel();
+      return !!toolPanel && !toolPanel.hidden;
+    }
     return feature === 'filter' && this.tableElement.filterable;
+  }
+
+  #findToolPanel(): ToolPanelElement | undefined {
+    const { tableElement } = this;
+    if (!tableElement) {
+      return undefined;
+    }
+    const root = this.getRootNode() as Document | ShadowRoot;
+    const toolPanels = Array.from(root.querySelectorAll<ToolPanelElement>(TOOL_PANEL_TAG_NAME));
+    return toolPanels.find(({ tableElement: panelTable, table }) => panelTable === tableElement || (!!table && table === tableElement.id));
   }
 
   #onFeatureToggle(feature: ToolbarFeature, evt: CustomEvent<boolean>): void {
@@ -191,6 +217,11 @@ export class ToolbarElement extends LitElement {
       this.tableElement.rowSelection = evt.detail ? 'multiple' : 'off';
     } else if (feature === 'filter') {
       this.tableElement.filterable = evt.detail;
+    } else if (feature === 'tools') {
+      const toolPanel = this.#findToolPanel();
+      if (toolPanel) {
+        toolPanel.hidden = !evt.detail;
+      }
     }
     this.requestUpdate();
   }
