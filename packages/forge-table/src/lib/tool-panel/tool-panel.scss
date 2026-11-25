@@ -1,0 +1,23 @@
+@use './token-utils' as *;
+
+:host {
+  @include tokens;
+
+  display: inline-block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+forge-card {
+  --forge-card-width: fit-content;
+  --forge-card-height: auto;
+  --forge-card-padding: #{token(padding)};
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: #{token(gap)};
+}

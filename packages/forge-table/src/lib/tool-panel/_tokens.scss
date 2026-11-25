@@ -1,0 +1,7 @@
+@use '@tylertech/forge-tokens/sass/utils';
+@use '@tylertech/forge-tokens/sass/spacing';
+
+$tokens: (
+  padding: utils.module-val(table-tool-panel, padding, spacing.variable(xsmall)),
+  gap: utils.module-val(table-tool-panel, gap, spacing.variable(xsmall))
+) !default;

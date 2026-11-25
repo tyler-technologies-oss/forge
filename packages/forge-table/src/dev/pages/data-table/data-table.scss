@@ -11,3 +11,14 @@
   padding-block-start: 16px;
   border-block-start: 1px solid var(--forge-theme-outline);
 }
+
+.table-with-tool-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  forge-data-table {
+    flex: 1;
+    min-width: 0;
+  }
+}

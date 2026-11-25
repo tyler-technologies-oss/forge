@@ -2,12 +2,15 @@
   <span slot="title">Employees</span>
 </forge-data-table-toolbar>
 <forge-data-table-search table="employee-table"></forge-data-table-search>
-<forge-data-table id="employee-table">
-  <div slot="expanded:row-3">
-    Expanded content for row 3
-  </div>
-  <forge-paginator slot="paginator" page-size="10" first-last></forge-paginator>
-</forge-data-table>
+<div class="table-with-tool-panel">
+  <forge-data-table id="employee-table">
+    <div slot="expanded:row-3">
+      Expanded content for row 3
+    </div>
+    <forge-paginator slot="paginator" page-size="10" first-last></forge-paginator>
+  </forge-data-table>
+  <forge-data-table-tool-panel table="employee-table"></forge-data-table-tool-panel>
+</div>
 <forge-data-table-caption table="employee-table">Example caption</forge-data-table-caption>
 
 <script type="module" src="data-table.ts"></script>
