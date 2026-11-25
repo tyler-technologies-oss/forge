@@ -93,6 +93,19 @@ async function openMenu(element: ColumnMenuElement<TestData>): Promise<MenuItem[
   return getTopLevelItems(element);
 }
 
+async function waitForMenuClosed(element: ColumnMenuElement<TestData>): Promise<void> {
+  const overlay = getMenu(element).shadowRoot?.querySelector('forge-popover')?.shadowRoot?.querySelector('forge-overlay');
+  await vi.waitFor(() => expect(overlay?.shadowRoot?.querySelector('[popover]')?.matches(':popover-open') ?? false).toBe(false));
+}
+
+async function closeMenu(element: ColumnMenuElement<TestData>): Promise<void> {
+  await vi.waitFor(async () => {
+    await userEvent.keyboard('{Escape}');
+    expect(getMenu(element).open).toBe(false);
+  });
+  await waitForMenuClosed(element);
+}
+
 async function openSubmenu(element: ColumnMenuElement<TestData>, parentLabel: string): Promise<MenuItem[]> {
   const parent = getItem(await openMenu(element), parentLabel);
   await userEvent.click(parent);
@@ -139,7 +152,7 @@ describe('ColumnMenu', () => {
   it('should list the sort directions in the sort submenu', async () => {
     const element = await renderMenu(createTestTable(), 'name');
 
-    expect(getLabels(await openSubmenu(element, 'Sort'))).toEqual(['Ascending', 'Descending']);
+    expect(getLabels(await openSubmenu(element, 'Sort'))).toEqual(['Ascending', 'Descending', 'Unsort']);
   });
 
   it('should list the pin actions in the pin submenu', async () => {
@@ -164,6 +177,124 @@ describe('ColumnMenu', () => {
     await chooseInSubmenu(element, 'Sort', 'Descending');
 
     expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: true }]);
+  });
+
+  it('should not check a sort direction when the column is not sorted', async () => {
+    const element = await renderMenu(createTestTable(), 'age');
+
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(false);
+    expect(getItem(items, 'Descending').checked).toBe(false);
+  });
+
+  it('should check ascending when the column is sorted ascending', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(false);
+    const element = await renderMenu(table, 'age');
+
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(true);
+    expect(getItem(items, 'Descending').checked).toBe(false);
+  });
+
+  it('should check descending when the column is sorted descending', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(true);
+    const element = await renderMenu(table, 'age');
+
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(false);
+    expect(getItem(items, 'Descending').checked).toBe(true);
+  });
+
+  it('should check the direction of its own column when other columns are sorted', async () => {
+    const table = createTestTable();
+    table.getColumn('name')?.toggleSorting(true);
+    table.getColumn('age')?.toggleSorting(false, true);
+    const element = await renderMenu(table, 'age');
+
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(true);
+    expect(getItem(items, 'Descending').checked).toBe(false);
+  });
+
+  it('should reflect sorting that changed while the menu was closed', async () => {
+    const table = createTestTable();
+    const element = await renderMenu(table, 'age');
+    await openSubmenu(element, 'Sort');
+    await closeMenu(element);
+
+    table.getColumn('age')?.toggleSorting(true);
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(false);
+    expect(getItem(items, 'Descending').checked).toBe(true);
+    expect(getItem(items, 'Unsort').disabled).toBe(false);
+  });
+
+  it('should check only the chosen direction when the direction is changed', async () => {
+    const element = await renderMenu(createTestTable(), 'age');
+    await chooseInSubmenu(element, 'Sort', 'Ascending');
+    await waitForMenuClosed(element);
+
+    await chooseInSubmenu(element, 'Sort', 'Descending');
+    await waitForMenuClosed(element);
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(false);
+    expect(getItem(items, 'Descending').checked).toBe(true);
+  });
+
+  it('should uncheck the direction when the column is unsorted', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(false);
+    const element = await renderMenu(table, 'age');
+    await chooseInSubmenu(element, 'Sort', 'Unsort');
+    await waitForMenuClosed(element);
+
+    const items = await openSubmenu(element, 'Sort');
+
+    expect(getItem(items, 'Ascending').checked).toBe(false);
+    expect(getItem(items, 'Descending').checked).toBe(false);
+  });
+
+  it('should clear the sorting of the column when unsort is chosen', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(false);
+    const element = await renderMenu(table, 'age');
+
+    await chooseInSubmenu(element, 'Sort', 'Unsort');
+
+    expect(table.atoms.sorting.get()).toEqual([]);
+  });
+
+  it('should only clear the sorting of its own column when unsort is chosen', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(false);
+    table.getColumn('name')?.toggleSorting(false, true);
+    const element = await renderMenu(table, 'age');
+
+    await chooseInSubmenu(element, 'Sort', 'Unsort');
+
+    expect(table.atoms.sorting.get()).toEqual([{ id: 'name', desc: false }]);
+  });
+
+  it('should disable unsort when the column is not sorted', async () => {
+    const element = await renderMenu(createTestTable(), 'age');
+
+    expect(getItem(await openSubmenu(element, 'Sort'), 'Unsort').disabled).toBe(true);
+  });
+
+  it('should enable unsort when the column is sorted', async () => {
+    const table = createTestTable();
+    table.getColumn('age')?.toggleSorting(true);
+    const element = await renderMenu(table, 'age');
+
+    expect(getItem(await openSubmenu(element, 'Sort'), 'Unsort').disabled).toBe(false);
   });
 
   it('should list the group action when the table allows grouping', async () => {

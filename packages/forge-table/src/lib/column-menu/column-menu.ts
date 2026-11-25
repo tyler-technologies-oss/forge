@@ -14,11 +14,13 @@ import {
   tylIconPin,
   tylIconPinOff,
   tylIconSort,
+  tylIconSortVariantRemove,
   tylIconTableRows,
   tylIconVisibilityOff
 } from '@tylertech/tyler-icons';
 import { html, LitElement, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { live } from 'lit/directives/live.js';
 import type { DropdownMenuComponent } from '@tylertech/forge/dropdown-menu';
 import { canColumnBeReordered } from '../data-table/columns/column-utils.js';
 import { EXPANDER_COLUMN_ID, SELECT_COLUMN_ID } from '../data-table/constants.js';
@@ -65,6 +67,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
       tylIconDockLeft,
       tylIconDockRight,
       tylIconSort,
+      tylIconSortVariantRemove,
       tylIconTableRows,
       tylIconArrowExpandHorizontal
     ]);
@@ -123,14 +126,24 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
               <forge-dropdown-menu-item>
                 <forge-icon slot="start" name="sort"></forge-icon>
                 <span>Sort</span>
-                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(false)}">
+                <forge-dropdown-menu-item-radio
+                  slot="submenu"
+                  .checked="${live(this.column.getIsSorted() === 'asc')}"
+                  @click="${() => this.column?.toggleSorting(false)}">
                   <forge-icon slot="start" name="arrow_upward"></forge-icon>
                   <span>Ascending</span>
                 </forge-dropdown-menu-item-radio>
-                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(true)}">
+                <forge-dropdown-menu-item-radio
+                  slot="submenu"
+                  .checked="${live(this.column.getIsSorted() === 'desc')}"
+                  @click="${() => this.column?.toggleSorting(true)}">
                   <forge-icon slot="start" name="arrow_downward"></forge-icon>
                   <span>Descending</span>
                 </forge-dropdown-menu-item-radio>
+                <forge-dropdown-menu-item slot="submenu" .disabled="${!this.column.getIsSorted()}" @click="${() => this.column?.clearSorting()}">
+                  <forge-icon slot="start" name="sort_variant_remove"></forge-icon>
+                  <span>Unsort</span>
+                </forge-dropdown-menu-item>
               </forge-dropdown-menu-item>
             `
           : nothing}
@@ -265,6 +278,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
 
   #onBeforeToggle = (evt: ToggleEvent): void => {
     if (evt.newState === 'open' && this.#menu) {
+      this.requestUpdate();
       this.#menu.anchorElement = null;
       this.#listenForOutsideContextMenu();
     }
