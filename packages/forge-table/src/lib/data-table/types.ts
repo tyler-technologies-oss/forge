@@ -103,6 +103,14 @@ export interface FilterFnChangeEventDetail<TData extends Row = Row> {
   index: number;
 }
 
+export interface GlobalFilterFnChangeEventDetail<TData extends Row = Row> {
+  /**
+   * The filter function now used by the global filter, or `undefined` when the table's `filter` has none and the default applies.
+   */
+  filterFn: ColumnFilterFn<TData> | undefined;
+  index: number;
+}
+
 export type FooterCallback<TData extends Row = Row> = (props: { property: string; data: TData[]; aggregate?: unknown }) => string;
 
 export type CustomFormatter<TData extends Row = Row, TResult = unknown> = (row: TData, index: number) => TResult;
@@ -128,6 +136,11 @@ export interface ColumnDef<TData extends Row = Row> {
   footer?: string | FooterCallback<TData>;
   aggregate?: ColumnAggregation<TData>;
   groupable?: boolean;
+  /**
+   * Whether the column takes part in global filtering (`DataTableElement.globalFilter()`). Set it to `false` to leave the column out. By default a column
+   * takes part when its first non-empty value is a string or a number; `true` also includes a column with other values, such as an array.
+   */
+  canGlobalFilter?: boolean;
   property?: string & keyof TData;
   hidden?: boolean;
   hideable?: boolean;
@@ -177,6 +190,7 @@ export interface DataTableDef<TData extends Row = Row> {
   multiSortRemove?: boolean;
   multiSortKey?: MultiSortKey;
   filterable?: boolean;
+  filter?: ColumnFilterOption<TData> | ColumnFilterOption<TData>[];
   manualSort?: boolean;
   manualFilter?: boolean;
   striped?: boolean;

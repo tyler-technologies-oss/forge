@@ -175,6 +175,7 @@ const groupedColumns: ColumnDef<RowData>[] = [
 
 const dataTable = document.querySelector('forge-data-table') as DataTableElement<RowData>;
 dataTable.columns = flatColumns;
+dataTable.filter = [filterFn_includesString, { filterFn: fuzzyFilter, label: 'Fuzzy' }];
 dataTable.reorderable = true;
 dataTable.multiSort = false;
 dataTable.getSubRows = (row: RowData) => row.children ?? undefined;

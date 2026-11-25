@@ -41,6 +41,7 @@ import { ColumnRenameController } from './features/column-rename.js';
 import { DEFAULT_PAGINATION, PaginationController } from './features/pagination.js';
 import { RowClickController } from './features/row-click.js';
 import { ColumnFilterFnController } from './features/filter-fn.js';
+import { GlobalFilter } from './features/global-filter.js';
 import { getColumnSizeStyles } from './features/column-sizing.js';
 import { buildCsv, buildSelectionCsv, DEFAULT_CSV_FILENAME, downloadCsv } from './features/csv-export.js';
 import { HostSemantics } from './features/host-semantics.js';
@@ -55,7 +56,19 @@ import { renderColumnGroup } from './templates/column-group.js';
 import { renderTableFooter } from './templates/footer.js';
 import { renderTableHeader } from './templates/header.js';
 import { renderPaginator } from './templates/paginator.js';
-import type { CellRenderFn, ColumnDef, DataTableDef, EnableCellSelectionFn, FilterFnChangeEventDetail, MultiSortKey, Row, RowSelectionType } from './types.js';
+import type {
+  CellRenderFn,
+  ColumnDef,
+  ColumnFilterOption,
+  DataTableDef,
+  EnableCellSelectionFn,
+  FilterFnChangeEventDetail,
+  GlobalFilterFnChangeEventDetail,
+  MultiSortKey,
+  ResolvedColumnFilter,
+  Row,
+  RowSelectionType
+} from './types.js';
 
 import '@tylertech/forge/checkbox';
 import '@tylertech/forge/date-picker';
@@ -90,6 +103,7 @@ export type {
   FilterFieldType,
   FilterFnChangeEventDetail,
   FooterCallback,
+  GlobalFilterFnChangeEventDetail,
   MultiSortKey,
   Row,
   RowSelectionType,
@@ -188,6 +202,20 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
    */
   @property({ type: Boolean })
   public filterable = false;
+
+  /**
+   * The filter functions that `globalFilter()` matches its text with, in the same form as `ColumnDef.filter`: a filter function, the name it was
+   * registered under, a `ColumnFilter` with a `label`, or a list of them. A `field` is ignored.
+   *
+   * The first function is the default. With more than one, `forge-data-table-search` shows a menu to choose between them (labelled like the column
+   * filter function menu), and `setGlobalFilterFn()` chooses one in code. Setting the property resets the choice to the first. Without it, the table
+   * matches case-insensitively with TanStack's `includesString`.
+   *
+   * The built-in functions and `fuzzyFilter` (from `@tylertech/forge-table/data-table/features/fuzzy`) work as they do for a column; each runs against every
+   * column the global filter searches, and a row is kept when one of them passes.
+   */
+  @property({ attribute: false })
+  public filter: ColumnFilterOption<TData> | ColumnFilterOption<TData>[] | undefined;
 
   /**
    * Controls whether the table is sorted manually or automatically.
@@ -393,6 +421,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   #columnReorderController: ColumnReorderController<TData> | null = null;
   #appliedColumnHeaders: Record<string, string> = {};
   #appliedFilterFns: Readonly<Record<string, number>> = {};
+  #appliedGlobalFilter: ResolvedColumnFilter<TData> | undefined;
   readonly #hostSemantics: HostSemantics;
   readonly #virtualization = new RowVirtualization<TData>(this, () => this.#tableContainerRef.value);
   readonly #columnVisibilityController = new ColumnVisibilityController<TData>(this, {
@@ -407,6 +436,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   readonly #columnFilterFn = new ColumnFilterFnController<TData>(this, {
     refilter: () => this.#onFilter(filters => [...filters])
   });
+  readonly #globalFiltering = new GlobalFilter<TData>(this);
   readonly #cellRender = new CellRenderController<TData>(this);
   readonly #cellSlot = new CellSlotController(this);
   readonly #pagination = new PaginationController<TData>(this, {
@@ -440,6 +470,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
 
     if (changedProperties.has('cellSelection') && !this.cellSelection) {
       this.#cellSelection.reset();
+    }
+
+    if (changedProperties.has('filter')) {
+      this.#globalFiltering.setFilters(this.filter);
     }
 
     this.#checkRecreateTableController(changedProperties);
@@ -503,6 +537,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       enableColumnFilters: this.filterable,
       manualFiltering: this.manualFilter,
       onColumnFiltersChange: updaterOrValue => this.#onFilter(updaterOrValue),
+      globalFilterFn: this.#globalFiltering.activeFilter?.filterFn ?? 'auto',
+      onGlobalFilterChange: updaterOrValue => this.#globalFiltering.set(updaterOrValue),
       enableRowSelection: this.rowSelection !== 'off',
       enableMultiRowSelection: this.rowSelection === 'multiple',
       onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
@@ -520,6 +556,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       state: {
         sorting: this._sorting,
         columnFilters: this._columnFilters,
+        globalFilter: this.#globalFiltering.value,
         columnVisibility: this.singleGroupColumn ? { ...this.columnVisibility, [GROUPS_COLUMN_ID]: this.grouping.length > 0 } : this.columnVisibility,
         columnOrder: getGroupedColumnOrder(this.columnOrder, this.grouping, this.rowSelection !== 'off', this.singleGroupColumn, this.expandable),
         columnPinning: this._columnPinning,
@@ -566,7 +603,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
           ${renderBody({
             host: this,
             table,
-            filtered: this._columnFilters.length > 0,
+            filtered: this._columnFilters.length > 0 || this.#globalFiltering.active,
             cellSelection: this.#cellSelection,
             cellRender: this.#cellRender,
             cellSlot: this.#cellSlot,
@@ -619,9 +656,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('stickyHeader') ||
       changedProperties.has('stickyFooter') ||
       changedProperties.has('virtualized') ||
-      changedProperties.has('paginate');
+      changedProperties.has('paginate') ||
+      this.#globalFiltering.activeFilter !== this.#appliedGlobalFilter;
 
     if (needsRecreation) {
+      this.#appliedGlobalFilter = this.#globalFiltering.activeFilter;
       this.removeController(this.#tableController);
       this.#tableController = new TableController<DataTableFeatures, TData>(this);
 
@@ -829,6 +868,34 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     }
     printDocument(buildPrintDocument(this.#table, title));
   }
+
+  /**
+   * The index, in `filter`, of the function the global filter matches with. `0` when `filter` has no functions.
+   */
+  public get globalFilterFnIndex(): number {
+    return this.#globalFiltering.activeIndex;
+  }
+
+  /**
+   * Chooses which of the functions in `filter` the global filter matches with, and filters the rows again with it. Does nothing when `filter` has
+   * no function at `index`. Emits `forge-data-table-global-filter-fn-change`.
+   * @param {number} index - The position of the function in `filter`.
+   */
+  public setGlobalFilterFn(index: number): void {
+    this.#globalFiltering.select(index);
+  }
+
+  /**
+   * Filters the table's rows by text matched against the text and number columns (case-insensitively, unless `filter` sets another function). A row is kept
+   * when any of those columns matches, and the filter combines with the column filters.
+   *
+   * Pass an empty string to remove the filter. Works whether or not `filterable` is on, and before the table has rendered. Emits
+   * `forge-data-table-global-filter` when the text changes. With `manualFilter` the rows are not filtered; use the event to filter them.
+   * @param {string} value - The text to filter by.
+   */
+  public globalFilter(value: string): void {
+    this.#globalFiltering.set(value);
+  }
 }
 
 declare global {
@@ -839,6 +906,8 @@ declare global {
   interface HTMLElementEventMap {
     'forge-data-table-sort': CustomEvent<SortingState>;
     'forge-data-table-filter': CustomEvent<ColumnFiltersState>;
+    'forge-data-table-global-filter': CustomEvent<string>;
+    'forge-data-table-global-filter-fn-change': CustomEvent<GlobalFilterFnChangeEventDetail<any>>;
     'forge-data-table-filter-fn-change': CustomEvent<FilterFnChangeEventDetail<any>>;
     'forge-data-table-row-select': CustomEvent<RowSelectionState>;
     'forge-data-table-cell-select': CustomEvent<CellSelectionState>;

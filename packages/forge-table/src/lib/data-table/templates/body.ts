@@ -30,7 +30,10 @@ export function renderBody<TData extends Row>(context: BodyContext<TData>): Temp
       colSpan: Math.max(table.getVisibleLeafColumns().length, 1),
       cellRole: getCellRole(host.cellSelection),
       filtered,
-      onClearFilters: () => table.setColumnFilters([])
+      onClearFilters: () => {
+        table.setColumnFilters([]);
+        table.setGlobalFilter(undefined);
+      }
     });
   }
   const virtualizer = host.virtualized ? context.virtualization.getVirtualizer() : undefined;

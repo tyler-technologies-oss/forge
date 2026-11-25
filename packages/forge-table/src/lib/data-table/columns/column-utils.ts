@@ -92,6 +92,7 @@ export function mapColumns<TData extends Row>(columns: ColumnDef<TData>[], paren
       footer: mapFooter(column),
       enableHiding: column.hideable ?? true,
       enableGrouping: column.groupable,
+      enableGlobalFilter: column.canGlobalFilter,
       enableCellSelection: getStaticCellSelection(column),
       size: column.width ?? DEFAULT_COLUMN_WIDTH,
       meta: {

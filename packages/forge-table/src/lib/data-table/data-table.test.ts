@@ -23,6 +23,7 @@ import { getTableAccessibility } from '../../testing/accessibility.js';
 import './data-table.js';
 import type { ColumnDef, ColumnFilter, DataTableElement } from './data-table.js';
 import { actionCell, badgeCell, meterCell, ratingCell, registerFilterFns } from './data-table.js';
+import { fuzzyFilter } from './features/fuzzy/index.js';
 import {
   filterFn_arrIncludesSome as arrIncludesSome,
   filterFn_inDateRange as inDateRange,
@@ -2704,6 +2705,359 @@ describe('DataTable', () => {
       await harness.typeIntoFilter(1, '');
 
       expect(harness.bodyRows.length).toBe(3);
+    });
+  });
+
+  describe('Global filtering', () => {
+    function getNames(harness: DataTableHarness): (string | undefined)[] {
+      return harness.bodyRows.map((_, index) => harness.getBodyCellByRowAndColumn(index, 1)?.textContent?.trim());
+    }
+
+    it('should show only the rows with a column containing the text', async () => {
+      const harness = await createFixture();
+
+      harness.element.globalFilter('bob');
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Bob']);
+    });
+
+    it('should match against every column', async () => {
+      const harness = await createFixture();
+
+      harness.element.globalFilter('charlie@example');
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Charlie']);
+    });
+
+    it('should match number columns', async () => {
+      const harness = await createFixture();
+
+      harness.element.globalFilter('35');
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Charlie']);
+    });
+
+    it('should filter without filterable being set', async () => {
+      const harness = await createFixture({ filterable: false });
+
+      harness.element.globalFilter('alice');
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Alice']);
+    });
+
+    it('should restore all rows when the text is empty', async () => {
+      const harness = await createFixture();
+      harness.element.globalFilter('alice');
+      await settle(harness.element);
+
+      harness.element.globalFilter('');
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(3);
+    });
+
+    it('should combine with column filters', async () => {
+      const harness = await createFixture({ filterable: true });
+      await harness.typeIntoFilter(1, 'li');
+
+      harness.element.globalFilter('charlie');
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Charlie']);
+    });
+
+    it('should not match columns that are not globally filterable', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'email', header: 'Email', property: 'email', canGlobalFilter: false }
+      ];
+      const harness = await createFixture({ columns });
+
+      harness.element.globalFilter('bob@example');
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(0);
+    });
+
+    it('should match a column that is not a string or number when canGlobalFilter is true', async () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'name', header: 'Name', property: 'name' },
+        { id: 'tags', header: 'Tags', property: 'tags' as keyof TestData, canGlobalFilter: true }
+      ];
+      const data = [{ ...TEST_DATA[0], tags: ['red'] }, TEST_DATA[1]] as TestData[];
+      const harness = await createFixture({ columns, data });
+
+      harness.element.globalFilter('red');
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(1);
+      expect(harness.getBodyCellByRowAndColumn(0, 0)?.textContent?.trim()).toBe('Alice');
+    });
+
+    it('should apply the text set before the data has loaded', async () => {
+      const deferred = createDeferred<TestData[]>();
+      const harness = await createFixture({ dataSource: new DataSource<TestData>(() => deferred.promise) });
+
+      harness.element.globalFilter('bob');
+      deferred.resolve(TEST_DATA);
+      await settle(harness.element);
+
+      expect(getNames(harness)).toEqual(['Bob']);
+    });
+
+    it('should not filter the rows when manual filter is true', async () => {
+      const harness = await createFixture({ manualFilter: true });
+
+      harness.element.globalFilter('bob');
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(3);
+    });
+
+    it('should show a filter message when the text matches no rows', async () => {
+      const harness = await createFixture();
+
+      harness.element.globalFilter('zzz');
+      await settle(harness.element);
+
+      expect(harness.emptyStateMessage).toBe('No rows match your filter');
+    });
+
+    it('should clear the text when the clear filters button is clicked', async () => {
+      const harness = await createFixture();
+      harness.element.globalFilter('zzz');
+      await settle(harness.element);
+
+      harness.clearFiltersButton?.click();
+      await settle(harness.element);
+
+      expect(harness.bodyRows.length).toBe(3);
+    });
+
+    describe('filter functions', () => {
+      it('should match with the filter function given by filter', async () => {
+        const harness = await createFixture();
+        harness.element.filter = filterFn_startsWith;
+
+        harness.element.globalFilter('li');
+        await settle(harness.element);
+
+        expect(harness.bodyRows.length).toBe(0);
+      });
+
+      it('should match with the first function of a list', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+
+        harness.element.globalFilter('al');
+        await settle(harness.element);
+
+        expect(getNames(harness)).toEqual(['Alice']);
+        expect(harness.element.globalFilterFnIndex).toBe(0);
+      });
+
+      it('should accept the registered name of a filter function and a ColumnFilter', async () => {
+        const harness = await createFixture();
+        harness.element.filter = ['includesString', { filterFn: filterFn_startsWith, label: 'Starts with' }];
+
+        harness.element.globalFilter('li');
+        await settle(harness.element);
+
+        expect(getNames(harness)).toEqual(['Alice', 'Charlie']);
+      });
+
+      it('should ignore a name that is not registered', async () => {
+        const harness = await createFixture();
+        harness.element.filter = 'notRegistered';
+
+        harness.element.globalFilter('bob');
+        await settle(harness.element);
+
+        expect(getNames(harness)).toEqual(['Bob']);
+      });
+
+      it('should filter the rows again when another function is chosen', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        harness.element.globalFilter('li');
+        await settle(harness.element);
+
+        harness.element.setGlobalFilterFn(1);
+        await settle(harness.element);
+
+        expect(harness.element.globalFilterFnIndex).toBe(1);
+        expect(getNames(harness)).toEqual(['Alice', 'Charlie']);
+      });
+
+      it('should ignore an index without a function', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        await settle(harness.element);
+        const listener = vi.fn();
+        harness.element.addEventListener('forge-data-table-global-filter-fn-change', listener);
+
+        harness.element.setGlobalFilterFn(2);
+        harness.element.setGlobalFilterFn(-1);
+        await settle(harness.element);
+
+        expect(harness.element.globalFilterFnIndex).toBe(0);
+        expect(listener).not.toHaveBeenCalled();
+      });
+
+      it('should go back to the first function when filter is set', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        harness.element.setGlobalFilterFn(1);
+        await settle(harness.element);
+
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        await settle(harness.element);
+
+        expect(harness.element.globalFilterFnIndex).toBe(0);
+      });
+
+      it('should use the default function again when filter is cleared', async () => {
+        const harness = await createFixture();
+        harness.element.filter = filterFn_startsWith;
+        harness.element.globalFilter('li');
+        await settle(harness.element);
+
+        harness.element.filter = undefined;
+        await settle(harness.element);
+
+        expect(getNames(harness)).toEqual(['Alice', 'Charlie']);
+      });
+
+      it('should keep the text when another function is chosen', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        const events: string[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter', evt => events.push(evt.detail));
+        harness.element.globalFilter('li');
+
+        harness.element.setGlobalFilterFn(1);
+
+        expect(events).toEqual(['li']);
+      });
+
+      it('should emit forge-data-table-global-filter-fn-change when a function is chosen', async () => {
+        const harness = await createFixture();
+        harness.element.filter = [filterFn_startsWith, filterFn_includesString];
+        await settle(harness.element);
+        const details: { filterFn: unknown; index: number }[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter-fn-change', evt => details.push(evt.detail));
+
+        harness.element.setGlobalFilterFn(1);
+
+        expect(details).toEqual([{ filterFn: filterFn_includesString, index: 1 }]);
+      });
+
+      it('should emit forge-data-table-global-filter-fn-change when filter is set', async () => {
+        const harness = await createFixture();
+        const details: { filterFn: unknown; index: number }[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter-fn-change', evt => details.push(evt.detail));
+
+        harness.element.filter = filterFn_startsWith;
+        await settle(harness.element);
+
+        expect(details).toEqual([{ filterFn: filterFn_startsWith, index: 0 }]);
+      });
+
+      it('should read and write filter through config', async () => {
+        const harness = await createFixture();
+
+        harness.element.config = { filter: filterFn_startsWith };
+        harness.element.globalFilter('li');
+        await settle(harness.element);
+
+        expect(harness.element.config.filter).toBe(filterFn_startsWith);
+        expect(harness.bodyRows.length).toBe(0);
+      });
+
+      it('should clear filter when config sets it to undefined', async () => {
+        const harness = await createFixture();
+        harness.element.filter = filterFn_startsWith;
+
+        harness.element.config = { filter: undefined };
+
+        expect(harness.element.filter).toBeUndefined();
+      });
+
+      describe('fuzzy filtering', () => {
+        it('should keep rows that match the text approximately', async () => {
+          const harness = await createFixture();
+          harness.element.filter = fuzzyFilter;
+
+          harness.element.globalFilter('alce');
+          await settle(harness.element);
+
+          expect(getNames(harness)).toEqual(['Alice']);
+        });
+
+        it('should match approximately only after choosing the fuzzy function from a list', async () => {
+          const harness = await createFixture();
+          harness.element.filter = [filterFn_includesString, { filterFn: fuzzyFilter, label: 'Fuzzy' }];
+          harness.element.globalFilter('alce');
+          await settle(harness.element);
+          expect(harness.bodyRows.length).toBe(0);
+
+          harness.element.setGlobalFilterFn(1);
+          await settle(harness.element);
+
+          expect(getNames(harness)).toEqual(['Alice']);
+        });
+      });
+    });
+
+    describe('event', () => {
+      it('should emit forge-data-table-global-filter with the text when it changes', async () => {
+        const harness = await createFixture();
+        const events: string[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter', evt => events.push(evt.detail));
+
+        harness.element.globalFilter('bob');
+        harness.element.globalFilter('bo');
+
+        expect(events).toEqual(['bob', 'bo']);
+      });
+
+      it('should emit an empty string when the text is cleared', async () => {
+        const harness = await createFixture();
+        harness.element.globalFilter('bob');
+        const events: string[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter', evt => events.push(evt.detail));
+
+        harness.element.globalFilter('');
+
+        expect(events).toEqual(['']);
+      });
+
+      it('should not emit when the text is unchanged', async () => {
+        const harness = await createFixture();
+        harness.element.globalFilter('bob');
+        const listener = vi.fn();
+        harness.element.addEventListener('forge-data-table-global-filter', listener);
+
+        harness.element.globalFilter('bob');
+        harness.element.globalFilter('');
+        harness.element.globalFilter('');
+
+        expect(listener).toHaveBeenCalledTimes(1);
+      });
+
+      it('should emit when manual filter is true', async () => {
+        const harness = await createFixture({ manualFilter: true });
+        const events: string[] = [];
+        harness.element.addEventListener('forge-data-table-global-filter', evt => events.push(evt.detail));
+
+        harness.element.globalFilter('bob');
+
+        expect(events).toEqual(['bob']);
+      });
     });
   });
 
