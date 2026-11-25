@@ -18,6 +18,9 @@ export const DEFAULT_ROW_HEIGHT = 48;
 export const VIRTUALIZER_OVERSCAN = 5;
 export const FETCH_SKIP = 0;
 export const FETCH_TAKE = Number.MAX_SAFE_INTEGER;
+export const DEFAULT_PAGE_SIZE = 25;
+export const PAGINATOR_SLOT_NAME = 'paginator';
+export const PAGINATOR_SELECTOR = `:scope > forge-paginator[slot="${PAGINATOR_SLOT_NAME}"]`;
 
 export const CELL_SELECTION_KEY_DIRECTIONS: Readonly<Record<string, CellSelectionDirection>> = {
   ArrowUp: 'up',
@@ -59,6 +62,7 @@ export const DATA_TABLE_DEF_KEYS = {
   grouping: false,
   singleGroupColumn: false,
   virtualized: false,
+  paginate: false,
   stickyHeader: false,
   stickyFooter: false,
   getRowName: false,

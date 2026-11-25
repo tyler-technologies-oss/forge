@@ -417,6 +417,15 @@ table.filterable {
 }
 
 //
+// Paginator
+//
+
+.paginator {
+  background-color: #{theme.variable(surface-container-minimum)};
+  padding-inline: #{spacing.variable(medium)};
+}
+
+//
 // Empty state
 //
 
@@ -426,6 +435,11 @@ table.filterable {
 
 table tbody.empty-tbody td {
   padding: 0;
+}
+
+table tbody.page-filler-tbody td {
+  padding: 0;
+  border: none;
 }
 
 .empty-state {
@@ -589,7 +603,7 @@ table.cell-selection {
 //
 
 table.hover {
-  tbody:not(.empty-tbody) tr:hover {
+  tbody:not(.empty-tbody, .page-filler-tbody) tr:hover {
     background-color: #{theme.variable(surface-container-minimum)};
   }
 
@@ -598,7 +612,7 @@ table.hover {
   }
 
   &.striped {
-    tbody:not(.empty-tbody) tr:nth-child(odd):hover {
+    tbody:not(.empty-tbody, .page-filler-tbody) tr:nth-child(odd):hover {
       background-color: #{theme.variable(surface-container-low)};
     }
   }
@@ -609,7 +623,7 @@ table.hover {
 //
 
 table.striped {
-  tbody:not(.empty-tbody) tr:nth-child(odd) {
+  tbody:not(.empty-tbody, .page-filler-tbody) tr:nth-child(odd) {
     background-color: #{theme.variable(surface-container-minimum)};
   }
 }

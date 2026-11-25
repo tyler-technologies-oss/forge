@@ -7,6 +7,7 @@ import { getGroupStartColumnIds } from '../columns/column-utils.js';
 import { getCellRole } from '../features/cell-selection.js';
 import { CLICKABLE_CLASS, getRowClickHandler, hasRowClickAction } from '../features/row-click.js';
 import { getGroupRowName } from '../features/row-grouping.js';
+import type { PaginationController } from '../features/pagination.js';
 import { setRowName, type RowMeta } from '../features/row-meta.js';
 import { renderRowDetail, toggleRowOnDoubleClick } from '../features/expander.js';
 import type { RowVirtualization, RowVirtualizer } from '../features/virtualization.js';
@@ -14,10 +15,12 @@ import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
 import { renderBodyCell, type BodyCellContext } from './body-cell.js';
 import { renderEmptyState } from './empty-state.js';
+import { renderPageFiller } from './page-filler.js';
 
 export interface BodyContext<TData extends Row> extends BodyCellContext<TData> {
   filtered: boolean;
   virtualization: RowVirtualization<TData>;
+  pagination: PaginationController<TData>;
 }
 
 export function renderBody<TData extends Row>(context: BodyContext<TData>): TemplateResult {
@@ -31,7 +34,13 @@ export function renderBody<TData extends Row>(context: BodyContext<TData>): Temp
     });
   }
   const virtualizer = host.virtualized ? context.virtualization.getVirtualizer() : undefined;
-  return virtualizer ? renderVirtualizedTableBody(context, virtualizer) : renderTableBody(context);
+  if (virtualizer) {
+    return renderVirtualizedTableBody(context, virtualizer);
+  }
+  return html`${renderTableBody(context)}${renderPageFiller(
+    Math.max(table.getVisibleLeafColumns().length, 1),
+    context.pagination.getPaddingHeight(table.getRowModel().rows.length)
+  )}`;
 }
 
 function getRowMeta<TData extends Row>(context: BodyContext<TData>, row: TanstackRow<DataTableFeatures, TData>): RowMeta {

@@ -4,6 +4,7 @@ import '@tylertech/forge-table';
 import '@tylertech/forge-table/data-table/features/filter';
 import { fuzzyFilter, fuzzySort } from '@tylertech/forge-table/data-table/features/fuzzy';
 import './data-table.scss';
+import '@tylertech/forge/paginator';
 import { CurrencyFormatter, DataSource, DateFormatter, NumberFormatter } from '@tylertech/forge-core';
 import type { BadgeTheme } from '@tylertech/forge/badge';
 import type { ISelectComponent } from '@tylertech/forge/select';
@@ -411,6 +412,9 @@ groupableToggle.addEventListener('forge-switch-change', ({ detail: selected }) =
 
 const singleGroupColumnToggle = document.querySelector('#opt-single-group-column') as ISwitchComponent;
 singleGroupColumnToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.singleGroupColumn = selected));
+
+const paginateToggle = document.querySelector('#opt-paginate') as ISwitchComponent;
+paginateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => (dataTable.paginate = selected));
 
 const customCellTemplateToggle = document.querySelector('#opt-custom-cell-template') as ISwitchComponent;
 customCellTemplateToggle.addEventListener('forge-switch-change', ({ detail: selected }) => {

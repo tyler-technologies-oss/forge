@@ -7,6 +7,7 @@ import {
   ColumnVisibilityState,
   GroupingState,
   LitTable,
+  PaginationState,
   RowSelectionState,
   SelectCellRangeOptions,
   SortingState,
@@ -37,6 +38,7 @@ import { CellSlotController } from './features/cell-slot.js';
 import { CellSelectionController } from './features/cell-selection.js';
 import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
 import { ColumnRenameController } from './features/column-rename.js';
+import { DEFAULT_PAGINATION, PaginationController } from './features/pagination.js';
 import { RowClickController } from './features/row-click.js';
 import { ColumnFilterFnController } from './features/filter-fn.js';
 import { getColumnSizeStyles } from './features/column-sizing.js';
@@ -52,6 +54,7 @@ import { renderBody } from './templates/body.js';
 import { renderColumnGroup } from './templates/column-group.js';
 import { renderTableFooter } from './templates/footer.js';
 import { renderTableHeader } from './templates/header.js';
+import { renderPaginator } from './templates/paginator.js';
 import type { CellRenderFn, ColumnDef, DataTableDef, EnableCellSelectionFn, FilterFnChangeEventDetail, MultiSortKey, Row, RowSelectionType } from './types.js';
 
 import '@tylertech/forge/checkbox';
@@ -304,6 +307,17 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   public virtualized = false;
 
   /**
+   * Show the rows one page at a time.
+   *
+   * Place a `forge-paginator` in the `paginator` slot to let users change the page and the page size. The table adopts the paginator's `page-size`
+   * when it first finds it and starts on the first page, then keeps its `total`, `page-index` and `page-size` in sync with the table. Pages are made from the
+   * sorted, filtered and grouped rows, and the page resets to the first when those change. Without a paginator the table shows the first page of
+   * 25 rows.
+   */
+  @property({ type: Boolean })
+  public paginate = false;
+
+  /**
    * Keep the header row stuck to the top while scrolling through the table.
    */
   @property({ type: Boolean, attribute: 'sticky-header' })
@@ -371,6 +385,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   @state() private _columnFilters: ColumnFiltersState = [];
   @state() private _columnPinning: ColumnPinningState = { start: [], end: [] };
   @state() private _rowSelection: RowSelectionState = {};
+  @state() private _pagination: PaginationState = { ...DEFAULT_PAGINATION };
 
   #tableController = new TableController<DataTableFeatures, TData>(this);
   #table: LitTable<DataTableFeatures, TData> | null = null;
@@ -394,6 +409,11 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
   });
   readonly #cellRender = new CellRenderController<TData>(this);
   readonly #cellSlot = new CellSlotController(this);
+  readonly #pagination = new PaginationController<TData>(this, {
+    getTable: () => this.#table,
+    getPagination: () => this._pagination,
+    setPagination: pagination => this.#onPagination(pagination)
+  });
   readonly #cellSelection = new CellSelectionController<TData>(this, {
     getTable: () => this.#table,
     getScrollElement: () => this.#tableContainerRef.value,
@@ -486,6 +506,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       enableRowSelection: this.rowSelection !== 'off',
       enableMultiRowSelection: this.rowSelection === 'multiple',
       onRowSelectionChange: updaterOrValue => this.#onRowSelect(updaterOrValue),
+      manualPagination: !this.paginate,
+      onPaginationChange: updaterOrValue => this.#onPagination(updaterOrValue),
       enableCellSelection: this.cellSelection && (cell => this.#cellSelection.canSelect(cell)),
       onCellSelectionChange: updaterOrValue => this.#cellSelection.onSelectionChange(updaterOrValue),
       onColumnVisibilityChange: updaterOrValue => this.#onColumnVisibilityChange(updaterOrValue),
@@ -503,6 +525,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
         columnPinning: this._columnPinning,
         grouping: this.grouping,
         rowSelection: this._rowSelection,
+        pagination: this._pagination,
         cellSelection: this.#cellSelection.state
       }
     });
@@ -547,11 +570,13 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             cellSelection: this.#cellSelection,
             cellRender: this.#cellRender,
             cellSlot: this.#cellSlot,
-            virtualization: this.#virtualization
+            virtualization: this.#virtualization,
+            pagination: this.#pagination
           })}
           ${renderTableFooter(table, this.resizable)}
         </table>
       </div>
+      ${renderPaginator(this, this.#pagination)}
     `;
   }
 
@@ -593,7 +618,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
       changedProperties.has('singleGroupColumn') ||
       changedProperties.has('stickyHeader') ||
       changedProperties.has('stickyFooter') ||
-      changedProperties.has('virtualized');
+      changedProperties.has('virtualized') ||
+      changedProperties.has('paginate');
 
     if (needsRecreation) {
       this.removeController(this.#tableController);
@@ -686,6 +712,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     if (this.manualFilter) {
       this.dispatchEvent(new CustomEvent('forge-data-table-filter', { detail: this._columnFilters, bubbles: true, composed: true }));
     }
+  }
+
+  #onPagination(updaterOrValue: Updater<PaginationState>): void {
+    this._pagination = typeof updaterOrValue === 'function' ? updaterOrValue(this._pagination) : updaterOrValue;
   }
 
   #onRowSelect(updaterOrValue: Updater<RowSelectionState>): void {

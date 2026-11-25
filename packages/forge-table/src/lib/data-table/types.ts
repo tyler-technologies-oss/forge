@@ -193,6 +193,7 @@ export interface DataTableDef<TData extends Row = Row> {
   grouping?: string[];
   singleGroupColumn?: boolean;
   virtualized?: boolean;
+  paginate?: boolean;
   stickyHeader?: boolean;
   stickyFooter?: boolean;
   getRowName?: (row: TData, index: number) => string;
