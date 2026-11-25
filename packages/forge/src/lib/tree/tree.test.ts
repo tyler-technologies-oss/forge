@@ -3,7 +3,7 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 import { userEvent } from 'vitest/browser';
 import { frame } from '../core/utils/utils.js';
-import type { TreeComponent } from './tree/tree.js';
+import type { ITreeItemReorderEventData, TreeComponent } from './tree/tree.js';
 import type { TreeItemComponent } from './tree-item/index.js';
 import { TreeSelectionController } from './tree/tree-selection-controller.js';
 import {
@@ -1542,6 +1542,400 @@ describe('Tree', () => {
           expect(child2TreeIcon).not.toBeNull();
           expect(child2CustomIcon).toBeNull();
         });
+      });
+    });
+  });
+
+  describe('reorderable', () => {
+    const dispatchDrag = (target: EventTarget, type: string, clientY = 0): void => {
+      target.dispatchEvent(new DragEvent(type, { bubbles: true, composed: true, cancelable: true, dataTransfer: new DataTransfer(), clientY }));
+    };
+
+    const getHandle = (item: TreeItemComponent): HTMLElement | null => item.shadowRoot?.querySelector<HTMLElement>('.drag-handle') ?? null;
+    const getOrder = (parent: Element): string[] => getChildItems(parent as TreeComponent).map(item => item.value as string);
+    const getHeader = (item: TreeItemComponent): HTMLElement => item.shadowRoot?.querySelector<HTMLElement>('.header') as HTMLElement;
+    const getClientYAt = (item: TreeItemComponent, ratio: number): number => {
+      const rect = getHeader(item).getBoundingClientRect();
+      return rect.top + rect.height * ratio;
+    };
+
+    const createFixture = async (reorderable = true): Promise<{ tree: TreeComponent; items: TreeItemComponent[]; children: TreeItemComponent[] }> => {
+      const screen = render(html`
+        <forge-tree ?reorderable=${reorderable} mode="multiple">
+          <forge-tree-item .value=${'a'}>A</forge-tree-item>
+          <forge-tree-item .value=${'b'} open>
+            B
+            <forge-tree-item .value=${'b1'}>B1</forge-tree-item>
+            <forge-tree-item .value=${'b2'}>B2</forge-tree-item>
+          </forge-tree-item>
+          <forge-tree-item .value=${'c'}>C</forge-tree-item>
+        </forge-tree>
+      `);
+      const tree = screen.container.querySelector('forge-tree') as TreeComponent;
+      await frame();
+      await frame();
+      return { tree, items: getChildItems(tree), children: getChildItems(tree.querySelector('forge-tree-item[open]') as TreeItemComponent) };
+    };
+
+    const drag = (handle: HTMLElement, tree: TreeComponent, clientY: number, drop = true): void => {
+      dispatchDrag(handle, 'dragstart');
+      dispatchDrag(tree, 'dragenter', clientY);
+      dispatchDrag(tree, 'dragover', clientY);
+      if (drop) {
+        dispatchDrag(tree, 'drop', clientY);
+      }
+      dispatchDrag(handle, 'dragend');
+    };
+
+    it('should default to not reorderable', async () => {
+      const { tree } = await createFixture(false);
+
+      expect(tree.reorderable).toBe(false);
+    });
+
+    it('should render a drag handle after the checkbox and expand icon when reorderable', async () => {
+      const { items } = await createFixture();
+
+      const header = getHeader(items[1]);
+      const children = Array.from(header.children);
+      const handle = getHandle(items[1]) as HTMLElement;
+      expect(handle).not.toBeNull();
+      expect(handle.getAttribute('draggable')).toBe('true');
+      expect(children.indexOf(handle)).toBeGreaterThan(children.indexOf(header.querySelector('.expand-icon') as Element));
+      expect(children.indexOf(handle)).toBeGreaterThan(children.indexOf(header.querySelector('.checkbox') as Element));
+      expect(children.indexOf(handle)).toBeLessThan(children.indexOf(header.querySelector('.start') as Element));
+    });
+
+    it('should not render a drag handle when not reorderable', async () => {
+      const { items } = await createFixture(false);
+
+      expect(getHandle(items[0])).toBeNull();
+    });
+
+    it('should add and remove drag handles when reorderable changes', async () => {
+      const { tree, items } = await createFixture(false);
+
+      tree.reorderable = true;
+      await frame();
+      expect(getHandle(items[0])).not.toBeNull();
+
+      tree.reorderable = false;
+      await frame();
+      expect(getHandle(items[0])).toBeNull();
+    });
+
+    it('should not toggle selection when clicking the drag handle', async () => {
+      const { items } = await createFixture();
+
+      getHandle(items[0])?.click();
+      await frame();
+
+      expect(items[0].selected).toBe(false);
+    });
+
+    it('should reorder an item among its siblings when dropped', async () => {
+      const { tree, items } = await createFixture();
+      const reorderSpy = vi.fn();
+      tree.addEventListener('forge-tree-item-reorder', reorderSpy);
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[2], 0.9));
+
+      expect(getOrder(tree)).toEqual(['b', 'c', 'a']);
+      expect(reorderSpy).toHaveBeenCalledOnce();
+      expect(reorderSpy.mock.calls[0][0].detail).toMatchObject({ item: items[0], parent: tree, previousParent: tree, index: 2, previousIndex: 0 });
+    });
+
+    it('should reorder a nested item among its siblings', async () => {
+      const { tree, items, children } = await createFixture();
+
+      drag(getHandle(children[1]) as HTMLElement, tree, getClientYAt(children[0], 0.1));
+
+      expect(getOrder(items[1])).toEqual(['b2', 'b1']);
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+    });
+
+    it('should move an item into another parent when dropped on the middle of an item', async () => {
+      const { tree, items } = await createFixture();
+      const reorderSpy = vi.fn();
+      tree.addEventListener('forge-tree-item-reorder', reorderSpy);
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[2], 0.5));
+
+      expect(getOrder(tree)).toEqual(['b', 'c']);
+      expect(getOrder(items[2])).toEqual(['a']);
+      expect(items[0].parentElement).toBe(items[2]);
+      expect(items[0].slot).toBe('children');
+      expect(items[0].level).toBe(1);
+      expect(items[2].open).toBe(true);
+      expect(reorderSpy.mock.calls[0][0].detail).toMatchObject({ parent: items[2], previousParent: tree, index: 0, previousIndex: 0 });
+    });
+
+    it('should move an item out of its parent when dropped before a root item', async () => {
+      const { tree, items, children } = await createFixture();
+
+      drag(getHandle(children[0]) as HTMLElement, tree, getClientYAt(items[0], 0.1));
+
+      expect(getOrder(tree)).toEqual(['b1', 'a', 'b', 'c']);
+      expect(getOrder(items[1])).toEqual(['b2']);
+      expect(children[0].hasAttribute('slot')).toBe(false);
+      expect(children[0].level).toBe(0);
+    });
+
+    it('should move an item to the start of an open parent when dropped below its header', async () => {
+      const { tree, items } = await createFixture();
+
+      drag(getHandle(items[2]) as HTMLElement, tree, getClientYAt(items[1], 0.9));
+
+      expect(getOrder(tree)).toEqual(['a', 'b']);
+      expect(getOrder(items[1])).toEqual(['c', 'b1', 'b2']);
+    });
+
+    it('should move an item to the end of the tree when dropped below all items', async () => {
+      const { tree, items, children } = await createFixture();
+
+      drag(getHandle(children[0]) as HTMLElement, tree, getHeader(items[2]).getBoundingClientRect().bottom + 20);
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c', 'b1']);
+    });
+
+    it('should not move an item into itself or its descendants', async () => {
+      const { tree, items, children } = await createFixture();
+      const reorderSpy = vi.fn();
+      tree.addEventListener('forge-tree-item-reorder', reorderSpy);
+
+      drag(getHandle(items[1]) as HTMLElement, tree, getClientYAt(children[0], 0.5));
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      expect(getOrder(items[1])).toEqual(['b1', 'b2']);
+      expect(reorderSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not move an item into a disabled item', async () => {
+      const { tree, items } = await createFixture();
+      items[2].disabled = true;
+      await frame();
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[2], 0.4));
+
+      expect(getOrder(items[2])).toEqual([]);
+      expect(getOrder(tree)).toEqual(['b', 'a', 'c']);
+    });
+
+    it('should not move an item when the drop position is its current position', async () => {
+      const { tree, items } = await createFixture();
+      const reorderSpy = vi.fn();
+      tree.addEventListener('forge-tree-item-reorder', reorderSpy);
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[1], 0.1));
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      expect(reorderSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not move an item when the reorder event is canceled', async () => {
+      const { tree, items } = await createFixture();
+      tree.addEventListener('forge-tree-item-reorder', evt => evt.preventDefault());
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[2], 0.5));
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      expect(getOrder(items[2])).toEqual([]);
+      expect(items[2].open).toBe(false);
+    });
+
+    it('should update the selected state of the previous parent when an item moves out of it', async () => {
+      const { tree, items, children } = await createFixture();
+      children[0].selected = true;
+      await frame();
+      expect(items[1].indeterminate).toBe(true);
+
+      drag(getHandle(children[1]) as HTMLElement, tree, getClientYAt(items[0], 0.1));
+      await frame();
+
+      expect(items[1].indeterminate).toBe(false);
+      expect(items[1].selected).toBe(true);
+    });
+
+    it('should show a drop indicator for the drop position and remove it afterward', async () => {
+      const { tree, items } = await createFixture();
+      const handle = getHandle(items[0]) as HTMLElement;
+
+      dispatchDrag(handle, 'dragstart');
+      dispatchDrag(tree, 'dragenter', getClientYAt(items[2], 0.9));
+      expect(items[2].hasAttribute('data-drop-after')).toBe(true);
+
+      dispatchDrag(tree, 'dragover', getClientYAt(items[2], 0.5));
+      expect(items[2].hasAttribute('data-drop-after')).toBe(false);
+      expect(items[2].hasAttribute('data-drop-inside')).toBe(true);
+
+      dispatchDrag(tree, 'dragover', getClientYAt(items[2], 0.1));
+      expect(items[2].hasAttribute('data-drop-inside')).toBe(false);
+      expect(items[2].hasAttribute('data-drop-before')).toBe(true);
+
+      dispatchDrag(tree, 'dragleave');
+      expect(items[2].hasAttribute('data-drop-before')).toBe(false);
+
+      dispatchDrag(handle, 'dragend');
+    });
+
+    it('should not reorder when dragging from outside of the drag handle', async () => {
+      const { tree, items } = await createFixture();
+
+      dispatchDrag(items[0], 'dragstart');
+      dispatchDrag(tree, 'dragenter', getClientYAt(items[2], 0.5));
+      dispatchDrag(tree, 'dragover', getClientYAt(items[2], 0.5));
+      dispatchDrag(tree, 'drop', getClientYAt(items[2], 0.5));
+      dispatchDrag(items[0], 'dragend');
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      expect(items[2].hasAttribute('data-drop-inside')).toBe(false);
+    });
+
+    it('should not allow dragging disabled items', async () => {
+      const { items } = await createFixture();
+      items[0].disabled = true;
+      await frame();
+
+      expect(getHandle(items[0])?.getAttribute('draggable')).toBe('false');
+    });
+
+    it('should not allow dragging when the tree is disabled', async () => {
+      const { tree, items } = await createFixture();
+      tree.disabled = true;
+      await frame();
+
+      drag(getHandle(items[0]) as HTMLElement, tree, getClientYAt(items[2], 0.9));
+
+      expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+    });
+
+    describe('keyboard', () => {
+      const pressAlt = async (key: 'ArrowUp' | 'ArrowDown'): Promise<void> => {
+        await userEvent.keyboard(`{Alt>}{${key}}{/Alt}`);
+        await frame();
+      };
+
+      it('should move the focused item down among its siblings with alt + arrow down', async () => {
+        const { tree, items } = await createFixture();
+        items[1].open = false;
+        await frame();
+        items[0].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['b', 'a', 'c']);
+        expect(document.activeElement).toBe(items[0]);
+      });
+
+      it('should move the focused item up among its siblings with alt + arrow up', async () => {
+        const { tree, items } = await createFixture();
+        items[1].open = false;
+        await frame();
+        items[2].focus();
+
+        await pressAlt('ArrowUp');
+
+        expect(getOrder(tree)).toEqual(['a', 'c', 'b']);
+        expect(document.activeElement).toBe(items[2]);
+      });
+
+      it('should move an item into the start of the next item when it is open', async () => {
+        const { tree, items } = await createFixture();
+        items[0].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['b', 'c']);
+        expect(getOrder(items[1])).toEqual(['a', 'b1', 'b2']);
+        expect(items[0].level).toBe(1);
+        expect(document.activeElement).toBe(items[0]);
+      });
+
+      it('should move an item into the end of the previous item when it is open', async () => {
+        const { tree, items } = await createFixture();
+        items[2].focus();
+
+        await pressAlt('ArrowUp');
+
+        expect(getOrder(tree)).toEqual(['a', 'b']);
+        expect(getOrder(items[1])).toEqual(['b1', 'b2', 'c']);
+        expect(document.activeElement).toBe(items[2]);
+      });
+
+      it('should move the last child out of its parent with alt + arrow down', async () => {
+        const { tree, items, children } = await createFixture();
+        children[1].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['a', 'b', 'b2', 'c']);
+        expect(getOrder(items[1])).toEqual(['b1']);
+        expect(children[1].hasAttribute('slot')).toBe(false);
+        expect(document.activeElement).toBe(children[1]);
+      });
+
+      it('should move the first child out of its parent with alt + arrow up', async () => {
+        const { tree, items, children } = await createFixture();
+        children[0].focus();
+
+        await pressAlt('ArrowUp');
+
+        expect(getOrder(tree)).toEqual(['a', 'b1', 'b', 'c']);
+        expect(getOrder(items[1])).toEqual(['b2']);
+      });
+
+      it('should move nested items among their siblings', async () => {
+        const { tree, items, children } = await createFixture();
+        children[1].focus();
+
+        await pressAlt('ArrowUp');
+
+        expect(getOrder(items[1])).toEqual(['b2', 'b1']);
+        expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      });
+
+      it('should not move the first root item up or the last root item down', async () => {
+        const { tree, items } = await createFixture();
+        items[0].focus();
+        await pressAlt('ArrowUp');
+        items[2].focus();
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      });
+
+      it('should dispatch a cancelable reorder event and not move the item when canceled', async () => {
+        const { tree, items } = await createFixture();
+        const reorderSpy = vi.fn((evt: CustomEvent<ITreeItemReorderEventData>) => evt.preventDefault());
+        tree.addEventListener('forge-tree-item-reorder', reorderSpy);
+        items[0].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(reorderSpy).toHaveBeenCalledOnce();
+        expect(reorderSpy.mock.calls[0][0].detail).toMatchObject({ item: items[0], parent: items[1], previousParent: tree, index: 0, previousIndex: 0 });
+        expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+      });
+
+      it('should not reorder when the tree is not reorderable', async () => {
+        const { tree, items } = await createFixture(false);
+        items[0].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
+        expect(document.activeElement).toBe(items[1]);
+      });
+
+      it('should not reorder disabled items', async () => {
+        const { tree, items } = await createFixture();
+        items[0].disabled = true;
+        await frame();
+        items[0].focus();
+
+        await pressAlt('ArrowDown');
+
+        expect(getOrder(tree)).toEqual(['a', 'b', 'c']);
       });
     });
   });

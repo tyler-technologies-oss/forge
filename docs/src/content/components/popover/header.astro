@@ -5,5 +5,27 @@ const { thumbnail = false } = Astro.props;
 ---
 
 <ComponentHeader {thumbnail}>
-  <forge-button variant="outlined">Open popover</forge-button>
+  <forge-button id="popover-header-trigger" variant="raised">Show Popover</forge-button>
+  {
+    !thumbnail && (
+      <forge-popover open anchor="popover-header-trigger" placement="bottom-start" arrow role="dialog" aria-modal="false" aria-labelledby="popover-header-title">
+        <forge-scaffold>
+          <forge-toolbar no-border slot="header">
+            <h2 class="forge-typography--heading4" slot="start" id="popover-header-title">Enter Your Name</h2>
+          </forge-toolbar>
+          <div slot="body" class="w-[300px] p-medium">
+            <form autocomplete="off">
+              <forge-text-field>
+                <input type="text" name="your-name" required aria-label="Enter your name" />
+              </forge-text-field>
+            </form>
+          </div>
+          <forge-toolbar no-border slot="footer">
+            <forge-button slot="end" class="mr-medium">Cancel</forge-button>
+            <forge-button slot="end" variant="filled" disabled>Save</forge-button>
+          </forge-toolbar>
+        </forge-scaffold>
+      </forge-popover>
+    )
+  }
 </ComponentHeader>

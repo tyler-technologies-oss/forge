@@ -188,7 +188,10 @@ const allTo = (prefix: string, paths: string[], to: string): Record<string, stri
 
 const removedPageRedirects: Record<string, string> = {
   '/developing/customization': '/developing/theming/',
-  '/faq/focus-indicator-clipping': '/developing/accessibility/'
+  '/faq/focus-indicator-clipping': '/developing/accessibility/',
+  '/faq/dropdown-options': '/',
+  '/about/roadmap': '/changelog/',
+  '/about/changelog': '/changelog/'
 };
 
 export const LEGACY_REDIRECTS: Record<string, string> = {

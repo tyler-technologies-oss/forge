@@ -10,7 +10,12 @@ const component = 'forge-tree';
 const meta = {
   title: 'Components/Tree',
   render: args => html`
-    <forge-tree .accordion=${args.accordion} .indentLines=${args.indentLines} .mode=${args.mode} .selectionFollowsFocus=${args.selectionFollowsFocus}>
+    <forge-tree
+      .accordion=${args.accordion}
+      .indentLines=${args.indentLines}
+      .mode=${args.mode}
+      .reorderable=${args.reorderable}
+      .selectionFollowsFocus=${args.selectionFollowsFocus}>
       <forge-tree-item>
         <span>Item 1</span>
         <forge-tree-item>
@@ -115,6 +120,11 @@ const meta = {
             options: ['single', 'multiple', 'leaf', 'off']
           }
         },
+        reorderable: {
+          control: {
+            type: 'boolean'
+          }
+        },
         selectionFollowsFocus: {
           control: {
             type: 'boolean'
@@ -132,6 +142,7 @@ const meta = {
     accordion: false,
     indentLines: false,
     mode: 'single',
+    reorderable: false,
     selectionFollowsFocus: false,
     value: ''
   }
@@ -142,3 +153,9 @@ export default meta;
 type Story = StoryObj;
 
 export const Demo: Story = {};
+
+export const Reorderable: Story = {
+  args: {
+    reorderable: true
+  }
+};

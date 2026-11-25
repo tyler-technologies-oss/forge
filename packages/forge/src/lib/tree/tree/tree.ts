@@ -3,21 +3,27 @@ import { tryDefine } from '@tylertech/forge-core';
 import { html, LitElement, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { DragController } from '../../core/controllers/drag-controller.js';
+import { DropController, DropEventArgs } from '../../core/controllers/drop-controller.js';
 import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { toggleState } from '../../core/utils/utils.js';
 import { KeyActionController } from '../../core/utils/key-action.js';
 import { TreeItemComponent, TreeItemUpdateReason } from '../tree-item/index.js';
 import {
   closeDescendants,
+  eventPathIncludesTreeItemDragHandle,
   eventPathIncludesTreeItemExpandIcon,
   eventPathIncludesTreeItemHeader,
+  getChildItems,
   getFirstChildItem,
   getLastChildItem,
   getNextItem,
   getParentItem,
+  getParentTree,
   getPreviousItem,
   getSiblingItems,
   getTreeItemFromEvent,
+  getTreeItemHeader,
   getTreeItemsInEventPath,
   getTreeItemTarget,
   isTreeItem,
@@ -35,7 +41,30 @@ export interface ITreeContext {
   expandIcon?: HTMLElement;
   indentLines: boolean;
   mode: TreeMode;
+  reorderable: boolean;
 }
+
+export interface ITreeItemReorderEventData {
+  /** The item being moved. */
+  item: TreeItemComponent;
+  /** The tree or tree item the item will be a child of after the move. */
+  parent: TreeComponent | TreeItemComponent;
+  /** The tree or tree item the item is currently a child of. */
+  previousParent: TreeComponent | TreeItemComponent;
+  /** The index the item will occupy among the child items of `parent` after the move. */
+  index: number;
+  /** The index the item currently occupies among the child items of `previousParent`. */
+  previousIndex: number;
+}
+
+interface ITreeDropLocation {
+  parent: TreeComponent | TreeItemComponent;
+  index: number;
+  position: 'before' | 'after' | 'inside';
+  target: TreeItemComponent;
+}
+
+const DROP_EDGE_RATIO = 0.25;
 
 export const TREE_CONTEXT = createContext<ITreeContext>('forge-tree');
 
@@ -47,6 +76,9 @@ export const TREE_CONTEXT = createContext<ITreeContext>('forge-tree');
  * @dependency forge-tree-item
  *
  * @event {CustomEvent<void>} forge-tree-select-all - Dispatched when the user selects all items.
+ * @event {CustomEvent<ITreeItemReorderEventData>} forge-tree-item-reorder - Dispatched from an item when the user
+ * moves it, either within its parent or into another parent, by dragging or with the keyboard. Cancelable. If the
+ * event is not canceled, the tree moves the item in the DOM.
  *
  * @csspart root - The root tree element.
  *
@@ -93,6 +125,14 @@ export class TreeComponent extends LitElement {
   @property({ type: Boolean }) public disabled = false;
 
   /**
+   * Whether items can be moved within the tree, including into other parents, by dragging their
+   * drag handle or by pressing Alt + Arrow Up or Alt + Arrow Down.
+   * @default false
+   * @attribute
+   */
+  @property({ type: Boolean }) public reorderable = false;
+
+  /**
    * The value of all selected items.
    * @default []
    * @attribute
@@ -110,6 +150,14 @@ export class TreeComponent extends LitElement {
   private _internals: ElementInternals;
   private _keyActionController = new KeyActionController(this, {
     actions: [
+      {
+        key: [
+          { key: 'ArrowUp', modifier: 'alt' },
+          { key: 'ArrowDown', modifier: 'alt' }
+        ],
+        handler: this._handleReorderKey.bind(this),
+        allowRepeat: true
+      },
       { key: ['ArrowUp', 'ArrowDown'], handler: this._handleArrowUpOrDown.bind(this), allowRepeat: true },
       { key: 'ArrowLeft', handler: this._handleArrowLeft.bind(this), allowRepeat: true },
       { key: 'ArrowRight', handler: this._handleArrowRight.bind(this), allowRepeat: true },
@@ -128,6 +176,23 @@ export class TreeComponent extends LitElement {
     searchHandler: this._search.bind(this)
   });
   private _selectionController = new TreeSelectionController(this);
+  private _dragController = new DragController(this, {
+    getSourceElement: () => this
+  });
+  private _dropController = new DropController(this, {
+    childSelector: 'forge-tree-item',
+    orientation: 'vertical',
+    throttle: 0,
+    getIndex: event => this._getInsertionIndex(event),
+    onDragStart: args => this._handleDragStart(args),
+    onDragEnter: () => this._showDropIndicator(),
+    onDragOver: () => this._showDropIndicator(),
+    onDragLeave: () => this._handleDragLeave(),
+    onDragEnd: () => this._handleDragEnd(),
+    onDrop: () => this._handleDrop()
+  });
+  private _draggedItem?: TreeItemComponent;
+  private _dropLocation?: ITreeDropLocation | null;
   private _lastFocusedItem?: TreeItemComponent;
   private _expandIcon?: HTMLElement;
   private _collapseIcon?: HTMLElement;
@@ -168,8 +233,17 @@ export class TreeComponent extends LitElement {
     if (_changedProperties.has('disabled')) {
       this._setDisabled();
     }
-    if (_changedProperties.has('disabled') || _changedProperties.has('indentLines') || _changedProperties.has('mode')) {
+    if (
+      _changedProperties.has('disabled') ||
+      _changedProperties.has('indentLines') ||
+      _changedProperties.has('mode') ||
+      _changedProperties.has('reorderable')
+    ) {
       this._updateContext();
+    }
+    if (_changedProperties.has('reorderable')) {
+      this._dragController.setEnabled(this.reorderable);
+      this._dropController.setEnabled(this.reorderable);
     }
     if (_changedProperties.has('mode')) {
       this._setDisabled();
@@ -199,7 +273,8 @@ export class TreeComponent extends LitElement {
       disabled: this.disabled,
       expandIcon: this._expandIcon,
       indentLines: this.indentLines,
-      mode: this.mode
+      mode: this.mode,
+      reorderable: this.reorderable
     };
   }
 
@@ -207,8 +282,8 @@ export class TreeComponent extends LitElement {
    * Toggle either the selected or open state of a key item when its header is clicked.
    */
   private _handleClick(evt: PointerEvent): void {
-    // Ensure an item's header was clicked
-    if (!eventPathIncludesTreeItemHeader(evt)) {
+    // Ensure an item's header was clicked, ignoring clicks on its drag handle
+    if (!eventPathIncludesTreeItemHeader(evt) || eventPathIncludesTreeItemDragHandle(evt)) {
       return;
     }
 
@@ -401,6 +476,238 @@ export class TreeComponent extends LitElement {
     }
   }
 
+  /**
+   * Moves the focused item up or down in the visible order, moving into or out of an adjacent
+   * parent when it reaches the end of its siblings.
+   */
+  private _handleReorderKey(evt: KeyboardEvent): boolean | void {
+    // Fall through to the default arrow key handling when reordering is not enabled
+    if (!this.reorderable) {
+      return true;
+    }
+
+    const target = getTreeItemFromEvent(evt);
+    if (!target || this.disabled || target.disabled) {
+      return;
+    }
+
+    const location = evt.key === 'ArrowDown' ? this._getLocationBelow(target) : this._getLocationAbove(target);
+    if (location) {
+      this._moveItem(target, location.parent, location.index);
+    }
+  }
+
+  private _getLocationAbove(item: TreeItemComponent): ITreeDropLocation | null {
+    const siblings = getSiblingItems(item, true);
+    const previous = siblings[siblings.indexOf(item) - 1];
+    if (!previous) {
+      const parent = getParentItem(item);
+      return parent ? this._getLocationBefore(parent, item) : null;
+    }
+
+    // Enter the previous item as its last child when it is open
+    const children = getChildItems(previous);
+    if (previous.open && children.length) {
+      return { parent: previous, index: children.length, position: 'after', target: children[children.length - 1] };
+    }
+    return this._getLocationBefore(previous, item);
+  }
+
+  private _getLocationBelow(item: TreeItemComponent): ITreeDropLocation | null {
+    const siblings = getSiblingItems(item, true);
+    const next = siblings[siblings.indexOf(item) + 1];
+    if (!next) {
+      const parent = getParentItem(item);
+      return parent ? this._getLocationAfter(parent, item) : null;
+    }
+
+    // Enter the next item as its first child when it is open
+    const children = getChildItems(next);
+    if (next.open && children.length) {
+      return { parent: next, index: 0, position: 'before', target: children[0] };
+    }
+    return this._getLocationAfter(next, item);
+  }
+
+  private _getLocationBefore(target: TreeItemComponent, exclude?: TreeItemComponent): ITreeDropLocation {
+    const parent = getParentItem(target) ?? this;
+    const index = getChildItems(parent)
+      .filter(child => child !== exclude)
+      .indexOf(target);
+    return { parent, index, position: 'before', target };
+  }
+
+  private _getLocationAfter(target: TreeItemComponent, exclude?: TreeItemComponent): ITreeDropLocation {
+    const location = this._getLocationBefore(target, exclude);
+    return { ...location, index: location.index + 1, position: 'after' };
+  }
+
+  private _handleDragStart({ event, item, source }: DropEventArgs): boolean {
+    // Only the drag handle of an enabled item that belongs to this tree starts a reorder
+    const [origin] = event.composedPath();
+    const isHandle = origin instanceof HTMLElement && origin.matches('.drag-handle');
+    if (!this.reorderable || this.disabled || !isHandle || source !== this || !item || !isTreeItem(item) || item.disabled || getParentTree(item) !== this) {
+      return false;
+    }
+    this._draggedItem = item;
+    return true;
+  }
+
+  private _handleDragLeave(): void {
+    this._dropLocation = undefined;
+    this._clearDropIndicator();
+  }
+
+  private _handleDragEnd(): void {
+    this._draggedItem = undefined;
+    this._dropLocation = undefined;
+    this._clearDropIndicator();
+  }
+
+  private _handleDrop(): void {
+    const item = this._draggedItem;
+    const location = this._dropLocation;
+    this._clearDropIndicator();
+    if (!item || !location) {
+      return;
+    }
+
+    const moved = this._moveItem(item, location.parent, location.index);
+    if (moved && location.position === 'inside' && isTreeItem(location.parent)) {
+      location.parent.open = true;
+    }
+  }
+
+  /**
+   * Gets the drop location for the pointer position and stores it for the drag callbacks. Returns
+   * the index within the location's parent, or -1 if the pointer is not over a valid location.
+   */
+  private _getInsertionIndex(event: DragEvent): number {
+    this._dropLocation = this._getDropLocation(event);
+    return this._dropLocation?.index ?? -1;
+  }
+
+  /**
+   * Resolves the pointer position to a place in the tree. The top and bottom quarters of an item's
+   * header insert before or after it, and the middle nests the dragged item inside of it.
+   */
+  private _getDropLocation(event: DragEvent): ITreeDropLocation | null {
+    const dragged = this._draggedItem;
+    if (!dragged) {
+      return null;
+    }
+
+    const visibleItems = getChildItems(this, true)
+      .map(item => ({ item, rect: getTreeItemHeader(item)?.getBoundingClientRect() }))
+      .filter((entry): entry is { item: TreeItemComponent; rect: DOMRect } => !!entry.rect && entry.rect.height > 0);
+    const hovered = visibleItems.find(entry => event.clientY <= entry.rect.bottom);
+
+    // The pointer is below every item, so drop at the end of the tree
+    if (!hovered) {
+      const rootItems = getChildItems(this).filter(item => item !== dragged);
+      const last = rootItems[rootItems.length - 1];
+      return last ? { parent: this, index: rootItems.length, position: 'after', target: last } : null;
+    }
+
+    // An item can't be dropped on itself or inside of its own descendants
+    const { item: target, rect } = hovered;
+    if (dragged.contains(target)) {
+      return null;
+    }
+
+    const canNest = !target.lazy && !target.disabled;
+    const children = getChildItems(target).filter(child => child !== dragged);
+    const ratio = (event.clientY - rect.top) / rect.height;
+    if (ratio < DROP_EDGE_RATIO || (!canNest && ratio < 0.5)) {
+      return this._getLocationBefore(target, dragged);
+    }
+    if (ratio <= 1 - DROP_EDGE_RATIO && canNest) {
+      return { parent: target, index: children.length, position: 'inside', target };
+    }
+
+    // The space below an open item is the start of its children
+    if (target.open && children.length) {
+      return { parent: target, index: 0, position: 'before', target: children[0] };
+    }
+    return this._getLocationAfter(target, dragged);
+  }
+
+  private _isCurrentLocation(item: TreeItemComponent, location: ITreeDropLocation): boolean {
+    const parent = getParentItem(item) ?? this;
+    return location.parent === parent && location.index === getChildItems(parent).indexOf(item);
+  }
+
+  private _showDropIndicator(): void {
+    this._clearDropIndicator();
+
+    const item = this._draggedItem;
+    const location = this._dropLocation;
+    if (!item || !location || this._isCurrentLocation(item, location)) {
+      return;
+    }
+    location.target.toggleAttribute(`data-drop-${location.position}`, true);
+  }
+
+  private _clearDropIndicator(): void {
+    this.querySelectorAll('[data-drop-before], [data-drop-after], [data-drop-inside]').forEach(el => {
+      el.removeAttribute('data-drop-before');
+      el.removeAttribute('data-drop-after');
+      el.removeAttribute('data-drop-inside');
+    });
+  }
+
+  /**
+   * Moves an item to an index among the child items of a parent, unless the reorder event is
+   * canceled.
+   * @param item The item to move.
+   * @param parent The tree or tree item to move the item into.
+   * @param index The index the item should occupy among the parent's child items after the move.
+   * @returns Whether the item was moved.
+   */
+  private _moveItem(item: TreeItemComponent, parent: TreeComponent | TreeItemComponent, index: number): boolean {
+    // An item can't be moved into itself or its own descendants
+    if (item.contains(parent)) {
+      return false;
+    }
+
+    const previousParent = getParentItem(item) ?? this;
+    const previousIndex = getChildItems(previousParent).indexOf(item);
+    const others = getChildItems(parent).filter(child => child !== item);
+    const newIndex = Math.min(Math.max(index, 0), others.length);
+    if (previousParent === parent && previousIndex === newIndex) {
+      return false;
+    }
+
+    const event = new CustomEvent<ITreeItemReorderEventData>('forge-tree-item-reorder', {
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+      detail: { item, parent, previousParent, index: newIndex, previousIndex }
+    });
+    if (!item.dispatchEvent(event)) {
+      return false;
+    }
+
+    // Moving an element in the DOM blurs it, so restore focus afterward
+    const hadFocus = item.matches(':focus-within');
+    if (newIndex < others.length) {
+      others[newIndex].before(item);
+    } else if (others.length) {
+      others[others.length - 1].after(item);
+    } else {
+      parent.append(item);
+    }
+
+    // The item's old parent lost a child, which can change its selected state
+    if (previousParent !== parent && this.mode === 'multiple' && isTreeItem(previousParent)) {
+      this._selectionController.updateFrom(previousParent);
+    }
+    if (hadFocus) {
+      item.focus();
+    }
+    return true;
+  }
+
   private _handleFocusIn(evt: FocusEvent): void {
     // Focus either the last focused item or first item when the tree receives focus
     if (evt.target === this) {
@@ -552,5 +859,8 @@ tryDefine('forge-tree', TreeComponent);
 declare global {
   interface HTMLElementTagNameMap {
     'forge-tree': TreeComponent;
+  }
+  interface HTMLElementEventMap {
+    'forge-tree-item-reorder': CustomEvent<ITreeItemReorderEventData>;
   }
 }

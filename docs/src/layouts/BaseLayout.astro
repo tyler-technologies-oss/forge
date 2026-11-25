@@ -5,7 +5,6 @@ import PendoAnalytics from "../components/PendoAnalytics.astro";
 import SearchDialog from "../components/SearchDialog.astro";
 import SearchField from "../components/SearchField.astro";
 import Sidenav from "../components/Sidenav.astro";
-import { getCollection } from "astro:content";
 import "../styles/global.css";
 import "../styles/dark-theme.scss";
 
@@ -38,18 +37,16 @@ const {
 } = Astro.props;
 
 const SEARCH_SECTIONS: Record<string, string> = {
-  about: "About",
+  changelog: "Changelog",
   components: "Components",
   designing: "Designing",
   developing: "Developing",
-  faq: "FAQ",
   icons: "Icons",
   tokens: "Tokens",
 };
 
 const searchSection = SEARCH_SECTIONS[Astro.url.pathname.split("/")[1]] ?? "Docs";
 
-const components = await getCollection("components");
 ---
 
 <!doctype html>
@@ -318,7 +315,7 @@ const components = await getCollection("components");
         slot="left"
         data-sidenav
         transition:persist>
-        <Sidenav components={components} />
+        <Sidenav />
       </div>
 
       <main
@@ -392,8 +389,9 @@ const components = await getCollection("components");
       // `<a>` appears throughout slotted/child content (sidenav, MDX,
       // breadcrumbs) rather than this component's own template, so :global()
       // is required — same escape hatch Blockquote.astro uses for its
-      // slotted body content.
-      :global(a) {
+      // slotted body content. Anchors wrapped by `forge-button` are excluded
+      // so the button keeps its own text color and decoration.
+      :global(a:where(:not(forge-button > a))) {
         @include forge-typography.anchor-base;
 
         &:visited {

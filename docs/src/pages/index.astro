@@ -46,7 +46,7 @@ const links: HomeLink[] = [
   {
     title: "Migrate",
     description: "How to update and upgrade to newer Forge releases",
-    href: `${baseUrl}about/changelog/`,
+    href: `${baseUrl}changelog/`,
     illustration: MigrateIllustration,
     hidden: true,
   },
@@ -69,6 +69,12 @@ const links: HomeLink[] = [
     illustration: ComponentsIllustration,
   },
   {
+    title: "MCP Server",
+    description: "Give your AI tools direct access to Forge components, blocks, and docs",
+    href: `${baseUrl}developing/mcp-server/`,
+    illustration: DevelopIllustration,
+  },
+  {
     title: "Blocks",
     description: "Pre-built patterns to jump-start your application layouts",
     href: `${baseUrl}blocks/`,
@@ -82,7 +88,7 @@ const visibleLinks = links.filter(({ hidden }) => !hidden);
 <BaseLayout title="Home" flush searchable={false}>
   <div class="flex flex-col min-h-full">
     <section
-      class="h-[400px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">
+      class="h-[200px] relative isolate overflow-hidden bg-linear-to-r from-(--forge-theme-primary) via-(--forge-theme-brand) to-(--forge-theme-primary) dark:from-(--forge-theme-brand) dark:to-(--forge-theme-brand) text-(--forge-theme-on-brand) px-large py-xxxlarge flex flex-col items-center justify-center gap-xlarge text-center">
       <img
         src={heroImage.src}
         alt=""

@@ -234,6 +234,15 @@ export class TreeSelectionController implements ReactiveController {
   }
 
   /**
+   * Recomputes the selected and indeterminate state of an item and its ancestors from their
+   * children. Use this after removing a child from the item.
+   * @param item The item to start updating from.
+   */
+  public updateFrom(item: TreeItemComponent): void {
+    this._updateAncestorSelections(item, [], true);
+  }
+
+  /**
    * Updates other items when an item is updated outside of the tree's interaction handlers.
    * @param evt The update event emitted from a tree item.
    */
@@ -345,8 +354,8 @@ export class TreeSelectionController implements ReactiveController {
    * @param changes The original state of all changed tree items.
    * @return The updated snapshot of all changed tree items.
    */
-  private _updateAncestorSelections(item: TreeItemComponent, changes: ITreeItemSnapshot[] = []): ITreeItemSnapshot[] {
-    let parentItem = getParentItem(item);
+  private _updateAncestorSelections(item: TreeItemComponent, changes: ITreeItemSnapshot[] = [], includeSelf = false): ITreeItemSnapshot[] {
+    let parentItem = includeSelf ? item : getParentItem(item);
     while (parentItem) {
       // Save a snapshot of the parent item's current state
       this._addToSnapshot(parentItem, changes);

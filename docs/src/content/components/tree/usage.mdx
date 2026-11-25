@@ -61,6 +61,39 @@ Nest `forge-tree-item` elements in each other's `children` slot to build the hie
 
 Set `mode` to `single` (the default) or `multiple` to control how many items can be selected at once, or `leaf` to only allow selecting items with no children. Set `mode="off"` to disable selection entirely, and `selectionFollowsFocus` to select an item as soon as it's focused (single mode only).
 
+## Reorderable
+
+Set `reorderable` on the tree so users can move items by dragging. Each item shows a drag handle after its expand icon and checkbox. Dropping on the top or bottom edge of an item places the dragged item before or after it, and dropping on the middle of an item nests it inside, opening that item. Items can be moved to a different parent, but not into themselves, their descendants, or a different tree.
+
+```html
+<forge-tree reorderable>
+  <forge-tree-item value="documents">
+    Documents
+    <forge-tree-item value="resume">Resume</forge-tree-item>
+    <forge-tree-item value="cover-letter">Cover letter</forge-tree-item>
+  </forge-tree-item>
+  <forge-tree-item value="pictures">Pictures</forge-tree-item>
+</forge-tree>
+```
+
+The tree moves the item in the DOM for you and dispatches a cancelable `forge-tree-item-reorder` event from the item first. Call `preventDefault()` on the event to apply the change yourself, such as when the tree is rendered from data by a framework. The event's `detail` includes the `item`, the `parent` and `previousParent`, and the new `index` and `previousIndex` among each parent's child items.
+
+```js
+const tree = document.querySelector('forge-tree');
+
+tree.addEventListener('forge-tree-item-reorder', evt => {
+  const { item, parent, index } = evt.detail;
+
+  // Update your data model, then let your framework re-render the tree
+  evt.preventDefault();
+  moveNode(item.value, parent.value ?? null, index);
+});
+```
+
+### Keyboard
+
+Users can also move the focused item with Alt + Arrow up and Alt + Arrow down. See <a href={`${import.meta.env.BASE_URL}components/tree/accessibility/`}>accessibility</a> for how these move items between parents.
+
 ## Accordion behavior
 
 Set `accordion` so opening one item automatically closes its siblings, instead of allowing multiple branches open at once.

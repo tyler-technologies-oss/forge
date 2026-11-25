@@ -24,24 +24,31 @@ const baseUrl = import.meta.env.BASE_URL;
 <BaseLayout
   title="Blocks"
   description="Pre-built UI patterns and templates"
-  wide
   searchable={false}>
   <PageScaffold class="blocks-page">
+    <div slot="header">
     <ContentHeader
-      slot="header"
       title="Blocks"
       description="Pre-built UI patterns and layouts to accelerate development."
     />
-
-    <div>
-      <div class="mb-xlarge flex flex-col gap-medium">
-        <forge-text-field class="block w-full">
-          <input
-            type="text"
-            id="block-filter"
-            placeholder="Filter by name or tag..."
-          />
+    <div class="mb-medium flex flex-col gap-medium">
+        <div class="flex items-center gap-medium">
+          <forge-text-field class="block grow" show-clear>
+          <forge-icon slot="start" name="search"></forge-icon>
+          <forge-icon-button slot="clear-button" tabindex="-1" dense aria-label="Clear">
+            <forge-icon name="clear"></forge-icon>
+          </forge-icon-button>
+          <input type="text" id="block-filter" autocomplete="off" placeholder="Search blocks" aria-label="Search blocks" />
         </forge-text-field>
+          <forge-button-toggle-group id="view-toggle" value="card" mandatory aria-label="Layout">
+            <forge-button-toggle value="card" aria-label="Card view">
+              <forge-icon name="view_grid"></forge-icon>
+            </forge-button-toggle>
+            <forge-button-toggle value="list" aria-label="List view">
+              <forge-icon name="view_list"></forge-icon>
+            </forge-button-toggle>
+          </forge-button-toggle-group>
+        </div>
         <forge-chip-set id="category-filter" type="filter" dense>
           {
             categoryOptions.map((label) => (
@@ -50,6 +57,10 @@ const baseUrl = import.meta.env.BASE_URL;
           }
         </forge-chip-set>
       </div>
+    </div>
+
+    <div class="pt-medium">
+
 
       {
         groupedBlocks.length === 0 ? (
@@ -70,7 +81,7 @@ const baseUrl = import.meta.env.BASE_URL;
                 class="category-section mb-xxlarge"
                 data-category={group.label}>
                 <h2 class="text-heading4 mt-0 mb-large">{group.label}</h2>
-                <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-large">
+                <div data-view="card" class="block-grid group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] data-[view=list]:grid-cols-1 gap-large">
                   {group.items.map((block) => (
                     <div
                       class="block-card"
@@ -83,7 +94,8 @@ const baseUrl = import.meta.env.BASE_URL;
                             href={`${baseUrl}blocks/${block.id}/`}
                             aria-label={`View ${block.name} block`}
                           />
-                          <div class="block-preview aspect-video w-full overflow-hidden">
+                          <div class="flex h-full flex-col group-data-[view=list]:flex-row">
+                          <div class="block-preview aspect-video w-full overflow-hidden group-data-[view=list]:w-[240px] group-data-[view=list]:shrink-0">
                             <img
                               src={getBlockScreenshotUrl(block)}
                               alt={`Preview of ${block.name}`}
@@ -91,13 +103,19 @@ const baseUrl = import.meta.env.BASE_URL;
                               class="w-full h-full object-cover object-top"
                             />
                           </div>
-                          <div class="p-medium">
+                          <div class="p-medium group-data-[view=list]:flex group-data-[view=list]:flex-col group-data-[view=list]:justify-center">
                             <h3 class="text-heading3 mt-0 mb-xsmall">
                               {block.name}
                             </h3>
                             <p class="text-medium mt-0 mb-medium">
-                              {truncateDescription(block.description)}
+                              <span class="group-data-[view=list]:hidden">
+                                {truncateDescription(block.description)}
+                              </span>
+                              <span class="hidden group-data-[view=list]:inline">
+                                {block.description}
+                              </span>
                             </p>
+                          </div>
                           </div>
                         </forge-button-area>
                       </forge-card>
@@ -114,54 +132,76 @@ const baseUrl = import.meta.env.BASE_URL;
 </BaseLayout>
 
 <script>
-  function initBlockFilter(): void {
-    const filterInput = document.getElementById(
-      "block-filter",
-    ) as HTMLInputElement | null;
-    const categoryChips = document.getElementById("category-filter");
-    if (!filterInput || !categoryChips) return;
+  import {
+    getListFilters,
+    getListView,
+    setListFilters,
+    setListView,
+    type ListView,
+  } from "../../scripts/list-view";
 
-    const getSelectedCategories = (): Set<string> => {
-      const selected = new Set<string>();
-      categoryChips
-        .querySelectorAll<
-          HTMLElement & { selected?: boolean; value?: string }
-        >("forge-chip")
-        .forEach((chip) => {
-          if (chip.selected && chip.value) selected.add(chip.value);
-        });
-      return selected;
-    };
+  const PAGE_KEY = "blocks";
+
+  type ChipElement = HTMLElement & { selected: boolean; value: string };
+
+  const initBlockFilter = async (): Promise<void> => {
+    const filterInput = document.getElementById("block-filter") as HTMLInputElement | null;
+    const categoryChips = document.getElementById("category-filter");
+    const toggle = document.getElementById("view-toggle") as (HTMLElement & { value: string }) | null;
+    if (!filterInput || !categoryChips || !toggle) {
+      return;
+    }
+
+    await customElements.whenDefined("forge-chip");
+    const chips = Array.from(categoryChips.querySelectorAll<ChipElement>("forge-chip"));
 
     const applyFilters = (): void => {
       const query = filterInput.value.toLowerCase().trim();
-      const selectedCategories = getSelectedCategories();
-      const filterByCategory = selectedCategories.size > 0;
-      const cards = document.querySelectorAll<HTMLElement>(".block-card");
-      const sections =
-        document.querySelectorAll<HTMLElement>(".category-section");
+      const selected = chips.filter((chip) => chip.selected).map((chip) => chip.value);
 
-      cards.forEach((card) => {
-        const name = card.dataset.name ?? "";
-        const tags = card.dataset.tags ?? "";
+      document.querySelectorAll<HTMLElement>(".block-card").forEach((item) => {
+        const name = item.dataset.name ?? "";
+        const tags = item.dataset.tags ?? "";
         const matches = !query || name.includes(query) || tags.includes(query);
-        card.style.display = matches ? "" : "none";
+        item.style.display = matches ? "" : "none";
       });
 
-      sections.forEach((section) => {
-        const category = section.dataset.category ?? "";
-        const matchesCategory =
-          !filterByCategory || selectedCategories.has(category);
-        const hasVisible = Array.from(
-          section.querySelectorAll<HTMLElement>(".block-card"),
-        ).some((card) => card.style.display !== "none");
+      document.querySelectorAll<HTMLElement>(".category-section").forEach((section) => {
+        const matchesCategory = selected.length === 0 || selected.includes(section.dataset.category ?? "");
+        const hasVisible = Array.from(section.querySelectorAll<HTMLElement>(".block-card")).some(
+          (card) => card.style.display !== "none",
+        );
         section.style.display = matchesCategory && hasVisible ? "" : "none";
+      });
+
+      setListFilters(PAGE_KEY, { query: filterInput.value, categories: selected });
+    };
+
+    const applyView = (view: ListView): void => {
+      document.querySelectorAll<HTMLElement>(".block-grid").forEach((el) => {
+        el.dataset.view = view;
       });
     };
 
+    const saved = getListFilters(PAGE_KEY);
+    filterInput.value = saved.query;
+    chips.forEach((chip) => {
+      chip.selected = saved.categories.includes(chip.value);
+    });
+    const view = getListView();
+    toggle.value = view;
+    applyView(view);
+    applyFilters();
+
+    toggle.addEventListener("forge-button-toggle-group-change", ({ detail }: Event & { detail?: string }) => {
+      const next: ListView = detail === "list" ? "list" : "card";
+      setListView(next);
+      applyView(next);
+    });
     filterInput.addEventListener("input", applyFilters);
+    filterInput.closest("forge-text-field")?.addEventListener("forge-text-field-clear", applyFilters);
     categoryChips.addEventListener("forge-chip-select", applyFilters);
-  }
+  };
 
   document.addEventListener("astro:page-load", initBlockFilter);
 </script>
@@ -188,5 +228,9 @@ const baseUrl = import.meta.env.BASE_URL;
   /* Top-corner radius on the block preview image matches the card radius. */
   .block-preview img {
     border-radius: var(--card-radius) var(--card-radius) 0 0;
+  }
+
+  [data-view="list"] .block-preview img {
+    border-radius: var(--card-radius) 0 0 var(--card-radius);
   }
 </style>

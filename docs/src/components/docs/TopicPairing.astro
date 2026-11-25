@@ -15,7 +15,7 @@ const SECTION_TONES = {
   buildingApps: "success",
   tooling: "info",
   tokens: "tertiary",
-  about: "primary",
+  changelog: "primary",
 } as const satisfies Record<string, HeaderPairingTone>;
 
 const TOPICS = {
@@ -41,8 +41,7 @@ const TOPICS = {
   "tokens-elevation": { section: "tokens", icon: "box_shadow", caption: "--forge-elevation-*" },
   "tokens-layering": { section: "tokens", icon: "layers_triple_outline", caption: "--forge-z-index-*" },
   "tokens-animation": { section: "tokens", icon: "motion_play_outline", caption: "--forge-animation-*" },
-  roadmap: { section: "about", icon: "map_marker_path", caption: "FORGE feature requests" },
-  changelog: { section: "about", icon: "history", caption: `@tylertech/forge@${version}` },
+  changelog: { section: "changelog", icon: "history", caption: `@tylertech/forge@${version}` },
 } as const satisfies Record<string, { section: keyof typeof SECTION_TONES; icon: string; caption: string }>;
 
 interface Props {
