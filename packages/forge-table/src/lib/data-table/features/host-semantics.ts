@@ -19,7 +19,7 @@ const CUSTOM_STATE_RULES: readonly CustomStateRule[] = [
 ];
 
 /**
- * Keeps the host's `role`, `aria-multiselectable` and custom states in sync with its properties.
+ * Keeps the host's `role`, `aria-multiselectable`, `aria-rowcount` and custom states in sync with its properties.
  */
 export class HostSemantics {
   readonly #host: DataTableElement<any>;
@@ -38,6 +38,10 @@ export class HostSemantics {
       this.#host.setAttribute('role', this.#managedRole);
     }
     this.#internals.ariaMultiSelectable = this.#host.cellSelection ? 'true' : null;
+  }
+
+  public updateRowCount(rowCount: number | undefined): void {
+    this.#internals.ariaRowCount = rowCount === undefined ? null : String(rowCount);
   }
 
   public updateStates(changedProperties: ReadonlyMap<PropertyKey, unknown>): void {

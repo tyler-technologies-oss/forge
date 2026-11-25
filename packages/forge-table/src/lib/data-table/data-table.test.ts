@@ -562,6 +562,179 @@ describe('DataTable', () => {
         expect(description).toBe('Sorted by name.');
       });
     });
+
+    describe('sortable headers', () => {
+      const getSortTarget = (harness: DataTableHarness, columnId: string): HTMLElement =>
+        harness.getHeaderCellById(columnId)?.querySelector('.cell-content') as HTMLElement;
+
+      const pressKey = async (harness: DataTableHarness, target: HTMLElement, key: string, init: KeyboardEventInit = {}): Promise<void> => {
+        target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, composed: true, cancelable: true, ...init }));
+        await settle(harness.element);
+      };
+
+      it('should not set aria-sort on any column when no column is sorted', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        expect(harness.headerCells.every(cell => !cell.hasAttribute('aria-sort'))).toBe(true);
+      });
+
+      it('should set aria-sort to ascending on the column sorted ascending', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await harness.clickHeaderCell(1);
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('ascending');
+      });
+
+      it('should set aria-sort to descending on the column sorted descending', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCell(1);
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('descending');
+      });
+
+      it('should remove aria-sort when the sort is cleared', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCell(1);
+
+        expect(harness.getHeaderCellById('name')?.hasAttribute('aria-sort')).toBe(false);
+      });
+
+      it('should only set aria-sort on the sorted column', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await harness.clickHeaderCell(1);
+
+        expect(harness.getHeaderCellById('age')?.hasAttribute('aria-sort')).toBe(false);
+      });
+
+      it('should not make headers focusable when the table is not sortable', async () => {
+        const harness = await createFixture();
+
+        expect(harness.shadowRoot.querySelectorAll('thead .cell-content[tabindex]')).toHaveLength(0);
+        expect(harness.shadowRoot.querySelectorAll('thead .cell-content[role="button"]')).toHaveLength(0);
+      });
+
+      it('should make the header of every sortable column a focusable button when sortable', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        const targets = harness.shadowRoot.querySelectorAll('thead .cell-content[role="button"][tabindex="0"]');
+        expect(targets).toHaveLength(TEST_COLUMNS.length);
+      });
+
+      it('should not make the header of a column that cannot be sorted focusable', async () => {
+        const columns: ColumnDef<TestData>[] = [
+          { id: 'id', header: 'ID', property: 'id' },
+          { id: 'name', header: 'Name', property: 'name' },
+          { id: 'actions', header: 'Actions' }
+        ];
+        const harness = await createFixture({ sortable: true, columns });
+
+        expect(getSortTarget(harness, 'actions').hasAttribute('tabindex')).toBe(false);
+        expect(getSortTarget(harness, 'name').getAttribute('tabindex')).toBe('0');
+      });
+
+      it('should reach the sortable headers with the Tab key', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await userEvent.tab();
+
+        expect(harness.element.shadowRoot?.activeElement).toBe(getSortTarget(harness, 'id'));
+      });
+
+      it('should sort ascending when Enter is pressed on a header', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), 'Enter');
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('ascending');
+      });
+
+      it('should sort ascending when Space is pressed on a header', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), ' ');
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('ascending');
+      });
+
+      it('should toggle the direction when Enter is pressed again', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), 'Enter');
+        await pressKey(harness, getSortTarget(harness, 'name'), 'Enter');
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('descending');
+      });
+
+      it('should prevent the default action of the keys that sort so the page does not scroll', async () => {
+        const harness = await createFixture({ sortable: true });
+        const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true, composed: true, cancelable: true });
+
+        getSortTarget(harness, 'name').dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(true);
+      });
+
+      it('should not sort when another key is pressed on a header', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), 'a');
+
+        expect(harness.getHeaderCellById('name')?.hasAttribute('aria-sort')).toBe(false);
+      });
+
+      it('should sort by several columns when Shift+Enter is pressed on another header', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), 'Enter');
+        await pressKey(harness, getSortTarget(harness, 'email'), 'Enter', { shiftKey: true });
+
+        expect(harness.getHeaderCellById('name')?.getAttribute('aria-sort')).toBe('ascending');
+        expect(harness.getHeaderCellById('email')?.getAttribute('aria-sort')).toBe('ascending');
+      });
+
+      it('should replace the sort when Enter is pressed on another header without the multi sort key', async () => {
+        const harness = await createFixture({ sortable: true });
+
+        await pressKey(harness, getSortTarget(harness, 'name'), 'Enter');
+        await pressKey(harness, getSortTarget(harness, 'email'), 'Enter');
+
+        expect(harness.getHeaderCellById('name')?.hasAttribute('aria-sort')).toBe(false);
+        expect(harness.getHeaderCellById('email')?.getAttribute('aria-sort')).toBe('ascending');
+      });
+
+      it('should ignore keys pressed on content inside the header button', async () => {
+        const harness = await createFixture({ sortable: true });
+        const text = getSortTarget(harness, 'name').querySelector('.cell-text') as HTMLElement;
+
+        await pressKey(harness, text, 'Enter');
+
+        expect(harness.getHeaderCellById('name')?.hasAttribute('aria-sort')).toBe(false);
+      });
+
+      it('should not make a header focusable while its column is being renamed', async () => {
+        const columns: ColumnDef<TestData>[] = TEST_COLUMNS.map(column => ({ ...column, renamable: column.id === 'name' }));
+        const harness = await createFixture({ sortable: true, columns });
+
+        await chooseMenuAction(harness, 'name', 'Rename');
+
+        expect(getSortTarget(harness, 'name').hasAttribute('tabindex')).toBe(false);
+        expect(getSortTarget(harness, 'name').hasAttribute('role')).toBe(false);
+      });
+
+      it('should be accessible when sortable and sorted', async () => {
+        const harness = await createFixture({ sortable: true });
+        await harness.clickHeaderCell(1);
+
+        await expect(harness.element).toBeAccessible();
+      });
+    });
   });
 
   describe('Column Definitions', () => {

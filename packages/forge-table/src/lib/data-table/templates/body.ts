@@ -1,12 +1,14 @@
 import type { Row as TanstackRow } from '@tanstack/lit-table';
 import { html, TemplateResult } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { getGroupStartColumnIds } from '../columns/column-utils.js';
 import { getCellRole } from '../features/cell-selection.js';
 import { CLICKABLE_CLASS, getRowClickHandler, hasRowClickAction } from '../features/row-click.js';
 import { getGroupRowName } from '../features/row-grouping.js';
+import { getBodyRowIndex, type RowIndexing } from '../features/row-indexing.js';
 import type { PaginationController } from '../features/pagination.js';
 import { setRowName, type RowMeta } from '../features/row-meta.js';
 import { renderRowDetail, toggleRowOnDoubleClick } from '../features/expander.js';
@@ -21,6 +23,7 @@ export interface BodyContext<TData extends Row> extends BodyCellContext<TData> {
   filtered: boolean;
   virtualization: RowVirtualization<TData>;
   pagination: PaginationController<TData>;
+  rowIndexing?: RowIndexing;
 }
 
 export function renderBody<TData extends Row>(context: BodyContext<TData>): TemplateResult {
@@ -58,13 +61,14 @@ function renderTableBody<TData extends Row>(context: BodyContext<TData>): Templa
     ${repeat(
       table.getRowModel().rows,
       row => row.id,
-      row => {
+      (row, position) => {
         const { name, nameId } = getRowMeta(context, row);
         return html`
           <tr
             role="row"
             id=${nameId}
             aria-label=${name}
+            aria-rowindex=${ifDefined(getBodyRowIndex(context.rowIndexing, position))}
             class=${classMap({
               selected: row.getIsSelected(),
               'group-row': row.getIsGrouped(),
@@ -111,6 +115,7 @@ function renderVirtualizedTableBody<TData extends Row>(context: BodyContext<TDat
             role="row"
             id=${nameId}
             aria-label=${name}
+            aria-rowindex=${ifDefined(getBodyRowIndex(context.rowIndexing, item.index))}
             data-index="${item.index}"
             class=${classMap({
               selected: row.getIsSelected(),

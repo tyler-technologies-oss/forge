@@ -14,6 +14,7 @@ import type { ColumnRenameController } from '../features/column-rename.js';
 import type { ColumnFilterFnController } from '../features/filter-fn.js';
 import { getPinnedColumnClasses, getPinnedColumnStyle } from '../features/column-pinning.js';
 import { getColumnWidthStyle } from '../features/column-sizing.js';
+import { getHeaderRowIndex, type RowIndexing } from '../features/row-indexing.js';
 import { getColumnHeaderId, getColumnHeaderTextId } from '../features/row-meta.js';
 import type { DataTableFeatures } from '../table-features.js';
 import type { Row } from '../types.js';
@@ -26,6 +27,7 @@ export interface HeaderContext<TData extends Row> {
   rename: ColumnRenameController<TData>;
   filterFn: ColumnFilterFnController<TData>;
   reorder: ColumnReorderController<TData> | null;
+  rowIndexing?: RowIndexing;
 }
 
 type TableHeader<TData extends Row> = Header<DataTableFeatures, TData, unknown>;
@@ -37,8 +39,8 @@ export function renderTableHeader<TData extends Row>(context: HeaderContext<TDat
   const headerGroups = context.table.getHeaderGroups();
   const groupStartColumnIds = getGroupStartColumnIds(context.table);
   return html`${headerGroups.map(
-    headerGroup => html`
-      <tr role="row" part="head-tr tr">
+    (headerGroup, position) => html`
+      <tr role="row" part="head-tr tr" aria-rowindex=${ifDefined(getHeaderRowIndex(context.rowIndexing, position))}>
         ${headerGroup.headers.map(header => renderHeaderCell(context, header, headerGroup, headerGroups, groupStartColumnIds))}
       </tr>
     `
@@ -73,6 +75,16 @@ function renderHeaderCell<TData extends Row>(
             }
           }
         : null;
+  const sortDirection = column.getIsSorted();
+  const isSortable = host.sortable && !header.isPlaceholder && !isRenaming && column.getCanSort();
+  const toggleSorting = isSortable ? column.getToggleSortingHandler() : undefined;
+  const onSortKeydown = (evt: KeyboardEvent): void => {
+    if (evt.target !== evt.currentTarget || (evt.key !== 'Enter' && evt.key !== ' ')) {
+      return;
+    }
+    evt.preventDefault();
+    toggleSorting?.(evt);
+  };
   const hasColumnMenu = !isLeadingColumn && !header.isPlaceholder && !isParent;
   const onHeaderContextMenu = (evt: MouseEvent): void => {
     const menu = (evt.currentTarget as HTMLElement).querySelector<ColumnMenuElement<TData>>(COLUMN_MENU_TAG_NAME);
@@ -88,6 +100,7 @@ function renderHeaderCell<TData extends Row>(
       role="columnheader"
       part="head-cell cell"
       colspan=${ifDefined(header.colSpan > 1 ? header.colSpan : undefined)}
+      aria-sort=${ifDefined(host.sortable && sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined)}
       style=${styleMap({ width: getColumnWidthStyle(column, host.resizable), ...getPinnedColumnStyle(column) })}
       class=${classMap({
         ...getPinnedColumnClasses(column),
@@ -115,7 +128,10 @@ function renderHeaderCell<TData extends Row>(
         })}>
         <div
           part="head-cell-content cell-content"
-          class="cell-content"
+          class=${classMap({ 'cell-content': true, sortable: isSortable })}
+          role=${ifDefined(isSortable ? 'button' : undefined)}
+          tabindex=${ifDefined(isSortable ? 0 : undefined)}
+          @keydown=${isSortable ? onSortKeydown : nothing}
           @click=${canRename && sortClickHandler
             ? (evt: MouseEvent) => {
                 rename.captureSortingBeforeClick(evt);

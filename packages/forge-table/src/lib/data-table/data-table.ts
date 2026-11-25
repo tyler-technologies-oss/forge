@@ -40,6 +40,7 @@ import { getColumnPinningState, pinSelectColumn } from './features/column-pinnin
 import { ColumnRenameController } from './features/column-rename.js';
 import { DEFAULT_PAGINATION, PaginationController } from './features/pagination.js';
 import { RowClickController } from './features/row-click.js';
+import { getAriaRowCount, getRowIndexing } from './features/row-indexing.js';
 import { ColumnFilterFnController } from './features/filter-fn.js';
 import { GlobalFilter } from './features/global-filter.js';
 import { getColumnSizeStyles } from './features/column-sizing.js';
@@ -568,6 +569,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     });
     this.#table = table;
     this.#cellSelection.updateTabStop(table);
+    const rowIndexing = getRowIndexing(this, table);
+    this.#hostSemantics.updateRowCount(rowIndexing && getAriaRowCount(rowIndexing));
 
     return html`
       <div class="table-container" ${ref(this.#tableContainerRef)}>
@@ -597,7 +600,8 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
               sorting: this._sorting,
               rename: this.#columnRename,
               filterFn: this.#columnFilterFn,
-              reorder: this.#columnReorderController
+              reorder: this.#columnReorderController,
+              rowIndexing
             })}
           </thead>
           ${renderBody({
@@ -608,9 +612,10 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             cellRender: this.#cellRender,
             cellSlot: this.#cellSlot,
             virtualization: this.#virtualization,
-            pagination: this.#pagination
+            pagination: this.#pagination,
+            rowIndexing
           })}
-          ${renderTableFooter(table, this.resizable)}
+          ${renderTableFooter(table, this.resizable, rowIndexing)}
         </table>
       </div>
       ${renderPaginator(this, this.#pagination)}

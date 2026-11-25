@@ -168,6 +168,12 @@ table {
             color #{animation.variable(duration-short4)} #{animation.variable(easing-standard)};
         }
 
+        .cell-content.sortable {
+          @include focus-indicator.standalone($type: 'inward');
+
+          position: relative;
+        }
+
         &:hover {
           .sort-icon {
             opacity: #{theme.emphasis(medium)};
