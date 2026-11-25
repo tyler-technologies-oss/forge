@@ -16,6 +16,10 @@ export type CellEditablePredicate = (cell: AnyCell) => boolean;
  */
 export function createCellEditablePredicate<TData extends Row>(column: ColumnDef<TData>): CellEditablePredicate | undefined {
   const { editable } = column;
+  if (typeof editable === 'function') {
+    return cell => editable(cell.row.original);
+  }
+
   return editable ? () => true : undefined;
 }
 

@@ -16,13 +16,14 @@ import {
 import type { CellSelectionRange, CellSelectionState, ColumnFiltersState, SortingState, ColumnVisibilityState } from '@tanstack/lit-table';
 import { CurrencyFormatter, DataSource, NumberFormatter } from '@tylertech/forge-core';
 import { html } from 'lit';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { userEvent } from 'vitest/browser';
 import { getTableAccessibility } from '../../testing/accessibility.js';
 import './data-table.js';
 import type { ColumnDef, ColumnFilter, DataTableElement } from './data-table.js';
 import { actionCell, badgeCell, meterCell, ratingCell, registerFilterFns } from './data-table.js';
+import { dataTableFilterFns } from './features/filter-fn.js';
 import { fuzzyFilter } from './features/fuzzy/index.js';
 import {
   filterFn_arrIncludesSome as arrIncludesSome,
@@ -291,15 +292,31 @@ class DataTableHarness {
   }
 }
 
-async function chooseMenuAction(harness: DataTableHarness, columnId: string, label: string): Promise<void> {
+const MENU_ITEM_SELECTOR = ':is(forge-dropdown-menu-item, forge-dropdown-menu-item-checkbox, forge-dropdown-menu-item-radio)';
+
+async function chooseMenuAction(harness: DataTableHarness, columnId: string, label: string, parentLabel?: string): Promise<void> {
   const menu = harness.getHeaderCellById(columnId)?.querySelector('forge-data-table-column-menu');
   (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
+  const findItem = (scope: ParentNode | null | undefined, itemLabel: string, selector: string): HTMLElement | undefined =>
+    [...(scope?.querySelectorAll<HTMLElement>(selector) ?? [])].find(i => i.querySelector(':scope > span')?.textContent?.trim() === itemLabel);
+
   const item = await vi.waitFor(() => {
-    const match = [...(menu?.shadowRoot?.querySelectorAll('forge-dropdown-menu-item') ?? [])].find(i => i.textContent?.trim() === label);
+    const match = findItem(menu?.shadowRoot?.querySelector('forge-dropdown-menu'), parentLabel ?? label, `:scope > ${MENU_ITEM_SELECTOR}`);
     expect(match).toBeTruthy();
     return match as HTMLElement;
   });
   await userEvent.click(item);
+  if (!parentLabel) {
+    await settle(harness.element);
+    return;
+  }
+
+  const submenuItem = await vi.waitFor(() => {
+    const match = findItem(item, label, `:scope > ${MENU_ITEM_SELECTOR}`);
+    expect(match).toBeTruthy();
+    return match as HTMLElement;
+  });
+  await userEvent.click(submenuItem);
   await settle(harness.element);
 }
 
@@ -355,7 +372,14 @@ async function createFixture(
   return new DataTableHarness(el);
 }
 
+const DEFAULT_FILTER_FNS = { ...dataTableFilterFns };
+
 describe('DataTable', () => {
+  afterEach(() => {
+    Object.keys(dataTableFilterFns).forEach(name => delete dataTableFilterFns[name]);
+    Object.assign(dataTableFilterFns, DEFAULT_FILTER_FNS);
+  });
+
   describe('Basic Rendering', () => {
     it('should render with shadow root', async () => {
       const harness = await createFixture();
@@ -1551,17 +1575,17 @@ describe('DataTable', () => {
     it('should pin and unpin a column from its column menu', async () => {
       const harness = await createFixture({ columns: TEST_COLUMNS });
 
-      await chooseMenuAction(harness, 'email', 'Pin');
+      await chooseMenuAction(harness, 'email', 'Start', 'Pin');
       expect(getHeaderIds(harness)).toEqual(['email', 'id', 'name', 'age']);
 
-      await chooseMenuAction(harness, 'email', 'Unpin');
+      await chooseMenuAction(harness, 'email', 'Unpin', 'Pin');
       expect(getHeaderIds(harness)).toEqual(['id', 'name', 'age', 'email']);
     });
 
     it('should keep the row selection column first when a column is pinned from the menu', async () => {
       const harness = await createFixture({ columns: TEST_COLUMNS, rowSelection: 'multiple' });
 
-      await chooseMenuAction(harness, 'email', 'Pin');
+      await chooseMenuAction(harness, 'email', 'Start', 'Pin');
 
       expect(getHeaderIds(harness).slice(0, 2)).toEqual(['SELECT_COLUMN_ID', 'email']);
     });
@@ -2006,15 +2030,13 @@ describe('DataTable', () => {
         expect(harness.getSortIconForColumn('name')).not.toBeNull();
         expect(harness.getSortIconForColumn('age')).not.toBeNull();
 
-        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCellWithModifier(2, 'shift');
         await harness.element.updateComplete;
-        await harness.clickHeaderCell(1);
-        await harness.element.updateComplete;
-        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCellWithModifier(2, 'shift');
         await harness.element.updateComplete;
 
-        const nameIcon = harness.getSortIconForColumn('name');
-        expect(nameIcon).toBeNull();
+        expect(harness.getSortIconForColumn('age')).toBeNull();
+        expect(harness.getSortIconForColumn('name')).not.toBeNull();
       });
 
       it('should not remove from multi-sort when multiSortRemove is false', async () => {
@@ -2026,10 +2048,11 @@ describe('DataTable', () => {
         expect(harness.getSortIconForColumn('name')).not.toBeNull();
         expect(harness.getSortIconForColumn('age')).not.toBeNull();
 
-        await harness.clickHeaderCell(1);
-        await harness.clickHeaderCell(1);
-        await harness.clickHeaderCell(1);
+        await harness.clickHeaderCellWithModifier(2, 'shift');
+        await harness.clickHeaderCellWithModifier(2, 'shift');
+        await harness.clickHeaderCellWithModifier(2, 'shift');
 
+        expect(harness.getSortIconForColumn('age')).not.toBeNull();
         expect(harness.getSortIconForColumn('name')).not.toBeNull();
       });
 
@@ -2332,7 +2355,7 @@ describe('DataTable', () => {
       };
       const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter });
 
-      expect(optionLabels(harness)).toEqual(['All', 'Low', 'High']);
+      expect(optionLabels(harness)).toEqual(['', 'Low', 'High']);
     });
 
     it('should filter by the chosen option of a select field', async () => {
@@ -2350,7 +2373,7 @@ describe('DataTable', () => {
       const filter: ColumnFilter<FieldData> = { filterFn: filterFn_equals, field: { type: 'select' } };
       const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter });
 
-      expect(optionLabels(harness)).toEqual(['All', 'low', 'high']);
+      expect(optionLabels(harness)).toEqual(['', 'low', 'high']);
     });
 
     it('should filter by every chosen option of a multiple select field', async () => {
@@ -2387,7 +2410,7 @@ describe('DataTable', () => {
       registerFilterFns({ equals: filterFn_equals });
       const harness = await fieldFixture({ id: 'level', header: 'Level', property: 'level', filter: { filterFn: 'equals', field: { type: 'select' } } });
 
-      expect(optionLabels(harness)).toEqual(['All', 'low', 'high']);
+      expect(optionLabels(harness)).toEqual(['', 'low', 'high']);
     });
 
     it('should use the field of the filter instead of the default field of its filter function', async () => {
@@ -5568,9 +5591,10 @@ describe('DataTable', () => {
         const harness = await createGroupedFixture({ grouping: [] });
         const menu = harness.getHeaderCellById('email')?.querySelector('forge-data-table-column-menu');
         (menu?.shadowRoot?.querySelector('forge-icon-button') as HTMLElement).click();
-        await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item').length).toBeGreaterThan(0));
+        const getItems = (): Element[] => [...(menu?.shadowRoot?.querySelectorAll(`forge-dropdown-menu > ${MENU_ITEM_SELECTOR}`) ?? [])];
+        await vi.waitFor(() => expect(getItems().length).toBeGreaterThan(0));
 
-        const labels = [...document.querySelectorAll('forge-list-item')].map(item => item.textContent?.trim());
+        const labels = getItems().map(item => item.querySelector(':scope > span')?.textContent?.trim());
 
         expect(labels).not.toContain('Group');
       });

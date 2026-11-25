@@ -25,7 +25,7 @@ import { EXPANDER_COLUMN_ID, SELECT_COLUMN_ID } from '../data-table/constants.js
 import type { DataTableFeatures } from '../data-table/table-features.js';
 import type { Row } from '../data-table/types.js';
 import { COLUMN_MENU_ACTION_EVENT, COLUMN_MENU_TAG_NAME } from './constants.js';
-import type { ColumnMenuActionEventDetail } from './types.js';
+import type { ColumnMenuAction, ColumnMenuActionEventDetail } from './types.js';
 
 import '@tylertech/forge/dropdown-menu';
 import '@tylertech/forge/dropdown-menu/dropdown-menu-item';
@@ -123,11 +123,11 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
               <forge-dropdown-menu-item>
                 <forge-icon slot="start" name="sort"></forge-icon>
                 <span>Sort</span>
-                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(true)}">
+                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(false)}">
                   <forge-icon slot="start" name="arrow_upward"></forge-icon>
                   <span>Ascending</span>
                 </forge-dropdown-menu-item-radio>
-                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(false)}">
+                <forge-dropdown-menu-item-radio slot="submenu" @click="${() => this.column?.toggleSorting(true)}">
                   <forge-icon slot="start" name="arrow_downward"></forge-icon>
                   <span>Descending</span>
                 </forge-dropdown-menu-item-radio>
@@ -144,7 +144,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
           : nothing}
         ${this.column?.columnDef.meta?.renamable && typeof this.column?.columnDef.header === 'string'
           ? html`
-              <forge-dropdown-menu-item @click="${() => this.#rename()}">
+              <forge-dropdown-menu-item @click="${() => this.#announce('rename')}">
                 <forge-icon slot="start" name="edit"></forge-icon>
                 <span>Rename</span>
               </forge-dropdown-menu-item>
@@ -183,7 +183,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
           : nothing}
         ${this.column?.getCanResize()
           ? html`
-              <forge-dropdown-menu-item>
+              <forge-dropdown-menu-item @click="${() => this.#announce('maximize')}">
                 <forge-icon slot="start" name="arrow_expand_horizontal"></forge-icon>
                 <span>Maximize</span>
               </forge-dropdown-menu-item>
@@ -224,7 +224,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
     table.setColumnOrder(order);
   }
 
-  #rename(): void {
+  #announce(action: ColumnMenuAction): void {
     const columnId = this.column?.id;
     if (!columnId) {
       return;
@@ -232,7 +232,7 @@ export class ColumnMenuElement<TData extends Row = Row> extends LitElement {
 
     this.dispatchEvent(
       new CustomEvent<ColumnMenuActionEventDetail>(COLUMN_MENU_ACTION_EVENT, {
-        detail: { columnId, action: 'rename' },
+        detail: { columnId, action },
         bubbles: true,
         composed: true
       })

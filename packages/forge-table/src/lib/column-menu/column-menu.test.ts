@@ -54,32 +54,58 @@ async function renderMenu(table: Table<DataTableFeatures, TestData>, columnId: s
   return element;
 }
 
-async function openMenu(element: ColumnMenuElement<TestData>): Promise<HTMLElement[]> {
-  const button = element.shadowRoot?.querySelector('forge-icon-button') as HTMLElement;
-  await userEvent.click(button);
-  const getItems = (): HTMLElement[] => Array.from(document.querySelectorAll('forge-list-item'));
-  await vi.waitFor(() => expect(getItems().length).toBeGreaterThan(0));
-  return getItems();
+type MenuItem = HTMLElement & { disabled: boolean; open?: boolean; checked?: boolean };
+
+const ITEM_SELECTOR = ':is(forge-dropdown-menu-item, forge-dropdown-menu-item-checkbox, forge-dropdown-menu-item-radio)';
+
+function getMenu(element: ColumnMenuElement<TestData>): HTMLElement & { open: boolean } {
+  return element.shadowRoot?.querySelector('forge-dropdown-menu') as HTMLElement & { open: boolean };
+}
+
+function getItemLabel(item: HTMLElement): string | undefined {
+  return item.querySelector(':scope > span')?.textContent?.trim();
+}
+
+function getTopLevelItems(element: ColumnMenuElement<TestData>): MenuItem[] {
+  return Array.from(getMenu(element).querySelectorAll<MenuItem>(`:scope > ${ITEM_SELECTOR}`));
+}
+
+function getSubmenuItems(parent: HTMLElement): MenuItem[] {
+  return Array.from(parent.querySelectorAll<MenuItem>(`:scope > ${ITEM_SELECTOR}`));
 }
 
 function getLabels(items: HTMLElement[]): Array<string | undefined> {
-  return items.map(i => i.textContent?.trim());
+  return items.map(getItemLabel);
 }
 
-function getItem(items: HTMLElement[], label: string): HTMLElement {
-  const item = items.find(i => i.textContent?.trim() === label);
+function getItem(items: HTMLElement[], label: string): MenuItem {
+  const item = items.find(i => getItemLabel(i) === label);
   if (!item) {
     throw new Error(`No menu item labelled "${label}"`);
   }
-  return item;
+  return item as MenuItem;
 }
 
-async function choose(items: HTMLElement[], label: string): Promise<void> {
-  await userEvent.click(getItem(items, label).querySelector('button') as HTMLElement);
+async function openMenu(element: ColumnMenuElement<TestData>): Promise<MenuItem[]> {
+  const button = element.shadowRoot?.querySelector('forge-icon-button') as HTMLElement;
+  await userEvent.click(button);
+  await vi.waitFor(() => expect(getMenu(element).open).toBe(true));
+  return getTopLevelItems(element);
 }
 
-function isDisabled(items: HTMLElement[], label: string): boolean {
-  return getItem(items, label).querySelector('button')?.hasAttribute('disabled') ?? false;
+async function openSubmenu(element: ColumnMenuElement<TestData>, parentLabel: string): Promise<MenuItem[]> {
+  const parent = getItem(await openMenu(element), parentLabel);
+  await userEvent.click(parent);
+  await vi.waitFor(() => expect(parent.open).toBe(true));
+  return getSubmenuItems(parent);
+}
+
+async function choose(element: ColumnMenuElement<TestData>, label: string): Promise<void> {
+  await userEvent.click(getItem(await openMenu(element), label));
+}
+
+async function chooseInSubmenu(element: ColumnMenuElement<TestData>, parentLabel: string, label: string): Promise<void> {
+  await userEvent.click(getItem(await openSubmenu(element, parentLabel), label));
 }
 
 describe('ColumnMenu', () => {
@@ -90,28 +116,52 @@ describe('ColumnMenu', () => {
     expect(button?.getAttribute('aria-label')).toBe('Column options');
   });
 
+  it('should focus the menu button when focused', async () => {
+    const element = await renderMenu(createTestTable(), 'name');
+
+    element.focus();
+
+    expect(element.shadowRoot?.activeElement).toBe(element.shadowRoot?.querySelector('forge-icon-button'));
+  });
+
   it('should list all column actions when opened', async () => {
     const element = await renderMenu(createTestTable(), 'name');
 
-    const items = await openMenu(element);
-
-    expect(items.map(i => i.textContent?.trim())).toEqual(['Move left', 'Move right', 'Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Sort', 'Hide', 'Pin', 'Maximize']);
   });
 
-  it('should sort the column ascending when sort ascending is chosen', async () => {
+  it('should list the move actions in the move submenu', async () => {
+    const element = await renderMenu(createTestTable(), 'name');
+
+    expect(getLabels(await openSubmenu(element, 'Move'))).toEqual(['Move left', 'Move right']);
+  });
+
+  it('should list the sort directions in the sort submenu', async () => {
+    const element = await renderMenu(createTestTable(), 'name');
+
+    expect(getLabels(await openSubmenu(element, 'Sort'))).toEqual(['Ascending', 'Descending']);
+  });
+
+  it('should list the pin actions in the pin submenu', async () => {
+    const element = await renderMenu(createTestTable(), 'name');
+
+    expect(getLabels(await openSubmenu(element, 'Pin'))).toEqual(['Start', 'End', 'Unpin']);
+  });
+
+  it('should sort the column ascending when ascending is chosen', async () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'age');
 
-    await choose(await openMenu(element), 'Sort ascending');
+    await chooseInSubmenu(element, 'Sort', 'Ascending');
 
     expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: false }]);
   });
 
-  it('should sort the column descending when sort descending is chosen', async () => {
+  it('should sort the column descending when descending is chosen', async () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'age');
 
-    await choose(await openMenu(element), 'Sort descending');
+    await chooseInSubmenu(element, 'Sort', 'Descending');
 
     expect(table.atoms.sorting.get()).toEqual([{ id: 'age', desc: true }]);
   });
@@ -119,16 +169,24 @@ describe('ColumnMenu', () => {
   it('should list the group action when the table allows grouping', async () => {
     const element = await renderMenu(createTestTable({ enableGrouping: true }), 'name');
 
-    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Sort ascending', 'Sort descending', 'Group', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Sort', 'Group', 'Hide', 'Pin', 'Maximize']);
   });
 
   it('should group the rows by the column when group is chosen', async () => {
     const table = createTestTable({ enableGrouping: true });
     const element = await renderMenu(table, 'name');
 
-    await choose(await openMenu(element), 'Group');
+    await choose(element, 'Group');
 
     expect(table.atoms.grouping.get()).toEqual(['name']);
+  });
+
+  it('should check the group action when the column is grouped', async () => {
+    const table = createTestTable({ enableGrouping: true });
+    table.setGrouping(['name']);
+    const element = await renderMenu(table, 'name');
+
+    expect(getItem(await openMenu(element), 'Group').checked).toBe(true);
   });
 
   it('should remove the grouping when group is chosen for a grouped column', async () => {
@@ -136,7 +194,7 @@ describe('ColumnMenu', () => {
     table.setGrouping(['name']);
     const element = await renderMenu(table, 'name');
 
-    await choose(await openMenu(element), 'Group');
+    await choose(element, 'Group');
 
     expect(table.atoms.grouping.get()).toEqual([]);
   });
@@ -151,26 +209,26 @@ describe('ColumnMenu', () => {
   it('should omit sort actions when the table does not allow sorting', async () => {
     const element = await renderMenu(createTestTable({ enableSorting: false }), 'name');
 
-    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Hide', 'Pin', 'Maximize']);
   });
 
   it('should omit sort actions when the column does not allow sorting', async () => {
     const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enableSorting: false } : column));
     const element = await renderMenu(createTestTable({ columns }), 'name');
 
-    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Hide', 'Pin', 'Maximize']);
   });
 
   it('should omit move actions when the table does not allow reordering', async () => {
     const element = await renderMenu(createTestTable(), 'name', false);
 
-    expect(getLabels(await openMenu(element))).toEqual(['Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Sort', 'Hide', 'Pin', 'Maximize']);
   });
 
-  it('should offer the rename action after the move actions when the column is renamable', async () => {
+  it('should offer the rename action before hide when the column is renamable', async () => {
     const element = await renderMenu(createTestTable({ columns: RENAMABLE_COLUMNS }), 'name');
 
-    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Rename', 'Sort ascending', 'Sort descending', 'Hide', 'Pin', 'Maximize']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Sort', 'Rename', 'Hide', 'Pin', 'Maximize']);
   });
 
   it('should dispatch an action event without changing the table when Rename is chosen', async () => {
@@ -179,25 +237,30 @@ describe('ColumnMenu', () => {
     const listener = vi.fn();
     element.addEventListener('forge-data-table-column-menu-action', listener);
 
-    await choose(await openMenu(element), 'Rename');
+    await choose(element, 'Rename');
 
     expect(listener).toHaveBeenCalledOnce();
     expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'rename' });
     expect(table.getColumn('name')?.columnDef.header).toBe('Name');
   });
 
-  it('should focus the menu button when focused', async () => {
-    const element = await renderMenu(createTestTable(), 'name');
-
-    element.focus();
-
-    expect(element.shadowRoot?.activeElement).toBe(element.shadowRoot?.querySelector('forge-icon-button'));
-  });
-
   it('should omit the maximize action when the table does not allow resizing', async () => {
     const element = await renderMenu(createTestTable({ enableColumnResizing: false }), 'name');
 
-    expect(getLabels(await openMenu(element))).toEqual(['Move left', 'Move right', 'Sort ascending', 'Sort descending', 'Hide', 'Pin']);
+    expect(getLabels(await openMenu(element))).toEqual(['Move', 'Sort', 'Hide', 'Pin']);
+  });
+
+  it('should dispatch an action event without changing the table when Maximize is chosen', async () => {
+    const table = createTestTable();
+    const element = await renderMenu(table, 'name');
+    const listener = vi.fn();
+    element.addEventListener('forge-data-table-column-menu-action', listener);
+
+    await choose(element, 'Maximize');
+
+    expect(listener).toHaveBeenCalledOnce();
+    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'maximize' });
+    expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
   });
 
   it('should reflect option changes made after the menu was first opened', async () => {
@@ -205,7 +268,7 @@ describe('ColumnMenu', () => {
     const element = await renderMenu(table, 'name');
     await openMenu(element);
     await userEvent.keyboard('{Escape}');
-    await vi.waitFor(() => expect(document.querySelectorAll('forge-list-item')).toHaveLength(0));
+    await vi.waitFor(() => expect(getMenu(element).open).toBe(false));
 
     element.reorderable = false;
     table.setOptions(prev => ({ ...prev, enableSorting: false, enableColumnResizing: false }));
@@ -218,22 +281,22 @@ describe('ColumnMenu', () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'name');
 
-    await choose(await openMenu(element), 'Hide');
+    await choose(element, 'Hide');
 
     expect(table.atoms.columnVisibility.get()).toEqual({ name: false });
   });
 
-  it('should disable hide when the column cannot be hidden', async () => {
+  it('should not offer hide when the column cannot be hidden', async () => {
     const element = await renderMenu(createTestTable(), 'age');
 
-    expect(isDisabled(await openMenu(element), 'Hide')).toBe(true);
+    expect(getLabels(await openMenu(element))).not.toContain('Hide');
   });
 
   it('should move the column left when move left is chosen', async () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'name');
 
-    await choose(await openMenu(element), 'Move left');
+    await chooseInSubmenu(element, 'Move', 'Move left');
 
     expect(table.getAllLeafColumns().map(c => c.id)).toEqual(['name', 'id', 'age']);
   });
@@ -242,7 +305,7 @@ describe('ColumnMenu', () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'name');
 
-    await choose(await openMenu(element), 'Move right');
+    await chooseInSubmenu(element, 'Move', 'Move right');
 
     expect(table.getAllLeafColumns().map(c => c.id)).toEqual(['id', 'age', 'name']);
   });
@@ -250,77 +313,72 @@ describe('ColumnMenu', () => {
   it('should disable move left for the first column', async () => {
     const element = await renderMenu(createTestTable(), 'id');
 
-    expect(isDisabled(await openMenu(element), 'Move left')).toBe(true);
+    expect(getItem(await openSubmenu(element, 'Move'), 'Move left').disabled).toBe(true);
   });
 
   it('should disable move right for the last column', async () => {
     const element = await renderMenu(createTestTable(), 'age');
 
-    expect(isDisabled(await openMenu(element), 'Move right')).toBe(true);
+    expect(getItem(await openSubmenu(element, 'Move'), 'Move right').disabled).toBe(true);
   });
 
-  it('should dispatch an action event without changing the table when Maximize is chosen', async () => {
+  it('should pin the column to the start when start is chosen', async () => {
     const table = createTestTable();
     const element = await renderMenu(table, 'name');
-    const listener = vi.fn();
-    element.addEventListener('forge-data-table-column-menu-action', listener);
 
-    await choose(await openMenu(element), 'Maximize');
-
-    expect(listener).toHaveBeenCalledTimes(1);
-    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'maximize' });
-    expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
-  });
-
-  it('should pin the column to the start when pin is chosen', async () => {
-    const table = createTestTable();
-    const element = await renderMenu(table, 'name');
-    const listener = vi.fn();
-    element.addEventListener('forge-data-table-column-menu-action', listener);
-
-    await choose(await openMenu(element), 'Pin');
+    await chooseInSubmenu(element, 'Pin', 'Start');
 
     expect(table.atoms.columnPinning.get()).toEqual({ start: ['name'], end: [] });
-    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'pin' });
+  });
+
+  it('should pin the column to the end when end is chosen', async () => {
+    const table = createTestTable();
+    const element = await renderMenu(table, 'name');
+
+    await chooseInSubmenu(element, 'Pin', 'End');
+
+    expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: ['name'] });
+  });
+
+  it('should check the pin position the column is pinned to', async () => {
+    const table = createTestTable();
+    table.getColumn('name')?.pin('end');
+    const element = await renderMenu(table, 'name');
+
+    const items = await openSubmenu(element, 'Pin');
+
+    expect(getItem(items, 'Start').checked).toBe(false);
+    expect(getItem(items, 'End').checked).toBe(true);
   });
 
   it('should unpin the column when unpin is chosen', async () => {
     const table = createTestTable();
     table.getColumn('name')?.pin('end');
     const element = await renderMenu(table, 'name');
-    const listener = vi.fn();
-    element.addEventListener('forge-data-table-column-menu-action', listener);
 
-    await choose(await openMenu(element), 'Unpin');
+    await chooseInSubmenu(element, 'Pin', 'Unpin');
 
     expect(table.atoms.columnPinning.get()).toEqual({ start: [], end: [] });
-    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'unpin' });
   });
 
-  it('should disable pin when the column cannot be pinned', async () => {
-    const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enablePinning: false } : column));
-    const element = await renderMenu(createTestTable({ columns }), 'name');
-
-    expect(isDisabled(await openMenu(element), 'Pin')).toBe(true);
-  });
-
-  it('should dispatch an action event for actions applied to the table', async () => {
+  it('should disable unpin when the column is not pinned', async () => {
     const element = await renderMenu(createTestTable(), 'name');
-    const listener = vi.fn();
-    element.addEventListener('forge-data-table-column-menu-action', listener);
 
-    await choose(await openMenu(element), 'Sort ascending');
-
-    expect(listener.mock.calls[0][0].detail).toEqual({ columnId: 'name', action: 'sort-ascending' });
+    expect(getItem(await openSubmenu(element, 'Pin'), 'Unpin').disabled).toBe(true);
   });
 
-  it('should offer unpin when the column is pinned', async () => {
+  it('should enable unpin when the column is pinned', async () => {
     const table = createTestTable();
     table.getColumn('name')?.pin('start');
     const element = await renderMenu(table, 'name');
 
-    const items = await openMenu(element);
+    expect(getItem(await openSubmenu(element, 'Pin'), 'Unpin').disabled).toBe(false);
+  });
 
-    expect(items.map(i => i.textContent?.trim())).toContain('Unpin');
+  it('should omit the pin action when the column cannot be pinned', async () => {
+    const columns = COLUMNS.map(column => (column.id === 'name' ? { ...column, enablePinning: false } : column));
+    const element = await renderMenu(createTestTable({ columns }), 'name');
+
+    expect(getLabels(await openMenu(element))).not.toContain('Pin');
   });
 });

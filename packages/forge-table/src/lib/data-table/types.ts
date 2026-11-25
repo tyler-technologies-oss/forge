@@ -165,7 +165,10 @@ export interface ColumnDef<TData extends Row = Row> {
   columns?: ColumnDef<TData>[];
   align?: ColumnAlign;
   pin?: ColumnPin;
-  editable?: boolean;
+  /**
+   * Renders an input in the column's cells. A function decides per row, from the row's data, whether its cell is editable.
+   */
+  editable?: boolean | ((row: TData) => boolean);
   enableCellSelection?: boolean | EnableCellSelectionFn<TData>;
   /**
    * Called after each of the column's body cells renders, to modify the cell's DOM in place. Takes precedence over the table's `onCellRender`.
