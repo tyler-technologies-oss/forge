@@ -2,12 +2,13 @@ import type { Cell } from '@tanstack/lit-table';
 import type { DataTableFeatures } from '../table-features.js';
 import { noChange } from 'lit';
 import { Directive, directive } from 'lit/directive.js';
+import { getCellSlotName, getTemplateSlotElement } from '../features/cell-slot.js';
 
 class LightDomRenderDirective extends Directive {
   public render(host: HTMLElement, cell: Cell<DataTableFeatures, any>): typeof noChange {
-    const slotName = `col-${cell.column.id}:row-${cell.row.id}`;
+    const slotName = getCellSlotName(cell.row.id, cell.column.id);
 
-    const container = host.querySelector(`[slot="${slotName}"]`) ?? document.createElement('div');
+    const container = getTemplateSlotElement(host, cell.row.id, cell.column.id) ?? document.createElement('div');
     container.slot = slotName;
     container.setAttribute('data-custom-cell', '');
 

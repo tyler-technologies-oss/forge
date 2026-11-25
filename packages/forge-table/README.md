@@ -47,6 +47,8 @@ import '@tylertech/forge-table/data-table/features/filter';
 
 Set `expandable` to add a toggle column to each row. Use `getSubRows` and `getRowHasDetail` to expand sub rows or limit which rows have detail content. Detail content comes from `getRowDetail`, or from the row's `expanded:row-<id>` slot when that is not set. A row with content in its slot can always expand, whatever `getRowHasDetail` returns for it.
 
+Put content in a cell by slotting an element into `col-<id>:row-<id>` (the column id, then the row id), for example `<span slot="col-name:row-0">`. A cell with slotted content shows it instead of its value, and shows its value again when the content is removed. Slotted content wins over what the column renders, including columns with `useTemplateSlot`.
+
 ## Development
 
 ```bash

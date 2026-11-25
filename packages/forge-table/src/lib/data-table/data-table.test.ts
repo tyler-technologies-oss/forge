@@ -706,6 +706,82 @@ describe('DataTable', () => {
       expect(slot?.getAttribute('name')).toMatch(/^col-slotted:row-/);
     });
 
+    describe('slotted cell content', () => {
+      const columns: ColumnDef<TestData>[] = [
+        { id: 'id', header: 'ID', property: 'id' },
+        { id: 'name', header: 'Name', property: 'name' }
+      ];
+      const appendSlotted = async (harness: DataTableHarness, slot: string, text = 'Slotted'): Promise<HTMLElement> => {
+        const content = document.createElement('span');
+        content.slot = slot;
+        content.textContent = text;
+        harness.element.append(content);
+        await settle(harness.element);
+        return content;
+      };
+
+      it('should render the slot of a cell that has content slotted into it', async () => {
+        const harness = await createFixture({ columns });
+        const rowId = harness.getBodyRowByIndex(0)?.getAttribute('data-row-id') ?? '0';
+
+        await appendSlotted(harness, `col-name:row-${rowId}`);
+
+        const slot = harness.getBodyCellByRowAndColumn(0, 1)?.querySelector('slot');
+        expect(slot?.getAttribute('name')).toBe(`col-name:row-${rowId}`);
+      });
+
+      it('should project the slotted content into only the matching cell', async () => {
+        const harness = await createFixture({ columns });
+        const content = await appendSlotted(harness, 'col-name:row-0');
+
+        const slots = [...harness.shadowRoot.querySelectorAll('td slot')] as HTMLSlotElement[];
+        expect(slots).toHaveLength(1);
+        expect(slots[0].assignedElements()).toEqual([content]);
+        expect(harness.getBodyCellByRowAndColumn(0, 1)?.contains(slots[0])).toBe(true);
+      });
+
+      it('should render the cell value again when the slotted content is removed', async () => {
+        const harness = await createFixture({ columns });
+        const content = await appendSlotted(harness, 'col-name:row-0');
+
+        content.remove();
+        await settle(harness.element);
+
+        expect(harness.getBodyCellByRowAndColumn(0, 1)?.querySelector('slot')).toBeNull();
+        expect(harness.getBodyCellByRowAndColumn(0, 1)?.textContent?.trim()).toBe(TEST_DATA[0].name);
+      });
+
+      it('should update the cell when the slot attribute of existing content changes', async () => {
+        const harness = await createFixture({ columns });
+        const content = await appendSlotted(harness, 'col-name:row-0');
+
+        content.slot = 'col-name:row-1';
+        await settle(harness.element);
+
+        expect(harness.getBodyCellByRowAndColumn(0, 1)?.querySelector('slot')).toBeNull();
+        expect(harness.getBodyCellByRowAndColumn(1, 1)?.querySelector('slot')).not.toBeNull();
+      });
+
+      it('should prefer slotted content over a template slot column', async () => {
+        const harness = await createFixture({ columns: [columns[0], { ...columns[1], useTemplateSlot: true, template: () => 'Generated' }] });
+        const content = await appendSlotted(harness, 'col-name:row-0');
+
+        expect(content.textContent).toBe('Slotted');
+        expect(harness.getBodyCellByRowAndColumn(0, 1)?.querySelector('slot')?.assignedElements()).toEqual([content]);
+      });
+
+      it('should not remove slotted content when a column stops using a template slot', async () => {
+        const harness = await createFixture({ columns: [columns[0], { ...columns[1], useTemplateSlot: true }] });
+        const content = await appendSlotted(harness, 'col-name:row-0');
+
+        harness.element.columns = [...columns];
+        await settle(harness.element);
+
+        expect(content.isConnected).toBe(true);
+        expect(harness.element.querySelector('[data-custom-cell]')).toBeNull();
+      });
+    });
+
     describe('Badge Cell', () => {
       it('should render a badge with the cell value when no options callback is provided', async () => {
         const columns: ColumnDef<TestData>[] = [{ header: 'Name', property: 'name', template: badgeCell() }];

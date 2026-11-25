@@ -11,6 +11,7 @@ import { queueCellRender } from '../directives/cell-render.js';
 import { formatAttribute } from '../directives/format-attribute.js';
 import { lightDomRender } from '../directives/light-dom-render.js';
 import type { CellRenderController } from '../features/cell-render.js';
+import { getCellSlotName, removeTemplateSlotElement, type CellSlotController } from '../features/cell-slot.js';
 import { getCellRole, type CellSelectionController } from '../features/cell-selection.js';
 import { getPinnedColumnClasses, getPinnedColumnStyle } from '../features/column-pinning.js';
 import { getColumnWidthStyle } from '../features/column-sizing.js';
@@ -24,6 +25,7 @@ export interface BodyCellContext<TData extends Row> {
   table: Table<DataTableFeatures, TData>;
   cellSelection: CellSelectionController<TData>;
   cellRender: CellRenderController<TData>;
+  cellSlot: CellSlotController;
 }
 
 export function renderBodyCell<TData extends Row>(
@@ -88,11 +90,14 @@ function renderCellContent<TData extends Row>(context: BodyCellContext<TData>, c
     return renderGroupRowCellContent(context, cell);
   }
 
+  const slotName = getCellSlotName(rowId, cell.column.id);
+  if (context.cellSlot.hasContent(rowId, cell.column.id)) {
+    removeTemplateSlotElement(context.host, rowId, cell.column.id);
+    return html`<slot name=${slotName}></slot>`;
+  }
+
   return cell.column.columnDef.meta?.cellSlot
-    ? guard(
-        [cell.column],
-        () => html`<slot ${lightDomRender(context.host, cell as Cell<DataTableFeatures, any>)} name=${`col-${cell.column.id}:row-${rowId}`}></slot>`
-      )
+    ? guard([cell.column], () => html`<slot ${lightDomRender(context.host, cell as Cell<DataTableFeatures, any>)} name=${slotName}></slot>`)
     : FlexRender({ cell });
 }
 

@@ -33,6 +33,7 @@ import { DATA_TABLE_DEF_KEYS, DEFAULT_COLUMN_WIDTH, FETCH_SKIP, FETCH_TAKE, GROU
 import { ColumnReorderController } from './controllers/column-reorder-controller.js';
 import { ColumnVisibilityController } from './controllers/column-visibility-controller.js';
 import { CellRenderController } from './features/cell-render.js';
+import { CellSlotController } from './features/cell-slot.js';
 import { CellSelectionController } from './features/cell-selection.js';
 import { getColumnPinningState, pinSelectColumn } from './features/column-pinning.js';
 import { ColumnRenameController } from './features/column-rename.js';
@@ -392,6 +393,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     refilter: () => this.#onFilter(filters => [...filters])
   });
   readonly #cellRender = new CellRenderController<TData>(this);
+  readonly #cellSlot = new CellSlotController(this);
   readonly #cellSelection = new CellSelectionController<TData>(this, {
     getTable: () => this.#table,
     getScrollElement: () => this.#tableContainerRef.value,
@@ -544,6 +546,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
             filtered: this._columnFilters.length > 0,
             cellSelection: this.#cellSelection,
             cellRender: this.#cellRender,
+            cellSlot: this.#cellSlot,
             virtualization: this.#virtualization
           })}
           ${renderTableFooter(table, this.resizable)}
@@ -558,7 +561,7 @@ export class DataTableElement<TData extends Row = Row> extends LitElement {
     getAllLeafColumns(this.columns).forEach(({ column, indexPath }) => {
       if (!column.useTemplateSlot) {
         const columnId = resolveColumnId(column, indexPath);
-        this.querySelectorAll(`[slot^="col-${columnId}:"]`).forEach(el => el.remove());
+        this.querySelectorAll(`:scope > [data-custom-cell][slot^="col-${CSS.escape(columnId)}:"]`).forEach(el => el.remove());
       }
     });
 

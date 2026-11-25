@@ -160,6 +160,18 @@ Slotted content and `getRowDetail` can be combined. A row with slotted content e
 
 Detail rows are not rendered when `virtualized` is set.
 
+## Slotted Cells
+
+To write the content of a cell as markup, put an element in the `col-<id>:row-<id>` slot of the table, where `<id>` is the id of the column and then the id of the row (its index in the data unless the table uses another row id). The slotted element stays in your own DOM, so your styles, templates and event listeners apply to it.
+
+```html
+<forge-data-table>
+  <forge-button slot="col-actions:row-0">Edit</forge-button>
+</forge-data-table>
+```
+
+A cell with slotted content shows it instead of its value, and shows its value again when the content is removed. Slotted content also takes precedence over what the column renders, including columns that set `useTemplateSlot` or a `template`. Group rows do not show slotted cells.
+
 ## Virtualized Table
 
 Enable row virtualization for efficiently handling large datasets with improved performance:
@@ -205,13 +217,13 @@ that create common templates, and you can write your own. Each example below sho
 
 `actionCell()` takes an array of button configs (`ActionButtonConfig`):
 
-| Property        | Type                           | Description                                                                                                                                                                        |
-| --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `text`          | `string \| (row) => string`    | The label of a text button, or the tooltip and accessible label of an icon button. A function receives the TanStack row. The accessible name also includes the row name.         |
-| `icon`          | `string`                       | The name of the icon to show.                                                                                                                                                      |
-| `type`          | `'icon' \| 'button'`           | `icon` (default) renders an icon button with a tooltip. `button` renders a text button.                                                                                            |
-| `defaultAction` | `boolean`                      | Marks the button as the default action of the row. When `allow-row-click` is on, clicking the row clicks this button. Only the first button with `defaultAction` in a cell is used. |
-| `onClick`       | `(row) => void`                | Called with the TanStack row when the button is clicked, including when the row click triggers it.                                                                                 |
+| Property        | Type                        | Description                                                                                                                                                                         |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`          | `string \| (row) => string` | The label of a text button, or the tooltip and accessible label of an icon button. A function receives the TanStack row. The accessible name also includes the row name.            |
+| `icon`          | `string`                    | The name of the icon to show.                                                                                                                                                       |
+| `type`          | `'icon' \| 'button'`        | `icon` (default) renders an icon button with a tooltip. `button` renders a text button.                                                                                             |
+| `defaultAction` | `boolean`                   | Marks the button as the default action of the row. When `allow-row-click` is on, clicking the row clicks this button. Only the first button with `defaultAction` in a cell is used. |
+| `onClick`       | `(row) => void`             | Called with the TanStack row when the button is clicked, including when the row click triggers it.                                                                                  |
 
 With `defaultAction`, a click on the row runs the same `onClick` as a click on the button. See [Row Clicking](#row-clicking).
 

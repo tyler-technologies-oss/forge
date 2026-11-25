@@ -48,7 +48,11 @@ component out of a release. To publish: remove `private`, add a changeset, and r
 - `src/lib/data-table/controllers/` — Lit reactive controllers for column reordering, column visibility,
   and the shared `ColumnHierarchyHelper` for grouped (nested) columns.
 - `src/lib/data-table/directives/light-dom-render.ts` — renders custom cell templates into the light DOM
-  and projects them through named slots (`col-<id>:row-<id>`).
+  and projects them through named slots (`col-<id>:row-<id>`, `getCellSlotName`).
+  Consumers can slot their own content into a cell with the same name: `CellSlotController` (`features/cell-slot.ts`) keeps the set of
+  slot names of the host's direct children that the table did not generate (generated elements have `data-custom-cell`), and requests an update when they change (a `MutationObserver` on children and `slot` attributes), because a cell
+  without slotted content has no `<slot>` to fire `slotchange`. `renderCellContent` renders a plain `<slot>` for such a cell (and removes the generated
+  element of a `useTemplateSlot` column for it, which shares the slot name), so slotted content wins over `useTemplateSlot`, `template` and the value. Group rows ignore it.
 - `src/lib/data-table/features/` — opt-in pieces.
   `expander.ts` holds everything specific to expandable rows; none of it is public API beyond the element's `expandable`, `getSubRows`, `getRowHasDetail` and `getRowDetail`. `expandable` adds a leading expander column (`EXPANDER_COLUMN_ID`, `prependExpanderColumn`) with a `forge-icon-button` holding a `forge-open-icon` (its `open` reflects the expanded state) per data row, after the row selection column and before the groups/grouped columns (`getGroupedColumnOrder`, `pinSelectColumn` and `getGroupLabelCell` all know it). It has no column menu, sorting, filter, reordering or cell selection, stops row clicks, and group rows leave its cell empty. Double clicking a group row or an expandable data row toggles it (`toggleRowOnDoubleClick`), ignoring double clicks that land on interactive content such as the toggle buttons and checkboxes.
   `column-pinning.ts` holds the column pinning logic: it turns `ColumnDef.pin` (`'start' | 'end'`, cascading from a column group to its
