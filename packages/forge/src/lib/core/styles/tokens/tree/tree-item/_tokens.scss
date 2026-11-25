@@ -9,10 +9,13 @@
 $tokens: (
   // Color
   selected-background: utils.module-val(tree-item, selected-background, theme.variable(primary-container-low)),
+  drag-handle-color: utils.module-val(tree-item, drag-handle-color, theme.variable(text-medium)),
+  drop-indicator-color: utils.module-val(tree-item, drop-indicator-color, theme.variable(primary)),
   // Size and shape
   min-block-size: utils.module-val(tree-item, min-block-size, spacing.variable(xlarge)),
   shape: utils.module-val(tree-item, shape, shape.variable(medium)),
   expand-icon-inline-size: utils.module-val(tree-item, expand-icon-inline-size, spacing.variable(large)),
+  drop-indicator-size: utils.module-val(tree-item, drop-indicator-size, border.variable(medium)),
   // Spacing
   padding-inline: utils.module-val(tree-item, padding-inline, spacing.variable(xxsmall)),
   padding-inline-start: utils.module-ref(tree-item, padding-inline-start, padding-inline),

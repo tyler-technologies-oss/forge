@@ -88,6 +88,26 @@ export function eventPathIncludesTreeItemExpandIcon(evt: Event): boolean {
 }
 
 /**
+ * Returns whether an event includes a tree item drag handle.
+ *
+ * @param evt An event dispatched from a tree item.
+ * @returns Whether the event includes a drag handle element within a tree item.
+ */
+export function eventPathIncludesTreeItemDragHandle(evt: Event): boolean {
+  return evt.composedPath().some(el => el instanceof HTMLElement && el.matches('.drag-handle'));
+}
+
+/**
+ * Gets the header element of a tree item.
+ *
+ * @param el - The tree item component.
+ * @returns The header element, or `null` if the item has not rendered.
+ */
+export function getTreeItemHeader(el: TreeItemComponent): HTMLElement | null {
+  return el.shadowRoot?.querySelector<HTMLElement>('.header') ?? null;
+}
+
+/**
  * Gets the target tree item component from an event.
  *
  * @param evt An event dispatched from the target item.

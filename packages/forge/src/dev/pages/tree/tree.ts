@@ -17,6 +17,7 @@ const indentLinesSwitch = document.getElementById('opt-indent-lines') as ISwitch
 const preventSelectionSwitch = document.getElementById('opt-prevent-selection') as ISwitchComponent;
 const disabledSwitch = document.getElementById('opt-disabled') as ISwitchComponent;
 const openDisabledSwitch = document.getElementById('opt-open-disabled') as ISwitchComponent;
+const reorderableSwitch = document.getElementById('opt-reorderable') as ISwitchComponent;
 const valueButton = document.getElementById('btn-value') as HTMLButtonElement;
 
 const preventSelectionListener: EventListener = (evt: CustomEvent) => evt.preventDefault();
@@ -70,6 +71,12 @@ openDisabledSwitch.addEventListener('change', () => {
   const items = document.querySelectorAll('forge-tree-item');
   items.forEach(item => {
     item.openDisabled = openDisabledSwitch.on;
+  });
+});
+
+reorderableSwitch.addEventListener('change', () => {
+  trees.forEach(tree => {
+    tree.reorderable = reorderableSwitch.on;
   });
 });
 

@@ -1,3 +1,14 @@
 ## Keyboard interaction and ARIA
 
 Tree implements the keyboard shortcuts and ARIA roles, states, and properties defined in the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/">WAI-ARIA Tree View pattern</a> — arrow keys move focus between items, and the expanded/selected state of each item is exposed automatically. You don't need to hand-wire ARIA attributes yourself.
+
+### Reordering
+
+When `reorderable` is set, dragging requires a pointer, so the tree also provides a keyboard alternative.
+
+| Key              | Action                                                                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| Alt + Arrow up   | Moves the focused item up. An open item above it receives it as its last child, and a first child moves out of its parent. |
+| Alt + Arrow down | Moves the focused item down. An open item below it receives it as its first child, and a last child moves out of its parent. |
+
+Focus stays on the moved item. The drag handle is hidden from assistive technology since the keyboard shortcuts perform the same actions.

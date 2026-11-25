@@ -52,6 +52,10 @@
     @include checkbox;
   }
 
+  .drag-handle {
+    @include drag-handle;
+  }
+
   .children {
     @include children;
 
@@ -83,6 +87,10 @@
       @include disabled-header-content;
     }
 
+    .drag-handle {
+      @include disabled-drag-handle;
+    }
+
     &:not(.open-disabled) {
       .expand-icon {
         @include enabled-expand-icon;
@@ -95,6 +103,33 @@
       @include disabled-expand-icon;
     }
   }
+}
+
+//
+// Drag and drop
+//
+
+:host([data-dragging]) :is(forge-state-layer, forge-focus-indicator) {
+  display: none;
+}
+
+:host([data-drop-before]) .forge-tree-item,
+:host([data-drop-after]) .forge-tree-item {
+  @include drop-target;
+}
+
+:host([data-drop-inside]) .header {
+  @include drop-inside-header;
+}
+
+:host([data-drop-before]) .forge-tree-item::before {
+  @include drop-indicator;
+  @include drop-indicator-before;
+}
+
+:host([data-drop-after]) .forge-tree-item::after {
+  @include drop-indicator;
+  @include drop-indicator-after;
 }
 
 //

@@ -1,6 +1,6 @@
 import { consume } from '@lit/context';
 import { tryDefine } from '@tylertech/forge-core';
-import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
+import { tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDragHorizontal, tylIconIndeterminateCheckBox } from '@tylertech/tyler-icons';
 import { LitElement, PropertyValues, TemplateResult, html, nothing, unsafeCSS } from 'lit';
 import { property, queryAssignedNodes, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -29,6 +29,12 @@ export type TreeItemUpdateReason = 'added' | 'deselected' | 'opened' | 'removed'
  * @event {CustomEvent<unknown>} forge-tree-item-select - Dispatched when the user selects a tree item.
  * @event {CustomEvent<void>} forge-tree-item-open - Dispatched when the user opens a tree item.
  * @event {CustomEvent<void>} forge-tree-item-close - Dispatched when the user closes a tree item.
+ *
+ * @csspart drag-handle - The drag handle icon shown when the tree is reorderable.
+ *
+ * @cssproperty --forge-tree-item-drag-handle-color - The color of the drag handle icon.
+ * @cssproperty --forge-tree-item-drop-indicator-color - The color of the line shown where a dragged item will be dropped.
+ * @cssproperty --forge-tree-item-drop-indicator-size - The thickness of the drop indicator line.
  */
 export class TreeItemComponent extends LitElement {
   public static styles = unsafeCSS(styles);
@@ -128,7 +134,7 @@ export class TreeItemComponent extends LitElement {
   constructor() {
     super();
     this._internals = this.attachInternals();
-    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconIndeterminateCheckBox]);
+    IconRegistry.define([tylIconCheckBox, tylIconCheckBoxOutlineBlank, tylIconDragHorizontal, tylIconIndeterminateCheckBox]);
   }
 
   public connectedCallback(): void {
@@ -227,6 +233,14 @@ export class TreeItemComponent extends LitElement {
           ${this._treeContext?.mode === 'multiple'
             ? html`<forge-icon id="checkbox" class="checkbox" part="checkbox" .name="${this._checkboxIcon}"></forge-icon>`
             : nothing}
+          ${this._treeContext?.reorderable
+            ? html`<forge-icon
+                class="drag-handle"
+                part="drag-handle"
+                name="drag_horizontal"
+                aria-hidden="true"
+                draggable=${disabled ? 'false' : 'true'}></forge-icon>`
+            : nothing}
           <div class="start">
             <slot name="start"></slot>
           </div>
@@ -301,6 +315,8 @@ export class TreeItemComponent extends LitElement {
     const parent = this.parentElement;
     if (parent?.tagName.toLowerCase() === 'forge-tree-item') {
       this.slot = 'children';
+    } else if (this.slot === 'children') {
+      this.removeAttribute('slot');
     }
   }
 
