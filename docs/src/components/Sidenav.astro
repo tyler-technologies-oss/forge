@@ -28,10 +28,11 @@ const navigation = buildNavigation();
           class="hidden h-full max-h-[100px] max-w-[150px] dark:block"
         />
       </a>
-      <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
-        <forge-icon name="brightness_3"></forge-icon>
-        <forge-icon slot="on" name="brightness_7"></forge-icon>
-      </forge-icon-button>
+      <forge-menu slot="end" placement="bottom-end" persist-selection data-theme-menu>
+        <forge-icon-button aria-label="Theme" aria-haspopup="true">
+          <forge-icon name="palette_swatch_outline"></forge-icon>
+        </forge-icon-button>
+      </forge-menu>
     </forge-toolbar>
     <SearchField />
   </div>
@@ -50,38 +51,48 @@ const navigation = buildNavigation();
     }
   </div>
   <forge-toolbar slot="footer" no-border class="hidden [[data-placement=dialog]_&]:block">
-    <forge-icon-button slot="end" toggle aria-label="Dark theme" data-theme-toggle>
-      <forge-icon name="brightness_3"></forge-icon>
-      <forge-icon slot="on" name="brightness_7"></forge-icon>
-    </forge-icon-button>
+    <forge-menu slot="end" placement="top-end" persist-selection data-theme-menu>
+      <forge-icon-button aria-label="Theme" aria-haspopup="true">
+        <forge-icon name="palette_swatch_outline"></forge-icon>
+      </forge-icon-button>
+    </forge-menu>
   </forge-toolbar>
 </forge-scaffold>
 
 <script>
-  import type { IconButtonComponent } from "@tylertech/forge/icon-button";
-  import { getCurrentTheme, setTheme } from "../scripts/theme";
+  import type { IMenuComponent } from "@tylertech/forge/menu";
+  import { getThemePreference, setThemePreference, type ThemePreference } from "../scripts/theme";
 
-  // One toggle sits in the desktop header, the other in the mobile menu footer.
-  const buttons = document.querySelectorAll<IconButtonComponent>("[data-theme-toggle]");
+  const THEME_OPTIONS = [
+    { value: "system", label: "System setting" },
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+  ];
 
-  const syncThemeToggle = (): void => {
-    buttons.forEach((button) => {
-      button.pressed = getCurrentTheme() === "dark";
+  // One menu sits in the desktop header, the other in the mobile menu footer.
+  const menus = document.querySelectorAll<IMenuComponent>("[data-theme-menu]");
+
+  const syncThemeMenus = (): void => {
+    const preference = getThemePreference();
+    const options = THEME_OPTIONS.map((option) => ({ ...option, selected: option.value === preference }));
+    menus.forEach((menu) => {
+      menu.options = options;
     });
   };
 
   // The sidenav is `transition:persist`ed, so this only needs binding once. Observing the
-  // attribute keeps the buttons in sync with theme changes made elsewhere (OS preference, block viewer).
-  buttons.forEach((button) => {
-    button.addEventListener("forge-icon-button-toggle", ({ detail }) => {
-      setTheme(detail ? "dark" : "light");
+  // attribute keeps the menus in sync with theme changes made elsewhere (OS preference, block viewer).
+  menus.forEach((menu) => {
+    menu.addEventListener("forge-menu-select", ({ detail }) => {
+      setThemePreference(detail.value as ThemePreference);
+      syncThemeMenus();
     });
   });
-  new MutationObserver(syncThemeToggle).observe(document.documentElement, {
+  new MutationObserver(syncThemeMenus).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ["data-forge-theme"],
   });
-  syncThemeToggle();
+  syncThemeMenus();
 
   const TOOLTIP_DELAY_MS = 300;
   const tooltips = new WeakMap<Element, HTMLElement>();

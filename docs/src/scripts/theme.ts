@@ -1,4 +1,5 @@
 export type Theme = 'light' | 'dark';
+export type ThemePreference = Theme | 'system';
 
 // Shared with forge-theme-toggle (inside the user-profile demos), so a toggle on any page reads and
 // writes the same preference instead of overwriting the docs theme with its own default.
@@ -19,10 +20,19 @@ const applyTheme = (theme: Theme, root: HTMLElement = document.documentElement):
 
 export const getCurrentTheme = (): Theme => (document.documentElement.getAttribute(THEME_ATTRIBUTE) === 'dark' ? 'dark' : 'light');
 
-export const setTheme = (theme: Theme): void => {
-  localStorage.setItem(STORAGE_KEY, theme);
-  applyTheme(theme);
+export const getThemePreference = (): ThemePreference => getStoredTheme() ?? 'system';
+
+export const setThemePreference = (preference: ThemePreference): void => {
+  if (preference === 'system') {
+    localStorage.removeItem(STORAGE_KEY);
+    applyTheme(getSystemTheme());
+    return;
+  }
+  localStorage.setItem(STORAGE_KEY, preference);
+  applyTheme(preference);
 };
+
+export const setTheme = (theme: Theme): void => setThemePreference(theme);
 
 export const toggleTheme = (): void => {
   setTheme(getCurrentTheme() === 'light' ? 'dark' : 'light');
